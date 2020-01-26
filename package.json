@@ -1,0 +1,42 @@
+{
+  "name": "@lit-dashboard/frc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack -d --config webpack.config.js",
+    "start": "webpack -d --config webpack.config.js --watch",
+    "build:prod": "webpack -p --config webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lit-dashboard/frc.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lit-dashboard/frc/issues"
+  },
+  "homepage": "https://github.com/lit-dashboard/frc#readme",
+  "dependencies": {
+    "@lit-dashboard/lit-dashboard": "^1.0.2",
+    "d3": "^5.15.0",
+    "lodash": "^4.17.15",
+    "svg-gauge": "^1.0.6",
+    "wpilib-nt-client": "^1.7.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.3",
+    "@babel/core": "^7.8.3",
+    "@babel/node": "^7.8.3",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-decorators": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "babel-loader": "^8.0.6",
+    "copy-webpack-plugin": "^5.1.1",
+    "file-loader": "^5.0.2",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
+  }
+}
