@@ -12,3 +12,4 @@ import './text-view';
 import './toggle-button';
 import './toggle-switch';
 import './voltage-view';
+import './model-viewer';
