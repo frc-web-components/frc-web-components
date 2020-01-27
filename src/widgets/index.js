@@ -13,3 +13,4 @@ import './toggle-button';
 import './toggle-switch';
 import './voltage-view';
 import './model-viewer';
+import './line-chart';

@@ -19,14 +19,16 @@
     "url": "https://github.com/lit-dashboard/frc/issues"
   },
   "homepage": "https://github.com/lit-dashboard/frc#readme",
-  "dependencies": {
+  "peerDependencies": {
     "@google/model-viewer": "^0.8.1",
     "@lit-dashboard/lit-dashboard": "^1.0.2",
+    "chart.js": "^2.8.0",
+    "chartjs-web-components": "^2.7.1",
     "d3": "^5.15.0",
     "lodash": "^4.17.15",
+    "raw-loader": "^4.0.0",
     "svg-gauge": "^1.0.6",
-    "wpilib-nt-client": "^1.7.1",
-    "raw-loader": "^4.0.0"
+    "wpilib-nt-client": "^1.7.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.3",
