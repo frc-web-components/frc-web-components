@@ -49,7 +49,7 @@ class ComboboxChooser extends Widget {
       <vaadin-combo-box 
         label="${this.label}" 
         .items="${this.options}" 
-        value="${this.selected}"
+        .value="${this.selected}"
         @selected-item-changed="${this.onChange}"
       >
       </vaadin-combo-box>
