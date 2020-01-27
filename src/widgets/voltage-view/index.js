@@ -7,7 +7,7 @@ class VoltageView extends Widget {
     return css`
       :host {
        display: block;
-       padding: 0 10px;
+       padding: 0 20px;
       }
 
       .bar {
