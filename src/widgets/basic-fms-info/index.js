@@ -44,6 +44,23 @@ class BasicFmsInfo extends Widget {
     `;
   }
 
+  static get properties() {
+    return {
+      matchType: { type: Number, attribute: 'match-type', reflect: true },
+      matchNumber: { type: Number, attribute: 'match-number', reflect: true },
+      eventName: { type: Number, attribute: 'event-name', reflect: true },
+      fmsControlData: { type: Number, attribute: 'fms-control-data', reflect: true }
+    };
+  }
+
+  constructor() {
+    super();
+    this.matchType = 0;
+    this.matchNumber = 0;
+    this.eventName = '';
+    this.fmsControlData = 0;
+  }
+
   getRobotState() {
     if (this.isEnabled()) {
       if (this.isTest()) {
@@ -61,49 +78,37 @@ class BasicFmsInfo extends Widget {
     }
   }
 
-  getMatchType() {
-    return this.hasSource() ? MATCH_TYPES[this.sourceValue.matchType] : '';
-  }
-
-  getMatchNumber() {
-    return this.hasSource() ? this.sourceValue.matchNumber : 0;
-  }
-
-  getEventName() {
-    return this.hasSource() ? this.sourceValue.eventName : '';
-  }
-
   isEnabled() {
-    return !!(this.sourceValue.fmsControlData & ENABLED_FLAG);
+    return !!(this.fmsControlData & ENABLED_FLAG);
   }
 
   isAuto() {
-    return !!(this.sourceValue.fmsControlData & AUTO_FLAG);
+    return !!(this.fmsControlData & AUTO_FLAG);
   }
 
   isTest() {
-    return !!(this.sourceValue.fmsControlData & TEST_FLAG);
+    return !!(this.fmsControlData & TEST_FLAG);
   };
 
   isEmergencyStopped() {
-    return !!(this.sourceValue.fmsControlData & EMERGENCY_STOP_FLAG);
+    return !!(this.fmsControlData & EMERGENCY_STOP_FLAG);
   }
 
   isFmsAttached() {
-    return !!(this.sourceValue.fmsControlData & FMS_ATTACHED_FLAG);
+    return !!(this.fmsControlData & FMS_ATTACHED_FLAG);
   }
 
   isDsAttached() {
-    return !!(this.sourceValue.fmsControlData & DS_ATTACHED_FLAG);
+    return !!(this.fmsControlData & DS_ATTACHED_FLAG);
   }
 
   render() {
     return html`
       <p>
         <strong>
-          <span>${this.getEventName()}</span>
-          <span>${this.getMatchType()}</span>
-          <span>match ${this.getMatchNumber()}</span>
+          <span>${this.eventName}</span>
+          <span>${MATCH_TYPES[this.matchType]}</span>
+          <span>match ${this.matchNumber}</span>
         </strong>
       </p>
       
@@ -147,6 +152,5 @@ registerWidget('basic-fms-info', {
   class: BasicFmsInfo,
   label: 'Basic FMS Info',
   category: 'FRC',
-  acceptedTypes: ['FMSInfo'],
   image: require.resolve('./basic-fms-info.png')
 });
