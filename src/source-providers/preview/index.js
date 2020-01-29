@@ -25,26 +25,15 @@ class PreviewProvider extends SourceProvider {
 			get: (sources, key) => {
 				return sources[key];
 			},
-			set: (sources, key, { value, type, name }) => {
-
-				sources[key] = { value, type, name };
-
-				updateSource(key, {
-					value,
-					type,
-					name
-				});
-
+			set: (sources, key, value) => {
+				sources[key] = value;
+				updateSource(key, value);
 				return true;
 			}
 		});
 
-		forEach(this.sources, ({ value, type, name }, key) => {
-			updateSource(key, {
-				value,
-				type,
-				name
-			});
+		forEach(this.sources, (value, key) => {
+			updateSource(key, value);
 		});
 	}
 
@@ -57,18 +46,11 @@ class PreviewProvider extends SourceProvider {
 		}
 
 		if (key in this.sources) {
-			if (type === this.sources[key].type) {
-				this.sources[key] = {
-					...this.sources[key],
-					value
-				};
+			if (type === this.getType(this.sources[key])) {
+				this.sources[key] = value;
 			}
 		} else {
-			this.sources[key] = {
-				value,
-				type,
-				name: key
-			}
+			this.sources[key] = value;
 		}
 	}
 }

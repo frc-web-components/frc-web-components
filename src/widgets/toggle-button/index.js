@@ -20,37 +20,25 @@ class ToggleButton extends Widget {
 
   static get properties() {
     return {
-      value: { type: Boolean },
+      toggled: { type: Boolean, reflect: true, primary: true },
       theme: { type: String }
     }
   }
 
   constructor() {
     super();
-    this.value = false;
+    this.toggled = false;
     this.theme = 'contrast';
   }
 
-  updated() {
-    if (this.hasSource()) {
-      this.value = this.sourceValue;
-    }
-  }
-
   onClick() {
-    const newValue = this.value == true ? false : true;
-    if (this.sourceType === 'Boolean') {
-      this.sourceValue = newValue;
-    }
-    else {
-      this.value = newValue;
-    }
-  };
+    this.toggled = !this.toggled;
+  }
 
   render() {
     return html`   
       <vaadin-button 
-        theme="${this.theme} ${this.value == true ? 'primary' : ''}"
+        theme="${this.theme} ${this.toggled == true ? 'primary' : ''}"
         part="button"
         @click="${this.onClick}"
       >
@@ -65,6 +53,5 @@ registerWidget('toggle-button', {
   class: ToggleButton,
   label: 'Toggle Button',
   category: 'FRC',
-  acceptedTypes: ['Boolean'],
   image: require.resolve('./toggle-button.png')
 });

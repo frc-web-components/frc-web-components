@@ -1,4 +1,3 @@
-import { isString, isNumber, isBoolean, isArray } from 'lodash';
 import NetworkTables from './networktables';
 import { SourceProvider, storage, store } from '@lit-dashboard/lit-dashboard';
 import { clearSources } from '@lit-dashboard/lit-dashboard/actions';
@@ -48,43 +47,7 @@ export default class NetworkTablesProvider extends SourceProvider {
 
 	updateFromProvider(updateSource) {
 		NetworkTables.addGlobalListener((key, value) => {
-			if (key.endsWith('/.type')) {
-				updateSource(key, {
-					value,
-					type: 'String'
-				});
-				updateSource(key.substring(0, key.length - 6), {
-					type: value,
-				});
-			} else if (key.endsWith('/.name')) {
-				updateSource(key, {
-					value,
-					type: 'String'
-				});
-				updateSource(key.substring(0, key.length - 6), {
-					name: value
-				});
-			} else {
-				let primitiveType;
-
-				if (isBoolean(value)) {
-					primitiveType = 'Boolean';
-				} else if (isString(value)) {
-					primitiveType = 'String'
-				} else if (isNumber(value)) {
-					primitiveType = 'Number';
-				} else if (isArray(value)) {
-					primitiveType = 'Array';
-				}
-
-				const type = NetworkTables.getValue(`${key}/.type`) || primitiveType;
-				const name = NetworkTables.getValue(`${key}/.name`);
-				updateSource(key, {
-          value,
-          type,
-          name
-        });
-			}
+			updateSource(key, value);
 	  }, true);
 	}
 

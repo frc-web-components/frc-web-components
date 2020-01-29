@@ -37,15 +37,11 @@ class LineChart extends Widget {
 			data: {
 				labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
 				datasets: [{
-					label: 'My First dataset',
+					label: 'My First dataset!',
 					data: [
 						Math.random(),
 						Math.random(),
 						Math.random(),
-						Math.random(),
-						Math.random(),
-						Math.random(),
-						Math.random()
 					],
 					fill: false,
 				}, {

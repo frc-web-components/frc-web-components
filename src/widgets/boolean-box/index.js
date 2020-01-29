@@ -25,9 +25,10 @@ class BooleanBox extends Widget {
 
   static get properties() {
     return {
-      defaultColor: { type: String, attribute: 'default-color' },
-      trueColor: { type: String, attribute: 'true-color' },
-      falseColor: { type: String, attribute: 'false-color' }
+      value: { type: Boolean, reflect: true, primary: true },
+      defaultColor: { type: String, attribute: 'default-color', reflect: true },
+      trueColor: { type: String, attribute: 'true-color', reflect: true },
+      falseColor: { type: String, attribute: 'false-color', reflect: true }
     };
   }
 
@@ -41,13 +42,19 @@ class BooleanBox extends Widget {
   updated() {
     const backgroundNode = this.shadowRoot.querySelector('[part=box]');
     let backgroundColor = this.defaultColor;
-    if (this.sourceValue == true) {
+
+    if (this.value === true) {
       backgroundColor = this.trueColor;
     }
-    else if (this.sourceValue == false) {
+    else if (this.value === false) {
       backgroundColor = this.falseColor;
     }
     backgroundNode.style.setProperty('--box-color', backgroundColor);
+  }
+
+  firstUpdated() {
+    const backgroundNode = this.shadowRoot.querySelector('[part=box]');
+    backgroundNode.style.setProperty('--box-color', this.defaultColor);
   }
 
   render() {
@@ -63,6 +70,5 @@ registerWidget('boolean-box', {
   class: BooleanBox,
   label: 'Boolean Box',
   category: 'FRC',
-  acceptedTypes: ['Boolean'],
   image: require.resolve('./boolean-box.png')
 });
