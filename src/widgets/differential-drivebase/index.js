@@ -138,15 +138,15 @@ class DifferentialDrivebase extends Widget {
 
   static get properties() {
     return {
-      left: { type: Number },
-      right: { type: Number }
+      leftMotorSpeed: { type: Number, attribute: 'left-motor-speed', reflect: true },
+      rightMotorSpeed: { type: Number, attribute: 'right-motor-speed', reflect: true }
     };
   }
 
   constructor() {
     super();
-    this.left = 0;
-    this.right = 0;
+    this.leftMotorSpeed = 0;
+    this.rightMotorSpeed = 0;
   }
 
   drawMotionVector(left, right) {
@@ -277,11 +277,11 @@ class DifferentialDrivebase extends Widget {
 
 
   getLeftForegroundStyle() {
-    return this.getForegroundStyle(this.left);
+    return this.getForegroundStyle(this.leftMotorSpeed);
   }
 
   getRightForegroundStyle() {
-    return this.getForegroundStyle(this.right);
+    return this.getForegroundStyle(this.rightMotorSpeed);
   }
 
   getForegroundStyle(value) {
@@ -326,7 +326,7 @@ class DifferentialDrivebase extends Widget {
   }
 
   resized() {
-    let drawing = this.drawMotionVector(this.left, this.right);
+    let drawing = this.drawMotionVector(this.leftMotorSpeed, this.rightMotorSpeed);
     this.shadowRoot.getElementById('forceVector').innerHTML = drawing;
     const svgNode = this.shadowRoot.getElementById('svg');
     const rect = svgNode.getBoundingClientRect();
@@ -335,9 +335,7 @@ class DifferentialDrivebase extends Widget {
   }
 
   updated() {
-    this.left = this.sourceValue.leftMotorSpeed || 0;
-    this.right = this.sourceValue.rightMotorSpeed || 0;
-    let drawing = this.drawMotionVector(this.left, this.right);
+    let drawing = this.drawMotionVector(this.leftMotorSpeed, this.rightMotorSpeed);
     this.shadowRoot.getElementById('forceVector').innerHTML = drawing;
   }
 
