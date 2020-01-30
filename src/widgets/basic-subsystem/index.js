@@ -21,10 +21,23 @@ class BasicSubsystem extends Widget {
     `;
   }
 
+  static get properties() {
+    return {
+      default: { type: String, reflect: true },
+      command: { type: String, reflect: true }
+    };
+  }
+
+  constructor() {
+    super();
+    this.default = 'None';
+    this.command = 'None';
+  }
+
   render() {
     return html`
-      <p>Default command: ${this.sourceValue.default || 'None'}</p>
-      <p>Current command: ${this.sourceValue.command || 'None'}</p>
+      <p>Default command: ${this.default}</p>
+      <p>Current command: ${this.command}</p>
     `;
   }
 }
@@ -33,6 +46,5 @@ registerWidget('basic-subsystem', {
   class: BasicSubsystem,
   label: 'Basic Subsystem',
   category: 'FRC',
-  acceptedTypes: ['Subsystem'],
   image: require.resolve('./basic-subsystem.png')
 });
