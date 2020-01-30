@@ -3,14 +3,6 @@ import { registerWidget } from '@lit-dashboard/lit-dashboard/app';
 
 class ComboboxChooser extends Widget {
 
-  static get properties() {
-    return {
-      label: { type: String },
-      selected: { type: Object },
-      options: { type: Array }
-    }
-  }
-
   static get styles() {
     return css`
       :host {
@@ -19,37 +11,33 @@ class ComboboxChooser extends Widget {
     `;
   }
 
+  static get properties() {
+    return {
+      name: { type: String, reflect: true },
+      selected: { type: String, reflect: true },
+      default: { type: String, reflect: true },
+      options: { type: Array, reflect: true }
+    };
+  }
+
   constructor() {
     super();
     this.options = [];
     this.selected = '';
-    this.label = '';
+    this.name = '';
+    this.default = '';
   }
 
   onChange(ev) {
-    if (this.hasSource()) {
-      const value = ev.detail.value;
-      this.sourceValue.selected = value;
-    }
-  }
-
-  updated(changedProperties) {
-    if (changedProperties.has('sourceValue')) {
-      this.options = this.sourceValue.options || [];
-      this.label = this.sourceValue.name || '';
-      this.selected = 
-        this.sourceValue.selected 
-        || this.sourceValue.default
-        || '';
-    }
+    this.selected = ev.detail.value;
   }
 
   render() {
     return html`
       <vaadin-combo-box 
-        label="${this.label}" 
+        label="${this.name}" 
         .items="${this.options}" 
-        .value="${this.selected}"
+        .value="${this.selected || this.default}"
         @selected-item-changed="${this.onChange}"
       >
       </vaadin-combo-box>
@@ -61,6 +49,5 @@ registerWidget('combobox-chooser', {
   class: ComboboxChooser,
   label: 'ComboBox Chooser',
   category: 'FRC',
-  acceptedTypes: ['String Chooser'],
   image: require.resolve('./combobox-chooser.png')
 });
