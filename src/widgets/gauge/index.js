@@ -44,8 +44,21 @@ class GaugeWidget extends Widget {
 
   static get properties() {
     return {
-      min: { type: Number },
-      max: { type: Number }
+      min: { 
+        type: Number, 
+        reflect: true,
+        get() {
+          return Math.min(this._min, this._max);
+        }
+      },
+      max: { 
+        type: Number, 
+        reflect: true,
+        get() {
+          return Math.max(this._min, this._max);
+        }
+      },
+      value: { type: Number, reflect: true, primary: true }
     }
   }
 
@@ -53,27 +66,8 @@ class GaugeWidget extends Widget {
     super();
     this.min = 0;
     this.max = 100;
+    this.value = 0;
     this.gauge = null;
-  }
-
-  set min(value) {
-    const oldValue = this._min;
-    this._min = value;
-    this.requestUpdate('min', oldValue);
-  }
-
-  get min() {
-    return Math.min(this._min, this._max);
-  }
-
-  set max(value) {
-    const oldValue = this._max;
-    this._max = value;
-    this.requestUpdate('max', oldValue);
-  }
-
-  get max() {
-    return Math.max(this._min, this._max);
   }
 
   setSize() {
@@ -110,10 +104,7 @@ class GaugeWidget extends Widget {
     if (changedProperties.has('min') || changedProperties.has('max')) {
       this.gaugeInit();
     }
-
-    if (this.gauge && this.sourceType === 'Number') {
-      this.gauge.setValue(this.sourceValue);
-    }
+    this.gauge.setValue(this.value);
   }
 
   render() {
@@ -129,6 +120,5 @@ registerWidget('gauge-widget', {
   class: GaugeWidget,
   label: 'Gauge',
   category: 'FRC',
-  acceptedTypes: ['Number'],
   image: require.resolve('./gauge.png')
 });
