@@ -1,0 +1,25 @@
+<html>
+  <head></head>
+
+  <body>
+
+    <frc-boolean-box 
+      source-key="/box"
+      source-provider="NetworkTables"
+      default-color="gray"
+      true-color="purple"
+    ></frc-boolean-box>
+
+      <script src="http://localhost:8888/networktables/networktables.js" data-nt-host="localhost:8888"></script>
+      <script src="./webbit-frc.js"></script>
+
+      <script>
+        WebbitStore.addSourceProvider('Preview', 'sffds', {
+          sources: { 'a' : 1, '/FMSInfo/IsRedAlliance': false }
+        });
+
+        WebbitStore.addSourceProvider('NetworkTables', 'NetworkTables');
+      </script>
+  </body>
+
+</html>

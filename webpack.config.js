@@ -4,8 +4,8 @@ module.exports = {
   context: path.resolve(__dirname, "src"),
   entry: './index.js',
   output: {
-    filename: "dashboard.js",
-    path: path.resolve(__dirname, 'dist')
+    filename: "webbit-frc.js",
+    path: path.resolve(__dirname, 'build')
   },
   module: {
     rules: [
@@ -36,19 +36,13 @@ module.exports = {
           }
         ],
       },
-      {
-        test: /\.(jpg|png|gif|svg)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: './images'
-            }
-          }
-        ]
-      },
     ]
   },
-  devtool: 'inline-source-map'
+  devtool: 'source-map',
+  devServer: {
+    contentBase: path.resolve(__dirname, 'build/'),
+    stats: 'errors-only',
+    open: true,
+    port: 12000,
+  },
 }

@@ -1,6 +1,4 @@
-import { isNull, forEach } from 'lodash';
-import { SourceProvider } from '@lit-dashboard/lit-dashboard';
-import { addSourceProviderType } from '@lit-dashboard/lit-dashboard/app';
+import { SourceProvider, addSourceProviderType } from '@webbitjs/store';
 
 class PreviewProvider extends SourceProvider {
 
@@ -32,16 +30,17 @@ class PreviewProvider extends SourceProvider {
 			}
 		});
 
-		forEach(this.sources, (value, key) => {
+		for (let key in this.sources) {
+			const value = this.sources[key];
 			updateSource(key, value);
-		});
+		}
 	}
 
 	updateFromDashboard(key, value) {
 	
 		const type = this.getType(value);
 
-		if (isNull(type)) {
+		if (type === null) {
 			return;
 		}
 
