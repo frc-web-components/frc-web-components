@@ -9,9 +9,6 @@
     "build": "webpack -d --config webpack.config.js",
     "build:prod": "webpack -p --config webpack.config.js"
   },
-  "publishConfig": {
-    "registry":"https://npm.pkg.github.com/"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/webbitjs/frc.git"
