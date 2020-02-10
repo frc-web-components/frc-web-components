@@ -1,9 +1,6 @@
 
 import { SourceProvider, addSourceProviderType } from '@webbitjs/store';
 
-//import { clearSources } from '@lit-dashboard/lit-dashboard/actions';
-
-
 export default class NetworkTablesProvider extends SourceProvider {
 
 	static get typeName() {
@@ -16,8 +13,8 @@ export default class NetworkTablesProvider extends SourceProvider {
     };
   }
 
-  constructor(settings) {
-    super();
+  constructor(providerName, settings) {
+    super(providerName);
     this.address = localStorage.robotAddress || settings.address;
     
     if ('connect' in NetworkTables) {
@@ -30,7 +27,13 @@ export default class NetworkTablesProvider extends SourceProvider {
     }
 
     NetworkTables.addRobotConnectionListener(connected => {
-      //store.dispatch(clearSources('NetworkTables'));
+      if (!connected) {
+        this.clearSources();
+      }
+    }, true);
+
+    NetworkTables.addGlobalListener((key, value) => {
+      this.updateSource(key, value);
     }, true);
   }
 
@@ -42,12 +45,6 @@ export default class NetworkTablesProvider extends SourceProvider {
 
   onSettingsChange(settings) {
     this.address = settings.address;
-  }
-
-  updateFromProvider(updateSource) {
-    NetworkTables.addGlobalListener((key, value) => {
-      updateSource(key, value);
-    }, true);
   }
 
   updateFromDashboard(key, value) {
