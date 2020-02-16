@@ -5,7 +5,6 @@ class TextView extends Webbit {
   static get styles() {
     return css`
       :host {
-        height: 100%;
         display: block;
         font-size: 18px;
         font-weight: normal;
@@ -28,29 +27,32 @@ class TextView extends Webbit {
       }
     `;
   }
-  
-  getInputType() {
-    return this.sourceType === 'Number' ? 'number' : 'text';
+
+  static get properties() {
+    return {
+      value: { type: Object, primary: true }
+    };
   }
 
-  getInputValue() {
-    return this.hasAcceptedType() ? this.sourceValue.toString() : '';
+  constructor() {
+    super();
+    this.value = '';
   }
 
   onChange(ev) {
     const value = ev.target.value;
 
-    if (this.sourceType === 'String') {
-      this.sourceValue = value;
+    if (typeof this.value === 'string') {
+      this.value = value;
     }
-    else if (this.sourceType === 'Number') {
-      this.sourceValue = parseFloat(value);
+    else if (typeof this.value === 'number') {
+      this.value = parseFloat(value);
     }
-    else if (this.sourceType === 'Boolean') {
+    else if (typeof this.value === 'boolean') {
       if (value === 'true') {
-        this.sourceValue = true;
+        this.value = true;
       } else if (value === 'false') {
-        this.sourceValue = false;
+        this.value = false;
       }
     }
   }
@@ -59,9 +61,9 @@ class TextView extends Webbit {
     return html`   
       <input
         part="input"
-        type="${this.getInputType()}"
+        type="${typeof this.value === 'number' ? 'number' : 'text'}"
         @change="${this.onChange}"
-        .value="${this.getInputValue()}"
+        .value="${this.value.toString()}"
       />
     `;
   }
