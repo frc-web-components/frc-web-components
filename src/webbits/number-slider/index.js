@@ -4,9 +4,26 @@ class NumberSlider extends Webbit {
 
   static get properties() {
     return {
-      value: { type: Number, attribute: false },
-      min: { type: Number },
-      max: { type: Number },
+      value: { 
+        type: Number, 
+        primary: true,
+        get() {
+          // clamp value
+          return Math.max(this.min, Math.min(this._value, this.max));
+        }
+      },
+      min: { 
+        type: Number,
+        get() {
+          return Math.min(this._min, this._max);
+        }
+      },
+      max: { 
+        type: Number,
+        get() {
+          return Math.max(this._min, this._max);
+        }
+      },
       blockIncrement: { type: Number, attribute: 'block-increment' }
     };
   }
@@ -47,47 +64,8 @@ class NumberSlider extends Webbit {
     this.blockIncrement = .05;
   }
 
-  set value(value) {
-    const oldValue = this._value;
-    this._value = value;
-    this.requestUpdate('value', oldValue);
-  }
-
-  get value() {
-    return Math.clamp(this._value, this.min, this.max);
-  }
-
-  set min(value) {
-    const oldValue = this._min;
-    this._min = value;
-    this.requestUpdate('min', oldValue);
-  }
-
-  get min() {
-    return Math.min(this._min, this._max);
-  }
-
-  set max(value) {
-    const oldValue = this._max;
-    this._max = value;
-    this.requestUpdate('max', oldValue);
-  }
-
-  get max() {
-    return Math.max(this._min, this._max);
-  }
-
   onChange(ev) {
-    const value = parseFloat(ev.target.value);
-    if (this.hasSource()) {
-      this.sourceValue = value;
-    }
-  }
-
-  updated(changedProperties) {
-    if (this.sourceType === 'Number' && changedProperties.has('sourceValue')) {
-      this.value = this.sourceValue;
-    }
+    this.value = parseFloat(ev.target.value);
   }
 
   render() {
