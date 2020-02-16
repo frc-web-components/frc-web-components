@@ -1,4 +1,5 @@
 import { Webbit, html, css } from '@webbitjs/webbit';
+import '@vaadin/vaadin-button';
 
 class ToggleButton extends Webbit {
 
@@ -19,7 +20,7 @@ class ToggleButton extends Webbit {
 
   static get properties() {
     return {
-      toggled: { type: Boolean, reflect: true, primary: true },
+      toggled: { type: Boolean, primary: true },
       theme: { type: String }
     }
   }
