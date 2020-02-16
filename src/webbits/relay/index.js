@@ -1,4 +1,5 @@
 import { Webbit, html, css } from '@webbitjs/webbit';
+import '@vaadin/vaadin-button';
 
 class Relay extends Webbit {
 
@@ -23,7 +24,7 @@ class Relay extends Webbit {
 
   static get properties() {
     return {
-      value: { type: String, attribute: false }
+      value: { type: String, primary: true }
     };
   }
 
@@ -34,18 +35,7 @@ class Relay extends Webbit {
   }
 
   setValue(value) {
-    if (this.sourceType === 'Relay') {
-      this.sourceValue.value = value;
-    }
-    else {
-      this.value = value;
-    }
-  }
-
-  updated() {
-    if (this.sourceType === 'Relay') {
-      this.value = this.sourceValue.value;
-    }
+    this.value = value;
   }
 
   render() {
