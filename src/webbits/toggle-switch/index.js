@@ -65,19 +65,13 @@ class ToggleSwitch extends Webbit {
 
   static get properties() {
     return {
-      checked: { type: Boolean }
+      checked: { type: Boolean, primary: true }
     }
   }
 
   constructor() {
     super();
     this.checked = false;
-  }
-
-  updated() {
-    if (this.sourceType === 'Boolean') {
-      this.checked = this.sourceValue == true;
-    }
   }
 
   resized() {
@@ -93,12 +87,13 @@ class ToggleSwitch extends Webbit {
   }
 
   onClick() {
-    if (this.sourceType === 'Boolean') {
-      this.sourceValue = !this.checked;
-    }
-    else {
-      this.checked = !this.checked;
-    }
+    this.checked = !this.checked;
+    const event = new CustomEvent('check', { 
+      detail: {
+        checked: this.checked 
+      }
+    });
+    this.dispatchEvent(event);
   }
 
   render() {
