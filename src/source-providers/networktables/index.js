@@ -89,6 +89,9 @@ export default class NetworkTablesProvider extends SourceProvider {
       // put in if it's new and it's valid
       if (!currentType && updatedType) {
         this.updateSource(key, value);
+        if (!this.updatedEntriesBeforeReady.includes(key)) {
+          this.updatedEntriesBeforeReady.push(key);
+        }
       }
 
       // Don't update if type isn't valid
@@ -99,6 +102,9 @@ export default class NetworkTablesProvider extends SourceProvider {
       // make sure current value type matches value passed in
       if (currentType === updatedType) {
         this.updateSource(key, value);
+        if (!this.updatedEntriesBeforeReady.includes(key)) {
+          this.updatedEntriesBeforeReady.push(key);
+        }
       }
     }
   }
