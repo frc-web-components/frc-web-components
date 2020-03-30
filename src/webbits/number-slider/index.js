@@ -33,6 +33,7 @@ class NumberSlider extends Webbit {
 
       :host {
         display: block;
+        height: 50px;
       }
 
       .slider-container {
