@@ -1,5 +1,6 @@
 
 import { SourceProvider, addSourceProviderType } from '@webbitjs/store';
+import './nt-boolean';
 
 const getType = (value) => {
   if (['number', 'boolean', 'string'].includes(typeof value)) {
@@ -40,11 +41,8 @@ export default class NetworkTablesProvider extends SourceProvider {
     });
     
     this.ntReady.then(() => {
-      const ntKeys = NetworkTables.getKeys();
       this.updatedEntriesBeforeReady.forEach(key => {
-        if (!ntKeys.includes(key)) {
-          NetworkTables.putValue(key, this.getSource(key));
-        }
+        NetworkTables.putValue(key, this.getSource(key));
       });
 
       if ('connect' in NetworkTables) {
@@ -78,7 +76,7 @@ export default class NetworkTablesProvider extends SourceProvider {
     this.address = settings.address;
   }
 
-  updateFromDashboard(key, value) {
+  userUpdate(key, value) {
     if ('NetworkTables' in  window) {
       NetworkTables.putValue(key, value);
     } else {
