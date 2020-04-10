@@ -2,13 +2,50 @@
   <head></head>
 
   <body>
+
+    <script>
+      function printChange(key, value) {
+        console.log(`value for ${key} changed to ${value}`);
+      }
+    </script>
+
     <frc-dashboard>
-      <nt-boolean key="/bool1" value="false"></nt-boolean>
+      <nt-boolean 
+        key="/bool1" 
+        value="false" 
+        onchange="printChange(this.key, this.value)"
+      ></nt-boolean>
+      <nt-number 
+        key="/slider" 
+        value="-3"
+        onchange="printChange(this.key, this.value)"
+      ></nt-number>
+      <nt-string
+        key="/string1" 
+        onchange="printChange(this.key, this.value)"
+      ></nt-string>
+      <nt-boolean-array
+        key="/boolArray" 
+        value="[true,false,true,true,false]"
+        onchange="printChange(this.key, this.value)"
+      ></nt-boolean-array>
+      <nt-number-array
+        key="/numArray" 
+        onchange="printChange(this.key, this.value)"
+      ></nt-number-array>
+      <nt-string-array
+        key="/string2Array" 
+        onchange="printChange(this.key, this.value)"
+      ></nt-string-array>
       <frc-boolean-box 
         source-key="/box"
         default-color="gray"
         true-color="purple"
       ></frc-boolean-box>
+      <nt-robot-connection
+        onchange="console.log(`robot connected: ${this.connected}`)"
+        immediate-notify
+      ></nt-robot-connection>
       <frc-number-slider source-key="/slider"></frc-number-slider>
       <frc-text-view source-key="/slider"></frc-text-view>
       <frc-relay source-key="/relay"></frc-relay>

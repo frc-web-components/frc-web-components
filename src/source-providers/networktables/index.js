@@ -1,6 +1,12 @@
 
 import { SourceProvider, addSourceProviderType } from '@webbitjs/store';
 import './nt-boolean';
+import './nt-number';
+import './nt-string';
+import './nt-boolean-array';
+import './nt-number-array';
+import './nt-string-array';
+import './nt-robot-connection';
 
 const getType = (value) => {
   if (['number', 'boolean', 'string'].includes(typeof value)) {
@@ -103,6 +109,31 @@ export default class NetworkTablesProvider extends SourceProvider {
         if (!this.updatedEntriesBeforeReady.includes(key)) {
           this.updatedEntriesBeforeReady.push(key);
         }
+      }
+    }
+  }
+
+  isRobotConnected() {
+    if ('NetworkTables' in window) {
+      return NetworkTables.isRobotConnected();
+    }
+    return false;
+  }
+
+  async addRobotConnectionListener(listener, immediateNotify) {
+    if ('NetworkTables' in window) {
+      NetworkTables.addRobotConnectionListener(listener, immediateNotify);
+    } else {
+      // No NetworkTables, so can't be connected to robot
+      if (immediateNotify) {
+        listener(false);
+      }
+      await this.ntReady;
+      // Listener has already been notified, so don't immediately notify.
+      // Only send a notification if connection has changed (from false to true)
+      NetworkTables.addRobotConnectionListener(listener, false);
+      if (immediateNotify && NetworkTables.isRobotConnected()) {
+        listener(true);
       }
     }
   }

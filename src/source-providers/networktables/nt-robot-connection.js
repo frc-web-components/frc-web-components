@@ -1,7 +1,23 @@
 import { LitElement } from '@webbitjs/webbit';
 import { getSourceProvider, sourceProviderAdded } from '@webbitjs/store';
 
-export default class NtEntry extends LitElement {
+export default class NtRobotConnection extends LitElement {
+
+  static get properties() {
+    return {
+      immediateNotify: { type: Boolean, attribute: 'immediate-notify' },
+      connected: { type: Boolean, reflect: true }
+    }
+  }
+
+  set connected(value) {}
+  
+  get connected() {
+    if (!this.provider) {
+      return false;
+    }
+    return this.provider.isRobotConnected();
+  }
 
   constructor() {
     super();
@@ -16,16 +32,17 @@ export default class NtEntry extends LitElement {
     });
 
     this.hasProvider.then(provider => {
-      provider.subscribe(this.key, async (value) => {
+      provider.addRobotConnectionListener(async (connected) => {
         await this.requestUpdate('value');
         const event = new CustomEvent('change', {
           detail: {
-            key: this.key,
-            value
+            connected
           }
         });
         this.dispatchEvent(event);
-      }, true);
+      }, this.immediateNotify);
     });
   }
 }
+
+customElements.define('nt-robot-connection', NtRobotConnection);
