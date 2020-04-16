@@ -41,6 +41,10 @@
         onchange="console.log(`robot connected: ${this.connected}`)"
         immediate-notify
       ></nt-robot-connection>
+      <nt-global-listener
+        onchange="console.log(`global change: ${this.key}: ${this.value}`)"
+        immediate-notify
+      ></nt-global-listener>
       <frc-number-slider source-key="/slider"></frc-number-slider>
       <frc-text-view source-key="/slider"></frc-text-view>
       <frc-relay source-key="/relay"></frc-relay>

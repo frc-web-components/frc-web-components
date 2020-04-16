@@ -7,6 +7,7 @@ import './nt-boolean-array';
 import './nt-number-array';
 import './nt-string-array';
 import './nt-robot-connection';
+import './nt-global-listener';
 
 const getType = (value) => {
   if (['number', 'boolean', 'string'].includes(typeof value)) {
