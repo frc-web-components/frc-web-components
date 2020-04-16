@@ -5,7 +5,8 @@ class NtNumber extends NtEntry {
   static get properties() {
     return {
       key: { type: String },
-      value: { type: Number, reflect: true }
+      value: { type: Number, reflect: true },
+      immediateNotify: { type: Boolean, attribute: 'immediate-notify' }
     };
   }
 

@@ -3,17 +3,12 @@
 
   <body>
 
-    <script>
-      function printChange(key, value) {
-        console.log(`value for ${key} changed to ${value}`);
-      }
-    </script>
-
-    <frc-dashboard>
+    <frc-dashboard onload="loaded()">
       <nt-boolean 
         key="/bool1" 
         value="false" 
         onchange="printChange(this.key, this.value)"
+        immediate-notify
       ></nt-boolean>
       <nt-number 
         key="/slider" 
@@ -52,9 +47,17 @@
       <frc-toggle-button source-key="/toggle/toggled"></frc-toggle-button>
     </frc-dashboard>
 
+    <script>
+      function printChange(key, value) {
+        console.log(`value for ${key} changed to ${value}`);
+      }
+
+      function loaded() {
+        console.log('NetworkTables:', NetworkTables);
+      }
+    </script>
+
     <script src="./webbit-frc.js"></script>
-
-
   </body>
 
 </html>

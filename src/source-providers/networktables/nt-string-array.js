@@ -5,7 +5,8 @@ class NtStringArray extends NtEntry {
   static get properties() {
     return {
       key: { type: String },
-      value: { type: Array, reflect: true }
+      value: { type: Array, reflect: true },
+      immediateNotify: { type: Boolean, attribute: 'immediate-notify' }
     };
   }
 

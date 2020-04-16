@@ -16,16 +16,28 @@ export default class NtEntry extends LitElement {
     });
 
     this.hasProvider.then(provider => {
+
+      if (this.immediateNotify) {
+        const value = provider.getSource(this.key);
+        if (value !== undefined) {
+          this.dispatchChangeEvent(value);
+        }
+      }
+
       provider.subscribe(this.key, async (value) => {
         await this.requestUpdate('value');
-        const event = new CustomEvent('change', {
-          detail: {
-            key: this.key,
-            value
-          }
-        });
-        this.dispatchEvent(event);
+        this.dispatchChangeEvent(value);
       }, true);
     });
+  }
+
+  dispatchChangeEvent(value) {
+    const event = new CustomEvent('change', {
+      detail: {
+        key: this.key,
+        value
+      }
+    });
+    this.dispatchEvent(event);
   }
 }

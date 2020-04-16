@@ -5,7 +5,8 @@ class NtBoolean extends NtEntry {
   static get properties() {
     return {
       key: { type: String },
-      value: { type: String, reflect: true }
+      value: { type: String, reflect: true },
+      immediateNotify: { type: Boolean, attribute: 'immediate-notify' }
     };
   }
 
