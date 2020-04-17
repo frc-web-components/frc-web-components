@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server -d --inline --config webpack.config.js",
     "build": "webpack -d --config webpack.config.js",
-    "build:prod": "webpack -p --config webpack.config.js"
+    "build:prod": "webpack -p --config webpack.config.js --devtool none --output-filename webbit-frc.min.js"
   },
   "repository": {
     "type": "git",
