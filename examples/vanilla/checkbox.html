@@ -1,0 +1,65 @@
+
+<html>
+  <head>
+    <title>Checkbox</title>
+    <link rel="stylesheet" type="text/css" href="./styles.css">
+  </head>
+  <body>
+    <a href="./index.html">Back to all examples</a>
+    <h2>Examples for Checkbox</h2>
+    
+    <frc-dashboard>
+      <!-- Code for "With attributes" example -->
+      <h3>With attributes</h3>
+      <frc-checkbox checked></frc-checkbox>
+      <frc-checkbox disabled></frc-checkbox>
+      
+      <!-- Code for "With label" example -->
+      <h3>With label</h3>
+      <frc-checkbox checked>With label</frc-checkbox>
+
+      <!-- Code for "With NetworkTables" example -->
+      <h3>With NetworkTables</h3>
+      <nt-boolean key="/bool1" value="true"></nt-boolean>
+      <nt-boolean key="/bool2" value="false"></nt-boolean>
+
+      <frc-checkbox source-key="/bool1">/bool1</frc-checkbox>
+      <frc-checkbox source-key="/bool2">/bool2</frc-checkbox>
+
+      <nt-boolean key="/checkbox1/checked" value="true"></nt-boolean>
+      <nt-string key="/checkbox1/disabled" value="true"></nt-string>
+
+      <frc-checkbox source-key="/checkbox1">/checkbox1</frc-checkbox>
+
+      <!-- Code for "With attributes and NetworkTables" example -->
+      <h3>With attributes and NetworkTables</h3>
+
+      <nt-boolean key="/checkbox2/checked" value="false"></nt-boolean>
+
+      <frc-checkbox 
+        source-key="/checkbox2"
+        disabled
+      >/checkbox2</frc-checkbox>
+
+      <!-- code for "Try it out" section -->
+      <h3>Try it out!</h3>
+
+      <nt-boolean key="/playground/checked" value="true"></nt-boolean>
+      <nt-boolean key="/playground/disabled" value="false"></nt-boolean>
+
+      <frc-checkbox source-key="/playground">Try it out!</frc-checkbox>
+
+      <div class="try-it-out">
+        <label>Checked</label>
+        <frc-checkbox source-key="/playground/checked"></frc-checkbox>
+
+        <label>Disabled</label>
+        <frc-checkbox source-key="/playground/disabled"></frc-checkbox>
+      </div>
+
+
+    </frc-dashboard>
+
+    <script src="./webbit-frc.js"></script>
+  </body>
+</html>
