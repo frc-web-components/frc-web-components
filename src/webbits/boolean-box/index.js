@@ -18,6 +18,7 @@ class BooleanBox extends Webbit {
         align-content: center;
         flex-wrap: wrap;
         background-color: var(--box-color);
+        text-align: center;
       }
     `;
   }

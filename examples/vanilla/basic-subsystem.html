@@ -1,0 +1,42 @@
+
+<html>
+  <head>
+    <title>Basic Subsystem</title>
+    <link rel="stylesheet" type="text/css" href="./styles.css">
+  </head>
+  <body>
+    <a href="./index.html">Back to all examples</a>
+    <h2>Examples for Basic Subsystem</h2>
+    
+    <frc-dashboard>
+      <h3>With attributes</h3>
+      <frc-basic-subsystem
+        default="Go Forward"
+        command="Go Backwards"
+      ></frc-basic-subsystem>
+
+      <h3>With NetworkTables</h3>
+      <nt-string key="/LiveWindow/Ungrouped/Drivetrain/.default" value="Go Left"></nt-string>
+      <nt-string key="/LiveWindow/Ungrouped/Drivetrain/.command" value="Go Right"></nt-string>
+      <frc-basic-subsystem source-key="/LiveWindow/Ungrouped/Drivetrain"></frc-basic-subsystem>
+
+      <h3>With styles</h3>
+      <style>
+        .with-styles {
+          text-transform: uppercase;
+          color: white;
+          padding: 10px;
+          background: black;
+        }
+      </style>
+      <frc-basic-subsystem
+        class="with-styles"
+        default="Go Forward"
+        command="Go Backwards"
+      ></frc-basic-subsystem>
+
+    </frc-dashboard>
+
+    <script src="./webbit-frc.js"></script>
+  </body>
+</html>
