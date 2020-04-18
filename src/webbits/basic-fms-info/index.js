@@ -31,6 +31,7 @@ class BasicFmsInfo extends Webbit {
         display: flex;
         flex-direction: column;
         justify-content: center;
+        font-family: sans-serif;
       }
 
       [icon="vaadin:check"] {
@@ -47,7 +48,7 @@ class BasicFmsInfo extends Webbit {
     return {
       matchType: { type: Number, attribute: 'match-type' },
       matchNumber: { type: Number, attribute: 'match-number' },
-      eventName: { type: Number, attribute: 'event-name' },
+      eventName: { type: String, attribute: 'event-name' },
       fmsControlData: { type: Number, attribute: 'fms-control-data' }
     };
   }

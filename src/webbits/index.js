@@ -14,3 +14,4 @@ import './toggle-switch';
 import './voltage-view';
 import './cad-viewer';
 import './line-chart';
+import '@vaadin/vaadin';
