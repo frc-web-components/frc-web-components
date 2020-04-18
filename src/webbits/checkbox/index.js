@@ -24,12 +24,18 @@ class Checkbox extends Webbit {
     this.disabled = false;
   }
 
+  onChange(ev) {
+    const [target] = ev.path;
+    this.checked = target.checked;
+  }
+
   render() {
     return html`   
       <vaadin-checkbox 
         value="Option" 
         ?checked="${this.checked}" 
         ?disabled="${this.disabled}"
+        @change="${this.onChange}"
       >
         <slot></slot>
       </vaadin-checkbox>

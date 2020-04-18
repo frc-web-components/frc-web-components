@@ -15,14 +15,17 @@
     <h2>Examples for Boolean Box</h2>
     
     <frc-dashboard>
+      <!-- Code for "With attributes" example -->
       <h3>With attributes</h3>
       <frc-boolean-box value></frc-boolean-box>
       <frc-boolean-box default-color="gray"></frc-boolean-box>
       <frc-boolean-box false-color="pink" true-color="purple" value></frc-boolean-box>
       
+      <!-- Code for "With text" example -->
       <h3>With text</h3>
       <frc-boolean-box value>This is a Boolean Box</frc-boolean-box>
 
+      <!-- Code for "With NetworkTables" example -->
       <h3>With NetworkTables</h3>
       <nt-boolean key="/bool1" value="true"></nt-boolean>
       <nt-boolean key="/bool2" value="false"></nt-boolean>
@@ -35,6 +38,7 @@
       <nt-boolean key="/box1/value" value="true"></nt-boolean>
       <nt-string key="/box1/trueColor" value="blue"></nt-string>
 
+      <!-- Code for "With attributes and NetworkTables" example -->
       <h3>With attributes and NetworkTables</h3>
 
       <nt-boolean key="/box2/value" value="false"></nt-boolean>
@@ -45,6 +49,7 @@
         false-color="#00aa88"
       ></frc-boolean-box>
 
+      <!-- Code for "With styles" example -->
       <h3>With styles</h3>
 
       <style>
@@ -57,6 +62,26 @@
       <frc-boolean-box class="with-styles" value>
         Boolean Circle
       </frc-boolean-box>
+
+      <!-- code for "Try it out" section -->
+      <h3>Try it out!</h3>
+
+      <nt-boolean key="/playground/value" value="true"></nt-boolean>
+      <nt-string key="/playground/trueColor" value="green"></nt-string>
+      <nt-string key="/playground/falseColor" value="#ff0000"></nt-string>
+
+      <frc-boolean-box source-key="/playground"></frc-boolean-box>
+
+      <div class="try-it-out">
+        <label>Value</label>
+        <frc-checkbox source-key="/playground/value"></frc-checkbox>
+
+        <label>True Color</label>
+        <frc-text-view source-key="/playground/trueColor"></frc-text-view>
+
+        <label>False Color</label>
+        <frc-text-view source-key="/playground/falseColor"></frc-text-view>
+      </div>
 
 
     </frc-dashboard>

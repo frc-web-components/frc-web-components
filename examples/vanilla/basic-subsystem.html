@@ -9,17 +9,21 @@
     <h2>Examples for Basic Subsystem</h2>
     
     <frc-dashboard>
+
+        <!-- Code for "With attributes" example -->
       <h3>With attributes</h3>
       <frc-basic-subsystem
         default="Go Forward"
         command="Go Backwards"
       ></frc-basic-subsystem>
 
+      <!-- Code for "With NetworkTables" example -->
       <h3>With NetworkTables</h3>
       <nt-string key="/LiveWindow/Ungrouped/Drivetrain/.default" value="Go Left"></nt-string>
       <nt-string key="/LiveWindow/Ungrouped/Drivetrain/.command" value="Go Right"></nt-string>
       <frc-basic-subsystem source-key="/LiveWindow/Ungrouped/Drivetrain"></frc-basic-subsystem>
 
+      <!-- Code for "With styles" example -->
       <h3>With styles</h3>
       <style>
         .with-styles {
@@ -34,6 +38,23 @@
         default="Go Forward"
         command="Go Backwards"
       ></frc-basic-subsystem>
+
+      <!-- code for "Try it out" section -->
+      <h3>Try it out!</h3>
+
+      <nt-string key="/playground/.default" value="Stop"></nt-string>
+      <nt-string key="/playground/.command" value="Go"></nt-string>
+
+      <frc-basic-subsystem source-key="/playground"></frc-basic-subsystem>
+
+
+      <div class="try-it-out">
+        <label>Default</label>
+        <frc-text-view source-key="/playground/.default"></frc-text-view>
+
+        <label>Command</label>
+        <frc-text-view source-key="/playground/.command"></frc-text-view>
+      </div>
 
     </frc-dashboard>
 

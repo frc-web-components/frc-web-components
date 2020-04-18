@@ -7,8 +7,9 @@
   <body>
     <a href="./index.html">Back to all examples</a>
     <h2>Examples for Basic FMS Info</h2>
-    
+
     <frc-dashboard>
+      <!-- Code for "With attributes" example -->
       <h3>With attributes</h3>
       <frc-basic-fms-info
         match-type="2"
@@ -17,6 +18,7 @@
         fms-control-data="33"
       ></frc-basic-fms-info>
 
+      <!-- Code for "With NetworkTables" example -->
       <h3>With NetworkTables</h3>
       <nt-number key="/FMSInfo/MatchType" value="1"></nt-number>
       <nt-number key="/FMSInfo/MatchNumber" value="2"></nt-number>
@@ -24,6 +26,7 @@
       <nt-number key="/FMSInfo/FMSControlData" value="29"></nt-number>
       <frc-basic-fms-info source-key="/FMSInfo"></frc-basic-fms-info>
 
+      <!-- Code for "With styles" example -->
       <h3>With styles</h3>
       <style>
         .with-styles {
@@ -33,6 +36,33 @@
         }
       </style>
       <frc-basic-fms-info class="with-styles"></frc-basic-fms-info>
+
+      <!-- code for "Try it out" section -->
+      <h3>Try it out!</h3>
+
+      <nt-number key="/playground/MatchType" value="1"></nt-number>
+      <nt-number key="/playground/MatchNumber" value="2"></nt-number>
+      <nt-string key="/playground/EventName" value="Another Event"></nt-string> 
+      <nt-number key="/playground/FMSControlData" value="29"></nt-number>
+
+      <frc-basic-fms-info source-key="/playground"></frc-basic-fms-info>
+
+
+      <div class="try-it-out">
+        <label>Match Type</label>
+        <frc-text-view source-key="/playground/MatchType"></frc-text-view>
+
+        <label>Match Number</label>
+        <frc-text-view source-key="/playground/MatchNumber"></frc-text-view>
+
+        <label>Event Name</label>
+        <frc-text-view source-key="/playground/EventName"></frc-text-view>
+
+        <label>FMS Control Data</label>
+        <frc-text-view source-key="/playground/FMSControlData"></frc-text-view>
+      </div>
+
+
 
     </frc-dashboard>
 
