@@ -23,7 +23,7 @@
     "@google/model-viewer": "^0.8.1",
     "@vaadin/vaadin": "^14.1.16",
     "@webbitjs/store": "^1.0.7",
-    "@webbitjs/webbit": "^1.0.10",
+    "@webbitjs/webbit": "^1.0.11",
     "chart.js": "^2.8.0",
     "d3": "^5.15.0",
     "svg-gauge": "^1.0.6"
