@@ -55,6 +55,14 @@ class TextView extends Webbit {
         this.value = false;
       }
     }
+    else if (this.value instanceof Array) {
+      try {
+        const parsedValue = JSON.parse(value);
+        if (parsedValue instanceof Array) {
+          this.value = parsedValue;
+        }
+      } catch (e) {}
+    }
   }
 
   render() {
@@ -63,7 +71,9 @@ class TextView extends Webbit {
         part="input"
         type="${typeof this.value === 'number' ? 'number' : 'text'}"
         @change="${this.onChange}"
-        .value="${this.value.toString()}"
+        .value="${this.value instanceof Array 
+          ? JSON.stringify(this.value) 
+          : this.value.toString()}"
       />
     `;
   }

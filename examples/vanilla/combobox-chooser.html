@@ -1,0 +1,81 @@
+
+<html>
+  <head>
+    <title>Combo Box Chooser</title>
+    <link rel="stylesheet" type="text/css" href="./styles.css">
+  </head>
+  <body>
+    <a href="./index.html">Back to all examples</a>
+    <h2>Examples for Combo Box Chooser</h2>
+    
+    <frc-dashboard>
+      <!-- Code for "With attributes" example -->
+      <h3>With attributes</h3>
+
+      <frc-combobox-chooser 
+        name="Combo Box"
+        selected="Option 2"
+        default="Option 1"
+        options='["Option 1", "Option 2", "Option 3", "Option 4"]'
+      ></frc-combobox-chooser>
+
+      <!-- Code for "With NetworkTables" example -->
+      <h3>With NetworkTables</h3>
+
+      <nt-string 
+        key="/SmartDashboard/Autonomous Mode/.name" 
+        value="Autonomous Mode"
+      ></nt-string>
+
+      <nt-string 
+        key="/SmartDashboard/Autonomous Mode/selected" 
+        value="Drive Backwards"
+      ></nt-string>
+
+      <nt-string 
+        key="/SmartDashboard/Autonomous Mode/default" 
+        value="None"
+      ></nt-string>
+
+      <nt-string-array
+        key="/SmartDashboard/Autonomous Mode/options" 
+        value='["Drive Backwards", "Drive Forward", "Feature Example", "None"]'
+      ></nt-string-array>
+
+      <frc-combobox-chooser 
+        source-key="/SmartDashboard/Autonomous Mode"
+      >/checkbox1</frc-combobox-chooser>
+
+      <!-- code for "Try it out" section -->
+      <h3>Try it out!</h3>
+
+      <nt-string key="/playground/.name" value="Try it out"></nt-string>
+      <nt-string key="/playground/selected" value="A"></nt-string>
+      <nt-string key="/playground/default" value="B"></nt-string>
+      <nt-string-array 
+        key="/playground/options" 
+        value='["A", "B", "C", "D"]'
+      ></nt-string-array>
+
+      <frc-combobox-chooser source-key="/playground"></frc-combobox-chooser>
+
+      <div class="try-it-out">
+        <label>Name</label>
+        <frc-text-view source-key="/playground/.name"></frc-text-view>
+
+        <label>Selected</label>
+        <frc-text-view source-key="/playground/selected"></frc-text-view>
+
+        <label>Default</label>
+        <frc-text-view source-key="/playground/default"></frc-text-view>
+
+        <label>Options</label>
+        <frc-text-view source-key="/playground/options"></frc-text-view>
+      </div>
+
+
+    </frc-dashboard>
+
+    <script src="./webbit-frc.js"></script>
+  </body>
+</html>
