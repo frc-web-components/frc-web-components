@@ -28,6 +28,9 @@ import * as CurvedArrow from '../curved-arrow';
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(value, min));
+}
 
 function map(x, minInput, maxInput, minOutput, maxOutput) {
   return (x - minInput) * (maxOutput - minOutput) / (maxInput - minInput) + minOutput;
@@ -286,7 +289,7 @@ class DifferentialDrivebase extends Webbit {
   getForegroundStyle(value) {
     const min = -1;
     const max = 1;
-    const val = Math.clamp(value, min, max);
+    const val = clamp(value, min, max);
 
     if (max < 0) {
       return `

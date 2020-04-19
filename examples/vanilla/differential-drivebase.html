@@ -1,0 +1,66 @@
+
+<html>
+  <head>
+    <title>Differential Drivebase</title>
+    <link rel="stylesheet" type="text/css" href="./styles.css">
+  </head>
+  <body>
+    <a href="./index.html">Back to all examples</a>
+    <h2>Examples for Differential Drivebase</h2>
+    
+    <frc-dashboard>
+      <!-- Code for "With attributes" example -->
+      <h3>With attributes</h3>
+
+      <frc-differential-drivebase 
+        left-motor-speed=".7"
+        right-motor-speed="-.1"
+      ></frc-differential-drivebase>
+
+      <!-- Code for "With NetworkTables" example -->
+      <h3>With NetworkTables</h3>
+
+      <nt-number 
+        key="/LiveWindow/Ungrouped/DifferentialDrive[1]/Left Motor Speed" 
+        value="-.5"
+      ></nt-number>
+
+      <nt-number 
+        key="/LiveWindow/Ungrouped/DifferentialDrive[1]/Right Motor Speed" 
+        value=".5"
+      ></nt-number>
+
+      <frc-differential-drivebase 
+        source-key="/LiveWindow/Ungrouped/DifferentialDrive[1]"
+      ></frc-differential-drivebase>
+
+      <!-- code for "Try it out" section -->
+      <h3>Try it out!</h3>
+
+      <nt-number 
+        key="/playground/Left Motor Speed" 
+        value="-.5"
+      ></nt-number>
+
+      <nt-number 
+        key="/playground/Right Motor Speed" 
+        value=".5"
+      ></nt-number>
+
+      <frc-differential-drivebase 
+        source-key="/playground"
+      ></frc-differential-drivebase>
+
+      <div class="try-it-out">
+        <label>Left Motor Speed</label>
+        <frc-text-view source-key="/playground/Left Motor Speed"></frc-text-view>
+
+        <label>Right Motor Speed</label>
+        <frc-text-view source-key="/playground/Right Motor Speed"></frc-text-view>
+      </div>
+
+    </frc-dashboard>
+
+    <script src="./webbit-frc.js"></script>
+  </body>
+</html>
