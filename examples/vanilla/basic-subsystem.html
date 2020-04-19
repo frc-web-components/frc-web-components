@@ -3,6 +3,8 @@
   <head>
     <title>Basic Subsystem</title>
     <link rel="stylesheet" type="text/css" href="./styles.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
   </head>
   <body>
     <a href="./index.html">Back to all examples</a>
@@ -17,11 +19,26 @@
         command="Go Backwards"
       ></frc-basic-subsystem>
 
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With attributes&quot; example --&gt;
+        &lt;frc-basic-subsystem
+          default=&quot;Go Forward&quot;
+          command=&quot;Go Backwards&quot;
+        &gt;&lt;/frc-basic-subsystem&gt;
+      </code></pre>
+
       <!-- Code for "With NetworkTables" example -->
       <h3>With NetworkTables</h3>
       <nt-string key="/LiveWindow/Ungrouped/Drivetrain/.default" value="Go Left"></nt-string>
       <nt-string key="/LiveWindow/Ungrouped/Drivetrain/.command" value="Go Right"></nt-string>
       <frc-basic-subsystem source-key="/LiveWindow/Ungrouped/Drivetrain"></frc-basic-subsystem>
+
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With NetworkTables&quot; example --&gt;
+        &lt;nt-string key=&quot;/LiveWindow/Ungrouped/Drivetrain/.default&quot; value=&quot;Go Left&quot;&gt;&lt;/nt-string&gt;
+        &lt;nt-string key=&quot;/LiveWindow/Ungrouped/Drivetrain/.command&quot; value=&quot;Go Right&quot;&gt;&lt;/nt-string&gt;
+        &lt;frc-basic-subsystem source-key=&quot;/LiveWindow/Ungrouped/Drivetrain&quot;&gt;&lt;/frc-basic-subsystem&gt;
+      </code></pre>
 
       <!-- Code for "With styles" example -->
       <h3>With styles</h3>
@@ -38,6 +55,23 @@
         default="Go Forward"
         command="Go Backwards"
       ></frc-basic-subsystem>
+
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With styles&quot; example --&gt;
+        &lt;style&gt;
+          .with-styles {
+            text-transform: uppercase;
+            color: white;
+            padding: 10px;
+            background: black;
+          }
+        &lt;/style&gt;
+        &lt;frc-basic-subsystem
+          class=&quot;with-styles&quot;
+          default=&quot;Go Forward&quot;
+          command=&quot;Go Backwards&quot;
+        &gt;&lt;/frc-basic-subsystem&gt;
+      </code></pre>
 
       <!-- code for "Try it out" section -->
       <h3>Try it out!</h3>
@@ -59,5 +93,9 @@
     </frc-dashboard>
 
     <script src="./webbit-frc.js"></script>
+
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
   </body>
 </html>

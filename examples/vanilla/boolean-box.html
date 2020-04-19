@@ -3,6 +3,8 @@
   <head>
     <title>Boolean Box</title>
     <link rel="stylesheet" type="text/css" href="./styles.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
 
     <style>
       frc-boolean-box {
@@ -19,11 +21,31 @@
       <h3>With attributes</h3>
       <frc-boolean-box value></frc-boolean-box>
       <frc-boolean-box default-color="gray"></frc-boolean-box>
-      <frc-boolean-box false-color="pink" true-color="purple" value></frc-boolean-box>
+      <frc-boolean-box 
+        false-color="#ff7788" 
+        true-color="purple" 
+        value
+      ></frc-boolean-box>
+
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With attributes&quot; example --&gt;
+        &lt;frc-boolean-box value&gt;&lt;/frc-boolean-box&gt;
+        &lt;frc-boolean-box default-color=&quot;gray&quot;&gt;&lt;/frc-boolean-box&gt;
+        &lt;frc-boolean-box 
+          false-color=&quot;#ff7788&quot; 
+          true-color=&quot;purple&quot; 
+          value
+        &gt;&lt;/frc-boolean-box&gt;
+      </code></pre>
       
       <!-- Code for "With text" example -->
       <h3>With text</h3>
       <frc-boolean-box value>This is a Boolean Box</frc-boolean-box>
+
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With text&quot; example --&gt;
+        &lt;frc-boolean-box value&gt;This is a Boolean Box&lt;/frc-boolean-box&gt;
+      </code></pre>
 
       <!-- Code for "With NetworkTables" example -->
       <h3>With NetworkTables</h3>
@@ -38,6 +60,24 @@
       <nt-boolean key="/box1/value" value="true"></nt-boolean>
       <nt-string key="/box1/trueColor" value="blue"></nt-string>
 
+      <frc-boolean-box source-key="/box1"></frc-boolean-box>
+
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With NetworkTables&quot; example --&gt;
+        &lt;nt-boolean key=&quot;/bool1&quot; value=&quot;true&quot;&gt;&lt;/nt-boolean&gt;
+        &lt;nt-boolean key=&quot;/bool2&quot; value=&quot;false&quot;&gt;&lt;/nt-boolean&gt;
+        &lt;nt-boolean key=&quot;/bool3&quot;&gt;&lt;/nt-boolean&gt;
+
+        &lt;frc-boolean-box source-key=&quot;/bool1&quot;&gt;&lt;/frc-boolean-box&gt;
+        &lt;frc-boolean-box source-key=&quot;/bool2&quot;&gt;&lt;/frc-boolean-box&gt;
+        &lt;frc-boolean-box source-key=&quot;/bool3&quot;&gt;&lt;/frc-boolean-box&gt;
+
+        &lt;nt-boolean key=&quot;/box1/value&quot; value=&quot;true&quot;&gt;&lt;/nt-boolean&gt;
+        &lt;nt-string key=&quot;/box1/trueColor&quot; value=&quot;blue&quot;&gt;&lt;/nt-string&gt;
+
+        &lt;frc-boolean-box source-key=&quot;/box1&quot;&gt;&lt;/frc-boolean-box&gt;
+      </code></pre>
+
       <!-- Code for "With attributes and NetworkTables" example -->
       <h3>With attributes and NetworkTables</h3>
 
@@ -48,6 +88,17 @@
         true-color="blue"
         false-color="#00aa88"
       ></frc-boolean-box>
+
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With attributes and NetworkTables&quot; example --&gt;
+        &lt;nt-boolean key=&quot;/box2/value&quot; value=&quot;false&quot;&gt;&lt;/nt-boolean&gt;
+
+        &lt;frc-boolean-box 
+          source-key=&quot;/box2&quot;
+          true-color=&quot;blue&quot;
+          false-color=&quot;#00aa88&quot;
+        &gt;&lt;/frc-boolean-box&gt;
+      </code></pre>
 
       <!-- Code for "With styles" example -->
       <h3>With styles</h3>
@@ -62,6 +113,20 @@
       <frc-boolean-box class="with-styles" value>
         Boolean Circle
       </frc-boolean-box>
+
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With styles&quot; example --&gt;
+        &lt;style&gt;
+          .with-styles::part(box) {
+            border-radius: 50%;
+            border: 3px solid black;
+            color: white;
+          }
+        &lt;/style&gt;
+        &lt;frc-boolean-box class=&quot;with-styles&quot; value&gt;
+          Boolean Circle
+        &lt;/frc-boolean-box&gt;
+      </code></pre>
 
       <!-- code for "Try it out" section -->
       <h3>Try it out!</h3>
@@ -87,5 +152,9 @@
     </frc-dashboard>
 
     <script src="./webbit-frc.js"></script>
+
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
   </body>
 </html>

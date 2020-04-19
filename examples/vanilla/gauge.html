@@ -1,0 +1,106 @@
+
+<html>
+  <head>
+    <title>Gauge</title>
+    <link rel="stylesheet" type="text/css" href="./styles.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
+  </head>
+  <body>
+    <a href="./index.html">Back to all examples</a>
+    <h2>Examples for Gauge</h2>
+    
+    <frc-dashboard>
+      <!-- Code for "With attributes" example -->
+      <h3>With attributes</h3>
+
+      <frc-gauge value="50" min="0" max="100"></frc-gauge>
+
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With attributes&quot; example --&gt;
+        &lt;frc-gauge value=&quot;50&quot; min=&quot;0&quot; max=&quot;100&quot;&gt;&lt;/frc-gauge&gt;
+      </code></pre>
+
+      <!-- Code for "With NetworkTables" example -->
+      <h3>With NetworkTables</h3>
+
+      <nt-number key="/gauge/value" value="-20"></nt-number>
+      <nt-number key="/gauge/min" value="-30"></nt-number>
+      <nt-number key="/gauge/max" value="10"></nt-number>
+
+      <frc-gauge source-key="/gauge"></frc-gauge>
+
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With NetworkTables&quot; example --&gt;
+        &lt;nt-number key=&quot;/gauge1/value&quot; value=&quot;-20&quot;&gt;&lt;/nt-number&gt;
+        &lt;nt-number key=&quot;/gauge1/min&quot; value=&quot;-30&quot;&gt;&lt;/nt-number&gt;
+        &lt;nt-number key=&quot;/gauge1/max&quot; value=&quot;10&quot;&gt;&lt;/nt-number&gt;
+
+        &lt;frc-gauge source-key=&quot;/gauge1&quot;&gt;&lt;/frc-gauge&gt;
+      </code></pre>
+
+      <!-- Code for "With attributes and NetworkTables" example -->
+      <h3>With attributes and NetworkTables</h3>
+
+      <nt-number key="/number" value="80"></nt-number>
+
+      <frc-gauge source-key="/number" min="0" max="100"></frc-gauge>
+
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With attributes and NetworkTables&quot; example --&gt;
+        &lt;nt-number key=&quot;/number&quot; value=&quot;80&quot;&gt;&lt;/nt-number&gt;
+
+        &lt;frc-gauge source-key=&quot;/number&quot; min=&quot;0&quot; max=&quot;100&quot;&gt;&lt;/frc-gauge&gt;
+      </code></pre>
+
+      <!-- Code for "With styles" example -->
+      <h3>With styles</h3>
+
+      <style>
+        .with-styles {
+          width: 400px;
+          height: 400px;
+        }
+      </style>
+      <frc-gauge class="with-styles" value="20"></frc-gauge>
+
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With styles&quot; example --&gt;
+        &lt;style&gt;
+          .with-styles {
+            width: 400px;
+            height: 400px;
+          }
+        &lt;/style&gt;
+        &lt;frc-gauge class=&quot;with-styles&quot; value=&quot;20&quot;&gt;&lt;/frc-gauge&gt;
+      </code></pre>
+
+      <!-- code for "Try it out" section -->
+      <h3>Try it out!</h3>
+
+      <nt-number key="/playground/value" value="50"></nt-number>
+      <nt-number key="/playground/min" value="0"></nt-number>
+      <nt-number key="/playground/max" value="100"></nt-number>
+
+      <frc-gauge source-key="/playground"></frc-gauge>
+
+      <div class="try-it-out">
+        <label>Value</label>
+        <frc-text-view source-key="/playground/value"></frc-text-view>
+
+        <label>Min</label>
+        <frc-text-view source-key="/playground/min"></frc-text-view>
+        
+        <label>Max</label>
+        <frc-text-view source-key="/playground/max"></frc-text-view>
+      </div>
+
+    </frc-dashboard>
+
+    <script src="./webbit-frc.js"></script>
+
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+  </body>
+</html>

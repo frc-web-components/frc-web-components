@@ -3,6 +3,8 @@
   <head>
     <title>Differential Drivebase</title>
     <link rel="stylesheet" type="text/css" href="./styles.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
   </head>
   <body>
     <a href="./index.html">Back to all examples</a>
@@ -16,6 +18,14 @@
         left-motor-speed=".7"
         right-motor-speed="-.1"
       ></frc-differential-drivebase>
+
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With attributes&quot; example --&gt;
+        &lt;frc-differential-drivebase 
+          left-motor-speed=&quot;.7&quot;
+          right-motor-speed=&quot;-.1&quot;
+        &gt;&lt;/frc-differential-drivebase&gt;
+      </code></pre>
 
       <!-- Code for "With NetworkTables" example -->
       <h3>With NetworkTables</h3>
@@ -34,6 +44,23 @@
         source-key="/LiveWindow/Ungrouped/DifferentialDrive[1]"
       ></frc-differential-drivebase>
 
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With NetworkTables&quot; example --&gt;
+        &lt;nt-number 
+          key=&quot;/LiveWindow/Ungrouped/DifferentialDrive[1]/Left Motor Speed&quot; 
+          value=&quot;-.5&quot;
+        &gt;&lt;/nt-number&gt;
+
+        &lt;nt-number 
+          key=&quot;/LiveWindow/Ungrouped/DifferentialDrive[1]/Right Motor Speed&quot; 
+          value=&quot;.5&quot;
+        &gt;&lt;/nt-number&gt;
+
+        &lt;frc-differential-drivebase 
+          source-key=&quot;/LiveWindow/Ungrouped/DifferentialDrive[1]&quot;
+        &gt;&lt;/frc-differential-drivebase&gt;
+      </code></pre>
+
       <!-- Code for "With styles" example -->
       <h3>With styles</h3>
 
@@ -48,6 +75,21 @@
         left-motor-speed=".7"
         right-motor-speed=".7"
       ></frc-differential-drivebase>
+
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With styles&quot; example --&gt;
+        &lt;style&gt;
+          .with-styles {
+            width: 450px;
+            height: 180px;
+          }
+        &lt;/style&gt;
+        &lt;frc-differential-drivebase 
+          class=&quot;with-styles&quot;
+          left-motor-speed=&quot;.7&quot;
+          right-motor-speed=&quot;.7&quot;
+        &gt;&lt;/frc-differential-drivebase&gt;
+      </code></pre>
 
       <!-- code for "Try it out" section -->
       <h3>Try it out!</h3>
@@ -77,5 +119,9 @@
     </frc-dashboard>
 
     <script src="./webbit-frc.js"></script>
+
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
   </body>
 </html>

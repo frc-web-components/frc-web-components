@@ -3,6 +3,9 @@
   <head>
     <title>Checkbox</title>
     <link rel="stylesheet" type="text/css" href="./styles.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
+
   </head>
   <body>
     <a href="./index.html">Back to all examples</a>
@@ -13,10 +16,21 @@
       <h3>With attributes</h3>
       <frc-checkbox checked></frc-checkbox>
       <frc-checkbox disabled></frc-checkbox>
+
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With attributes&quot; example --&gt;
+        &lt;frc-checkbox checked&gt;&lt;/frc-checkbox&gt;
+        &lt;frc-checkbox disabled&gt;&lt;/frc-checkbox&gt;
+      </code></pre>
       
       <!-- Code for "With label" example -->
       <h3>With label</h3>
       <frc-checkbox checked>With label</frc-checkbox>
+
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With label&quot; example --&gt;
+        &lt;frc-checkbox checked&gt;With label&lt;/frc-checkbox&gt;
+      </code></pre>
 
       <!-- Code for "With NetworkTables" example -->
       <h3>With NetworkTables</h3>
@@ -31,6 +45,20 @@
 
       <frc-checkbox source-key="/checkbox1">/checkbox1</frc-checkbox>
 
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With NetworkTables&quot; example --&gt;
+        &lt;nt-boolean key=&quot;/bool1&quot; value=&quot;true&quot;&gt;&lt;/nt-boolean&gt;
+        &lt;nt-boolean key=&quot;/bool2&quot; value=&quot;false&quot;&gt;&lt;/nt-boolean&gt;
+
+        &lt;frc-checkbox source-key=&quot;/bool1&quot;&gt;/bool1&lt;/frc-checkbox&gt;
+        &lt;frc-checkbox source-key=&quot;/bool2&quot;&gt;/bool2&lt;/frc-checkbox&gt;
+
+        &lt;nt-boolean key=&quot;/checkbox1/checked&quot; value=&quot;true&quot;&gt;&lt;/nt-boolean&gt;
+        &lt;nt-string key=&quot;/checkbox1/disabled&quot; value=&quot;true&quot;&gt;&lt;/nt-string&gt;
+
+        &lt;frc-checkbox source-key=&quot;/checkbox1&quot;&gt;/checkbox1&lt;/frc-checkbox&gt;
+      </code></pre>
+
       <!-- Code for "With attributes and NetworkTables" example -->
       <h3>With attributes and NetworkTables</h3>
 
@@ -40,6 +68,16 @@
         source-key="/checkbox2"
         disabled
       >/checkbox2</frc-checkbox>
+
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With attributes and NetworkTables&quot; example --&gt;
+        &lt;nt-boolean key=&quot;/checkbox2/checked&quot; value=&quot;false&quot;&gt;&lt;/nt-boolean&gt;
+
+        &lt;frc-checkbox 
+          source-key=&quot;/checkbox2&quot;
+          disabled
+        &gt;/checkbox2&lt;/frc-checkbox&gt;
+      </code></pre>
 
       <!-- code for "Try it out" section -->
       <h3>Try it out!</h3>
@@ -61,5 +99,9 @@
     </frc-dashboard>
 
     <script src="./webbit-frc.js"></script>
+
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
   </body>
 </html>

@@ -1,0 +1,190 @@
+
+<html>
+  <head>
+    <title>Number Bar</title>
+    <link rel="stylesheet" type="text/css" href="./styles.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
+  </head>
+  <body>
+    <a href="./index.html">Back to all examples</a>
+    <h2>Examples for Number Bar</h2>
+    
+    <frc-dashboard>
+      <!-- Code for "With attributes" example -->
+      <h3>With attributes</h3>
+
+      <frc-number-bar value=".5"></frc-number-bar>
+
+      <frc-number-bar 
+        value="2"
+        min="-10"
+        max="20"
+        center="5"
+        hide-text
+        num-tick-marks="3"
+      ></frc-number-bar>
+
+      <frc-number-bar 
+        value=".7"
+        min="0"
+        max="1"
+        center="0"
+      ></frc-number-bar>
+
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With attributes&quot; example --&gt;
+        &lt;frc-number-bar value=&quot;.5&quot;&gt;&lt;/frc-number-bar&gt;
+
+        &lt;frc-number-bar 
+          value=&quot;2&quot;
+          min=&quot;-10&quot;
+          max=&quot;20&quot;
+          center=&quot;5&quot;
+          hide-text
+          num-tick-marks=&quot;3&quot;
+        &gt;&lt;/frc-number-bar&gt;
+
+        &lt;frc-number-bar 
+          value=&quot;.7&quot;
+          min=&quot;0&quot;
+          max=&quot;1&quot;
+          center=&quot;0&quot;
+        &gt;&lt;/frc-number-bar&gt;
+      </code></pre>
+
+      <!-- Code for "With NetworkTables" example -->
+      <h3>With NetworkTables</h3>
+
+      <nt-number key="/bar1/value" value="7"></nt-number>
+      <nt-number key="/bar1/min" value="0"></nt-number>
+      <nt-number key="/bar1/max" value="10"></nt-number>
+      <nt-number key="/bar1/center" value="8"></nt-number>
+      <nt-boolean key="/bar1/hideText" value="false"></nt-boolean>
+      <nt-number key="/bar1/numTickMarks" value="7"></nt-number>
+
+      <frc-number-bar source-key="/bar1"></frc-number-bar>
+
+      <nt-number key="/num1" value="-.8"></nt-number>
+
+      <frc-number-bar source-key="/num1"></frc-number-bar>
+
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With NetworkTables&quot; example --&gt;
+        &lt;nt-number key=&quot;/bar1/value&quot; value=&quot;7&quot;&gt;&lt;/nt-number&gt;
+        &lt;nt-number key=&quot;/bar1/min&quot; value=&quot;0&quot;&gt;&lt;/nt-number&gt;
+        &lt;nt-number key=&quot;/bar1/max&quot; value=&quot;10&quot;&gt;&lt;/nt-number&gt;
+        &lt;nt-number key=&quot;/bar1/center&quot; value=&quot;8&quot;&gt;&lt;/nt-number&gt;
+        &lt;nt-boolean key=&quot;/bar1/hideText&quot; value=&quot;false&quot;&gt;&lt;/nt-boolean&gt;
+        &lt;nt-number key=&quot;/bar1/numTickMarks&quot; value=&quot;7&quot;&gt;&lt;/nt-number&gt;
+
+        &lt;frc-number-bar source-key=&quot;/bar1&quot;&gt;&lt;/frc-number-bar&gt;
+
+        &lt;nt-number key=&quot;/num1&quot; value=&quot;-.8&quot;&gt;&lt;/nt-number&gt;
+
+        &lt;frc-number-bar source-key=&quot;/num1&quot;&gt;&lt;/frc-number-bar&gt;
+      </code></pre>
+
+      <!-- Code for "With attributes and NetworkTables" example -->
+      <h3>With attributes and NetworkTables</h3>
+
+      <nt-number key="/num2" value="3"></nt-number>
+
+      <frc-number-bar source-key="/num2" max="5" hide-text></frc-number-bar>
+
+      <nt-number key="/bar2/min" value="-20"></nt-number>
+      <nt-number key="/bar2/max" value="20"></nt-number>
+
+      <frc-number-bar 
+        source-key="/bar2"
+        value="6" 
+        num-tick-marks="2"
+      ></frc-number-bar>
+
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With attributes and NetworkTables&quot; example --&gt;
+        &lt;nt-number key=&quot;/num2&quot; value=&quot;3&quot;&gt;&lt;/nt-number&gt;
+
+        &lt;frc-number-bar source-key=&quot;/num2&quot; max=&quot;5&quot; hide-text&gt;&lt;/frc-number-bar&gt;
+
+        &lt;nt-number key=&quot;/bar2/min&quot; value=&quot;-20&quot;&gt;&lt;/nt-number&gt;
+        &lt;nt-number key=&quot;/bar2/max&quot; value=&quot;20&quot;&gt;&lt;/nt-number&gt;
+
+        &lt;frc-number-bar 
+          source-key=&quot;/bar2&quot;
+          value=&quot;6&quot; 
+          num-tick-marks=&quot;2&quot;
+        &gt;&lt;/frc-number-bar&gt;
+      </code></pre>
+
+      <!-- Code for "With styles" example -->
+      <h3>With styles</h3>
+
+      <style>
+        .with-styles {
+          width: 700px;
+        }
+      </style>
+
+      <frc-number-bar 
+        class="with-styles"
+        value=".9"
+        num-tick-marks="11"
+      ></frc-number-bar>
+
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With styles&quot; example --&gt;
+        &lt;style&gt;
+          .with-styles {
+            width: 700px;
+          }
+        &lt;/style&gt;
+
+        &lt;frc-number-bar 
+          class=&quot;with-styles&quot;
+          value=&quot;.9&quot;
+          num-tick-marks=&quot;11&quot;
+        &gt;&lt;/frc-number-bar&gt;
+      </code></pre>
+
+      <!-- code for "Try it out" section -->
+      <h3>Try it out!</h3>
+
+      <nt-number key="/playground/value" value="1"></nt-number>
+      <nt-number key="/playground/min" value="-10"></nt-number>
+      <nt-number key="/playground/max" value="10"></nt-number>
+      <nt-number key="/playground/center" value="0"></nt-number>
+      <nt-boolean key="/playground/hideText" value="false"></nt-boolean>
+      <nt-number key="/playground/numTickMarks" value="7"></nt-number>
+
+      <frc-number-bar source-key="/playground"></frc-number-bar>
+
+      <div class="try-it-out">
+        <label>Value</label>
+        <frc-text-view source-key="/playground/value"></frc-text-view>
+
+        <label>Min</label>
+        <frc-text-view source-key="/playground/min"></frc-text-view>
+        
+        <label>Max</label>
+        <frc-text-view source-key="/playground/max"></frc-text-view>
+
+        <label>Center</label>
+        <frc-text-view source-key="/playground/center"></frc-text-view>
+
+        <label>Hide Text</label>
+        <frc-checkbox source-key="/playground/hideText"></frc-checkbox>
+
+        <label>Number of Ticks Marks</label>
+        <frc-text-view source-key="/playground/numTickMarks"></frc-text-view>
+      </div>
+
+    </frc-dashboard>
+
+    <script src="./webbit-frc.js"></script>
+
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+  </body>
+</html>

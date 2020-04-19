@@ -22,14 +22,12 @@
 
       <pre><code class="html">
         &lt;!-- Code for &quot;With attributes&quot; example --&gt;
-        &lt;frc-dashboard&gt;
-          &lt;frc-basic-fms-info
-            match-type=&quot;2&quot;
-            match-number=&quot;5&quot;
-            event-name=&quot;Some Event&quot;
-            fms-control-data=&quot;33&quot;
-          &gt;&lt;/frc-basic-fms-info&gt;
-        &lt;/frc-dashboard&gt;
+        &lt;frc-basic-fms-info
+          match-type=&quot;2&quot;
+          match-number=&quot;5&quot;
+          event-name=&quot;Some Event&quot;
+          fms-control-data=&quot;33&quot;
+        &gt;&lt;/frc-basic-fms-info&gt;
       </code></pre>
 
       <!-- Code for "With NetworkTables" example -->
@@ -42,13 +40,12 @@
 
       <pre><code class="html">
         &lt;!-- Code for &quot;With NetworkTables&quot; example --&gt;
-        &lt;frc-dashboard&gt;
-          &lt;nt-number key=&quot;/FMSInfo/MatchType&quot; value=&quot;1&quot;&gt;&lt;/nt-number&gt;
-          &lt;nt-number key=&quot;/FMSInfo/MatchNumber&quot; value=&quot;2&quot;&gt;&lt;/nt-number&gt;
-          &lt;nt-string key=&quot;/FMSInfo/EventName&quot; value=&quot;Another Event&quot;&gt;&lt;/nt-string&gt; 
-          &lt;nt-number key=&quot;/FMSInfo/FMSControlData&quot; value=&quot;29&quot;&gt;&lt;/nt-number&gt;
-          &lt;frc-basic-fms-info source-key=&quot;/FMSInfo&quot;&gt;&lt;/frc-basic-fms-info&gt;
-        &lt;/frc-dashboard&gt;
+        &lt;nt-number key=&quot;/FMSInfo/MatchType&quot; value=&quot;1&quot;&gt;&lt;/nt-number&gt;
+        &lt;nt-number key=&quot;/FMSInfo/MatchNumber&quot; value=&quot;2&quot;&gt;&lt;/nt-number&gt;
+        &lt;nt-string key=&quot;/FMSInfo/EventName&quot; value=&quot;Another Event&quot;&gt;&lt;/nt-string&gt; 
+        &lt;nt-number key=&quot;/FMSInfo/FMSControlData&quot; value=&quot;29&quot;&gt;&lt;/nt-number&gt;
+        
+        &lt;frc-basic-fms-info source-key=&quot;/FMSInfo&quot;&gt;&lt;/frc-basic-fms-info&gt;
       </code></pre>
 
       <!-- Code for "With styles" example -->
@@ -64,16 +61,14 @@
 
       <pre><code class="html">
         &lt;!-- Code for &quot;With styles&quot; example --&gt;
-        &lt;frc-dashboard&gt;
-          &lt;style&gt;
-            .with-styles {
-              font-size: 20px;
-              font-family: cursive;
-              color: purple;
-            }
-          &lt;/style&gt;
-          &lt;frc-basic-fms-info class=&quot;with-styles&quot;&gt;&lt;/frc-basic-fms-info&gt;
-        &lt;/frc-dashboard&gt;
+        &lt;style&gt;
+          .with-styles {
+            font-size: 20px;
+            font-family: cursive;
+            color: purple;
+          }
+        &lt;/style&gt;
+        &lt;frc-basic-fms-info class=&quot;with-styles&quot;&gt;&lt;/frc-basic-fms-info&gt;
       </code></pre>
 
       <!-- code for "Try it out" section -->

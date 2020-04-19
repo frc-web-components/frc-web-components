@@ -1,5 +1,9 @@
 import { Webbit, html, css } from '@webbitjs/webbit';
 
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(value, min));
+}
+
 class NumberBar extends Webbit {
 
   static get properties() {
@@ -21,7 +25,7 @@ class NumberBar extends Webbit {
         }
       },
       center: { type: Number, reflect: true },
-      showText: { type: Boolean, attribute: 'show-text', reflect: true, },
+      hideText: { type: Boolean, attribute: 'hide-text', reflect: true, },
       numTickMarks: { 
         type: Number, 
         attribute: 'num-tick-marks', 
@@ -38,6 +42,8 @@ class NumberBar extends Webbit {
       
       :host {
         display: block;
+        height: 60px;
+        width: 400px;
       }
 
       .number-bar-container {
@@ -90,13 +96,13 @@ class NumberBar extends Webbit {
     this.min = -1;
     this.max = 1;
     this.center = 0;
-    this.showText = true;
+    this.hideText = false;
     this.numTickMarks = 5;
   }
 
   updateForeground() {
     const { min, max, center, value } = this;
-    const val = Math.clamp(value, min, max);
+    const val = clamp(value, min, max);
 
     const foreground = this.shadowRoot.querySelector('.foreground');
 
@@ -154,7 +160,7 @@ class NumberBar extends Webbit {
         <div class="number-bar">
           <div class="bar">
             <div class="foreground"></div>
-            ${this.showText ? html`
+            ${!this.hideText ? html`
               <p class="text">
                 ${this.value}
               </p>
