@@ -3,6 +3,8 @@
   <head>
     <title>Basic FMS Info</title>
     <link rel="stylesheet" type="text/css" href="./styles.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
   </head>
   <body>
     <a href="./index.html">Back to all examples</a>
@@ -18,6 +20,18 @@
         fms-control-data="33"
       ></frc-basic-fms-info>
 
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With attributes&quot; example --&gt;
+        &lt;frc-dashboard&gt;
+          &lt;frc-basic-fms-info
+            match-type=&quot;2&quot;
+            match-number=&quot;5&quot;
+            event-name=&quot;Some Event&quot;
+            fms-control-data=&quot;33&quot;
+          &gt;&lt;/frc-basic-fms-info&gt;
+        &lt;/frc-dashboard&gt;
+      </code></pre>
+
       <!-- Code for "With NetworkTables" example -->
       <h3>With NetworkTables</h3>
       <nt-number key="/FMSInfo/MatchType" value="1"></nt-number>
@@ -25,6 +39,17 @@
       <nt-string key="/FMSInfo/EventName" value="Another Event"></nt-string> 
       <nt-number key="/FMSInfo/FMSControlData" value="29"></nt-number>
       <frc-basic-fms-info source-key="/FMSInfo"></frc-basic-fms-info>
+
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With NetworkTables&quot; example --&gt;
+        &lt;frc-dashboard&gt;
+          &lt;nt-number key=&quot;/FMSInfo/MatchType&quot; value=&quot;1&quot;&gt;&lt;/nt-number&gt;
+          &lt;nt-number key=&quot;/FMSInfo/MatchNumber&quot; value=&quot;2&quot;&gt;&lt;/nt-number&gt;
+          &lt;nt-string key=&quot;/FMSInfo/EventName&quot; value=&quot;Another Event&quot;&gt;&lt;/nt-string&gt; 
+          &lt;nt-number key=&quot;/FMSInfo/FMSControlData&quot; value=&quot;29&quot;&gt;&lt;/nt-number&gt;
+          &lt;frc-basic-fms-info source-key=&quot;/FMSInfo&quot;&gt;&lt;/frc-basic-fms-info&gt;
+        &lt;/frc-dashboard&gt;
+      </code></pre>
 
       <!-- Code for "With styles" example -->
       <h3>With styles</h3>
@@ -36,6 +61,20 @@
         }
       </style>
       <frc-basic-fms-info class="with-styles"></frc-basic-fms-info>
+
+      <pre><code class="html">
+        &lt;!-- Code for &quot;With styles&quot; example --&gt;
+        &lt;frc-dashboard&gt;
+          &lt;style&gt;
+            .with-styles {
+              font-size: 20px;
+              font-family: cursive;
+              color: purple;
+            }
+          &lt;/style&gt;
+          &lt;frc-basic-fms-info class=&quot;with-styles&quot;&gt;&lt;/frc-basic-fms-info&gt;
+        &lt;/frc-dashboard&gt;
+      </code></pre>
 
       <!-- code for "Try it out" section -->
       <h3>Try it out!</h3>
@@ -67,5 +106,9 @@
     </frc-dashboard>
 
     <script src="./webbit-frc.js"></script>
+
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
   </body>
 </html>

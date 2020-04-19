@@ -1,6 +1,6 @@
 
 body {
-  width: 500px;
+  width: 700px;
   font-family: sans-serif;
 }
 
@@ -25,4 +25,13 @@ h3 {
 .try-it-out frc-text-view, .try-it-out frc-checkbox {
   width: 200px;
   margin-bottom: 20px;
+}
+
+.CodeMirror {
+  border: 1px solid #eee;
+  height: auto;
+}
+
+pre {
+  margin: 30px 0;
 }
