@@ -14,11 +14,12 @@ class Relay extends Webbit {
         height: 300px;
       }
 
-      vaadin-button {
+      [part=button] {
         border-radius: 0;
         margin: 0;
         flex: 1;
         font-size: inherit;
+        height: 100%;
       }
     `;
   }
@@ -42,7 +43,8 @@ class Relay extends Webbit {
   render() {
     return html`   
       ${this.buttons.map(button => html`
-        <vaadin-button 
+        <vaadin-button
+          part="button" 
           theme="contrast ${this.value == button ? 'primary' : ''}" 
           @click="${() => this.setValue(button)}"
         >
