@@ -1,5 +1,5 @@
 {
-  "name": "@webbitjs/frc",
+  "name": "@frc-web-components/frc-web-components",
   "version": "1.0.7",
   "description": "",
   "main": "src/index.js",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/webbitjs/frc.git"
+    "url": "git+https://github.com/frc-web-components/frc-web-components.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/webbitjs/frc/issues"
+    "url": "https://github.com/frc-web-components/frc-web-components/issues"
   },
-  "homepage": "https://github.com/webbitjs/frc#readme",
+  "homepage": "https://github.com/frc-web-components/frc-web-components#readme",
   "dependencies": {
     "@google/model-viewer": "^0.8.1",
     "@vaadin/vaadin": "^14.1.16",
