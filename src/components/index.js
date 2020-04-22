@@ -1,4 +1,5 @@
 import './table-axis';
+import './accelerometer';
 import './basic-fms-info';
 import './basic-subsystem';
 import './boolean-box';

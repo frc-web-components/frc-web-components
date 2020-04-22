@@ -9,6 +9,7 @@ class TextView extends Webbit {
         font-size: 18px;
         font-weight: normal;
         color: black;
+        width: 400px;
       }
 
       input {

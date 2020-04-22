@@ -21,14 +21,12 @@ class ToggleButton extends Webbit {
   static get properties() {
     return {
       toggled: { type: Boolean, primary: true },
-      theme: { type: String }
     }
   }
 
   constructor() {
     super();
     this.toggled = false;
-    this.theme = 'contrast';
   }
 
   onClick() {
@@ -38,7 +36,7 @@ class ToggleButton extends Webbit {
   render() {
     return html`   
       <vaadin-button 
-        theme="${this.theme} ${this.toggled == true ? 'primary' : ''}"
+        theme="${this.toggled == true ? 'primary' : ''} contrast"
         part="button"
         @click="${this.onClick}"
       >

@@ -36,8 +36,9 @@ class ToggleSwitch extends Webbit {
         transition: .4s;
       }
 
-      [part=switch]:before {
+      [part=knob] {
         position: absolute;
+        display: inline-block;
         content: "";
         height: var(--circle-height);
         width: var(--circle-width);
@@ -57,7 +58,7 @@ class ToggleSwitch extends Webbit {
         box-shadow: 0 0 1px #2196F3;
       }
 
-      input:checked + [part=switch]:before {
+      input:checked + [part=switch] [part=knob] {
         transform: translateX(var(--circle-translate-x));
       }
     `;
@@ -65,13 +66,13 @@ class ToggleSwitch extends Webbit {
 
   static get properties() {
     return {
-      checked: { type: Boolean, primary: true }
+      toggled: { type: Boolean, primary: true }
     }
   }
 
   constructor() {
     super();
-    this.checked = false;
+    this.toggled = false;
   }
 
   resized() {
@@ -87,10 +88,10 @@ class ToggleSwitch extends Webbit {
   }
 
   onClick() {
-    this.checked = !this.checked;
-    const event = new CustomEvent('check', { 
+    this.toggled = !this.toggled;
+    const event = new CustomEvent('change', { 
       detail: {
-        checked: this.checked 
+        toggled: this.toggled 
       }
     });
     this.dispatchEvent(event);
@@ -101,10 +102,12 @@ class ToggleSwitch extends Webbit {
       <label class="switch" @click="${this.onClick}">
         <input 
           type="checkbox" 
-          .checked="${this.checked}" 
+          .checked="${this.toggled}" 
           disabled
         />
-        <span part="switch"></span>
+        <span part="switch">
+          <span part="knob"></span>
+        </span>
       </label>
     `;
   }
