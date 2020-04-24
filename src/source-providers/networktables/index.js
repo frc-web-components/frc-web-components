@@ -40,7 +40,7 @@ export default class NetworkTablesProvider extends SourceProvider {
     this.updatedEntriesBeforeReady = [];
     this.ntReady = new Promise(resolve => {
       const interval = setInterval(() => {
-        if ('NetworkTables' in window) {
+        if ('NetworkTables' in window && NetworkTables.isWsConnected()) {
           resolve();
           clearInterval(interval);
         }
