@@ -1,3 +1,4 @@
+import './bar';
 import './table-axis';
 import './accelerometer';
 import './basic-fms-info';
