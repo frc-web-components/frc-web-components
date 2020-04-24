@@ -38,9 +38,11 @@ export default class NetworkTablesProvider extends SourceProvider {
     super(providerName);
     this.address = localStorage.robotAddress || settings.address;
     this.updatedEntriesBeforeReady = [];
+    this.isNtReady = false;
     this.ntReady = new Promise(resolve => {
       const interval = setInterval(() => {
         if ('NetworkTables' in window && NetworkTables.isWsConnected()) {
+          this.isNtReady = true;
           resolve();
           clearInterval(interval);
         }
@@ -84,7 +86,7 @@ export default class NetworkTablesProvider extends SourceProvider {
   }
 
   userUpdate(key, value) {
-    if ('NetworkTables' in  window) {
+    if (this.isNtReady) {
       NetworkTables.putValue(key, value);
     } else {
       const currentValue = this.getSource(key);
@@ -115,14 +117,14 @@ export default class NetworkTablesProvider extends SourceProvider {
   }
 
   isRobotConnected() {
-    if ('NetworkTables' in window) {
+    if (this.isNtReady) {
       return NetworkTables.isRobotConnected();
     }
     return false;
   }
 
   async addRobotConnectionListener(listener, immediateNotify) {
-    if ('NetworkTables' in window) {
+    if (this.isNtReady) {
       NetworkTables.addRobotConnectionListener(listener, immediateNotify);
     } else {
       // No NetworkTables, so can't be connected to robot
