@@ -18,7 +18,6 @@ class VoltageView extends NumberBar {
     super();
     this.min = 0;
     this.max = 5;
-    this.hideText = true;
     this.numTickMarks = 6;
     this.unit = 'V';
   }
