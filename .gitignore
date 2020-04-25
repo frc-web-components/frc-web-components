@@ -105,3 +105,4 @@ typings/
 # frc-web-components
 .DS_Store
 build/
+.wpilib/
