@@ -4,7 +4,7 @@ module.exports = {
   context: path.resolve(__dirname, "src"),
   entry: './index.js',
   output: {
-    filename: "webbit-frc.js",
+    filename: "frc-web-components.js",
     path: path.resolve(__dirname, 'build')
   },
   module: {
