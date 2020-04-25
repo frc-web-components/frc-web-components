@@ -30,7 +30,7 @@ class TableAxis extends LitElement {
       vertical: { type: Boolean },
       ticks: { type: Number },
       range: { type: Array },
-      units: { type: String }
+      unit: { type: String }
     }
   }
 
@@ -40,6 +40,7 @@ class TableAxis extends LitElement {
     this.prevTicks = 0;
     this.prevMin = null;
     this.prevMax = null;
+    this.unit = '';
   }
 
   setAxis() {
@@ -102,7 +103,7 @@ class TableAxis extends LitElement {
                 .attr('x', i * tickSpacing)
                 .attr('y', 25)
                 .attr('text-anchor', 'middle')
-                .text(value.toFixed(2) + (this.units ? ` ${this.units}` : ''));
+                .text(value.toFixed(2) + (this.unit ? ` ${this.unit}` : ''));
 
               textEnd = i * tickSpacing + textEl.node().getBBox().width / 2;
               lastTickWithText = i;
@@ -115,7 +116,7 @@ class TableAxis extends LitElement {
               .attr('x', -3)
               .attr('y', i * tickSpacing + 4)
               .attr('text-anchor', 'end')
-              .text(value.toFixed(2) + (this.units ? ` ${this.units}` : ''));
+              .text(value.toFixed(2) + (this.unit ? ` ${this.unit}` : ''));
           }
         }
 

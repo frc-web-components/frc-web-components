@@ -45,9 +45,14 @@ export default class NumberBar extends Webbit {
     return css`
       :host {
         display: inline-block;
-        height: 50px;
+        height: auto;
         width: 400px;
         font-family: sans-serif;
+      }
+
+      :host([num-tick-marks="0"]) [part=bar] {
+        width: 100%;
+        margin: 0;
       }
 
       [part=bar] {
@@ -92,11 +97,14 @@ export default class NumberBar extends Webbit {
           ${this.unit}
         ` : ''}
       </frc-bar>
-      <table-axis 
-        part="axis"
-        ticks="${this.numTickMarks}"
-        .range="${[this.min, this.max]}"
-      ></table-axis>
+      ${this.numTickMarks > 0 ? html`
+        <table-axis 
+          part="axis"
+          ticks="${this.numTickMarks}"
+          .range="${[this.min, this.max]}"
+          unit="${this.unit}"
+        ></table-axis>
+      ` : ''}
     `;
   }
 }
