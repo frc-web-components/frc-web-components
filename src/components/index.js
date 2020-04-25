@@ -7,6 +7,7 @@ import './basic-subsystem';
 import './boolean-box';
 import './combobox-chooser';
 import './differential-drivebase';
+import './encoder';
 import './gauge';
 import './number-bar';
 import './number-slider';

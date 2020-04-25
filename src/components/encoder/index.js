@@ -1,11 +1,61 @@
-import './encoder.tag';
-import image from './encoder.png';
+import { Webbit, html, css } from '@webbitjs/webbit';
 
-dashboard.registerWidget('encoder', {
-  label: 'Encoder',
-  category: 'Sensors',
-  acceptedTypes: ['Encoder', 'Quadrature Encoder'],
-  image,
-  minX: 6,
-  minY: 3
-});
+class Encoder extends Webbit {
+
+  static get styles() {
+    return css`
+      :host {
+        display: inline-grid;
+        grid-template-columns: min-content auto;
+        grid-template-rows: 50% 50%;
+        column-gap: 15px;
+        align-items: center;
+        width: 250px;
+        font-family: sans-serif;
+        
+      }
+
+      label {
+        font-weight: bold;
+        text-align: right;
+      }
+
+      vaadin-number-field {
+        width: 100%;
+        min-width: 50px;
+      }
+    `;
+  }
+
+  static get properties() {
+    return {
+      distance: { type: Number },
+      speed: { type: Number }
+    };
+  }
+
+  constructor() {
+    super();
+    this.distance = 0;
+    this.speed = 0;
+  }
+
+  render() {
+    return html`   
+        <label part="distance-label">Distance</label>
+        <vaadin-number-field 
+          part="distance-input" 
+          value="${this.distance}" 
+          readonly
+        ></vaadin-number-field>
+        <label part="speed-label">Speed</label>
+        <vaadin-number-field 
+          part="speed-input" 
+          value="${this.speed}" 
+          readonly
+        ></vaadin-number-field>
+    `;
+  }
+}
+
+webbitRegistry.define('frc-encoder', Encoder);
