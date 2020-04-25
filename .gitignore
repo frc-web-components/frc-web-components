@@ -102,5 +102,6 @@ typings/
 # TernJS port file
 .tern-port
 
-# lit-dashboard
+# frc-web-components
 .DS_Store
+build/
