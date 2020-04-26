@@ -9,6 +9,7 @@ import './combobox-chooser';
 import './differential-drivebase';
 import './encoder';
 import './gauge';
+import './label';
 import './number-bar';
 import './number-slider';
 import './relay';
