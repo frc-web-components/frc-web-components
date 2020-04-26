@@ -1,5 +1,9 @@
 import { Webbit, css, svg } from '@webbitjs/webbit';
 
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(value, min));
+}
+
 class Gyro extends Webbit {
 
   static get styles() {
@@ -13,13 +17,19 @@ class Gyro extends Webbit {
       }
 
       svg {
-        width: calc(90%);
-        height: calc(90%);
+        width: 80%;
+        height: 80%;
         position: relative;
         top: 5%;
-        left: 5%;
+        left: 10%;
         overflow: visible;
-        font-size: var(--degree-label-font-size);
+      }
+
+      :host([hide-label]) svg {
+        width: 90%;
+        height: 90%;
+        top: 5%;
+        left: 5%;
       }
 
       svg .edge {
@@ -56,6 +66,13 @@ class Gyro extends Webbit {
         fill: black;
         text-anchor: middle;
         alignment-baseline: middle;
+        font-size: var(--degree-label-font-size);
+      }
+
+      .angle-label {
+        fill: black;
+        text-anchor: middle;
+        font-size: var(--angle-label-font-size);
       }
     `;
   }
@@ -63,12 +80,21 @@ class Gyro extends Webbit {
   static get properties() {
     return {
       value: { type: Number, primary: true },
+      hideLabel: { type: Boolean, attribute: 'hide-label' },
+      precision: { 
+        type: Number,
+        get() {
+          return clamp(this._precision, 0, 100);
+        }
+      }
     };
   }
 
   constructor() {
     super();
     this.value = 0;
+    this.hideLabel = false;
+    this.precision = 2;
 
     this.tickAngles = [];
 
@@ -189,6 +215,28 @@ class Gyro extends Webbit {
       })}
     `;
   }
+
+  renderAngleLabel() {
+
+    if (this.hideLabel) {
+      return null;
+    }
+
+    const width = this.getWidth();
+
+    const edgeElement = this.shadowRoot.querySelector('svg');
+
+    if (edgeElement) {
+      edgeElement.style.setProperty('--angle-label-font-size', `${width * .08}px`);
+    }
+
+    const x = width / 2;
+    const y = width + width * .15;
+
+    return svg`
+      <text class="angle-label" x="${x}" y="${y}">${this.value.toFixed(this.precision)}&deg;</text>
+    `;
+  }
   
 
   render() {
@@ -199,6 +247,7 @@ class Gyro extends Webbit {
         ${this.renderDialHand()}
         ${this.renderDialCircle()}
         ${this.renderDegreeLabels()}
+        ${this.renderAngleLabel()}
       </svg>
     `;
   }
