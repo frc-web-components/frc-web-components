@@ -66,7 +66,7 @@ class DifferentialDrivebase extends Webbit {
       :host {
         display: block;
         width: 400px;
-        height: 400px;
+        height: 300px;
         padding: 0 10px;
       }
 
@@ -125,7 +125,7 @@ class DifferentialDrivebase extends Webbit {
 
       table-axis {
           width: 10px;
-          height: calc(100% - 30px);
+          height: calc(100% - 35px);
       }
 
       .foreground {
