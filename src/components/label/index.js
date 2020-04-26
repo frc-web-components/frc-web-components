@@ -13,7 +13,7 @@ class Label extends Webbit {
 
   static get properties() {
     return {
-      text: { type: String },
+      text: { type: String, primary: true },
     };
   }
 
