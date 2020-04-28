@@ -3,14 +3,33 @@ FRC Web Components
 
 A set of web components to build custom dashboards for the `FIRST Robotics Competition (FRC) <https://www.firstinspires.org/robotics/frc>`_. 
 
-FRC Web Components works with `pynetworktables2js <https://github.com/robotpy/pynetworktables2js>`_ to communicate with your robot over NetworkTables. To use, run **pynetworktables2js** where you're serving your HTML files, include the **frc-web-components.js** file as a script in your HTML page, and wrap your HTML in a``<frc-dashboard></frc-dashboard>`` tag, and you're ready to go!
+FRC Web Components works with `pynetworktables2js <https://github.com/robotpy/pynetworktables2js>`_ to communicate with your robot over NetworkTables. To use, run **pynetworktables2js** where you're serving your HTML files, include the **frc-web-components.js** file as a script in your HTML page, and wrap your HTML in a **frc-dashboard** tag, and you're ready to go!
 
 .. code:: html
 
   <html>
-    <head></head>
+    <head>
+      <title>My Robot Dashboard!</title>
+      <style>
+        h1 frc-label {
+          color: darkblue;
+        }
+
+        .rounded-box {
+          color: white;
+          margin: 20px;
+        }
+
+        .rounded-box::part(box) {
+          border-radius: 20%;
+        }
+      </style>
+    </head>
+
     <body>
+
       <frc-dashboard>
+        
         <nt-number key="/angle" value="135"></nt-number>
         <nt-string key="/robotName" value="Dozer"></nt-string>
         <nt-boolean key="/box/value" value="true"></nt-boolean>
@@ -37,6 +56,8 @@ FRC Web Components works with `pynetworktables2js <https://github.com/robotpy/py
           Look I'm a rounded box!
         </frc-boolean-box>
       </frc-dashboard>
+
+      <script src="./frc-web-components.js"></script>
     </body>
   </html>
 
