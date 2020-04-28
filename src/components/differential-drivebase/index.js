@@ -64,7 +64,7 @@ class DifferentialDrivebase extends Webbit {
   static get styles() {
     return css`
       :host {
-        display: block;
+        display: inline-block;
         width: 400px;
         height: 300px;
         padding: 0 10px;

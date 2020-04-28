@@ -5,7 +5,7 @@ class BooleanBox extends Webbit {
   static get styles() {
     return css`
       :host { 
-        display: block; 
+        display: inline-block; 
         width: 100px;
         height: 100px;
       }
