@@ -140,8 +140,20 @@ class DifferentialDrivebase extends Webbit {
 
   static get properties() {
     return {
-      leftMotorSpeed: { type: Number, attribute: 'left-motor-speed' },
-      rightMotorSpeed: { type: Number, attribute: 'right-motor-speed' }
+      leftMotorSpeed: { 
+        type: Number, 
+        attribute: 'left-motor-speed',
+        get() {
+          return clamp(this._leftMotorSpeed, -1, 1);
+        }
+       },
+      rightMotorSpeed: { 
+        type: Number, 
+        attribute: 'right-motor-speed',
+        get() {
+          return clamp(this._rightMotorSpeed, -1, 1);
+        }
+       }
     };
   }
 

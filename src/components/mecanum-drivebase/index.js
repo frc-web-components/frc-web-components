@@ -143,10 +143,34 @@ class MecanumDrivebase extends Webbit {
 
   static get properties() {
     return {
-      frontLeftMotorSpeed: { type: Number, attribute: 'front-left-motor-speed' },
-      frontRightMotorSpeed: { type: Number, attribute: 'front-right-motor-speed' },
-      rearLeftMotorSpeed: { type: Number, attribute: 'rear-left-motor-speed' },
-      rearRightMotorSpeed: { type: Number, attribute: 'rear-right-motor-speed' }
+      frontLeftMotorSpeed: { 
+        type: Number, 
+        attribute: 'fl-motor-speed',
+        get() {
+          return clamp(this._frontLeftMotorSpeed, -1, 1);
+        } 
+      },
+      frontRightMotorSpeed: { 
+        type: Number, 
+        attribute: 'fr-motor-speed',
+        get() {
+          return clamp(this._frontRightMotorSpeed, -1, 1);
+        } 
+      },
+      rearLeftMotorSpeed: { 
+        type: Number, 
+        attribute: 'rl-motor-speed',
+        get() {
+          return clamp(this._rearLeftMotorSpeed, -1, 1);
+        } 
+      },
+      rearRightMotorSpeed: { 
+        type: Number, 
+        attribute: 'rr-motor-speed',
+        get() {
+          return clamp(this._rearRightMotorSpeed, -1, 1);
+        } 
+      }
     };
   }
 
