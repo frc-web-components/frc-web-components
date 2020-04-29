@@ -40,4 +40,85 @@ Installation
 Examples
 ========
 
-Usage examples can be found `here <https://frc-web-components.github.io/examples/vanilla/index.html>`_.
+Usage examples can be found `here <https://frc-web-components.github.io/examples/vanilla/index.html>`_.'
+
+How to Use
+==========
+
+To use wrap your HTML dashboard code in the **<frc-dashboard></frc-dashboard>** element. This will include the necessary code for your dashboard to run as well as asynchronously load the **pynetworktables2js** script in your page.
+
+Using the NetworkTables API
+----------------------------
+
+Since the script is loaded asynchronously, you'll need to use the **frc-dashboard**'s *onload* event.
+
+.. code:: html
+
+  <html>
+    <body>
+      <frc-dashboard onload="ntLoaded()">
+        <!-- Dashboard code goes here -->
+      </frc-dashboard>
+      <script src="./frc-web-components.js"></script>
+      <script>
+        function ntLoaded() {
+          NetworkTables.addGlobalListener(function(key, value, isNew) {
+            // do something with the values as they change
+          }, true);
+
+          NetworkTables.putValue('/networktablesLoaded', true);
+        }
+      </script>
+    </body>
+  </html>
+  
+More on the NetworkTables API can be found here: https://robotpy.readthedocs.io/projects/pynetworktables2js/en/stable/api_js.html
+
+Using the components
+--------------------
+
+FRC Web Components are used by adding them inside the **<frc-dashboard></frc-dashboard>** component:
+
+.. code:: html
+
+  <frc-dashboard onload="ntLoaded()">
+    <frc-number-bar></frc-number-bar>
+  </frc-dashboard
+  
+They can be changed by setting their attributes:
+
+.. code:: html
+
+  <frc-dashboard onload="ntLoaded()">
+    <frc-number-bar value="2" min="-5" max="5"></frc-number-bar>
+  </frc-dashboard
+  
+You can also set a component's attributes by giving it a NetworkTable key:
+
+.. code:: html
+
+  <frc-dashboard onload="ntLoaded()">
+    <nt-number key="/bar/value" value="3"></nt-number>
+    <nt-number key="/bar/min" value="0"></nt-number>
+    <nt-number key="/bar/max" value="10"></nt-number>
+    <!-- Here we pass the subtable "/bar" -->
+    <frc-number-bar source-key="/bar"></frc-number-bar>
+    <!-- Here we pass the single NetworkTable entry "/bar/value" -->
+    <frc-number-bar source-key="/bar/value"></frc-number-bar>
+  </frc-dashboard>
+  
+Above we passed NetworkTable keys into two separate **<frc-number-bar>** components through the **source-key** attribute. If we pass in a subtable, all the subtable's entries will be mapped to the component's attributes. If we pass in a single entry, the component's primary attribute will be set, if it has one. In this case **<frc-number-bar>**'s primary attribute is **value**.
+
+You can also set a component's attributes through a mixture of NetworkTables and manually setting its attributes:
+
+.. code:: html
+
+  <frc-dashboard onload="ntLoaded()">
+    <nt-number key="/bar/value" value="3"></nt-number>
+    <nt-number key="/bar/min" value="0"></nt-number>
+    <nt-number key="/bar/max" value="10"></nt-number>
+   
+    <frc-number-bar source-key="/bar" min="-5" precision="4"></frc-number-bar>
+  </frc-dashboard>
+
+Above you may notice the component's min attribute took on the value passed in through NetworkTables. NetworkTables takes precedence and will override hard coded attribute values.
