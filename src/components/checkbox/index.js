@@ -5,7 +5,7 @@ class Checkbox extends Webbit {
   static get styles() {
     return css`
       :host {
-        display: block;
+        display: inline-block;
         font-family: sans-serif;
       }
     `;

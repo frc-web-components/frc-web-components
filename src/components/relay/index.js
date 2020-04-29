@@ -6,9 +6,8 @@ class Relay extends Webbit {
   static get styles() {
     return css`
       :host {
-        display: inline-block;
         font-size: 15px;
-        display: flex;
+        display: inline-flex;
         flex-direction: column;
         width: 150px;
         height: 300px;

@@ -32,9 +32,9 @@ class NumberSlider extends Webbit {
     return css`
 
       :host {
-        display: block;
+        display: inline-block;
         height: 50px;
-        width: 400px;
+        width: 300px;
       }
 
       .slider-container {

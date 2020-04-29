@@ -46,7 +46,7 @@ export default class NumberBar extends Webbit {
       :host {
         display: inline-block;
         height: auto;
-        width: 400px;
+        width: 300px;
         font-family: sans-serif;
       }
 

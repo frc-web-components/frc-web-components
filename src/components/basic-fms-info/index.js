@@ -28,7 +28,8 @@ class BasicFmsInfo extends Webbit {
       :host {
         text-align: center;
         font-size: 15px;
-        display: flex;
+        display: inline-flex;
+        width: auto;
         flex-direction: column;
         justify-content: center;
         font-family: sans-serif;

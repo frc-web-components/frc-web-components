@@ -46,11 +46,11 @@ class ThreeAxisAccelerometer extends Webbit {
   static get styles() {
     return css`
       :host {
-        display: flex;
+        display: inline-flex;
         flex-direction: column;
         height: auto;
         font-family: sans-serif;
-        width: 400px;
+        width: 300px;
       }
 
       [part=accelerometer] {
@@ -92,8 +92,8 @@ class ThreeAxisAccelerometer extends Webbit {
     this.x = 0;
     this.y = 0;
     this.z = 0;
-    this.min = -1;
-    this.max = 1;
+    this.min = -16;
+    this.max = 16;
     this.center = 0;
     this.precision = 2;
     this.hideText = false;
