@@ -160,3 +160,61 @@ Because of this conversion it's possible for name collisions to happen.
   <frc-number-bar source-key="/bar/value"></frc-number-bar>
   
 All of these will result in the same attribute being set. The attribute's value will be .5 since that was the last line executed.
+
+Creating Your Own Component
+===========================
+
+The list of FRC Web Components will continue being updated and expanded, but many teams will probably want to create their own for their custom dashboards. The **frc-web-components.js** exposes a couple of modules for creating and registering components: **webbit** and **webbitRegistry**. The **webbit** module is used to define components and **webbitRegistry** is used to register them. Both these modules contain a number helper functions and classes used to create custom components, but these are the most commonly used ones:
+
+.. code:: javascript
+
+  // These are the functions you need to define your component
+  let { Webbit, css, html } = webbit;
+  
+  class MyComponentClass extends Webbit {
+  
+    // This is the function needed to define properties, which automatically 
+    // update the component when their values change. They also by default 
+    // reflect their values in your component's attributes. That means when 
+    // you change the name attribute in your component's HTML element, 
+    // this.name will also change, and when you change this.name internally, 
+    // the name attribute in your component's HTML element will also change.
+    static get properties() {
+      return {
+        name: { type: String, primary: true },
+        moodRating: { type: Number, attribute: 'mood-rating' }
+      }
+    }
+    
+    // This is the function needed to define the styles for your component.
+    // The css here only affects the HTML rendered in your component. CSS
+    // defined outside your component also doesn't affect your component's
+    // rendered HTML.
+    static get styles() {
+      return css`
+        p span {
+          color: green;
+        }
+      `;
+    }
+    
+    // This is needed to initialize things in your component and set default
+    // property values.
+    constructor() {
+      super();
+      this.name = 'Bob';
+      this.moodRating = 8.5;
+    }
+    
+    // This is the function needed to define the HTML your component renders
+    render() {
+      return html`
+        <p>Hello, my name is <span>${this.name}</span>!</p>
+        <p>My mood is a <span>${this.moodRating}/10</span> right now.</p>
+      `;
+    }
+  }
+  
+  // This is the function you need to register your component
+  webbitRegistry.define('my-component', MyComponentClass);
+  
