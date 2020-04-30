@@ -132,7 +132,7 @@ You can also set a component's attributes through a mixture of NetworkTables and
 
 Above you may notice the component's min attribute took on the value passed in through NetworkTables. NetworkTables takes precedence and will override hard coded attribute values.
 
-Also note that NetworkTable keys will always be converted to cammel case to match the attribute's properties. For example:
+Also note that NetworkTable keys will always be converted to camelCase to match the attribute's properties. For example:
 
 .. code:: html
 
