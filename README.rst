@@ -144,9 +144,9 @@ Also note that NetworkTable keys will always be converted to cammel case to matc
     <frc-number-bar source-key="/bar" min="-5" precision="4"></frc-number-bar>
   </frc-dashboard>
   
-  Will still display correctly:
+Will still display correctly:
   
-  .. image:: ./images/number-bar4.png
+.. image:: ./images/number-bar4.png
 
 Because of this conversion it's possible for naming collision to happen.
 
