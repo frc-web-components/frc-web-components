@@ -12,31 +12,29 @@ class PreviewProvider extends SourceProvider {
 		};
   }
 
-	constructor(settings) {
-		super();
+	constructor(providerName, settings) {
+		super(providerName);
 		this.initSources = settings.sources;
 		this.sources = {};
-	}
 
-	updateFromProvider(updateSource) {
 		this.sources = new Proxy(this.initSources || {}, {
 			get: (sources, key) => {
 				return sources[key];
 			},
 			set: (sources, key, value) => {
 				sources[key] = value;
-				updateSource(key, value);
+				this.updateSource(key, value);
 				return true;
 			}
 		});
 
 		for (let key in this.sources) {
 			const value = this.sources[key];
-			updateSource(key, value);
+			this.updateSource(key, value);
 		}
 	}
 
-	updateFromDashboard(key, value) {
+	userUpdate(key, value) {
 	
 		const type = this.getType(value);
 
