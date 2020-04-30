@@ -28,7 +28,7 @@ FRC Web Components works with `pynetworktables2js <https://github.com/robotpy/py
   </html>
 
 
-.. image:: ./dashboard.png
+.. image:: ./images/dashboard.png
 
 
 Installation
@@ -40,7 +40,7 @@ Installation
 Examples
 ========
 
-Usage examples can be found `here <https://frc-web-components.github.io/examples/vanilla/index.html>`_.'
+Usage examples can be found `here <https://frc-web-components.github.io/examples/vanilla/index.html>`_.
 
 How to Use
 ==========
@@ -85,6 +85,9 @@ FRC Web Components are used by adding them inside the **<frc-dashboard></frc-das
     <frc-number-bar></frc-number-bar>
   </frc-dashboard
   
+.. image:: ./images/number-bar1.png
+
+  
 They can be changed by setting their attributes:
 
 .. code:: html
@@ -92,6 +95,8 @@ They can be changed by setting their attributes:
   <frc-dashboard onload="ntLoaded()">
     <frc-number-bar value="2" min="-5" max="5"></frc-number-bar>
   </frc-dashboard
+  
+.. image:: ./images/number-bar2.png
   
 You can also set a component's attributes by giving it a NetworkTable key:
 
@@ -107,6 +112,8 @@ You can also set a component's attributes by giving it a NetworkTable key:
     <frc-number-bar source-key="/bar/value"></frc-number-bar>
   </frc-dashboard>
   
+.. image:: ./images/number-bar3.png
+  
 Above we passed NetworkTable keys into two separate **<frc-number-bar>** components through the **source-key** attribute. If we pass in a subtable, all the subtable's entries will be mapped to the component's attributes. If we pass in a single entry, the component's primary attribute will be set, if it has one. In this case **<frc-number-bar>**'s primary attribute is **value**.
 
 You can also set a component's attributes through a mixture of NetworkTables and manually setting its attributes:
@@ -120,5 +127,36 @@ You can also set a component's attributes through a mixture of NetworkTables and
    
     <frc-number-bar source-key="/bar" min="-5" precision="4"></frc-number-bar>
   </frc-dashboard>
+  
+.. image:: ./images/number-bar4.png
 
 Above you may notice the component's min attribute took on the value passed in through NetworkTables. NetworkTables takes precedence and will override hard coded attribute values.
+
+Also note that NetworkTable keys will always be converted to cammel case to match the attribute's properties. For example:
+
+.. code:: html
+
+  <frc-dashboard onload="ntLoaded()">
+    <nt-number key="/bar/.value" value="3"></nt-number>
+    <nt-number key="/bar/Min" value="0"></nt-number>
+    <nt-number key="/bar/ max " value="10"></nt-number>
+   
+    <frc-number-bar source-key="/bar" min="-5" precision="4"></frc-number-bar>
+  </frc-dashboard>
+  
+Will still display correctly:
+  
+.. image:: ./images/number-bar4.png
+
+Because of this conversion it's possible for naming collision to happen.
+
+.. code:: html
+
+  <nt-number key="/bar/.value" value="-1"></nt-number>
+  <nt-number key="/bar/Value" value="-.5"></nt-number>
+  <nt-number key="/bar/value" value="0"></nt-number>
+  <nt-number key="/bar/ value" value=".5"></nt-number>
+  
+  <frc-number-bar source-key="/bar/value"></frc-number-bar>
+  
+All of these will result in the same attribute being set. The attribute's value will be .5 since that was the last line executed.
