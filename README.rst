@@ -131,3 +131,32 @@ You can also set a component's attributes through a mixture of NetworkTables and
 .. image:: ./images/number-bar4.png
 
 Above you may notice the component's min attribute took on the value passed in through NetworkTables. NetworkTables takes precedence and will override hard coded attribute values.
+
+Also note that NetworkTable keys will always be converted to cammel case to match the attribute's properties. For example:
+
+.. code:: html
+
+  <frc-dashboard onload="ntLoaded()">
+    <nt-number key="/bar/.value" value="3"></nt-number>
+    <nt-number key="/bar/Min" value="0"></nt-number>
+    <nt-number key="/bar/ max " value="10"></nt-number>
+   
+    <frc-number-bar source-key="/bar" min="-5" precision="4"></frc-number-bar>
+  </frc-dashboard>
+  
+  Will still display correctly:
+  
+  .. image:: ./images/number-bar4.png
+
+Because of this conversion it's possible for naming collision to happen.
+
+.. code:: html
+
+  <nt-number key="/bar/.value" value="-1"></nt-number>
+  <nt-number key="/bar/Value" value="-.5"></nt-number>
+  <nt-number key="/bar/value" value="0"></nt-number>
+  <nt-number key="/bar/ value" value=".5"></nt-number>
+  
+  <frc-number-bar source-key="/bar/value"></frc-number-bar>
+  
+All of these will result in the same attribute being set. The attribute's value will be .5 since that was the last line executed.
