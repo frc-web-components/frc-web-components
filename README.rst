@@ -148,7 +148,7 @@ Will still display correctly:
   
 .. image:: ./images/number-bar4.png
 
-Because of this conversion it's possible for naming collision to happen.
+Because of this conversion it's possible for name collisions to happen.
 
 .. code:: html
 
