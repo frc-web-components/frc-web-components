@@ -169,7 +169,7 @@ The list of FRC Web Components will continue being updated and expanded, but man
 .. code:: javascript
 
   // These are the functions you need to define your component
-  let { Webbit, css, html } = webbit;
+  var { Webbit, css, html } = webbit;
   
   class MyComponentClass extends Webbit {
   
@@ -218,3 +218,20 @@ The list of FRC Web Components will continue being updated and expanded, but man
   // This is the function you need to register your component
   webbitRegistry.define('my-component', MyComponentClass);
   
+Create a file called **my-component.js** in the same folder as your **index.html** and **frc-web-components.js**, and add the above code to the file. Include the script below where you included the **frc-web-components.js** script:
+
+.. code:: html
+
+  <html>
+    <body>
+      <frc-dashboard>
+        <my-component name="Amory" mood="10"></my-component>
+      </frc-dashboard>
+      <script src="./frc-web-components.js"></script>
+      <script src="./my-component.js"></script>
+    </body>
+  </html>
+  
+Your webpage should now look like this:
+
+
