@@ -218,7 +218,7 @@ The list of FRC Web Components will continue being updated and expanded, but man
   // This is the function you need to register your component
   webbitRegistry.define('my-component', MyComponentClass);
   
-Create a file called **my-component.js** in the same folder as your **index.html** and **frc-web-components.js**, and add the above code to the file. Include the script below where you included the **frc-web-components.js** script:
+Create a file called **my-component.js** in the same folder as your **index.html** and **frc-web-components.js**, and add the above code to the file. Include the script below where you included the **frc-web-components.js** script in your **index.html** file:
 
 .. code:: html
 
