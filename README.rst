@@ -236,6 +236,26 @@ Your webpage should now look like this:
 
 .. image:: ./images/create-component1.png
 
+You can also now connect your component to NetworkTables:
+
+.. code:: html
+
+  <html>
+    <body>
+      <frc-dashboard>
+        <nt-string key="/myComponent/name" value="Amory"></nt-string>
+        <nt-number key="/myComponent/moodRating" value="10"></nt-number>
+        <my-component source-key="/myComponent"></my-component>
+      </frc-dashboard>
+      <script src="./frc-web-components.js"></script>
+      <script src="./my-component.js"></script>
+    </body>
+  </html>
+  
+Your webpage should look the same:
+
+.. image:: ./images/create-component1.png
+
 LitElement
 ----------
 
