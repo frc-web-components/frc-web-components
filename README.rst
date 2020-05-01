@@ -239,4 +239,4 @@ Your webpage should now look like this:
 LitElement
 ----------
 
-The **Webbit** class itself extends **LitElement**, which is a library used to create custom components. There are some differences and gotchas, but if you know how to create components using **LitElement**, you know almost everything you need to create custom FRC components. To understand how **LitElement** works, look over their live examples, guide and API here: https://lit-element.polymer-project.org/
+The **Webbit** class itself extends **LitElement**, which is a library used to create custom components. There are some differences and gotchas, but if you know how to create components using **LitElement**, you know almost everything you need to create custom FRC components. To understand how **LitElement** works, look over the project's live examples, guide and API here: https://lit-element.polymer-project.org/
