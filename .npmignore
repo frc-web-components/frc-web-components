@@ -1,3 +1,5 @@
 node_modules
 .wpilib
 images
+build/*.html
+build/my-component*.js
