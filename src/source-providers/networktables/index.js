@@ -35,7 +35,7 @@ export default class NetworkTablesProvider extends SourceProvider {
   }
 
   constructor(providerName, settings) {
-    super(providerName);
+    super(providerName, settings);
     this.address = localStorage.robotAddress || settings.address;
     this.updatedEntriesBeforeReady = [];
     this.isNtReady = false;
@@ -73,12 +73,6 @@ export default class NetworkTablesProvider extends SourceProvider {
         this.updateSource(key, value);
       }, true);
     });
-  }
-
-  get settings() {
-    return {
-      address: this.address
-    }
   }
 
   onSettingsChange(settings) {

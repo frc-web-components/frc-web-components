@@ -13,7 +13,7 @@ class PreviewProvider extends SourceProvider {
   }
 
 	constructor(providerName, settings) {
-		super(providerName);
+		super(providerName, settings);
 		this.initSources = settings.sources;
 		this.sources = {};
 
