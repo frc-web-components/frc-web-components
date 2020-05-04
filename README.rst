@@ -164,7 +164,7 @@ All of these will result in the same attribute being set. The attribute's value 
 Creating Your Own Component
 ===========================
 
-The list of FRC Web Components will continue being updated and expanded, but many teams will probably want to create their own for their custom dashboards. The **frc-web-components.js** exposes a couple of modules for creating and registering components: **webbit** and **webbitRegistry**. The **webbit** module is used to define components and **webbitRegistry** is used to register them. Both these modules contain a number helper functions and classes used to create custom components, but these are the most commonly used ones:
+The list of FRC Web Components will continue being updated and expanded, but many teams will probably want to create their own for their custom dashboards. The **frc-web-components.js** file exposes a couple of modules for creating and registering components: **webbit** and **webbitRegistry**. The **webbit** module is used to define components and **webbitRegistry** is used to register them. Both these modules contain a number helper functions and classes used to create custom components, but these are the most commonly used ones:
 
 .. code:: javascript
 
@@ -234,4 +234,34 @@ Create a file called **my-component.js** in the same folder as your **index.html
   
 Your webpage should now look like this:
 
+.. image:: ./images/create-component1.png
 
+You can also now connect your component to NetworkTables:
+
+.. code:: html
+
+  <html>
+    <body>
+      <frc-dashboard>
+        <nt-string key="/myComponent/name" value="Amory"></nt-string>
+        <nt-number key="/myComponent/moodRating" value="10"></nt-number>
+        <my-component source-key="/myComponent"></my-component>
+      </frc-dashboard>
+      <script src="./frc-web-components.js"></script>
+      <script src="./my-component.js"></script>
+    </body>
+  </html>
+  
+Your webpage should look the same:
+
+.. image:: ./images/create-component1.png
+
+LitElement
+----------
+
+The **Webbit** class itself extends **LitElement**, which is a library used to create custom components. There are some differences and gotchas, but if you know how to create components using **LitElement**, you know almost everything you need to create custom FRC components. To understand how **LitElement** works, look over the project's live examples, guide and API here: https://lit-element.polymer-project.org/
+
+Creating components examples and tutorials
+------------------------------------------
+
+More in-depth tutorials on how to create your own components will be added soon. You can also look at the source code for the existing list of components if you need help getting started: https://github.com/frc-web-components/frc-web-components/tree/master/src/components
