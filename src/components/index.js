@@ -14,6 +14,7 @@ import './label';
 import './mecanum-drivebase';
 import './number-bar';
 import './number-slider';
+import './pdp';
 import './relay';
 import './text-view';
 import './toggle-button';
