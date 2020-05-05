@@ -2,7 +2,7 @@ import { Webbit, html, css } from '@webbitjs/webbit';
 import './source-view';
 import { subscribe, getRawSource } from '@webbitjs/store';
 
-class SourcesView extends Webbit {
+class NetworkTableTree extends Webbit {
 
   static get properties() {
     return {
@@ -13,6 +13,7 @@ class SourcesView extends Webbit {
   static get styles() {
     return css`
       :host {
+        margin: 5px;
         display: inline-block;
         padding: 0px 13px;
         box-sizing: border-box;
@@ -51,8 +52,8 @@ class SourcesView extends Webbit {
     if (changedProperties.has('sourceKey') || changedProperties.has('sourceProvider')) {
       if (this.sourceProvider) {
         this.unsubscribe();
-        this.unsubscribe = subscribe(this.sourceProvider, this.sourceKey, value => {
-          this.sources = getRawSource(this.sourceProvider, this.sourceKey) || { __sources__: {} };
+        this.unsubscribe = subscribe(this.sourceProvider, this.sourceKey || '', value => {
+          this.sources = getRawSource(this.sourceProvider, this.sourceKey || '') || { __sources__: {} };
           this.requestUpdate();
         }, true);
       }
@@ -88,4 +89,4 @@ class SourcesView extends Webbit {
 
 }
 
-webbitRegistry.define('frc-sources-view', SourcesView);
+webbitRegistry.define('frc-networktable-tree', NetworkTableTree);

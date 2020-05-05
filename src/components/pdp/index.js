@@ -25,13 +25,14 @@ class Pdp extends Webbit {
     return {
       ...props,
       voltage: { type: Number },
-      totalCurrent: { type: Number }      
+      totalCurrent: { type: Number, attribute: 'total-current' }      
     };
   }
 
   static get styles() {
     return css`
       :host {
+        margin: 5px;
         display: inline-block;
         font-family: sans-serif;
         width: 350px;
@@ -115,7 +116,7 @@ class Pdp extends Webbit {
         `)}
         ${getRange(8, 16).map(number => html`
           <label part="channel-label">
-            <slot name="${`channelLabel${number}`}">Ch. ${number}</slot>
+            <slot name="${`channel-label${number}`}">Ch. ${number}</slot>
           </label>
         `)}
         ${getRange(8, 16).map(number => html`
