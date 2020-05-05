@@ -65,6 +65,7 @@ class SourceView extends LitElement {
         font-size: 11px;
         display: none;
         width: 15px;
+        height: auto;
       }
       header.expanded .caret [icon$="angle-down"] {
         display: inline-block;
