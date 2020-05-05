@@ -16,6 +16,7 @@ import './number-bar';
 import './number-slider';
 import './pdp';
 import './relay';
+import './sources-view';
 import './text-view';
 import './toggle-button';
 import './toggle-switch';
