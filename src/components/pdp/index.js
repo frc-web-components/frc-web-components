@@ -24,18 +24,8 @@ class Pdp extends Webbit {
 
     return {
       ...props,
-      voltage: { 
-        type: Number,
-        get() {
-          return clamp(this._voltage, 0, 15);
-        }
-      },
-      totalCurrent: { 
-        type: Number,
-        get() {
-          return clamp(this._totalCurrent, 0, 500);
-        }
-      }      
+      voltage: { type: Number },
+      totalCurrent: { type: Number }      
     };
   }
 
