@@ -5,7 +5,7 @@ import './accelerometer';
 import './basic-fms-info';
 import './basic-subsystem';
 import './boolean-box';
-import './combobox-chooser';
+import './combo-box';
 import './differential-drivebase';
 import './encoder';
 import './gauge';
@@ -25,3 +25,7 @@ import './cad-viewer';
 import './line-chart';
 import './checkbox';
 import '@vaadin/vaadin';
+
+// form fields
+import './text-field';
+import './number-field';

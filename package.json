@@ -21,7 +21,7 @@
   "homepage": "https://github.com/frc-web-components/frc-web-components#readme",
   "dependencies": {
     "@google/model-viewer": "^0.8.1",
-    "@vaadin/vaadin": "^14.1.16",
+    "@vaadin/vaadin": "^15.0.5",
     "@webbitjs/store": "^1.1.7",
     "@webbitjs/webbit": "^1.1.5",
     "chart.js": "^2.8.0",
