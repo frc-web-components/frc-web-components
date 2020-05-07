@@ -7,6 +7,15 @@ export default class TextField extends Webbit {
       :host {
         display: inline-block;
       }
+
+      [part=input] {
+        max-height: inherit;
+        min-height: inherit;
+        height: inherit;
+        width: inherit;
+        max-width: inherit;
+        min-width: inherit;
+      }
     `;
   }
 

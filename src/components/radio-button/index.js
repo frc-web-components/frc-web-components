@@ -1,6 +1,6 @@
 import { Webbit, html, css } from '@webbitjs/webbit';
 
-class Checkbox extends Webbit {
+class RadioButton extends Webbit {
 
   static get styles() {
     return css`
@@ -27,8 +27,8 @@ class Checkbox extends Webbit {
   }
 
   firstUpdated() {
-    const styleAttributes = ['active', 'focus-ring', 'focused', 'indeterminate', 'empty'];
-    const input = this.shadowRoot.querySelector('[part=checkbox-container]');
+    const styleAttributes = ['focus-ring', 'focused', 'empty'];
+    const input = this.shadowRoot.querySelector('[part=radio-button-container]');
 
     var observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
@@ -58,18 +58,18 @@ class Checkbox extends Webbit {
 
   render() {
     return html`   
-      <vaadin-checkbox
-        part="checkbox-container"
-        exportparts="checkbox, label"
+      <vaadin-radio-button
+        part="radio-button-container"
+        exportparts="radio, label"
         value="${this.value}" 
         ?checked="${this.checked}" 
         ?disabled="${this.disabled}"
-        @change="${this.onChange}"
+        @checked-changed="${this.onChange}"
       >
         <slot></slot>
-      </vaadin-checkbox>
+      </vaadin-radio-button>
     `;
   }
 }
 
-webbitRegistry.define('frc-checkbox', Checkbox);
+webbitRegistry.define('frc-radio-button', RadioButton);

@@ -1,6 +1,6 @@
 import { Webbit, html, css } from '@webbitjs/webbit';
 
-class CheckboxGroup extends Webbit {
+class RadioGroup extends Webbit {
 
   static get styles() {
     return css`
@@ -12,10 +12,11 @@ class CheckboxGroup extends Webbit {
 
   static get properties() {
     return {
-      value: { type: Array, primary: true },
+      value: { type: String, primary: true },
       label: { type: String },
       theme: { type: String },
       disabled: { type: Boolean },
+      readonly: { type: Boolean },
       required: { type: Boolean },
       errorMessage: { type: String, attribute: 'error-message' },
       
@@ -24,24 +25,25 @@ class CheckboxGroup extends Webbit {
 
   constructor() {
     super();
-    this.value = [];
+    this.value = '';
     this.label = '';
     this.theme = 'vertical';
     this.disabled = false;
+    this.readonly = false;
     this.required = false;
     this.errorMessage = '';
   }
 
   firstUpdated() {
     const styleAttributes = ['focused', 'has-label', 'has-value', 'invalid'];
-    const checkboxGroup = this.shadowRoot.querySelector('[part=checkbox-group-container]');
+    const radioGroup = this.shadowRoot.querySelector('[part=radio-group-container]');
 
     var observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.type == "attributes") {
           const { attributeName } = mutation;
           if (styleAttributes.includes(attributeName)) {
-            const value = checkboxGroup.getAttribute(attributeName);
+            const value = radioGroup.getAttribute(attributeName);
             if (value === null) {
               this.removeAttribute(attributeName, value);
             } else {
@@ -52,18 +54,17 @@ class CheckboxGroup extends Webbit {
       });
     });
 
-    observer.observe(checkboxGroup, {
+    observer.observe(radioGroup, {
       attributes: true
     });
 
-    // add elements to actual checkbox vaadin group
-    const checkboxes = this.querySelectorAll('frc-checkbox');
-    console.log("checkboxes:", checkboxes);
-    checkboxes.forEach(checkbox => {
-      checkbox.updateComplete.then(() => {
-        const vaadinCheckbox = checkbox.shadowRoot.querySelector('vaadin-checkbox');
-        vaadinCheckbox.innerHTML = checkbox.innerHTML;
-        checkboxGroup.appendChild(vaadinCheckbox);
+    // add elements to actual radio vaadin group
+    const radioButtons = this.querySelectorAll('frc-radio-button');
+    radioButtons.forEach(radioButton => {
+      radioButton.updateComplete.then(() => {
+        const vaadinRadioButton = radioButton.shadowRoot.querySelector('vaadin-radio-button');
+        vaadinRadioButton.innerHTML = radioButton.innerHTML;
+        radioGroup.appendChild(vaadinRadioButton);
       });
     });
   }
@@ -75,21 +76,22 @@ class CheckboxGroup extends Webbit {
 
   render() {
     return html`   
-      <vaadin-checkbox-group
-        part="checkbox-group-container"
+      <vaadin-radio-group
+        part="radio-group-container"
         exportparts="label, group-field, error-message"
-        .value="${this.value || []}" 
+        .value="${this.value}" 
         label="${this.label}"
         theme="${this.theme}"
         ?disabled="${this.disabled}"
+        ?readonly="${this.readonly}"
         ?required="${this.required}"
         error-message="${this.errorMessage}"
         @value-changed="${this.onChange}"
       >
         <slot></slot>
-      </vaadin-checkbox-group>
+      </vaadin-radio-group>
     `;
   }
 }
 
-webbitRegistry.define('frc-checkbox-group', CheckboxGroup);
+webbitRegistry.define('frc-radio-group', RadioGroup);
