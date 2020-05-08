@@ -58,9 +58,9 @@ class CheckboxGroup extends Webbit {
 
     // add elements to actual checkbox vaadin group
     const checkboxes = this.querySelectorAll('frc-checkbox');
-    console.log("checkboxes:", checkboxes);
     checkboxes.forEach(checkbox => {
       checkbox.updateComplete.then(() => {
+        checkbox.style.display = 'none';
         const vaadinCheckbox = checkbox.shadowRoot.querySelector('vaadin-checkbox');
         vaadinCheckbox.innerHTML = checkbox.innerHTML;
         checkboxGroup.appendChild(vaadinCheckbox);
