@@ -23,7 +23,7 @@ class NtBooleanArray extends NtEntry {
   }
 
   set value(value) {
-    if (this.isBooleanArray(value) && value.length > 0) {
+    if (this.isBooleanArray(value)) {
       this.hasProvider.then(provider => {
         provider.userUpdate(this.key, value);
       });

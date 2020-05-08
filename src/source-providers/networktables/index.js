@@ -16,10 +16,12 @@ const getType = (value) => {
   if (value instanceof Array) {
     const [element] = value;
     if (['number', 'boolean', 'string'].includes(typeof element)) {
-      return typeof `${typeof element}Array`;
+      return `${typeof element}Array`;
+    } else {
+      return 'Array';
     }
   }
-  return null;
+  return '';
 };
 
 export default class NetworkTablesProvider extends SourceProvider {
@@ -101,7 +103,11 @@ export default class NetworkTablesProvider extends SourceProvider {
       }
 
       // make sure current value type matches value passed in
-      if (currentType === updatedType) {
+      if (
+        currentType === updatedType
+        || currentType.includes('Array') && updatedType === 'Array'
+        || currentType === 'Array' && updatedType.includes('Array')
+      ) {
         this.updateSource(key, value);
         if (!this.updatedEntriesBeforeReady.includes(key)) {
           this.updatedEntriesBeforeReady.push(key);

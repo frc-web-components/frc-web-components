@@ -23,7 +23,7 @@ class NtStringArray extends NtEntry {
   }
 
   set value(value) {
-    if (this.isStringArray(value) && value.length > 0) {
+    if (this.isStringArray(value)) {
       this.hasProvider.then(provider => {
         provider.userUpdate(this.key, value);
       });
