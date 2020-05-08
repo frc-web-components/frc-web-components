@@ -62,6 +62,7 @@ class RadioGroup extends Webbit {
     const radioButtons = this.querySelectorAll('frc-radio-button');
     radioButtons.forEach(radioButton => {
       radioButton.updateComplete.then(() => {
+        radioButton.style.display = 'none';
         const vaadinRadioButton = radioButton.shadowRoot.querySelector('vaadin-radio-button');
         vaadinRadioButton.innerHTML = radioButton.innerHTML;
         radioGroup.appendChild(vaadinRadioButton);
