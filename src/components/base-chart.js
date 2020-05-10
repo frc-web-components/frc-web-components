@@ -1,32 +1,68 @@
+import { Chart } from 'chart.js';
+import { html, css, LitElement, property } from 'lit-element';
+
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
   var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
   if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
   else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
   return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-import { Chart } from 'chart.js';
-import { html, LitElement, property } from 'lit-element';
+
 /**
 * Base Chart of chartjs-web-components
 */
 export default class BaseChart extends LitElement {
+
+  static get styles() {
+    return css`
+      :host {
+        position: relative;
+        width: 100%;
+        width: 100%;
+        display: inline-block;
+      }
+    
+      .chart-size {
+        width: 100%;
+        height: 100%;
+      }
+      canvas {
+        width:100%;
+        height:100%;
+      }
+    `;
+  }
+
   constructor() {
       super(...arguments);
       /**
        * Manually update chart
        */
       this.updateChart = () => {
-          if (this.chart) {
-              this.chart.update();
-          }
+        if (this.chart) {
+          this.chart.update();
+          // console.log('updated');
+        }
       };
   }
+
   /**
    * Called when the dom first time updated. init chart.js data, add observe, and add resize listener
    */
   firstUpdated() {
       const data = this.data || {};
-      const options = this.options || {};
+      const options = {
+        responsive: true,
+				maintainAspectRatio: false,
+        animation: {
+          duration: 0 // general animation time
+        },
+        hover: {
+          animationDuration: 0 // duration of animations when hovering an item
+        },
+        responsiveAnimationDuration: 0,
+        ...this.options
+      };
       if (!this.chart) {
           const ctx = this.shadowRoot
               .querySelector('canvas')
@@ -34,7 +70,8 @@ export default class BaseChart extends LitElement {
           this.chart = new Chart(ctx, {
               type: this.type,
               data,
-              options
+              options,
+              plugins: this.plugins
           });
       }
       else {
@@ -77,28 +114,19 @@ export default class BaseChart extends LitElement {
    */
   render() {
       return html `
-          <style>
-              .chart-size{
-                  position: relative;
-              }
-              canvas{
-                  width:400px;
-                  height:400px;
-              }
-          </style>
-          <div class="chart-size">
-              <canvas></canvas>
-          </div>
+        <div class="chart-size">
+          <canvas></canvas>
+        </div>
       `;
   }
-  /**
-   * Get update state,when element update completed will return true
-   */
-  get updateComplete() {
-      return (async () => {
-          return super.updateComplete;
-      })();
-  }
+  // /**
+  //  * Get update state,when element update completed will return true
+  //  */
+  // get updateComplete() {
+  //     return (async () => {
+  //         return super.updateComplete;
+  //     })();
+  // }
 }
 __decorate([
   property()
@@ -109,6 +137,6 @@ __decorate([
 __decorate([
   property()
 ], BaseChart.prototype, "options", void 0);
-if (!customElements.get('base-chart')) {
-  customElements.define('base-chart', BaseChart);
+if (!customElements.get('frc-base-chart')) {
+  customElements.define('frc-base-chart', BaseChart);
 }
