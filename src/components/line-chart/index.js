@@ -148,8 +148,8 @@ class LineChart extends Webbit {
   static get properties() {
     return {
       title: { type: String },
-			suggestedMinY: { type: Number, attribute: 'suggested-min-y' },
-			suggestedMaxY: { type: Number, attribute: 'suggested-max-y' },
+			minY: { type: Number, attribute: 'min-y' },
+			maxY: { type: Number, attribute: 'max-y' },
 			xAxisLabel: { type: String, attribute: 'x-axis-label' },
 			yAxisLabel: { type: String, attribute: 'y-axis-label' },
 			trackedTime: { type: Number, attribute: 'tracked-time' },
@@ -166,8 +166,8 @@ class LineChart extends Webbit {
   constructor() {
     super();
 		this.title = '';
-		this.suggestedMinY = -1;
-		this.suggestedMaxY = 1;
+		this.minY = -1;
+		this.maxY = 1;
 		this.xAxisLabel = 'Time (seconds)';
 		this.yAxisLabel = 'Value';
 		this.dataElements = [];
@@ -178,8 +178,8 @@ class LineChart extends Webbit {
 		this.plugins = [{
 			beforeUpdate: (chart, options) => {
 				chart.options.title.text = this.title;
-				chart.options.scales.yAxes[0].ticks.suggestedMin = this.suggestedMinY;
-				chart.options.scales.yAxes[0].ticks.suggestedMax = this.suggestedMaxY;
+				chart.options.scales.yAxes[0].ticks.suggestedMin = this.minY;
+				chart.options.scales.yAxes[0].ticks.suggestedMax = this.maxY;
 
 				// sets labels
 				chart.options.scales.xAxes[0].scaleLabel.labelString = this.xAxisLabel;
