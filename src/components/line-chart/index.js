@@ -46,6 +46,15 @@ class LineChartData {
 
 		chart.chart.data.labels = this.data.map(point => point.time.toFixed(1));
 
+		// https://stackoverflow.com/a/41878442
+		const hiddenValues = chart.chart.data.datasets.map(dataset => {
+			const isHiddenMeta = dataset._meta[Object.keys(dataset._meta)[0]].hidden;
+			if (typeof isHiddenMeta === 'boolean') {
+				return isHiddenMeta;
+			}
+			return dataset.hidden;
+		});
+
 		chart.chart.data.datasets.splice(0, chart.chart.data.datasets.length);
 		this.dataLabels.forEach((label, index) => {
 			chart.chart.data.datasets.push({
@@ -54,7 +63,8 @@ class LineChartData {
 				fill: false,
 				pointRadius: 0,
 				borderColor: this.dataColors[index],
-				borderWidth: 2
+				borderWidth: 2,
+				hidden: hiddenValues[index]
 			});
 		});
 
