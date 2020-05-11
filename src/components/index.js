@@ -33,7 +33,8 @@ import './checkbox';
 import './radio-button';
 import './radio-group';
 
-// charts
+// charts and graphing
 import './base-chart';
 import './chart-data';
 import './line-chart';
+import './field';
