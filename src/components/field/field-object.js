@@ -21,7 +21,7 @@ class FieldObject extends Webbit {
     return {
       x: { type: Number },
       y: { type: Number },
-      angle: { type: Number },
+      theta: { type: Number },
       width: { type: Number },
       height: { type: Number },
       image: { type: String },
@@ -33,7 +33,7 @@ class FieldObject extends Webbit {
     super();
     this.x = 0;
     this.y = 0;
-    this.angle = 0;
+    this.theta = 0;
     this.width = 1;
     this.height = 1;
     this.image = '';

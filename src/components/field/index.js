@@ -96,7 +96,7 @@ class Field extends Webbit {
 
       this.objectElements.forEach(object => {
 
-        const { width, height, x, y, unit, angle } = object;
+        const { width, height, x, y, unit, theta } = object;
 
         const widthPx = toPx(width);
         const heightPx = toPx(height);
@@ -104,7 +104,7 @@ class Field extends Webbit {
         object.style.width = toPx(width);
         object.style.height = toPx(height);
         object.style.transformOrigin = 'top center';
-        object.style.transform = `translate(${toPx(y) - toPx(width) / 2}px, ${toPx(x)}px) rotate(${angle + 90}deg)`;
+        object.style.transform = `translate(${toPx(y) - toPx(width) / 2}px, ${toPx(x)}px) rotate(${-theta + 90}deg)`;
       });
 
       window.requestAnimationFrame(updateObjects);
