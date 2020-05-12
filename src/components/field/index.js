@@ -1,4 +1,5 @@
 import { Webbit, html, svg, css } from '@webbitjs/webbit';
+import './field-object';
 
 class Field extends Webbit {
 
@@ -46,7 +47,9 @@ class Field extends Webbit {
       height: { type: Number },
       image: { type: String },
       gridSize: { type: Number, attribute: 'grid-size' },
-      hideGrid: { type: Boolean, attribute: 'hide-grid' }
+      hideGrid: { type: Boolean, attribute: 'hide-grid' },
+      swapAxes: { type: Boolean, attribute: 'swap-axes' },
+      unit: { type: String }
     };
   }
 
@@ -57,6 +60,9 @@ class Field extends Webbit {
     this.image = '';
     this.gridSize = 1;
     this.hideGrid = false;
+    this.swapAxes = false;
+    this.objectElements = [];
+    this.unit = 'ft';
   }
 
   updated(changedProperties) {
@@ -67,8 +73,46 @@ class Field extends Webbit {
     if (changedProperties.has('image')) {
       const fieldElement = this.shadowRoot.querySelector('[part=field]');
       fieldElement.style.setProperty('--field-image', `url(${this.image}`);
-
     }
+  }
+
+  firstUpdated() {
+    const slot = this.shadowRoot.querySelector('slot');
+    slot.addEventListener('slotchange', e => {
+      let elements = [...slot.assignedElements()];
+      this.objectElements = elements.filter(element => element.tagName === 'FRC-FIELD-OBJECT');
+    });
+
+
+    // update object positions and size
+    const updateObjects = () => {
+
+      const rect = this.getBoundingClientRect();
+
+      const toPx = (length) => {
+        return (length / this.width) * rect.width;
+      }
+
+
+      this.objectElements.forEach(object => {
+
+        const { width, height, x, y, unit, angle } = object;
+
+        const widthPx = toPx(width);
+        const heightPx = toPx(height);
+
+        object.style.width = toPx(width);
+        object.style.height = toPx(height);
+        object.style.transformOrigin = 'top center';
+        object.style.transform = `translate(${toPx(y) - toPx(width) / 2}px, ${toPx(x)}px) rotate(${angle + 90}deg)`;
+      });
+
+      window.requestAnimationFrame(updateObjects);
+    };
+
+
+    window.requestAnimationFrame(updateObjects);
+
   }
 
   resizeField() {
@@ -81,14 +125,6 @@ class Field extends Webbit {
   resized() {
     this.resizeField();
     this.requestUpdate();
-  }
-
-  getAxisPositions(length) {
-    const positions = [];
-    for (let position = 0; position < length; position += this.gridSize) {
-      positions.push(position);
-    }
-    return positions;
   }
 
   render() {
