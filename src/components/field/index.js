@@ -1,5 +1,8 @@
 import { Webbit, html, svg, css } from '@webbitjs/webbit';
+import { baseUnit, toBaseConversions, convert } from './units';
 import './field-object';
+import './field-drawing';
+
 
 class Field extends Webbit {
 
@@ -29,6 +32,14 @@ class Field extends Webbit {
       [part=grid] path {
         stroke: var(--frc-grid-line-color, gray);
         stroke-width: var(--frc-grid-line-width, 1);
+      }
+
+      [part=canvas] {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
       }
 
       ::slotted(frc-field-object) {
@@ -62,7 +73,8 @@ class Field extends Webbit {
     this.hideGrid = false;
     this.swapAxes = false;
     this.objectElements = [];
-    this.unit = 'ft';
+    this.drawingElements = [];
+    this.unit = baseUnit;
   }
 
   updated(changedProperties) {
@@ -76,43 +88,144 @@ class Field extends Webbit {
     }
   }
 
-  firstUpdated() {
-    const slot = this.shadowRoot.querySelector('slot');
-    slot.addEventListener('slotchange', e => {
-      let elements = [...slot.assignedElements()];
-      this.objectElements = elements.filter(element => element.tagName === 'FRC-FIELD-OBJECT');
-    });
+  setElementPose(element, fieldInfo, parentInfo) {
 
+    const { toPx, toLength, ctx, canvas, rect } = fieldInfo;
 
-    // update object positions and size
-    const updateObjects = () => {
+    if (element.tagName === 'FRC-FIELD') {
+      // construct info for children
+      const elementInfo = {
+        transformations: [],
+        x: 0,
+        y: 0,
+        width: this.width,
+        height: this.height,
+        theta: 0,
+        isField: true,
+      };
 
-      const rect = this.getBoundingClientRect();
+      // set child poses relative to parent
+      element.childNodes.forEach(childNode => {
+        const { tagName } = childNode;
+        if (tagName === 'FRC-FIELD-OBJECT' || tagName === 'FRC-FIELD-DRAWING') {
+          this.setElementPose(childNode, fieldInfo, elementInfo)
+        }
+      });
+    } else if (element.tagName === 'FRC-FIELD-OBJECT') {
+      // set element pose
+      const {  theta } = element;
+      const width = convert(element.width, element.unit || this.unit, this.unit);
+      const height = convert(element.height, element.unit || this.unit, this.unit);
+      const x = convert(element.x, element.unit || this.unit, this.unit);
+      const y = convert(element.y, element.unit || this.unit, this.unit);
 
-      const toPx = (length) => {
-        return (length / this.width) * rect.width;
+      const widthPx = toPx(width);
+      const heightPx = toPx(height);
+
+      element.style.width = toPx(width);
+      element.style.height = toPx(height);
+      element.style.transformOrigin = parentInfo.isField ? 'top center' : 'auto auto';
+
+      const translateY = parentInfo.isField
+        ? (y - width / 2)
+        : (x + parentInfo.width / 2 - width / 2);
+
+      const translateX = parentInfo.isField
+        ? (x)
+        : (-y - height / 2 + parentInfo.height / 2);
+
+      element.style.transform = `translate(${toPx(translateY)}px, ${toPx(translateX)}px) rotate(${-theta + (parentInfo.isField ? 90 : 0)}deg)`;
+
+      // construct parent info for children
+      let transformations = parentInfo.transformations;
+
+      if (parentInfo.isField) {
+        transformations = transformations.concat([
+          { type: 'translation', x: y, y: x },
+          { type: 'rotation', rotation: 90 - theta },
+          { type: 'translation', x: 0, y: height / 2 }
+        ]);
+      } else {
+        transformations = transformations.concat([
+          { type: 'translation', x, y: -y },
+          { type: 'rotation', rotation: -theta },
+        ]);
       }
 
+      const elementInfo = {
+        transformations,
+        x,
+        y,
+        width,
+        height,
+        theta
+      };
 
-      this.objectElements.forEach(object => {
-
-        const { width, height, x, y, unit, theta } = object;
-
-        const widthPx = toPx(width);
-        const heightPx = toPx(height);
-
-        object.style.width = toPx(width);
-        object.style.height = toPx(height);
-        object.style.transformOrigin = 'top center';
-        object.style.transform = `translate(${toPx(y) - toPx(width) / 2}px, ${toPx(x)}px) rotate(${-theta + 90}deg)`;
+      // set child poses relative to parent
+      element.childNodes.forEach(childNode => {
+        const { tagName } = childNode;
+        if (tagName === 'FRC-FIELD-OBJECT' || tagName === 'FRC-FIELD-DRAWING') {
+          this.setElementPose(childNode, fieldInfo, elementInfo)
+        }
       });
 
-      window.requestAnimationFrame(updateObjects);
+    } else if (element.tagName === 'FRC-FIELD-DRAWING') {
+      // set element pose
+      ctx.save();
+
+      const scale = rect.width * 2 / this.width;
+      ctx.scale(scale, scale);
+
+      // transform
+      parentInfo.transformations.forEach(({ type, x, y, rotation }) => {
+        if (type === 'translation') {
+          ctx.translate(x, y);
+        } else {
+          ctx.rotate(rotation * Math.PI / 180);
+        }
+      });
+
+      // flip y
+      ctx.scale(1, -1);
+
+      // scale based on the units the drawing is in
+      const unitScale = convert(1, element.unit || this.unit, this.unit);
+      ctx.scale(unitScale, unitScale);
+
+      element.renderDrawing({ 
+        canvas, 
+        ctx, 
+        scalingFactor: unitScale * scale / 2, 
+        source: element.getSource() || {},
+        parentWidth: parentInfo.width / unitScale,
+        parentHeight: parentInfo.height / unitScale
+      });
+      
+      ctx.restore();
+    }
+  }
+
+  firstUpdated() {
+
+    const canvas = this.shadowRoot.querySelector('canvas');
+    const ctx = canvas.getContext("2d");
+    
+    // update object positions and size
+    const updateObjectsAndDrawings = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      const rect = this.getBoundingClientRect();
+      this.setElementPose(this, {
+        canvas,
+        ctx,
+        rect,
+        toPx: (length) => length * rect.width / this.width,
+        toLength: (px) => px * this.width / rect.width,
+      });
+      window.requestAnimationFrame(updateObjectsAndDrawings);
     };
 
-
-    window.requestAnimationFrame(updateObjects);
-
+    window.requestAnimationFrame(updateObjectsAndDrawings);
   }
 
   resizeField() {
@@ -129,7 +242,7 @@ class Field extends Webbit {
 
   render() {
     
-    const { width } = this.getBoundingClientRect();
+    const { width, height } = this.getBoundingClientRect();
     const patternSize = (this.gridSize / this.width) * width;
 
     return html`   
@@ -155,6 +268,7 @@ class Field extends Webbit {
           </div>
         ` : ''}
         <slot></slot>
+        <canvas part="canvas" width="${width * 2}" height="${height * 2}"></canvas>
       </div>
     `;
   }
