@@ -100,7 +100,7 @@ class Field extends Webbit {
         y: 0,
         width: this.width,
         height: this.height,
-        theta: 0,
+        rotation: 0,
         isField: true,
         unit: this.unit,
       };
@@ -114,7 +114,7 @@ class Field extends Webbit {
       });
     } else if (element.tagName === 'FRC-FIELD-OBJECT') {
       // set element pose
-      const {  theta } = element;
+      const {  rotation } = element;
       const width = convert(element.width, element.unit || parentInfo.unit, this.unit);
       const height = convert(element.height, element.unit || parentInfo.unit, this.unit);
       const x = convert(element.x, element.unit || parentInfo.unit, this.unit);
@@ -135,7 +135,7 @@ class Field extends Webbit {
         ? (x)
         : (-y - height / 2 + parentInfo.height / 2);
 
-      element.style.transform = `translate(${toPx(translateY)}px, ${toPx(translateX)}px) rotate(${-theta + (parentInfo.isField ? 90 : 0)}deg)`;
+      element.style.transform = `translate(${toPx(translateY)}px, ${toPx(translateX)}px) rotate(${-rotation + (parentInfo.isField ? 90 : 0)}deg)`;
 
       // construct parent info for children
       let transformations = parentInfo.transformations;
@@ -143,13 +143,13 @@ class Field extends Webbit {
       if (parentInfo.isField) {
         transformations = transformations.concat([
           { type: 'translation', x: y, y: x },
-          { type: 'rotation', rotation: 90 - theta },
+          { type: 'rotation', rotation: 90 - rotation },
           { type: 'translation', x: 0, y: height / 2 }
         ]);
       } else {
         transformations = transformations.concat([
           { type: 'translation', x, y: -y },
-          { type: 'rotation', rotation: -theta },
+          { type: 'rotation', rotation: -rotation },
         ]);
       }
 
@@ -159,7 +159,7 @@ class Field extends Webbit {
         y,
         width,
         height,
-        theta,
+        rotation,
         unit: element.unit || parentInfo.unit
       };
 
