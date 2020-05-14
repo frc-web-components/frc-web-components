@@ -102,6 +102,7 @@ class Field extends Webbit {
         height: this.height,
         theta: 0,
         isField: true,
+        unit: this.unit,
       };
 
       // set child poses relative to parent
@@ -114,10 +115,10 @@ class Field extends Webbit {
     } else if (element.tagName === 'FRC-FIELD-OBJECT') {
       // set element pose
       const {  theta } = element;
-      const width = convert(element.width, element.unit || this.unit, this.unit);
-      const height = convert(element.height, element.unit || this.unit, this.unit);
-      const x = convert(element.x, element.unit || this.unit, this.unit);
-      const y = convert(element.y, element.unit || this.unit, this.unit);
+      const width = convert(element.width, element.unit || parentInfo.unit, this.unit);
+      const height = convert(element.height, element.unit || parentInfo.unit, this.unit);
+      const x = convert(element.x, element.unit || parentInfo.unit, this.unit);
+      const y = convert(element.y, element.unit || parentInfo.unit, this.unit);
 
       const widthPx = toPx(width);
       const heightPx = toPx(height);
@@ -158,7 +159,8 @@ class Field extends Webbit {
         y,
         width,
         height,
-        theta
+        theta,
+        unit: element.unit || parentInfo.unit
       };
 
       // set child poses relative to parent
@@ -189,7 +191,7 @@ class Field extends Webbit {
       ctx.scale(1, -1);
 
       // scale based on the units the drawing is in
-      const unitScale = convert(1, element.unit || this.unit, this.unit);
+      const unitScale = convert(1, element.unit || parentInfo.unit, this.unit);
       ctx.scale(unitScale, unitScale);
 
       element.renderDrawing({ 
