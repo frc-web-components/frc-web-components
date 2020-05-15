@@ -54,17 +54,17 @@ class FieldCamera extends FieldDrawing {
       ctx.lineTo(x, distance);
       ctx.fill();
       ctx.restore();
+    } else {
+      // draw line to target
+      ctx.beginPath();
+      ctx.lineWidth = 1 / scalingFactor;
+      ctx.strokeStyle = this.seesTarget ? "rgb(0, 255, 0)" : 'rgb(255, 0, 0)';
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.angle * Math.PI / 180);
+      ctx.moveTo(0, 0);
+      ctx.lineTo(0, distance);
+      ctx.stroke();
     }
-
-    // draw line to target
-    ctx.beginPath();
-    ctx.lineWidth = .5 / scalingFactor;
-    ctx.strokeStyle = this.seesTarget ? "rgb(0, 255, 0)" : 'rgb(255, 0, 0)';
-    ctx.translate(this.x, this.y);
-    ctx.rotate(this.angle * Math.PI / 180);
-    ctx.moveTo(0, 0);
-    ctx.lineTo(0, distance);
-    ctx.stroke();
   }
 }
 
