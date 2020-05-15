@@ -1,8 +1,5 @@
 import FieldDrawing from './field-drawing';
 
-
-{/* <frc-field-camera fov="60" angle="0" x="1" y="0" range="10" sees-target></frc-field-camera> */}
-
 class FieldCamera extends FieldDrawing {
 
   static get properties() {

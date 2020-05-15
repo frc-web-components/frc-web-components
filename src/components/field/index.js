@@ -4,6 +4,7 @@ import './field-object';
 import FieldDrawing from './field-drawing';
 import './field-trajectory';
 import './field-camera';
+import './field-robot';
 
 
 class Field extends Webbit {
