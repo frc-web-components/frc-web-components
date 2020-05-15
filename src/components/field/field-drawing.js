@@ -1,6 +1,10 @@
 import { Webbit, html, svg, css } from '@webbitjs/webbit';
 
-class FieldDrawing extends Webbit {
+export default class FieldDrawing extends Webbit {
+
+  static get __IS_FIELD_DRAWING__() {
+    return true;
+  }
 
   static get properties() {
     return {

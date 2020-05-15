@@ -1,7 +1,8 @@
 import { Webbit, html, svg, css } from '@webbitjs/webbit';
 import { baseUnit, toBaseConversions, convert } from './units';
 import './field-object';
-import './field-drawing';
+import FieldDrawing from './field-drawing';
+import './field-trajectory';
 
 
 class Field extends Webbit {
@@ -34,7 +35,7 @@ class Field extends Webbit {
         stroke-width: var(--frc-grid-line-width, 1);
       }
 
-      [part=canvas] {
+      [part=top-canvas], [part=bottom-canvas] {
         position: absolute;
         width: 100%;
         height: 100%;
@@ -90,7 +91,7 @@ class Field extends Webbit {
 
   setElementPose(element, fieldInfo, parentInfo) {
 
-    const { toPx, toLength, ctx, canvas, rect } = fieldInfo;
+    const { toPx, toLength, ctx, canvas, bottomCtx, bottomCanvas, rect } = fieldInfo;
 
     if (element.tagName === 'FRC-FIELD') {
       // construct info for children
@@ -107,8 +108,8 @@ class Field extends Webbit {
 
       // set child poses relative to parent
       element.childNodes.forEach(childNode => {
-        const { tagName } = childNode;
-        if (tagName === 'FRC-FIELD-OBJECT' || tagName === 'FRC-FIELD-DRAWING') {
+        const { tagName, constructor } = childNode;
+        if (tagName === 'FRC-FIELD-OBJECT' || constructor.__IS_FIELD_DRAWING__) {
           this.setElementPose(childNode, fieldInfo, elementInfo)
         }
       });
@@ -165,38 +166,54 @@ class Field extends Webbit {
 
       // set child poses relative to parent
       element.childNodes.forEach(childNode => {
-        const { tagName } = childNode;
-        if (tagName === 'FRC-FIELD-OBJECT' || tagName === 'FRC-FIELD-DRAWING') {
+        const { tagName, constructor } = childNode;
+        if (tagName === 'FRC-FIELD-OBJECT' || constructor.__IS_FIELD_DRAWING__) {
           this.setElementPose(childNode, fieldInfo, elementInfo)
         }
       });
 
-    } else if (element.tagName === 'FRC-FIELD-DRAWING') {
+    } else if (element.constructor.__IS_FIELD_DRAWING__) {
       // set element pose
       ctx.save();
+      bottomCtx.save();
 
       const scale = rect.width * 2 / this.width;
       ctx.scale(scale, scale);
+      bottomCtx.scale(scale, scale);
 
       // transform
+      if (parentInfo.transformations.length === 0) {
+        parentInfo.transformations.push({ type: 'rotation', rotation: 90 }); 
+      }
+
       parentInfo.transformations.forEach(({ type, x, y, rotation }) => {
         if (type === 'translation') {
           ctx.translate(x, y);
+          bottomCtx.translate(x, y);
         } else {
           ctx.rotate(rotation * Math.PI / 180);
+          bottomCtx.rotate(rotation * Math.PI / 180);
         }
       });
 
       // flip y
       ctx.scale(1, -1);
+      bottomCtx.scale(1, -1);
 
       // scale based on the units the drawing is in
       const unitScale = convert(1, element.unit || parentInfo.unit, this.unit);
       ctx.scale(unitScale, unitScale);
+      bottomCtx.scale(unitScale, unitScale);
 
+      // This is to prevent previous drawings from affecting current drawing
+      ctx.beginPath();
+      bottomCtx.beginPath();
+      
       element.renderDrawing({ 
         canvas, 
-        ctx, 
+        ctx,
+        bottomCanvas,
+        bottomCtx,
         scalingFactor: unitScale * scale / 2, 
         source: element.getSource() || {},
         parentWidth: parentInfo.width / unitScale,
@@ -204,22 +221,31 @@ class Field extends Webbit {
       });
       
       ctx.restore();
+      bottomCtx.restore();
     }
   }
 
   firstUpdated() {
 
-    const canvas = this.shadowRoot.querySelector('canvas');
+    const canvas = this.shadowRoot.querySelector('[part=top-canvas]');
     const ctx = canvas.getContext("2d");
+
+    const bottomCanvas = this.shadowRoot.querySelector('[part=bottom-canvas]');
+    const bottomCtx = bottomCanvas.getContext("2d");
     
     // update object positions and size
     const updateObjectsAndDrawings = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.beginPath();
+      bottomCtx.clearRect(0, 0, bottomCanvas.width, bottomCanvas.height);
+      bottomCtx.beginPath();
+
       const rect = this.getBoundingClientRect();
       this.setElementPose(this, {
         canvas,
         ctx,
+        bottomCanvas,
+        bottomCtx,
         rect,
         toPx: (length) => length * rect.width / this.width,
         toLength: (px) => px * this.width / rect.width,
@@ -269,8 +295,9 @@ class Field extends Webbit {
             `}
           </div>
         ` : ''}
+        <canvas part="bottom-canvas" width="${width * 2}" height="${height * 2}"></canvas>
         <slot></slot>
-        <canvas part="canvas" width="${width * 2}" height="${height * 2}"></canvas>
+        <canvas part="top-canvas" width="${width * 2}" height="${height * 2}"></canvas>
       </div>
     `;
   }
