@@ -28,8 +28,9 @@ class FieldRobot extends FieldDrawing {
 
 
     // draw wheels
-    const wheelWidth = parentWidth * .17;
     const wheelRadius = Math.min(parentWidth * .17, parentHeight * .19);
+    const wheelWidth = wheelRadius;
+
     const verticalPadding = parentHeight * .1;
 
     bottomCtx.beginPath();
