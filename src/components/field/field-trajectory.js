@@ -21,7 +21,7 @@ class FieldTrajectory extends FieldDrawing {
   }
 
   renderDrawing({ bottomCtx, scalingFactor, parentWidth, parentHeight }) {
-    bottomCtx.lineWidth = 5 / scalingFactor;
+    bottomCtx.lineWidth = 4 / scalingFactor;
     bottomCtx.strokeStyle = "rgba(235, 164, 52, .5)";
 
     for (let i = 0; i < this.xs.length - 1; i++) {
@@ -40,11 +40,11 @@ class FieldTrajectory extends FieldDrawing {
     ctx.save();
     ctx.translate(y, x);
     ctx.rotate(rotation * Math.PI / 180);
-    ctx.fillStyle = "rgba(235, 164, 52)";
+    ctx.fillStyle = "rgba(255, 174, 72)";
     ctx.moveTo(0, 0);
-    ctx.lineTo(- 6 / scalingFactor, 0);
-    ctx.lineTo(0, 14 / scalingFactor);
-    ctx.lineTo(6 / scalingFactor, 0);
+    ctx.lineTo(- 5 / scalingFactor, 0);
+    ctx.lineTo(0, 10 / scalingFactor);
+    ctx.lineTo(5 / scalingFactor, 0);
     ctx.fill();
 
     ctx.restore();

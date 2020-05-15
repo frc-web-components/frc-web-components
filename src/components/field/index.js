@@ -3,6 +3,7 @@ import { baseUnit, toBaseConversions, convert } from './units';
 import './field-object';
 import FieldDrawing from './field-drawing';
 import './field-trajectory';
+import './field-camera';
 
 
 class Field extends Webbit {
