@@ -61,7 +61,7 @@ class FieldRobot extends FieldDrawing {
       wheelRadius * 2
     );
 
-    // front right
+    // rear right
     bottomCtx.fillRect(
       parentWidth / 2 - wheelWidth / 2, 
       -parentHeight / 2 + verticalPadding,

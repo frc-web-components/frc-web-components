@@ -13,7 +13,7 @@ class ComboBox extends Webbit {
   static get properties() {
     return {
       name: { type: String },
-      selected: { type: String },
+      selected: { type: String, primary: true },
       default: { type: String },
       options: { type: Array },
       placeholder: { type: String },
