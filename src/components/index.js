@@ -20,8 +20,9 @@ import './text-view';
 import './toggle-button';
 import './toggle-switch';
 import './voltage-view';
-import './cad-viewer';
+import './model-viewer';
 import '@vaadin/vaadin';
+import './control-panel';
 
 // form fields
 import './combo-box';

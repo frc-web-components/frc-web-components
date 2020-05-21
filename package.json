@@ -26,7 +26,9 @@
     "@webbitjs/webbit": "^1.1.8",
     "chart.js": "^2.8.0",
     "d3": "^5.15.0",
-    "svg-gauge": "^1.0.6"
+    "quaternion": "^1.1.0",
+    "svg-gauge": "^1.0.6",
+    "three": "^0.116.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
