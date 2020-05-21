@@ -1,6 +1,7 @@
 node_modules
 .wpilib
 images
+models
 field-images
 build/*.html
 build/my-component*.js
