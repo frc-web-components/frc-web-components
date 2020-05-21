@@ -40,6 +40,7 @@ class ModelViewer extends Webbit {
 
   constructor() {
     super();
+    this.src = '';
     this.pitch = 0;
     this.roll = 0;
     this.yaw = 0;
