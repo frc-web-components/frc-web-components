@@ -27,30 +27,30 @@ class ModelViewer extends Webbit {
     // X is Pitch, Y is Roll, Z is Yaw
     return {
       src: { type: String },
-      x: { type: Number },
-      y: { type: Number },
-      z: { type: Number },
-      xOffset: { type: Number },
-      yOffset: { type: Number },
-      zOffset: { type: Number },
+      pitch: { type: Number },
+      roll: { type: Number },
+      yaw: { type: Number },
+      pitchOffset: { type: Number },
+      rollOffset: { type: Number },
+      yawOffset: { type: Number },
     };
   }
 
   constructor() {
     super();
-    this.x = 0;
-    this.y = 0;
-    this.z = 0;
-    this.xOffset = 0;
-    this.yOffset = 0;
-    this.zOffset = 0;
+    this.pitch = 0;
+    this.roll = 0;
+    this.yaw = 0;
+    this.pitchOffset = 0;
+    this.rollOffset = 0;
+    this.yawOffset = 0;
     this.model = null;
     this.shouldAnimate = false;
   }
 
   transform() {
-    const q = Quaternion.fromEuler(this.z * rad, this.x * rad, this.y * rad, 'YXZ');
-    const offsetQ = Quaternion.fromEuler(this.zOffset * rad, this.xOffset * rad, this.yOffset * rad, 'YXZ');
+    const q = Quaternion.fromEuler(this.yaw * rad, this.pitch * rad, this.roll * rad, 'YXZ');
+    const offsetQ = Quaternion.fromEuler(this.yawOffset * rad, this.pitchOffset * rad, this.rollOffset * rad, 'YXZ');
     this.model.style.transform = `matrix3d(${q.conjugate().toMatrix4()}) matrix3d(${offsetQ.conjugate().toMatrix4()})`;
   }
 
