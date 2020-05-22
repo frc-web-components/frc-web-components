@@ -73,7 +73,7 @@ const remove = (obj) => {
 
 
 const update = () => {
-  overlayWidth = document.body.scrollWidth;
+  overlayWidth = window.innerWidth;
   overlayHeight = document.body.scrollHeight;
   camera = null;
   renderer.setSize(overlayWidth, overlayHeight);

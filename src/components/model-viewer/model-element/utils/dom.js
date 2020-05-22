@@ -70,13 +70,13 @@ const getProjectionForElement = elem => {
   let clipBounds = {
     left: 0,
     top: 0,
-    right: document.body.scrollWidth,
+    right: window.innerWidth,
     bottom: document.body.scrollHeight
   };
   let cameraBounds = {
     left: 0,
     top: 0,
-    right: document.body.scrollWidth,
+    right: window.innerWidth,
     bottom: document.body.scrollHeight
   };
 

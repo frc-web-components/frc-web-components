@@ -128,14 +128,14 @@ class Field extends Webbit {
 
       element.style.width = toPx(width);
       element.style.height = toPx(height);
-      element.style.transformOrigin = parentInfo.isField ? 'top center' : 'auto auto';
+      element.style.transformOrigin = parentInfo.isField ? 'center center' : 'auto auto';
 
       const translateY = parentInfo.isField
         ? (y - width / 2)
         : (x + parentInfo.width / 2 - width / 2);
 
       const translateX = parentInfo.isField
-        ? (x)
+        ? (x - height / 2)
         : (-y - height / 2 + parentInfo.height / 2);
 
       element.style.transform = `translate(${toPx(translateY)}px, ${toPx(translateX)}px) rotate(${-rotation + (parentInfo.isField ? 90 : 0)}deg)`;
@@ -147,7 +147,6 @@ class Field extends Webbit {
         transformations = transformations.concat([
           { type: 'translation', x: y, y: x },
           { type: 'rotation', rotation: 90 - rotation },
-          { type: 'translation', x: 0, y: height / 2 }
         ]);
       } else {
         transformations = transformations.concat([
