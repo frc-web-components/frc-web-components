@@ -40,7 +40,7 @@ Installation
 Examples
 ========
 
-Usage examples can be found `here <https://frc-web-components.github.io/examples/vanilla/index.html>`_.
+Usage examples can be found `here <https://frc-web-components.github.io/>`_.
 
 How to Use
 ==========
