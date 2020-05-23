@@ -62,10 +62,11 @@ class ControlPanel extends Webbit {
       [part=control-panel] {
         width: 100%;
         display: inline-block;
-        border: .1px solid rgba(0,0,0,0);
+        border: none;
         border-radius: 50%;
         box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
         position: relative;
+        font-size: 0;
       }
 
       svg {

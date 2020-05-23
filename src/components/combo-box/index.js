@@ -69,7 +69,7 @@ class ComboBox extends Webbit {
   }
 
   onChange(ev) {
-    const [element] = ev.path;
+    const element = ev.target || ev.path[0];
     this.selected = element.value;
   }
 

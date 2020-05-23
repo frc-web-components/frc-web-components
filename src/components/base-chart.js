@@ -18,7 +18,7 @@ export default class BaseChart extends LitElement {
       :host {
         position: relative;
         width: 100%;
-        width: 100%;
+        height: 100%;
         display: inline-block;
       }
     

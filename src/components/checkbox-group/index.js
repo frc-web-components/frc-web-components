@@ -69,7 +69,7 @@ class CheckboxGroup extends Webbit {
   }
 
   onChange(ev) {
-    const [target] = ev.path;
+    const target = ev.target || ev.path[0];
     this.value = target.value;
   }
 

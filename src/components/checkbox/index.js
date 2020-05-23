@@ -52,7 +52,7 @@ class Checkbox extends Webbit {
   }
 
   onChange(ev) {
-    const [target] = ev.path;
+    const target = ev.target || ev.path[0];
     this.checked = target.checked;
   }
 

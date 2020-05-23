@@ -30,7 +30,7 @@ class NumberField extends TextField {
   }
 
   onChange(ev) {
-    const [input] = ev.path;
+    const input = ev.target || ev.path[0];
     this.value = parseFloat(input.value);
   }
 

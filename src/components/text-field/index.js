@@ -82,7 +82,7 @@ export default class TextField extends Webbit {
   }
 
   onChange(ev) {
-    const [input] = ev.path;
+    const input = ev.target || ev.path[0];
     this.value = input.value;
   }
 
