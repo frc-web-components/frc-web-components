@@ -51,8 +51,8 @@ class ControlPanel extends Webbit {
     return css`
 
       :host {
-        display: flex;
-        width: 400px;
+        display: inline-flex;
+        width: 300px;
         align-items: center;
         flex-direction: row;
         position: relative;
@@ -62,6 +62,7 @@ class ControlPanel extends Webbit {
       [part=control-panel] {
         width: 100%;
         display: inline-block;
+        border: .1px solid rgba(0,0,0,0);
         border-radius: 50%;
         box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
         position: relative;
