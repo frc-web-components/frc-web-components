@@ -1,5 +1,6 @@
 import { LitElement, html, css } from '@webbitjs/webbit';
 import * as d3 from 'd3';
+import ResizeObserver from 'resize-observer-polyfill';
 
 class TableAxis extends LitElement {
 

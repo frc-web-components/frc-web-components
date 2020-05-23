@@ -109,11 +109,7 @@ class Gyro extends Webbit {
     }
   }
 
-  firstUpdated() {
-    const resizeObserver = new ResizeObserver(() => {
-      this.requestUpdate();
-    });
-    resizeObserver.observe(this);
+  resized() {
     this.requestUpdate();
   }
 

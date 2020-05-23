@@ -39,6 +39,7 @@
     "@babel/preset-env": "^7.8.4",
     "babel-loader": "^8.0.4",
     "css-loader": "^0.28.11",
+    "resize-observer-polyfill": "^1.5.1",
     "sass-loader": "^7.0.3",
     "style-loader": "^0.21.0",
     "webpack": "^4.41.5",
