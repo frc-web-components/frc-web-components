@@ -24,6 +24,9 @@ import './model-viewer';
 import '@vaadin/vaadin';
 import './control-panel';
 
+// Layout
+import './if';
+
 // form fields
 import './combo-box';
 import './text-field';
