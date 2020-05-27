@@ -28,6 +28,8 @@ import './control-panel';
 import './if';
 import './tabs';
 import './tabs/tab';
+import './tabs/tabs-content';
+import './tabs/tab-content';
 
 // form fields
 import './combo-box';
