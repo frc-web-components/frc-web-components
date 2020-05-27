@@ -26,6 +26,8 @@ import './control-panel';
 
 // Layout
 import './if';
+import './tabs';
+import './tabs/tab';
 
 // form fields
 import './combo-box';
