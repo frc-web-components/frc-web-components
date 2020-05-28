@@ -24,6 +24,9 @@ import './model-viewer';
 import '@vaadin/vaadin';
 import './control-panel';
 
+// General
+import './logger';
+
 // Layout
 import './if';
 import './tabs';
