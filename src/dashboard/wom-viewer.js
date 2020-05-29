@@ -92,12 +92,26 @@ class WomViewer extends LitElement {
     this.requestUpdate();
   }
 
+  expand() {
+    this.expanded = true;
+    this.requestUpdate();
+  }
+
   hasChildren() {
     return this.node.hasChildren();
   }
 
   isSelected() {
     return this.selectedNode === this.node;
+  }
+
+  updated(changedProperties) {
+    if (changedProperties.has('selectedNode')) {
+      if (this.selectedNode && this.selectedNode.isDescendant(this.node)) {
+        this.expanded = true;
+        this.requestUpdate();
+      }
+    }
   }
 
   firstUpdated() {

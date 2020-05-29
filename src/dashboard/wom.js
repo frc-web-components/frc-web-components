@@ -16,18 +16,70 @@ const getChildWebbits = (domNode) => {
 
 class WomNode {
 
-  constructor(node, root = false) {
+  constructor(node, ancestors = []) {
     this.node = node;
-    this.root = root;
+    this.ancestors = ancestors;
     this.childNodes = [];
+
+    this.onMouseEnter = () => {
+      const event = new CustomEvent('womNodeMouseenter', {
+        bubbles: true,
+        composed: true,
+        detail: {
+          node: this,
+        }
+      });
+      node.dispatchEvent(event);
+    };
+
+    this.onMouseLeave = () => {
+      const event = new CustomEvent('womNodeMouseleave', {
+        bubbles: true,
+        composed: true,
+        detail: {
+          node: this
+        }
+      });
+      node.dispatchEvent(event);
+    };
+
+    this.onMouseClick = (ev) => {
+      ev.stopPropagation();
+      const event = new CustomEvent('womNodeSelect', {
+        bubbles: true,
+        composed: true,
+        detail: {
+          node: this
+        }
+      });
+      node.dispatchEvent(event);
+    }
+
+    node.addEventListener('mouseover', this.onMouseEnter);
+    node.addEventListener('mouseleave', this.onMouseLeave);
+    node.addEventListener('click', this.onMouseClick);
+  }
+
+  destroy() {
+    this.node.removeEventListener('mouseover', this.onMouseEnter);
+    this.node.removeEventListener('mouseleave', this.onMouseLeave);
+    this.node.removeEventListener('click', this.onMouseClick);
+
+    this.childNodes.forEach(node => {
+      node.destroy();
+    });
   }
 
   build() {
     this.childNodes = getChildWebbits(this.node).map(node => {
-      const womNode = new WomNode(node);
+      const womNode = new WomNode(node, this.ancestors.concat(this));
       womNode.build();
       return womNode;
     });
+  }
+
+  isDescendant(node) {
+    return this.ancestors.indexOf(node) >= 0;
   }
 
   getChildren() {
@@ -43,11 +95,15 @@ class WomNode {
   }
 
   isRoot() {
-    return this.root;
+    return this.level === 0;
   }
 
   getNode() {
     return this.node;
+  }
+
+  getLevel() {
+    return this.ancestors.length;
   }
 }
 
@@ -57,11 +113,11 @@ class WomNode {
  */
 class Wom {
 
-
   constructor(rootNode) {
     this.rootNode = rootNode;
-    this.womNode = new WomNode(this.rootNode, true);
+    this.womNode = new WomNode(this.rootNode);
     this.womNode.build();
+  
 
 
     const observer = new MutationObserver(() => {
@@ -75,6 +131,10 @@ class Wom {
 
   getRootNode() {
     return this.womNode;
+  }
+
+  destroy() {
+    this.womNode.destroy();
   }
 }
 

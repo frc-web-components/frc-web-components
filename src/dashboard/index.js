@@ -93,8 +93,6 @@ class WebbitDashboard extends LitElement {
   }
 
   firstUpdated() {
-    this.wom = new Wom(this);
-
     const css = document.createElement('style');
     css.type = 'text/css';
     const styles = 'body { margin: 0; }';
@@ -127,8 +125,13 @@ class WebbitDashboard extends LitElement {
     if (changedProperties.has('editMode')) {
       if (!this.editMode) {
         this.inspecting = false;
+        if (this.wom) {
+          this.wom.destroy();
+        }
       } else {
+        this.wom = new Wom(this);
         this.dashboardNode = this.shadowRoot.querySelector('[part=dashboard]');
+        this.requestUpdate();
       }
     }
   }
@@ -147,7 +150,25 @@ class WebbitDashboard extends LitElement {
   }
 
   onInspect() {
-    this.inspecting = true;
+    this.inspecting = !this.inspecting;
+  }
+
+  onWomNodeMouseenter(ev) {
+    const { node } = ev.detail;
+    if (this.inspecting) {
+      if (this.previewedNode === null || node.getLevel() >= this.previewedNode.getLevel()) {
+        this.previewedNode = node;
+      }
+    }
+  }
+
+  onWomNodeMouseleave(ev) {
+    const { node } = ev.detail;
+    if (this.inspecting) {
+      if (this.previewedNode === node) {
+        this.previewedNode = null;
+      }
+    }
   }
 
   onWomNodeSelect(ev) {
@@ -169,7 +190,12 @@ class WebbitDashboard extends LitElement {
     return html`
       ${this.editMode ? html`
         <vaadin-split-layout part="editor" theme="small">
-          <div part="dashboard">
+          <div 
+            part="dashboard"
+            @womNodeMouseenter="${this.onWomNodeMouseenter}"
+            @womNodeMouseleave="${this.onWomNodeMouseleave}"
+            @womNodeSelect="${this.onWomNodeSelect}"
+          >
             ${this.previewedNode ? html`
               <wom-preview-box
                 x="${this.previewX}"
@@ -192,14 +218,16 @@ class WebbitDashboard extends LitElement {
                 </vaadin-button>
               </div>
               <div part="wom">
-                <wom-viewer
-                  @womNodeSelect="${this.onWomNodeSelect}"
-                  @womNodePreview="${this.onWomNodePreview}"
-                  @womNodePreviewEnd="${this.onWomNodePreviewEnd}"
-                  level="${0}" 
-                  .node="${this.wom.getRootNode()}"
-                  .selectedNode="${this.selectedNode}"
-                ></wom-viewer>
+                ${this.wom ? html`
+                  <wom-viewer
+                    @womNodeSelect="${this.onWomNodeSelect}"
+                    @womNodePreview="${this.onWomNodePreview}"
+                    @womNodePreviewEnd="${this.onWomNodePreviewEnd}"
+                    level="${0}" 
+                    .node="${this.wom.getRootNode()}"
+                    .selectedNode="${this.selectedNode}"
+                  ></wom-viewer>
+                ` : ''}
               </div>
 
             </div>

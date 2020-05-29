@@ -25,6 +25,7 @@ class WomPreviewBox extends LitElement {
     this.previewElement.style.background = 'rgba(3, 132, 210, .5)';
     this.previewElement.style.position = 'absolute';
     this.previewElement.style.zIndex = '1';
+    this.previewElement.style.pointerEvents = 'none';
     document.body.appendChild(this.previewElement);
   }
 
