@@ -47,6 +47,8 @@ class WebbitDashboard extends LitElement {
         height: 100%;
         box-sizing: border-box;
         overflow: scroll;
+        display: flex;
+        flex-direction: column;
       }
 
       [part=top-menu] {
@@ -74,6 +76,24 @@ class WebbitDashboard extends LitElement {
         left: var(--preview-left, 50px);
         width: var(--preview-width, 100px);
         height: var(--preview-height, 100px);
+      }
+
+      [part=tools-top], [part=tools-bottom] {
+        min-height: 10%;
+      }
+
+      [part=tools-splitter] {
+        height: 100%;
+        flex: 1;
+      }
+
+      vaadin-tabs {
+        background: #eee;
+        box-shadow: none;
+      }
+
+      vaadin-tab {
+        color: #555;
       }
     `
   }
@@ -217,18 +237,30 @@ class WebbitDashboard extends LitElement {
                   <iron-icon icon="vaadin:area-select"></iron-icon>
                 </vaadin-button>
               </div>
-              <div part="wom">
-                ${this.wom ? html`
-                  <wom-viewer
-                    @womNodeSelect="${this.onWomNodeSelect}"
-                    @womNodePreview="${this.onWomNodePreview}"
-                    @womNodePreviewEnd="${this.onWomNodePreviewEnd}"
-                    level="${0}" 
-                    .node="${this.wom.getRootNode()}"
-                    .selectedNode="${this.selectedNode}"
-                  ></wom-viewer>
-                ` : ''}
-              </div>
+              <vaadin-split-layout part="tools-splitter" theme="small" orientation="vertical">
+                <div part="tools-top">
+                  <div part="wom">
+                    ${this.wom ? html`
+                      <wom-viewer
+                        @womNodeSelect="${this.onWomNodeSelect}"
+                        @womNodePreview="${this.onWomNodePreview}"
+                        @womNodePreviewEnd="${this.onWomNodePreviewEnd}"
+                        level="${0}" 
+                        .node="${this.wom.getRootNode()}"
+                        .selectedNode="${this.selectedNode}"
+                      ></wom-viewer>
+                    ` : ''}
+                  </div>
+                </div>
+                <div part="tools-bottom">
+                  <vaadin-tabs theme="small">
+                    <vaadin-tab>Properties</vaadin-tab>
+                    <vaadin-tab>Sources</vaadin-tab>
+                    <vaadin-tab>Slots</vaadin-tab>
+                    <vaadin-tab>Styles</vaadin-tab>
+                  </vaadin-tabs>
+                </div>
+              </vaadin-split-layout>
 
             </div>
           </div>
