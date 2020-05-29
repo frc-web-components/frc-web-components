@@ -244,7 +244,10 @@ class WebbitDashboard extends LitElement {
                     ` : ''}
                   </div>
                 </div>
-                  <dashboard-tools-bottom part="tools-bottom">
+                  <dashboard-tools-bottom 
+                    part="tools-bottom"
+                    .selectedNode="${this.selectedNode}"
+                  >
 
                   </dashboard-tools-bottom>        
               </vaadin-split-layout>

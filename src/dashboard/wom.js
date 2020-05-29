@@ -106,6 +106,10 @@ class WomNode {
   getLevel() {
     return this.ancestors.length;
   }
+
+  isWebbit() {
+    return isWebbit(this.node);
+  }
 }
 
 
