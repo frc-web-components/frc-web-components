@@ -9,7 +9,8 @@ const isWebbit = (domNode) => {
 
 const getChildWebbits = (domNode) => {
   return [...domNode.children].filter(node => {
-    return isWebbit(node);
+    return true;
+    //return isWebbit(node);
   });
 };
 

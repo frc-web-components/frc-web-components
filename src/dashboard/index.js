@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit-element';
 import Wom from './wom';
 import './wom-viewer';
 import './wom-preview-box';
+import './tools-bottom';
 
 class WebbitDashboard extends LitElement {
 
@@ -85,15 +86,6 @@ class WebbitDashboard extends LitElement {
       [part=tools-splitter] {
         height: 100%;
         flex: 1;
-      }
-
-      vaadin-tabs {
-        background: #eee;
-        box-shadow: none;
-      }
-
-      vaadin-tab {
-        color: #555;
       }
     `
   }
@@ -252,14 +244,9 @@ class WebbitDashboard extends LitElement {
                     ` : ''}
                   </div>
                 </div>
-                <div part="tools-bottom">
-                  <vaadin-tabs theme="small">
-                    <vaadin-tab>Properties</vaadin-tab>
-                    <vaadin-tab>Sources</vaadin-tab>
-                    <vaadin-tab>Slots</vaadin-tab>
-                    <vaadin-tab>Styles</vaadin-tab>
-                  </vaadin-tabs>
-                </div>
+                  <dashboard-tools-bottom part="tools-bottom">
+
+                  </dashboard-tools-bottom>        
               </vaadin-split-layout>
 
             </div>
