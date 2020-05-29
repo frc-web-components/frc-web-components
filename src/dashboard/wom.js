@@ -45,6 +45,10 @@ class WomNode {
   isRoot() {
     return this.root;
   }
+
+  getNode() {
+    return this.node;
+  }
 }
 
 

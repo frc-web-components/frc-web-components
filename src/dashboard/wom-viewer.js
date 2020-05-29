@@ -124,6 +124,28 @@ class WomViewer extends LitElement {
     }
   }
 
+  onPreview(ev) {
+    const event = new CustomEvent('womNodePreview', {
+      bubbles: true,
+      composed: true,
+      detail: {
+        node: this.node
+      }
+    });
+    this.dispatchEvent(event);
+  }
+
+  onPreviewEnd() {
+    const event = new CustomEvent('womNodePreviewEnd', {
+      bubbles: true,
+      composed: true,
+      detail: {
+        node: this.node
+      }
+    });
+    this.dispatchEvent(event);
+  }
+
   render() {
 
     return html`
@@ -131,6 +153,8 @@ class WomViewer extends LitElement {
         <header 
           class="${this.expanded ? 'expanded' : 'collapsed'} ${this.isSelected() ? 'selected' : ''}"
           @click="${this.onSelect}"  
+          @mouseenter="${this.onPreview}"
+          @mouseleave="${this.onPreviewEnd}"
         >
           <span class="key">
             ${this.hasChildren() ? html`
