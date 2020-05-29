@@ -1,6 +1,7 @@
 import './source-providers';
 import './components';
 import './frc-dashboard';
+import './dashboard';
 import * as webbitStore from '@webbitjs/store';
 import * as webbit from '@webbitjs/webbit';
 

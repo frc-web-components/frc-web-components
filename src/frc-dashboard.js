@@ -1,10 +1,11 @@
-import { LitElement, html } from '@webbitjs/webbit';
 import { addSourceProvider, setDefaultSourceProvider } from '@webbitjs/store';
+import WebbitDashboard from './dashboard';
 
-class FrcDashboard extends LitElement {
+class FrcDashboard extends WebbitDashboard {
 
   constructor() {
     super();
+    this.fullscreen = true;
 
     addSourceProvider('NetworkTables', 'NetworkTables');
     setDefaultSourceProvider('NetworkTables');
@@ -24,12 +25,6 @@ class FrcDashboard extends LitElement {
       }, 500);
     };
     document.getElementsByTagName('head')[0].appendChild(script);
-  }
-
-  render() {
-    return html`
-      <slot></slot>
-    `;
   }
 }
 
