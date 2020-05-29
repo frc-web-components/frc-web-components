@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import './sources/sources-view';
 
 class SourcesTool extends LitElement {
 
@@ -16,17 +17,27 @@ class SourcesTool extends LitElement {
 
       [part=source-fields] vaadin-text-field {
         flex: 1;
-        margin-right: 10px;
+        margin-right: 7px;
         min-width: 120px;
         padding-top: 0;
       }
 
-      [part=confirm-button] iron-icon {
-        color: green;
+      [part=buttons] {
+        display: flex;
+        justify-content: flex-end;
       }
 
-      [part=cancel-button] iron-icon {
-        color: red;
+      [part=buttons] vaadin-button {
+        margin-right: 7px;
+      }
+
+      p {
+        margin-top: 0;
+        font-weight: bold;
+      }
+
+      p span {
+        color: purple;
       }
 
     `;
@@ -34,39 +45,112 @@ class SourcesTool extends LitElement {
 
   static get properties() {
     return {
-      selectedNode: { type: Object, attribute: false }
+      selectedNode: { type: Object, attribute: false },
+      sourceKeyInput: { type: String, attribute: false },
+      sourceProviderInput: { type: String, attribute: false },
     };
   }
 
   constructor() {
     super();
     this.selectedNode = null;
+    this.sourceKeyInput = '';
+    this.sourceProviderInput = '';
+  }
+
+  getSourceKey() {
+    const sourceKey = this.selectedNode.getNode().sourceKey;
+    return sourceKey ? sourceKey : '';
+  }
+
+  getSourceProvider() {
+    const sourceProvider = this.selectedNode.getNode().sourceProvider;
+    return sourceProvider ? sourceProvider : '';
+  }
+
+  updated(changedProperties) {
+    if (changedProperties.has('selectedNode') && this.selectedNode) {
+      this.sourceKeyInput = this.getSourceKey();
+      this.sourceProviderInput = this.getSourceProvider();
+    }
+  }
+
+  isSourceKeyInputModified() {
+    if (!this.selectedNode) {
+      return false;
+    }
+
+    return this.getSourceKey() !== this.sourceKeyInput;
+  }
+
+  isSourceProviderInputModified() {
+    if (!this.selectedNode) {
+      return false;
+    }
+
+    return this.getSourceProvider() !== this.sourceProviderInput;
+  }
+
+  isInputModified() {
+    return this.isSourceKeyInputModified() || this.isSourceProviderInputModified();
+  }
+
+  onSourceKeyInputChange(ev) {
+    const input = ev.target || ev.path[0];
+    this.sourceKeyInput = input.value;
+  }
+
+  onSourceProviderInputChange(ev) {
+    const input = ev.target || ev.path[0];
+    this.sourceProviderInput = input.value;
+  }
+
+  onCancel() {
+    this.sourceKeyInput = this.getSourceKey();
+    this.sourceProviderInput = this.getSourceProvider();
   }
 
   renderWebbit() {
     return html`
+      <p>Source for <span>${this.selectedNode.getName()}</span></p>
       <div part="source-fields">
         <vaadin-text-field
           label="Source Key"
           clear-button-visible 
-          value="Value"
+          value="${this.sourceKeyInput}"
+          @change="${this.onSourceKeyInputChange}"
           theme="small"
         ></vaadin-text-field>
         <vaadin-text-field
           label="Source Provider"
           clear-button-visible 
-          value="Value"
+          value="${this.sourceProviderInput}"
+          @change="${this.onSourceProviderInputChange}"
           theme="small"
         ></vaadin-text-field>
       </div>
 
-      <vaadin-button part="confirm-button" theme="success primary small" aria-label="Confirm">
-        Confirm
-      </vaadin-button>
+      <div part="buttons">
+        <vaadin-button 
+          part="confirm-button" 
+          theme="success primary small" 
+          aria-label="Confirm"
+          ?disabled="${!this.isInputModified()}"
+        >
+          Confirm
+        </vaadin-button>
 
-      <vaadin-button part="cancel-button" theme="error primary small" aria-label="Cancel">
-        Cancel
-      </vaadin-button>
+        <vaadin-button 
+          part="cancel-button" 
+          theme="error primary small" 
+          aria-label="Cancel"
+          ?disabled="${!this.isInputModified()}"
+          @click="${this.onCancel}"
+        >
+          Cancel
+        </vaadin-button>
+      </div>
+      <dashboard-sources-view></dashboard-sources-view>
     `;
   }
 
