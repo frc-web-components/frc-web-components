@@ -29,6 +29,22 @@ class WomNode {
       return womNode;
     });
   }
+
+  getChildren() {
+    return this.childNodes;
+  }
+
+  hasChildren() {
+    return this.childNodes.length > 0;
+  }
+
+  getName() {
+    return this.node.tagName.toLowerCase();
+  }
+
+  isRoot() {
+    return this.root;
+  }
 }
 
 
@@ -51,6 +67,10 @@ class Wom {
       childList: true,
       subtree: true
     });
+  }
+
+  getRootNode() {
+    return this.womNode;
   }
 }
 

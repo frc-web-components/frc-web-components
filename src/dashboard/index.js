@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 import Wom from './wom';
+import './wom-viewer';
 
 class WebbitDashboard extends LitElement {
 
@@ -7,7 +8,8 @@ class WebbitDashboard extends LitElement {
     return {
       editMode: { type: Boolean, attribute: 'edit-mode', reflect: true },
       fullscreen: { type: Boolean, reflect: true },
-      inspecting: { type: Boolean }
+      inspecting: { type: Boolean },
+      selectedNode: { type: Object, attribute: false }
     };
   }
 
@@ -51,6 +53,10 @@ class WebbitDashboard extends LitElement {
       [part=top-menu] vaadin-button[inspecting] {
         color: blue;
       }
+
+      [part=wom] {
+        padding: 5px;
+      }
     `
   }
 
@@ -60,6 +66,7 @@ class WebbitDashboard extends LitElement {
     this.editMode = false;
     this.fullscreen = false;
     this.inspecting = false;
+    this.selectedNode = null;
   }
 
   firstUpdated() {
@@ -90,17 +97,22 @@ class WebbitDashboard extends LitElement {
   onKeyDown(ev) {
     // Toggle edit mode
     if (this.fullscreen && ev.shiftKey && ev.code === 'KeyE') {
-      console.log('...');
       this.editMode = !this.editMode;
+      this.selectedNode = null;
     }
 
     if(ev.key === "Escape") {
       this.inspecting = false;
+      this.selectedNode = null;
     }
   }
 
   onInspect() {
     this.inspecting = true;
+  }
+
+  onWomNodeSelect(ev) {
+    this.selectedNode = ev.detail.node;
   }
 
   render() {
@@ -121,6 +133,15 @@ class WebbitDashboard extends LitElement {
                   <iron-icon icon="vaadin:area-select"></iron-icon>
                 </vaadin-button>
               </div>
+              <div part="wom">
+                <wom-viewer
+                  @womNodeSelect="${this.onWomNodeSelect}"
+                  level="${0}" 
+                  .node="${this.wom.getRootNode()}"
+                  .selectedNode="${this.selectedNode}"
+                ></wom-viewer>
+              </div>
+
             </div>
           </div>
         </vaadin-split-layout>
