@@ -6,7 +6,9 @@ class DashboardToolsBottom extends LitElement {
   static get styles() {
     return css`
       :host {
-        display: block;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
       }
 
       vaadin-tabs {
@@ -16,6 +18,11 @@ class DashboardToolsBottom extends LitElement {
 
       vaadin-tab {
         color: #555;
+      }
+
+      [part=tab-content] {
+        overflow: auto;
+        flex: 1;
       }
     `;
   }
@@ -50,21 +57,23 @@ class DashboardToolsBottom extends LitElement {
         <vaadin-tab>Sources</vaadin-tab>
         <vaadin-tab>Styles</vaadin-tab>
       </vaadin-tabs>
-      ${this.selectedTab === 0 ? html`
-        Components
-      ` : ''}
+      <div part="tab-content">
+        ${this.selectedTab === 0 ? html`
+          Components
+        ` : ''}
 
-      ${this.selectedTab === 1 ? html`
-        Properties
-      ` : ''}
+        ${this.selectedTab === 1 ? html`
+          Properties
+        ` : ''}
 
-      ${this.selectedTab === 2 ? html`
-        <dashboard-sources-tool .selectedNode="${this.selectedNode}"></dashboard-sources-tool>
-      ` : ''}
+        ${this.selectedTab === 2 ? html`
+          <dashboard-sources-tool .selectedNode="${this.selectedNode}"></dashboard-sources-tool>
+        ` : ''}
 
-      ${this.selectedTab === 3 ? html`
-        Styles
-      ` : ''}
+        ${this.selectedTab === 3 ? html`
+          Styles
+        ` : ''}
+      </div>
     `;
   }
 }

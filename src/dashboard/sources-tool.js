@@ -178,7 +178,7 @@ class SourcesTool extends LitElement {
         Select an element to view sources.
       ` : ''}
       ${(this.selectedNode && !this.selectedNode.isWebbit()) ? html`
-        No sources are available for this element.
+        Sources cannot be applied to this element.
       ` : ''}
 
       ${this.selectedNode && this.selectedNode.isWebbit() ? html`

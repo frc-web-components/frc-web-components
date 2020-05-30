@@ -87,6 +87,10 @@ class WebbitDashboard extends LitElement {
         height: 100%;
         flex: 1;
       }
+
+      dashboard-tools-bottom {
+        overflow: unset;
+      }
     `
   }
 
