@@ -3,7 +3,8 @@ import {
   sourceProviderAdded, 
   getSourceProviderNames,
   getSourceProvider ,
-  getRawSources
+  getRawSources,
+  subscribeAll
 } from '@webbitjs/store';
 import './source-view';
 
@@ -33,9 +34,10 @@ class SourcesView extends LitElement {
 
   constructor() {
     super();
-    this.selectedSourceKey = null;
-    this.selectedSourceProvider = null;
+    this.selectedSourceKey = '';
+    this.selectedSourceProvider = '';
     this.providers = [];
+    this.unsubscribers = {};
   }
 
   setProviders() {
@@ -49,6 +51,20 @@ class SourcesView extends LitElement {
       this.setProviders();
     });
     this.setProviders();
+  }
+
+  updated(changedProperties) {
+    if (changedProperties.has('providers')) {
+      Object.entries(this.unsubscribers).map(([name, unsubscribe]) => {
+        unsubscribe();
+      });
+      this.unsubscribers = {};
+      this.providers.forEach(provider => {
+        this.unsubscribers[provider._providerName] = subscribeAll(provider._providerName, () => {
+          this.requestUpdate();
+        });
+      });
+    }
   }
 
   getLabel(name) {
@@ -67,12 +83,14 @@ class SourcesView extends LitElement {
 
     return html`
       ${Object.entries(sources).map(([name, source]) => html`
-        <source-view 
+        <dashboard-source-view 
           label="${this.getLabel(source.__key__)}" 
           provider-name="${provider._providerName}"
           .source="${{...source}}"
+          selected-source-key="${this.selectedSourceKey}"
+          selected-source-provider="${this.selectedSourceProvider}"
         >
-        </source-view>
+        </dashboard-source-view>
       `)}
     `;
   }

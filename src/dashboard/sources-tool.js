@@ -60,12 +60,12 @@ class SourcesTool extends LitElement {
 
   getSourceKey() {
     const sourceKey = this.selectedNode.getNode().sourceKey;
-    return sourceKey ? sourceKey : '';
+    return sourceKey;
   }
 
   getSourceProvider() {
     const sourceProvider = this.selectedNode.getNode().sourceProvider;
-    return sourceProvider ? sourceProvider : '';
+    return sourceProvider;
   }
 
   updated(changedProperties) {
@@ -80,7 +80,7 @@ class SourcesTool extends LitElement {
       return false;
     }
 
-    return this.getSourceKey() !== this.sourceKeyInput;
+    return this.getSourceKey() !== this.sourceKeyInput || this.sourceKeyInput === null;
   }
 
   isSourceProviderInputModified() {
@@ -110,6 +110,18 @@ class SourcesTool extends LitElement {
     this.sourceProviderInput = this.getSourceProvider();
   }
 
+  onConfirm() {
+    this.selectedNode.getNode().sourceProvider = this.sourceProviderInput;
+    this.selectedNode.getNode().sourceKey = this.sourceKeyInput;
+    this.requestUpdate();
+  }
+
+  onSourceSelect(ev) {
+    const { sourceKey, sourceProvider } = ev.detail;
+    this.sourceKeyInput = sourceKey;
+    this.sourceProviderInput = sourceProvider;
+  }
+
   renderWebbit() {
     return html`
       <p>Source for <span>${this.selectedNode.getName()}</span></p>
@@ -117,14 +129,14 @@ class SourcesTool extends LitElement {
         <vaadin-text-field
           label="Source Key"
           clear-button-visible 
-          value="${this.sourceKeyInput}"
+          value="${this.sourceKeyInput || ''}"
           @change="${this.onSourceKeyInputChange}"
           theme="small"
         ></vaadin-text-field>
         <vaadin-text-field
           label="Source Provider"
           clear-button-visible 
-          value="${this.sourceProviderInput}"
+          value="${this.sourceProviderInput || ''}"
           @change="${this.onSourceProviderInputChange}"
           theme="small"
         ></vaadin-text-field>
@@ -136,6 +148,7 @@ class SourcesTool extends LitElement {
           theme="success primary small" 
           aria-label="Confirm"
           ?disabled="${!this.isInputModified()}"
+          @click="${this.onConfirm}"
         >
           Confirm
         </vaadin-button>
@@ -150,7 +163,11 @@ class SourcesTool extends LitElement {
           Cancel
         </vaadin-button>
       </div>
-      <dashboard-sources-view></dashboard-sources-view>
+      <dashboard-sources-view
+        selected-source-key="${this.sourceKeyInput}"
+        selected-source-provider="${this.sourceProviderInput}"
+        @sourceSelect="${this.onSourceSelect}"
+      ></dashboard-sources-view>
     `;
   }
 
