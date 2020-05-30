@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
-import './sources-tool';
+import './sources/sources-tool';
+import './components/components-tool';
 
 class DashboardToolsBottom extends LitElement {
 
@@ -59,7 +60,7 @@ class DashboardToolsBottom extends LitElement {
       </vaadin-tabs>
       <div part="tab-content">
         ${this.selectedTab === 0 ? html`
-          Components
+        <dashboard-components-tool></dashboard-components-tool>
         ` : ''}
 
         ${this.selectedTab === 1 ? html`

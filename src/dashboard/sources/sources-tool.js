@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
-import './sources/sources-view';
+import './sources-view';
 
 class SourcesTool extends LitElement {
 
