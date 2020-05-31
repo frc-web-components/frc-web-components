@@ -9,6 +9,16 @@ class WomViewer extends LitElement {
         font-family: sans-serif;
         font-size: 15px;
       }
+
+      :host([adding-element]) header:hover, 
+      :host([adding-element]) header:hover .key, 
+      :host([adding-element]) header:hover .key label {
+        cursor: cell;
+      }
+
+      :host([adding-element]) header:hover .key {
+        box-shadow: 0px var(--add-element-position, 8px) 0px 0px #87b187
+      }
       
       header {
         padding: 3px 0;
@@ -22,6 +32,7 @@ class WomViewer extends LitElement {
       header:not(.selected):hover {
         background-color: #eee;
       }
+
       header .key {
         white-space: nowrap;
         width: 100%;
@@ -32,13 +43,13 @@ class WomViewer extends LitElement {
       }
       header .key .caret + label {
         padding-top: 2px;
-        padding-left: 3px;
+        padding-left: 2px;
       }
       header .key label {
         overflow: auto;
         white-space: nowrap;
         text-overflow: clip;
-        padding-left: 8px;
+        padding-left: 2px;
         flex: 1;
       }
       header .key label::-webkit-scrollbar { 
@@ -50,7 +61,7 @@ class WomViewer extends LitElement {
         height: 0 !important;
       }
       header .key {
-        padding-left: var(--header-key-padding-left);
+        margin-left: var(--header-key-margin-left);
         color: purple;
         display: flex;
       }
@@ -76,6 +87,7 @@ class WomViewer extends LitElement {
       node: { type: Object },
       selectedNode: { type: Object },
       level: { type: Number },
+      addingElement: { type: Boolean, attribute: 'adding-element', reflect: true },
     };
   }
 
@@ -85,6 +97,8 @@ class WomViewer extends LitElement {
     this.node = null;
     this.selectedNode = null;
     this.level = 0;
+    this.addingElement = false;
+    this.headerNode = null;
   }
 
   toggleExpand() {
@@ -115,11 +129,12 @@ class WomViewer extends LitElement {
   }
 
   firstUpdated() {
-    const headerNode = this.shadowRoot.querySelector('header');
-    headerNode.style.setProperty(
-      '--header-key-padding-left', 
-      `${12 * this.level + 5}px`
+    this.headerNode = this.shadowRoot.querySelector('header');
+    this.headerNode.style.setProperty(
+      '--header-key-margin-left', 
+      `${16 * this.level + 5}px`
     );
+
   }
 
   onSelect(ev) {
@@ -160,6 +175,21 @@ class WomViewer extends LitElement {
     this.dispatchEvent(event);
   }
 
+  onAddElementPreview(ev) {
+    const target = this.headerNode;
+    const offset = target.offsetTop;
+    const height = target.clientHeight;
+    const y = ev.pageY;
+    var loc = Math.abs(offset - y);
+    if (loc < height / 2) {
+      target.style.setProperty('--add-element-position', '-8px')
+    }
+    else {
+      target.style.setProperty('--add-element-position', '8px')
+
+    }
+  }
+
   render() {
 
     return html`
@@ -167,6 +197,7 @@ class WomViewer extends LitElement {
         <header 
           class="${this.expanded ? 'expanded' : 'collapsed'} ${this.isSelected() ? 'selected' : ''}"
           @click="${this.onSelect}"  
+          @mousemove="${this.onAddElementPreview}"
           @mouseenter="${this.onPreview}"
           @mouseleave="${this.onPreviewEnd}"
         >
@@ -187,6 +218,7 @@ class WomViewer extends LitElement {
                 .node="${node}"
                 .selectedNode="${this.selectedNode}"
                 level="${this.level + 1}"
+                ?adding-element="${this.addingElement}"
               ></wom-viewer>
             `)}
           </div>

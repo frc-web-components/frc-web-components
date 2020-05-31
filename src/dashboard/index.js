@@ -31,11 +31,6 @@ class WebbitDashboard extends LitElement {
       :host([fullscreen]) [part=editor] {
         height: 100vh;
       }
-
-      :host([selected-component]:not([selected-component=""])) [part=dashboard],
-      :host([selected-component]:not([selected-component=""])) [part=dashboard] * {
-        cursor: cell !important;
-      }
  
       [part=editor] {
         height: 100%;
@@ -109,6 +104,19 @@ class WebbitDashboard extends LitElement {
     this.previewWidth = 0;
     this.previewHeight = 0;
     this.selectedComponent = '';
+    this.newElementPreview = null;
+  }
+
+  getChildNumber(node) {
+    return Array.prototype.indexOf.call(node.parentNode.childNodes, node);
+  }
+
+  addNewElementPreview(insertedNode, node) {
+    console.log('node', insertedNode, node);
+
+    if (node.parentNode) {
+      node.parentNode.insertBefore(insertedNode, node);
+    }
   }
 
   firstUpdated() {
@@ -126,7 +134,25 @@ class WebbitDashboard extends LitElement {
     });
 
 
+    const newElementPreview = document.createElement('div');
+    newElementPreview.style.width = '20px';
+    newElementPreview.style.height = '20px';
+    newElementPreview.style.background = 'green';
+    newElementPreview.style.opacity = '.5';
+
+    this.newElementPreview = newElementPreview;
+
+
     const setPreviewBounds = () => { 
+
+
+      // if (this.editMode && this.previewedNode && this.selectedComponent) {
+      //   // Get position of element
+      //   //const positionIndex = this.getChildNumber(this.previewedNode);
+      //   //this.addNewElementPreview(this.newElementPreview, this.previewedNode.node);
+        
+      // } 
+
       if (this.editMode && this.previewedNode) {
         const boundingRect = this.dashboardNode.getBoundingClientRect();
         const { x, y, width, height } = this.previewedNode.getNode().getBoundingClientRect();
@@ -240,6 +266,7 @@ class WebbitDashboard extends LitElement {
                         level="${0}" 
                         .node="${this.wom.getRootNode()}"
                         .selectedNode="${this.selectedNode}"
+                        ?adding-element="${!!this.selectedComponent}"
                       ></wom-viewer>
                     ` : ''}
                   </div>
