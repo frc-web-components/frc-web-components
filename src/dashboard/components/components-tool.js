@@ -61,7 +61,7 @@ class ComponentsTool extends LitElement {
   static get properties() {
     return {
       componentCategories: { type: Array, attribute: false },
-      selectedComponent: { type: String, attribute: false }
+      selectedComponent: { type: String, attribute: 'selected-component' }
     };
   }
 
@@ -125,7 +125,14 @@ class ComponentsTool extends LitElement {
   }
 
   onComponentSelect(name) {
-    this.selectedComponent = name;
+    const event = new CustomEvent('dashhboardComponentSelected', {
+      bubbles: true,
+      composed: true,
+      detail: {
+        name,
+      }
+    });
+    this.dispatchEvent(event);
   }
 
   renderSelectedComponent() {

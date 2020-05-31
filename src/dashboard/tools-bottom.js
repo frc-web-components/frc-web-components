@@ -31,7 +31,8 @@ class DashboardToolsBottom extends LitElement {
   static get properties() {
     return {
       selectedTab: { type: Number, attribute: false },
-      selectedNode: { type: Object, attribute: false }
+      selectedNode: { type: Object, attribute: false },
+      selectedComponent: { type: String, attribute: 'selected-component' }
     };
   }
 
@@ -39,11 +40,18 @@ class DashboardToolsBottom extends LitElement {
     super();
     this.selectedTab = 0;
     this.selectedNode = null;
+    this.selectedComponent = '';
   }
 
   onTabChange(ev) {
     const target = ev.target || ev.path[0];
     this.selectedTab = target.selected;
+
+    const event = new CustomEvent('dashboardToolsTabChange', {
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(event);
   }
 
   render() {
@@ -60,7 +68,9 @@ class DashboardToolsBottom extends LitElement {
       </vaadin-tabs>
       <div part="tab-content">
         ${this.selectedTab === 0 ? html`
-        <dashboard-components-tool></dashboard-components-tool>
+        <dashboard-components-tool
+          selected-component="${this.selectedComponent}"
+        ></dashboard-components-tool>
         ` : ''}
 
         ${this.selectedTab === 1 ? html`

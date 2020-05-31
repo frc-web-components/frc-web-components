@@ -17,6 +17,7 @@ class WebbitDashboard extends LitElement {
       previewY: { type: Number, attribute: false },
       previewWidth: { type: Number, attribute: false },
       previewHeight: { type: Number, attribute: false },
+      selectedComponent: { type: String, attribute: 'selected-component', reflect: true }
     };
   }
 
@@ -32,6 +33,11 @@ class WebbitDashboard extends LitElement {
         height: 100vh;
       }
 
+      :host([selected-component]:not([selected-component=""])) [part=dashboard],
+      :host([selected-component]:not([selected-component=""])) [part=dashboard] * {
+        cursor: cell !important;
+      }
+ 
       [part=editor] {
         height: 100%;
       }
@@ -106,6 +112,7 @@ class WebbitDashboard extends LitElement {
     this.previewY = 0;
     this.previewWidth = 0;
     this.previewHeight = 0;
+    this.selectedComponent = '';
   }
 
   firstUpdated() {
@@ -157,11 +164,13 @@ class WebbitDashboard extends LitElement {
     if (this.fullscreen && ev.shiftKey && ev.code === 'KeyE') {
       this.editMode = !this.editMode;
       this.selectedNode = null;
+      this.selectedComponent = '';
     }
 
     if(ev.key === "Escape") {
       this.inspecting = false;
       this.selectedNode = null;
+      this.selectedComponent = '';
     }
   }
 
@@ -200,6 +209,15 @@ class WebbitDashboard extends LitElement {
     if (this.previewedNode === node) {
       this.previewedNode = null;
     }
+  }
+
+  onDashboardToolsTabChange() {
+    this.selectedComponent = '';
+  }
+
+  onDashhboardComponentSelected(ev) {
+    const { name } = ev.detail;
+    this.selectedComponent = name;
   }
 
   render() {
@@ -251,6 +269,9 @@ class WebbitDashboard extends LitElement {
                   <dashboard-tools-bottom 
                     part="tools-bottom"
                     .selectedNode="${this.selectedNode}"
+                    @dashboardToolsTabChange="${this.onDashboardToolsTabChange}"
+                    @dashhboardComponentSelected="${this.onDashhboardComponentSelected}"
+                    selected-component="${this.selectedComponent}"
                   >
 
                   </dashboard-tools-bottom>        
