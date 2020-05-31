@@ -10,7 +10,6 @@ class WebbitDashboard extends LitElement {
     return {
       editMode: { type: Boolean, attribute: 'edit-mode', reflect: true },
       fullscreen: { type: Boolean, reflect: true },
-      inspecting: { type: Boolean },
       selectedNode: { type: Object, attribute: false },
       previewedNode: { type: Object, attribute: false },
       previewX: { type: Number, attribute: false },
@@ -61,15 +60,13 @@ class WebbitDashboard extends LitElement {
       [part=top-menu] {
         width: 100%;
         background: #eee;
+        display: none;
       }
 
       [part=top-menu] vaadin-button {
         color: black;
       }
 
-      [part=top-menu] vaadin-button[inspecting] {
-        color: blue;
-      }
 
       [part=wom] {
         padding: 5px;
@@ -105,7 +102,6 @@ class WebbitDashboard extends LitElement {
     this.wom = null;
     this.editMode = false;
     this.fullscreen = false;
-    this.inspecting = false;
     this.selectedNode = null;
     this.dashboardNode = null;
     this.previewX = 0;
@@ -147,7 +143,6 @@ class WebbitDashboard extends LitElement {
   updated(changedProperties) {
     if (changedProperties.has('editMode')) {
       if (!this.editMode) {
-        this.inspecting = false;
         if (this.wom) {
           this.wom.destroy();
         }
@@ -168,31 +163,22 @@ class WebbitDashboard extends LitElement {
     }
 
     if(ev.key === "Escape") {
-      this.inspecting = false;
       this.selectedNode = null;
       this.selectedComponent = '';
     }
   }
 
-  onInspect() {
-    this.inspecting = !this.inspecting;
-  }
-
   onWomNodeMouseenter(ev) {
     const { node } = ev.detail;
-    if (this.inspecting) {
-      if (this.previewedNode === null || node.getLevel() >= this.previewedNode.getLevel()) {
-        this.previewedNode = node;
-      }
+    if (!this.previewedNode || node.getLevel() >= this.previewedNode.getLevel()) {
+      this.previewedNode = node;
     }
   }
 
   onWomNodeMouseleave(ev) {
     const { node } = ev.detail;
-    if (this.inspecting) {
-      if (this.previewedNode === node) {
-        this.previewedNode = null;
-      }
+    if (this.previewedNode === node) {
+      this.previewedNode = null;
     }
   }
 
@@ -242,15 +228,7 @@ class WebbitDashboard extends LitElement {
           </div>
           <div part="tools-container">
             <div part="tools">
-              <div part="top-menu">
-                <vaadin-button 
-                  ?inspecting="${this.inspecting}" 
-                  theme="icon tertiary" 
-                  @click="${this.onInspect}
-                ">
-                  <iron-icon icon="vaadin:area-select"></iron-icon>
-                </vaadin-button>
-              </div>
+              <div part="top-menu"></div>
               <vaadin-split-layout part="tools-splitter" theme="small" orientation="vertical">
                 <div part="tools-top">
                   <div part="wom">
