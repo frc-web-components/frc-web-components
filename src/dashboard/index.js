@@ -38,7 +38,7 @@ class WebbitDashboard extends LitElement {
 
       [part=tools-container] {
         position: relative;
-        min-width: 300px;
+        min-width: 350px;
         z-index: 2;
       }
 
@@ -111,11 +111,16 @@ class WebbitDashboard extends LitElement {
     return Array.prototype.indexOf.call(node.parentNode.childNodes, node);
   }
 
-  addNewElementPreview(insertedNode, node) {
-    console.log('node', insertedNode, node);
+  addNewElementPreview(insertedNode, node, before) {
 
-    if (node.parentNode) {
+    if (!node.parentNode) {
+      return;
+    }
+
+    if (before) {
       node.parentNode.insertBefore(insertedNode, node);
+    } else {
+      node.parentNode.insertBefore(insertedNode, node.nextSibling);
     }
   }
 
@@ -135,23 +140,13 @@ class WebbitDashboard extends LitElement {
 
 
     const newElementPreview = document.createElement('div');
-    newElementPreview.style.width = '20px';
-    newElementPreview.style.height = '20px';
-    newElementPreview.style.background = 'green';
+    newElementPreview.style.border = '2px dashed darkgreen';
     newElementPreview.style.opacity = '.5';
 
     this.newElementPreview = newElementPreview;
 
 
     const setPreviewBounds = () => { 
-
-
-      // if (this.editMode && this.previewedNode && this.selectedComponent) {
-      //   // Get position of element
-      //   //const positionIndex = this.getChildNumber(this.previewedNode);
-      //   //this.addNewElementPreview(this.newElementPreview, this.previewedNode.node);
-        
-      // } 
 
       if (this.editMode && this.previewedNode) {
         const boundingRect = this.dashboardNode.getBoundingClientRect();
@@ -176,6 +171,19 @@ class WebbitDashboard extends LitElement {
         this.wom = new Wom(this);
         this.dashboardNode = this.shadowRoot.querySelector('[part=dashboard]');
         this.requestUpdate();
+      }
+    }
+
+    if (changedProperties.has('selectedComponent')) {
+      this.newElementPreview.innerHTML = '';
+      if (this.selectedComponent) {
+        this.newElementPreview.innerHTML = `
+          <${this.selectedComponent}></${this.selectedComponent}>
+        `;
+        const newElement = this.newElementPreview.querySelector(this.selectedComponent);
+        newElement.updateComplete.then(() => {
+          this.newElementPreview.style.display = window.getComputedStyle(newElement).display;
+        });
       }
     }
   }
@@ -208,8 +216,20 @@ class WebbitDashboard extends LitElement {
     }
   }
 
+  onDashboardWomNodeSelect(ev) {
+    this.selectedNode = ev.detail.node;
+  }
+
   onWomNodeSelect(ev) {
     this.selectedNode = ev.detail.node;
+
+    if (this.elementPreviewAdjacentNode) {
+      const newElement = this.newElementPreview.querySelector(this.selectedComponent);
+      const { node, before } = this.elementPreviewAdjacentNode;
+      this.addNewElementPreview(newElement, node.node, before);
+      this.newElementPreview.remove();
+      this.selectedComponent = '';
+    }
   }
 
   onWomNodePreview(ev) {
@@ -220,6 +240,21 @@ class WebbitDashboard extends LitElement {
     const { node } = ev.detail;
     if (this.previewedNode === node) {
       this.previewedNode = null;
+    }
+  }
+
+  onWomNodeAddElementPreview(ev) {
+    if (this.selectedComponent) {
+      const { node, before } = ev.detail;
+
+      if (
+        !this.elementPreviewAdjacentNode || 
+        this.elementPreviewAdjacentNode.node !== node ||
+        this.elementPreviewAdjacentNode.before !== before
+      ) {
+        this.elementPreviewAdjacentNode = { before, node };
+        this.addNewElementPreview(this.newElementPreview, node.node, before);
+      }
     }
   }
 
@@ -240,7 +275,8 @@ class WebbitDashboard extends LitElement {
             part="dashboard"
             @womNodeMouseenter="${this.onWomNodeMouseenter}"
             @womNodeMouseleave="${this.onWomNodeMouseleave}"
-            @womNodeSelect="${this.onWomNodeSelect}"
+            @womNodeSelect="${this.onDashboardWomNodeSelect}"
+            style="width: 70%"
           >
             ${this.previewedNode ? html`
               <wom-preview-box
@@ -252,17 +288,18 @@ class WebbitDashboard extends LitElement {
             `: ''}
             <slot></slot>
           </div>
-          <div part="tools-container">
+          <div part="tools-container" style="width: 30%">
             <div part="tools">
               <div part="top-menu"></div>
               <vaadin-split-layout part="tools-splitter" theme="small" orientation="vertical">
-                <div part="tools-top">
+                <div part="tools-top" style="height: 40%">
                   <div part="wom">
                     ${this.wom ? html`
                       <wom-viewer
                         @womNodeSelect="${this.onWomNodeSelect}"
                         @womNodePreview="${this.onWomNodePreview}"
                         @womNodePreviewEnd="${this.onWomNodePreviewEnd}"
+                        @womNodeAddElementPreview="${this.onWomNodeAddElementPreview}"
                         level="${0}" 
                         .node="${this.wom.getRootNode()}"
                         .selectedNode="${this.selectedNode}"
@@ -271,15 +308,15 @@ class WebbitDashboard extends LitElement {
                     ` : ''}
                   </div>
                 </div>
-                  <dashboard-tools-bottom 
-                    part="tools-bottom"
-                    .selectedNode="${this.selectedNode}"
-                    @dashboardToolsTabChange="${this.onDashboardToolsTabChange}"
-                    @dashhboardComponentSelected="${this.onDashhboardComponentSelected}"
-                    selected-component="${this.selectedComponent}"
-                  >
-
-                  </dashboard-tools-bottom>        
+                <dashboard-tools-bottom
+                  part="tools-bottom"
+                  style="height: 60%"
+                  .selectedNode="${this.selectedNode}"
+                  @dashboardToolsTabChange="${this.onDashboardToolsTabChange}"
+                  @dashhboardComponentSelected="${this.onDashhboardComponentSelected}"
+                  selected-component="${this.selectedComponent}"
+                >
+                </dashboard-tools-bottom>        
               </vaadin-split-layout>
 
             </div>

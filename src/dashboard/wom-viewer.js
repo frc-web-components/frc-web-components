@@ -182,12 +182,25 @@ class WomViewer extends LitElement {
     const y = ev.pageY;
     var loc = Math.abs(offset - y);
     if (loc < height / 2) {
-      target.style.setProperty('--add-element-position', '-8px')
+      target.style.setProperty('--add-element-position', '-8px'),
+      this.dispatchAddElementPreview(true);
     }
     else {
       target.style.setProperty('--add-element-position', '8px')
-
+      this.dispatchAddElementPreview(false);
     }
+  }
+
+  dispatchAddElementPreview(before) {
+    const event = new CustomEvent('womNodeAddElementPreview', {
+      bubbles: true,
+      composed: true,
+      detail: {
+        node: this.node,
+        before,
+      }
+    });
+    this.dispatchEvent(event);
   }
 
   render() {
