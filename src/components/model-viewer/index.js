@@ -7,6 +7,15 @@ const rad = Math.PI / 180;
 
 class ModelViewer extends Webbit {
 
+  static get metadata() {
+    return {
+      displayName: 'Model Viewer',
+      category: '3D Models',
+      //description: 'Component for displaying data from a 3-axis accelerometer.',
+      documentationLink: 'https://frc-web-components.github.io/components/model-viewer/'
+    };
+  }
+
   static get styles() {
     return css`
       :host { 

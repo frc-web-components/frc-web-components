@@ -3,6 +3,15 @@ import { Webbit, html, css } from '@webbitjs/webbit';
 
 class ChartData extends Webbit {
 
+  static get metadata() {
+    return {
+      displayName: 'Chart Data',
+      category: 'Charts & Graphs',
+      //description: 'Component for displaying data from a 3-axis accelerometer.',
+      documentationLink: 'https://frc-web-components.github.io/components/line-chart/'
+    };
+  }
+
   static get styles() {
     return css`
       :host { 

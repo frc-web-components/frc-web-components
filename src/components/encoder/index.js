@@ -2,6 +2,15 @@ import { Webbit, html, css } from '@webbitjs/webbit';
 
 class Encoder extends Webbit {
 
+  static get metadata() {
+    return {
+      displayName: 'Encoder',
+      category: 'Robot & Field Info',
+      //description: 'Component for displaying data from a 3-axis accelerometer.',
+      documentationLink: 'https://frc-web-components.github.io/components/encoder/'
+    };
+  }
+
   static get styles() {
     return css`
       :host {

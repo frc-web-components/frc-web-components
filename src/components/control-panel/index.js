@@ -46,6 +46,15 @@ class RotationAnimator {
 
 
 class ControlPanel extends Webbit {
+
+  static get metadata() {
+    return {
+      displayName: 'Control Panel',
+      category: 'Robot & Field Info',
+      //description: 'Component for displaying data from a 3-axis accelerometer.',
+      documentationLink: 'https://frc-web-components.github.io/components/control-panel/'
+    };
+  }
   
   static get styles() {
     return css`

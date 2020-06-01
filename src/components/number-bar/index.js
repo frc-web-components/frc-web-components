@@ -6,6 +6,15 @@ function clamp(value, min, max) {
 
 export default class NumberBar extends Webbit {
 
+  static get metadata() {
+    return {
+      displayName: 'Number Bar',
+      category: 'General',
+      //description: 'Component for displaying data from a 3-axis accelerometer.',
+      documentationLink: 'https://frc-web-components.github.io/components/number-bar/'
+    };
+  }
+
   static get properties() {
     return {
       value: { type: Number, primary: true },

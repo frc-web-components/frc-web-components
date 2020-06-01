@@ -2,6 +2,15 @@ import { Webbit, html, css } from '@webbitjs/webbit';
 
 class Checkbox extends Webbit {
 
+  static get metadata() {
+    return {
+      displayName: 'Checkbox',
+      category: 'Forms & Inputs',
+      //description: 'Component for displaying data from a 3-axis accelerometer.',
+      documentationLink: 'https://frc-web-components.github.io/components/checkbox/'
+    };
+  }
+
   static get styles() {
     return css`
       :host {

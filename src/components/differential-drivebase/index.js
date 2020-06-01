@@ -61,6 +61,15 @@ function generateX(width) {
 
 class DifferentialDrivebase extends Webbit {
 
+  static get metadata() {
+    return {
+      displayName: 'Differential Drivebase',
+      category: 'Robot & Field Info',
+      //description: 'Component for displaying data from a 3-axis accelerometer.',
+      documentationLink: 'https://frc-web-components.github.io/components/differential-drivebase/'
+    };
+  }
+
   static get styles() {
     return css`
       :host {

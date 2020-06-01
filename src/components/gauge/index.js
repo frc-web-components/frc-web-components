@@ -3,6 +3,15 @@ import Gauge from 'svg-gauge';
 
 class GaugeWebbit extends Webbit {
 
+  static get metadata() {
+    return {
+      displayName: 'Gauge',
+      category: 'Charts & Graphs',
+      //description: 'Component for displaying data from a 3-axis accelerometer.',
+      documentationLink: 'https://frc-web-components.github.io/components/gauge/'
+    };
+  }
+
   static get styles() {
     return css`
       :host {

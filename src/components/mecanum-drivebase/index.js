@@ -57,6 +57,15 @@ function generateX(width) {
 
 class MecanumDrivebase extends Webbit {
 
+  static get metadata() {
+    return {
+      displayName: 'Mecanum Drivebase',
+      category: 'Robot & Field Info',
+      //description: 'Component for displaying data from a 3-axis accelerometer.',
+      documentationLink: 'https://frc-web-components.github.io/components/mecanum-drivebase/'
+    };
+  }
+
   static get styles() {
     return css`
       :host {

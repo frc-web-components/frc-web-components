@@ -2,6 +2,15 @@ import { Webbit, html, css } from '@webbitjs/webbit';
 
 class BooleanBox extends Webbit {
 
+  static get metadata() {
+    return {
+      displayName: 'Boolean Box',
+      category: 'General',
+      //description: 'Component for displaying data from a 3-axis accelerometer.',
+      documentationLink: 'https://frc-web-components.github.io/components/boolean-box/'
+    };
+  }
+
   static get styles() {
     return css`
       :host { 

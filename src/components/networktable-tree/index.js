@@ -4,6 +4,15 @@ import { subscribe, getRawSource } from '@webbitjs/store';
 
 class NetworkTableTree extends Webbit {
 
+  static get metadata() {
+    return {
+      displayName: 'NetworkTable Tree',
+      category: 'Robot & Field Info',
+      //description: 'Component for displaying data from a 3-axis accelerometer.',
+      documentationLink: 'https://frc-web-components.github.io/components/networktable-tree/'
+    };
+  }
+
   static get properties() {
     return {
       sources: { type: Object, reflect: false }

@@ -3,6 +3,15 @@ import NumberBar from '../number-bar';
 
 class VoltageView extends NumberBar {
 
+  static get metadata() {
+    return {
+      displayName: 'Voltage View',
+      category: 'Robot & Field Info',
+      //description: 'Component for displaying data from a 3-axis accelerometer.',
+      documentationLink: 'https://frc-web-components.github.io/components/voltage-view/'
+    };
+  }
+
   static get styles() {
     return [
       super.styles,

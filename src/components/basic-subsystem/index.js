@@ -2,6 +2,15 @@ import { Webbit, html, css } from '@webbitjs/webbit';
 
 class BasicSubsystem extends Webbit {
 
+  static get metadata() {
+    return {
+      displayName: 'Basic Subsystem',
+      category: 'Robot & Field Info',
+      //description: 'Component for displaying data from a 3-axis accelerometer.',
+      documentationLink: 'https://frc-web-components.github.io/components/basic-subsystem/'
+    };
+  }
+
   static get styles() {
     return css`
       :host {
