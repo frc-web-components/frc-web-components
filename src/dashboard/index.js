@@ -12,11 +12,8 @@ class WebbitDashboard extends LitElement {
       fullscreen: { type: Boolean, reflect: true },
       selectedNode: { type: Object, attribute: false },
       previewedNode: { type: Object, attribute: false },
-      previewX: { type: Number, attribute: false },
-      previewY: { type: Number, attribute: false },
-      previewWidth: { type: Number, attribute: false },
-      previewHeight: { type: Number, attribute: false },
-      selectedComponent: { type: String, attribute: 'selected-component', reflect: true }
+      selectedComponent: { type: String, attribute: 'selected-component', reflect: true },
+      toolsTopElement: { type: Object }
     };
   }
 
@@ -67,16 +64,6 @@ class WebbitDashboard extends LitElement {
         padding: 5px;
       }
 
-      [part=previewed-node] {
-        display: block;
-        background: rgba(3, 132, 200, .4);
-        position: absolute;
-        top: var(--preview-top, 50px);
-        left: var(--preview-left, 50px);
-        width: var(--preview-width, 100px);
-        height: var(--preview-height, 100px);
-      }
-
       [part=tools-top], [part=tools-bottom] {
         min-height: 10%;
       }
@@ -99,12 +86,9 @@ class WebbitDashboard extends LitElement {
     this.fullscreen = false;
     this.selectedNode = null;
     this.dashboardNode = null;
-    this.previewX = 0;
-    this.previewY = 0;
-    this.previewWidth = 0;
-    this.previewHeight = 0;
     this.selectedComponent = '';
     this.newElementPreview = null;
+    this.toolsTopElement = null;
   }
 
   getChildNumber(node) {
@@ -144,21 +128,6 @@ class WebbitDashboard extends LitElement {
     newElementPreview.style.opacity = '.5';
 
     this.newElementPreview = newElementPreview;
-
-
-    const setPreviewBounds = () => { 
-
-      if (this.editMode && this.previewedNode) {
-        const boundingRect = this.dashboardNode.getBoundingClientRect();
-        const { x, y, width, height } = this.previewedNode.getNode().getBoundingClientRect();
-        this.previewX = Math.max(x, boundingRect.x);
-        this.previewY = Math.max(y, boundingRect.y);
-        this.previewWidth = Math.min(width, boundingRect.right - x);
-        this.previewHeight = Math.min(height, boundingRect.height - y);
-      }
-      window.requestAnimationFrame(setPreviewBounds);
-    };
-    window.requestAnimationFrame(setPreviewBounds);
   }
 
   updated(changedProperties) {
@@ -170,6 +139,7 @@ class WebbitDashboard extends LitElement {
       } else {
         this.wom = new Wom(this);
         this.dashboardNode = this.shadowRoot.querySelector('[part=dashboard]');
+        this.toolsTopElement = this.shadowRoot.querySelector('[part="tools-top"]');
         this.requestUpdate();
       }
     }
@@ -278,14 +248,11 @@ class WebbitDashboard extends LitElement {
             @womNodeSelect="${this.onDashboardWomNodeSelect}"
             style="width: 70%"
           >
-            ${this.previewedNode ? html`
-              <wom-preview-box
-                x="${this.previewX}"
-                y="${this.previewY}"
-                width="${this.previewWidth}"
-                height="${this.previewHeight}"
-              ></wom-preview-box>
-            `: ''}
+            <wom-preview-box
+              .parentNode="${this.dashboardNode}"
+              .previewedNode="${this.previewedNode}"
+              .selectedNode="${this.selectedNode}"
+            ></wom-preview-box>
             <slot></slot>
           </div>
           <div part="tools-container" style="width: 30%">
@@ -303,6 +270,7 @@ class WebbitDashboard extends LitElement {
                         level="${0}" 
                         .node="${this.wom.getRootNode()}"
                         .selectedNode="${this.selectedNode}"
+                        .container="${this.toolsTopElement}"
                         ?adding-element="${!!this.selectedComponent}"
                       ></wom-viewer>
                     ` : ''}

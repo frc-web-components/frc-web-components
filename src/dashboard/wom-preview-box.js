@@ -1,13 +1,13 @@
 import { LitElement, html } from '@webbitjs/webbit';
+import { isElementInViewport } from './utils';
 
 class WomPreviewBox extends LitElement {
 
   static get properties() {
     return {
-      x: { type: Number },
-      y: { type: Number },
-      width: { type: Number },
-      height: { type: Number },
+      parentNode: { type: Object },
+      previewedNode: { type: Object },
+      selectedNode: { type: Object },
     };
   }
 
@@ -18,6 +18,20 @@ class WomPreviewBox extends LitElement {
     this.width = 0;
     this.height = 0;
     this.previewElement = null;
+    this.parentNode = null;
+    this.previewedNode = null;
+    this.selectedNode = null;
+  }
+
+  updated(changedProperties) {
+    if (
+      changedProperties.has('selectedNode') &&
+      this.parentNode && 
+      this.selectedNode &&
+      !isElementInViewport(this.selectedNode.getNode(), this.parentNode)
+    ) {
+      this.selectedNode.getNode().scrollIntoView();
+    }
   }
 
   firstUpdated() {
@@ -27,22 +41,38 @@ class WomPreviewBox extends LitElement {
     this.previewElement.style.zIndex = '1';
     this.previewElement.style.pointerEvents = 'none';
     document.body.appendChild(this.previewElement);
+
+
+    const setPreviewBounds = () => { 
+      if (this.previewedNode && this.parentNode) {
+        const boundingRect = this.parentNode.getBoundingClientRect();
+        const { x, y, width, height, bottom, right } = this.previewedNode.getNode().getBoundingClientRect();        
+        
+        const boundedLeft = Math.max(x, boundingRect.x);
+        const boundedTop = Math.max(y, boundingRect.y);
+        const boundedRight = Math.min(right, boundingRect.right);
+        const boundedBottom = Math.min(bottom, boundingRect.bottom);
+        const boundedWidth = boundedRight - boundedLeft;
+        const boundedHeight = boundedBottom - boundedTop;
+
+        this.previewElement.style.display = 'block';
+        this.previewElement.style.left = boundedLeft + 'px';
+        this.previewElement.style.top = boundedTop + 'px';
+        this.previewElement.style.width = boundedWidth + 'px';
+        this.previewElement.style.height = boundedHeight + 'px';
+      } else {
+        this.previewElement.style.display = 'none';
+      }
+      window.requestAnimationFrame(setPreviewBounds);
+    };
+    window.requestAnimationFrame(setPreviewBounds);
   }
+
+
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.previewElement.remove();  
-  }
-
-  updated() {
-    this.setBounds();
-  }
-
-  setBounds() {
-    this.previewElement.style.top = `${this.y}px`;
-    this.previewElement.style.left = `${this.x}px`;
-    this.previewElement.style.width = `${this.width}px`;
-    this.previewElement.style.height = `${this.height}px`;
   }
 
   render() {

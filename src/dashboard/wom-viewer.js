@@ -1,4 +1,5 @@
 import { LitElement, html, css } from '@webbitjs/webbit';
+import { isElementInViewport } from './utils';
 
 class WomViewer extends LitElement {
 
@@ -88,6 +89,7 @@ class WomViewer extends LitElement {
       selectedNode: { type: Object },
       level: { type: Number },
       addingElement: { type: Boolean, attribute: 'adding-element', reflect: true },
+      container: { type: Object }
     };
   }
 
@@ -99,6 +101,7 @@ class WomViewer extends LitElement {
     this.level = 0;
     this.addingElement = false;
     this.headerNode = null;
+    this.container = null;
   }
 
   toggleExpand() {
@@ -124,6 +127,14 @@ class WomViewer extends LitElement {
       if (this.selectedNode && this.selectedNode.isDescendant(this.node)) {
         this.expanded = true;
         this.requestUpdate();
+      }
+
+      if (
+        this.selectedNode && 
+        this.selectedNode === this.node && 
+        !isElementInViewport(this.headerNode, this.container)
+      ) {
+        this.headerNode.scrollIntoView();
       }
     }
   }
@@ -230,6 +241,7 @@ class WomViewer extends LitElement {
               <wom-viewer 
                 .node="${node}"
                 .selectedNode="${this.selectedNode}"
+                .container="${this.container}"
                 level="${this.level + 1}"
                 ?adding-element="${this.addingElement}"
               ></wom-viewer>
