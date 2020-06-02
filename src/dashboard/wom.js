@@ -9,6 +9,7 @@ const isWebbit = (domNode) => {
 
 const getChildWebbits = (domNode) => {
   return [...domNode.children].filter(node => {
+    return node.tagName.toLowerCase() !== 'wom-new-element-preview-display';
     return true;
     //return isWebbit(node);
   });
@@ -127,6 +128,11 @@ class Wom {
 
     const observer = new MutationObserver(() => {
       this.womNode.build();
+      const event = new CustomEvent('womChange', {
+        bubbles: true,
+        composed: true,
+      });
+      this.rootNode.dispatchEvent(event);
     });
     observer.observe(this.rootNode, {
       childList: true,

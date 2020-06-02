@@ -3,6 +3,7 @@ import Wom from './wom';
 import './wom-viewer';
 import './wom-preview-box';
 import './tools-bottom';
+import './wom-new-element-preview';
 
 class WebbitDashboard extends LitElement {
 
@@ -13,7 +14,10 @@ class WebbitDashboard extends LitElement {
       selectedNode: { type: Object, attribute: false },
       previewedNode: { type: Object, attribute: false },
       selectedComponent: { type: String, attribute: 'selected-component', reflect: true },
-      toolsTopElement: { type: Object }
+      toolsTopElement: { type: Object },
+      elementPreviewAdjacentNode: { type: Object },
+      elementPreviewAdjacentBefore: { type: Boolean }
+
     };
   }
 
@@ -89,23 +93,7 @@ class WebbitDashboard extends LitElement {
     this.selectedComponent = '';
     this.newElementPreview = null;
     this.toolsTopElement = null;
-  }
-
-  getChildNumber(node) {
-    return Array.prototype.indexOf.call(node.parentNode.childNodes, node);
-  }
-
-  addNewElementPreview(insertedNode, node, before) {
-
-    if (!node.parentNode) {
-      return;
-    }
-
-    if (before) {
-      node.parentNode.insertBefore(insertedNode, node);
-    } else {
-      node.parentNode.insertBefore(insertedNode, node.nextSibling);
-    }
+    this.womViewerNode = null;
   }
 
   firstUpdated() {
@@ -122,12 +110,12 @@ class WebbitDashboard extends LitElement {
       this.onKeyDown(ev);
     });
 
-
-    const newElementPreview = document.createElement('div');
-    newElementPreview.style.border = '2px dashed darkgreen';
-    newElementPreview.style.opacity = '.5';
-
-    this.newElementPreview = newElementPreview;
+    this.addEventListener('womChange', () => {
+      if (!this.womViewerNode) {
+        this.womViewerNode = this.shadowRoot.querySelector('wom-viewer');
+      }
+      this.womViewerNode.requestUpdate();
+    });
   }
 
   updated(changedProperties) {
@@ -141,19 +129,6 @@ class WebbitDashboard extends LitElement {
         this.dashboardNode = this.shadowRoot.querySelector('[part=dashboard]');
         this.toolsTopElement = this.shadowRoot.querySelector('[part="tools-top"]');
         this.requestUpdate();
-      }
-    }
-
-    if (changedProperties.has('selectedComponent')) {
-      this.newElementPreview.innerHTML = '';
-      if (this.selectedComponent) {
-        this.newElementPreview.innerHTML = `
-          <${this.selectedComponent}></${this.selectedComponent}>
-        `;
-        const newElement = this.newElementPreview.querySelector(this.selectedComponent);
-        newElement.updateComplete.then(() => {
-          this.newElementPreview.style.display = window.getComputedStyle(newElement).display;
-        });
       }
     }
   }
@@ -192,14 +167,6 @@ class WebbitDashboard extends LitElement {
 
   onWomNodeSelect(ev) {
     this.selectedNode = ev.detail.node;
-
-    if (this.elementPreviewAdjacentNode) {
-      const newElement = this.newElementPreview.querySelector(this.selectedComponent);
-      const { node, before } = this.elementPreviewAdjacentNode;
-      this.addNewElementPreview(newElement, node.node, before);
-      this.newElementPreview.remove();
-      this.selectedComponent = '';
-    }
   }
 
   onWomNodePreview(ev) {
@@ -214,17 +181,13 @@ class WebbitDashboard extends LitElement {
   }
 
   onWomNodeAddElementPreview(ev) {
-    if (this.selectedComponent) {
-      const { node, before } = ev.detail;
-
-      if (
-        !this.elementPreviewAdjacentNode || 
-        this.elementPreviewAdjacentNode.node !== node ||
-        this.elementPreviewAdjacentNode.before !== before
-      ) {
-        this.elementPreviewAdjacentNode = { before, node };
-        this.addNewElementPreview(this.newElementPreview, node.node, before);
-      }
+    const { node, before } = ev.detail;
+    if (
+      node !== this.elementPreviewAdjacentNode ||
+      before !== this.elementPreviewAdjacentBefore
+    ) {
+    this.elementPreviewAdjacentNode = node;
+    this.elementPreviewAdjacentBefore = before;
     }
   }
 
@@ -235,6 +198,10 @@ class WebbitDashboard extends LitElement {
   onDashhboardComponentSelected(ev) {
     const { name } = ev.detail;
     this.selectedComponent = name;
+  }
+  
+  onWomNodeAdd() {
+    this.selectedComponent = '';
   }
 
   render() {
@@ -253,6 +220,13 @@ class WebbitDashboard extends LitElement {
               .previewedNode="${this.previewedNode}"
               .selectedNode="${this.selectedNode}"
             ></wom-preview-box>
+            <wom-new-element-preview
+              .selectedComponent="${this.selectedComponent}"
+              .selectedNode="${this.selectedNode}"
+              .adjacentNode="${this.elementPreviewAdjacentNode}"
+              .addBefore="${this.elementPreviewAdjacentBefore}"
+              @womNodeAdd="${this.onWomNodeAdd}"
+            ></wom-new-element-preview>
             <slot></slot>
           </div>
           <div part="tools-container" style="width: 30%">
