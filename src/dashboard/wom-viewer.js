@@ -11,13 +11,13 @@ class WomViewer extends LitElement {
         font-size: 15px;
       }
 
-      :host([adding-element]) header:hover, 
-      :host([adding-element]) header:hover .key, 
-      :host([adding-element]) header:hover .key label {
+      :host([adding-element]:not([level="0"])) header:hover, 
+      :host([adding-element]:not([level="0"])) header:hover .key, 
+      :host([adding-element]:not([level="0"])) header:hover .key label {
         cursor: cell;
       }
 
-      :host([adding-element]) header:hover .key {
+      :host([adding-element]:not([level="0"])) header:hover .key {
         box-shadow: 0px var(--add-element-position, 8px) 0px 0px #87b187
       }
       
@@ -149,6 +149,12 @@ class WomViewer extends LitElement {
   }
 
   onSelect(ev) {
+
+    // Don't allow the root node to be selected
+    if (this.level === 0) {
+      return;
+    }
+
     const [target] = ev.path;
 
     // select if click element isn't caret
@@ -187,6 +193,12 @@ class WomViewer extends LitElement {
   }
 
   onAddElementPreview(ev) {
+
+    // Don't allow elements to be added before or after root node
+    if (this.level === 0) {
+      return;
+    }
+
     const target = this.headerNode;
     const offset = target.offsetTop;
     const height = target.clientHeight;
@@ -202,7 +214,7 @@ class WomViewer extends LitElement {
     }
   }
 
-  dispatchAddElementPreview(before) {
+  dispatchAddElementPreview(before) {    
     const event = new CustomEvent('womNodeAddElementPreview', {
       bubbles: true,
       composed: true,
