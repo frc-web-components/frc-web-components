@@ -9,6 +9,7 @@ class NewElementPreview extends LitElement {
   static get properties() {
     return {
       selectedNode: { type: Object },
+      selectedNodeMethod: { type: String },
       parentNode: { type: Object },
       selectedComponent: { type: String },
       adjacentNode: { type: Object },
@@ -27,6 +28,7 @@ class NewElementPreview extends LitElement {
   constructor() {
     super();
     this.selectedNode = null;
+    this.selectedNodeMethod = '';
     this.parentNode = null;
     this.selectedComponent = '';
     this.displayNode = null;
@@ -82,7 +84,11 @@ class NewElementPreview extends LitElement {
       }
     }
 
-    if (changedProperties.has('selectedNode') && this.selectedNode) {
+    if (
+      (changedProperties.has('selectedNode') || changedProperties.has('selectedNodeMethod')) && 
+      this.selectedNode && 
+      this.selectedNodeMethod === 'womViewer'
+    ) {
       const newElement = this.displayNode.querySelector(this.selectedComponent);
       this.addNewElementPreview(newElement);
       

@@ -12,6 +12,7 @@ class WebbitDashboard extends LitElement {
       editMode: { type: Boolean, attribute: 'edit-mode', reflect: true },
       fullscreen: { type: Boolean, reflect: true },
       selectedNode: { type: Object, attribute: false },
+      selectedNodeMethod: { type: String, attribute: false },
       previewedNode: { type: Object, attribute: false },
       selectedComponent: { type: String, attribute: 'selected-component', reflect: true },
       toolsTopElement: { type: Object },
@@ -89,6 +90,7 @@ class WebbitDashboard extends LitElement {
     this.editMode = false;
     this.fullscreen = false;
     this.selectedNode = null;
+    this.selectedNodeMethod = '';
     this.dashboardNode = null;
     this.selectedComponent = '';
     this.newElementPreview = null;
@@ -138,11 +140,13 @@ class WebbitDashboard extends LitElement {
     if (this.fullscreen && ev.shiftKey && ev.code === 'KeyE') {
       this.editMode = !this.editMode;
       this.selectedNode = null;
+      this.selectedNodeMethod = '';
       this.selectedComponent = '';
     }
 
     if(ev.key === "Escape") {
       this.selectedNode = null;
+      this.selectedNodeMethod = '';
       this.selectedComponent = '';
     }
   }
@@ -163,10 +167,12 @@ class WebbitDashboard extends LitElement {
 
   onDashboardWomNodeSelect(ev) {
     this.selectedNode = ev.detail.node;
+    this.selectedNodeMethod = 'dashboard';
   }
 
   onWomNodeSelect(ev) {
     this.selectedNode = ev.detail.node;
+    this.selectedNodeMethod = 'womViewer';
   }
 
   onWomNodePreview(ev) {
@@ -223,6 +229,7 @@ class WebbitDashboard extends LitElement {
             <wom-new-element-preview
               .selectedComponent="${this.selectedComponent}"
               .selectedNode="${this.selectedNode}"
+              .selectedNodeMethod="${this.selectedNodeMethod}"
               .adjacentNode="${this.elementPreviewAdjacentNode}"
               .addBefore="${this.elementPreviewAdjacentBefore}"
               @womNodeAdd="${this.onWomNodeAdd}"
