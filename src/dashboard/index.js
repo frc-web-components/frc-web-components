@@ -226,6 +226,7 @@ class WebbitDashboard extends LitElement {
               .adjacentNode="${this.elementPreviewAdjacentNode}"
               .addBefore="${this.elementPreviewAdjacentBefore}"
               @womNodeAdd="${this.onWomNodeAdd}"
+              .parentNode="${this.dashboardNode}"
             ></wom-new-element-preview>
             <slot></slot>
           </div>

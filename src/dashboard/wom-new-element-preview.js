@@ -1,12 +1,15 @@
 import { LitElement, html, css } from 'lit-element';
 import './sources/sources-tool';
 import './components/components-tool';
+import { isElementInViewport } from './utils';
+
 
 class NewElementPreview extends LitElement {
 
   static get properties() {
     return {
       selectedNode: { type: Object },
+      parentNode: { type: Object },
       selectedComponent: { type: String },
       adjacentNode: { type: Object },
       addBefore: { type: Boolean }
@@ -24,6 +27,7 @@ class NewElementPreview extends LitElement {
   constructor() {
     super();
     this.selectedNode = null;
+    this.parentNode = null;
     this.selectedComponent = '';
     this.displayNode = null;
     this.adjacentNode = null;
@@ -40,6 +44,11 @@ class NewElementPreview extends LitElement {
         insertedNode, 
         this.addBefore ? this.adjacentNode.node : this.adjacentNode.node.nextSibling
       );
+
+      // scroll inserted node into view
+      if (!isElementInViewport(insertedNode, this.parentNode)) {
+        insertedNode.scrollIntoView();
+      }
     }
   }
 
