@@ -17,7 +17,7 @@ class WebbitDashboard extends LitElement {
       selectedComponent: { type: String, attribute: 'selected-component', reflect: true },
       toolsTopElement: { type: Object },
       elementPreviewAdjacentNode: { type: Object },
-      elementPreviewAdjacentBefore: { type: Boolean }
+      elementPreviewPlacement: { type: String }
 
     };
   }
@@ -188,13 +188,20 @@ class WebbitDashboard extends LitElement {
 
   onWomNodeAddElementPreview(ev) {
     const { node, before } = ev.detail;
+    const placement = before ? 'before' : 'after';
     if (
       node !== this.elementPreviewAdjacentNode ||
-      before !== this.elementPreviewAdjacentBefore
+      placement !== this.elementPreviewPlacement
     ) {
     this.elementPreviewAdjacentNode = node;
-    this.elementPreviewAdjacentBefore = before;
+    this.elementPreviewPlacement = placement;
     }
+  }
+
+  onWomNodePrependElementPreview(ev) {
+    const { node } = ev.detail;
+    this.elementPreviewAdjacentNode = node;
+    this.elementPreviewPlacement = 'inside';
   }
 
   onDashboardToolsTabChange() {
@@ -231,7 +238,7 @@ class WebbitDashboard extends LitElement {
               .selectedNode="${this.selectedNode}"
               .selectedNodeMethod="${this.selectedNodeMethod}"
               .adjacentNode="${this.elementPreviewAdjacentNode}"
-              .addBefore="${this.elementPreviewAdjacentBefore}"
+              placement="${this.elementPreviewPlacement}"
               @womNodeAdd="${this.onWomNodeAdd}"
               .parentNode="${this.dashboardNode}"
             ></wom-new-element-preview>
@@ -246,9 +253,11 @@ class WebbitDashboard extends LitElement {
                     ${this.wom ? html`
                       <wom-viewer
                         @womNodeSelect="${this.onWomNodeSelect}"
+                        @womSlotNodeSelect="${this.onWomNodeSelect}"
                         @womNodePreview="${this.onWomNodePreview}"
                         @womNodePreviewEnd="${this.onWomNodePreviewEnd}"
                         @womNodeAddElementPreview="${this.onWomNodeAddElementPreview}"
+                        @womNodePrependElementPreview="${this.onWomNodePrependElementPreview}"
                         level="${0}" 
                         .node="${this.wom.getRootNode()}"
                         .selectedNode="${this.selectedNode}"

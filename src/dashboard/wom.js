@@ -22,6 +22,10 @@ class WomNode {
     this.node = node;
     this.ancestors = ancestors;
     this.childNodes = [];
+    this.slots = isWebbit(node) ? this.getMetadata().slots : ['default'];
+    this.childBySlotNodes = this.slots.map(() => {
+      return [];
+    });
 
     this.onMouseEnter = () => {
       const event = new CustomEvent('womNodeMouseenter', {
@@ -70,11 +74,21 @@ class WomNode {
     this.childNodes.forEach(node => {
       node.destroy();
     });
+    this.childBySlotNodes = this.slots.map(() => {
+      return [];
+    });
   }
 
   build() {
     this.childNodes = getChildWebbits(this.node).map(node => {
       const womNode = new WomNode(node, this.ancestors.concat(this));
+      const slot = womNode.getSlot();
+      const indexOfSlot = this.slots.indexOf(slot);
+
+      if (indexOfSlot > -1) {
+        this.childBySlotNodes[indexOfSlot].push(womNode);
+      }
+
       womNode.build();
       return womNode;
     });
@@ -82,6 +96,19 @@ class WomNode {
 
   isDescendant(node) {
     return this.ancestors.indexOf(node) >= 0;
+  }
+
+  getSlots() {
+    return this.slots;
+  }
+
+  getChildrenBySlot(slot) {
+    const indexOfSlot = this.slots.indexOf(slot);
+    return this.childBySlotNodes[indexOfSlot] || [];
+  }
+
+  getSlot() {
+    return this.node.getAttribute('slot') || 'default';
   }
 
   getChildren() {
@@ -94,6 +121,10 @@ class WomNode {
 
   getName() {
     return this.node.tagName.toLowerCase();
+  }
+
+  getMetadata() {
+    return webbitRegistry.getMetadata(this.getName());
   }
 
   isRoot() {
@@ -126,7 +157,13 @@ class Wom {
   
 
 
-    const observer = new MutationObserver(() => {
+    const observer = new MutationObserver((mutations) => {
+      
+      if (!this.hasNonPreviewChangeMutation(mutations)) {
+        return;
+      }
+
+      this.womNode.destroy();
       this.womNode.build();
       const event = new CustomEvent('womChange', {
         bubbles: true,
@@ -138,6 +175,26 @@ class Wom {
       childList: true,
       subtree: true
     });
+  }
+
+  hasNonPreviewChangeMutation(mutations) {
+    for (let mutation of mutations) {
+      const [addedNode] = mutation.addedNodes;
+      const [removedNode] = mutation.removedNodes;
+      const node = addedNode || removedNode;
+
+      if (!node) {
+        return true;
+      }
+
+      const tagName = (node.tagName || '').toLowerCase();
+
+      if (tagName !== 'wom-new-element-preview-display') {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   getRootNode() {

@@ -13,7 +13,7 @@ class NewElementPreview extends LitElement {
       parentNode: { type: Object },
       selectedComponent: { type: String },
       adjacentNode: { type: Object },
-      addBefore: { type: Boolean }
+      placement: { type: String }
     };
   }
 
@@ -33,7 +33,7 @@ class NewElementPreview extends LitElement {
     this.selectedComponent = '';
     this.displayNode = null;
     this.adjacentNode = null;
-    this.addBefore = false;
+    this.placement = 'before';
   }
 
   firstUpdated() {
@@ -41,10 +41,19 @@ class NewElementPreview extends LitElement {
   }
 
   addNewElementPreview(insertedNode) {
-    if (this.adjacentNode && this.adjacentNode.node.parentNode) {
+
+    if (this.adjacentNode && this.placement === 'inside') {
+      this.adjacentNode.getNode().prepend(insertedNode);
+
+      // scroll inserted node into view
+      if (!isElementInViewport(insertedNode, this.parentNode)) {
+        insertedNode.scrollIntoView();
+      }
+    } 
+    else if (this.adjacentNode && this.adjacentNode.node.parentNode) {
       this.adjacentNode.node.parentNode.insertBefore(
         insertedNode, 
-        this.addBefore ? this.adjacentNode.node : this.adjacentNode.node.nextSibling
+        this.placement === 'before' ? this.adjacentNode.node : this.adjacentNode.node.nextSibling
       );
 
       // scroll inserted node into view
@@ -79,7 +88,7 @@ class NewElementPreview extends LitElement {
     }
 
     if (this.selectedComponent) {
-      if (changedProperties.has('adjacentNode') || changedProperties.has('addBefore')) {
+      if (changedProperties.has('adjacentNode') || changedProperties.has('placement')) {
         this.addNewElementPreview(this.displayNode);
       }
     }
@@ -87,7 +96,8 @@ class NewElementPreview extends LitElement {
     if (
       (changedProperties.has('selectedNode') || changedProperties.has('selectedNodeMethod')) && 
       this.selectedNode && 
-      this.selectedNodeMethod === 'womViewer'
+      this.selectedNodeMethod === 'womViewer' &&
+      this.selectedComponent
     ) {
       const newElement = this.displayNode.querySelector(this.selectedComponent);
       this.addNewElementPreview(newElement);

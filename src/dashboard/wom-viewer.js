@@ -1,5 +1,6 @@
 import { LitElement, html, css } from '@webbitjs/webbit';
 import { isElementInViewport } from './utils';
+import './wom-slot-node';
 
 class WomViewer extends LitElement {
 
@@ -227,6 +228,19 @@ class WomViewer extends LitElement {
     this.dispatchEvent(event);
   }
 
+  hasSlots() {
+    return this.node.getSlots().length > 0;
+  }
+
+  getSlottedChildren() {
+    return this.node.getSlots().map(slot => {
+      return {
+        slot,
+        children: this.node.getChildrenBySlot(slot)
+      };
+    });
+  }
+
   render() {
 
     return html`
@@ -239,25 +253,33 @@ class WomViewer extends LitElement {
           @mouseleave="${this.onPreviewEnd}"
         >
           <span class="key">
-            ${this.hasChildren() ? html`
+            ${this.hasSlots() ? html`
               <span class="caret" @click="${this.toggleExpand}">
                 <iron-icon icon="vaadin:angle-right"></iron-icon>
                 <iron-icon icon="vaadin:angle-down"></iron-icon>
               </span>
-            `: ''}
+            ` : ''}
             <label>${this.node.getName()}</label>
           </span>
         </header>
-        ${this.hasChildren() && this.expanded ? html`
+        ${this.expanded && this.hasSlots() ? html`
           <div class="nodes">
-            ${this.node.getChildren().map(node => html`
-              <wom-viewer 
-                .node="${node}"
-                .selectedNode="${this.selectedNode}"
-                .container="${this.container}"
+            ${this.getSlottedChildren().map(({ slot, children }) => html`
+              <wom-slot-node
+                .parentNode="${this.node}"
+                slot="${slot}"
                 level="${this.level + 1}"
                 ?adding-element="${this.addingElement}"
-              ></wom-viewer>
+              ></wom-slot-node>
+              ${children.map(node => html`
+                <wom-viewer 
+                  .node="${node}"
+                  .selectedNode="${this.selectedNode}"
+                  .container="${this.container}"
+                  level="${this.level + 1}"
+                  ?adding-element="${this.addingElement}"
+                ></wom-viewer>
+              `)}
             `)}
           </div>
         ` : ''}

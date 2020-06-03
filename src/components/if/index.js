@@ -2,6 +2,16 @@ import { Webbit, html, css } from '@webbitjs/webbit';
 
 class If extends Webbit {
 
+  static get metadata() {
+    return {
+      displayName: 'If',
+      category: 'Layout',
+      description: 'Component for conditionally displaying content.',
+      slots: ['default', 'if-true', 'if-false']
+      // documentationLink: 'https://frc-web-components.github.io/components/3-axis-accelerometer/'
+    };
+  }
+
   static get styles() {
     return css`
       :host {
