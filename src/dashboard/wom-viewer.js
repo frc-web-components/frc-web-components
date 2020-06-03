@@ -200,10 +200,11 @@ class WomViewer extends LitElement {
     }
 
     const target = this.headerNode;
-    const offset = target.offsetTop;
+    const offset = target.getBoundingClientRect().y;
     const height = target.clientHeight;
-    const y = ev.pageY;
+    const y = ev.clientY;
     var loc = Math.abs(offset - y);
+
     if (loc < height / 2) {
       target.style.setProperty('--add-element-position', '-8px'),
       this.dispatchAddElementPreview(true);
