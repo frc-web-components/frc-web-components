@@ -40,6 +40,7 @@ class WomSlotNode extends LitElement {
         text-overflow: clip;
         padding-left: 2px;
         flex: 1;
+        margin-top: 5px;
       }
       header .key label::-webkit-scrollbar { 
         width: 0 !important;
@@ -91,6 +92,7 @@ class WomSlotNode extends LitElement {
       composed: true,
       detail: {
         node: this.parentNode,
+        slot: this.slot,
       }
     });
     this.dispatchEvent(event);
@@ -101,7 +103,8 @@ class WomSlotNode extends LitElement {
       bubbles: true,
       composed: true,
       detail: {
-        node: this.parentNode
+        node: this.parentNode,
+        slot: this.slot
       }
     });
     this.dispatchEvent(event);

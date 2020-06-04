@@ -86,6 +86,7 @@ class WomViewer extends LitElement {
 
   static get properties() {
     return {
+      slot: { type: String },
       node: { type: Object },
       selectedNode: { type: Object },
       level: { type: Number },
@@ -97,6 +98,7 @@ class WomViewer extends LitElement {
   constructor() {
     super();
     this.expanded = false;
+    this.slot = '';
     this.node = null;
     this.selectedNode = null;
     this.level = 0;
@@ -164,7 +166,8 @@ class WomViewer extends LitElement {
         bubbles: true,
         composed: true,
         detail: {
-          node: this.node
+          node: this.node,
+          slot: this.slot
         }
       });
       this.dispatchEvent(event);
@@ -176,7 +179,7 @@ class WomViewer extends LitElement {
       bubbles: true,
       composed: true,
       detail: {
-        node: this.node
+        node: this.node,
       }
     });
     this.dispatchEvent(event);
@@ -223,6 +226,7 @@ class WomViewer extends LitElement {
       detail: {
         node: this.node,
         before,
+        slot: this.slot
       }
     });
     this.dispatchEvent(event);
@@ -272,7 +276,8 @@ class WomViewer extends LitElement {
                 ?adding-element="${this.addingElement}"
               ></wom-slot-node>
               ${children.map(node => html`
-                <wom-viewer 
+                <wom-viewer
+                  slot="${slot}"
                   .node="${node}"
                   .selectedNode="${this.selectedNode}"
                   .container="${this.container}"

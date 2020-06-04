@@ -12,6 +12,7 @@ class WebbitDashboard extends LitElement {
       editMode: { type: Boolean, attribute: 'edit-mode', reflect: true },
       fullscreen: { type: Boolean, reflect: true },
       selectedNode: { type: Object, attribute: false },
+      selectedNodeSlot: { type: String, attribute: false },
       selectedNodeMethod: { type: String, attribute: false },
       previewedNode: { type: Object, attribute: false },
       selectedComponent: { type: String, attribute: 'selected-component', reflect: true },
@@ -90,6 +91,7 @@ class WebbitDashboard extends LitElement {
     this.editMode = false;
     this.fullscreen = false;
     this.selectedNode = null;
+    this.selectedNodeSlot = '';
     this.selectedNodeMethod = '';
     this.dashboardNode = null;
     this.selectedComponent = '';
@@ -171,6 +173,7 @@ class WebbitDashboard extends LitElement {
   }
 
   onWomNodeSelect(ev) {
+    this.selectedNodeSlot = ev.detail.slot;
     this.selectedNode = ev.detail.node;
     this.selectedNodeMethod = 'womViewer';
   }
@@ -187,21 +190,23 @@ class WebbitDashboard extends LitElement {
   }
 
   onWomNodeAddElementPreview(ev) {
-    const { node, before } = ev.detail;
+    const { node, before, slot } = ev.detail;
     const placement = before ? 'before' : 'after';
     if (
       node !== this.elementPreviewAdjacentNode ||
       placement !== this.elementPreviewPlacement
     ) {
-    this.elementPreviewAdjacentNode = node;
-    this.elementPreviewPlacement = placement;
+      this.elementPreviewAdjacentNode = node;
+      this.elementPreviewPlacement = placement;
+      this.selectedNodeSlot = slot;
     }
   }
 
   onWomNodePrependElementPreview(ev) {
-    const { node } = ev.detail;
+    const { node, slot } = ev.detail;
     this.elementPreviewAdjacentNode = node;
     this.elementPreviewPlacement = 'inside';
+    this.selectedNodeSlot = slot;
   }
 
   onDashboardToolsTabChange() {
@@ -239,6 +244,7 @@ class WebbitDashboard extends LitElement {
               .selectedNodeMethod="${this.selectedNodeMethod}"
               .adjacentNode="${this.elementPreviewAdjacentNode}"
               placement="${this.elementPreviewPlacement}"
+              slot="${this.selectedNodeSlot}"
               @womNodeAdd="${this.onWomNodeAdd}"
               .parentNode="${this.dashboardNode}"
             ></wom-new-element-preview>

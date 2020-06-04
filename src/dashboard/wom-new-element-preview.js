@@ -13,7 +13,8 @@ class NewElementPreview extends LitElement {
       parentNode: { type: Object },
       selectedComponent: { type: String },
       adjacentNode: { type: Object },
-      placement: { type: String }
+      placement: { type: String },
+      slot: { type: String }
     };
   }
 
@@ -34,6 +35,7 @@ class NewElementPreview extends LitElement {
     this.displayNode = null;
     this.adjacentNode = null;
     this.placement = 'before';
+    this.slot = '';
   }
 
   firstUpdated() {
@@ -90,6 +92,7 @@ class NewElementPreview extends LitElement {
     if (this.selectedComponent) {
       if (changedProperties.has('adjacentNode') || changedProperties.has('placement')) {
         this.addNewElementPreview(this.displayNode);
+        this.displayNode.setAttribute('slot', this.slot === 'default' ? '' : this.slot);
       }
     }
 
@@ -100,6 +103,7 @@ class NewElementPreview extends LitElement {
       this.selectedComponent
     ) {
       const newElement = this.displayNode.querySelector(this.selectedComponent);
+      newElement.setAttribute('slot', this.slot === 'default' ? '' : this.slot);
       this.addNewElementPreview(newElement);
       
       const event = new CustomEvent('womNodeAdd', {
