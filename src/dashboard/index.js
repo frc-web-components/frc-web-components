@@ -41,7 +41,7 @@ class WebbitDashboard extends LitElement {
 
       [part=tools-container] {
         position: relative;
-        min-width: 350px;
+        min-width: 400px;
         z-index: 2;
       }
 
@@ -58,7 +58,7 @@ class WebbitDashboard extends LitElement {
       [part=top-menu] {
         width: 100%;
         background: #eee;
-        display: none;
+        display: block;
       }
 
       [part=top-menu] vaadin-button {
@@ -173,6 +173,13 @@ class WebbitDashboard extends LitElement {
   }
 
   onWomNodeSelect(ev) {
+    
+    // Don't let clicking slot node select a component unless it's being used
+    // to add an element
+    if (ev.type === 'womSlotNodeSelect' && !this.selectedComponent) {
+      return;
+    } 
+
     this.selectedNodeSlot = ev.detail.slot;
     this.selectedNode = ev.detail.node;
     this.selectedNodeMethod = 'womViewer';
@@ -222,6 +229,16 @@ class WebbitDashboard extends LitElement {
     this.selectedComponent = '';
   }
 
+  onDeleteElement() {
+    // Do nothing if a component is being added or a component isn't selected
+    if (this.selectedComponent || !this.selectedNode) {
+      return;
+    }
+
+    this.selectedNode.getNode().remove();
+    this.selectedNode = null;
+  }
+
   render() {
     return html`
       ${this.editMode ? html`
@@ -252,7 +269,15 @@ class WebbitDashboard extends LitElement {
           </div>
           <div part="tools-container" style="width: 30%">
             <div part="tools">
-              <div part="top-menu"></div>
+              <div part="top-menu">
+                <vaadin-button 
+                  theme="icon tertiary" 
+                  aria-label="Delete element"
+                  @click="${this.onDeleteElement}"
+                >
+                  <iron-icon icon="vaadin:trash"></iron-icon>
+                </vaadin-button>
+              </div>
               <vaadin-split-layout part="tools-splitter" theme="small" orientation="vertical">
                 <div part="tools-top" style="height: 40%">
                   <div part="wom">

@@ -1,6 +1,7 @@
 import { LitElement, html, css } from '@webbitjs/webbit';
 import { isElementInViewport } from './utils';
 import './wom-slot-node';
+import './wom-viewer-attribute';
 
 class WomViewer extends LitElement {
 
@@ -64,6 +65,7 @@ class WomViewer extends LitElement {
       }
       header .key {
         margin-left: var(--header-key-margin-left);
+        width: calc(100% - var(--header-key-margin-left, 0px));
         color: purple;
         display: flex;
       }
@@ -236,6 +238,10 @@ class WomViewer extends LitElement {
     return this.node.getSlots().length > 0;
   }
 
+  getWebbitId() {
+
+  }
+
   getSlottedChildren() {
     return this.node.getSlots().map(slot => {
       return {
@@ -243,6 +249,18 @@ class WomViewer extends LitElement {
         children: this.node.getChildrenBySlot(slot)
       };
     });
+  }
+
+  renderAttributes() {
+    const webbitId = this.node.getWebbitId();
+
+    if (!webbitId) {
+      return '';
+    }
+
+    return html`
+      <wom-viewer-attribute attribute="id">${webbitId}</wom-viewer-attribute>
+    `;
   }
 
   render() {
@@ -263,7 +281,10 @@ class WomViewer extends LitElement {
                 <iron-icon icon="vaadin:angle-down"></iron-icon>
               </span>
             ` : ''}
-            <label>${this.node.getName()}</label>
+            <label>
+              ${this.node.getName()}
+              ${this.renderAttributes()}
+            </label>
           </span>
         </header>
         ${this.expanded && this.hasSlots() ? html`

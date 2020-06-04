@@ -123,6 +123,10 @@ class WomNode {
     return this.node.tagName.toLowerCase();
   }
 
+  getWebbitId() {
+    return isWebbit(this.node) ? this.node.webbitId : null;
+  }
+
   getMetadata() {
     return webbitRegistry.getMetadata(this.getName());
   }
@@ -173,7 +177,8 @@ class Wom {
     });
     observer.observe(this.rootNode, {
       childList: true,
-      subtree: true
+      subtree: true,
+      attributeFilter: ['webbit-id']
     });
   }
 
