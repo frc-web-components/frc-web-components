@@ -123,6 +123,11 @@ class WomNode {
     return this.node.tagName.toLowerCase();
   }
 
+  getDisplayName() {
+    const metadata = this.getMetadata();
+    return metadata ? metadata.displayName : this.getName();
+  }
+
   getWebbitId() {
     return isWebbit(this.node) ? this.node.webbitId : null;
   }

@@ -282,7 +282,7 @@ class WomViewer extends LitElement {
               </span>
             ` : ''}
             <label>
-              ${this.node.getName()}
+              ${this.node.getDisplayName()}
               ${this.renderAttributes()}
             </label>
           </span>

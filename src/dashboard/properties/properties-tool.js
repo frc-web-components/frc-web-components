@@ -56,7 +56,7 @@ class PropertiesTool extends LitElement {
   }
 
   getComponentName() {
-    return this.selectedNode.getMetadata().displayName;
+    return this.selectedNode.getName();
   }
 
   updated(changedProperties) {
@@ -125,7 +125,7 @@ class PropertiesTool extends LitElement {
           theme="small"
         ></vaadin-text-field>
         <vaadin-text-field
-          label="Component Type"
+          label="Component Name"
           readonly
           value="${this.getComponentName()}"
           theme="small"
