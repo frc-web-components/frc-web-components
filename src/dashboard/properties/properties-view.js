@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import 'multiselect-combo-box/multiselect-combo-box.js';
 
 class PropertiesView extends LitElement {
 
@@ -13,7 +14,7 @@ class PropertiesView extends LitElement {
         text-transform: capitalize;
       }
 
-      vaadin-text-field, vaadin-number-field {
+      vaadin-text-field, vaadin-number-field, multiselect-combo-box {
         width: 100%;
         /* padding-top: 5px; */
       }
@@ -39,41 +40,44 @@ class PropertiesView extends LitElement {
       return property.canConnectToSources;
     });
 
-    console.log('properties:', propertiesForSources);
-
     return html`
       <vaadin-form-layout>
-      ${propertiesForSources.map(([name, property]) => html`
-        ${property.type === String ? html`
+        ${propertiesForSources.map(([name, property]) => html`
           <vaadin-form-item>
             <label slot="label">${property.attribute.replace('-', ' ')}</label>
-            <vaadin-text-field
-              value="${this.selectedNode.getNode()[name]}"
-              theme="small"
-            ></vaadin-text-field>
-          </vaadin-form-item>
-        ` : ''}
+            ${property.type === String ? html`
+              <vaadin-text-field
+                value="${this.selectedNode.getNode()[name]}"
+                theme="small"
+              ></vaadin-text-field>
+            ` : ''}
 
-        ${property.type === Number ? html`
-          <vaadin-form-item>
-            <label slot="label">${property.attribute.replace(/-/g, ' ')}</label>
-            <vaadin-number-field
-              value="${this.selectedNode.getNode()[name]}"
-              theme="small"
-            ></vaadin-number-field>
-          </vaadin-form-item>
-        ` : ''}
+            ${property.type === Number ? html`
+              <vaadin-number-field
+                value="${this.selectedNode.getNode()[name]}"
+                theme="small"
+                has-controls
+              ></vaadin-number-field>
+            ` : ''}
 
-        ${property.type === Boolean ? html`
-        <vaadin-form-item>
-            <label slot="label">${property.attribute.replace(/-/g, ' ')}</label>
-            <vaadin-checkbox
-              ?checked="${this.selectedNode.getNode()[name]}"
-              theme="small"
-            ></vaadin-checkbox>
+            ${property.type === Boolean ? html`
+              <vaadin-checkbox
+                ?checked="${this.selectedNode.getNode()[name]}"
+                theme="small"
+              ></vaadin-checkbox>
+            ` : ''}
+
+            ${property.type === Array ? html`
+              <multiselect-combo-box 
+                theme="small"
+                allow-custom-values
+                .items="${this.selectedNode.getNode().getAllValues()}"
+                .selectedItems="${this.selectedNode.getNode().value}"
+              >
+              </multiselect-combo-box>
+            ` : ''}
           </vaadin-form-item>
-        ` : ''}
-      `)}
+        `)}
       </vaadin-form-layout>
     `;
   }

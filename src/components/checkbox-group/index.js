@@ -34,14 +34,14 @@ class CheckboxGroup extends Webbit {
 
   firstUpdated() {
     const styleAttributes = ['focused', 'has-label', 'has-value', 'invalid'];
-    const checkboxGroup = this.shadowRoot.querySelector('[part=checkbox-group-container]');
+    this.checkboxGroup = this.shadowRoot.querySelector('[part=checkbox-group-container]');
 
     var observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.type == "attributes") {
           const { attributeName } = mutation;
           if (styleAttributes.includes(attributeName)) {
-            const value = checkboxGroup.getAttribute(attributeName);
+            const value = this.checkboxGroup.getAttribute(attributeName);
             if (value === null) {
               this.removeAttribute(attributeName, value);
             } else {
@@ -52,7 +52,7 @@ class CheckboxGroup extends Webbit {
       });
     });
 
-    observer.observe(checkboxGroup, {
+    observer.observe(this.checkboxGroup, {
       attributes: true
     });
 
@@ -63,7 +63,7 @@ class CheckboxGroup extends Webbit {
         checkbox.style.display = 'none';
         const vaadinCheckbox = checkbox.shadowRoot.querySelector('vaadin-checkbox');
         vaadinCheckbox.innerHTML = checkbox.innerHTML;
-        checkboxGroup.appendChild(vaadinCheckbox);
+        this.checkboxGroup.appendChild(vaadinCheckbox);
       });
     });
   }
@@ -71,6 +71,10 @@ class CheckboxGroup extends Webbit {
   onChange(ev) {
     const target = ev.target || ev.path[0];
     this.value = target.value;
+  }
+
+  getAllValues() {
+    return this.checkboxGroup._checkboxes.map(checkbox => checkbox.value);
   }
 
   render() {
