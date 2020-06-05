@@ -124,7 +124,7 @@ class SourcesTool extends LitElement {
 
   renderWebbit() {
     return html`
-      <p>Source for <span>${this.selectedNode.getName()}</span></p>
+      <p>Source for <span>${this.selectedNode.getWebbitId()}</span></p>
       <div part="source-fields">
         <vaadin-text-field
           label="Source Key"

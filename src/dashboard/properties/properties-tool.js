@@ -111,7 +111,7 @@ class PropertiesTool extends LitElement {
 
   renderWebbit() {
     return html`
-      <p>Properties for <span>${this.selectedNode.getName()}</span></p>
+      <p>Properties for <span>${this.selectedNode.getWebbitId()}</span></p>
       <div part="main-fields">
         <vaadin-text-field
           label="Webbit ID"

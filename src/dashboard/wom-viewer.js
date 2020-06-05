@@ -237,11 +237,7 @@ class WomViewer extends LitElement {
   hasSlots() {
     return this.node.getSlots().length > 0;
   }
-
-  getWebbitId() {
-
-  }
-
+  
   getSlottedChildren() {
     return this.node.getSlots().map(slot => {
       return {
