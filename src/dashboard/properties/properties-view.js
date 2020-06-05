@@ -1,5 +1,8 @@
 import { LitElement, html, css } from 'lit-element';
-import 'multiselect-combo-box/multiselect-combo-box.js';
+import './string-property-view';
+import './number-property-view';
+import './boolean-property-view';
+import './array-property-view';
 
 class PropertiesView extends LitElement {
 
@@ -7,16 +10,6 @@ class PropertiesView extends LitElement {
     return css`
       :host {
         display: block;
-        font-family: sans-serif;
-      }
-
-      vaadin-form-item label {
-        text-transform: capitalize;
-      }
-
-      vaadin-text-field, vaadin-number-field, multiselect-combo-box {
-        width: 100%;
-        /* padding-top: 5px; */
       }
     `;
   }
@@ -43,40 +36,37 @@ class PropertiesView extends LitElement {
     return html`
       <vaadin-form-layout>
         ${propertiesForSources.map(([name, property]) => html`
-          <vaadin-form-item>
-            <label slot="label">${property.attribute.replace('-', ' ')}</label>
-            ${property.type === String ? html`
-              <vaadin-text-field
-                value="${this.selectedNode.getNode()[name]}"
-                theme="small"
-              ></vaadin-text-field>
-            ` : ''}
+          ${property.type === String ? html`
+            <dashboard-string-property-view
+              .selectedNode="${this.selectedNode}"
+              .propertyName="${name}"
+              .property="${property}"
+            ></dashboard-string-property-view>
+          ` : ''}
 
-            ${property.type === Number ? html`
-              <vaadin-number-field
-                value="${this.selectedNode.getNode()[name]}"
-                theme="small"
-                has-controls
-              ></vaadin-number-field>
-            ` : ''}
+          ${property.type === Number ? html`
+            <dashboard-number-property-view
+              .selectedNode="${this.selectedNode}"
+              .propertyName="${name}"
+              .property="${property}"
+            ></dashboard-number-property-view>
+          ` : ''}
 
-            ${property.type === Boolean ? html`
-              <vaadin-checkbox
-                ?checked="${this.selectedNode.getNode()[name]}"
-                theme="small"
-              ></vaadin-checkbox>
-            ` : ''}
+          ${property.type === Boolean ? html`
+            <dashboard-boolean-property-view
+              .selectedNode="${this.selectedNode}"
+              .propertyName="${name}"
+              .property="${property}"
+            ></dashboard-boolean-property-view>
+          ` : ''}
 
-            ${property.type === Array ? html`
-              <multiselect-combo-box 
-                theme="small"
-                allow-custom-values
-                .items="${this.selectedNode.getNode().getAllValues()}"
-                .selectedItems="${this.selectedNode.getNode().value}"
-              >
-              </multiselect-combo-box>
-            ` : ''}
-          </vaadin-form-item>
+          ${property.type === Array ? html`
+            <dashboard-array-property-view
+              .selectedNode="${this.selectedNode}"
+              .propertyName="${name}"
+              .property="${property}"
+            ></dashboard-array-property-view>
+          ` : ''}
         `)}
       </vaadin-form-layout>
     `;

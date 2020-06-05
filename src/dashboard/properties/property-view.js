@@ -1,0 +1,93 @@
+import { LitElement, html, css } from 'lit-element';
+
+export default class PropertyView extends LitElement {
+
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+        font-family: sans-serif;
+      }
+
+      vaadin-form-item {
+        width: 100%;
+      }
+
+      vaadin-form-item label {
+        text-transform: capitalize;
+      }
+
+      vaadin-text-field, vaadin-number-field, multiselect-combo-box {
+        width: 100%;
+      }
+    `;
+  }
+
+  static get properties() {
+    return {
+      selectedNode: { type: Object, attribute: false },
+      propertyName: { type: String, attribute: false },
+      property: { type: Object, attribute: false },
+      inputValue: { type: Object },
+    };
+  }
+
+  constructor() {
+    super();
+    this.selectedNode = null;
+    this.propertyName = '';
+    this.property = null;
+    this.inputValue = null;
+    this.inputElement = null;
+  }
+
+  getValue() {
+    return this.selectedNode.getNode()[this.propertyName];
+  }
+
+  isInputModified() {
+    return this.getValue() !== this.inputValue || this.inputValue === null;
+  }
+
+  isValid() {
+    return true;
+  }
+
+  onInputChange() {
+    this.inputValue = this.inputElement.value;
+  }
+
+  cancel() {
+    this.inputValue = this.getValue();
+  }
+
+  confirm() {
+    if (webbitIdNode.isValid()) {
+      this.selectedNode.getNode()[this.propertyName] = this.inputValue;
+      this.requestUpdate();
+    }
+  }
+
+  updated(changedProperties) {
+    if (changedProperties.has('selectedNode') && this.selectedNode) {
+      this.inputValue = this.getValue();
+    }
+  }
+
+  firstUpdated() {
+    this.inputElement = this.shadowRoot.querySelector('[part="input"]');
+  }
+
+  renderInputField() {
+    return html``;
+  }
+
+  render() {
+    return html`
+      <vaadin-form-item>
+        <label slot="label">${this.property.attribute.replace(/-/g, ' ')}</label>
+        ${this.renderInputField()}
+      </vaadin-form-item>
+    `;
+  }
+}

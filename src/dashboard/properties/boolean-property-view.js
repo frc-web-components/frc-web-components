@@ -1,0 +1,21 @@
+import PropertyView from './property-view';
+
+class BooleanPropertyView extends PropertyView {
+
+  onInputChange() {
+    this.inputValue = this.inputElement.checked;
+  }
+
+  renderInputField() {
+    return html`
+      <vaadin-checkbox
+        part="input"
+        ?checked="${this.inputValue}"
+        @change="${this.onInputChange}"
+        theme="small"
+      ></vaadin-checkbox>
+    `;
+  }
+}
+
+customElements.define('dashboard-boolean-property-view', BooleanPropertyView);

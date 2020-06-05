@@ -43,11 +43,11 @@ class Logger extends Webbit {
     super();
     this.title = "Robot Logger";
     this.maxLogCount = 1000;
-    this.info = null;
-    this.debug = null;
-    this.warning = null;
-    this.success = null;
-    this.error = null;
+    this.info = '';
+    this.debug = '';
+    this.warning = '';
+    this.success = '';
+    this.error = '';
     this.levels = ['info', 'debug', 'warning', 'success', 'error'];
     this.level = 0;
     this.disabled = false;
