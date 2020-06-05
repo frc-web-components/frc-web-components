@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import './properties-view';
 
 class PropertiesTool extends LitElement {
 
@@ -131,6 +132,10 @@ class PropertiesTool extends LitElement {
           theme="small"
         ></vaadin-text-field>
       </div>
+
+      <dashboard-properties-view 
+        .selectedNode="${this.selectedNode}"
+      ></dashboard-properties-view>
 
       <div part="buttons">
         <vaadin-button 
