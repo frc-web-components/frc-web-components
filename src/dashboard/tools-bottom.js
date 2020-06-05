@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 import './sources/sources-tool';
 import './components/components-tool';
+import './properties/properties-tool';
 
 class DashboardToolsBottom extends LitElement {
 
@@ -74,7 +75,7 @@ class DashboardToolsBottom extends LitElement {
         ` : ''}
 
         ${this.selectedTab === 1 ? html`
-          Properties
+        <dashboard-properties-tool .selectedNode="${this.selectedNode}"></dashboard-properties-tool>
         ` : ''}
 
         ${this.selectedTab === 2 ? html`
