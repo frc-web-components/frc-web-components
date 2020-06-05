@@ -86,6 +86,8 @@ class SourceView extends LitElement {
 
   static get properties() {
     return {
+      onlyChild: { type: Boolean, attribute: 'only-child' },
+      expanded: { type: Boolean },
       label: { type: String },
       providerName: { type: String, attribute: 'provider-name' },
       source: { type: Object },
@@ -108,7 +110,6 @@ class SourceView extends LitElement {
 
   toggleExpand() {
     this.expanded = !this.expanded;
-    this.requestUpdate();
   }
 
   hasSources() {
@@ -122,6 +123,7 @@ class SourceView extends LitElement {
   }
 
   firstUpdated() {
+    this.expanded = this.onlyChild;
     const headerNode = this.shadowRoot.querySelector('header');
     headerNode.style.setProperty(
       '--header-key-padding-left', 
@@ -170,7 +172,6 @@ class SourceView extends LitElement {
     ) {
       if (this.isSelectedKeyDescendent()) {
         this.expanded = true;
-        this.requestUpdate();
       }
     }
   }
@@ -227,6 +228,28 @@ class SourceView extends LitElement {
 
     return html``;
   }
+
+  renderChildSources() {
+
+    const sourceEntries = Object.entries(this.source.__sources__);
+
+    return html`
+      <div class="sources">
+        ${sourceEntries.map(([name, source]) => html`
+          <dashboard-source-view
+            ?only-child="${sourceEntries.length === 1}"
+            label="${this.getLabel(source.__key__)}" 
+            provider-name="${this.providerName}"
+            .source="${{...source}}"
+            level="${this.level + 1}"
+            selected-source-provider="${this.selectedSourceProvider}"
+            selected-source-key="${this.selectedSourceKey}"
+          >
+          </dashboard-source-view>
+        `)}
+      </div>
+    `
+  }
   
 
   render() {
@@ -251,19 +274,7 @@ class SourceView extends LitElement {
           </span>
         </header>
         ${this.hasSources() && this.expanded ? html`
-          <div class="sources">
-            ${Object.entries(this.source.__sources__).map(([name, source]) => html`
-              <dashboard-source-view
-                label="${this.getLabel(source.__key__)}" 
-                provider-name="${this.providerName}"
-                .source="${{...source}}"
-                level="${this.level + 1}"
-                selected-source-provider="${this.selectedSourceProvider}"
-                selected-source-key="${this.selectedSourceKey}"
-              >
-              </dashboard-source-view>
-            `)}
-          </div>
+          ${this.renderChildSources()}
         ` : ''}
       </div>
     `;

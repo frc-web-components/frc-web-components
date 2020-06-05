@@ -80,10 +80,11 @@ class SourcesView extends LitElement {
   renderSources(provider) {
     const rootSource = getRawSources(provider._providerName);
     const sources = rootSource.__sources__;
-
+    const sourceEntries = Object.entries(sources);
     return html`
-      ${Object.entries(sources).map(([name, source]) => html`
+      ${sourceEntries.map(([name, source]) => html`
         <dashboard-source-view 
+          ?only-child="${sourceEntries.length === 1}"
           label="${this.getLabel(source.__key__)}" 
           provider-name="${provider._providerName}"
           .source="${{...source}}"
