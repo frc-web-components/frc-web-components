@@ -60,6 +60,10 @@ class PropertiesTool extends LitElement {
     return this.selectedNode.getName();
   }
 
+  firstUpdated() {
+    this.propertiesViewElement = this.shadowRoot.querySelector('[part="properties-view"]');
+  }
+
   updated(changedProperties) {
     if (changedProperties.has('selectedNode') && this.selectedNode) {
       this.webbitIdInput = this.getWebbitId();
@@ -79,7 +83,10 @@ class PropertiesTool extends LitElement {
   }
 
   isInputModified() {
-    return this.isWebbitIdInputModified();
+    return (
+      this.isWebbitIdInputModified() || 
+      (this.propertiesViewElement ? this.propertiesViewElement.isInputModified() : false)
+    );
   }
 
   checkWebbitIdValidity() {
@@ -98,16 +105,23 @@ class PropertiesTool extends LitElement {
 
   onCancel() {
     this.webbitIdInput = this.getWebbitId();
+    this.propertiesViewElement.cancel();
+    this.requestUpdate();
   }
 
   onConfirm() {
 
     const webbitIdNode = this.shadowRoot.querySelector('[part="webbit-id"]');
 
-    if (!webbitIdNode.invalid) {
+    if (!webbitIdNode.invalid && this.propertiesViewElement.isValid()) {
       this.selectedNode.getNode().webbitId = this.webbitIdInput;
+      this.propertiesViewElement.confirm();
       this.requestUpdate();
     }
+  }
+
+  onPropertiesChange() {
+    this.requestUpdate();
   }
 
   renderWebbit() {
@@ -133,8 +147,10 @@ class PropertiesTool extends LitElement {
         ></vaadin-text-field>
       </div>
 
-      <dashboard-properties-view 
+      <dashboard-properties-view
+        part="properties-view"
         .selectedNode="${this.selectedNode}"
+        @dashboardToolsViewPropertyChange="${this.onPropertiesChange}"
       ></dashboard-properties-view>
 
       <div part="buttons">

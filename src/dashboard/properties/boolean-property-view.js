@@ -4,6 +4,7 @@ class BooleanPropertyView extends PropertyView {
 
   onInputChange() {
     this.inputValue = this.inputElement.checked;
+    this.dispatchPropertyChangeEvent();
   }
 
   renderInputField() {

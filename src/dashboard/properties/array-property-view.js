@@ -7,6 +7,7 @@ class ArrayPropertyView extends PropertyView {
   constructor() {
     super();
     this.customValues = [];
+    this.inputValue = [];
   }
 
   isInputModified() {
@@ -18,7 +19,7 @@ class ArrayPropertyView extends PropertyView {
     }
 
     for (let i = 0; i < value.length; i++) {
-      if (value !== this.inputValue[i]) {
+      if (value[i] !== this.inputValue[i]) {
         return true;
       }
     }
@@ -28,6 +29,7 @@ class ArrayPropertyView extends PropertyView {
 
   onInputChange() {
     this.inputValue = this.inputElement.selectedItems;
+    this.dispatchPropertyChangeEvent();
   }
 
   onCustomValueSet(ev) {

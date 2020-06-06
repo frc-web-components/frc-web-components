@@ -25,6 +25,42 @@ class PropertiesView extends LitElement {
     this.selectedNode = null;
   }
 
+  updated(changedProperties) {
+    if (changedProperties.has('selectedNode')) {
+      this.inputElements = this.shadowRoot.querySelectorAll('[part="input"]');
+    }
+  }
+
+  isInputModified() {
+    for (let input of this.inputElements) {
+      if (input.isInputModified()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  isValid() {
+    for (let input of this.inputElements) {
+      if (!input.isValid()) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  confirm() {
+    for (let input of this.inputElements) {
+      input.confirm();
+    }
+  }
+
+  cancel() {
+    for (let input of this.inputElements) {
+      input.cancel();
+    }
+  }
+
   render() {
 
     const properties = Object.entries(this.selectedNode.getNode().constructor.properties);
@@ -38,6 +74,7 @@ class PropertiesView extends LitElement {
         ${propertiesForSources.map(([name, property]) => html`
           ${property.type === String ? html`
             <dashboard-string-property-view
+              part="input"
               .selectedNode="${this.selectedNode}"
               .propertyName="${name}"
               .property="${property}"
@@ -46,6 +83,7 @@ class PropertiesView extends LitElement {
 
           ${property.type === Number ? html`
             <dashboard-number-property-view
+              part="input"
               .selectedNode="${this.selectedNode}"
               .propertyName="${name}"
               .property="${property}"
@@ -54,6 +92,7 @@ class PropertiesView extends LitElement {
 
           ${property.type === Boolean ? html`
             <dashboard-boolean-property-view
+              part="input"
               .selectedNode="${this.selectedNode}"
               .propertyName="${name}"
               .property="${property}"
@@ -62,6 +101,7 @@ class PropertiesView extends LitElement {
 
           ${property.type === Array ? html`
             <dashboard-array-property-view
+              part="input"
               .selectedNode="${this.selectedNode}"
               .propertyName="${name}"
               .property="${property}"

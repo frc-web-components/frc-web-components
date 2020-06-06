@@ -52,9 +52,11 @@ export default class PropertyView extends LitElement {
   isValid() {
     return true;
   }
+  
 
   onInputChange() {
     this.inputValue = this.inputElement.value;
+    this.dispatchPropertyChangeEvent();
   }
 
   cancel() {
@@ -62,7 +64,7 @@ export default class PropertyView extends LitElement {
   }
 
   confirm() {
-    if (webbitIdNode.isValid()) {
+    if (this.isValid()) {
       this.selectedNode.getNode()[this.propertyName] = this.inputValue;
       this.requestUpdate();
     }
@@ -74,8 +76,17 @@ export default class PropertyView extends LitElement {
     }
   }
 
+  dispatchPropertyChangeEvent() {
+    const event = new CustomEvent('dashboardToolsViewPropertyChange', {
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(event);
+  }
+
   firstUpdated() {
     this.inputElement = this.shadowRoot.querySelector('[part="input"]');
+    this.dispatchPropertyChangeEvent();
   }
 
   renderInputField() {
