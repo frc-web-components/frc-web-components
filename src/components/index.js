@@ -33,6 +33,8 @@ import './tabs';
 import './tabs/tab';
 import './tabs/tabs-content';
 import './tabs/tab-content';
+import './flexbox/flex-container';
+import './container';
 
 // form fields
 import './combo-box';
