@@ -2,6 +2,11 @@ import PropertyView from './property-view';
 
 class NumberPropertyView extends PropertyView {
 
+  onInputChange() {
+    this.inputValue = parseFloat(this.inputElement.value);
+    this.dispatchPropertyChangeEvent();
+  }
+
   renderInputField() {
     return html`
       <vaadin-number-field
