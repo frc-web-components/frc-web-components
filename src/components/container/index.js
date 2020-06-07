@@ -24,12 +24,12 @@ export default class Container extends Webbit {
 
   static get properties() {
     return {
-      display: { type: String },
-      width: { type: String },
-      height: { type: String },
-      background: { type: String },
-      color: { type: String },
-      fontFamily: { type: String }
+      display: { type: String, category: 'Styles' },
+      width: { type: String, category: 'Styles' },
+      height: { type: String, category: 'Styles' },
+      background: { type: String, category: 'Styles' },
+      color: { type: String, category: 'Styles' },
+      fontFamily: { type: String, category: 'Styles' }
     };
   }
 

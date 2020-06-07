@@ -11,6 +11,10 @@ class PropertiesView extends LitElement {
       :host {
         display: block;
       }
+
+      [part=category-name] {
+        text-transform: capitalize;
+      }
     `;
   }
 
@@ -61,17 +65,14 @@ class PropertiesView extends LitElement {
     }
   }
 
-  render() {
-
-    const properties = Object.entries(this.selectedNode.getNode().constructor.properties);
-
-    const propertiesForSources = properties.filter(([name, property]) => {
-      return property.canConnectToSources;
+  renderProperties(properties, category) {
+    const categoryProperties = properties.filter(([name, property]) => {
+      return property.category === category;
     });
 
     return html`
       <vaadin-form-layout>
-        ${propertiesForSources.map(([name, property]) => html`
+        ${categoryProperties.map(([name, property]) => html`
           ${property.type === String ? html`
             <dashboard-string-property-view
               part="input"
@@ -109,6 +110,29 @@ class PropertiesView extends LitElement {
           ` : ''}
         `)}
       </vaadin-form-layout>
+    `;
+  }
+
+  render() {
+
+    const properties = Object.entries(this.selectedNode.getNode().constructor.properties);
+
+    const propertiesForSources = properties.filter(([name, property]) => {
+      return property.canConnectToSources;
+    });
+
+    const categories = [this.selectedNode.getDisplayName(), 'Styles'];
+
+
+    return html`
+      <vaadin-accordion>
+        ${categories.map(category => html`
+          <vaadin-accordion-panel>
+            <div part="category-name" slot="summary">${category}</div>
+            ${this.renderProperties(propertiesForSources, category)}
+          </vaadin-accordion-panel>
+        `)}
+      </vaadin-accordion>
     `;
   }
 }
