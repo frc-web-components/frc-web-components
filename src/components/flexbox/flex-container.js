@@ -1,17 +1,8 @@
 import { Webbit, html, css } from '@webbitjs/webbit';
+import Container from '../container';
 
-const FLEX_ALIASES = {
-  'start': 'flex-start',
-  'end': 'flex-end',
-  'center': 'center',
-  'space-between': 'space-between',
-  'space-around': 'space-around',
-  'space-evenly': 'space-evenly',
-  'stretch': 'stretch',
-  'baseline': 'baseline'
-}
 
-class FlexContainer extends Webbit {
+class FlexContainer extends Container {
 
   static get metadata() {
     return {
@@ -21,25 +12,23 @@ class FlexContainer extends Webbit {
   }
 
   static get styles() {
-    return css`
-      :host {
-        width: var(--flex-container-width, auto);
-        height: var(--flex-container-height, auto);
-        display: var(--flex-container-display, flex);
-        flex-direction: var(--flex-container-direction, flex-start);
-        flex-wrap: var(--flex-container-wrap, wrap);
-        justify-content: var(--flex-container-justify-content, flex-start);
-        align-items: var(--flex-container-align-items, flex-start);
-        align-content: var(--flex-container-align-content, flex-start);
-      }
-    `;
+    return [
+      super.styles,
+      css`
+        :host {
+          flex-direction: var(--container-direction);
+          flex-wrap: var(--container-wrap, wrap);
+          justify-content: var(--container-justify-content);
+          align-items: var(--container-align-items);
+          align-content: var(--container-align-content);
+        }
+      `
+    ];
   }
 
   static get properties() {
     return {
-      width: { type: String },
-      height: { type: String },
-      inline: { type: Boolean },
+      ...super.properties,
       direction: { type: String },
       wrap: { type: String },
       justifyContent: { type: String },
@@ -50,14 +39,12 @@ class FlexContainer extends Webbit {
 
   constructor() {
     super();
-    this.width = 'auto';
-    this.height = 'auto';
-    this.inline = false;
+    this.display = 'inline-flex';
     this.direction = 'row';
     this.wrap = 'wrap';
-    this.justifyContent = 'start';
-    this.alignItems = 'start';
-    this.alignContent = 'start';
+    this.justifyContent = 'flex-start';
+    this.alignItems = 'flex-start';
+    this.alignContent = 'flex-start';
   }
 
   render() {
@@ -68,37 +55,13 @@ class FlexContainer extends Webbit {
 
   updated(changedProps) {
 
-    if (changedProps.has('width')) {
-      this.style.setProperty('--flex-container-width', this.width);
-    }
+    super.updated(changedProps);
 
-    if (changedProps.has('height')) {
-      this.style.setProperty('--flex-container-height', this.height);
-    }
-
-    if (changedProps.has('inline')) {
-      this.style.setProperty('--flex-container-display', this.inline ? 'inline-flex' : 'flex');
-    }
-
-    if (changedProps.has('direction')) {
-      this.style.setProperty('--flex-container-direction', this.direction);
-    }
-
-    if (changedProps.has('wrap')) {
-      this.style.setProperty('--flex-container-wrap', this.wrap);
-    }
-
-    if (changedProps.has('justifyContent')) {
-      this.style.setProperty('--flex-container-justify-content', FLEX_ALIASES[this.justifyContent]);
-    }
-    
-    if (changedProps.has('alignItems')) {
-      this.style.setProperty('--flex-container-align-items', FLEX_ALIASES[this.alignItems]);
-    }
-
-    if (changedProps.has('alignContent')) {
-      this.style.setProperty('--flex-container-align-content', FLEX_ALIASES[this.alignContent]);
-    }
+    ['direction', 'wrap', 'justifyContent', 'alignItems', 'alignContent'].forEach(prop => {
+      if (changedProps.has(prop)) {
+        this.style.setProperty(`--container-${prop}`, this[prop]);
+      }
+    });
   }
 }
 
