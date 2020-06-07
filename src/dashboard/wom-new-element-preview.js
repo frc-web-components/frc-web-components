@@ -108,7 +108,10 @@ class NewElementPreview extends LitElement {
       
       const event = new CustomEvent('womNodeAdd', {
         bubbles: true,
-        composed: true,
+        // composed: true,
+        detail: {
+          newElement
+        }
       });
       this.dispatchEvent(event);
     }

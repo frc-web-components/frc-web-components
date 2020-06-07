@@ -66,6 +66,24 @@ class WomNode {
     node.addEventListener('click', this.onMouseClick);
   }
 
+  dispatchWomNodeBuild() {
+    const event = new CustomEvent('womNodeBuild', {
+      detail: {
+        node: this
+      }
+    });
+    this.node.dispatchEvent(event);
+  }
+
+  dispatchWomNodeDestroy() {
+    const event = new CustomEvent('womNodeDestroy', {
+      detail: {
+        node: this
+      }
+    });
+    this.node.dispatchEvent(event);
+  }
+
   destroy() {
     this.node.removeEventListener('mouseover', this.onMouseEnter);
     this.node.removeEventListener('mouseleave', this.onMouseLeave);
@@ -77,6 +95,7 @@ class WomNode {
     this.childBySlotNodes = this.slots.map(() => {
       return [];
     });
+    this.dispatchWomNodeDestroy();
   }
 
   build() {
@@ -92,10 +111,11 @@ class WomNode {
       womNode.build();
       return womNode;
     });
+    this.dispatchWomNodeBuild();
   }
 
   isDescendant(node) {
-    return this.ancestors.indexOf(node) >= 0;
+    return this.ancestors.map(ancestor => ancestor.node).indexOf(node.node) >= 0;
   }
 
   getSlots() {

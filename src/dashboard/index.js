@@ -176,6 +176,7 @@ class WebbitDashboard extends LitElement {
     
     // Don't let clicking slot node select a component unless it's being used
     // to add an element
+
     if (ev.type === 'womSlotNodeSelect' && !this.selectedComponent) {
       return;
     } 
@@ -222,11 +223,22 @@ class WebbitDashboard extends LitElement {
 
   onDashhboardComponentSelected(ev) {
     const { name } = ev.detail;
+    this.selectedNode = null;
     this.selectedComponent = name;
   }
   
-  onWomNodeAdd() {
+  onWomNodeAdd(ev) {
     this.selectedComponent = '';
+    const { newElement } = ev.detail;
+    const webbitId = newElement.webbitId;
+
+    const listenerCallback = ev => {
+      const { node } = ev.detail;
+      this.selectedNode = node;
+      newElement.removeEventListener('womNodeBuild', listenerCallback);
+    }
+
+    newElement.addEventListener('womNodeBuild', listenerCallback);
   }
 
   onDeleteElement() {

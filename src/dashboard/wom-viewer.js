@@ -88,6 +88,7 @@ class WomViewer extends LitElement {
 
   static get properties() {
     return {
+      expanded: { type: Boolean },
       slot: { type: String },
       node: { type: Object },
       selectedNode: { type: Object },
@@ -111,12 +112,10 @@ class WomViewer extends LitElement {
 
   toggleExpand() {
     this.expanded = !this.expanded;
-    this.requestUpdate();
   }
 
   expand() {
     this.expanded = true;
-    this.requestUpdate();
   }
 
   hasChildren() {
@@ -124,14 +123,17 @@ class WomViewer extends LitElement {
   }
 
   isSelected() {
-    return this.selectedNode === this.node;
+    if (!this.selectedNode) {
+      return false;
+    }
+
+    return this.selectedNode.getNode() === this.node.getNode();
   }
 
   updated(changedProperties) {
     if (changedProperties.has('selectedNode')) {
       if (this.selectedNode && this.selectedNode.isDescendant(this.node)) {
         this.expanded = true;
-        this.requestUpdate();
       }
 
       if (
