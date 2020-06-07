@@ -1,6 +1,7 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { html } from '@webbitjs/webbit';
+import Container from '../container';
 
-class If extends Webbit {
+class If extends Container {
 
   static get metadata() {
     return {
@@ -13,15 +14,14 @@ class If extends Webbit {
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: inline-block;
-      }
-    `;
+    return [
+      super.styles
+    ];
   }
 
   static get properties() {
     return {
+      ...super.properties,
       value: { type: Boolean },
     };
   }

@@ -1,4 +1,5 @@
 import { Webbit, html, css } from '@webbitjs/webbit';
+import Container from '../container';
 import * as CurvedArrow from '../curved-arrow';
 
 /** 
@@ -55,7 +56,7 @@ function generateX(width) {
   return `<g class="x">${lineA} ${lineB}</g>`;
 }
 
-class MecanumDrivebase extends Webbit {
+class MecanumDrivebase extends Container {
 
   static get metadata() {
     return {
@@ -67,91 +68,92 @@ class MecanumDrivebase extends Webbit {
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: inline-block;
-        width: 400px;
-        height: 300px;
-        padding: 0 10px;
-      }
+    return [
+      super.styles,
+      css`
+        :host {
+          padding: 0 10px;
+        }
 
-      .diff-drive-container {
+        .diff-drive-container {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        svg {
+          overflow: overlay;
+          flex: 1;
           height: 100%;
-          width: 100%;
+        }
+
+        svg .x {
+            stroke: rgb(50,50,255);
+            stroke-width: 2;
+        }
+
+        svg .arrow line, svg .arrow path {
+            stroke: rgb(50,50,255);
+            stroke-width: 2;
+            fill: none;
+        }
+
+        svg .arrow polygon {
+            stroke: rgb(50,50,255);
+            fill: rgb(50,50,255);
+        }
+
+        svg .drivetrain {
+            fill: none;
+            stroke: black;
+        }
+
+        .bar {
+            position: relative;
+            height: calc(100% - 30px);
+            width: 20px;
+            border-radius: 3px;
+            margin: 15px 0;
+            background: #DDD;
+        }
+
+        .speed-pair {
+          height: 100%;
           display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: center;
-      }
+          flex-direction: column;
+          justify-content: space-around;
+        }
 
-      svg {
-        overflow: overlay;
-        flex: 1;
-        height: 100%;
-      }
+        .speed {
+            display: flex;
+            height: 48%;
+            flex-direction: row;
+            align-items: center;
+            margin-left: 30px;
+        }
 
-      svg .x {
-          stroke: rgb(50,50,255);
-          stroke-width: 2;
-      }
+        table-axis {
+            width: 10px;
+            height: calc(100% - 35px);
+        }
 
-      svg .arrow line, svg .arrow path {
-          stroke: rgb(50,50,255);
-          stroke-width: 2;
-          fill: none;
-      }
-
-      svg .arrow polygon {
-          stroke: rgb(50,50,255);
-          fill: rgb(50,50,255);
-      }
-
-      svg .drivetrain {
-          fill: none;
-          stroke: black;
-      }
-
-      .bar {
-          position: relative;
-          height: calc(100% - 30px);
-          width: 20px;
-          border-radius: 3px;
-          margin: 15px 0;
-          background: #DDD;
-      }
-
-      .speed-pair {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-      }
-
-      .speed {
-          display: flex;
-          height: 48%;
-          flex-direction: row;
-          align-items: center;
-          margin-left: 30px;
-      }
-
-      table-axis {
-          width: 10px;
-          height: calc(100% - 35px);
-      }
-
-      .foreground {
-          position: absolute;
-          top: 0;
-          width: 20px;
-          background: lightblue;
-          border-radius: 3px;
-      }
-    `;
+        .foreground {
+            position: absolute;
+            top: 0;
+            width: 20px;
+            background: lightblue;
+            border-radius: 3px;
+        }
+      `
+    ];
   }
 
   static get properties() {
     return {
+      ...super.properties,
       frontLeftMotorSpeed: { 
         type: Number, 
         attribute: 'fl-motor-speed',
@@ -185,6 +187,8 @@ class MecanumDrivebase extends Webbit {
 
   constructor() {
     super();
+    this.width = '400px';
+    this.height = '300px';
     this.frontLeftMotorSpeed = 0;
     this.frontRightMotorSpeed = 0;
     this.rearLeftMotorSpeed = 0;
@@ -349,7 +353,8 @@ class MecanumDrivebase extends Webbit {
     this.shadowRoot.getElementById('drivetrain').innerHTML = this.drawDrivetrain();
   }
 
-  updated() {
+  updated(changedProps) {
+    super.updated(changedProps);
     let drawing = this.drawMotionVector(
       this.frontLeftMotorSpeed, 
       this.frontRightMotorSpeed,

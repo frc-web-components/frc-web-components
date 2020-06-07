@@ -17,6 +17,7 @@ export default class Container extends Webbit {
         height: var(--container-height);
         background: var(--container-background);
         color: var(--container-color);
+        font-family: var(--container-font-family);
       }
     `;
   }
@@ -28,6 +29,7 @@ export default class Container extends Webbit {
       height: { type: String },
       background: { type: String },
       color: { type: String },
+      fontFamily: { type: String }
     };
   }
 
@@ -38,6 +40,7 @@ export default class Container extends Webbit {
     this.height = 'auto';
     this.background = 'none';
     this.color = 'inherit';
+    this.fontFamily = 'sans-serif';
   }
 
   render() {
@@ -47,9 +50,10 @@ export default class Container extends Webbit {
   }
 
   updated(changedProps) {
-    ['display', 'width', 'height', 'background', 'color'].forEach(prop => {
+    ['display', 'width', 'height', 'background', 'color', 'fontFamily'].forEach(prop => {
       if (changedProps.has(prop)) {
-        this.style.setProperty(`--container-${prop}`, this[prop]);
+        const attribute = this.constructor.properties[prop].attribute;
+        this.style.setProperty(`--container-${attribute}`, this[prop]);
       }
     });
   }

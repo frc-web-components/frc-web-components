@@ -1,10 +1,11 @@
-import { Webbit, css, svg } from '@webbitjs/webbit';
+import { css, svg } from '@webbitjs/webbit';
+import Container from '../container';
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(value, min));
 }
 
-class Gyro extends Webbit {
+class Gyro extends Container {
 
   static get metadata() {
     return {
@@ -16,78 +17,78 @@ class Gyro extends Webbit {
   }
 
   static get styles() {
-    return css`
-      :host { 
-        display: inline-block; 
-        width: 300px;
-        height: 300px;
-        position: relative;
-        font-family: sans-serif;
-      }
+    return [
+      super.styles,
+      css`
+        :host { 
+          position: relative;
+        }
 
-      svg {
-        width: 80%;
-        height: 80%;
-        position: relative;
-        top: 5%;
-        left: 10%;
-        overflow: visible;
-      }
+        svg {
+          width: 80%;
+          height: 80%;
+          position: relative;
+          top: 5%;
+          left: 10%;
+          overflow: visible;
+        }
 
-      :host([hide-label]) svg {
-        width: 90%;
-        height: 90%;
-        top: 5%;
-        left: 5%;
-      }
+        :host([hide-label]) svg {
+          width: 90%;
+          height: 90%;
+          top: 5%;
+          left: 5%;
+        }
 
-      svg .edge {
-        fill: none;
-        stroke: black;
-        stroke-width: 1px;
-        color: black;
-        overflow: overlay;
-      }
+        svg .edge {
+          fill: none;
+          stroke: black;
+          stroke-width: 1px;
+          color: black;
+          overflow: overlay;
+        }
 
-      .tick {
-        stroke: #bbb;
-        stroke-width: 1px;
-      }
+        .tick {
+          stroke: #bbb;
+          stroke-width: 1px;
+        }
 
-      .tick.big {
-        stroke-width: 2px;
-        stroke: black;
-      }
+        .tick.big {
+          stroke-width: 2px;
+          stroke: black;
+        }
 
-      .dial-circle {
-        fill: #ddd;
-        stroke: white;
-        stroke-width: 1%;
-      }
+        .dial-circle {
+          fill: #ddd;
+          stroke: white;
+          stroke-width: 1%;
+        }
 
-      .dial-hand {
-        fill: blue;
-        stroke: blue;
-        stroke-width: 3px;
-      }
+        .dial-hand {
+          fill: blue;
+          stroke: blue;
+          stroke-width: 3px;
+        }
 
-      .degree-label {
-        fill: black;
-        text-anchor: middle;
-        alignment-baseline: middle;
-        font-size: var(--degree-label-font-size);
-      }
+        .degree-label {
+          fill: black;
+          text-anchor: middle;
+          alignment-baseline: middle;
+          font-size: var(--degree-label-font-size);
+        }
 
-      .angle-label {
-        fill: black;
-        text-anchor: middle;
-        font-size: var(--angle-label-font-size);
-      }
-    `;
+        .angle-label {
+          fill: black;
+          text-anchor: middle;
+          font-size: var(--angle-label-font-size);
+        }
+      `
+    ];
   }
 
   static get properties() {
     return {
+      ...super.properties,
       value: { type: Number, primary: true },
       hideLabel: { type: Boolean, attribute: 'hide-label' },
       precision: { 
@@ -101,6 +102,8 @@ class Gyro extends Webbit {
 
   constructor() {
     super();
+    this.width = '300px';
+    this.height = '300px';
     this.value = 0;
     this.hideLabel = false;
     this.precision = 2;

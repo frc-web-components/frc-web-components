@@ -1,6 +1,5 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { html, css } from '@webbitjs/webbit';
 import Container from '../container';
-
 
 class FlexContainer extends Container {
 

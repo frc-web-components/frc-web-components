@@ -1,6 +1,7 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { html } from '@webbitjs/webbit';
+import Container from '../container';
 
-class Checkbox extends Webbit {
+class Checkbox extends Container {
 
   static get metadata() {
     return {
@@ -12,16 +13,14 @@ class Checkbox extends Webbit {
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: inline-block;
-        font-family: sans-serif;
-      }
-    `;
+    return [
+      super.styles,
+    ];
   }
 
   static get properties() {
     return {
+      ...super.properties,
       checked: { type: Boolean, primary: true },
       value: { type: String },
       disabled: { type: Boolean }

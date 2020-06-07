@@ -1,4 +1,6 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { html, css } from '@webbitjs/webbit';
+import Container from '../container';
+
 
 function getRange(start, end) {
   const range = [];
@@ -12,7 +14,7 @@ function clamp(value, min, max) {
   return Math.min(max, Math.max(value, min));
 }
 
-class Pdp extends Webbit {
+class Pdp extends Container {
 
   static get metadata() {
     return {
@@ -32,6 +34,7 @@ class Pdp extends Webbit {
     }
 
     return {
+      ...super.properties,
       ...props,
       voltage: { type: Number },
       totalCurrent: { type: Number, attribute: 'total-current' }      
@@ -39,55 +42,56 @@ class Pdp extends Webbit {
   }
 
   static get styles() {
-    return css`
-      :host {
-        margin: 5px;
-        display: inline-block;
-        font-family: sans-serif;
-        width: 350px;
-      }
+    return [
+      super.styles,
+      css`
+        :host {
+          margin: 5px;
+        }
 
-      [part=channels] {
-        display: grid;
-        grid-auto-flow: column;
-        grid-template-columns: min-content 1fr min-content 1fr;
-        grid-template-rows: auto auto auto auto auto auto auto auto;
-        column-gap: 5px;
-        row-gap: 5px;
-        width: 100%;
-        height: auto;
-      }
+        [part=channels] {
+          display: grid;
+          grid-auto-flow: column;
+          grid-template-columns: min-content 1fr min-content 1fr;
+          grid-template-rows: auto auto auto auto auto auto auto auto;
+          column-gap: 5px;
+          row-gap: 5px;
+          width: 100%;
+          height: auto;
+        }
 
-      .channel, .voltage, .total-current {
-        width: auto;
-      }
+        .channel, .voltage, .total-current {
+          width: auto;
+        }
 
-      [part=channel-label] {
-        padding-left: 5px;
-        text-align: right;
-        white-space: nowrap;
-      }
+        [part=channel-label] {
+          padding-left: 5px;
+          text-align: right;
+          white-space: nowrap;
+        }
 
-      [part=voltage-and-total-current] {
-        margin-top: 15px;
-        display: grid;
-        grid-auto-flow: column;
-        grid-template-columns: min-content auto;
-        grid-template-rows: auto auto;
-        column-gap: 10px;
-        row-gap: 8px;
-        width: 100%;
-        height: auto;
-      }
+        [part=voltage-and-total-current] {
+          margin-top: 15px;
+          display: grid;
+          grid-auto-flow: column;
+          grid-template-columns: min-content auto;
+          grid-template-rows: auto auto;
+          column-gap: 10px;
+          row-gap: 8px;
+          width: 100%;
+          height: auto;
+        }
 
-      [part=voltage-and-total-current] {
-        white-space: nowrap;
-      }
-    `;
+        [part=voltage-and-total-current] {
+          white-space: nowrap;
+        }
+      `
+    ];
   }
 
   constructor() {
     super();
+    this.width = '350px';
     for (let i = 0; i < 16; i++) {
       this[`chan${i}`] = 0;
     }

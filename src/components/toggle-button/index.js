@@ -1,31 +1,40 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
-import '@vaadin/vaadin-button';
+import { html, css } from '@webbitjs/webbit';
+import Container from '../container';
 
-class ToggleButton extends Webbit {
+class ToggleButton extends Container {
+
+  static get metadata() {
+    return {
+      displayName: 'Toggle Button',
+      category: 'Forms & Inputs',
+      //description: 'Component for displaying data from a 3-axis accelerometer.',
+      documentationLink: 'https://frc-web-components.github.io/components/toggle-button/'
+    };
+  }
 
   static get styles() {
-    return css`
-      :host {
-        display: inline-block;
-        width: 100px;
-        height: 50px;
-      }
-
-      [part=button] {
-        width: 100%;
-        height: 100%;
-      }
-    `;
+    return [
+      super.styles,
+      css`
+        [part=button] {
+          width: 100%;
+          height: 100%;
+        }
+      `
+    ];
   }
 
   static get properties() {
     return {
+      ...super.properties,
       toggled: { type: Boolean, primary: true },
     }
   }
 
   constructor() {
     super();
+    this.width = '100px';
+    this.height = '50px';
     this.toggled = false;
   }
 

@@ -1,17 +1,26 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { html } from '@webbitjs/webbit';
+import Container from '../container';
 
-class ComboBox extends Webbit {
+class ComboBox extends Container {
+
+  static get metadata() {
+    return {
+      displayName: 'Combo Box',
+      category: 'Forms & Inputs',
+      //description: 'Component for displaying data from a 3-axis accelerometer.',
+      documentationLink: 'https://frc-web-components.github.io/components/combo-box/'
+    };
+  }
 
   static get styles() {
-    return css`
-      :host {
-        display: inline-block;
-      }
-    `;
+    return [
+      super.styles
+    ];
   }
 
   static get properties() {
     return {
+      ...super.properties,
       name: { type: String },
       selected: { type: String, primary: true },
       default: { type: String },
@@ -71,6 +80,10 @@ class ComboBox extends Webbit {
   onChange(ev) {
     const element = ev.target || ev.path[0];
     this.selected = element.value;
+  }
+
+  getAllValues() {
+    return this.options;
   }
 
   render() {

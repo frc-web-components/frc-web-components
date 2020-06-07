@@ -1,7 +1,8 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { html, css } from '@webbitjs/webbit';
+import Container from '../container';
 import Gauge from 'svg-gauge';
 
-class GaugeWebbit extends Webbit {
+class GaugeWebbit extends Container {
 
   static get metadata() {
     return {
@@ -13,45 +14,43 @@ class GaugeWebbit extends Webbit {
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: inline-block;
-        width: 200px;
-        height: 200px;
-      }
+    return [
+      super.styles,
+      css`
+        .gauge-container-container {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
 
-      .gauge-container-container {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .gauge-container {
-        display: block;
-      }
-      
-      .gauge-container > .gauge > .dial {
-        stroke: #ddd;
-        stroke-width: 3;
-        fill: rgba(0,0,0,0);
-      }
-      .gauge-container > .gauge > .value {
-        stroke: rgb(47, 180, 200);
-        stroke-width: 3;
-        fill: rgba(0,0,0,0);
-      }
-      .gauge-container > .gauge > .value-text {
-        fill: black;
-        font-family: sans-serif;
-        font-size: 1em;
-      }
-    `;
+        .gauge-container {
+          display: block;
+        }
+        
+        .gauge-container > .gauge > .dial {
+          stroke: #ddd;
+          stroke-width: 3;
+          fill: rgba(0,0,0,0);
+        }
+        .gauge-container > .gauge > .value {
+          stroke: rgb(47, 180, 200);
+          stroke-width: 3;
+          fill: rgba(0,0,0,0);
+        }
+        .gauge-container > .gauge > .value-text {
+          fill: black;
+          font-family: sans-serif;
+          font-size: 1em;
+        }
+      `
+    ];
   }
 
   static get properties() {
     return {
+      ...super.properties,
       min: { 
         type: Number, 
         get() {
@@ -70,6 +69,8 @@ class GaugeWebbit extends Webbit {
 
   constructor() {
     super();
+    this.width = '200px';
+    this.height = '200px';
     this.min = 0;
     this.max = 100;
     this.value = 0;
@@ -107,6 +108,7 @@ class GaugeWebbit extends Webbit {
   }
 
   updated(changedProperties) {
+    super.updated(changedProperties);
     if (changedProperties.has('min') || changedProperties.has('max')) {
       this.gaugeInit();
     }

@@ -1,17 +1,26 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { html } from '@webbitjs/webbit';
+import Container from '../container';
 
-class CheckboxGroup extends Webbit {
+class CheckboxGroup extends Container {
+
+  static get metadata() {
+    return {
+      displayName: 'Checkbox Group',
+      category: 'Forms & Inputs',
+      //description: 'Component for displaying data from a 3-axis accelerometer.',
+      documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/'
+    };
+  }
 
   static get styles() {
-    return css`
-      :host {
-        display: inline-block;
-      }
-    `;
+    return [
+      super.styles
+    ];
   }
 
   static get properties() {
     return {
+      ...super.properties,
       value: { type: Array, primary: true },
       label: { type: String },
       theme: { type: String },
