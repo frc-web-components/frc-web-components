@@ -35,6 +35,8 @@ import './tabs/tabs-content';
 import './tabs/tab-content';
 import './flexbox/flex-container';
 import './container';
+import '@kor-ui/grid';
+
 
 // form fields
 import './combo-box';

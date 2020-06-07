@@ -15,6 +15,8 @@ export default class Container extends Webbit {
         display: var(--container-display);
         width: var(--container-width);
         height: var(--container-height);
+        max-width: 100%;
+        max-height: 100%;
         background: var(--container-background);
         color: var(--container-color);
         font-family: var(--container-font-family);

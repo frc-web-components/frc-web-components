@@ -24,6 +24,10 @@ class Gyro extends Container {
           position: relative;
         }
 
+        .container {
+          height: var(--gyro-container-height);
+        }
+
         svg {
           width: 80%;
           height: 80%;
@@ -103,7 +107,7 @@ class Gyro extends Container {
   constructor() {
     super();
     this.width = '300px';
-    this.height = '300px';
+    this.height = 'auto';
     this.value = 0;
     this.hideLabel = false;
     this.precision = 2;
@@ -121,7 +125,13 @@ class Gyro extends Container {
     }
   }
 
+  firstUpdated() {
+    this.containerNode = this.shadowRoot.querySelector('.container');
+  }
+
   resized() {
+    const { width } = this.getBoundingClientRect();
+    this.containerNode.style.setProperty('--gyro-container-height', `${width}px`);
     this.requestUpdate();
   }
 
@@ -249,14 +259,16 @@ class Gyro extends Container {
 
   render() {
     return svg`
-      <svg>
-        ${this.renderEdge()}
-        ${this.renderTicks()}
-        ${this.renderDialHand()}
-        ${this.renderDialCircle()}
-        ${this.renderDegreeLabels()}
-        ${this.renderAngleLabel()}
-      </svg>
+      <div class="container">
+        <svg>
+          ${this.renderEdge()}
+          ${this.renderTicks()}
+          ${this.renderDialHand()}
+          ${this.renderDialCircle()}
+          ${this.renderDegreeLabels()}
+          ${this.renderAngleLabel()}
+        </svg>
+      </div>
     `;
   }
 }

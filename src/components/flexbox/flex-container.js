@@ -16,7 +16,7 @@ class FlexContainer extends Container {
       css`
         :host {
           flex-direction: var(--container-direction);
-          flex-wrap: var(--container-wrap, wrap);
+          flex-wrap: var(--container-wrap);
           justify-content: var(--container-justify-content);
           align-items: var(--container-align-items);
           align-content: var(--container-align-content);
@@ -38,7 +38,7 @@ class FlexContainer extends Container {
 
   constructor() {
     super();
-    this.display = 'inline-flex';
+    this.display = 'flex';
     this.direction = 'row';
     this.wrap = 'wrap';
     this.justifyContent = 'flex-start';
@@ -58,7 +58,8 @@ class FlexContainer extends Container {
 
     ['direction', 'wrap', 'justifyContent', 'alignItems', 'alignContent'].forEach(prop => {
       if (changedProps.has(prop)) {
-        this.style.setProperty(`--container-${prop}`, this[prop]);
+        const attribute = this.constructor.properties[prop].attribute;
+        this.style.setProperty(`--container-${attribute}`, this[prop]);
       }
     });
   }

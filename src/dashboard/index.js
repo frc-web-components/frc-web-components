@@ -4,6 +4,7 @@ import './wom-viewer';
 import './wom-preview-box';
 import './tools-bottom';
 import './wom-new-element-preview';
+import ResizeObserver from 'resize-observer-polyfill';
 
 class WebbitDashboard extends LitElement {
 
@@ -31,8 +32,18 @@ class WebbitDashboard extends LitElement {
         position: relative;
       }
 
+      :host(:not([edit-mode])) {
+        min-height: 100vh;
+        height: var(--dashboard-height, 100%);
+      }
+
       :host([fullscreen]) [part=editor] {
-        height: 100vh;
+        min-height: 100vh;
+        height: var(--dashboard-height, 100%);
+      }
+
+      [part=container] {
+        height: auto;
       }
  
       [part=editor] {
@@ -122,6 +133,16 @@ class WebbitDashboard extends LitElement {
     });
   }
 
+  addResizeObserver() {
+    const containerNode = this.shadowRoot.querySelector('[part="container"]');
+
+    const resizeObserver = new ResizeObserver(() => {
+      const { height } = containerNode.getBoundingClientRect();
+      this.style.setProperty('--dashboard-height', `${height}px`);
+    });
+    resizeObserver.observe(containerNode);
+  }
+
   updated(changedProperties) {
     if (changedProperties.has('editMode')) {
       if (!this.editMode) {
@@ -134,6 +155,7 @@ class WebbitDashboard extends LitElement {
         this.toolsTopElement = this.shadowRoot.querySelector('[part="tools-top"]');
         this.requestUpdate();
       }
+      this.addResizeObserver();
     }
   }
 
@@ -277,7 +299,9 @@ class WebbitDashboard extends LitElement {
               @womNodeAdd="${this.onWomNodeAdd}"
               .parentNode="${this.dashboardNode}"
             ></wom-new-element-preview>
-            <slot></slot>
+            <div part="container">
+              <slot></slot>
+            </div>
           </div>
           <div part="tools-container" style="width: 30%">
             <div part="tools">
@@ -325,7 +349,9 @@ class WebbitDashboard extends LitElement {
           </div>
         </vaadin-split-layout>
       `: html`
-        <slot></slot>
+        <div part="container">
+          <slot></slot>
+        </div>
       `}
     `;
   }
