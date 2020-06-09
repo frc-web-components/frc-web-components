@@ -79,7 +79,7 @@ class SourcesView extends LitElement {
 
   renderSources(provider) {
     const rootSource = getRawSources(provider._providerName);
-    const sources = rootSource.__sources__;
+    const sources = rootSource ? rootSource.__sources__ : {}; 
     const sourceEntries = Object.entries(sources);
     return html`
       ${sourceEntries.map(([name, source]) => html`

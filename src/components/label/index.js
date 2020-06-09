@@ -1,4 +1,4 @@
-import { html, css } from '@webbitjs/webbit';
+import { html } from '@webbitjs/webbit';
 import Container from '../container';
 
 class Label extends Container {
@@ -15,11 +15,6 @@ class Label extends Container {
   static get styles() {
     return [
       super.styles,
-      css`
-        :host {
-          font: inherit;
-        }
-      `
     ]
   }
 
@@ -34,6 +29,12 @@ class Label extends Container {
     super();
     this.display = 'inline';
     this.text = '';
+    this.fontSize = 'inherit';
+    this.fontFamily = 'inherit';
+    this.fontWeight = 'inherit';
+    this.textAlign = 'inherit';
+    this.margin = '0';
+    this.padding = '0';
   }
 
   render() {

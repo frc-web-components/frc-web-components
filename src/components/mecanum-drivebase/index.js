@@ -71,10 +71,6 @@ class MecanumDrivebase extends Container {
     return [
       super.styles,
       css`
-        :host {
-          padding: 0 10px;
-        }
-
         .diff-drive-container {
             height: 100%;
             width: 100%;
@@ -189,6 +185,7 @@ class MecanumDrivebase extends Container {
     super();
     this.width = '400px';
     this.height = '300px';
+    this.padding = '0 10px';
     this.frontLeftMotorSpeed = 0;
     this.frontRightMotorSpeed = 0;
     this.rearLeftMotorSpeed = 0;

@@ -45,10 +45,6 @@ class Pdp extends Container {
     return [
       super.styles,
       css`
-        :host {
-          margin: 5px;
-        }
-
         [part=channels] {
           display: grid;
           grid-auto-flow: column;
@@ -92,6 +88,7 @@ class Pdp extends Container {
   constructor() {
     super();
     this.width = '350px';
+    this.margin = '5px';
     for (let i = 0; i < 16; i++) {
       this[`chan${i}`] = 0;
     }
