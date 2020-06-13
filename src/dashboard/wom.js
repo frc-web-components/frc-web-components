@@ -14,6 +14,7 @@ class Wom {
     this.womNode.build();
     this.actions = {};
     this.selectedActionId = null;
+    this.actionContext = {};
     this.mode = 'live';
     this.observeMutations();
   }
@@ -40,7 +41,7 @@ class Wom {
   targetNode(node) {
     if (this.getSelectedAction()) {
       this.dispatchAction('womNodeTarget', { node });
-      this.executeAction();
+      this.executeAction(node);
     }
   }
 
@@ -56,19 +57,23 @@ class Wom {
     return Object.keys(this.actions);
   }
 
-  selectAction(id) {
+  selectAction(id, context) {
 
-    if (!this.getAction(id)) {
+    const action = this.getAction(id);
+
+    if (!action) {
       return;
     }
 
     this.deselectAction();
-    if (this.getSelectedNode()) {
+    if (this.getSelectedNode() || !action.needsSelection) {
       this.selectedActionId = id;
       this.dispatchEvent('womActionSelect', { 
         actionId,
         action: this.getAction(id)
       });
+      this.setActionContext(context);
+      this.executeAction();
     }
   }
 
@@ -76,6 +81,7 @@ class Wom {
     const prevSelectedActionId = this.getSelectedActionId();
     if (prevSelectedActionId) {
       this.selectedActionId = null;
+      this.actionContext = {};
       this.dispatchEvent('womActionDeselect', { 
         actionId: prevSelectedActionId,
         action: this.getAction(prevSelectedActionId)
@@ -87,20 +93,50 @@ class Wom {
     return this.selectedActionId;
   }
 
-  executeAction() {
+  executeAction(targetedNode) {
 
     const actionId = this.getSelectedActionId();
     const action = this.getAction(actionId);
+    const selectedNode = this.getSelectedNode();
 
-    if (!actionId) {
+    if (!actionId || !action.isReady(!!selectedNode, !!targetedNode)) {
       return;
     }
 
-    action.execute(this);
+    action.execute({
+      wom: this,
+      selectedNode,
+      targetedNode,
+      context: this.getActionContext(),
+    });
     this.dispatchEvent('womActionExecute', {
       actionId,
       action
     })
+  }
+
+  setActionContext(context) {
+
+    const actionId = this.getSelectedActionId();
+    const action = this.getAction(actionId);
+
+    if (!action) {
+      return;
+    }
+
+    this.actionContext = {
+      ...this.actionContext,
+      context
+    };
+    this.dispatchEvent('womActionContextSet', {
+      actionId,
+      action,
+      actionContext: this.actionContext
+    });
+  }
+
+  getActionContext() {
+    return this.actionContext;
   }
 
   prependNode(node, parentNode) {

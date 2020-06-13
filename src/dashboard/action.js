@@ -18,7 +18,7 @@ export default class Action {
     return true;
   }
 
-  execute(wom) {
+  execute() {
 
   }
 }
