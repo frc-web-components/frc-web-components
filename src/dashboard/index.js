@@ -252,16 +252,6 @@ class WebbitDashboard extends LitElement {
   
   onWomNodeAdd(ev) {
     this.selectedComponent = '';
-    const { newElement } = ev.detail;
-    const webbitId = newElement.webbitId;
-
-    const listenerCallback = ev => {
-      const { node } = ev.detail;
-      this.wom.selectNode(node);
-      newElement.removeEventListener('womNodeBuild', listenerCallback);
-    }
-
-    newElement.addEventListener('womNodeBuild', listenerCallback);
   }
 
   onDeleteElement() {

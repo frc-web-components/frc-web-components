@@ -121,6 +121,14 @@ class NewElementPreview extends LitElement {
 
       newElement.setAttribute('slot', this.slot === 'default' ? '' : this.slot);
       this.addNewElementPreview(newElement);
+
+      const listenerCallback = ev => {
+        const { node } = ev.detail;
+        this.wom.selectNode(node);
+        newElement.removeEventListener('womNodeBuild', listenerCallback);
+      }
+
+      newElement.addEventListener('womNodeBuild', listenerCallback);
       
       const event = new CustomEvent('womNodeAdd', {
         bubbles: true,
