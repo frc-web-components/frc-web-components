@@ -1,177 +1,5 @@
-
-const isWebbit = (domNode) => {
-  if (!(domNode instanceof Object)) {
-    return false;
-  }
-
-  return domNode.constructor.__WEBBIT_CLASSNAME__ === 'Webbit';
-};
-
-const getChildWebbits = (domNode) => {
-  return [...domNode.children].filter(node => {
-    return node.tagName.toLowerCase() !== 'wom-new-element-preview-display';
-    return true;
-    //return isWebbit(node);
-  });
-};
-
-
-class WomNode {
-
-  constructor(node, ancestors = []) {
-    this.node = node;
-    this.ancestors = ancestors;
-    this.childNodes = [];
-    this.slots = isWebbit(node) ? this.getMetadata().slots : ['default'];
-    this.childBySlotNodes = this.slots.map(() => {
-      return [];
-    });
-
-    this.onMouseEnter = () => {
-      const event = new CustomEvent('womNodeMouseenter', {
-        bubbles: true,
-        composed: true,
-        detail: {
-          node: this,
-        }
-      });
-      node.dispatchEvent(event);
-    };
-
-    this.onMouseLeave = () => {
-      const event = new CustomEvent('womNodeMouseleave', {
-        bubbles: true,
-        composed: true,
-        detail: {
-          node: this
-        }
-      });
-      node.dispatchEvent(event);
-    };
-
-    this.onMouseClick = (ev) => {
-      ev.stopPropagation();
-      const event = new CustomEvent('womNodeSelect', {
-        bubbles: true,
-        composed: true,
-        detail: {
-          node: this
-        }
-      });
-      node.dispatchEvent(event);
-    }
-
-    node.addEventListener('mouseover', this.onMouseEnter);
-    node.addEventListener('mouseleave', this.onMouseLeave);
-    node.addEventListener('click', this.onMouseClick);
-  }
-
-  dispatchWomNodeBuild() {
-    const event = new CustomEvent('womNodeBuild', {
-      detail: {
-        node: this
-      }
-    });
-    this.node.dispatchEvent(event);
-  }
-
-  dispatchWomNodeDestroy() {
-    const event = new CustomEvent('womNodeDestroy', {
-      detail: {
-        node: this
-      }
-    });
-    this.node.dispatchEvent(event);
-  }
-
-  destroy() {
-    this.node.removeEventListener('mouseover', this.onMouseEnter);
-    this.node.removeEventListener('mouseleave', this.onMouseLeave);
-    this.node.removeEventListener('click', this.onMouseClick);
-
-    this.childNodes.forEach(node => {
-      node.destroy();
-    });
-    this.childBySlotNodes = this.slots.map(() => {
-      return [];
-    });
-    this.dispatchWomNodeDestroy();
-  }
-
-  build() {
-    this.childNodes = getChildWebbits(this.node).map(node => {
-      const womNode = new WomNode(node, this.ancestors.concat(this));
-      const slot = womNode.getSlot();
-      const indexOfSlot = this.slots.indexOf(slot);
-
-      if (indexOfSlot > -1) {
-        this.childBySlotNodes[indexOfSlot].push(womNode);
-      }
-
-      womNode.build();
-      return womNode;
-    });
-    this.dispatchWomNodeBuild();
-  }
-
-  isDescendant(node) {
-    return this.ancestors.map(ancestor => ancestor.node).indexOf(node.node) >= 0;
-  }
-
-  getSlots() {
-    return this.slots;
-  }
-
-  getChildrenBySlot(slot) {
-    const indexOfSlot = this.slots.indexOf(slot);
-    return this.childBySlotNodes[indexOfSlot] || [];
-  }
-
-  getSlot() {
-    return this.node.getAttribute('slot') || 'default';
-  }
-
-  getChildren() {
-    return this.childNodes;
-  }
-
-  hasChildren() {
-    return this.childNodes.length > 0;
-  }
-
-  getName() {
-    return this.node.tagName.toLowerCase();
-  }
-
-  getDisplayName() {
-    const metadata = this.getMetadata();
-    return metadata ? metadata.displayName : this.getName();
-  }
-
-  getWebbitId() {
-    return isWebbit(this.node) ? this.node.webbitId : null;
-  }
-
-  getMetadata() {
-    return webbitRegistry.getMetadata(this.getName());
-  }
-
-  isRoot() {
-    return this.level === 0;
-  }
-
-  getNode() {
-    return this.node;
-  }
-
-  getLevel() {
-    return this.ancestors.length;
-  }
-
-  isWebbit() {
-    return isWebbit(this.node);
-  }
-}
+import WomNode from './wom-node';
+import { isElementInViewport } from './utils';
 
 
 /**
@@ -181,11 +9,164 @@ class Wom {
 
   constructor(rootNode) {
     this.rootNode = rootNode;
+    this.selectedNode = null;
     this.womNode = new WomNode(this.rootNode);
     this.womNode.build();
-  
+    this.actions = {};
+    this.selectedActionId = null;
+    this.mode = 'live';
+    this.observeMutations();
+  }
 
+  selectNode(node) {
+    this.deselectNode();
+    this.dispatchEvent('womNodeSelect', { node });
+  }
 
+  deselectNode() {
+    this.deselectedAction();
+    if (this.selectedNode) {
+      const deselectedNode = this.selectedNode;
+      this.selectedNode = null;
+      this.dispatchEvent('womNodeDeselect', { node: deselectedNode });
+    }
+  }
+
+  getSelectedNode() {
+    return this.selectedNode;
+  }
+
+  targetNode(node) {
+    if (this.getSelectedAction()) {
+      this.dispatchAction('womNodeTarget', { node });
+      this.executeAction();
+    }
+  }
+
+  addAction(id, action) {
+    this.actions[id] = action;
+  }
+
+  getAction(id) {
+    return this.actions[id];
+  }
+
+  getActionIds() {
+    return Object.keys(this.actions);
+  }
+
+  selectAction(id) {
+
+    if (!this.getAction(id)) {
+      return;
+    }
+
+    this.deselectedAction();
+    if (this.getSelectedNode()) {
+      this.selectedActionId = id;
+      this.dispatchEvent('womActionSelect', { 
+        actionId,
+        action: this.getAction(id)
+      });
+    }
+  }
+
+  deselectAction() {
+    const prevSelectedActionId = this.getSelectedActionId();
+    if (prevActionId) {
+      this.selectedActionId = null;
+      this.dispatchEvent('womActionDeselect', { 
+        actionId: prevSelectedActionId,
+        action: this.getAction(prevSelectedActionId)
+      });
+    }
+  }
+
+  getSelectedActionId() {
+    return this.selectedActionId;
+  }
+
+  executeAction() {
+
+    const actionId = this.getSelectedActionId();
+    const action = this.getAction(actionId);
+
+    if (!actionId) {
+      return;
+    }
+
+    action.execute(this);
+    this.dispatchEvent('womActionExecute', {
+      actionId,
+      action
+    })
+  }
+
+  prependNode(node, parentNode) {
+    parentNode.getNode().prepend(node);
+
+    // scroll inserted node into view
+    if (!isElementInViewport(node, this.rootNode)) {
+      node.scrollIntoView();
+    }
+
+    this.dispatchEvent('womNodeAdd', { node });
+  }
+
+  insertNodeAfter(node, adjacentNode) {
+    adjacentNode.getNode().parentNode.insertBefore(
+      node, 
+      adjacentNode.getNode()
+    );
+
+    // scroll inserted node into view
+    if (!isElementInViewport(node, this.rootNode)) {
+      node.scrollIntoView();
+    }
+
+    this.dispatchEvent('womNodeAdd', { node });
+  }
+
+  insertNodeBefore(node, adjacentNode) {
+
+    adjacentNode.getNode().parentNode.insertBefore(
+      node, 
+      adjacentNode.getNode().nextSibling
+    );
+    
+    // scroll inserted node into view
+    if (!isElementInViewport(node, this.rootNode)) {
+      node.scrollIntoView();
+    }
+
+    this.dispatchEvent('womNodeAdd', { node });
+  }
+
+  removeNode(node) {
+    node.getNode().remove();
+    this.dispatchEvent('womNodeRemove', { node });
+  }
+
+  setMode(mode) {
+    if (this.mode !== mode) {
+      this.mode = mode;
+      this.dispatchEvent('womModeChange', { mode });
+    }
+  }
+
+  getMode() {
+    return this.mode;
+  }
+
+  save() {
+
+  }
+
+  load(config) {
+
+  }
+
+  observeMutations() {
     const observer = new MutationObserver((mutations) => {
       
       if (!this.hasNonPreviewChangeMutation(mutations)) {
@@ -194,11 +175,7 @@ class Wom {
 
       this.womNode.destroy();
       this.womNode.build();
-      const event = new CustomEvent('womChange', {
-        bubbles: true,
-        composed: true,
-      });
-      this.rootNode.dispatchEvent(event);
+      this.dispatchEvent('womChange');
     });
     observer.observe(this.rootNode, {
       childList: true,
@@ -233,6 +210,19 @@ class Wom {
 
   destroy() {
     this.womNode.destroy();
+  }
+
+  dispatchEvent(name, detail) {
+    const event = new CustomEvent(name, {
+      bubbles: true,
+      composed: true,
+    });
+
+    if (detail) {
+      event.detail = detail;
+    }
+
+    this.rootNode.dispatchEvent(event);
   }
 }
 
