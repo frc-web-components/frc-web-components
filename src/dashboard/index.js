@@ -10,6 +10,7 @@ class WebbitDashboard extends LitElement {
 
   static get properties() {
     return {
+      wom: { type: Object },
       editMode: { type: Boolean, attribute: 'edit-mode', reflect: true },
       fullscreen: { type: Boolean, reflect: true },
       selectedNodeSlot: { type: String, attribute: false },
@@ -157,7 +158,6 @@ class WebbitDashboard extends LitElement {
         this.wom.addEventListener('womNodeDeselect', () => {
           this.requestUpdate();
         });
-        this.requestUpdate();
       }
       this.addResizeObserver();
     }
@@ -290,14 +290,13 @@ class WebbitDashboard extends LitElement {
               .previewedNode="${this.previewedNode}"
             ></wom-preview-box>
             <wom-new-element-preview
+              .wom="${this.wom}"
               .selectedComponent="${this.selectedComponent}"
-              .selectedNode="${this.wom ? this.wom.getSelectedNode() : null}"
               .selectedNodeMethod="${this.selectedNodeMethod}"
               .adjacentNode="${this.elementPreviewAdjacentNode}"
               placement="${this.elementPreviewPlacement}"
               slot="${this.selectedNodeSlot}"
               @womNodeAdd="${this.onWomNodeAdd}"
-              .parentNode="${this.dashboardNode}"
             ></wom-new-element-preview>
             <div part="container">
               <slot></slot>

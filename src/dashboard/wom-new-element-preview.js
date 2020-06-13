@@ -8,9 +8,8 @@ class NewElementPreview extends LitElement {
 
   static get properties() {
     return {
-      selectedNode: { type: Object },
+      wom: { type: Object },
       selectedNodeMethod: { type: String },
-      parentNode: { type: Object },
       selectedComponent: { type: String },
       adjacentNode: { type: Object },
       placement: { type: String },
@@ -28,9 +27,8 @@ class NewElementPreview extends LitElement {
 
   constructor() {
     super();
-    this.selectedNode = null;
+    this.wom = null;
     this.selectedNodeMethod = '';
-    this.parentNode = null;
     this.selectedComponent = '';
     this.displayNode = null;
     this.adjacentNode = null;
@@ -48,7 +46,7 @@ class NewElementPreview extends LitElement {
       this.adjacentNode.getNode().prepend(insertedNode);
 
       // scroll inserted node into view
-      if (!isElementInViewport(insertedNode, this.parentNode)) {
+      if (!isElementInViewport(insertedNode, this.wom.getRootNode().getNode())) {
         insertedNode.scrollIntoView();
       }
     } 
@@ -59,7 +57,7 @@ class NewElementPreview extends LitElement {
       );
 
       // scroll inserted node into view
-      if (!isElementInViewport(insertedNode, this.parentNode)) {
+      if (!isElementInViewport(insertedNode, this.wom.getRootNode().getNode())) {
         insertedNode.scrollIntoView();
       }
     }
@@ -96,13 +94,31 @@ class NewElementPreview extends LitElement {
       }
     }
 
+    if (changedProperties.has('wom')) {
+      this.wom.addListener('womNodeSelect', () => {
+        this.showPreview();
+      });
+    }
+
+    if (changedProperties.has('selectedNodeMethod')) {
+      this.showPreview();
+    }
+  }
+
+  showPreview() {
+
     if (
-      (changedProperties.has('selectedNode') || changedProperties.has('selectedNodeMethod')) && 
-      this.selectedNode && 
+      this.wom &&
+      this.wom.getSelectedNode() && 
       this.selectedNodeMethod === 'womViewer' &&
       this.selectedComponent
     ) {
       const newElement = this.displayNode.querySelector(this.selectedComponent);
+
+      if (!newElement) {
+        return;
+      }
+
       newElement.setAttribute('slot', this.slot === 'default' ? '' : this.slot);
       this.addNewElementPreview(newElement);
       
