@@ -20,11 +20,12 @@ class Wom {
 
   selectNode(node) {
     this.deselectNode();
+    this.selectedNode = node;
     this.dispatchEvent('womNodeSelect', { node });
   }
 
   deselectNode() {
-    this.deselectedAction();
+    this.deselectAction();
     if (this.selectedNode) {
       const deselectedNode = this.selectedNode;
       this.selectedNode = null;
@@ -61,7 +62,7 @@ class Wom {
       return;
     }
 
-    this.deselectedAction();
+    this.deselectAction();
     if (this.getSelectedNode()) {
       this.selectedActionId = id;
       this.dispatchEvent('womActionSelect', { 
@@ -73,7 +74,7 @@ class Wom {
 
   deselectAction() {
     const prevSelectedActionId = this.getSelectedActionId();
-    if (prevActionId) {
+    if (prevSelectedActionId) {
       this.selectedActionId = null;
       this.dispatchEvent('womActionDeselect', { 
         actionId: prevSelectedActionId,
@@ -166,6 +167,10 @@ class Wom {
 
   }
 
+  addListener(eventName, callback) {
+    this.rootNode.addEventListener(eventName, callback);
+  }
+
   observeMutations() {
     const observer = new MutationObserver((mutations) => {
       
@@ -216,11 +221,8 @@ class Wom {
     const event = new CustomEvent(name, {
       bubbles: true,
       composed: true,
+      detail
     });
-
-    if (detail) {
-      event.detail = detail;
-    }
 
     this.rootNode.dispatchEvent(event);
   }

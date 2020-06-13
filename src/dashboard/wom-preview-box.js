@@ -5,9 +5,8 @@ class WomPreviewBox extends LitElement {
 
   static get properties() {
     return {
-      parentNode: { type: Object },
+      wom: { type: Object },
       previewedNode: { type: Object },
-      selectedNode: { type: Object },
     };
   }
 
@@ -17,20 +16,22 @@ class WomPreviewBox extends LitElement {
     this.y = 0;
     this.width = 0;
     this.height = 0;
+    this.wom = null;
     this.previewElement = null;
-    this.parentNode = null;
     this.previewedNode = null;
-    this.selectedNode = null;
   }
 
   updated(changedProperties) {
-    if (
-      changedProperties.has('selectedNode') &&
-      this.parentNode && 
-      this.selectedNode &&
-      !isElementInViewport(this.selectedNode.getNode(), this.parentNode)
-    ) {
-      this.selectedNode.getNode().scrollIntoView();
+
+    if (changedProperties.has('wom')) {
+      this.wom.addListener('womNodeSelect', (ev) => {
+        const { node } = ev.detail;
+        if (!isElementInViewport(
+          node.getNode(), 
+          this.wom.getRootNode().getNode()
+        ))
+        node.getNode().scrollIntoView();
+      });
     }
   }
 
@@ -44,8 +45,8 @@ class WomPreviewBox extends LitElement {
 
 
     const setPreviewBounds = () => { 
-      if (this.previewedNode && this.parentNode) {
-        const boundingRect = this.parentNode.getBoundingClientRect();
+      if (this.previewedNode && this.wom) {
+        const boundingRect = this.wom.getRootNode().getNode().getBoundingClientRect();
         const { x, y, width, height, bottom, right } = this.previewedNode.getNode().getBoundingClientRect();        
         
         const boundedLeft = Math.max(x, boundingRect.x);
