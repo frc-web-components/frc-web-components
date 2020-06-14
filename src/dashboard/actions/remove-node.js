@@ -1,6 +1,6 @@
 import Action from '../action';
 
-export default class DeleteNode extends Action {
+export default class RemoveNode extends Action {
 
   constructor() {
     super({
@@ -9,6 +9,7 @@ export default class DeleteNode extends Action {
   }
 
   execute({ wom, selectedNode }) {
+    wom.deselectNode();
     wom.removeNode(selectedNode);
   }
 }

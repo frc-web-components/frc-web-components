@@ -44,6 +44,16 @@ class DashboardToolsBottom extends LitElement {
     this.selectedNode = null;
   }
 
+  updated(changedProps) {
+    if (changedProps.has('wom') && this.wom) {
+      const callback = () => {
+        this.selectedNode = this.wom.getSelectedNode();
+      };
+      this.wom.addListener('womNodeSelect', callback);
+      this.wom.addListener('womNodeDeselect', callback);
+    }
+  }
+
   onTabChange(ev) {
     const target = ev.target || ev.path[0];
     this.selectedTab = target.selected;

@@ -6,6 +6,7 @@ import './tools-bottom';
 import './wom-new-element-preview';
 import ResizeObserver from 'resize-observer-polyfill';
 import AddNode from './actions/add-node';
+import RemoveNode from './actions/remove-node';
 
 class WebbitDashboard extends LitElement {
 
@@ -156,6 +157,7 @@ class WebbitDashboard extends LitElement {
 
         // add actions
         this.wom.addAction('addNode', new AddNode());
+        this.wom.addAction('removeNode', new RemoveNode());
       }
       this.addResizeObserver();
     }
@@ -201,14 +203,8 @@ class WebbitDashboard extends LitElement {
     }
   }
   
-  onDeleteElement() {
-    // Do nothing if a component is being added or a component isn't selected
-    if (!this.selectedNode) {
-      return;
-    }
-
-    this.wom.deselectNode();
-    this.wom.removeNode(this.wom.getSelectedNode());
+  onRemoveElement() {
+    this.wom.selectAction('removeNode');
   }
 
   render() {
@@ -241,8 +237,8 @@ class WebbitDashboard extends LitElement {
               <div part="top-menu">
                 <vaadin-button 
                   theme="icon tertiary" 
-                  aria-label="Delete element"
-                  @click="${this.onDeleteElement}"
+                  aria-label="Remove element"
+                  @click="${this.onRemoveElement}"
                 >
                   <iron-icon icon="vaadin:trash"></iron-icon>
                 </vaadin-button>
@@ -269,7 +265,6 @@ class WebbitDashboard extends LitElement {
                   part="tools-bottom"
                   style="height: 60%"
                   .wom="${this.wom}"
-                  .selectedNode="${this.wom ? this.wom.getSelectedNode() : null}"
                 >
                 </dashboard-tools-bottom>        
               </vaadin-split-layout>
