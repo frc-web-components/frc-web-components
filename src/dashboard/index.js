@@ -5,6 +5,7 @@ import './wom-preview-box';
 import './tools-bottom';
 import './wom-new-element-preview';
 import ResizeObserver from 'resize-observer-polyfill';
+import AddNode from './actions/add-node';
 
 class WebbitDashboard extends LitElement {
 
@@ -13,10 +14,7 @@ class WebbitDashboard extends LitElement {
       wom: { type: Object },
       editMode: { type: Boolean, attribute: 'edit-mode', reflect: true },
       fullscreen: { type: Boolean, reflect: true },
-      selectedNodeSlot: { type: String, attribute: false },
-      selectedNodeMethod: { type: String, attribute: false },
       previewedNode: { type: Object, attribute: false },
-      selectedComponent: { type: String, attribute: 'selected-component', reflect: true },
       toolsTopElement: { type: Object },
       elementPreviewAdjacentNode: { type: Object },
       elementPreviewPlacement: { type: String }
@@ -101,10 +99,7 @@ class WebbitDashboard extends LitElement {
     this.wom = null;
     this.editMode = false;
     this.fullscreen = false;
-    this.selectedNodeSlot = '';
-    this.selectedNodeMethod = '';
     this.dashboardNode = null;
-    this.selectedComponent = '';
     this.newElementPreview = null;
     this.toolsTopElement = null;
     this.womViewerNode = null;
@@ -152,12 +147,15 @@ class WebbitDashboard extends LitElement {
         this.wom = new Wom(this);
         this.dashboardNode = this.shadowRoot.querySelector('[part=dashboard]');
         this.toolsTopElement = this.shadowRoot.querySelector('[part="tools-top"]');
-        this.wom.addEventListener('womNodeSelect', () => {
+        this.wom.addListener('womNodeSelect', () => {
           this.requestUpdate();
         });
-        this.wom.addEventListener('womNodeDeselect', () => {
+        this.wom.addListener('womNodeDeselect', () => {
           this.requestUpdate();
         });
+
+        // add actions
+        this.wom.addAction('addNode', new AddNode());
       }
       this.addResizeObserver();
     }
@@ -171,8 +169,6 @@ class WebbitDashboard extends LitElement {
 
     if(ev.key === "Escape") {
       this.wom.deselectNode();
-      this.selectedNodeMethod = '';
-      this.selectedComponent = '';
     }
   }
 
@@ -192,21 +188,6 @@ class WebbitDashboard extends LitElement {
 
   onDashboardWomNodeSelect(ev) {
     this.wom.selectNode(ev.detail.node);
-    this.selectedNodeMethod = 'dashboard';
-  }
-
-  onWomNodeSelect(ev) {
-    
-    // Don't let clicking slot node select a component unless it's being used
-    // to add an element
-
-    if (ev.type === 'womSlotNodeSelect' && !this.selectedComponent) {
-      return;
-    } 
-
-    this.selectedNodeSlot = ev.detail.slot;
-    this.wom.selectNode(ev.detail.node);
-    this.selectedNodeMethod = 'womViewer';
   }
 
   onWomNodePreview(ev) {
@@ -219,44 +200,10 @@ class WebbitDashboard extends LitElement {
       this.previewedNode = null;
     }
   }
-
-  onWomNodeAddElementPreview(ev) {
-    const { node, before, slot } = ev.detail;
-    const placement = before ? 'before' : 'after';
-    if (
-      node !== this.elementPreviewAdjacentNode ||
-      placement !== this.elementPreviewPlacement
-    ) {
-      this.elementPreviewAdjacentNode = node;
-      this.elementPreviewPlacement = placement;
-      this.selectedNodeSlot = slot;
-    }
-  }
-
-  onWomNodePrependElementPreview(ev) {
-    const { node, slot } = ev.detail;
-    this.elementPreviewAdjacentNode = node;
-    this.elementPreviewPlacement = 'inside';
-    this.selectedNodeSlot = slot;
-  }
-
-  onDashboardToolsTabChange() {
-    this.selectedComponent = '';
-  }
-
-  onDashhboardComponentSelected(ev) {
-    const { name } = ev.detail;
-    this.wom.deselectNode();
-    this.selectedComponent = name;
-  }
   
-  onWomNodeAdd(ev) {
-    this.selectedComponent = '';
-  }
-
   onDeleteElement() {
     // Do nothing if a component is being added or a component isn't selected
-    if (this.selectedComponent || !this.selectedNode) {
+    if (!this.selectedNode) {
       return;
     }
 
@@ -281,11 +228,8 @@ class WebbitDashboard extends LitElement {
             ></wom-preview-box>
             <wom-new-element-preview
               .wom="${this.wom}"
-              .selectedComponent="${this.selectedComponent}"
-              .selectedNodeMethod="${this.selectedNodeMethod}"
               .adjacentNode="${this.elementPreviewAdjacentNode}"
               placement="${this.elementPreviewPlacement}"
-              slot="${this.selectedNodeSlot}"
               @womNodeAdd="${this.onWomNodeAdd}"
             ></wom-new-element-preview>
             <div part="container">
@@ -308,17 +252,15 @@ class WebbitDashboard extends LitElement {
                   <div part="wom">
                     ${this.wom ? html`
                       <wom-viewer
-                        @womNodeSelect="${this.onWomNodeSelect}"
-                        @womSlotNodeSelect="${this.onWomNodeSelect}"
+                        .wom="${this.wom}"
                         @womNodePreview="${this.onWomNodePreview}"
                         @womNodePreviewEnd="${this.onWomNodePreviewEnd}"
                         @womNodeAddElementPreview="${this.onWomNodeAddElementPreview}"
-                        @womNodePrependElementPreview="${this.onWomNodePrependElementPreview}"
                         level="${0}" 
                         .node="${this.wom.getRootNode()}"
                         .selectedNode="${this.wom ? this.wom.getSelectedNode() : null}"
                         .container="${this.toolsTopElement}"
-                        ?adding-element="${!!this.selectedComponent}"
+                        ?adding-element="${this.wom && this.wom.getSelectedActionId() === 'addNode'}"
                       ></wom-viewer>
                     ` : ''}
                   </div>
@@ -326,10 +268,8 @@ class WebbitDashboard extends LitElement {
                 <dashboard-tools-bottom
                   part="tools-bottom"
                   style="height: 60%"
+                  .wom="${this.wom}"
                   .selectedNode="${this.wom ? this.wom.getSelectedNode() : null}"
-                  @dashboardToolsTabChange="${this.onDashboardToolsTabChange}"
-                  @dashhboardComponentSelected="${this.onDashhboardComponentSelected}"
-                  selected-component="${this.selectedComponent}"
                 >
                 </dashboard-tools-bottom>        
               </vaadin-split-layout>

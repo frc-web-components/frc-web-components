@@ -88,6 +88,7 @@ class WomViewer extends LitElement {
 
   static get properties() {
     return {
+      wom: { type: Object },
       expanded: { type: Boolean },
       slot: { type: String },
       node: { type: Object },
@@ -100,6 +101,7 @@ class WomViewer extends LitElement {
 
   constructor() {
     super();
+    this.wom = null;
     this.expanded = false;
     this.slot = '';
     this.node = null;
@@ -166,15 +168,7 @@ class WomViewer extends LitElement {
 
     // select if click element isn't caret
     if (target.nodeName !== 'IRON-ICON') {
-      const event = new CustomEvent('womNodeSelect', {
-        bubbles: true,
-        composed: true,
-        detail: {
-          node: this.node,
-          slot: this.slot
-        }
-      });
-      this.dispatchEvent(event);
+      this.wom.interactWithNode(this.node);
     }
   }
 
@@ -214,26 +208,19 @@ class WomViewer extends LitElement {
     var loc = Math.abs(offset - y);
 
     if (loc < height / 2) {
-      target.style.setProperty('--add-element-position', '-8px'),
-      this.dispatchAddElementPreview(true);
+      target.style.setProperty('--add-element-position', '-8px');
+      this.wom.setActionContext('addNode', {
+        placement: 'before',
+        slot: this.slot
+      });
     }
     else {
-      target.style.setProperty('--add-element-position', '8px')
-      this.dispatchAddElementPreview(false);
-    }
-  }
-
-  dispatchAddElementPreview(before) {    
-    const event = new CustomEvent('womNodeAddElementPreview', {
-      bubbles: true,
-      composed: true,
-      detail: {
-        node: this.node,
-        before,
+      target.style.setProperty('--add-element-position', '8px');
+      this.wom.setActionContext('addNode', {
+        placement: 'after',
         slot: this.slot
-      }
-    });
-    this.dispatchEvent(event);
+      });
+    }
   }
 
   hasSlots() {
@@ -289,6 +276,7 @@ class WomViewer extends LitElement {
           <div class="nodes">
             ${this.getSlottedChildren().map(({ slot, children }) => html`
               <wom-slot-node
+                .wom="${this.wom}"
                 .parentNode="${this.node}"
                 slot="${slot}"
                 level="${this.level + 1}"
@@ -296,6 +284,7 @@ class WomViewer extends LitElement {
               ></wom-slot-node>
               ${children.map(node => html`
                 <wom-viewer
+                  .wom="${this.wom}"
                   slot="${slot}"
                   .node="${node}"
                   .selectedNode="${this.selectedNode}"

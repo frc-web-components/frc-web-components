@@ -31,17 +31,17 @@ class DashboardToolsBottom extends LitElement {
 
   static get properties() {
     return {
+      wom: { type: Object },
       selectedTab: { type: Number, attribute: false },
       selectedNode: { type: Object, attribute: false },
-      selectedComponent: { type: String, attribute: 'selected-component' }
     };
   }
 
   constructor() {
     super();
+    this.wom = null;
     this.selectedTab = 0;
     this.selectedNode = null;
-    this.selectedComponent = '';
   }
 
   onTabChange(ev) {
@@ -70,7 +70,7 @@ class DashboardToolsBottom extends LitElement {
       <div part="tab-content">
         ${this.selectedTab === 0 ? html`
         <dashboard-components-tool
-          selected-component="${this.selectedComponent}"
+          .wom="${this.wom}"
         ></dashboard-components-tool>
         ` : ''}
 

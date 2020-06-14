@@ -1,11 +1,10 @@
 import Action from '../action';
 
-export default class AddNode extends Action {
+export default class SetSource extends Action {
 
   constructor() {
     super({
       needsSelection: true,
-      needsTarget: true
     });
   }
 

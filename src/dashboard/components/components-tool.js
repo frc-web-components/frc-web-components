@@ -60,13 +60,15 @@ class ComponentsTool extends LitElement {
 
   static get properties() {
     return {
+      wom: { type: Object },
       componentCategories: { type: Array, attribute: false },
-      selectedComponent: { type: String, attribute: 'selected-component' }
+      selectedComponent: { type: String, attribute: false }
     };
   }
 
   constructor() {
     super();
+    this.wom = null;
     this.componentCategories = [];
     this.selectedComponent = '';
   }
@@ -125,14 +127,10 @@ class ComponentsTool extends LitElement {
   }
 
   onComponentSelect(name) {
-    const event = new CustomEvent('dashhboardComponentSelected', {
-      bubbles: true,
-      composed: true,
-      detail: {
-        name,
-      }
+    this.selectedComponent = name; 
+    this.wom.selectAction('addNode', {
+      componentType: name
     });
-    this.dispatchEvent(event);
   }
 
   renderSelectedComponent() {

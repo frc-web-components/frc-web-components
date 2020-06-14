@@ -7,6 +7,7 @@ export default class Action {
   }
 
   isReady(hasSelection, hasTarget) {
+    
     if (this.needsSelection && !hasSelection) {
       return false;
     }

@@ -39,9 +39,19 @@ class Wom {
   }
 
   targetNode(node) {
-    if (this.getSelectedAction()) {
-      this.dispatchAction('womNodeTarget', { node });
+    const action = this.getAction(this.getSelectedActionId());
+    if (action) {
+      this.dispatchEvent('womNodeTarget', { node });
       this.executeAction(node);
+    }
+  }
+
+  interactWithNode(node) {
+    const action = this.getAction(this.getSelectedActionId());
+    if (action) {
+      this.targetNode(node);
+    } else {
+      this.selectNode(node);
     }
   }
 
@@ -69,10 +79,10 @@ class Wom {
     if (this.getSelectedNode() || !action.needsSelection) {
       this.selectedActionId = id;
       this.dispatchEvent('womActionSelect', { 
-        actionId,
+        actionId: id,
         action: this.getAction(id)
       });
-      this.setActionContext(context);
+      this.setActionContext(id, context);
       this.executeAction();
     }
   }
@@ -115,18 +125,18 @@ class Wom {
     })
   }
 
-  setActionContext(context) {
+  setActionContext(id, context) {
 
     const actionId = this.getSelectedActionId();
     const action = this.getAction(actionId);
 
-    if (!action) {
+    if (!action || id !== actionId) {
       return;
     }
 
     this.actionContext = {
       ...this.actionContext,
-      context
+      ...context
     };
     this.dispatchEvent('womActionContextSet', {
       actionId,
@@ -153,7 +163,7 @@ class Wom {
   insertNodeAfter(node, adjacentNode) {
     adjacentNode.getNode().parentNode.insertBefore(
       node, 
-      adjacentNode.getNode()
+      adjacentNode.getNode().nextSibling
     );
 
     // scroll inserted node into view
@@ -168,7 +178,7 @@ class Wom {
 
     adjacentNode.getNode().parentNode.insertBefore(
       node, 
-      adjacentNode.getNode().nextSibling
+      adjacentNode.getNode()
     );
     
     // scroll inserted node into view

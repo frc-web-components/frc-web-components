@@ -4,25 +4,30 @@ export default class AddNode extends Action {
 
   constructor() {
     super({
-      needsSelection: true,
       needsTarget: true
     });
   }
 
   execute({ 
     wom, 
-    selectedNode, 
     targetedNode,
     context
   }) {
-    const { position } = context;
+    const { placement, componentType, slot } = context;
 
-    if (position === 'inside') {
-      wom.prependNode(selectedNode, targetedNode);
-    } else if (position === 'before') {
-      wom.insertNodeBefore(selectedNode, targetedNode);
+    const parentNode = document.createElement('div');
+    parentNode.innerHTML = `
+      <${componentType}></${componentType}>
+    `
+    const newElement = parentNode.querySelector(componentType);
+    newElement.setAttribute('slot', slot === 'default' ? '' : slot);
+
+    if (placement === 'inside') {
+      wom.prependNode(newElement, targetedNode);
+    } else if (placement === 'before') {
+      wom.insertNodeBefore(newElement, targetedNode);
     } else {
-      wom.insertNodeAfter(selectedNode, targetedNode);
+      wom.insertNodeAfter(newElement, targetedNode);
     }
   }
 }

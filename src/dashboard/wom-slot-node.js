@@ -64,6 +64,7 @@ class WomSlotNode extends LitElement {
 
   static get properties() {
     return {
+      wom: { type: Object },
       parentNode: { type: Object },
       slot: { type: String },
       level: { type: Number },
@@ -72,6 +73,7 @@ class WomSlotNode extends LitElement {
 
   constructor() {
     super();
+    this.wom = null;
     this.parentNode = null;
     this.slot = '';
     this.level = 0;
@@ -87,27 +89,14 @@ class WomSlotNode extends LitElement {
   }
 
   onAddElementPreview() {
-    const event = new CustomEvent('womNodePrependElementPreview', {
-      bubbles: true,
-      composed: true,
-      detail: {
-        node: this.parentNode,
-        slot: this.slot,
-      }
+    this.wom.setActionContext('addNode', {
+      placement: 'inside',
+      slot: this.slot
     });
-    this.dispatchEvent(event);
   }
 
   onSelect() {
-    const event = new CustomEvent('womSlotNodeSelect', {
-      bubbles: true,
-      composed: true,
-      detail: {
-        node: this.parentNode,
-        slot: this.slot
-      }
-    });
-    this.dispatchEvent(event);
+    this.wom.interactWithNode(this.parentNode);
   }
 
   render() {
