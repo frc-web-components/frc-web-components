@@ -18,8 +18,9 @@ const getChildWebbits = (domNode) => {
 
 export default class WomNode {
 
-  constructor(node, ancestors = []) {
+  constructor(node, wom, ancestors = []) {
     this.node = node;
+    this.wom = wom;
     this.ancestors = ancestors;
     this.childNodes = [];
     this.slots = isWebbit(node) ? this.getMetadata().slots : ['default'];
@@ -51,14 +52,9 @@ export default class WomNode {
 
     this.onMouseClick = (ev) => {
       ev.stopPropagation();
-      const event = new CustomEvent('womNodeSelect', {
-        bubbles: true,
-        composed: true,
-        detail: {
-          node: this
-        }
-      });
-      node.dispatchEvent(event);
+      if (this.ancestors.length > 0) {
+        this.wom.selectNode(this);
+      }
     }
 
     node.addEventListener('mouseover', this.onMouseEnter);
@@ -100,7 +96,7 @@ export default class WomNode {
 
   build() {
     this.childNodes = getChildWebbits(this.node).map(node => {
-      const womNode = new WomNode(node, this.ancestors.concat(this));
+      const womNode = new WomNode(node, this.wom, this.ancestors.concat(this));
       const slot = womNode.getSlot();
       const indexOfSlot = this.slots.indexOf(slot);
 

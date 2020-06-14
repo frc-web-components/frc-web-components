@@ -14,11 +14,8 @@ class WebbitDashboard extends LitElement {
     return {
       wom: { type: Object },
       editMode: { type: Boolean, attribute: 'edit-mode', reflect: true },
-      fullscreen: { type: Boolean, reflect: true },
       previewedNode: { type: Object, attribute: false },
       toolsTopElement: { type: Object },
-      elementPreviewAdjacentNode: { type: Object },
-      elementPreviewPlacement: { type: String }
 
     };
   }
@@ -36,7 +33,7 @@ class WebbitDashboard extends LitElement {
         height: var(--dashboard-height, 100%);
       }
 
-      :host([fullscreen]) [part=editor] {
+      :host [part=editor] {
         min-height: 100vh;
         height: var(--dashboard-height, 100%);
       }
@@ -99,7 +96,6 @@ class WebbitDashboard extends LitElement {
     super();
     this.wom = null;
     this.editMode = false;
-    this.fullscreen = false;
     this.dashboardNode = null;
     this.newElementPreview = null;
     this.toolsTopElement = null;
@@ -165,7 +161,7 @@ class WebbitDashboard extends LitElement {
 
   onKeyDown(ev) {
     // Toggle edit mode
-    if (this.fullscreen && ev.shiftKey && ev.code === 'KeyE') {
+    if (ev.shiftKey && ev.code === 'KeyE') {
       this.editMode = !this.editMode;
     }
 
@@ -186,10 +182,6 @@ class WebbitDashboard extends LitElement {
     if (this.previewedNode === node) {
       this.previewedNode = null;
     }
-  }
-
-  onDashboardWomNodeSelect(ev) {
-    this.wom.selectNode(ev.detail.node);
   }
 
   onWomNodePreview(ev) {
@@ -215,7 +207,6 @@ class WebbitDashboard extends LitElement {
             part="dashboard"
             @womNodeMouseenter="${this.onWomNodeMouseenter}"
             @womNodeMouseleave="${this.onWomNodeMouseleave}"
-            @womNodeSelect="${this.onDashboardWomNodeSelect}"
             style="width: 70%"
           >
             <wom-preview-box
@@ -224,9 +215,6 @@ class WebbitDashboard extends LitElement {
             ></wom-preview-box>
             <wom-new-element-preview
               .wom="${this.wom}"
-              .adjacentNode="${this.elementPreviewAdjacentNode}"
-              placement="${this.elementPreviewPlacement}"
-              @womNodeAdd="${this.onWomNodeAdd}"
             ></wom-new-element-preview>
             <div part="container">
               <slot></slot>
@@ -252,7 +240,6 @@ class WebbitDashboard extends LitElement {
                         @womNodePreview="${this.onWomNodePreview}"
                         @womNodePreviewEnd="${this.onWomNodePreviewEnd}"
                         @womNodeAddElementPreview="${this.onWomNodeAddElementPreview}"
-                        level="${0}" 
                         .node="${this.wom.getRootNode()}"
                         .selectedNode="${this.wom ? this.wom.getSelectedNode() : null}"
                         .container="${this.toolsTopElement}"

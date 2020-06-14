@@ -10,7 +10,7 @@ class Wom {
   constructor(rootNode) {
     this.rootNode = rootNode;
     this.selectedNode = null;
-    this.womNode = new WomNode(this.rootNode);
+    this.womNode = new WomNode(this.rootNode, this);
     this.womNode.build();
     this.actions = {};
     this.selectedActionId = null;
