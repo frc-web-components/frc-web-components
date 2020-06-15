@@ -117,6 +117,18 @@ class WebbitDashboard extends LitElement {
     });
   }
 
+  addWomListeners() {
+    [
+      'womNodeSelect', 'womNodeDeselect', 'womActionSelect',
+      'womNodeTarget', 'womActionDeselect', 'womActionExecute',
+      'womActionContextSet', 'womNodeAdd', 'womNodeRemove'
+    ].forEach(eventName => {
+      this.wom.addListener(eventName, () => {
+        this.requestUpdate();
+      });
+    });
+  }
+
   updated(changedProperties) {
     if (changedProperties.has('editMode')) {
       if (!this.editMode) {
@@ -127,12 +139,7 @@ class WebbitDashboard extends LitElement {
         this.dashboardNode = this.shadowRoot.querySelector('[part=dashboard]');
         this.toolsTopElement = this.shadowRoot.querySelector('[part="tools-top"]');
         this.wom = new Wom(this, this.dashboardNode);
-        this.wom.addListener('womNodeSelect', () => {
-          this.requestUpdate();
-        });
-        this.wom.addListener('womNodeDeselect', () => {
-          this.requestUpdate();
-        });
+        this.addWomListeners();
 
         // add actions
         this.wom.addAction('addNode', new AddNode());

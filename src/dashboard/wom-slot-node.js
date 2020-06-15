@@ -67,7 +67,7 @@ class WomSlotNode extends LitElement {
       wom: { type: Object },
       parentNode: { type: Object },
       slot: { type: String },
-      level: { type: Number },
+      level: { type: Number, reflect: true },
     };
   }
 
