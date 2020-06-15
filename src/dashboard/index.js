@@ -4,7 +4,6 @@ import './wom-viewer';
 import './wom-preview-box';
 import './tools-bottom';
 import './wom-new-element-preview';
-import ResizeObserver from 'resize-observer-polyfill';
 import AddNode from './actions/add-node';
 import RemoveNode from './actions/remove-node';
 
@@ -30,20 +29,14 @@ class WebbitDashboard extends LitElement {
 
       :host(:not([edit-mode])) {
         min-height: 100vh;
-        height: var(--dashboard-height, 100%);
       }
 
       :host [part=editor] {
-        min-height: 100vh;
-        height: var(--dashboard-height, 100%);
+        height: 100vh;
       }
 
       [part=container] {
         height: auto;
-      }
- 
-      [part=editor] {
-        height: 100%;
       }
 
       [part=tools-container] {
@@ -124,16 +117,6 @@ class WebbitDashboard extends LitElement {
     });
   }
 
-  addResizeObserver() {
-    const containerNode = this.shadowRoot.querySelector('[part="container"]');
-
-    const resizeObserver = new ResizeObserver(() => {
-      const { height } = containerNode.getBoundingClientRect();
-      this.style.setProperty('--dashboard-height', `${height}px`);
-    });
-    resizeObserver.observe(containerNode);
-  }
-
   updated(changedProperties) {
     if (changedProperties.has('editMode')) {
       if (!this.editMode) {
@@ -155,7 +138,6 @@ class WebbitDashboard extends LitElement {
         this.wom.addAction('addNode', new AddNode());
         this.wom.addAction('removeNode', new RemoveNode());
       }
-      this.addResizeObserver();
     }
   }
 
