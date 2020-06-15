@@ -35,6 +35,7 @@ import './tabs/tabs-content';
 import './tabs/tab-content';
 import './flexbox/flex-container';
 import './container';
+import './fullscreen-container';
 import '@kor-ui/grid';
 import './grid/grid';
 import './grid/card';
