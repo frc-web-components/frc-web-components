@@ -46,7 +46,7 @@ class NewElementPreview extends LitElement {
       this.adjacentNode.getNode().prepend(insertedNode);
 
       // scroll inserted node into view
-      if (!isElementInViewport(insertedNode, this.wom.getRootNode().getNode())) {
+      if (!isElementInViewport(insertedNode, this.wom.getDashboardElement())) {
         insertedNode.scrollIntoView();
       }
     } 
@@ -57,7 +57,7 @@ class NewElementPreview extends LitElement {
       );
 
       // scroll inserted node into view
-      if (!isElementInViewport(insertedNode, this.wom.getRootNode().getNode())) {
+      if (!isElementInViewport(insertedNode, this.wom.getDashboardElement())) {
         insertedNode.scrollIntoView();
       }
     }

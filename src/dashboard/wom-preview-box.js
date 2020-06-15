@@ -28,7 +28,7 @@ class WomPreviewBox extends LitElement {
         const { node } = ev.detail;
         if (!isElementInViewport(
           node.getNode(), 
-          this.wom.getRootNode().getNode()
+          this.wom.getDashboardElement()
         ))
         node.getNode().scrollIntoView();
       });
@@ -46,7 +46,7 @@ class WomPreviewBox extends LitElement {
 
     const setPreviewBounds = () => { 
       if (this.previewedNode && this.wom) {
-        const boundingRect = this.wom.getRootNode().getNode().getBoundingClientRect();
+        const boundingRect = this.wom.getDashboardElement().getBoundingClientRect();
         const { x, y, width, height, bottom, right } = this.previewedNode.getNode().getBoundingClientRect();        
         
         const boundedLeft = Math.max(x, boundingRect.x);

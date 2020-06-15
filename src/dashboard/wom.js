@@ -7,8 +7,9 @@ import { isElementInViewport } from './utils';
  */
 class Wom {
 
-  constructor(rootNode) {
+  constructor(rootNode, dashboardElement) {
     this.rootNode = rootNode;
+    this.dashboardElement = dashboardElement;
     this.selectedNode = null;
     this.womNode = new WomNode(this.rootNode, this);
     this.womNode.build();
@@ -153,7 +154,7 @@ class Wom {
     parentNode.getNode().prepend(node);
 
     // scroll inserted node into view
-    if (!isElementInViewport(node, this.rootNode)) {
+    if (!isElementInViewport(node, this.dashboardElement)) {
       node.scrollIntoView();
     }
 
@@ -167,7 +168,7 @@ class Wom {
     );
 
     // scroll inserted node into view
-    if (!isElementInViewport(node, this.rootNode)) {
+    if (!isElementInViewport(node, this.dashboardElement)) {
       node.scrollIntoView();
     }
 
@@ -182,7 +183,7 @@ class Wom {
     );
     
     // scroll inserted node into view
-    if (!isElementInViewport(node, this.rootNode)) {
+    if (!isElementInViewport(node, this.dashboardElement)) {
       node.scrollIntoView();
     }
 
@@ -257,6 +258,10 @@ class Wom {
 
   getRootNode() {
     return this.womNode;
+  }
+
+  getDashboardElement() {
+    return this.dashboardElement;
   }
 
   destroy() {

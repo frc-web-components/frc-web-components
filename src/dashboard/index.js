@@ -141,9 +141,9 @@ class WebbitDashboard extends LitElement {
           this.wom.destroy();
         }
       } else {
-        this.wom = new Wom(this);
         this.dashboardNode = this.shadowRoot.querySelector('[part=dashboard]');
         this.toolsTopElement = this.shadowRoot.querySelector('[part="tools-top"]');
+        this.wom = new Wom(this, this.dashboardNode);
         this.wom.addListener('womNodeSelect', () => {
           this.requestUpdate();
         });
