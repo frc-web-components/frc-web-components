@@ -121,12 +121,15 @@ class WebbitDashboard extends LitElement {
     [
       'womNodeSelect', 'womNodeDeselect', 'womActionSelect',
       'womNodeTarget', 'womActionDeselect', 'womActionExecute',
-      'womActionContextSet', 'womNodeAdd', 'womNodeRemove'
+      'womActionContextSet', 'womNodeAdd', 'womNodeRemove',
+      'womChange'
     ].forEach(eventName => {
       this.wom.addListener(eventName, () => {
         this.requestUpdate();
       });
     });
+
+
   }
 
   updated(changedProperties) {

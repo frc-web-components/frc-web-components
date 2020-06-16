@@ -52,8 +52,8 @@ export default class Container extends Webbit {
     this.display = 'inline-block';
     this.width = 'auto';
     this.height = 'auto';
-    this.margin = '5px';
-    this.padding = '0px';
+    this.margin = '0px';
+    this.padding = '5px';
     this.boxSizing = 'border-box';
     this.background = 'none';
     this.color = 'inherit';
