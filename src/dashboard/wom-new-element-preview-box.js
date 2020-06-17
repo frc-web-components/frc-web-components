@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html } from 'lit-element';
 import './sources/sources-tool';
 import './components/components-tool';
 
@@ -9,12 +9,6 @@ class NewElementPreviewBox extends LitElement {
       wom: { type: Object },
       previewedNode: { type: Object }
     };
-  }
-
-  static get styles() {
-    return css`
-      
-    `;
   }
 
   constructor() {
