@@ -1,6 +1,6 @@
 import { LitElement, html } from 'lit-element';
-import './sources/sources-tool';
-import './components/components-tool';
+import '../sources/sources-tool';
+import '../components/components-tool';
 
 class NewElementPreviewBox extends LitElement {
 

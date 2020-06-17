@@ -1,11 +1,10 @@
 import { LitElement, html, css } from 'lit-element';
 import Wom from './wom';
 import './wom-viewer';
-import './wom-preview-box';
 import './tools-bottom';
-import './wom-new-element-preview-box';
 import AddNode from './actions/add-node';
 import RemoveNode from './actions/remove-node';
+import './builder/index';
 
 class WebbitDashboard extends LitElement {
 
@@ -195,23 +194,15 @@ class WebbitDashboard extends LitElement {
     return html`
       ${this.editMode ? html`
         <vaadin-split-layout part="editor" theme="small">
-          <div 
+          <wom-dashboard-builder
+            .wom="${this.wom}"
+            .previewedNode="${this.previewedNode}"
             part="dashboard"
             @womNodeMouseenter="${this.onWomNodeMouseenter}"
             @womNodeMouseleave="${this.onWomNodeMouseleave}"
-            style="width: 70%"
           >
-            <wom-preview-box
-              .wom="${this.wom}"
-              .previewedNode="${this.previewedNode && this.previewedNode.getNode()}"
-            ></wom-preview-box>
-            <wom-new-element-preview-box
-              .wom="${this.wom}"
-            ></wom-new-element-preview-box>
-            <div part="container">
-              <slot></slot>
-            </div>
-          </div>
+            <slot></slot>
+          </wom-dashboard-builder>
           <div part="tools-container" style="width: 30%">
             <div part="tools">
               <div part="top-menu">

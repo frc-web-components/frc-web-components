@@ -1,5 +1,5 @@
 import { LitElement, html } from '@webbitjs/webbit';
-import { isElementInViewport } from './utils';
+import { isElementInViewport } from '../utils';
 
 class WomPreviewBox extends LitElement {
 
