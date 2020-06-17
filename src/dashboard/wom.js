@@ -279,6 +279,8 @@ class Wom {
   }
 
   destroy() {
+    this.deselectAction();
+    this.deselectNode();
     this.womNode.destroy();
   }
 
