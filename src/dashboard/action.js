@@ -19,7 +19,7 @@ export default class Action {
     return true;
   }
 
-  execute() {
+  contextChange() {}
 
-  }
+  execute() {}
 }

@@ -3,7 +3,7 @@ import Wom from './wom';
 import './wom-viewer';
 import './wom-preview-box';
 import './tools-bottom';
-import './wom-new-element-preview';
+import './wom-new-element-preview-box';
 import AddNode from './actions/add-node';
 import RemoveNode from './actions/remove-node';
 
@@ -203,11 +203,11 @@ class WebbitDashboard extends LitElement {
           >
             <wom-preview-box
               .wom="${this.wom}"
-              .previewedNode="${this.previewedNode}"
+              .previewedNode="${this.previewedNode && this.previewedNode.getNode()}"
             ></wom-preview-box>
-            <wom-new-element-preview
+            <wom-new-element-preview-box
               .wom="${this.wom}"
-            ></wom-new-element-preview>
+            ></wom-new-element-preview-box>
             <div part="container">
               <slot></slot>
             </div>
@@ -231,7 +231,6 @@ class WebbitDashboard extends LitElement {
                         .wom="${this.wom}"
                         @womNodePreview="${this.onWomNodePreview}"
                         @womNodePreviewEnd="${this.onWomNodePreviewEnd}"
-                        @womNodeAddElementPreview="${this.onWomNodeAddElementPreview}"
                         .node="${this.wom.getRootNode()}"
                         .selectedNode="${this.wom ? this.wom.getSelectedNode() : null}"
                         .container="${this.toolsTopElement}"

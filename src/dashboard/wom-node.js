@@ -9,7 +9,7 @@ const isWebbit = (domNode) => {
 
 const getChildWebbits = (domNode) => {
   return [...domNode.children].filter(node => {
-    return node.tagName.toLowerCase() !== 'wom-new-element-preview-display';
+    return !node.hasAttribute('is-preview');
     return true;
     //return isWebbit(node);
   });

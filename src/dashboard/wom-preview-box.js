@@ -7,6 +7,8 @@ class WomPreviewBox extends LitElement {
     return {
       wom: { type: Object },
       previewedNode: { type: Object },
+      background: { type: String },
+      border: { type: String },
     };
   }
 
@@ -19,6 +21,8 @@ class WomPreviewBox extends LitElement {
     this.wom = null;
     this.previewElement = null;
     this.previewedNode = null;
+    this.background = 'rgba(3, 132, 210, .5)';
+    this.border = 'none';
   }
 
   updated(changedProperties) {
@@ -37,7 +41,8 @@ class WomPreviewBox extends LitElement {
 
   firstUpdated() {
     this.previewElement = document.createElement('div');
-    this.previewElement.style.background = 'rgba(3, 132, 210, .5)';
+    this.previewElement.style.background = this.background;
+    this.previewElement.style.border = this.border;
     this.previewElement.style.position = 'absolute';
     this.previewElement.style.zIndex = '1';
     this.previewElement.style.pointerEvents = 'none';
@@ -47,7 +52,7 @@ class WomPreviewBox extends LitElement {
     const setPreviewBounds = () => { 
       if (this.previewedNode && this.wom) {
         const boundingRect = this.wom.getDashboardElement().getBoundingClientRect();
-        const { x, y, width, height, bottom, right } = this.previewedNode.getNode().getBoundingClientRect();        
+        const { x, y, width, height, bottom, right } = this.previewedNode.getBoundingClientRect();        
         
         const boundedLeft = Math.max(x, boundingRect.x);
         const boundedTop = Math.max(y, boundingRect.y);

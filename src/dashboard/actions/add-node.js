@@ -6,15 +6,18 @@ export default class AddNode extends Action {
     super({
       needsTarget: true
     });
+
+    this.previewedNode = null;
   }
 
-  execute({ 
-    wom, 
-    targetedNode,
-    context
-  }) {
-    const { placement, componentType, slot } = context;
+  removePreviewedNode(wom) {
+    if (this.previewedNode) {
+      this.previewedNode.remove();
+      wom.dispatchEvent('womPreviewNodeRemove', { node: this.previewNode });
+    }
+  }
 
+  createElement(componentType, slot, isPreview) {
     const parentNode = document.createElement('div');
     parentNode.innerHTML = `
       <${componentType}></${componentType}>
@@ -22,12 +25,46 @@ export default class AddNode extends Action {
     const newElement = parentNode.querySelector(componentType);
     newElement.setAttribute('slot', slot === 'default' ? '' : slot);
 
+    if (isPreview) {
+      newElement.setAttribute('is-preview', '');
+      newElement.setAttribute('webbit-id', 'preview');
+    }
+
+    return newElement;
+  }
+
+  addElement(wom, element, targetedNode, placement) {
     if (placement === 'inside') {
-      wom.prependNode(newElement, targetedNode);
+      wom.prependNode(element, targetedNode);
     } else if (placement === 'before') {
-      wom.insertNodeBefore(newElement, targetedNode);
+      wom.insertNodeBefore(element, targetedNode);
     } else {
-      wom.insertNodeAfter(newElement, targetedNode);
+      wom.insertNodeAfter(element, targetedNode);
     }
   }
+
+  contextChange({
+    wom,
+    context
+  }) {
+    this.removePreviewedNode(wom);
+    const { placement, targetedNode, componentType, slot } = context;
+
+    if (targetedNode) {
+      this.previewedNode = this.createElement(componentType, slot, true);
+      this.addElement(wom, this.previewedNode, targetedNode, placement);
+      wom.dispatchEvent('womPreviewNodeAdd', { node: this.previewedNode });
+    }
+  }
+
+  execute({ 
+    wom, 
+    targetedNode,
+    context
+  }) {
+    this.removePreviewedNode(wom);
+    const { placement, componentType, slot } = context;
+    const newElement = this.createElement(componentType, slot);
+    this.addElement(wom, newElement, targetedNode, placement)
+  };
 }

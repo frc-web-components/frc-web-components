@@ -211,14 +211,17 @@ class WomViewer extends LitElement {
       target.style.setProperty('--add-element-position', '-8px');
       this.wom.setActionContext('addNode', {
         placement: 'before',
-        slot: this.slot
+        slot: this.slot,
+        targetedNode: this.node
+
       });
     }
     else {
       target.style.setProperty('--add-element-position', '8px');
       this.wom.setActionContext('addNode', {
         placement: 'after',
-        slot: this.slot
+        slot: this.slot,
+        targetedNode: this.node
       });
     }
   }

@@ -91,7 +91,8 @@ class WomSlotNode extends LitElement {
   onAddElementPreview() {
     this.wom.setActionContext('addNode', {
       placement: 'inside',
-      slot: this.slot
+      slot: this.slot,
+      targetedNode: this.parentNode
     });
   }
 

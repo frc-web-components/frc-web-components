@@ -139,6 +139,13 @@ class Wom {
       ...this.actionContext,
       ...context
     };
+
+    action.contextChange({
+      wom: this,
+      selectedNode: this.selectedNode,
+      context: this.actionContext,
+    });
+
     this.dispatchEvent('womActionContextSet', {
       actionId,
       action,
@@ -237,18 +244,13 @@ class Wom {
   }
 
   hasNonPreviewChangeMutation(mutations) {
+
     for (let mutation of mutations) {
       const [addedNode] = mutation.addedNodes;
       const [removedNode] = mutation.removedNodes;
       const node = addedNode || removedNode;
 
-      if (!node) {
-        return true;
-      }
-
-      const tagName = (node.tagName || '').toLowerCase();
-
-      if (tagName !== 'wom-new-element-preview-display') {
+      if (!node || !node.hasAttribute('is-preview')) {
         return true;
       }
     }
