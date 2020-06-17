@@ -157,7 +157,11 @@ class WebbitDashboard extends LitElement {
     }
 
     if(ev.key === "Escape") {
-      this.wom.deselectNode();
+      if (this.wom.getSelectedActionId()) {
+        this.wom.deselectAction();
+      } else {
+        this.wom.deselectNode();
+      }
     }
   }
 

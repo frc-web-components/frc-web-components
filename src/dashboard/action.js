@@ -19,6 +19,8 @@ export default class Action {
     return true;
   }
 
+  deselect() {}
+
   contextChange() {}
 
   execute() {}

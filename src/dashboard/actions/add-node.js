@@ -57,6 +57,10 @@ export default class AddNode extends Action {
     }
   }
 
+  deselect({ wom }) {
+    this.removePreviewedNode(wom);
+  }
+
   execute({ 
     wom, 
     targetedNode,

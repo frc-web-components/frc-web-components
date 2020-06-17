@@ -21,6 +21,11 @@ class Wom {
   }
 
   selectNode(node) {
+
+    if (node.getNode() === this.rootNode) {
+      return;
+    }
+
     this.deselectNode();
     this.selectedNode = node;
     this.dispatchEvent('womNodeSelect', { node });
@@ -91,11 +96,18 @@ class Wom {
   deselectAction() {
     const prevSelectedActionId = this.getSelectedActionId();
     if (prevSelectedActionId) {
+      const action = this.getAction(prevSelectedActionId);
       this.selectedActionId = null;
+      action.deselect({
+        wom: this,
+        selectedNode: this.getSelectedNode(),
+        context: this.getActionContext(),
+      });
       this.actionContext = {};
+
       this.dispatchEvent('womActionDeselect', { 
         actionId: prevSelectedActionId,
-        action: this.getAction(prevSelectedActionId)
+        action
       });
     }
   }
