@@ -1,11 +1,9 @@
 import { LitElement, html, css } from 'lit-element';
 import Wom from './wom';
-import './wom-viewer';
-import './tools';
-import './tools-bottom';
 import AddNode from './actions/add-node';
 import RemoveNode from './actions/remove-node';
 import './builder/index';
+import './tools';
 
 class WebbitDashboard extends LitElement {
 

@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
-import './sources/sources-tool';
-import './components/components-tool';
-import './properties/properties-tool';
+import '../sources/sources-tool';
+import '../components/components-tool';
+import '../properties/properties-tool';
 
 class DashboardToolsBottom extends LitElement {
 

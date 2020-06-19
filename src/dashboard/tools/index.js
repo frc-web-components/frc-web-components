@@ -1,4 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
+import './tools-bottom';
+import './wom-viewer';
 
 class WomTools extends LitElement {
 

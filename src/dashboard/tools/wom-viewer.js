@@ -1,5 +1,5 @@
 import { LitElement, html, css } from '@webbitjs/webbit';
-import { isElementInViewport } from './utils';
+import { isElementInViewport } from '../utils';
 import './wom-slot-node';
 import './wom-viewer-attribute';
 
