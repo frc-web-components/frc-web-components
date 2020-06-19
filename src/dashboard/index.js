@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 import Wom from './wom';
 import './wom-viewer';
+import './tools';
 import './tools-bottom';
 import AddNode from './actions/add-node';
 import RemoveNode from './actions/remove-node';
@@ -12,14 +13,11 @@ class WebbitDashboard extends LitElement {
     return {
       wom: { type: Object },
       editMode: { type: Boolean, attribute: 'edit-mode', reflect: true },
-      toolsTopElement: { type: Object },
-
     };
   }
 
   static get styles() {
     return css`
-
       :host {
         display: block;
         position: relative;
@@ -37,48 +35,8 @@ class WebbitDashboard extends LitElement {
         height: auto;
       }
 
-      [part=tools-container] {
-        position: relative;
-        min-width: 400px;
-        z-index: 2;
-      }
-
-      [part=tools] {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        box-sizing: border-box;
-        overflow: scroll;
-        display: flex;
-        flex-direction: column;
-      }
-
-      [part=top-menu] {
-        width: 100%;
-        background: #eee;
-        display: block;
-      }
-
-      [part=top-menu] vaadin-button {
-        color: black;
-      }
-
-
       [part=wom] {
         padding: 5px;
-      }
-
-      [part=tools-top], [part=tools-bottom] {
-        min-height: 10%;
-      }
-
-      [part=tools-splitter] {
-        height: 100%;
-        flex: 1;
-      }
-
-      dashboard-tools-bottom {
-        overflow: unset;
       }
     `
   }
@@ -88,9 +46,6 @@ class WebbitDashboard extends LitElement {
     this.wom = null;
     this.editMode = false;
     this.dashboardNode = null;
-    this.newElementPreview = null;
-    this.toolsTopElement = null;
-    this.womViewerNode = null;
   }
 
   firstUpdated() {
@@ -106,13 +61,6 @@ class WebbitDashboard extends LitElement {
     document.body.addEventListener('keydown', ev => {
       this.onKeyDown(ev);
     });
-
-    this.addEventListener('womChange', () => {
-      if (!this.womViewerNode) {
-        this.womViewerNode = this.shadowRoot.querySelector('wom-viewer');
-      }
-      this.womViewerNode.requestUpdate();
-    });
   }
 
   addWomListeners() {
@@ -126,8 +74,6 @@ class WebbitDashboard extends LitElement {
         this.requestUpdate();
       });
     });
-
-
   }
 
   updated(changedProperties) {
@@ -138,7 +84,6 @@ class WebbitDashboard extends LitElement {
         }
       } else {
         this.dashboardNode = this.shadowRoot.querySelector('[part=dashboard]');
-        this.toolsTopElement = this.shadowRoot.querySelector('[part="tools-top"]');
         this.wom = new Wom(this, this.dashboardNode);
         this.addWomListeners();
 
@@ -164,21 +109,6 @@ class WebbitDashboard extends LitElement {
     }
   }
 
-  onWomNodePreview(ev) {
-    this.wom.previewNode(ev.detail.node);
-  }
-
-  onWomNodePreviewEnd(ev) {
-    const { node } = ev.detail;
-    if (this.wom.getPreviewedNode() === node) {
-      this.wom.removeNodePreview();
-    }
-  }
-  
-  onRemoveElement() {
-    this.wom.selectAction('removeNode');
-  }
-
   render() {
     return html`
       ${this.editMode ? html`
@@ -186,43 +116,8 @@ class WebbitDashboard extends LitElement {
           <wom-dashboard-builder part="dashboard" .wom="${this.wom}">
             <slot></slot>
           </wom-dashboard-builder>
-          <div part="tools-container" style="width: 30%">
-            <div part="tools">
-              <div part="top-menu">
-                <vaadin-button 
-                  theme="icon tertiary" 
-                  aria-label="Remove element"
-                  @click="${this.onRemoveElement}"
-                >
-                  <iron-icon icon="vaadin:trash"></iron-icon>
-                </vaadin-button>
-              </div>
-              <vaadin-split-layout part="tools-splitter" theme="small" orientation="vertical">
-                <div part="tools-top" style="height: 40%">
-                  <div part="wom">
-                    ${this.wom ? html`
-                      <wom-viewer
-                        .wom="${this.wom}"
-                        @womNodePreview="${this.onWomNodePreview}"
-                        @womNodePreviewEnd="${this.onWomNodePreviewEnd}"
-                        .node="${this.wom.getRootNode()}"
-                        .selectedNode="${this.wom ? this.wom.getSelectedNode() : null}"
-                        .container="${this.toolsTopElement}"
-                        ?adding-element="${this.wom && this.wom.getSelectedActionId() === 'addNode'}"
-                      ></wom-viewer>
-                    ` : ''}
-                  </div>
-                </div>
-                <dashboard-tools-bottom
-                  part="tools-bottom"
-                  style="height: 60%"
-                  .wom="${this.wom}"
-                >
-                </dashboard-tools-bottom>        
-              </vaadin-split-layout>
-
-            </div>
-          </div>
+          <dashboard-wom-tools part="tools-container" .wom="${this.wom}">
+          </dashboard-wom-tools>
         </vaadin-split-layout>
       `: html`
         <div part="container">

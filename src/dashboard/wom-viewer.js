@@ -173,25 +173,13 @@ class WomViewer extends LitElement {
   }
 
   onPreview(ev) {
-    const event = new CustomEvent('womNodePreview', {
-      bubbles: true,
-      composed: true,
-      detail: {
-        node: this.node,
-      }
-    });
-    this.dispatchEvent(event);
+    this.wom.previewNode(this.node);
   }
 
   onPreviewEnd() {
-    const event = new CustomEvent('womNodePreviewEnd', {
-      bubbles: true,
-      composed: true,
-      detail: {
-        node: this.node
-      }
-    });
-    this.dispatchEvent(event);
+    if (this.wom.getPreviewedNode() === this.node) {
+      this.wom.removeNodePreview();
+    }
   }
 
   onAddElementPreview(ev) {
