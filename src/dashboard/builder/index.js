@@ -27,6 +27,21 @@ class DashboardBuilder extends LitElement {
     this.previewedNode = null;
   }
 
+  updated(changedProps) {
+    if (changedProps.has('wom')) {
+      if (!this.wom) {
+        this.previewedNode = null;
+      } else {
+        this.wom.addListener('womNodePreview', (ev) => {
+          this.previewedNode = ev.detail.node;
+        });
+        this.wom.addListener('womNodePreviewRemove', (ev) => {
+          this.previewedNode = null;
+        });
+      }
+    }
+  }
+
   render() {
     return html`
       <wom-preview-box

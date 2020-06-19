@@ -29,25 +29,18 @@ export default class WomNode {
     });
 
     this.onMouseEnter = () => {
-      const event = new CustomEvent('womNodeMouseenter', {
-        bubbles: true,
-        composed: true,
-        detail: {
-          node: this,
-        }
-      });
-      node.dispatchEvent(event);
+      if (
+        !this.wom.getPreviewedNode() 
+        || this.getLevel() >= this.wom.getPreviewedNode().getLevel()
+      ) {
+        this.wom.previewNode(this);
+      }
     };
 
     this.onMouseLeave = () => {
-      const event = new CustomEvent('womNodeMouseleave', {
-        bubbles: true,
-        composed: true,
-        detail: {
-          node: this
-        }
-      });
-      node.dispatchEvent(event);
+      if (this.wom.getPreviewedNode() === this) {
+        this.wom.removeNodePreview();
+      }
     };
 
     this.onMouseClick = (ev) => {

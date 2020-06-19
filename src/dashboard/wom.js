@@ -10,6 +10,7 @@ class Wom {
   constructor(rootNode, dashboardElement) {
     this.rootNode = rootNode;
     this.dashboardElement = dashboardElement;
+    this.previewedNode = null;
     this.selectedNode = null;
     this.womNode = new WomNode(this.rootNode, this);
     this.womNode.build();
@@ -18,6 +19,24 @@ class Wom {
     this.actionContext = {};
     this.mode = 'live';
     this.observeMutations();
+  }
+
+  previewNode(node) {
+    this.removeNodePreview();
+    this.previewedNode = node;
+    this.dispatchEvent('womNodePreview', { node });
+  }
+
+  removeNodePreview() {
+    if (this.previewedNode) {
+      const previewedNode = this.previewedNode;
+      this.previewedNode = null;
+      this.dispatchEvent('womNodePreviewRemove', { node: previewedNode });
+    }
+  }
+
+  getPreviewedNode() {
+    return this.previewedNode;
   }
 
   selectNode(node) {

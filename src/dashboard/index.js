@@ -12,7 +12,6 @@ class WebbitDashboard extends LitElement {
     return {
       wom: { type: Object },
       editMode: { type: Boolean, attribute: 'edit-mode', reflect: true },
-      previewedNode: { type: Object, attribute: false },
       toolsTopElement: { type: Object },
 
     };
@@ -121,7 +120,7 @@ class WebbitDashboard extends LitElement {
       'womNodeSelect', 'womNodeDeselect', 'womActionSelect',
       'womNodeTarget', 'womActionDeselect', 'womActionExecute',
       'womActionContextSet', 'womNodeAdd', 'womNodeRemove',
-      'womChange'
+      'womChange', 'womNodePreview', 'womNodePreviewRemove'
     ].forEach(eventName => {
       this.wom.addListener(eventName, () => {
         this.requestUpdate();
@@ -165,28 +164,14 @@ class WebbitDashboard extends LitElement {
     }
   }
 
-  onWomNodeMouseenter(ev) {
-    const { node } = ev.detail;
-    if (!this.previewedNode || node.getLevel() >= this.previewedNode.getLevel()) {
-      this.previewedNode = node;
-    }
-  }
-
-  onWomNodeMouseleave(ev) {
-    const { node } = ev.detail;
-    if (this.previewedNode === node) {
-      this.previewedNode = null;
-    }
-  }
-
   onWomNodePreview(ev) {
-    this.previewedNode = ev.detail.node;
+    this.wom.previewNode(ev.detail.node);
   }
 
   onWomNodePreviewEnd(ev) {
     const { node } = ev.detail;
-    if (this.previewedNode === node) {
-      this.previewedNode = null;
+    if (this.wom.getPreviewedNode() === node) {
+      this.wom.removeNodePreview();
     }
   }
   
@@ -198,13 +183,7 @@ class WebbitDashboard extends LitElement {
     return html`
       ${this.editMode ? html`
         <vaadin-split-layout part="editor" theme="small">
-          <wom-dashboard-builder
-            .wom="${this.wom}"
-            .previewedNode="${this.previewedNode}"
-            part="dashboard"
-            @womNodeMouseenter="${this.onWomNodeMouseenter}"
-            @womNodeMouseleave="${this.onWomNodeMouseleave}"
-          >
+          <wom-dashboard-builder part="dashboard" .wom="${this.wom}">
             <slot></slot>
           </wom-dashboard-builder>
           <div part="tools-container" style="width: 30%">
