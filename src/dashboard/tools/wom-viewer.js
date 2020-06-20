@@ -177,7 +177,7 @@ class WomViewer extends LitElement {
   }
 
   onPreviewEnd() {
-    if (this.wom.getPreviewedNode() === this.node) {
+    if (this.wom.getPreviewedNode().getNode() === this.node.getNode()) {
       this.wom.removeNodePreview();
     }
   }
