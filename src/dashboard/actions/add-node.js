@@ -69,6 +69,17 @@ export default class AddNode extends Action {
     this.removePreviewedNode(wom);
     const { placement, componentType, slot } = context;
     const newElement = this.createElement(componentType, slot);
-    this.addElement(wom, newElement, targetedNode, placement)
+
+    const buldNodeCallback = (ev) => {
+      const { node } = ev.detail;
+      if (node.getNode() === newElement) {
+        wom.selectNode(node);
+        wom.selectAction('addNode', { componentType });
+        wom.removeListener('womNodeBuild', buldNodeCallback);
+      }
+    };
+    wom.addListener('womNodeBuild', buldNodeCallback);
+
+    this.addElement(wom, newElement, targetedNode, placement);
   };
 }

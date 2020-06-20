@@ -256,6 +256,10 @@ class Wom {
     this.rootNode.addEventListener(eventName, callback);
   }
 
+  removeListener(eventName, callback) {
+    this.rootNode.removeEventListener(eventName, callback);
+  }
+
   observeMutations() {
     const observer = new MutationObserver((mutations) => {
       

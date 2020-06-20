@@ -20,6 +20,7 @@ export default class WomNode {
 
   constructor(node, wom, ancestors = []) {
     this.node = node;
+    this.node.__WOM_NODE__ = this;
     this.wom = wom;
     this.ancestors = ancestors;
     this.childNodes = [];
@@ -55,24 +56,6 @@ export default class WomNode {
     node.addEventListener('click', this.onMouseClick);
   }
 
-  dispatchWomNodeBuild() {
-    const event = new CustomEvent('womNodeBuild', {
-      detail: {
-        node: this
-      }
-    });
-    this.node.dispatchEvent(event);
-  }
-
-  dispatchWomNodeDestroy() {
-    const event = new CustomEvent('womNodeDestroy', {
-      detail: {
-        node: this
-      }
-    });
-    this.node.dispatchEvent(event);
-  }
-
   destroy() {
     this.node.removeEventListener('mouseover', this.onMouseEnter);
     this.node.removeEventListener('mouseleave', this.onMouseLeave);
@@ -84,7 +67,7 @@ export default class WomNode {
     this.childBySlotNodes = this.slots.map(() => {
       return [];
     });
-    this.dispatchWomNodeDestroy();
+    this.wom.dispatchEvent('womNodeDestroy', { node: this });
   }
 
   build() {
@@ -100,7 +83,7 @@ export default class WomNode {
       womNode.build();
       return womNode;
     });
-    this.dispatchWomNodeBuild();
+    this.wom.dispatchEvent('womNodeBuild', { node: this });
   }
 
   isDescendant(node) {

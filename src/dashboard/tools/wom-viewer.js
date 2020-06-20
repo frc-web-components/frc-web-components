@@ -201,7 +201,6 @@ class WomViewer extends LitElement {
         placement: 'before',
         slot: this.slot,
         targetedNode: this.node
-
       });
     }
     else {

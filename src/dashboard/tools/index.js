@@ -40,6 +40,7 @@ class WomTools extends LitElement {
 
       [part=tools-top] {
         margin: 5px;
+        padding-bottom: 15px;
       }
 
       [part=tools-splitter] {
