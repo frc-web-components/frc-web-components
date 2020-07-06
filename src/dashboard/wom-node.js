@@ -56,6 +56,38 @@ export default class WomNode {
     node.addEventListener('click', this.onMouseClick);
   }
 
+  getParent() {
+    const parentNode = this.ancestors[this.ancestors.length - 1];
+    return parentNode || null;
+  }
+
+  getNextSibling() {
+    const parentNode = this.getParent();
+    if (!parentNode) {
+      return null;
+    }
+    const siblings = parentNode.getChildren(this.getSlot());
+    const siblingIndex = siblings
+      .findIndex(sibling => sibling.getNode() === this.getNode()) + 1;
+
+    return siblings[siblingIndex] || null;
+  }
+
+  getPreviousSibling() {
+    const parentNode = this.getParent();
+    if (!parentNode) {
+      return null;
+    }
+    const siblings = parentNode.getChildren(this.getSlot());
+    console.log('prev siblings:', siblings);
+    const siblingIndex = siblings
+      .findIndex(sibling => sibling.getNode() === this.getNode()) - 1;
+
+      console.log('prev sibling index:', siblingIndex);
+
+    return siblings[siblingIndex] || null;
+  }
+
   destroy() {
     this.node.removeEventListener('mouseover', this.onMouseEnter);
     this.node.removeEventListener('mouseleave', this.onMouseLeave);

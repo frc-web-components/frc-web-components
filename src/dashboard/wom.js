@@ -52,7 +52,7 @@ class Wom {
 
   deselectNode() {
     this.deselectAction();
-    if (this.selectedNode) {
+    if (this.getSelectedNode()) {
       const deselectedNode = this.selectedNode;
       this.selectedNode = null;
       this.dispatchEvent('womNodeDeselect', { node: deselectedNode });
@@ -60,7 +60,7 @@ class Wom {
   }
 
   getSelectedNode() {
-    return this.selectedNode;
+    return this.selectedNode ? this.selectedNode.getNode().__WOM_NODE__ : null;
   }
 
   targetNode(node) {
@@ -173,7 +173,7 @@ class Wom {
 
     action.contextChange({
       wom: this,
-      selectedNode: this.selectedNode,
+      selectedNode: this.getSelectedNode(),
       context: this.actionContext,
     });
 
