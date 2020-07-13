@@ -84,7 +84,10 @@ class DashboardToolsBottom extends LitElement {
         ` : ''}
 
         ${this.selectedTab === 1 ? html`
-        <dashboard-properties-tool .selectedNode="${this.selectedNode}"></dashboard-properties-tool>
+        <dashboard-properties-tool 
+          .selectedNode="${this.selectedNode}"
+          .wom="${this.wom}"
+        ></dashboard-properties-tool>
         ` : ''}
 
         ${this.selectedTab === 2 ? html`

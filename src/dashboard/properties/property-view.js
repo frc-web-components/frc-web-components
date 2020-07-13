@@ -70,6 +70,10 @@ export default class PropertyView extends LitElement {
     }
   }
 
+  getPropertyNameValuePair() {
+    return [this.propertyName, this.inputValue];
+  }
+
   updated(changedProperties) {
     if (changedProperties.has('selectedNode') && this.selectedNode) {
       this.inputValue = this.getValue();

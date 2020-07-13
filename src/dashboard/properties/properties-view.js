@@ -20,12 +20,14 @@ class PropertiesView extends LitElement {
 
   static get properties() {
     return {
+      wom: { type: Object },
       selectedNode: { type: Object, attribute: false },
     };
   }
 
   constructor() {
     super();
+    this.wom = null;
     this.selectedNode = null;
   }
 
@@ -54,9 +56,14 @@ class PropertiesView extends LitElement {
   }
 
   confirm() {
+    const propertyValueMap = {};
+
     for (let input of this.inputElements) {
-      input.confirm();
+      const [propertyName, inputValue] = input.getPropertyNameValuePair();
+      propertyValueMap[propertyName] = inputValue;
     }
+
+    this.wom.selectAction('setProperties', { propertyValueMap });
   }
 
   cancel() {

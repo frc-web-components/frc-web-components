@@ -45,6 +45,7 @@ class PropertiesTool extends LitElement {
 
   static get properties() {
     return {
+      wom: { type: Object },
       selectedNode: { type: Object, attribute: false },
       webbitIdInput: { type: String, attribute: false },
     };
@@ -52,6 +53,7 @@ class PropertiesTool extends LitElement {
 
   constructor() {
     super();
+    this.wom = null;
     this.selectedNode = null;
     this.webbitIdInput = '';
   }
@@ -149,6 +151,7 @@ class PropertiesTool extends LitElement {
 
       <dashboard-properties-view
         part="properties-view"
+        .wom="${this.wom}"
         .selectedNode="${this.selectedNode}"
         @dashboardToolsViewPropertyChange="${this.onPropertiesChange}"
       ></dashboard-properties-view>
