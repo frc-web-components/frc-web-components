@@ -79,11 +79,8 @@ export default class WomNode {
       return null;
     }
     const siblings = parentNode.getChildren(this.getSlot());
-    console.log('prev siblings:', siblings);
     const siblingIndex = siblings
       .findIndex(sibling => sibling.getNode() === this.getNode()) - 1;
-
-      console.log('prev sibling index:', siblingIndex);
 
     return siblings[siblingIndex] || null;
   }

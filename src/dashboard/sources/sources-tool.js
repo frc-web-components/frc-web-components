@@ -45,6 +45,7 @@ class SourcesTool extends LitElement {
 
   static get properties() {
     return {
+      wom: { type: Object },
       selectedNode: { type: Object, attribute: false },
       sourceKeyInput: { type: String, attribute: false },
       sourceProviderInput: { type: String, attribute: false },
@@ -53,6 +54,7 @@ class SourcesTool extends LitElement {
 
   constructor() {
     super();
+    this.wom = null;
     this.selectedNode = null;
     this.sourceKeyInput = '';
     this.sourceProviderInput = '';
@@ -111,8 +113,10 @@ class SourcesTool extends LitElement {
   }
 
   onConfirm() {
-    this.selectedNode.getNode().sourceProvider = this.sourceProviderInput;
-    this.selectedNode.getNode().sourceKey = this.sourceKeyInput;
+    this.wom.selectAction('setSource', {
+      sourceProvider: this.sourceProviderInput,
+      sourceKey: this.sourceKeyInput
+    });
     this.requestUpdate();
   }
 

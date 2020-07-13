@@ -8,20 +8,9 @@ export default class SetSource extends Action {
     });
   }
 
-  execute({ 
-    wom, 
-    selectedNode, 
-    targetedNode,
-    context
-  }) {
-    const { position } = context;
-
-    if (position === 'inside') {
-      wom.prependNode(selectedNode, targetedNode);
-    } else if (position === 'before') {
-      wom.insertNodeBefore(selectedNode, targetedNode);
-    } else {
-      wom.insertNodeAfter(selectedNode, targetedNode);
-    }
+  execute({ selectedNode, context }) {
+    const { sourceProvider, sourceKey } = context;
+    selectedNode.getNode().sourceProvider = sourceProvider;
+    selectedNode.getNode().sourceKey = sourceKey;
   }
 }
