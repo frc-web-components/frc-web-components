@@ -7,6 +7,7 @@ class FrcDashboard extends WebbitDashboard {
     super();
     this.fullscreen = true;
 
+    addSourceProvider('HALSim', 'HALSim');
     addSourceProvider('NetworkTables', 'NetworkTables');
     setDefaultSourceProvider('NetworkTables');
 
