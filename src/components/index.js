@@ -56,3 +56,6 @@ import './base-chart';
 import './chart-data';
 import './line-chart';
 import './field';
+
+// sim
+import './sim';
