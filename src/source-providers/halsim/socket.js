@@ -32,7 +32,7 @@ export function createSocket(onMessage) {
 
 export function sendMsg(o) {
   if (socket) {
-      var msg = JSON.stringify(o);
-      socket.send(msg);
+    var msg = JSON.stringify(o);
+    socket.send(msg);
   }
 }

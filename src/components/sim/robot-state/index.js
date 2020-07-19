@@ -1,4 +1,4 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { html, css } from '@webbitjs/webbit';
 import Container from '../../container';
 
 class RobotState extends Container {

@@ -1,10 +1,11 @@
 import { Webbit, html, css } from '@webbitjs/webbit';
+import Container from '../container';
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(value, min));
 }
 
-export default class NumberBar extends Webbit {
+export default class NumberBar extends Container {
 
   static get metadata() {
     return {
@@ -17,6 +18,7 @@ export default class NumberBar extends Webbit {
 
   static get properties() {
     return {
+      ...super.properties,
       value: { type: Number, primary: true },
       min: { 
         type: Number, 
@@ -51,37 +53,37 @@ export default class NumberBar extends Webbit {
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: inline-block;
-        height: auto;
-        width: 300px;
-        font-family: sans-serif;
-      }
+    return [
+      super.styles,
+      css`
+        :host([num-tick-marks="0"]) [part=bar] {
+          width: 100%;
+          margin: 0;
+        }
 
-      :host([num-tick-marks="0"]) [part=bar] {
-        width: 100%;
-        margin: 0;
-      }
+        [part=bar] {
+          position: relative;
+          width: calc(100% - 40px);
+          height: 20px;
+          margin: 0 20px;
+          border-radius: 3px;
+        }
 
-      [part=bar] {
-        position: relative;
-        width: calc(100% - 40px);
-        height: 20px;
-        margin: 0 20px;
-        border-radius: 3px;
-      }
-
-      [part=axis] {
-        width: calc(100% - 45px);
-        margin: 2px auto 0;
-        display: block;
-      }
-    `
+        [part=axis] {
+          width: calc(100% - 45px);
+          margin: 2px auto 0;
+          display: block;
+        }
+      `
+    ];
   }
 
   constructor() {
     super();
+    this.display = 'inline-block';
+    this.width = '300px';
+    this.height = 'auto';
+    this.fontFamily = 'sans-serif';
     this.value = 0;
     this.min = -1;
     this.max = 1;

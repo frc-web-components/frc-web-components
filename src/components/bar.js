@@ -20,12 +20,20 @@ class Bar extends LitElement {
     return css`
       :host {
         display: inline-block;
+        position: relative;
         width: 300px;
         height: 20px;
         background: #DDD;
         font-size: 15px;
         line-height: 18px;
         text-align: center;
+      }
+
+      [part=dragger] {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        width: 100%;
       }
 
       [part=foreground] {
@@ -37,6 +45,7 @@ class Bar extends LitElement {
         width: var(--foreground-width);
         left: var(--foreground-left);
         right: var(--foreground-right);
+        pointer-events: none;
       }
 
       .content {
@@ -51,6 +60,7 @@ class Bar extends LitElement {
     this.min = -1;
     this.max = 1;
     this.center = 0;
+    this.dragging = false;
   }
 
   get min() {
@@ -127,12 +137,53 @@ class Bar extends LitElement {
     this.updateForeground();
   }
 
+  setDragPosition(ev) {
+    const { left, width } = this.getBoundingClientRect();
+    const x = ev.clientX - left;
+    const dragPosition = clamp(x / width, 0, 1);
+    const value = this.min + (this.max - this.min) * dragPosition;
+
+    const event = new CustomEvent('barDrag', {
+      bubbles: true,
+      composed: true,
+      detail: { value }
+    });
+
+    this.dispatchEvent(event);
+  }
+
+  firstUpdated() {
+    this.setAttribute('draggable', 'false');
+
+    window.addEventListener('mousemove', ev => {
+
+      if (!this.dragging) {
+        return;
+      }
+
+     this.setDragPosition(ev);
+    });
+
+    window.addEventListener('mouseup', ev => {
+      this.dragging = false;
+    });
+  }
+
+  onMouseDown(ev) {
+    this.dragging = true;
+    this.setDragPosition(ev);
+  }
+
   render() {
     return html`
-      <div part="foreground"></div>
-      <div class="content">
-        <slot></slot>
-      </div>
+        <div part="foreground" draggble="false"></div>
+        <div class="content" draggable="false">
+          <slot></slot>
+        </div>
+        <div 
+          part="dragger" 
+          @mousedown="${this.onMouseDown}"
+        ></div>
     `;
   }
 }
