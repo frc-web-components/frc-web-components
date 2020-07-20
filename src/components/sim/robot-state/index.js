@@ -23,6 +23,22 @@ class RobotState extends Container {
         [part=connection].connected {
           color: green;
         }
+
+        [part=header] {
+          display: block;
+          font-size: 15px;
+          font-weight: bold;
+          margin-bottom: 7px;
+          color: #555;
+        }
+
+        vaadin-radio-group {
+          padding-top: 0;
+        }
+
+        p {
+          margin: 5px 0;
+        }
       `
     ];
   }
@@ -86,8 +102,8 @@ class RobotState extends Container {
 
   render() {
     return html`   
+      <label part="header">Robot State</label>
       <vaadin-radio-group 
-        label="Robot State" 
         theme="vertical"
         @value-changed="${this.onChange}"
       >

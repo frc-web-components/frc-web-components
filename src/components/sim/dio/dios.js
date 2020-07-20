@@ -9,11 +9,11 @@ function getRange(length) {
   return array;
 } 
 
-export default class AnalogInputs extends Container {
+export default class DigitalIOs extends Container {
 
   static get metadata() {
     return {
-      displayName: 'Analog Inputs',
+      displayName: 'DIOs',
       category: 'Simulation',
       // description: 'Component for displaying data from a 3-axis accelerometer.',
       // documentationLink: 'https://frc-web-components.github.io/components/number-bar/'
@@ -33,7 +33,8 @@ export default class AnalogInputs extends Container {
         [part=inputs] {
           width: 100%;
           display: inline-grid;
-          grid-template-columns: min-content auto;
+          grid-template-columns: min-content 30px;
+          align-items: center;
           grid-auto-rows: 25px;
           column-gap: 8px;
         }
@@ -52,10 +53,11 @@ export default class AnalogInputs extends Container {
           color: #555;
         }
 
-        frc-analog-input {
+        frc-dio {
           width: 100%;
           min-width: 50px;
           padding: 0;
+          margin: 0;
         }
 
         p {
@@ -70,42 +72,46 @@ export default class AnalogInputs extends Container {
     super();
     this.display = 'inline-block';
     this.height = 'auto';
-    this.width = '250px';
+    this.width = 'auto';
     this.fontFamily = 'sans-serif';
   }
 
   renderInputs() {
     if (!this.hasSource()) {
-      return html`<p>Add source to show analog inputs.</p>`;
+      return html`<p>Add source to show DIOs.</p>`;
     }
 
     const source = this.getSource();
     const sourceKey = this.sourceKey;
     const sourceProvider = this.sourceProvider;
 
-    const initializedAnalogs = getRange(8)
+    const initializedDIOs = getRange(31)
       .map(index => {
         const initialized = source[index] && source[index].init;
+        const input = source[index] && source[index].input;
         return {
           index,
           initialized,
+          input,
           sourceKey: `${sourceKey}/${index}`
         };
       })
       .filter(({ initialized }) => initialized);
 
-    if (initializedAnalogs.length === 0) {
-      return html`<p>No analog inputs</p>`;
+    if (initializedDIOs.length === 0) {
+      return html`<p>No DIOs</p>`;
     }
 
     return html`
       <div part="inputs">
-        ${initializedAnalogs.map(analogInput => html`
-          <label>${analogInput.index}</label>
-          <frc-analog-input 
-            source-key="${analogInput.sourceKey}"
+        ${initializedDIOs.map(dio => html`
+          <label>
+            ${dio.input ? 'In' : 'Out'}[${dio.index}]
+          </label>
+          <frc-dio
+            source-key="${dio.sourceKey}"
             source-provider="${sourceProvider}"
-          ></frc-analog-input>
+          ></frc-dio>
         `)}
       </div>
     `;
@@ -113,10 +119,10 @@ export default class AnalogInputs extends Container {
 
   render() {
     return html`
-      <label part="header">Analog Inputs</label>
+      <label part="header">DIO</label>
       ${this.renderInputs()}
     `;
   }
 }
 
-webbitRegistry.define('frc-analog-inputs', AnalogInputs);
+webbitRegistry.define('frc-dios', DigitalIOs);

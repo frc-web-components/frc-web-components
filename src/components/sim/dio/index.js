@@ -1,1 +1,2 @@
 import './dio';
+import './dios';
