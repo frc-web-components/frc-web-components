@@ -70,6 +70,9 @@ export default class DigitalIOs extends Container {
 
   constructor() {
     super();
+    this.sourceKey = 'DIO';
+    this.sourceProvider = 'HALSim';
+
     this.display = 'inline-block';
     this.height = 'auto';
     this.width = 'auto';

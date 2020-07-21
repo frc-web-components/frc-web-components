@@ -62,6 +62,9 @@ export default class Fms extends Container {
 
   constructor() {
     super();
+    this.sourceKey = 'driverStation';
+    this.sourceProvider = 'HALSim';
+
     this.display = 'inline-block';
     this.width = '300px';
     this.height = 'auto';

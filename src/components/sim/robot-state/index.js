@@ -46,8 +46,13 @@ class RobotState extends Container {
 
   constructor() {
     super();
+
+    this.sourceKey = 'driverStation';
+    this.sourceProvider = 'HALSim';
+
     this.display = 'inline-block';
     this.fontFamily = 'sans-serif';
+    
     this.enabled = false;
     this.autonomous = false;
     this.test = false;

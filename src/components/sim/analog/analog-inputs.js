@@ -68,6 +68,9 @@ export default class AnalogInputs extends Container {
 
   constructor() {
     super();
+    this.sourceKey = 'AI';
+    this.sourceProvider = 'HALSim';
+
     this.display = 'inline-block';
     this.height = 'auto';
     this.width = '250px';
