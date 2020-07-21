@@ -78,7 +78,10 @@ export default class DigitalIOs extends Container {
 
   renderInputs() {
     if (!this.hasSource()) {
-      return html`<p>Add source to show DIOs.</p>`;
+      return html`
+        <label part="header">DIO</label>
+        <p>Add source to show DIOs.</p>
+      `;
     }
 
     const source = this.getSource();
@@ -99,11 +102,16 @@ export default class DigitalIOs extends Container {
       .filter(({ initialized }) => initialized);
 
     if (initializedDIOs.length === 0) {
-      return html`<p>No DIOs</p>`;
+      return html`
+        <label part="header">DIO</label>
+        <p>No DIOs</p>
+      `;
     }
 
     return html`
       <div part="inputs">
+        <label part="header">DIO</label>
+        <div></div>
         ${initializedDIOs.map(dio => html`
           <label>
             ${dio.input ? 'In' : 'Out'}[${dio.index}]
@@ -119,7 +127,6 @@ export default class DigitalIOs extends Container {
 
   render() {
     return html`
-      <label part="header">DIO</label>
       ${this.renderInputs()}
     `;
   }

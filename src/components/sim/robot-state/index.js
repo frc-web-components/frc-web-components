@@ -16,14 +16,6 @@ class RobotState extends Container {
     return [
       super.styles,
       css`
-        [part=connection] {
-          color: red;
-        }
-
-        [part=connection].connected {
-          color: green;
-        }
-
         [part=header] {
           display: block;
           font-size: 15px;
@@ -48,8 +40,7 @@ class RobotState extends Container {
       ...super.properties,
       enabled: { type: Boolean },
       autonomous: { type: Boolean },
-      test: { type: Boolean },
-      ds: { type: Boolean },
+      test: { type: Boolean }
     };
   }
 
@@ -120,9 +111,6 @@ class RobotState extends Container {
           Test
         </vaadin-radio-button>
       </vaadin-radio-group>
-      <p part="connection" class="${this.ds ? 'connected' : ''}">
-        ${this.ds ? 'Connected!' : 'Disconnected!'}
-      </p>
     `;
   }
 }
