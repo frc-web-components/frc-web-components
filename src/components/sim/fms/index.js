@@ -77,9 +77,29 @@ export default class Fms extends Container {
     this.matchTime = 0;
   }
 
-  onBarDrag(ev) {
-    const { value } = ev.detail;
-    this.voltage = value;
+  onFmsChange(ev) {
+    const target = ev.target || ev.path[0];
+    this.fms = target.checked;
+  }
+
+  onDsChange(ev) {
+    const target = ev.target || ev.path[0];
+    this.ds = target.checked;
+  }
+
+  onStationChange(ev) {
+    const element = ev.target || ev.path[0];
+    this.station = element.value;
+  }
+
+  onMatchTimeEnabledChange(ev) {
+    const target = ev.target || ev.path[0];
+    this.matchTimeEnabled = target.checked;
+  }
+
+  onMatchTimeChange(ev) {
+    const target = ev.target || ev.path[0];
+    this.matchTime = target.checked;
   }
 
   render() {
@@ -88,11 +108,24 @@ export default class Fms extends Container {
         <label part="header">FMS</label>
         <div></div>
         <label>FMS Attached</label>
-        <vaadin-checkbox part="input" ?checked="${this.fms}"></vaadin-checkbox>
+        <vaadin-checkbox 
+          part="input" 
+          ?checked="${this.fms}" 
+          @change="${this.onFmsChange}"
+        ></vaadin-checkbox>
         <label>DS Attached</label>
-        <vaadin-checkbox part="input" ?checked="${this.ds}"></vaadin-checkbox>
+        <vaadin-checkbox 
+          part="input" 
+          ?checked="${this.ds}"
+          @change="${this.onDsChange}"
+        ></vaadin-checkbox>
         <label>Alliance Station</label>
-        <vaadin-select part="input" theme="small" value="red1">
+        <vaadin-select 
+          part="input" 
+          theme="small" 
+          value="${this.station}"
+          @change="${this.onStationChange}"
+        >
           <template>
             <vaadin-list-box>
               <vaadin-item value="red1">Red 1</vaadin-item>
@@ -105,7 +138,11 @@ export default class Fms extends Container {
           </template>
         </vaadin-select>
         <label>Match Time Enabled</label>
-        <vaadin-checkbox part="input" ?checked="${this.matchTimeEnabled}"></vaadin-checkbox>
+        <vaadin-checkbox 
+          part="input" 
+          ?checked="${this.matchTimeEnabled}"
+          @change="${this.onMatchTimeEnabledChange}"
+        ></vaadin-checkbox>
         <label>Match Time</label>
         <vaadin-number-field 
           part="input" 
@@ -113,6 +150,7 @@ export default class Fms extends Container {
           clear-button-visible
           has-controls
           theme="small"
+          @change="${this.onMatchTimeChange}"
         ></vaadin-number-field>
       </div>
     `;

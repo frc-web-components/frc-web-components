@@ -70,6 +70,7 @@ class Tabs extends Webbit {
   }
 
   firstUpdated() {
+    super.firstUpdated();
     const observer = new MutationObserver(this.updateTabs);
     observer.observe(this, {
       childList: true

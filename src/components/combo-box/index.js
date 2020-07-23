@@ -53,6 +53,7 @@ class ComboBox extends Container {
   }
 
   firstUpdated() {
+    super.firstUpdated();
     const styleAttributes = ['opened', 'has-value', 'invalid', 'focused', 'focus-ring', 'loading'];
     const input = this.shadowRoot.querySelector('[part="combo-box"]');
 

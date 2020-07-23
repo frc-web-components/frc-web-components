@@ -227,6 +227,7 @@ class Field extends Webbit {
   }
 
   firstUpdated() {
+    super.firstUpdated();
 
     const canvas = this.shadowRoot.querySelector('[part=top-canvas]');
     const ctx = canvas.getContext("2d");

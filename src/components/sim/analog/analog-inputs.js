@@ -78,13 +78,18 @@ export default class AnalogInputs extends Container {
   }
 
   renderInputs() {
-    if (!this.hasSource()) {
-      return html`<p>Add source to show analog inputs.</p>`;
-    }
 
     const source = this.getSource();
     const sourceKey = this.sourceKey;
     const sourceProvider = this.sourceProvider;
+
+    if (!this.hasSource()) {
+      return html`<p>Add source to show analog inputs.</p>`;
+    }
+
+    if (!source) {
+      return html`<p>Start HALSim back-end show analog inputs.</p>`;
+    }
 
     const initializedAnalogs = getRange(8)
       .map(index => {

@@ -80,16 +80,24 @@ export default class DigitalIOs extends Container {
   }
 
   renderInputs() {
-    if (!this.hasSource()) {
-      return html`
-        <label part="header">DIO</label>
-        <p>Add source to show DIOs.</p>
-      `;
-    }
 
     const source = this.getSource();
     const sourceKey = this.sourceKey;
     const sourceProvider = this.sourceProvider;
+
+    if (!this.hasSource()) {
+      return html`
+        <label part="header">DIO</label>
+        <p>Add source to show DIO devices.</p>
+      `;
+    }
+
+    if (!source) {
+      return html`
+        <label part="header">DIO</label>
+        <p>Start HALSim back-end to show DIO devices.</p>
+      `;
+    }
 
     const initializedDIOs = getRange(31)
       .map(index => {

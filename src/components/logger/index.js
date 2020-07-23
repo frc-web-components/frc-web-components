@@ -55,6 +55,7 @@ class Logger extends Webbit {
   }
 
   firstUpdated() {
+    super.firstUpdated();
     const loggerElement = this.shadowRoot.querySelector('[part=logger]');
     this.logger = new HtmlLogger(
       {

@@ -45,6 +45,7 @@ class Grid extends Container {
   }
 
   firstUpdated() {
+    super.firstUpdated();
     this.gridNode = this.shadowRoot.querySelector('[part=grid]');
   }
 

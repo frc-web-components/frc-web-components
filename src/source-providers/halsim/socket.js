@@ -4,7 +4,7 @@ const address = "ws://localhost:8080/ws";
 var socketOpen = false;
 var socket = null;
 
-export function createSocket(onMessage) {
+export function createSocket(onMessage, onClose) {
 
   socket = new WebSocket(address);
   if (socket) {
@@ -23,9 +23,12 @@ export function createSocket(onMessage) {
       if (socketOpen) {
         console.info("Socket closed");
         socket = null;
+        onClose();
       }
       // respawn the websocket
-      setTimeout(createSocket, 300);
+      setTimeout(() => {
+        createSocket(onMessage, onClose);
+      }, 300);
     };
   }
 }

@@ -211,6 +211,7 @@ class LineChart extends Webbit {
   }
 
   firstUpdated() {
+		super.firstUpdated();
 		this.chartElement = this.shadowRoot.querySelector('#chart');
 
 		const slot = this.shadowRoot.querySelector('slot');

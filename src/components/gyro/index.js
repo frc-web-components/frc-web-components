@@ -126,6 +126,7 @@ class Gyro extends Container {
   }
 
   firstUpdated() {
+    super.firstUpdated();
     this.containerNode = this.shadowRoot.querySelector('.container');
   }
 

@@ -83,6 +83,7 @@ class ModelViewer extends Webbit {
   }
 
   firstUpdated() {
+    super.firstUpdated();
     this.model = this.shadowRoot.querySelector('x-model');
 
     const animate = () => {

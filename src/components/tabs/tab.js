@@ -36,6 +36,7 @@ class Tab extends Webbit {
   }
 
   firstUpdated() {
+    super.firstUpdated();
     const slot = this.shadowRoot.querySelector('slot');
     slot.addEventListener('slotchange', (e) => {
       this.dispatchChangeEvent();

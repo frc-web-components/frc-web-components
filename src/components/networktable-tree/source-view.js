@@ -110,6 +110,7 @@ class SourceView extends LitElement {
   }
 
   firstUpdated() {
+    super.firstUpdated();
     const headerNode = this.shadowRoot.querySelector('header');
     headerNode.style.setProperty(
       '--header-key-padding-left', 

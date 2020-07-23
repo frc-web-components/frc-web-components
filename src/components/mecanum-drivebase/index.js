@@ -331,6 +331,7 @@ class MecanumDrivebase extends Container {
   }
 
   firstUpdated() {
+    super.firstUpdated();
     let drawing = this.drawMotionVector(0, 0, 0, 0);
     this.shadowRoot.getElementById('drivetrain').innerHTML = this.drawDrivetrain();
     this.shadowRoot.getElementById('forceVector').innerHTML = drawing;

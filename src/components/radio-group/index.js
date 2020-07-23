@@ -35,6 +35,7 @@ class RadioGroup extends Webbit {
   }
 
   firstUpdated() {
+    super.firstUpdated();
     const styleAttributes = ['focused', 'has-label', 'has-value', 'invalid'];
     const radioGroup = this.shadowRoot.querySelector('[part=radio-group-container]');
 

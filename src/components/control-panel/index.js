@@ -168,6 +168,7 @@ class ControlPanel extends Webbit {
   }
 
   firstUpdated() {
+    super.firstUpdated();
     this.svg = this.shadowRoot.querySelector('svg');
     this.animator = new RotationAnimator(
       this.shadowRoot.querySelector('svg'),

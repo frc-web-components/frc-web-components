@@ -62,6 +62,7 @@ class BooleanBox extends Webbit {
   }
 
   firstUpdated() {
+    super.firstUpdated();
     const backgroundNode = this.shadowRoot.querySelector('[part=box]');
     backgroundNode.style.setProperty('--box-color', this.defaultColor);
   }

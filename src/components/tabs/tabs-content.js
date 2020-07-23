@@ -55,6 +55,7 @@ class TabsContent extends Webbit {
   }
 
   firstUpdated() {
+    super.firstUpdated();
     this.slotElement = this.shadowRoot.querySelector('slot'); 
     this.slotElement.addEventListener('slotchange', () => {
       this.updateContents();

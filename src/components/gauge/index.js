@@ -100,6 +100,7 @@ class GaugeWebbit extends Container {
 };
 
   firstUpdated() {
+    super.firstUpdated();
     this.gaugeInit();
   }
 

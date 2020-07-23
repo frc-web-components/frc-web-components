@@ -35,6 +35,7 @@ class Checkbox extends Container {
   }
 
   firstUpdated() {
+    super.firstUpdated();
     const styleAttributes = ['active', 'focus-ring', 'focused', 'indeterminate', 'empty'];
     const input = this.shadowRoot.querySelector('[part=checkbox-container]');
 

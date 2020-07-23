@@ -27,6 +27,7 @@ class RadioButton extends Webbit {
   }
 
   firstUpdated() {
+    super.firstUpdated();
     const styleAttributes = ['focus-ring', 'focused', 'empty'];
     const input = this.shadowRoot.querySelector('[part=radio-button-container]');
 

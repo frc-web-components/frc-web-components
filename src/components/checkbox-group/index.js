@@ -42,6 +42,7 @@ class CheckboxGroup extends Container {
   }
 
   firstUpdated() {
+    super.firstUpdated();
     const styleAttributes = ['focused', 'has-label', 'has-value', 'invalid'];
     this.checkboxGroup = this.shadowRoot.querySelector('[part=checkbox-group-container]');
 

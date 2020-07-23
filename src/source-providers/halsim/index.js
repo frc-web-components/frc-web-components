@@ -28,9 +28,14 @@ export default class HalSimProvider extends SourceProvider {
     super(providerName, settings);
     this.parentKeyMap = {};
     this.dataToSend = {};
-    createSocket(data => {
-      this.socketUpdate(data);
-    });
+    createSocket(
+      data => {
+        this.socketUpdate(data);
+      },
+      () => {
+        this.clearSources();
+      },
+    );
     // Send data every 50ms
     setInterval(() => {
       if (Object.keys(this.dataToSend).length > 0) {

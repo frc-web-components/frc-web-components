@@ -57,6 +57,7 @@ export default class TextField extends Webbit {
   }
 
   firstUpdated() {
+    super.firstUpdated();
     const styleAttributes = ['has-value', 'has-label', 'invalid', 'input-prevented', 'focused', 'focus-ring'];
     const input = this.shadowRoot.querySelector('[part=input]');
 
