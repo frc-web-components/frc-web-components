@@ -69,4 +69,4 @@ export default class DigitalIO extends Container {
   }
 }
 
-webbitRegistry.define('frc-dio', DigitalIO);
+webbitRegistry.define('frc-sim-dio', DigitalIO);

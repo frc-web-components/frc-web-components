@@ -157,4 +157,4 @@ export default class Fms extends Container {
   }
 }
 
-webbitRegistry.define('frc-fms', Fms);
+webbitRegistry.define('frc-sim-fms', Fms);

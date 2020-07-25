@@ -120,4 +120,4 @@ class RobotState extends Container {
   }
 }
 
-webbitRegistry.define('frc-robot-state', RobotState);
+webbitRegistry.define('frc-sim-robot-state', RobotState);

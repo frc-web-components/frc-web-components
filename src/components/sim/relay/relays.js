@@ -9,11 +9,11 @@ function getRange(length) {
   return array;
 } 
 
-export default class AnalogInputs extends Container {
+export default class Relays extends Container {
 
   static get metadata() {
     return {
-      displayName: 'Analog Inputs',
+      displayName: 'Relays',
       category: 'Simulation',
       // description: 'Component for displaying data from a 3-axis accelerometer.',
       // documentationLink: 'https://frc-web-components.github.io/components/number-bar/'
@@ -34,8 +34,9 @@ export default class AnalogInputs extends Container {
           width: 100%;
           display: inline-grid;
           grid-template-columns: min-content auto;
-          grid-auto-rows: 25px;
+          grid-auto-rows: 30px;
           column-gap: 8px;
+          align-items: center;
         }
 
         label {
@@ -52,7 +53,7 @@ export default class AnalogInputs extends Container {
           color: #555;
         }
 
-        frc-sim-analog-input {
+        frc-sim-relay {
           width: 100%;
           min-width: 50px;
           padding: 0;
@@ -68,7 +69,7 @@ export default class AnalogInputs extends Container {
 
   constructor() {
     super();
-    this.sourceKey = 'AI';
+    this.sourceKey = 'Relay';
     this.sourceProvider = 'HALSim';
 
     this.display = 'inline-block';
@@ -84,16 +85,16 @@ export default class AnalogInputs extends Container {
     const sourceProvider = this.sourceProvider;
 
     if (!this.hasSource()) {
-      return html`<p>Add source to show analog inputs.</p>`;
+      return html`<p>Add source to show relays.</p>`;
     }
 
     if (!source) {
-      return html`<p>Start HALSim back-end to show analog inputs.</p>`;
+      return html`<p>Start HALSim back-end to show relays.</p>`;
     }
 
-    const initializedAnalogs = getRange(8)
+    const initializedRelays = getRange(4)
       .map(index => {
-        const initialized = source[index] && source[index].init;
+        const initialized = source[index] && (source[index].initFwd || source[index].initRev);
         return {
           index,
           initialized,
@@ -102,18 +103,18 @@ export default class AnalogInputs extends Container {
       })
       .filter(({ initialized }) => initialized);
 
-    if (initializedAnalogs.length === 0) {
-      return html`<p>No analog inputs</p>`;
+    if (initializedRelays.length === 0) {
+      return html`<p>No relays</p>`;
     }
 
     return html`
       <div part="inputs">
-        ${initializedAnalogs.map(analogInput => html`
-          <label>${analogInput.index}</label>
-          <frc-sim-analog-input 
-            source-key="${analogInput.sourceKey}"
+        ${initializedRelays.map(relay => html`
+          <label>${relay.index}</label>
+          <frc-sim-relay 
+            source-key="${relay.sourceKey}"
             source-provider="${sourceProvider}"
-          ></frc-sim-analog-input>
+          ></frc-sim-relay>
         `)}
       </div>
     `;
@@ -121,10 +122,10 @@ export default class AnalogInputs extends Container {
 
   render() {
     return html`
-      <label part="header">Analog Inputs</label>
+      <label part="header">Relays</label>
       ${this.renderInputs()}
     `;
   }
 }
 
-webbitRegistry.define('frc-sim-analog-inputs', AnalogInputs);
+webbitRegistry.define('frc-sim-relays', Relays);

@@ -53,7 +53,7 @@ export default class DigitalIOs extends Container {
           color: #555;
         }
 
-        frc-dio {
+        frc-sim-dio {
           width: 100%;
           min-width: 50px;
           padding: 0;
@@ -115,7 +115,7 @@ export default class DigitalIOs extends Container {
     if (initializedDIOs.length === 0) {
       return html`
         <label part="header">DIO</label>
-        <p>No DIOs</p>
+        <p>No DIO devices</p>
       `;
     }
 
@@ -127,10 +127,10 @@ export default class DigitalIOs extends Container {
           <label>
             ${dio.input ? 'In' : 'Out'}[${dio.index}]
           </label>
-          <frc-dio
+          <frc-sim-dio
             source-key="${dio.sourceKey}"
             source-provider="${sourceProvider}"
-          ></frc-dio>
+          ></frc-sim-dio>
         `)}
       </div>
     `;
@@ -143,4 +143,4 @@ export default class DigitalIOs extends Container {
   }
 }
 
-webbitRegistry.define('frc-dios', DigitalIOs);
+webbitRegistry.define('frc-sim-dios', DigitalIOs);

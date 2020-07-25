@@ -65,4 +65,4 @@ export default class AnalogInput extends Container {
   }
 }
 
-webbitRegistry.define('frc-analog-input', AnalogInput);
+webbitRegistry.define('frc-sim-analog-input', AnalogInput);
