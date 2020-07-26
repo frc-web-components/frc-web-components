@@ -9,11 +9,11 @@ function getRange(length) {
   return array;
 } 
 
-export default class AnalogInputs extends Container {
+export default class Pwms extends Container {
 
   static get metadata() {
     return {
-      displayName: 'Analog Inputs',
+      displayName: 'PWMs',
       category: 'Simulation',
       // description: 'Component for displaying data from a 3-axis accelerometer.',
       // documentationLink: 'https://frc-web-components.github.io/components/number-bar/'
@@ -52,7 +52,7 @@ export default class AnalogInputs extends Container {
           color: #555;
         }
 
-        frc-sim-analog-input {
+        frc-sim-pwm {
           width: 100%;
           min-width: 50px;
           padding: 0;
@@ -68,7 +68,7 @@ export default class AnalogInputs extends Container {
 
   constructor() {
     super();
-    this.sourceKey = 'AI';
+    this.sourceKey = 'PWM';
     this.sourceProvider = 'HALSim';
 
     this.display = 'inline-block';
@@ -84,14 +84,14 @@ export default class AnalogInputs extends Container {
     const sourceProvider = this.sourceProvider;
 
     if (!this.hasSource()) {
-      return html`<p>Add source to show analog inputs.</p>`;
+      return html`<p>Add source to show PWMs.</p>`;
     }
 
     if (!source) {
-      return html`<p>Start HALSim back-end to show analog inputs.</p>`;
+      return html`<p>Start HALSim back-end to show PWMs.</p>`;
     }
 
-    const initializedAnalogs = getRange(8)
+    const initializedPwms = getRange(8)
       .map(index => {
         const initialized = source[index] && source[index].init;
         return {
@@ -102,18 +102,18 @@ export default class AnalogInputs extends Container {
       })
       .filter(({ initialized }) => initialized);
 
-    if (initializedAnalogs.length === 0) {
-      return html`<p>No analog inputs</p>`;
+    if (initializedPwms.length === 0) {
+      return html`<p>No PWMs</p>`;
     }
 
     return html`
       <div part="inputs">
-        ${initializedAnalogs.map(analogInput => html`
-          <label>${analogInput.index}</label>
-          <frc-sim-analog-input 
-            source-key="${analogInput.sourceKey}"
+        ${initializedPwms.map(pwm => html`
+          <label>${pwm.index}</label>
+          <frc-sim-pwm
+            source-key="${pwm.sourceKey}"
             source-provider="${sourceProvider}"
-          ></frc-sim-analog-input>
+          ></frc-sim-pwm>
         `)}
       </div>
     `;
@@ -121,10 +121,10 @@ export default class AnalogInputs extends Container {
 
   render() {
     return html`
-      <label part="header">Analog Inputs</label>
+      <label part="header">PWM</label>
       ${this.renderInputs()}
     `;
   }
 }
 
-webbitRegistry.define('frc-sim-analog-inputs', AnalogInputs);
+webbitRegistry.define('frc-sim-pwms', Pwms);
