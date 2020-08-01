@@ -4,3 +4,4 @@ import './dio';
 import './fms';
 import './relay';
 import './pwm';
+import './encoder';
