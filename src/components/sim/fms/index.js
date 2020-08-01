@@ -62,9 +62,7 @@ export default class Fms extends Container {
 
   constructor() {
     super();
-    this.sourceKey = 'driverStation';
-    this.sourceProvider = 'HALSim';
-
+  
     this.display = 'inline-block';
     this.width = '300px';
     this.height = 'auto';
@@ -75,6 +73,9 @@ export default class Fms extends Container {
     this.station = 'red1';
     this.matchTimeEnabled = true;
     this.matchTime = 0;
+
+    this.sourceKey = 'driverStation';
+    this.sourceProvider = 'HALSim';
   }
 
   onFmsChange(ev) {
