@@ -6,3 +6,4 @@ import './relay';
 import './pwm';
 import './encoder';
 import './field2d';
+import './joystick';
