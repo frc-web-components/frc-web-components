@@ -9,6 +9,7 @@ class FrcDashboard extends WebbitDashboard {
 
     addSourceProvider('HALSim', 'HALSim');
     addSourceProvider('NetworkTables', 'NetworkTables');
+    addSourceProvider('Gamepad', 'Gamepad');
     setDefaultSourceProvider('NetworkTables');
 
     const script = document.createElement('script');
