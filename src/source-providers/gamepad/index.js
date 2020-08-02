@@ -24,9 +24,9 @@ export default class GamepadProvider extends SourceProvider {
           this.removeSource(`${index}/index`);
           this.removeSource(`${index}/mapping`);
           this.removeSource(`${index}/timestamp`);
-          this.removeSource(`${index}/button/presses`);
-          this.removeSource(`${index}/button/touches`);
-          this.removeSource(`${index}/button/values`);
+          this.removeSource(`${index}/buttonPresses`);
+          this.removeSource(`${index}/buttonTouches`);
+          this.removeSource(`${index}/buttonValues`);
           return;
         }
 
@@ -50,9 +50,9 @@ export default class GamepadProvider extends SourceProvider {
           values.push(value);
         });
 
-        this.updateSource(`${index}/button/presses`, presses);
-        this.updateSource(`${index}/button/touches`, touches);
-        this.updateSource(`${index}/button/values`, values);
+        this.updateSource(`${index}/buttonPresses`, presses);
+        this.updateSource(`${index}/buttonTouches`, touches);
+        this.updateSource(`${index}/buttonValues`, values);
       });
 
       window.requestAnimationFrame(update);
