@@ -1,16 +1,40 @@
 import { html, css } from '@webbitjs/webbit';
 import Container from '../../container';
 
+const hasArrayChanged = (newVal, oldVal) => {
+  if (
+      (newVal && !oldVal)
+      || (!newVal && oldVal)
+  ) {
+    return true;
+  }
+  if (newVal.length !== oldVal.length) {
+    return true;
+  }
+  for (let i = 0; i < newVal.length; i++) {
+    if (newVal[i] !== oldVal[i]) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export default class Gamepad extends Container {
 
   static get properties() {
     return {
       ...super.properties,
-      axes: { type: Array },
+      axes: { 
+        type: Array,
+        hasChanged: hasArrayChanged
+      },
       connected: { type: Boolean },
       id: { type: String },
       index: { type: Number },
-      buttonPresses: { type: Array },
+      buttonPresses: { 
+        type: Array,
+        hasChanged: hasArrayChanged
+      },
     };
   }
 
@@ -78,6 +102,15 @@ export default class Gamepad extends Container {
           flex: 1;
           width: auto;
         }
+
+        frc-bar::part(foreground) {
+          border-radius: 0;
+          background: rgba(200,0,0,.5);
+        }
+
+        frc-bar[positive]::part(foreground) {
+          background: rgba(0,180,0,.8);
+        }
       `
     ];
   }
@@ -99,9 +132,19 @@ export default class Gamepad extends Container {
     super.updated(changedProps);
 
     if (changedProps.has('buttonPresses')) {
-
+      const event = new CustomEvent('buttonPressChange', {
+        bubbles: true,
+        composed: true,
+        detail: { buttonPresses: this.buttonPresses }
+      });
+      this.dispatchEvent(event);
     } else if (changedProps.has('axes')) {
-
+      const event = new CustomEvent('axesChange', {
+        bubbles: true,
+        composed: true,
+        detail: { axes: this.axes }
+      });
+      this.dispatchEvent(event);
     }
   }
 
@@ -121,7 +164,8 @@ export default class Gamepad extends Container {
         ${this.axes.map((axis, index) => html`
           <div part="axis">
             <label>A${index}</label>
-            <frc-bar 
+            <frc-bar
+              ?positive="${axis >= 0}"
               value="${axis}"
               min="-1"
               max="1"

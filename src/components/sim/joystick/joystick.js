@@ -52,8 +52,18 @@ export default class Joystick extends Container {
     this.gamepad = 0;
   }
 
-  onButtonChange(ev) {
-    
+  onButtonPressChange(ev) {
+    if (this.hasSource()) {
+      const source = this.getSource();
+      source.buttons = ev.detail.buttonPresses;
+    }
+  }
+
+  onAxesChange(ev) {
+    if (this.hasSource()) {
+      const source = this.getSource();
+      source.axes = ev.detail.axes;
+    }
   }
 
   render() {
@@ -61,6 +71,8 @@ export default class Joystick extends Container {
       <frc-sim-gamepad
         source-provider="Gamepad"
         source-key="${this.gamepad.toString()}"
+        @buttonPressChange="${this.onButtonPressChange}"
+        @axesChange="${this.onAxesChange}"
       ></frc-sim-gamepad>
     `;
   }

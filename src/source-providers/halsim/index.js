@@ -4,7 +4,9 @@ import { createSocket, sendMsg } from './socket';
 // https://andrewdupont.net/2009/08/28/deep-extending-objects-in-javascript/
 const deepExtend = (destination, source) => {
   for (let property in source) {
-    if (typeof source[property] === "object") {
+    if (source[property] instanceof Array) {
+      destination[property] = source[property];
+    } else if (typeof source[property] === "object") {
       destination[property] = destination[property] || {};
       deepExtend(destination[property], source[property]);
     } else {
