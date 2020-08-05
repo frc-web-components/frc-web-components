@@ -198,7 +198,7 @@ class WomTools extends LitElement {
                   .node="${this.wom.getRootNode()}"
                   .selectedNode="${this.wom ? this.wom.getSelectedNode() : null}"
                   .container="${this.toolsTopElement}"
-                  ?adding-element="${this.wom && this.wom.getSelectedActionId() === 'addNode'}"
+                  ?target-needed="${this.wom && this.wom.isActionTargetNeeded()}"
                   level="0"
                 ></wom-viewer>
               ` : ''}

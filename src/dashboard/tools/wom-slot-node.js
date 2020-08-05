@@ -10,13 +10,13 @@ class WomSlotNode extends LitElement {
         font-size: 15px;
       }
 
-      :host([adding-element]) header:hover, 
-      :host([adding-element]) header:hover .key, 
-      :host([adding-element]) header:hover .key label {
+      :host([target-needed]) header:hover, 
+      :host([target-needed]) header:hover .key, 
+      :host([target-needed]) header:hover .key label {
         cursor: cell;
       }
 
-      :host([adding-element]) header:hover .key {
+      :host([target-needed]) header:hover .key {
         box-shadow: 0px 8px 0px 0px #87b187
       }
       
@@ -88,8 +88,8 @@ class WomSlotNode extends LitElement {
 
   }
 
-  onAddElementPreview() {
-    this.wom.setActionContext('addNode', {
+  onActionPreview() {
+    this.wom.setActionContext(this.wom.getSelectedActionId(), {
       placement: 'inside',
       slot: this.slot,
       targetedNode: this.parentNode
@@ -104,7 +104,7 @@ class WomSlotNode extends LitElement {
     return html`
       <div class="node">
         <header 
-          @mousemove="${this.onAddElementPreview}" 
+          @mousemove="${this.onActionPreview}" 
           @click="${this.onSelect}"
         >
           <span class="key">

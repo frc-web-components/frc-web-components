@@ -13,13 +13,13 @@ class WomViewer extends LitElement {
         font-size: 15px;
       }
 
-      :host([adding-element]:not([level="0"])) header:hover, 
-      :host([adding-element]:not([level="0"])) header:hover .key, 
-      :host([adding-element]:not([level="0"])) header:hover .key label {
+      :host([target-needed]:not([level="0"])) header:hover, 
+      :host([target-needed]:not([level="0"])) header:hover .key, 
+      :host([target-needed]:not([level="0"])) header:hover .key label {
         cursor: cell;
       }
 
-      :host([adding-element]:not([level="0"])) header:hover .key {
+      :host([target-needed]:not([level="0"])) header:hover .key {
         box-shadow: 0px var(--add-element-position, 8px) 0px 0px #87b187
       }
       
@@ -94,7 +94,7 @@ class WomViewer extends LitElement {
       node: { type: Object },
       selectedNode: { type: Object },
       level: { type: Number },
-      addingElement: { type: Boolean, attribute: 'adding-element', reflect: true },
+      targetNeeded: { type: Boolean, attribute: 'target-needed', reflect: true },
       container: { type: Object }
     };
   }
@@ -107,7 +107,7 @@ class WomViewer extends LitElement {
     this.node = null;
     this.selectedNode = null;
     this.level = 0;
-    this.addingElement = false;
+    this.targetNeeded = false;
     this.headerNode = null;
     this.container = null;
   }
@@ -182,7 +182,7 @@ class WomViewer extends LitElement {
     }
   }
 
-  onAddElementPreview(ev) {
+  onActionPreview(ev) {
 
     // Don't allow elements to be added before or after root node
     if (this.level === 0) {
@@ -197,7 +197,7 @@ class WomViewer extends LitElement {
 
     if (loc < height / 2) {
       target.style.setProperty('--add-element-position', '-8px');
-      this.wom.setActionContext('addNode', {
+      this.wom.setActionContext(this.wom.getSelectedActionId(), {
         placement: 'before',
         slot: this.slot,
         targetedNode: this.node
@@ -205,7 +205,7 @@ class WomViewer extends LitElement {
     }
     else {
       target.style.setProperty('--add-element-position', '8px');
-      this.wom.setActionContext('addNode', {
+      this.wom.setActionContext(this.wom.getSelectedActionId(), {
         placement: 'after',
         slot: this.slot,
         targetedNode: this.node
@@ -245,7 +245,7 @@ class WomViewer extends LitElement {
         <header 
           class="${this.expanded ? 'expanded' : 'collapsed'} ${this.isSelected() ? 'selected' : ''}"
           @click="${this.onSelect}"  
-          @mousemove="${this.onAddElementPreview}"
+          @mousemove="${this.onActionPreview}"
           @mouseenter="${this.onPreview}"
           @mouseleave="${this.onPreviewEnd}"
         >
@@ -270,7 +270,7 @@ class WomViewer extends LitElement {
                 .parentNode="${this.node}"
                 slot="${slot}"
                 level="${this.level + 1}"
-                ?adding-element="${this.addingElement}"
+                ?target-needed="${this.targetNeeded}"
               ></wom-slot-node>
               ${children.map(node => html`
                 <wom-viewer
@@ -280,7 +280,7 @@ class WomViewer extends LitElement {
                   .selectedNode="${this.selectedNode}"
                   .container="${this.container}"
                   level="${this.level + 1}"
-                  ?adding-element="${this.addingElement}"
+                  ?target-needed="${this.targetNeeded}"
                 ></wom-viewer>
               `)}
             `)}

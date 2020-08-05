@@ -157,6 +157,12 @@ class Wom {
     })
   }
 
+  isActionTargetNeeded() {
+    const actionId = this.getSelectedActionId();
+    const action = this.getAction(actionId);
+    return action && action.needsTarget;
+  }
+
   setActionContext(id, context) {
 
     const actionId = this.getSelectedActionId();
