@@ -28,10 +28,28 @@ class WomTools extends LitElement {
         width: 100%;
         background: #eee;
         display: block;
+        display: flex;
+        align-items: center;
       }
 
       [part=top-menu] vaadin-button {
         color: black;
+        padding: 0;
+      }
+
+      [part=top-menu] vaadin-button[disabled] {
+        color: #999;
+      }
+
+      [part=top-menu] vaadin-button[selected] {
+        color: blue;
+      }
+
+      [part=top-tools-separator] {
+        height: 70%;
+        width: 1px;
+        background: #aaa;
+        margin: 0 10px;
       }
 
       [part=tools-top], [part=tools-bottom] {
@@ -95,7 +113,23 @@ class WomTools extends LitElement {
     }
   }
 
-  onRemoveElement() {
+  onCutNode() {
+    if (this.wom.getSelectedActionId() !== 'cutNode') {
+      this.wom.selectAction('cutNode');
+    } else {
+      this.wom.deselectAction();
+    }
+  }
+
+  onCopyNode() {
+    if (this.wom.getSelectedActionId() !== 'copyNode') {
+      this.wom.selectAction('copyNode');
+    } else {
+      this.wom.deselectAction();
+    }
+  }
+
+  onRemoveNode() {
     this.wom.selectAction('removeNode');
   }
 
@@ -103,13 +137,57 @@ class WomTools extends LitElement {
     return html`
       <div part="tools">
         <div part="top-menu">
-          <vaadin-button 
-            theme="icon tertiary" 
-            aria-label="Remove element"
-            @click="${this.onRemoveElement}"
-          >
-            <iron-icon icon="vaadin:trash"></iron-icon>
-          </vaadin-button>
+          <div part="top-tools-left">
+
+            <vaadin-button 
+              theme="icon tertiary" 
+              aria-label="Cut node"
+              @click="${this.onCutNode}"
+              ?disabled="${!this.wom.getSelectedNode()}"
+              ?selected="${this.wom.getSelectedActionId() === 'cutNode'}"
+            >
+              <iron-icon icon="vaadin:scissors"></iron-icon>
+            </vaadin-button>
+            <vaadin-button 
+              theme="icon tertiary"
+              aria-label="Copy node"
+              @click="${this.onCopyNode}"
+              ?disabled="${!this.wom.getSelectedNode()}"
+              ?selected="${this.wom.getSelectedActionId() === 'copyNode'}"
+            >
+              <iron-icon icon="vaadin:copy"></iron-icon>
+            </vaadin-button>
+            <vaadin-button 
+              theme="icon tertiary" 
+              aria-label="Remove node"
+              @click="${this.onRemoveNode}"
+              ?disabled="${!this.wom.getSelectedNode()}"
+            >
+              <iron-icon icon="vaadin:trash"></iron-icon>
+            </vaadin-button>
+
+          </div>
+          <div part="top-tools-separator"></div>
+          <div part="top-tools-right">
+            <vaadin-button 
+              theme="icon tertiary" 
+              aria-label="New layout"  
+            >
+              <iron-icon icon="vaadin:file-add"></iron-icon>
+            </vaadin-button>
+            <vaadin-button 
+              theme="icon tertiary" 
+              aria-label="Open layout"  
+            >
+              <iron-icon icon="vaadin:folder-open"></iron-icon>
+            </vaadin-button>
+            <vaadin-button 
+              theme="icon tertiary" 
+              aria-label="Download layout"  
+            >
+              <iron-icon icon="vaadin:download-alt"></iron-icon>
+            </vaadin-button>
+          </div>
         </div>
         <vaadin-split-layout part="tools-splitter" theme="small" orientation="vertical">
           <div part="tools-top" style="height: 40%">

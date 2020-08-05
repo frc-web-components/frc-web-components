@@ -1,6 +1,8 @@
 import { LitElement, html, css } from 'lit-element';
 import Wom from './wom';
 import AddNode from './actions/add-node';
+import CopyNode from './actions/copy-node';
+import CutNode from './actions/cut-node';
 import RemoveNode from './actions/remove-node';
 import SetSource from './actions/set-source';
 import SetProperties from './actions/set-properties';
@@ -89,6 +91,8 @@ class WebbitDashboard extends LitElement {
 
         // add actions
         this.wom.addAction('addNode', new AddNode());
+        this.wom.addAction('copyNode', new CopyNode());
+        this.wom.addAction('cutNode', new CutNode());
         this.wom.addAction('removeNode', new RemoveNode());
         this.wom.addAction('setSource', new SetSource());
         this.wom.addAction('setProperties', new SetProperties());
