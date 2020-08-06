@@ -322,6 +322,10 @@ class Wom {
 
     this.rootNode.dispatchEvent(event);
   }
+
+  getJson() {
+    return this.womNode.getJson();
+  }
 }
 
 

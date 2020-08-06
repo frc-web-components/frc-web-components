@@ -99,6 +99,21 @@ export default class WomNode {
     this.wom.dispatchEvent('womNodeDestroy', { node: this });
   }
 
+  getJson() {
+    return {
+      name: this.getName(),
+      slot: this.node.getAttribute('slot'),
+      webbit: {
+        isWebbit: this.isWebbit(),
+        id: this.getWebbitId(),
+        sourceProvider: this.getSourceProvider(),
+        sourceKey: this.getSourceKey(),
+        properties: {}
+      },
+      children: this.getChildren().map(node => node.getJson())
+    };
+  }
+
   build() {
     this.childNodes = getChildWebbits(this.node).map(node => {
       const womNode = new WomNode(node, this.wom, this.ancestors.concat(this));
@@ -151,6 +166,14 @@ export default class WomNode {
 
   getWebbitId() {
     return isWebbit(this.node) ? this.node.webbitId : null;
+  }
+
+  getSourceProvider() {
+    return isWebbit(this.node) ? this.node.sourceProvider : null;
+  }
+
+  getSourceKey() {
+    return isWebbit(this.node) ? this.node.sourceKey : null;
   }
 
   getMetadata() {

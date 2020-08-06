@@ -133,6 +133,10 @@ class WomTools extends LitElement {
     this.wom.selectAction('removeNode');
   }
 
+  onSaveLayout() {
+    this.wom.selectAction('saveLayout');
+  }
+
   render() {
     return html`
       <div part="tools">
@@ -183,7 +187,8 @@ class WomTools extends LitElement {
             </vaadin-button>
             <vaadin-button 
               theme="icon tertiary" 
-              aria-label="Download layout"  
+              aria-label="Download layout"
+              @click="${this.onSaveLayout}"
             >
               <iron-icon icon="vaadin:download-alt"></iron-icon>
             </vaadin-button>
