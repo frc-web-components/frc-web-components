@@ -108,7 +108,7 @@ export default class WomNode {
         id: this.getWebbitId(),
         sourceProvider: this.getSourceProvider(),
         sourceKey: this.getSourceKey(),
-        properties: {}
+        properties: this.getDefaultProps(),
       },
       children: this.getChildren().map(node => node.getJson())
     };
@@ -174,6 +174,10 @@ export default class WomNode {
 
   getSourceKey() {
     return isWebbit(this.node) ? this.node.sourceKey : null;
+  }
+
+  getDefaultProps() {
+    return isWebbit(this.node) ? this.node.defaultProps : {};
   }
 
   getMetadata() {

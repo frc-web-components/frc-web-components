@@ -42,7 +42,7 @@ export default class PropertyView extends LitElement {
   }
 
   getValue() {
-    return this.selectedNode.getNode()[this.propertyName];
+    return this.selectedNode.getDefaultProps()[this.propertyName];
   }
 
   isInputModified() {
@@ -61,13 +61,6 @@ export default class PropertyView extends LitElement {
 
   cancel() {
     this.inputValue = this.getValue();
-  }
-
-  confirm() {
-    if (this.isValid()) {
-      this.selectedNode.getNode()[this.propertyName] = this.inputValue;
-      this.requestUpdate();
-    }
   }
 
   getPropertyNameValuePair() {
