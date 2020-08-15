@@ -137,6 +137,10 @@ class WomTools extends LitElement {
     this.wom.selectAction('saveLayout');
   }
 
+  onNewLayout() {
+    this.wom.selectAction('newLayout');
+  }
+
   render() {
     return html`
       <div part="tools">
@@ -175,7 +179,8 @@ class WomTools extends LitElement {
           <div part="top-tools-right">
             <vaadin-button 
               theme="icon tertiary" 
-              aria-label="New layout"  
+              aria-label="New layout"
+              @click="${this.onNewLayout}"
             >
               <iron-icon icon="vaadin:file-add"></iron-icon>
             </vaadin-button>
