@@ -8,6 +8,7 @@ import SetSource from './actions/set-source';
 import SetProperties from './actions/set-properties';
 import SaveLayout from './actions/save-layout';
 import NewLayout from './actions/new-layout';
+import LoadLayout from './actions/load-layout';
 import './builder/index';
 import './tools';
 
@@ -100,6 +101,7 @@ class WebbitDashboard extends LitElement {
         this.wom.addAction('setProperties', new SetProperties());
         this.wom.addAction('saveLayout', new SaveLayout());
         this.wom.addAction('newLayout', new NewLayout());
+        this.wom.addAction('loadLayout', new LoadLayout());
       }
     }
   }

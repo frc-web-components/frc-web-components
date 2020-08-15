@@ -1,7 +1,7 @@
 import Action from '../action';
-import { saveJson } from '../utils';
+import { loadJson } from '../utils';
 
-export default class SaveLayout extends Action {
+export default class LoadLayout extends Action {
 
   constructor() {
     super({
@@ -11,8 +11,13 @@ export default class SaveLayout extends Action {
   }
 
   execute({ wom }) {
-    wom.womNode.getChildren().forEach(node => {
-      wom.removeNode(node);
-    })
+    loadJson().then(({ result, error }) => {
+      if (error) {
+        alert('error loading layout!');
+        return;
+      }
+      wom.selectAction('newLayout');
+      console.log('layout:', result);
+    });
   };
 }

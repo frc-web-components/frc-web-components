@@ -37,7 +37,7 @@ export const saveJson = (data, filename = 'layout.json') => {
 
   data = JSON.stringify(data, undefined, 2);
   const blob = new Blob([data], {type: 'text/json'});
-  const a = document.createElement('a')
+  const a = document.createElement('a');
 
   a.download = filename;
   a.href = window.URL.createObjectURL(blob);
@@ -50,5 +50,52 @@ export const saveJson = (data, filename = 'layout.json') => {
   a.dispatchEvent(evt);
 }
 
-window.saveJson = saveJson;
+export const loadJson = () => {
+  return new Promise(resolve => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'application/JSON';
+
+    fileInput.onchange = () => {
+      const { files } = fileInput;
+
+      if (files.length < 1) {
+        resolve({
+          result: {},
+          cancelled: true,
+          error: false,
+        });
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = (e) => { 
+        try {
+          const result = JSON.parse(e.target.result);
+          resolve({
+            result,
+            cancelled: false,
+            error: false,
+          });
+        }
+        catch(e) {
+          resolve({
+            result: {},
+            cancelled: false,
+            error: true,
+          });
+        }
+      }
+
+      reader.readAsText(files.item(0));
+    };
+
+    const evt = new MouseEvent("click", {
+      bubbles: true,
+      cancelable: true,
+      view: window
+    });
+    fileInput.dispatchEvent(evt);
+  });
+};
 

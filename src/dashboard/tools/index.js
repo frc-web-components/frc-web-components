@@ -141,6 +141,10 @@ class WomTools extends LitElement {
     this.wom.selectAction('newLayout');
   }
 
+  onLoadLayout() {
+    this.wom.selectAction('loadLayout');
+  }
+
   render() {
     return html`
       <div part="tools">
@@ -186,7 +190,8 @@ class WomTools extends LitElement {
             </vaadin-button>
             <vaadin-button 
               theme="icon tertiary" 
-              aria-label="Open layout"  
+              aria-label="Open layout"
+              @click="${this.onLoadLayout}" 
             >
               <iron-icon icon="vaadin:folder-open"></iron-icon>
             </vaadin-button>
