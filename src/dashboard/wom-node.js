@@ -102,7 +102,7 @@ export default class WomNode {
   getJson() {
     return {
       name: this.getName(),
-      slot: this.node.getAttribute('slot'),
+      slot: this.node.getAttribute('slot') || '',
       webbit: {
         isWebbit: this.isWebbit(),
         id: this.getWebbitId(),
