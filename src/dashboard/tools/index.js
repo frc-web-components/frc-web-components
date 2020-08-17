@@ -145,6 +145,14 @@ class WomTools extends LitElement {
     this.wom.selectAction('loadLayout');
   }
 
+  onUndo() {
+
+  }
+
+  onRedo() {
+
+  }
+
   render() {
     return html`
       <div part="tools">
@@ -153,7 +161,8 @@ class WomTools extends LitElement {
 
             <vaadin-button 
               theme="icon tertiary" 
-              aria-label="Cut node"
+              aria-label="Cut Node"
+              title="Cut Node"
               @click="${this.onCutNode}"
               ?disabled="${!this.wom.getSelectedNode()}"
               ?selected="${this.wom.getSelectedActionId() === 'cutNode'}"
@@ -162,7 +171,8 @@ class WomTools extends LitElement {
             </vaadin-button>
             <vaadin-button 
               theme="icon tertiary"
-              aria-label="Copy node"
+              aria-label="Copy Node"
+              title="Copy Node"
               @click="${this.onCopyNode}"
               ?disabled="${!this.wom.getSelectedNode()}"
               ?selected="${this.wom.getSelectedActionId() === 'copyNode'}"
@@ -171,7 +181,8 @@ class WomTools extends LitElement {
             </vaadin-button>
             <vaadin-button 
               theme="icon tertiary" 
-              aria-label="Remove node"
+              aria-label="Remove Node"
+              title="Remove Node"
               @click="${this.onRemoveNode}"
               ?disabled="${!this.wom.getSelectedNode()}"
             >
@@ -180,24 +191,46 @@ class WomTools extends LitElement {
 
           </div>
           <div part="top-tools-separator"></div>
+          <div part="top-tools-middle">
+            <vaadin-button 
+              theme="icon tertiary" 
+              aria-label="Undo"
+              title="Undo"
+              @click="${this.onUndo}"
+            >
+              <iron-icon icon="vaadin:rotate-left"></iron-icon>
+            </vaadin-button>
+            <vaadin-button 
+              theme="icon tertiary" 
+              aria-label="Redo"
+              title="Redo"
+              @click="${this.onRedo}"
+            >
+              <iron-icon icon="vaadin:rotate-right"></iron-icon>
+            </vaadin-button>
+          </div>
+          <div part="top-tools-separator"></div>
           <div part="top-tools-right">
             <vaadin-button 
               theme="icon tertiary" 
               aria-label="New layout"
+              title="New Layout"
               @click="${this.onNewLayout}"
             >
               <iron-icon icon="vaadin:file-add"></iron-icon>
             </vaadin-button>
             <vaadin-button 
               theme="icon tertiary" 
-              aria-label="Open layout"
+              aria-label="Open Layout"
+              title="Open Layout"
               @click="${this.onLoadLayout}" 
             >
               <iron-icon icon="vaadin:folder-open"></iron-icon>
             </vaadin-button>
             <vaadin-button 
               theme="icon tertiary" 
-              aria-label="Download layout"
+              aria-label="Download Layout"
+              title="Download Layout"
               @click="${this.onSaveLayout}"
             >
               <iron-icon icon="vaadin:download-alt"></iron-icon>
