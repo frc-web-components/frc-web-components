@@ -153,6 +153,10 @@ class WomTools extends LitElement {
 
   }
 
+  onLoadExtension() {
+    
+  }
+
   render() {
     return html`
       <div part="tools">
@@ -188,10 +192,6 @@ class WomTools extends LitElement {
             >
               <iron-icon icon="vaadin:trash"></iron-icon>
             </vaadin-button>
-
-          </div>
-          <div part="top-tools-separator"></div>
-          <div part="top-tools-middle">
             <vaadin-button 
               theme="icon tertiary" 
               aria-label="Undo"
@@ -234,6 +234,14 @@ class WomTools extends LitElement {
               @click="${this.onSaveLayout}"
             >
               <iron-icon icon="vaadin:download-alt"></iron-icon>
+            </vaadin-button>
+            <vaadin-button 
+              theme="icon tertiary" 
+              aria-label="Load Extension"
+              title="Load Extension"
+              @click="${this.onLoadExtension}"
+            >
+              <iron-icon icon="vaadin:puzzle-piece"></iron-icon>
             </vaadin-button>
           </div>
         </div>

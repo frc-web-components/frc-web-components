@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit-element';
 import '../sources/sources-tool';
 import '../components/components-tool';
 import '../properties/properties-tool';
+import '../properties/styles-tool';
 
 class DashboardToolsBottom extends LitElement {
 
@@ -75,6 +76,7 @@ class DashboardToolsBottom extends LitElement {
         <vaadin-tab>Components</vaadin-tab>
         <vaadin-tab>Properties</vaadin-tab>
         <vaadin-tab>Sources</vaadin-tab>
+        <vaadin-tab>Styles</vaadin-tab>
       </vaadin-tabs>
       <div part="tab-content">
         ${this.selectedTab === 0 ? html`
@@ -95,6 +97,13 @@ class DashboardToolsBottom extends LitElement {
             .selectedNode="${this.selectedNode}"
             .wom="${this.wom}"
           ></dashboard-sources-tool>
+        ` : ''}
+
+        ${this.selectedTab === 3 ? html`
+          <dashboard-styles-tool 
+            .selectedNode="${this.selectedNode}"
+            .wom="${this.wom}"
+          ></dashboard-styles-tool>
         ` : ''}
       </div>
     `;
