@@ -13,7 +13,7 @@ export const createElement = (componentType, slot, isPreview) => {
   }
 
   return newElement;
-}
+};
 
 export const addElement = (wom, element, targetedNode, placement) => {
   if (placement === 'inside') {
@@ -23,7 +23,7 @@ export const addElement = (wom, element, targetedNode, placement) => {
   } else {
     wom.insertNodeAfter(element, targetedNode);
   }
-}
+};
 
 export const setProperties = (node, propertyValueMap) => {
   Object.entries(propertyValueMap).forEach(([property, value]) => {
@@ -32,4 +32,13 @@ export const setProperties = (node, propertyValueMap) => {
     }
     node.setDefaultValue(property, value);
   });
-}
+};
+
+export const setWebbitId = (node, webbitId) => {
+  node.webbitId = webbitId;
+};
+
+export const setWebbitSource = (node, sourceProvider, sourceKey) => {
+  node.sourceProvider = sourceProvider;
+  node.sourceKey = sourceKey;
+};

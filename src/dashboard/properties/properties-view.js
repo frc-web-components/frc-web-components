@@ -55,7 +55,7 @@ class PropertiesView extends LitElement {
     return true;
   }
 
-  confirm() {
+  getPropertyValueMap() {
     const propertyValueMap = {};
 
     for (let input of this.inputElements) {
@@ -63,7 +63,7 @@ class PropertiesView extends LitElement {
       propertyValueMap[propertyName] = inputValue;
     }
 
-    this.wom.selectAction('setProperties', { propertyValueMap });
+    return propertyValueMap;
   }
 
   cancel() {

@@ -1,4 +1,5 @@
 import Action from '../action';
+import { setWebbitSource } from './utils';
 
 export default class SetSource extends Action {
 
@@ -10,7 +11,10 @@ export default class SetSource extends Action {
 
   execute({ selectedNode, context }) {
     const { sourceProvider, sourceKey } = context;
-    selectedNode.getNode().sourceProvider = sourceProvider;
-    selectedNode.getNode().sourceKey = sourceKey;
+    setWebbitSource(
+      selectedNode.getNode(), 
+      sourceProvider,
+      sourceKey
+    );
   }
 }

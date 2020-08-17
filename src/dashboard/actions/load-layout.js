@@ -1,6 +1,12 @@
 import Action from '../action';
 import { loadJson } from '../utils';
-import { addElement, createElement, setProperties } from './utils';
+import { 
+  addElement, 
+  createElement, 
+  setProperties, 
+  setWebbitId,
+  setWebbitSource
+} from './utils';
 
 export default class LoadLayout extends Action {
 
@@ -17,11 +23,13 @@ export default class LoadLayout extends Action {
       const { 
         name, 
         slot, 
-        webbit: { properties }
+        webbit: { properties, id, sourceProvider, sourceKey }
       } = nodeConfig;
       node = createElement(name, slot);
       addElement(wom, node, parentNode, 'inside');
       setProperties(node, properties);
+      setWebbitId(node, id);
+      setWebbitSource(node, sourceProvider, sourceKey);
     } else {
       node = wom.womNode.getNode();
     }

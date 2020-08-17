@@ -62,10 +62,6 @@ class PropertiesTool extends LitElement {
     return this.selectedNode.getName();
   }
 
-  firstUpdated() {
-    this.propertiesViewElement = this.shadowRoot.querySelector('[part="properties-view"]');
-  }
-
   updated(changedProperties) {
     if (changedProperties.has('selectedNode') && this.selectedNode) {
       this.webbitIdInput = this.getWebbitId();
@@ -85,9 +81,10 @@ class PropertiesTool extends LitElement {
   }
 
   isInputModified() {
+    const propertiesViewElement = this.shadowRoot.querySelector('[part="properties-view"]');
     return (
       this.isWebbitIdInputModified() || 
-      (this.propertiesViewElement ? this.propertiesViewElement.isInputModified() : false)
+      (propertiesViewElement ? propertiesViewElement.isInputModified() : false)
     );
   }
 
@@ -106,18 +103,22 @@ class PropertiesTool extends LitElement {
   }
 
   onCancel() {
+    const propertiesViewElement = this.shadowRoot.querySelector('[part="properties-view"]');
     this.webbitIdInput = this.getWebbitId();
-    this.propertiesViewElement.cancel();
+    propertiesViewElement.cancel();
     this.requestUpdate();
   }
 
   onConfirm() {
 
+    const propertiesViewElement = this.shadowRoot.querySelector('[part="properties-view"]');
     const webbitIdNode = this.shadowRoot.querySelector('[part="webbit-id"]');
 
-    if (!webbitIdNode.invalid && this.propertiesViewElement.isValid()) {
-      this.selectedNode.getNode().webbitId = this.webbitIdInput;
-      this.propertiesViewElement.confirm();
+    if (!webbitIdNode.invalid && propertiesViewElement.isValid()) {
+      this.wom.selectAction('setProperties', { 
+        propertyValueMap: propertiesViewElement.getPropertyValueMap(), 
+        webbitId: this.webbitIdInput
+      });
       this.requestUpdate();
     }
   }

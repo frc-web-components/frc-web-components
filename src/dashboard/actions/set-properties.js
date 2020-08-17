@@ -1,5 +1,5 @@
 import Action from '../action';
-import { setProperties } from './utils';
+import { setProperties, setWebbitId } from './utils';
 
 export default class SetProperties extends Action {
 
@@ -10,7 +10,8 @@ export default class SetProperties extends Action {
   }
 
   execute({ selectedNode, context }) {
-    const { propertyValueMap } = context;
+    const { propertyValueMap, webbitId } = context;
     setProperties(selectedNode.getNode(), propertyValueMap);
+    setWebbitId(selectedNode.getNode(), webbitId)
   }
 }
