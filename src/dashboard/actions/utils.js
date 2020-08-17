@@ -24,3 +24,12 @@ export const addElement = (wom, element, targetedNode, placement) => {
     wom.insertNodeAfter(element, targetedNode);
   }
 }
+
+export const setProperties = (node, propertyValueMap) => {
+  Object.entries(propertyValueMap).forEach(([property, value]) => {
+    if (!node.isPropertyConnectedToSource(property)) {
+      node[property] = value;
+    }
+    node.setDefaultValue(property, value);
+  });
+}

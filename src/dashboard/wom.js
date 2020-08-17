@@ -195,7 +195,6 @@ class Wom {
   }
 
   prependNode(node, parentNode) {
-    console.log('parentNode:', parentNode);
     parentNode.prepend(node);
 
     // scroll inserted node into view

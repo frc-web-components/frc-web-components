@@ -1,6 +1,6 @@
 import Action from '../action';
 import { loadJson } from '../utils';
-import { addElement, createElement } from './utils';
+import { addElement, createElement, setProperties } from './utils';
 
 export default class LoadLayout extends Action {
 
@@ -14,9 +14,14 @@ export default class LoadLayout extends Action {
   addNode(wom, nodeConfig, parentNode = null) {
     let node = null;
     if (parentNode !== null) {
-      const { name, slot } = nodeConfig;
+      const { 
+        name, 
+        slot, 
+        webbit: { properties }
+      } = nodeConfig;
       node = createElement(name, slot);
       addElement(wom, node, parentNode, 'inside');
+      setProperties(node, properties);
     } else {
       node = wom.womNode.getNode();
     }
