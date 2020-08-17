@@ -1,5 +1,6 @@
 import Action from '../action';
 import { loadJson } from '../utils';
+import { addElement, createElement } from './utils';
 
 export default class LoadLayout extends Action {
 
@@ -10,21 +11,15 @@ export default class LoadLayout extends Action {
     });
   }
 
-  async addNode(wom, nodeConfig, parentNode = null) {
-
+  addNode(wom, nodeConfig, parentNode = null) {
     let node = null;
-
     if (parentNode !== null) {
-      wom.selectAction('addNode', {
-        componentType: nodeConfig.name,
-        placement: 'inside',
-        slot: nodeConfig.slot,
-      });
-      wom.targetNode(parentNode);
+      const { name, slot } = nodeConfig;
+      node = createElement(name, slot);
+      addElement(wom, node, parentNode, 'inside');
     } else {
-      node = wom.womNode;
+      node = wom.womNode.getNode();
     }
-
     nodeConfig.children.reverse().forEach(config => {
       this.addNode(wom, config, node);
     });

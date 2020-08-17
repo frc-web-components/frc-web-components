@@ -1,4 +1,5 @@
 import Action from '../action';
+import { addElement, createElement } from './utils';
 
 export default class AddNode extends Action {
 
@@ -17,32 +18,6 @@ export default class AddNode extends Action {
     }
   }
 
-  createElement(componentType, slot, isPreview) {
-    const parentNode = document.createElement('div');
-    parentNode.innerHTML = `
-      <${componentType}></${componentType}>
-    `
-    const newElement = parentNode.querySelector(componentType);
-    newElement.setAttribute('slot', slot === 'default' ? '' : slot);
-
-    if (isPreview) {
-      newElement.setAttribute('is-preview', '');
-      newElement.setAttribute('webbit-id', 'preview');
-    }
-
-    return newElement;
-  }
-
-  addElement(wom, element, targetedNode, placement) {
-    if (placement === 'inside') {
-      wom.prependNode(element, targetedNode);
-    } else if (placement === 'before') {
-      wom.insertNodeBefore(element, targetedNode);
-    } else {
-      wom.insertNodeAfter(element, targetedNode);
-    }
-  }
-
   contextChange({
     wom,
     context
@@ -51,8 +26,8 @@ export default class AddNode extends Action {
     const { placement, targetedNode, componentType, slot } = context;
 
     if (targetedNode) {
-      this.previewedNode = this.createElement(componentType, slot, true);
-      this.addElement(wom, this.previewedNode, targetedNode, placement);
+      this.previewedNode = createElement(componentType, slot, true);
+      addElement(wom, this.previewedNode, targetedNode.getNode(), placement);
       wom.dispatchEvent('womPreviewNodeAdd', { node: this.previewedNode });
     }
   }
@@ -68,7 +43,7 @@ export default class AddNode extends Action {
   }) {
     this.removePreviewedNode(wom);
     const { placement, componentType, slot } = context;
-    const newElement = this.createElement(componentType, slot);
+    const newElement = createElement(componentType, slot);
 
     const buldNodeCallback = (ev) => {
       const { node } = ev.detail;
@@ -80,6 +55,6 @@ export default class AddNode extends Action {
     };
     wom.addListener('womNodeBuild', buldNodeCallback);
 
-    this.addElement(wom, newElement, targetedNode, placement);
+    addElement(wom, newElement, targetedNode.getNode(), placement);
   };
 }

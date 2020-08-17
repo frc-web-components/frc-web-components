@@ -195,7 +195,8 @@ class Wom {
   }
 
   prependNode(node, parentNode) {
-    parentNode.getNode().prepend(node);
+    console.log('parentNode:', parentNode);
+    parentNode.prepend(node);
 
     // scroll inserted node into view
     if (!isElementInViewport(node, this.dashboardElement)) {
@@ -206,9 +207,9 @@ class Wom {
   }
 
   insertNodeAfter(node, adjacentNode) {
-    adjacentNode.getNode().parentNode.insertBefore(
+    adjacentNode.parentNode.insertBefore(
       node, 
-      adjacentNode.getNode().nextSibling
+      adjacentNode.nextSibling
     );
 
     // scroll inserted node into view
@@ -221,9 +222,9 @@ class Wom {
 
   insertNodeBefore(node, adjacentNode) {
 
-    adjacentNode.getNode().parentNode.insertBefore(
+    adjacentNode.parentNode.insertBefore(
       node, 
-      adjacentNode.getNode()
+      adjacentNode
     );
     
     // scroll inserted node into view
