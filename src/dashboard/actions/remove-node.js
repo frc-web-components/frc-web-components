@@ -19,6 +19,11 @@ export default class RemoveNode extends Action {
     } else {
       wom.deselectNode();
     }
+
+    wom.addListenerOnce('womChange', () => {
+      wom.history.push(wom.getJson());
+    });
+
     wom.removeNode(selectedNode);
   }
 }

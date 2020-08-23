@@ -45,15 +45,11 @@ export default class AddNode extends Action {
     const { placement, componentType, slot } = context;
     const newElement = createElement(componentType, slot);
 
-    const buldNodeCallback = (ev) => {
-      const { node } = ev.detail;
-      if (node.getNode() === newElement) {
-        wom.selectNode(node);
-        wom.selectAction('addNode', { componentType });
-        wom.removeListener('womNodeBuild', buldNodeCallback);
-      }
-    };
-    wom.addListener('womNodeBuild', buldNodeCallback);
+    wom.addListenerOnce('womChange', () => {
+      wom.selectNode(newElement.__WOM_NODE__);
+      wom.selectAction('addNode', { componentType });
+      wom.history.push(wom.getJson());
+    });
 
     addElement(wom, newElement, targetedNode.getNode(), placement);
   };

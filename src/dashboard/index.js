@@ -9,6 +9,8 @@ import SetProperties from './actions/set-properties';
 import SaveLayout from './actions/save-layout';
 import NewLayout from './actions/new-layout';
 import LoadLayout from './actions/load-layout';
+import Undo from './actions/undo';
+import Redo from './actions/Redo';
 import './builder/index';
 import './tools';
 
@@ -48,7 +50,7 @@ class WebbitDashboard extends LitElement {
 
   constructor() {
     super();
-    this.wom = null;
+    this.wom = new Wom(this);
     this.editMode = false;
     this.dashboardNode = null;
   }
@@ -66,6 +68,8 @@ class WebbitDashboard extends LitElement {
     document.body.addEventListener('keydown', ev => {
       this.onKeyDown(ev);
     });
+
+    this.wom.history.push(this.wom.getJson());
   }
 
   addWomListeners() {
@@ -89,7 +93,8 @@ class WebbitDashboard extends LitElement {
         }
       } else {
         this.dashboardNode = this.shadowRoot.querySelector('[part=dashboard]');
-        this.wom = new Wom(this, this.dashboardNode);
+        this.wom.setDashboardElement(this.dashboardNode);
+        this.wom.build();
         this.addWomListeners();
 
         // add actions
@@ -102,6 +107,8 @@ class WebbitDashboard extends LitElement {
         this.wom.addAction('saveLayout', new SaveLayout());
         this.wom.addAction('newLayout', new NewLayout());
         this.wom.addAction('loadLayout', new LoadLayout());
+        this.wom.addAction('undo', new Undo());
+        this.wom.addAction('redo', new Redo());
       }
     }
   }

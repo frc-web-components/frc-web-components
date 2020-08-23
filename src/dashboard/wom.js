@@ -1,24 +1,85 @@
 import WomNode from './wom-node';
 import { isElementInViewport } from './utils';
 
+class WomHistory {
+
+  constructor() {
+    this.history = [];
+    this.position = -1;
+  }
+
+  getCurrentPosition() {
+    return this.position;
+  }
+
+  getHistoryLength() {
+    return this.history.length;
+  }
+
+  getLayout(position) {
+    return JSON.parse(JSON.stringify(this.history[position]));
+  }
+
+  getCurrentLayout() {
+    return this.getLayout(this.position);
+  }
+
+  goBack() {
+    if (!this.atBeginning()) {
+      this.position--;
+    }
+  }
+
+  atBeginning() {
+    return this.position <= 0;
+  }
+
+  atEnd() {
+    return this.position >= this.getHistoryLength() - 1;
+  }
+
+  goForward() {
+    if (!this.atEnd()) {
+      this.position++;
+    }
+  }
+
+  push(layoutJson) {
+    this.history = this.history
+      .slice(0, this.position + 1)
+      .concat(JSON.parse(JSON.stringify(layoutJson)));
+
+    this.position = this.getHistoryLength() - 1;
+  }
+}
 
 /**
  * Webbit Object Model (WOM)
  */
 class Wom {
 
-  constructor(rootNode, dashboardElement) {
+  constructor(rootNode) {
     this.rootNode = rootNode;
-    this.dashboardElement = dashboardElement;
+    this.dashboardElement = null;
     this.previewedNode = null;
     this.selectedNode = null;
     this.womNode = new WomNode(this.rootNode, this);
-    this.womNode.build();
     this.actions = {};
     this.selectedActionId = null;
     this.actionContext = {};
     this.mode = 'live';
     this.observeMutations();
+    this.history = new WomHistory();
+  }
+
+  setDashboardElement(dashboardElement) {
+    this.dashboardElement = dashboardElement;
+  }
+
+  build() {
+    this.womNode.destroy();
+    this.womNode.build();
+    this.dispatchEvent('womChange');
   }
 
   previewNode(node) {
@@ -262,20 +323,23 @@ class Wom {
     this.rootNode.addEventListener(eventName, callback);
   }
 
+  addListenerOnce(eventName, callback) {
+    const listener = (...args) => {
+      callback(...args);
+      this.removeListener(eventName, listener);
+    };
+    this.addListener(eventName, listener);
+  }
+
   removeListener(eventName, callback) {
     this.rootNode.removeEventListener(eventName, callback);
   }
 
   observeMutations() {
-    const observer = new MutationObserver((mutations) => {
-      
-      if (!this.hasNonPreviewChangeMutation(mutations)) {
-        return;
+    const observer = new MutationObserver((mutations) => { 
+      if (this.hasNonPreviewChangeMutation(mutations)) {
+        this.build();
       }
-
-      this.womNode.destroy();
-      this.womNode.build();
-      this.dispatchEvent('womChange');
     });
     observer.observe(this.rootNode, {
       childList: true,

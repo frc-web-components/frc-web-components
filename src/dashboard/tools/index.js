@@ -146,11 +146,11 @@ class WomTools extends LitElement {
   }
 
   onUndo() {
-
+    this.wom.selectAction('undo');
   }
 
   onRedo() {
-
+    this.wom.selectAction('redo');
   }
 
   onLoadExtension() {
@@ -197,6 +197,7 @@ class WomTools extends LitElement {
               aria-label="Undo"
               title="Undo"
               @click="${this.onUndo}"
+              ?disabled="${this.wom.history.atBeginning()}"
             >
               <iron-icon icon="vaadin:rotate-left"></iron-icon>
             </vaadin-button>
@@ -205,6 +206,7 @@ class WomTools extends LitElement {
               aria-label="Redo"
               title="Redo"
               @click="${this.onRedo}"
+              ?disabled="${this.wom.history.atEnd()}"
             >
               <iron-icon icon="vaadin:rotate-right"></iron-icon>
             </vaadin-button>
