@@ -12,7 +12,6 @@ export default class Undo extends Action {
 
   execute({ wom }) {
     wom.history.goBack();
-    wom.selectAction('newLayout');
     const layoutJson = wom.history.getCurrentLayout();
     loadLayout(wom, layoutJson);
     wom.deselectNode();

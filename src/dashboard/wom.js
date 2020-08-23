@@ -45,9 +45,17 @@ class WomHistory {
   }
 
   push(layoutJson) {
+
+    const jsonString = JSON.stringify(layoutJson);
+    const currentJsonString = JSON.stringify(this.history[this.position]);
+
+    if (jsonString === currentJsonString) {
+      return;
+    }
+
     this.history = this.history
       .slice(0, this.position + 1)
-      .concat(JSON.parse(JSON.stringify(layoutJson)));
+      .concat(JSON.parse(jsonString));
 
     this.position = this.getHistoryLength() - 1;
   }

@@ -3,7 +3,10 @@ export  {
   addElement, 
   setProperties, 
   setWebbitId, 
-  setWebbitSource
+  setWebbitSource,
+  hasLayoutChanged,
+  isLayoutEmpty,
+  newLayout
 } from './basic';
 
 export { loadLayout } from './loadLayout';

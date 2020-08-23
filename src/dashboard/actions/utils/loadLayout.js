@@ -3,7 +3,8 @@ import {
   createElement, 
   setProperties, 
   setWebbitId,
-  setWebbitSource
+  setWebbitSource,
+  newLayout
 } from './basic';
 
 export const loadLayout = (wom, nodeConfig, parentNode = null) => {
@@ -20,6 +21,7 @@ export const loadLayout = (wom, nodeConfig, parentNode = null) => {
     setWebbitId(node, id);
     setWebbitSource(node, sourceProvider, sourceKey);
   } else {
+    newLayout(wom);
     node = wom.womNode.getNode();
   }
   nodeConfig.children.reverse().forEach(config => {

@@ -1,4 +1,5 @@
 import Action from '../action';
+import { newLayout, isLayoutEmpty } from './utils';
 
 export default class NewLayout extends Action {
 
@@ -10,8 +11,14 @@ export default class NewLayout extends Action {
   }
 
   execute({ wom }) {
-    wom.womNode.getChildren().forEach(node => {
-      wom.removeNode(node);
-    })
+
+    if (isLayoutEmpty(wom)) {
+      return;
+    }
+
+    wom.addListenerOnce('womChange', () => {
+      wom.history.push(wom.getJson());
+    });
+    newLayout(wom);
   };
 }

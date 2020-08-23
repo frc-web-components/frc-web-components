@@ -12,7 +12,6 @@ export default class Redo extends Action {
 
   execute({ wom }) {
     wom.history.goForward();
-    wom.selectAction('newLayout');
     const layoutJson = wom.history.getCurrentLayout();
     loadLayout(wom, layoutJson);
     wom.deselectNode();
