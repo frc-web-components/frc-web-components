@@ -11,6 +11,7 @@ import NewLayout from './actions/new-layout';
 import LoadLayout from './actions/load-layout';
 import Undo from './actions/undo';
 import Redo from './actions/Redo';
+import LoadStoredLayout from './actions/load-stored-layout';
 import './builder/index';
 import './tools';
 
@@ -55,6 +56,21 @@ class WebbitDashboard extends LitElement {
     this.dashboardNode = null;
   }
 
+  addActions() {
+    this.wom.addAction('addNode', new AddNode());
+    this.wom.addAction('copyNode', new CopyNode());
+    this.wom.addAction('cutNode', new CutNode());
+    this.wom.addAction('removeNode', new RemoveNode());
+    this.wom.addAction('setSource', new SetSource());
+    this.wom.addAction('setProperties', new SetProperties());
+    this.wom.addAction('saveLayout', new SaveLayout());
+    this.wom.addAction('newLayout', new NewLayout());
+    this.wom.addAction('loadLayout', new LoadLayout());
+    this.wom.addAction('undo', new Undo());
+    this.wom.addAction('redo', new Redo());
+    this.wom.addAction('loadStoredLayout', new LoadStoredLayout());
+  }
+
   firstUpdated() {
     const css = document.createElement('style');
     css.type = 'text/css';
@@ -69,7 +85,8 @@ class WebbitDashboard extends LitElement {
       this.onKeyDown(ev);
     });
 
-    this.wom.history.push(this.wom.getJson());
+    this.addActions();
+    this.wom.selectAction('loadStoredLayout');
   }
 
   addWomListeners() {
@@ -96,19 +113,6 @@ class WebbitDashboard extends LitElement {
         this.wom.setDashboardElement(this.dashboardNode);
         this.wom.build();
         this.addWomListeners();
-
-        // add actions
-        this.wom.addAction('addNode', new AddNode());
-        this.wom.addAction('copyNode', new CopyNode());
-        this.wom.addAction('cutNode', new CutNode());
-        this.wom.addAction('removeNode', new RemoveNode());
-        this.wom.addAction('setSource', new SetSource());
-        this.wom.addAction('setProperties', new SetProperties());
-        this.wom.addAction('saveLayout', new SaveLayout());
-        this.wom.addAction('newLayout', new NewLayout());
-        this.wom.addAction('loadLayout', new LoadLayout());
-        this.wom.addAction('undo', new Undo());
-        this.wom.addAction('redo', new Redo());
       }
     }
   }

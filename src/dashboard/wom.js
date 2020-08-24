@@ -8,6 +8,15 @@ class WomHistory {
     this.position = -1;
   }
 
+  storeLayout() {
+    const layout = this.getCurrentLayout();
+    window.localStorage['currentWomLayout'] = JSON.stringify(layout);
+  }
+
+  getStoredLayout() {
+    return JSON.parse(window.localStorage['currentWomLayout']);
+  }
+
   getCurrentPosition() {
     return this.position;
   }
@@ -27,6 +36,7 @@ class WomHistory {
   goBack() {
     if (!this.atBeginning()) {
       this.position--;
+      this.storeLayout();
     }
   }
 
@@ -41,6 +51,7 @@ class WomHistory {
   goForward() {
     if (!this.atEnd()) {
       this.position++;
+      this.storeLayout();
     }
   }
 
@@ -58,6 +69,7 @@ class WomHistory {
       .concat(JSON.parse(jsonString));
 
     this.position = this.getHistoryLength() - 1;
+    this.storeLayout();
   }
 }
 
