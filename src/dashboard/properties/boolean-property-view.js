@@ -1,4 +1,5 @@
 import PropertyView from './property-view';
+import { html } from 'lit-element';
 
 class BooleanPropertyView extends PropertyView {
 

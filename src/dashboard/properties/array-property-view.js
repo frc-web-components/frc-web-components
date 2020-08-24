@@ -1,6 +1,7 @@
 
 import PropertyView from './property-view';
 import 'multiselect-combo-box/multiselect-combo-box.js';
+import { html } from 'lit-element';
 
 class ArrayPropertyView extends PropertyView {
 
