@@ -19,7 +19,7 @@ class WomHistory {
         return JSON.parse(window.localStorage['currentWomLayout']);
       } catch(e) {}
     }
-    return this.getCurrentLayout();
+    return null;
   }
 
   getCurrentPosition() {

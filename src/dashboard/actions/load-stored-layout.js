@@ -11,7 +11,7 @@ export default class LoadStoredLayout extends Action {
   }
 
   execute({ wom }) {
-    const layoutJson = wom.history.getStoredLayout();
+    const layoutJson = wom.history.getStoredLayout() || wom.getJson();
     wom.history.push(layoutJson);
     loadLayout(wom, layoutJson);
   };
