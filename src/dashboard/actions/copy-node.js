@@ -10,6 +10,6 @@ export default class CopyNode extends Action {
   }
 
   execute({ wom, selectedNode }) {
-    
+    alert(`Copying nodes hasn't been implemented yet!`);
   }
 }

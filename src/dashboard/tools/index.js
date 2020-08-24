@@ -154,7 +154,7 @@ class WomTools extends LitElement {
   }
 
   onLoadExtension() {
-    
+    alert(`Loading Extensions hasn't been implemented yet!`);
   }
 
   render() {

@@ -51,7 +51,7 @@ class WebbitDashboard extends LitElement {
   constructor() {
     super();
     this.wom = new Wom(this);
-    this.editMode = false;
+    this.editMode = true;
     this.dashboardNode = null;
   }
 

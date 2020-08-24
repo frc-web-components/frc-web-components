@@ -16,7 +16,6 @@ export function createSocket(onMessage, onClose) {
     socket.onmessage = function (msg) {
       var data = JSON.parse(msg.data);
       onMessage(data);
-      console.info(data);
     };
 
     socket.onclose = function () {
