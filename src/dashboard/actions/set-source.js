@@ -9,12 +9,13 @@ export default class SetSource extends Action {
     });
   }
 
-  execute({ selectedNode, context }) {
+  execute({ wom, selectedNode, context }) {
     const { sourceProvider, sourceKey } = context;
     setWebbitSource(
       selectedNode.getNode(), 
       sourceProvider,
       sourceKey
     );
+    wom.history.push(wom.getJson());
   }
 }
