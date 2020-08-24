@@ -14,7 +14,12 @@ class WomHistory {
   }
 
   getStoredLayout() {
-    return JSON.parse(window.localStorage['currentWomLayout']);
+    if ('currentWomLayout' in window.localStorage) {
+      try {
+        return JSON.parse(window.localStorage['currentWomLayout']);
+      } catch(e) {}
+    }
+    return this.getCurrentLayout();
   }
 
   getCurrentPosition() {
