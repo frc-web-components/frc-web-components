@@ -1,5 +1,5 @@
 import Action from '../action';
-import { addElement, createElement } from './utils';
+import { addElement } from './utils';
 
 export default class CopyNode extends Action {
 
