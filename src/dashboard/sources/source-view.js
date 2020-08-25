@@ -187,7 +187,7 @@ class SourceView extends LitElement {
   }
 
   onSelect(ev) {
-    const [target] = ev.path;
+    const target = ev.target || ev.path[0];
 
     // select if click element isn't caret
     if (target.nodeName !== 'IRON-ICON') {

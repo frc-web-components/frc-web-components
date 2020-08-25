@@ -164,7 +164,7 @@ class WomViewer extends LitElement {
       return;
     }
 
-    const [target] = ev.path;
+    const target = ev.target || ev.path[0];
 
     // select if click element isn't caret
     if (target.nodeName !== 'IRON-ICON') {
