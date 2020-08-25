@@ -13,6 +13,7 @@ export default class NewLayout extends Action {
   execute({ wom }) {
 
     if (isLayoutEmpty(wom)) {
+      wom.deselectAction();
       return;
     }
 
@@ -20,5 +21,6 @@ export default class NewLayout extends Action {
       wom.history.push(wom.getJson());
     });
     newLayout(wom);
+    wom.deselectAction();
   };
 }

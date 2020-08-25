@@ -10,6 +10,7 @@ export default class CutNode extends Action {
   }
 
   execute({ wom, selectedNode }) {
+    wom.deselectAction();
     alert(`Cutting and pasting nodes hasn't been implemented yet!`);
   }
 }

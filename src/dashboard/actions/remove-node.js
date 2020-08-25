@@ -25,5 +25,6 @@ export default class RemoveNode extends Action {
     });
 
     wom.removeNode(selectedNode);
+    wom.deselectAction();
   }
 }

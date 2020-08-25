@@ -15,9 +15,11 @@ export default class LoadLayout extends Action {
     loadJson().then(({ result, error }) => {
       if (error) {
         alert('error loading layout!');
+        wom.deselectAction();
         return;
       }
       if (!hasLayoutChanged(wom, result)) {
+        wom.deselectAction();
         return;
       }
       wom.addListenerOnce('womChange', () => {

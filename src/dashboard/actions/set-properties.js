@@ -14,5 +14,6 @@ export default class SetProperties extends Action {
     setProperties(selectedNode.getNode(), propertyValueMap);
     setWebbitId(selectedNode.getNode(), webbitId);
     wom.history.push(wom.getJson());
+    wom.deselectAction();
   }
 }
