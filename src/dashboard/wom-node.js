@@ -29,13 +29,56 @@ export default class WomNode {
       return [];
     });
 
-    this.onMouseEnter = () => {
+    this.onMouseEnter = (ev) => {
       if (
         !this.wom.getPreviewedNode() 
         || this.getLevel() >= this.wom.getPreviewedNode().getLevel()
       ) {
         this.wom.previewNode(this);
+        console.log('path:', this.getPath());
       }
+    };
+
+    this.onMouseMove = (ev) => {
+      if (this.wom.getPreviewedNode() !== this) {
+        return;
+      }
+
+      const target = this.node;
+      const boundingRect = target.getBoundingClientRect();
+      const offsetX = boundingRect.x;
+      const offsetY = boundingRect.y;
+      const width = target.clientWidth;
+      const height = target.clientHeight;
+      const mouseX = ev.clientX;
+      const mouseY = ev.clientY;
+      var xPos = Math.abs(offsetX - mouseX);
+      var yPos = Math.abs(offsetY - mouseY);
+
+      let placement = null;
+
+      if (
+        xPos > width * .25
+        && xPos < width * .75
+        && yPos > height * .25
+        && yPos < height * .75
+      ) {
+        placement = 'inside'
+      } else if (
+        yPos < (height - (xPos * height / width))
+      ) {
+        placement = 'before';
+      } else {
+        placement = 'after';
+      }
+
+      this.wom.setActionContext(this.wom.getSelectedActionId(), {
+        placement,
+        slot: placement === 'inside' ? 'default' : this.getSlot(),
+        targetedNode: this
+      });
+
+      console.log('placement:', placement);
     };
 
     this.onMouseLeave = () => {
@@ -51,6 +94,7 @@ export default class WomNode {
       }
     }
 
+    node.addEventListener('mousemove', this.onMouseMove);
     node.addEventListener('mouseover', this.onMouseEnter);
     node.addEventListener('mouseleave', this.onMouseLeave);
     node.addEventListener('click', this.onMouseClick);
@@ -59,6 +103,21 @@ export default class WomNode {
   getParent() {
     const parentNode = this.ancestors[this.ancestors.length - 1];
     return parentNode || null;
+  }
+
+  getPath() {
+    return this.ancestors.slice(1).concat(this).map(node => {
+      return node.getIndex();
+    });
+  }
+
+  getIndex() {
+    const parentNode = this.getParent();
+    if (!parentNode) {
+      return null;
+    }
+    const siblings = parentNode.getChildren();
+    return siblings.findIndex(sibling => sibling.getNode() === this.getNode());
   }
 
   getNextSibling() {
