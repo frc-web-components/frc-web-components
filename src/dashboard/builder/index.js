@@ -17,7 +17,7 @@ class DashboardBuilder extends LitElement {
       }
 
       [part=original-wom] {
-        opacity: 0;
+        opacity: .5;
       }
 
       [part=copy-wom] {
@@ -104,10 +104,6 @@ class DashboardBuilder extends LitElement {
 
   render() {
     return html`
-      <wom-preview-box
-        .wom="${this.wom}"
-        .previewedNode="${this.previewedNode && this.previewedNode.getNode()}"
-      ></wom-preview-box>
       <wom-new-element-preview-box
         .wom="${this.wom}"
       ></wom-new-element-preview-box>
@@ -121,6 +117,10 @@ class DashboardBuilder extends LitElement {
             </div>
           </div>
         ` : html`
+          <wom-preview-box
+            .wom="${this.wom}"
+            .previewedNode="${this.previewedNode && this.previewedNode.getNode()}"
+          ></wom-preview-box>
           <slot></slot>
         `}
         
