@@ -45,7 +45,6 @@ export default class WomNode {
     };
 
     this.onMouseClick = (ev) => {
-      ev.stopPropagation();
 
       const { targetedNode } = this.wom.getActionContext();
 
@@ -64,12 +63,15 @@ export default class WomNode {
         return;
       }
 
+      if (this.getLevel() === 0 && !this.wom.getPreviewedNode()) {
+        this.wom.previewNode(this);
+      }
+
       if (!this.wom.getPreviewedNode() || (this.wom.getPreviewedNode().getWebbitId() !== this.getWebbitId())) {
         return;
       }
 
       const { mousePosition } = this.wom.getActionContext();
-      console.log('action context:', this.wom.getActionContext());
 
       const mouseX = ev.clientX;
       const mouseY = ev.clientY;
@@ -79,8 +81,9 @@ export default class WomNode {
         const xDistance = mouseX - x;
         const yDistance = mouseY - y;
         const distance = Math.sqrt(xDistance * xDistance + yDistance * yDistance);
-        console.log('distance:', distance);
-        if (distance < 100) {
+
+        if (distance < 50) {
+          console.log('less than distance');
           return;
         }
       }
@@ -96,7 +99,9 @@ export default class WomNode {
 
       let placement = null;
 
-      if (
+      if (this.getLevel() === 0) {
+        placement = 'inside';
+      } else if (
         xPos > width * .4
         && xPos < width * .6
         && yPos > height * .4
@@ -114,11 +119,13 @@ export default class WomNode {
       ) {
         placement = 'after';
       }
+
+      console.log('placement:', placement, this.getWebbitId());
       
 
       if (
         !placement || 
-        (placement === 'inside' && this.wom.getChildren().length > 0)
+        (placement === 'inside' && this.getChildren().length > 0)
       ) {
         return;
       }
@@ -172,9 +179,11 @@ export default class WomNode {
   }
 
   destroy() {
-    this.node.removeEventListener('mouseover', this.onMouseEnter);
-    this.node.removeEventListener('mouseleave', this.onMouseLeave);
-    this.node.removeEventListener('click', this.onMouseClick);
+    if (this.getLevel() > 0) {
+      this.node.removeEventListener('mouseover', this.onMouseEnter);
+      this.node.removeEventListener('mouseleave', this.onMouseLeave);
+      this.node.removeEventListener('click', this.onMouseClick);
+    }
 
     this.childNodes.forEach(node => {
       node.destroy();

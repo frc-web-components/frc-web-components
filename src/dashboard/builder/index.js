@@ -42,17 +42,6 @@ class DashboardBuilder extends LitElement {
     }
   }
 
-  onAdd() {
-    const { targetedNode } = this.wom.getActionContext();
-
-    if (this.wom.getSelectedActionId() === 'addNode') {
-      if (targetedNode) {
-        console.log('target ndoe:');
-        this.wom.targetNode(targetedNode);
-      }
-    }
-  }
-
   render() {
     return html`
       ${this.wom.getSelectedActionId() !== 'addNode' ? html`
@@ -64,7 +53,7 @@ class DashboardBuilder extends LitElement {
       <wom-new-element-preview-box
         .wom="${this.wom}"
       ></wom-new-element-preview-box>
-      <div part="container" @click="${this.onAdd}">
+      <div part="container">
         <slot></slot>
       </div>
     `;
