@@ -39,18 +39,104 @@ export default class WomNode {
     };
 
     this.onMouseLeave = () => {
-      if (this.wom.getPreviewedNode() === this) {
+      if (this.wom.getPreviewedNode().getWebbitId() === this.getWebbitId()) {
         this.wom.removeNodePreview();
       }
     };
 
     this.onMouseClick = (ev) => {
       ev.stopPropagation();
-      if (this.ancestors.length > 0) {
+
+      const { targetedNode } = this.wom.getActionContext();
+
+      if (this.wom.getSelectedActionId() === 'addNode') {
+        if (targetedNode) {
+          this.wom.targetNode(targetedNode);
+        }
+      } else if (this.ancestors.length > 0) {
         this.wom.selectNode(this);
       }
     }
 
+    this.onMouseMove = (ev) => {
+
+      if (this.wom.getSelectedActionId() !== 'addNode') {
+        return;
+      }
+
+      if (!this.wom.getPreviewedNode() || (this.wom.getPreviewedNode().getWebbitId() !== this.getWebbitId())) {
+        return;
+      }
+
+      const { mousePosition } = this.wom.getActionContext();
+      console.log('action context:', this.wom.getActionContext());
+
+      const mouseX = ev.clientX;
+      const mouseY = ev.clientY;
+
+      if (mousePosition) {
+        const { x, y } = mousePosition;
+        const xDistance = mouseX - x;
+        const yDistance = mouseY - y;
+        const distance = Math.sqrt(xDistance * xDistance + yDistance * yDistance);
+        console.log('distance:', distance);
+        if (distance < 100) {
+          return;
+        }
+      }
+
+      const target = this.node;
+      const boundingRect = target.getBoundingClientRect();
+      const offsetX = boundingRect.x;
+      const offsetY = boundingRect.y;
+      const width = target.clientWidth;
+      const height = target.clientHeight;
+      var xPos = Math.abs(offsetX - mouseX);
+      var yPos = Math.abs(offsetY - mouseY);
+
+      let placement = null;
+
+      if (
+        xPos > width * .4
+        && xPos < width * .6
+        && yPos > height * .4
+        && yPos < height * .6
+      ) {
+        placement = 'inside';
+      } else if (
+        (yPos < height * .8 && xPos < 40) ||
+        (xPos < width * .8 && yPos < 40)
+      ) {
+        placement = 'before';
+      } else if (
+        (yPos > height * .2 && xPos > width - 40) ||
+        (xPos > width * .2 && yPos > height - 40)
+      ) {
+        placement = 'after';
+      }
+      
+
+      if (
+        !placement || 
+        (placement === 'inside' && this.wom.getChildren().length > 0)
+      ) {
+        return;
+      }
+
+      this.wom.setActionContext(this.wom.getSelectedActionId(), {
+        placement,
+        slot: placement === 'inside' ? 'default' : this.getSlot(),
+        targetedNode: this,
+        mousePosition: {
+          x: mouseX,
+          y: mouseY
+        }
+      });
+
+      console.log('placement:', placement);
+    };
+
+    node.addEventListener('mousemove', this.onMouseMove);
     node.addEventListener('mouseover', this.onMouseEnter);
     node.addEventListener('mouseleave', this.onMouseLeave);
     node.addEventListener('click', this.onMouseClick);
