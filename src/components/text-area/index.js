@@ -3,6 +3,17 @@ import TextField from '../text-field';
 
 export default class TextArea extends TextField {
 
+  static get metadata() {
+    return {
+      displayName: 'Textarea',
+      category: 'Forms & Inputs',
+      // description: 'A group of checkboxes',
+      // documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
+      slots: [],
+    };
+  }
+
+
   render() {
     return html`   
         <vaadin-text-area 

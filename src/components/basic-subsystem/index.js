@@ -6,8 +6,9 @@ class BasicSubsystem extends Webbit {
     return {
       displayName: 'Basic Subsystem',
       category: 'Robot & Field Info',
-      //description: 'Component for displaying data from a 3-axis accelerometer.',
-      documentationLink: 'https://frc-web-components.github.io/components/basic-subsystem/'
+      description: 'Component for displaying the state of a command based subsystem.',
+      documentationLink: 'https://frc-web-components.github.io/components/basic-subsystem/',
+      slots: []
     };
   }
 

@@ -15,8 +15,9 @@ class BasicFmsInfo extends Webbit {
     return {
       displayName: 'Basic FMS Info',
       category: 'Robot & Field Info',
-      //description: 'Component for displaying data from a 3-axis accelerometer.',
-      documentationLink: 'https://frc-web-components.github.io/components/basic-fms-info/'
+      description: 'Component for displaying data from the FMS',
+      documentationLink: 'https://frc-web-components.github.io/components/basic-fms-info/',
+      slots: []
     };
   }
 

@@ -48,6 +48,13 @@ export default class WomNode {
 
       const { targetedNode } = this.wom.getActionContext();
 
+      const { width, height } = this.wom.getDashboardElement().getBoundingClientRect();
+      const { clientX, clientY } = ev;
+
+      if (clientX > width || clientY > height) {
+        return;
+      }
+
       if (this.wom.getSelectedActionId() === 'addNode') {
         if (targetedNode) {
           this.wom.targetNode(targetedNode);

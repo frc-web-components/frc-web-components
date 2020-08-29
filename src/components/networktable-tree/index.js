@@ -8,8 +8,9 @@ class NetworkTableTree extends Webbit {
     return {
       displayName: 'NetworkTable Tree',
       category: 'Robot & Field Info',
-      //description: 'Component for displaying data from a 3-axis accelerometer.',
-      documentationLink: 'https://frc-web-components.github.io/components/networktable-tree/'
+      description: 'Component used to display NetworkTable values.',
+      documentationLink: 'https://frc-web-components.github.io/components/networktable-tree/',
+      slots: [],
     };
   }
 

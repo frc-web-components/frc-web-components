@@ -8,8 +8,9 @@ class GaugeWebbit extends Container {
     return {
       displayName: 'Gauge',
       category: 'Charts & Graphs',
-      //description: 'Component for displaying data from a 3-axis accelerometer.',
-      documentationLink: 'https://frc-web-components.github.io/components/gauge/'
+      description: 'Component for displaying a gauge.',
+      documentationLink: 'https://frc-web-components.github.io/components/gauge/',
+      slots: []
     };
   }
 

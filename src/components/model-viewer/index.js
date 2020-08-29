@@ -11,8 +11,9 @@ class ModelViewer extends Webbit {
     return {
       displayName: 'Model Viewer',
       category: '3D Models',
-      //description: 'Component for displaying data from a 3-axis accelerometer.',
-      documentationLink: 'https://frc-web-components.github.io/components/model-viewer/'
+      description: 'Component used to display 3d models in a particular orientation.',
+      documentationLink: 'https://frc-web-components.github.io/components/model-viewer/',
+      slots: []
     };
   }
 

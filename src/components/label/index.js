@@ -7,8 +7,9 @@ class Label extends Container {
     return {
       displayName: 'Label',
       category: 'General',
-      //description: 'Component for displaying data from a 3-axis accelerometer.',
-      documentationLink: 'https://frc-web-components.github.io/components/label/'
+      description: 'A label',
+      documentationLink: 'https://frc-web-components.github.io/components/label/',
+      slots: [],
     };
   }
 

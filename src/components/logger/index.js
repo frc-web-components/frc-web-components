@@ -3,6 +3,16 @@ import HtmlLogger from './html-logger';
 
 class Logger extends Webbit {
 
+  static get metadata() {
+    return {
+      displayName: 'Logger',
+      category: 'General',
+      description: 'A component used for logging.',
+			// documentationLink: 'https://frc-web-components.github.io/components/line-chart/',
+			slots: [],
+    };
+  }
+
   static get styles() {
     return css`
       :host {

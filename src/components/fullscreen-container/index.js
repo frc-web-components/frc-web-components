@@ -6,6 +6,7 @@ export default class FullscreenContainer extends Container {
     return {
       displayName: 'Fullscreen Container',
       category: 'Layout',
+      description: 'A fullscreen container for other components.'
     };
   }
 

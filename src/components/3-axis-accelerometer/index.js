@@ -11,7 +11,8 @@ class ThreeAxisAccelerometer extends Webbit {
       displayName: '3-Axis Accelerometer',
       category: 'Robot & Field Info',
       description: 'Component for displaying data from a 3-axis accelerometer.',
-      documentationLink: 'https://frc-web-components.github.io/components/3-axis-accelerometer/'
+      documentationLink: 'https://frc-web-components.github.io/components/3-axis-accelerometer/',
+      slots: []
     };
   }
 

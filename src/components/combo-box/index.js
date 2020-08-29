@@ -7,8 +7,9 @@ class ComboBox extends Container {
     return {
       displayName: 'Combo Box',
       category: 'Forms & Inputs',
-      //description: 'Component for displaying data from a 3-axis accelerometer.',
-      documentationLink: 'https://frc-web-components.github.io/components/combo-box/'
+      description: 'An input field with a dropdown used to select different options.',
+      documentationLink: 'https://frc-web-components.github.io/components/combo-box/',
+      slots: []
     };
   }
 

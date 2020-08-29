@@ -21,7 +21,8 @@ class Pdp extends Container {
       displayName: 'Power Distribution Panel',
       category: 'Robot & Field Info',
       //description: 'Component for displaying data from a 3-axis accelerometer.',
-      documentationLink: 'https://frc-web-components.github.io/components/power-distribution-panel/'
+      documentationLink: 'https://frc-web-components.github.io/components/power-distribution-panel/',
+      slots: [],
     };
   }
 

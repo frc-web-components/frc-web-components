@@ -2,6 +2,16 @@ import { Webbit, html, css } from '@webbitjs/webbit';
 
 class NumberSlider extends Webbit {
 
+  static get metadata() {
+    return {
+      displayName: 'Number Slider',
+      category: 'General',
+      // description: 'A group of checkboxes',
+      // documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
+      slots: [],
+    };
+  }
+
   static get properties() {
     return {
       value: { 

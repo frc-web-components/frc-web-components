@@ -7,8 +7,9 @@ class CheckboxGroup extends Container {
     return {
       displayName: 'Checkbox Group',
       category: 'Forms & Inputs',
-      //description: 'Component for displaying data from a 3-axis accelerometer.',
-      documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/'
+      description: 'A group of checkboxes',
+      documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
+      allowedChildren: ['frc-checkbox']
     };
   }
 

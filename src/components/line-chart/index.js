@@ -145,8 +145,9 @@ class LineChart extends Webbit {
     return {
       displayName: 'Line Chart',
       category: 'Charts & Graphs',
-      //description: 'Component for displaying data from a 3-axis accelerometer.',
-      documentationLink: 'https://frc-web-components.github.io/components/line-chart/'
+      description: 'A component used to graph data over time.',
+			documentationLink: 'https://frc-web-components.github.io/components/line-chart/',
+			allowedChildren: ['frc-chart-data']
     };
   }
 

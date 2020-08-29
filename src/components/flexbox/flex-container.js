@@ -7,6 +7,7 @@ class FlexContainer extends Container {
     return {
       displayName: 'Flex Container',
       category: 'Layout',
+      description: 'A container for other components using a flexbox layout.'
     };
   }
 

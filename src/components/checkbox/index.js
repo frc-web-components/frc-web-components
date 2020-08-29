@@ -7,8 +7,9 @@ class Checkbox extends Container {
     return {
       displayName: 'Checkbox',
       category: 'Forms & Inputs',
-      //description: 'Component for displaying data from a 3-axis accelerometer.',
-      documentationLink: 'https://frc-web-components.github.io/components/checkbox/'
+      description: 'A checkbox',
+      documentationLink: 'https://frc-web-components.github.io/components/checkbox/',
+      slots: []
     };
   }
 
