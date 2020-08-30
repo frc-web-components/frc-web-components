@@ -90,7 +90,6 @@ export default class WomNode {
         const distance = Math.sqrt(xDistance * xDistance + yDistance * yDistance);
 
         if (distance < 50) {
-          console.log('less than distance');
           return;
         }
       }
@@ -125,14 +124,12 @@ export default class WomNode {
         (xPos > width * .2 && yPos > height - 40)
       ) {
         placement = 'after';
-      }
-
-      console.log('placement:', placement, this.getWebbitId());
-      
+      }      
 
       if (
         !placement || 
-        (placement === 'inside' && this.getChildren().length > 0)
+        (placement === 'inside' && this.getChildren().length > 0) ||
+        (placement === 'inside' && this.getMetadata().slots.length === 0)
       ) {
         return;
       }
@@ -144,10 +141,8 @@ export default class WomNode {
         mousePosition: {
           x: mouseX,
           y: mouseY
-        }
+        },
       });
-
-      console.log('placement:', placement);
     };
 
     node.addEventListener('mousemove', this.onMouseMove);
