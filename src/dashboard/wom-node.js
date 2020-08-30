@@ -91,7 +91,7 @@ export default class WomNode {
         const yDistance = mouseY - y;
         const distance = Math.sqrt(xDistance * xDistance + yDistance * yDistance);
 
-        if (distance < 50) {
+        if (distance < 20) {
           return;
         }
       }
@@ -137,21 +137,35 @@ export default class WomNode {
           return;
         }
 
-        const { allowedChildren } = this.getMetadata() || {};
         const { componentType } = this.wom.getActionContext();
+        const { allowedParents } = webbitRegistry.getMetadata(componentType) || {};
+        const { allowedChildren } = this.getMetadata() || {};
 
         if (allowedChildren && allowedChildren.indexOf(componentType) < 0) {
           return;
         }
+
+        if (allowedParents && allowedParents.indexOf(this.getName()) < 0) {
+          return;
+        }
+
       } else if (placement === 'before' || placement === 'after') {
         const parent = this.getParent();
-        if (parent) {
-          const { allowedChildren } = parent.getMetadata() || {};
-          const { componentType } = this.wom.getActionContext();
 
-          if (allowedChildren && allowedChildren.indexOf(componentType) < 0) {
-            return;
-          }
+        if (!parent) {
+          return;
+        }
+
+        const { componentType } = this.wom.getActionContext();
+        const { allowedParents } = webbitRegistry.getMetadata(componentType) || {};
+        const { allowedChildren } = parent.getMetadata() || {};
+
+        if (allowedChildren && allowedChildren.indexOf(componentType) < 0) {
+          return;
+        }
+
+        if (allowedParents && allowedParents.indexOf(parent.getName()) < 0) {
+          return;
         }
       }
       

@@ -8,7 +8,8 @@ class GridCard extends Container {
       displayName: 'Grid Card',
       category: 'Layout',
       description: 'A single element in a grid layout. Used to container other components in a grid layout.',
-      // documentationLink: 'https://frc-web-components.github.io/components/gauge/'
+      // documentationLink: 'https://frc-web-components.github.io/components/gauge/',
+      allowedParents: ['frc-grid']
     };
   }
 

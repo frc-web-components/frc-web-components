@@ -29,7 +29,7 @@ class Label extends Container {
   constructor() {
     super();
     this.display = 'inline';
-    this.text = '';
+    this.text = 'label';
     this.fontSize = 'inherit';
     this.fontFamily = 'inherit';
     this.fontWeight = 'inherit';
