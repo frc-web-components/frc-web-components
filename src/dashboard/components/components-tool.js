@@ -146,15 +146,23 @@ class ComponentsTool extends LitElement {
   onDragStart(ev, name) {
     console.log('drag start');
     this.onComponentSelect(name);
-    const dragImage = document.createElement('iron-icon');
+    const dragImage = document.createElement('div');
+    dragImage.innerText = '+';
+    dragImage.style.fontSize = '25px';
+    dragImage.style.fontStyle = 'bold';
+    dragImage.style.width = '30px';
+    dragImage.style.height = '30px';
+    dragImage.style.display = 'black';
+    dragImage.style.lineHeight = '30px';
+    dragImage.style.textAlign = 'center';
+    dragImage.style.color = 'white';
+    dragImage.style.background = 'green';
+    dragImage.style.borderRadius = '50%';
     dragImage.style.position = 'absolute';
     dragImage.style.left = '-1000000px';
     dragImage.style.top = '-1000000px';
-    dragImage.style.color = 'green';
-    dragImage.setAttribute('icon', 'vaadin:plus-circle');
+    dragImage.style.display = 'block';
     document.body.appendChild(dragImage);
-    // var img = document.createElement("img");
-    // img.src = "http://kryogenix.org/images/hackergotchi-simpler.png";
     ev.dataTransfer.setDragImage(dragImage, 0, 0);
   }
 
