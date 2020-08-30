@@ -40,6 +40,9 @@ class DashboardBuilder extends LitElement {
         });
       }
     }
+    this.wom.addListener('womActionSelect', () => {
+      this.requestUpdate();
+    });
   }
 
   render() {

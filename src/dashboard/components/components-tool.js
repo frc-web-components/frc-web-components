@@ -4,8 +4,9 @@ class ComponentsTool extends LitElement {
 
   static get styles() {
     return css`
+
       :host {
-        display: block;
+        display: flex;
         padding: 15px 10px;
         font-family: sans-serif;
       }
@@ -26,7 +27,12 @@ class ComponentsTool extends LitElement {
       }
 
       [part=all-components] {
-        margin-top: 25px;
+        width: 60%;
+        margin-right: 15px;
+      }
+
+      [part=selected-component] {
+        flex: 1;
       }
 
       [part=all-components] header {
@@ -37,7 +43,11 @@ class ComponentsTool extends LitElement {
 
       [part=component] {
         color: #333;
-        cursor: pointer;
+        cursor: grab;
+      }
+
+      [part=component]:active {
+        cursor: grabbing;
       }
 
       [part=category-name] {
@@ -133,33 +143,52 @@ class ComponentsTool extends LitElement {
     });
   }
 
+  onDragStart(ev, name) {
+    console.log('drag start');
+    this.onComponentSelect(name);
+    const dragImage = document.createElement('iron-icon');
+    dragImage.style.position = 'absolute';
+    dragImage.style.left = '-1000000px';
+    dragImage.style.top = '-1000000px';
+    dragImage.style.color = 'green';
+    dragImage.setAttribute('icon', 'vaadin:plus-circle');
+    document.body.appendChild(dragImage);
+    // var img = document.createElement("img");
+    // img.src = "http://kryogenix.org/images/hackergotchi-simpler.png";
+    ev.dataTransfer.setDragImage(dragImage, 0, 0);
+  }
+
   renderSelectedComponent() {
     if (!this.selectedComponent) {
       return html`
-        <p>No component is currently selected.</p>
+        <div part="selected-component">
+          <header>Selected component</header>
+          <p>No component is currently selected.</p>
+        </div>
       `;
     }
 
     const metadata = this.getComponentMetadata(this.selectedComponent);
 
     return html`
-      <header><span>${metadata.displayName}</span> component</header>
-      <p>
-        ${metadata.description}
-        ${' '}
-        ${metadata.documentationLink ? html`
-          Examples and documentation can be found <a href="${metadata.documentationLink}" target="_blank">here</a>.
-        ` : ''}
-      </p>
+      <div part="selected-component">
+        <header><span>${metadata.displayName}</span> component</header>
+        <p>
+          ${metadata.description}
+          ${' '}
+          ${metadata.documentationLink ? html`
+            Examples and documentation can be found <a href="${metadata.documentationLink}" target="_blank">here</a>.
+          ` : ''}
+        </p>
+      </div>
     `;
   }
 
   render() {
     return html`
-      ${this.renderSelectedComponent()}
       <div part="all-components">
         <header>All Components</header>
-        <vaadin-accordion>
+        <vaadin-accordion opened="${null}">
           ${this.componentCategories.map(category => html`
             <vaadin-accordion-panel theme="small">
               <div part="category-name" slot="summary">${category.name}</div>
@@ -168,7 +197,9 @@ class ComponentsTool extends LitElement {
                   <div 
                     part="component" 
                     @click="${() => this.onComponentSelect(component.name)}"
+                    @dragstart="${(ev) => this.onDragStart(ev, component.name)}"
                     class="${this.selectedComponent === component.name ? 'selected' : ''}"
+                    draggable="true"
                   >
                     ${component.displayName}
                   </div>
@@ -178,7 +209,7 @@ class ComponentsTool extends LitElement {
           `)}
         </vaadin-accordion>
       </div>
-
+      ${this.renderSelectedComponent()}
     `;
   }
 }
