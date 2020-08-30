@@ -39,12 +39,14 @@ export default class WomNode {
     };
 
     this.onMouseLeave = () => {
-      if (this.wom.getPreviewedNode().getWebbitId() === this.getWebbitId()) {
+      if (this.wom.getPreviewedNode() && this.wom.getPreviewedNode().getWebbitId() === this.getWebbitId()) {
         this.wom.removeNodePreview();
       }
     };
 
     this.onMouseClick = (ev) => {
+
+      ev.stopPropagation();
 
       const { targetedNode } = this.wom.getActionContext();
 
@@ -108,10 +110,10 @@ export default class WomNode {
       if (this.getLevel() === 0) {
         placement = 'inside';
       } else if (
-        xPos > width * .4
-        && xPos < width * .6
-        && yPos > height * .4
-        && yPos < height * .6
+        xPos > width * .25
+        && xPos < width * .75
+        && yPos > height * .25
+        && yPos < height * .75
       ) {
         placement = 'inside';
       } else if (
@@ -124,16 +126,35 @@ export default class WomNode {
         (xPos > width * .2 && yPos > height - 40)
       ) {
         placement = 'after';
-      }      
-
-      if (
-        !placement || 
-        (placement === 'inside' && this.getChildren().length > 0) ||
-        (placement === 'inside' && this.getMetadata().slots.length === 0)
-      ) {
+      }     
+      
+      if (!placement) {
         return;
       }
 
+      if (placement === 'inside') {
+        if (this.getChildren().length > 0 || this.slots.length === 0) {
+          return;
+        }
+
+        const { allowedChildren } = this.getMetadata() || {};
+        const { componentType } = this.wom.getActionContext();
+
+        if (allowedChildren && allowedChildren.indexOf(componentType) < 0) {
+          return;
+        }
+      } else if (placement === 'before' || placement === 'after') {
+        const parent = this.getParent();
+        if (parent) {
+          const { allowedChildren } = parent.getMetadata() || {};
+          const { componentType } = this.wom.getActionContext();
+
+          if (allowedChildren && allowedChildren.indexOf(componentType) < 0) {
+            return;
+          }
+        }
+      }
+      
       this.wom.setActionContext(this.wom.getSelectedActionId(), {
         placement,
         slot: placement === 'inside' ? 'default' : this.getSlot(),
