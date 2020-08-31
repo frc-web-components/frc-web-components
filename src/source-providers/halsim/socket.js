@@ -1,12 +1,18 @@
 
 
-const address = "ws://localhost:8080/wpilibws";
 var socketOpen = false;
 var socket = null;
 
-export function createSocket(onMessage, onClose) {
+function getAddress(type) {
+  if (type === 'gitpod') {
+    return `wss://8080${window.location.href.substring(12)}wpilibws`;
+  }
+  return "ws://localhost:8080/wpilibws";
+}
 
-  socket = new WebSocket(address);
+export function createSocket(addressType, onMessage, onClose) {
+
+  socket = new WebSocket(getAddress(addressType));
   if (socket) {
     socket.onopen = function () {
       console.info("Socket opened");
@@ -26,7 +32,7 @@ export function createSocket(onMessage, onClose) {
       }
       // respawn the websocket
       setTimeout(() => {
-        createSocket(onMessage, onClose);
+        createSocket(addressType, onMessage, onClose);
       }, 300);
     };
   }

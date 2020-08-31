@@ -8,7 +8,9 @@ export default class HalSimProvider extends SourceProvider {
   }
 
   static get settingsDefaults() {
-    return {};
+    return {
+      addressType: 'local'
+    };
   }
 
   constructor(providerName, settings) {
@@ -16,6 +18,7 @@ export default class HalSimProvider extends SourceProvider {
     this.parentKeyMap = {};
     this.dataToSend = [];
     createSocket(
+      settings.addressType,
       data => {
         this.socketUpdate(data);
       },

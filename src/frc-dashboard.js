@@ -3,11 +3,24 @@ import WebbitDashboard from './dashboard';
 
 class FrcDashboard extends WebbitDashboard {
 
+  static get properties() {
+    return {
+      ...super.properties,
+      addressType: { type: String, attribute: 'address-type', reflect: true },
+    };
+  }
+
   constructor() {
     super();
-    this.fullscreen = true;
+    this.addressType = 'local';
+  }
 
-    addSourceProvider('HALSim', 'HALSim');
+  firstUpdated() {
+    super.firstUpdated();
+
+    addSourceProvider('HALSim', 'HALSim', {
+      addressType: this.addressType
+    });
     addSourceProvider('NetworkTables', 'NetworkTables');
     addSourceProvider('Gamepad', 'Gamepad');
     setDefaultSourceProvider('NetworkTables');
