@@ -38,14 +38,18 @@ export default class WomNode {
     };
 
     this.onMouseClick = (ev) => {
-      this.onAdd(ev);
+      ev.stopPropagation();
+
+      const { width, height } = this.wom.getDashboardElement().getBoundingClientRect();
+      const { clientX, clientY } = ev;
+
+      if ((clientX > width || clientY > height)) {
+        return;
+      }
+
+      this.wom.selectNode(this);
     }
 
-    this.onMouseMove = (ev) => {
-      this.onMove(ev);
-    };
-
-    node.addEventListener('mousemove', this.onMouseMove);
     node.addEventListener('mouseover', this.onMouseEnter);
     node.addEventListener('mouseleave', this.onMouseLeave);
     node.addEventListener('click', this.onMouseClick);
@@ -164,27 +168,10 @@ export default class WomNode {
     });
   }
 
-  onAdd(ev, ignorePosition) {
-    ev.stopPropagation();
-
+  onAdd() {
     const { targetedNode } = this.wom.getActionContext();
-
-    const { width, height } = this.wom.getDashboardElement().getBoundingClientRect();
-    const { clientX, clientY } = ev;
-
-    if (!ignorePosition && (clientX > width || clientY > height)) {
-      return;
-    }
-
-    console.log('3');
-
-    if (this.wom.getSelectedActionId() === 'addNode') {
-      console.log('4', targetedNode);
-      if (targetedNode) {
-        this.wom.targetNode(targetedNode);
-      }
-    } else if (this.ancestors.length > 0) {
-      this.wom.selectNode(this);
+    if (targetedNode) {
+      this.wom.targetNode(targetedNode);
     }
   }
 
@@ -194,14 +181,12 @@ export default class WomNode {
       || this.getLevel() >= this.wom.getPreviewedNode().getLevel()
     ) {
       this.wom.previewNode(this);
-      console.log('enter:', this.getWebbitId());
     }
   }
 
   onLeave() {
     if (this.wom.getPreviewedNode() && this.wom.getPreviewedNode().getWebbitId() === this.getWebbitId()) {
       this.wom.removeNodePreview();
-      console.log('leave:', this.getWebbitId());
     }
   }
 

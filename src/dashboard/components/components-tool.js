@@ -138,8 +138,9 @@ class ComponentsTool extends LitElement {
 
     document.addEventListener("dragend", ev => { 
       if ('__WOM_NODE__' in ev.target) {
-        ev.target.__WOM_NODE__.onAdd(ev, true);
+        ev.target.__WOM_NODE__.onAdd();
       }      
+      this.wom.deselectNode();
     }, false);
   }
 
