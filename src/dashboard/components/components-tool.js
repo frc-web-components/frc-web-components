@@ -112,6 +112,35 @@ class ComponentsTool extends LitElement {
     window.webbitRegistry.whenAnyDefined(() => {
       this.componentCategories = this.getComponentCategories();
     });
+
+    console.log('.!!!!!!!');
+    document.addEventListener("dragover", ev => {
+      // prevent default to allow drop
+      ev.preventDefault();
+
+      if ('__WOM_NODE__' in ev.target) {
+        ev.target.__WOM_NODE__.onMove(ev);
+      }      
+    }, false);
+
+    document.addEventListener("dragenter", ev => {
+      if ('__WOM_NODE__' in ev.target) {
+        ev.target.__WOM_NODE__.onEnter();
+      }      
+    }, false);
+
+    document.addEventListener("dragleave", ev => {
+      
+      if ('__WOM_NODE__' in ev.target) {
+        ev.target.__WOM_NODE__.onLeave();
+      }      
+    }, false);
+
+    document.addEventListener("dragend", ev => { 
+      if ('__WOM_NODE__' in ev.target) {
+        ev.target.__WOM_NODE__.onAdd(ev, true);
+      }      
+    }, false);
   }
 
   getComponentCategories() {

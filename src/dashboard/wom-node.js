@@ -30,160 +30,179 @@ export default class WomNode {
     });
 
     this.onMouseEnter = () => {
-      if (
-        !this.wom.getPreviewedNode() 
-        || this.getLevel() >= this.wom.getPreviewedNode().getLevel()
-      ) {
-        this.wom.previewNode(this);
-      }
+      this.onEnter();
     };
 
     this.onMouseLeave = () => {
-      if (this.wom.getPreviewedNode() && this.wom.getPreviewedNode().getWebbitId() === this.getWebbitId()) {
-        this.wom.removeNodePreview();
-      }
+      this.onLeave();
     };
 
     this.onMouseClick = (ev) => {
-
-      ev.stopPropagation();
-
-      const { targetedNode } = this.wom.getActionContext();
-
-      const { width, height } = this.wom.getDashboardElement().getBoundingClientRect();
-      const { clientX, clientY } = ev;
-
-      if (clientX > width || clientY > height) {
-        return;
-      }
-
-      if (this.wom.getSelectedActionId() === 'addNode') {
-        if (targetedNode) {
-          this.wom.targetNode(targetedNode);
-        }
-      } else if (this.ancestors.length > 0) {
-        this.wom.selectNode(this);
-      }
+      this.onAdd(ev);
     }
 
     this.onMouseMove = (ev) => {
-
-      if (this.wom.getSelectedActionId() !== 'addNode') {
-        return;
-      }
-
-      if (this.getLevel() === 0 && !this.wom.getPreviewedNode()) {
-        this.wom.previewNode(this);
-      }
-
-      if (!this.wom.getPreviewedNode() || (this.wom.getPreviewedNode().getWebbitId() !== this.getWebbitId())) {
-        return;
-      }
-
-      const { mousePosition } = this.wom.getActionContext();
-
-      const mouseX = ev.clientX;
-      const mouseY = ev.clientY;
-
-      if (mousePosition) {
-        const { x, y } = mousePosition;
-        const xDistance = mouseX - x;
-        const yDistance = mouseY - y;
-        const distance = Math.sqrt(xDistance * xDistance + yDistance * yDistance);
-
-        if (distance < 20) {
-          return;
-        }
-      }
-
-      const target = this.node;
-      const boundingRect = target.getBoundingClientRect();
-      const offsetX = boundingRect.x;
-      const offsetY = boundingRect.y;
-      const width = target.clientWidth;
-      const height = target.clientHeight;
-      var xPos = Math.abs(offsetX - mouseX);
-      var yPos = Math.abs(offsetY - mouseY);
-
-      let placement = null;
-
-      if (this.getLevel() === 0) {
-        placement = 'inside';
-      } else if (
-        xPos > width * .25
-        && xPos < width * .75
-        && yPos > height * .25
-        && yPos < height * .75
-      ) {
-        placement = 'inside';
-      } else if (
-        (yPos < height * .8 && xPos < 40) ||
-        (xPos < width * .8 && yPos < 40)
-      ) {
-        placement = 'before';
-      } else if (
-        (yPos > height * .2 && xPos > width - 40) ||
-        (xPos > width * .2 && yPos > height - 40)
-      ) {
-        placement = 'after';
-      }     
-      
-      if (!placement) {
-        return;
-      }
-
-      if (placement === 'inside') {
-        if (this.getChildren().length > 0 || this.slots.length === 0) {
-          return;
-        }
-
-        const { componentType } = this.wom.getActionContext();
-        const { allowedParents } = webbitRegistry.getMetadata(componentType) || {};
-        const { allowedChildren } = this.getMetadata() || {};
-
-        if (allowedChildren && allowedChildren.indexOf(componentType) < 0) {
-          return;
-        }
-
-        if (allowedParents && allowedParents.indexOf(this.getName()) < 0) {
-          return;
-        }
-
-      } else if (placement === 'before' || placement === 'after') {
-        const parent = this.getParent();
-
-        if (!parent) {
-          return;
-        }
-
-        const { componentType } = this.wom.getActionContext();
-        const { allowedParents } = webbitRegistry.getMetadata(componentType) || {};
-        const { allowedChildren } = parent.getMetadata() || {};
-
-        if (allowedChildren && allowedChildren.indexOf(componentType) < 0) {
-          return;
-        }
-
-        if (allowedParents && allowedParents.indexOf(parent.getName()) < 0) {
-          return;
-        }
-      }
-      
-      this.wom.setActionContext(this.wom.getSelectedActionId(), {
-        placement,
-        slot: placement === 'inside' ? 'default' : this.getSlot(),
-        targetedNode: this,
-        mousePosition: {
-          x: mouseX,
-          y: mouseY
-        },
-      });
+      this.onMove(ev);
     };
 
     node.addEventListener('mousemove', this.onMouseMove);
     node.addEventListener('mouseover', this.onMouseEnter);
     node.addEventListener('mouseleave', this.onMouseLeave);
     node.addEventListener('click', this.onMouseClick);
+  }
+
+  onMove(ev) {
+    if (this.wom.getSelectedActionId() !== 'addNode') {
+      return;
+    }
+
+    if (this.getLevel() === 0 && !this.wom.getPreviewedNode()) {
+      this.wom.previewNode(this);
+    }
+
+    if (!this.wom.getPreviewedNode() || (this.wom.getPreviewedNode().getWebbitId() !== this.getWebbitId())) {
+      return;
+    }
+
+    const { mousePosition } = this.wom.getActionContext();
+
+    const mouseX = ev.clientX;
+    const mouseY = ev.clientY;
+
+    if (mousePosition) {
+      const { x, y } = mousePosition;
+      const xDistance = mouseX - x;
+      const yDistance = mouseY - y;
+      const distance = Math.sqrt(xDistance * xDistance + yDistance * yDistance);
+
+      if (distance < 20) {
+        return;
+      }
+    }
+
+    const target = this.node;
+    const boundingRect = target.getBoundingClientRect();
+    const offsetX = boundingRect.x;
+    const offsetY = boundingRect.y;
+    const width = target.clientWidth;
+    const height = target.clientHeight;
+    var xPos = Math.abs(offsetX - mouseX);
+    var yPos = Math.abs(offsetY - mouseY);
+
+    let placement = null;
+
+    if (this.getLevel() === 0) {
+      placement = 'inside';
+    } else if (
+      xPos > width * .25
+      && xPos < width * .75
+      && yPos > height * .25
+      && yPos < height * .75
+    ) {
+      placement = 'inside';
+    } else if (
+      (yPos < height * .8 && xPos < 40) ||
+      (xPos < width * .8 && yPos < 40)
+    ) {
+      placement = 'before';
+    } else if (
+      (yPos > height * .2 && xPos > width - 40) ||
+      (xPos > width * .2 && yPos > height - 40)
+    ) {
+      placement = 'after';
+    }     
+    
+    if (!placement) {
+      return;
+    }
+
+    if (placement === 'inside') {
+      if (this.getChildren().length > 0 || this.slots.length === 0) {
+        return;
+      }
+
+      const { componentType } = this.wom.getActionContext();
+      const { allowedParents } = webbitRegistry.getMetadata(componentType) || {};
+      const { allowedChildren } = this.getMetadata() || {};
+
+      if (allowedChildren && allowedChildren.indexOf(componentType) < 0) {
+        return;
+      }
+
+      if (allowedParents && allowedParents.indexOf(this.getName()) < 0) {
+        return;
+      }
+
+    } else if (placement === 'before' || placement === 'after') {
+      const parent = this.getParent();
+
+      if (!parent) {
+        return;
+      }
+
+      const { componentType } = this.wom.getActionContext();
+      const { allowedParents } = webbitRegistry.getMetadata(componentType) || {};
+      const { allowedChildren } = parent.getMetadata() || {};
+
+      if (allowedChildren && allowedChildren.indexOf(componentType) < 0) {
+        return;
+      }
+
+      if (allowedParents && allowedParents.indexOf(parent.getName()) < 0) {
+        return;
+      }
+    }
+    
+    this.wom.setActionContext(this.wom.getSelectedActionId(), {
+      placement,
+      slot: placement === 'inside' ? 'default' : this.getSlot(),
+      targetedNode: this,
+      mousePosition: {
+        x: mouseX,
+        y: mouseY
+      },
+    });
+  }
+
+  onAdd(ev, ignorePosition) {
+    ev.stopPropagation();
+
+    const { targetedNode } = this.wom.getActionContext();
+
+    const { width, height } = this.wom.getDashboardElement().getBoundingClientRect();
+    const { clientX, clientY } = ev;
+
+    if (!ignorePosition && (clientX > width || clientY > height)) {
+      return;
+    }
+
+    console.log('3');
+
+    if (this.wom.getSelectedActionId() === 'addNode') {
+      console.log('4', targetedNode);
+      if (targetedNode) {
+        this.wom.targetNode(targetedNode);
+      }
+    } else if (this.ancestors.length > 0) {
+      this.wom.selectNode(this);
+    }
+  }
+
+  onEnter() {
+    if (
+      !this.wom.getPreviewedNode() 
+      || this.getLevel() >= this.wom.getPreviewedNode().getLevel()
+    ) {
+      this.wom.previewNode(this);
+      console.log('enter:', this.getWebbitId());
+    }
+  }
+
+  onLeave() {
+    if (this.wom.getPreviewedNode() && this.wom.getPreviewedNode().getWebbitId() === this.getWebbitId()) {
+      this.wom.removeNodePreview();
+      console.log('leave:', this.getWebbitId());
+    }
   }
 
   getParent() {
