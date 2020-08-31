@@ -1,6 +1,6 @@
 
 
-const address = "ws://localhost:8080/ws";
+const address = "ws://localhost:8080/wpilibws";
 var socketOpen = false;
 var socket = null;
 
