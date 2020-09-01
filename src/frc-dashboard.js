@@ -25,9 +25,7 @@ class FrcDashboard extends WebbitDashboard {
     addSourceProvider('Gamepad', 'Gamepad');
     setDefaultSourceProvider('NetworkTables');
 
-    const script = document.createElement('script');
-    script.setAttribute('data-nt-host', 'localhost:8888');
-    script.src = "http://localhost:8888/networktables/networktables.js";
+    const script = this.getNtScript();
     script.onload = () => {
       const interval = setInterval(() => {
         if (NetworkTables.isWsConnected()) {
@@ -41,6 +39,20 @@ class FrcDashboard extends WebbitDashboard {
     };
     document.getElementsByTagName('head')[0].appendChild(script);
   }
+
+  getNtScript() {
+    const script = document.createElement('script');
+    if (this.addressType === 'gitpod') {
+      const addressPart = window.location.href.substring(12, window.location.href.length - 1);
+      script.setAttribute('data-nt-host', `8888${addressPart}`);
+      script.src = `https://8888${addressPart}/networktables/networktables.js`;
+    } else {
+      script.setAttribute('data-nt-host', 'localhost:8888');
+      script.src = "http://localhost:8888/networktables/networktables.js";
+    }
+    return script;
+  }
 }
+
 
 customElements.define('frc-dashboard', FrcDashboard);
