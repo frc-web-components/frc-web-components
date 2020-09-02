@@ -7,3 +7,4 @@ import './pwm';
 import './encoder';
 import './field2d';
 import './joystick';
+import './gitpod-info';

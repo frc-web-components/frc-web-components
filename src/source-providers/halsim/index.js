@@ -1,5 +1,5 @@
 import { SourceProvider, addSourceProviderType } from '@webbitjs/store';
-import { createSocket, sendMsg } from './socket';
+import { createSocket, sendMsg, addConnectionListener } from './socket';
 
 export default class HalSimProvider extends SourceProvider {
 
@@ -78,6 +78,10 @@ export default class HalSimProvider extends SourceProvider {
       }
       this.dataToSend.push(newDataToSend);
     }
+  }
+
+  addConnectionListener(listener, immediatelyNotify) {
+    addConnectionListener(listener, immediatelyNotify);
   }
 }
 

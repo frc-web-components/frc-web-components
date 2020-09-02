@@ -2,6 +2,7 @@
 
 var socketOpen = false;
 var socket = null;
+const listeners = [];
 
 function getAddress(type) {
   if (type === 'gitpod') {
@@ -17,6 +18,9 @@ export function createSocket(addressType, onMessage, onClose) {
     socket.onopen = function () {
       console.info("Socket opened");
       socketOpen = true;
+      listeners.forEach(listener => {
+        listener(true);
+      });
     };
 
     socket.onmessage = function (msg) {
@@ -29,6 +33,9 @@ export function createSocket(addressType, onMessage, onClose) {
         console.info("Socket closed");
         socket = null;
         onClose();
+        listeners.forEach(listener => {
+          listener(false);
+        });
       }
       // respawn the websocket
       setTimeout(() => {
@@ -42,5 +49,18 @@ export function sendMsg(o) {
   if (socket) {
     var msg = JSON.stringify(o);
     socket.send(msg);
+  }
+}
+
+export function isConncted() {
+  return socketOpen;
+}
+
+export function addConnectionListener(listener, immediatelyNotify) {
+  
+  listeners.push(listener);
+
+  if (immediatelyNotify) {
+    listener(socketOpen);
   }
 }
