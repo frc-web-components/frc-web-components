@@ -28,7 +28,7 @@ class FrcDashboard extends WebbitDashboard {
     const script = this.getNtScript();
     script.onload = () => {
       const interval = setInterval(() => {
-        if (NetworkTables.isWsConnected()) {
+        if ('NetworkTables' in window && NetworkTables.isWsConnected()) {
           const event = new CustomEvent('load', {
             detail: {}
           });
