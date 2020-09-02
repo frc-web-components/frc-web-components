@@ -2,6 +2,7 @@ import { html, css, LitElement } from '@webbitjs/webbit';
 import { 
   sourceProviderAdded,
   getSourceProvider,
+  hasSourceProvider
 } from '@webbitjs/store';
  
 
@@ -49,18 +50,32 @@ class GitpodInfo extends LitElement {
     this.halsimConnected = false;
   }
 
-  firstUpdated() {
-    sourceProviderAdded(providerName => {
-      if (providerName === 'NetworkTables') {
-        const provider = getSourceProvider(providerName);
+  addNtConnectionListener() {
+    if (hasSourceProvider('NetworkTables')) {
+      const provider = getSourceProvider('NetworkTables');
         provider.addWsConnectionListener(connected => {
           this.networktablesConnected = connected;
-        }, true);
-      } else if (providerName === 'HALSim') {
-        const provider = getSourceProvider(providerName);
+      }, true);
+    }
+  }
+
+  addHalSimConnectionListener() {
+    if (hasSourceProvider('HALSim')) {
+      const provider = getSourceProvider('HALSim');
         provider.addConnectionListener(connected => {
           this.halsimConnected = connected;
-        }, true);
+      }, true);
+    }
+  }
+
+  firstUpdated() {
+    this.addNtConnectionListener();
+    this.addHalSimConnectionListener();
+    sourceProviderAdded(providerName => {
+      if (providerName === 'NetworkTables') {
+        this.addNtConnectionListener();
+      } else if (providerName === 'HALSim') {
+        this.addHalSimConnectionListener();
       }
     });
   }
