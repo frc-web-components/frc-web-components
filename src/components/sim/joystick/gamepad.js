@@ -2,12 +2,16 @@ import { html, css } from '@webbitjs/webbit';
 import Container from '../../container';
 
 const hasArrayChanged = (newVal, oldVal) => {
+  if (newVal === oldVal) {
+    return false;
+  }
   if (
       (newVal && !oldVal)
       || (!newVal && oldVal)
   ) {
     return true;
   }
+
   if (newVal.length !== oldVal.length) {
     return true;
   }
@@ -135,48 +139,53 @@ export default class Gamepad extends Container {
       const event = new CustomEvent('buttonPressChange', {
         bubbles: true,
         composed: true,
-        detail: { buttonPresses: this.buttonPresses }
+        detail: { buttonPresses: this.buttonPresses || [] }
       });
       this.dispatchEvent(event);
     } else if (changedProps.has('axes')) {
       const event = new CustomEvent('axesChange', {
         bubbles: true,
         composed: true,
-        detail: { axes: this.axes }
+        detail: { axes: this.axes || [] }
       });
       this.dispatchEvent(event);
     }
   }
 
   render() {
+        
     return html`
       <label part="header">
         ${this.index}: <span part="name">${this.id}</span>
       </label>
-      <div part="buttons">
-        ${this.buttonPresses.map((pressed, index) => html`
-          <vaadin-checkbox ?checked="${pressed}" disabled>
-            B${index + 1}
-          </vaadin-checkbox>
-        `)}
-      </div>
-      <div part="axes">
-        ${this.axes.map((axis, index) => html`
-          <div part="axis">
-            <label>A${index}</label>
-            <frc-bar
-              ?positive="${axis >= 0}"
-              value="${axis}"
-              min="-1"
-              max="1"
-              center="0"
-              part="bar"
-            >
-              ${axis.toFixed(4)}
-            </frc-bar>
-          </div>
-        `)}
-      </div>
+      ${this.buttonPresses ? html`
+        <div part="buttons">
+          ${this.buttonPresses.map((pressed, index) => html`
+            <vaadin-checkbox ?checked="${pressed}" disabled>
+              B${index + 1}
+            </vaadin-checkbox>
+          `)}
+        </div>
+      ` : ''}
+      ${this.axes ? html`
+        <div part="axes">
+          ${this.axes.map((axis, index) => html`
+            <div part="axis">
+              <label>A${index}</label>
+              <frc-bar
+                ?positive="${axis >= 0}"
+                value="${axis}"
+                min="-1"
+                max="1"
+                center="0"
+                part="bar"
+              >
+                ${axis.toFixed(4)}
+              </frc-bar>
+            </div>
+          `)}
+        </div>
+      ` : ''} 
     `;
   }
 }
