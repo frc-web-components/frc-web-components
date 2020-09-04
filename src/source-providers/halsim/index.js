@@ -28,10 +28,19 @@ export default class HalSimProvider extends SourceProvider {
     );
     // Send data every 50ms
     setInterval(() => {
-      this.dataToSend.forEach(data => {
-        sendMsg(data);
-      });
-      this.dataToSend = [];
+      if (this.dataToSend.length > 0) {
+        this.dataToSend.forEach(data => {
+          sendMsg(data);
+        });
+        sendMsg({
+          device: '',
+          type: 'DriverStation',
+          data: {
+            '>new_data': true
+          }
+        });
+        this.dataToSend = [];
+      }
     }, 50);
   }
 
