@@ -71,11 +71,9 @@ export default class HalSimProvider extends SourceProvider {
         type,
         data: {
           [dataKey]: value,
+          '>new_date': true
         }
       };
-      if (type === 'DriverStation') {
-        newDataToSend.data['>new_data'] = true;
-      }
       this.dataToSend.push(newDataToSend);
     }
   }
