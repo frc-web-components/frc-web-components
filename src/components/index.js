@@ -11,7 +11,7 @@ import './gauge';
 import './gyro';
 import './label';
 import './mecanum-drivebase';
-import './networktable-tree';
+import './source-tree';
 import './number-bar';
 import './number-slider';
 import './pdp';

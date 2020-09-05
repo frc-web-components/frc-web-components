@@ -54,7 +54,7 @@ export default class Joystick extends Container {
   onButtonPressChange(ev) {
     if (this.hasSource()) {
       const source = this.getSource();
-      if (typeof source === 'object') {
+      if (source && typeof source === 'object') {
         source.buttons = ev.detail.buttonPresses;
       }
     }
@@ -63,7 +63,7 @@ export default class Joystick extends Container {
   onAxesChange(ev) {
     if (this.hasSource()) {
       const source = this.getSource();
-      if (typeof source === 'object') {
+      if (source && typeof source === 'object') {
         source.axes = ev.detail.axes;
       }
     }
