@@ -23,6 +23,7 @@ import './voltage-view';
 import './model-viewer';
 import '@vaadin/vaadin';
 import './control-panel';
+import './urdf-viewer';
 
 // General
 import './logger';
