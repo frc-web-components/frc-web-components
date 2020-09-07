@@ -27,7 +27,7 @@ class UrdfViewer extends Webbit {
         background: white;
       }
       
-      urdf-viewer {
+      urdf-viewer, urdf-manipulator {
         display: block;
         width: 100%;
         height: 100%;
@@ -38,6 +38,7 @@ class UrdfViewer extends Webbit {
   static get properties() {
     return {
       urdf: { type: String },
+      controllable: { type: Boolean },
       up: { type: String },
       displayShadow: { type: Boolean },
       ambientColor: { type: String },
@@ -52,6 +53,7 @@ class UrdfViewer extends Webbit {
   constructor() {
     super();
     this.urdf = '';
+    this.controllable = true;
     this.up = 'Z+';
     this.displayShadow = false;
     this.ambientColor = 'black';
@@ -94,8 +96,27 @@ class UrdfViewer extends Webbit {
   }
 
   render() {
+
+    if (!this.controllable) {
+      return html`   
+        <urdf-viewer 
+          urdf="${this.urdf}" 
+          up="${this.up}" 
+          ?display-shadow="${this.displayShadow}"
+          ambient-color="${this.ambientColor}"
+          .loadMeshFunc="${loadMesh}"
+          min-distance="${this.minDistance}"
+          max-distance="${this.maxDistance}"
+          camera-x="${this.cameraX}"
+          camera-y="${this.cameraY}"
+          camera-z="${this.cameraZ}"
+          @camera-change="${this.onCameraChange}"
+        ></urdf-viewer>
+      `;
+    }
+
     return html`   
-      <urdf-viewer 
+      <urdf-manipulator 
         urdf="${this.urdf}" 
         up="${this.up}" 
         ?display-shadow="${this.displayShadow}"
@@ -107,7 +128,7 @@ class UrdfViewer extends Webbit {
         camera-y="${this.cameraY}"
         camera-z="${this.cameraZ}"
         @camera-change="${this.onCameraChange}"
-      ></urdf-viewer>
+      ></urdf-manipulator>
     `;
   }
 }
