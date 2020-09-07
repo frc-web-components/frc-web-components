@@ -48,6 +48,15 @@ export default class URDFViewer extends HTMLElement {
     get maxDistance() { return this.getAttribute('max-distance') || 10; }
     get minDistance() { return this.getAttribute('min-distance') || .25; }
 
+    get cameraX() { return this.getAttribute('camera-x') || 0; }
+    set cameraX(val) { this.setAttribute('camera-x', val); }
+
+    get cameraY() { return this.getAttribute('camera-y') || 0; }
+    set cameraY(val) { this.setAttribute('camera-y', val); }
+
+    get cameraZ() { return this.getAttribute('camera-z') || -10; }
+    set cameraZ(val) { this.setAttribute('camera-z', val); }
+
     get angles() {
 
         const angles = {};
@@ -102,7 +111,10 @@ export default class URDFViewer extends HTMLElement {
 
         // Camera setup
         const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-        camera.position.z = -10;
+        
+        camera.position.x = this.cameraX;
+        camera.position.y = this.cameraY;
+        camera.position.z = this.cameraZ;
 
         // World setup
         const world = new THREE.Object3D();
@@ -127,9 +139,10 @@ export default class URDFViewer extends HTMLElement {
         controls.enableDamping = false;
         controls.maxDistance = this.maxDistance;
         controls.minDistance = this.minDistance;
-        controls.addEventListener('change', () => this.recenter());
-
-        console.log('controls:', controls);
+        controls.addEventListener('change', () => {
+            this.recenter();
+            this.repositionCamera();
+        });
 
         this.scene = scene;
         this.world = world;
@@ -162,6 +175,11 @@ export default class URDFViewer extends HTMLElement {
 
                 // update controls after the environment in
                 // case the controls are retargeted
+
+                camera.position.x = this.cameraX;
+                camera.position.y = this.cameraY;
+                camera.position.z = this.cameraZ;
+
                 controls.maxDistance = this.maxDistance;
                 controls.minDistance = this.minDistance;
                 this.controls.update();
@@ -279,11 +297,20 @@ export default class URDFViewer extends HTMLElement {
         this._dirty = true;
     }
 
-    recenter() {
+    repositionCamera() {
+        this.cameraX = this.camera.position.x;
+        this.cameraY = this.camera.position.y;
+        this.cameraZ = this.camera.position.z;
+        this.dispatchEvent(new CustomEvent('camera-change', { 
+            bubbles: true, 
+            cancelable: true, 
+            detail: this.camera.position 
+        }));
+    }
 
+    recenter() {
         this._updateEnvironment();
         this.redraw();
-
     }
 
     // Set the joint with jointName to

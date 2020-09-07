@@ -43,6 +43,9 @@ class UrdfViewer extends Webbit {
       ambientColor: { type: String },
       minDistance: { type: 'min-distance' },
       maxDistance: { type: 'max-distance' },
+      cameraX: { type: Number },
+      cameraY: { type: Number },
+      cameraZ: { type: Number },
     };
   }
 
@@ -55,6 +58,9 @@ class UrdfViewer extends Webbit {
     this.unsubscribe = () => {};
     this.minDistance = .25;
     this.maxDistance = 5;
+    this.cameraX = 0;
+    this.cameraY = 0;
+    this.cameraZ = -10;
   }
 
 
@@ -80,6 +86,13 @@ class UrdfViewer extends Webbit {
     }
   }
 
+  onCameraChange(ev) {
+    const { x, y, z } = ev.detail;
+    this.cameraX = x;
+    this.cameraY = y;
+    this.cameraZ = z;
+  }
+
   render() {
     return html`   
       <urdf-viewer 
@@ -90,6 +103,10 @@ class UrdfViewer extends Webbit {
         .loadMeshFunc="${loadMesh}"
         min-distance="${this.minDistance}"
         max-distance="${this.maxDistance}"
+        camera-x="${this.cameraX}"
+        camera-y="${this.cameraY}"
+        camera-z="${this.cameraZ}"
+        @camera-change="${this.onCameraChange}"
       ></urdf-viewer>
     `;
   }
