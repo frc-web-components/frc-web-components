@@ -71,9 +71,9 @@ class UrdfViewer extends Webbit {
     return css`
       :host {
         display: inline-block;
-        width: 500px;
-        height: 500px;
-        background: red;
+        width: 1000px;
+        height: 1000px;
+        background: white;
       }
       
       urdf-viewer {
@@ -101,7 +101,7 @@ class UrdfViewer extends Webbit {
         urdf="${this.urdf}" 
         up="Z+" 
         display-shadow 
-        ambient-color="white"
+        ambient-color="black"
         .loadMeshFunc="${loadMeshFunc}"
       ></urdf-viewer>
     `;
