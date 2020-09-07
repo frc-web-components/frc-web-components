@@ -57,6 +57,10 @@ export default class URDFViewer extends HTMLElement {
     get cameraZ() { return this.getAttribute('camera-z') || -10; }
     set cameraZ(val) { this.setAttribute('camera-z', val); }
 
+    get robotX() { return this.getAttribute('robot-x') || 0; }
+    get robotY() { return this.getAttribute('robot-y') || 0; }
+    get robotZ() { return this.getAttribute('robot-z') || 0; }
+
     get angles() {
 
         const angles = {};
@@ -179,6 +183,12 @@ export default class URDFViewer extends HTMLElement {
                 camera.position.x = this.cameraX;
                 camera.position.y = this.cameraY;
                 camera.position.z = this.cameraZ;
+
+                if (this.robot) {
+                    this.robot.position.x = this.robotX;
+                    this.robot.position.y = this.robotY;
+                    this.robot.position.z = this.robotZ;
+                }
 
                 controls.maxDistance = this.maxDistance;
                 controls.minDistance = this.minDistance;
@@ -517,6 +527,9 @@ export default class URDFViewer extends HTMLElement {
                 this.robot = robot;
                 this.world.add(robot);
                 updateMaterials(robot);
+
+                console.log('robot:', this.robot);
+                
 
                 this._setIgnoreLimits(this.ignoreLimits);
 
