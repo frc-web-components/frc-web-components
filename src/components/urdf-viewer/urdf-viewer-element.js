@@ -61,6 +61,10 @@ export default class URDFViewer extends HTMLElement {
     get robotY() { return this.getAttribute('robot-y') || 0; }
     get robotZ() { return this.getAttribute('robot-z') || 0; }
 
+    get autoRotate() { return this.hasAttribute('auto-rotate') || false; }
+    get autoRotateSpeed() { return this.getAttribute('auto-rotate-speed') || 2; }
+    
+
     get angles() {
 
         const angles = {};
@@ -136,6 +140,8 @@ export default class URDFViewer extends HTMLElement {
 
         // Controls setup
         const controls = new OrbitControls(camera, renderer.domElement);
+        controls.autoRotate = this.autoRotate;
+        controls.autoRotateSpeed = this.autoRotateSpeed;
         controls.rotateSpeed = 2.0;
         controls.zoomSpeed = .5;
         controls.panSpeed = 2;
@@ -192,6 +198,9 @@ export default class URDFViewer extends HTMLElement {
 
                 controls.maxDistance = this.maxDistance;
                 controls.minDistance = this.minDistance;
+                controls.autoRotate = this.autoRotate;
+                controls.autoRotateSpeed = this.autoRotateSpeed;
+
                 this.controls.update();
 
             }

@@ -50,13 +50,15 @@ class UrdfViewer extends Webbit {
       cameraX: { type: Number },
       cameraY: { type: Number },
       cameraZ: { type: Number },
+      autoRotate: { type: Boolean },
+      autoRotateSpeed: { type: Number },
     };
   }
 
   constructor() {
     super();
     this.urdf = '';
-    this.controllable = true;
+    this.controllable = false;
     this.up = 'Z+';
     this.displayShadow = false;
     this.ambientColor = 'black';
@@ -69,6 +71,8 @@ class UrdfViewer extends Webbit {
     this.cameraX = 0;
     this.cameraY = 0;
     this.cameraZ = -10;
+    this.autoRotate = false;
+    this.autoRotateSpeed = 2;
   }
 
 
@@ -119,6 +123,8 @@ class UrdfViewer extends Webbit {
           camera-x="${this.cameraX}"
           camera-y="${this.cameraY}"
           camera-z="${this.cameraZ}"
+          ?auto-rotate="${this.autoRotate}"
+          auto-rotate-speed="${this.autoRotateSpeed}"
           @camera-change="${this.onCameraChange}"
         ></urdf-viewer>
       `;
@@ -139,6 +145,8 @@ class UrdfViewer extends Webbit {
         camera-x="${this.cameraX}"
         camera-y="${this.cameraY}"
         camera-z="${this.cameraZ}"
+        ?auto-rotate="${this.autoRotate}"
+        auto-rotate-speed="${this.autoRotateSpeed}"
         @camera-change="${this.onCameraChange}"
       ></urdf-manipulator>
     `;
