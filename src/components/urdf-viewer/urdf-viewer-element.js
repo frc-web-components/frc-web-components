@@ -45,6 +45,9 @@ export default class URDFViewer extends HTMLElement {
     get noAutoRecenter() { return this.hasAttribute('no-auto-recenter') || false; }
     set noAutoRecenter(val) { val ? this.setAttribute('no-auto-recenter', true) : this.removeAttribute('no-auto-recenter'); }
 
+    get maxDistance() { return this.getAttribute('max-distance') || 10; }
+    get minDistance() { return this.getAttribute('min-distance') || .25; }
+
     get angles() {
 
         const angles = {};
@@ -118,13 +121,15 @@ export default class URDFViewer extends HTMLElement {
         // Controls setup
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.rotateSpeed = 2.0;
-        controls.zoomSpeed = 5;
+        controls.zoomSpeed = .5;
         controls.panSpeed = 2;
         controls.enableZoom = true;
         controls.enableDamping = false;
-        controls.maxDistance = 50;
-        controls.minDistance = 0.25;
+        controls.maxDistance = this.maxDistance;
+        controls.minDistance = this.minDistance;
         controls.addEventListener('change', () => this.recenter());
+
+        console.log('controls:', controls);
 
         this.scene = scene;
         this.world = world;
@@ -157,6 +162,8 @@ export default class URDFViewer extends HTMLElement {
 
                 // update controls after the environment in
                 // case the controls are retargeted
+                controls.maxDistance = this.maxDistance;
+                controls.minDistance = this.minDistance;
                 this.controls.update();
 
             }
@@ -552,3 +559,5 @@ export default class URDFViewer extends HTMLElement {
     }
 
 }
+
+customElements.define('urdf-viewer', URDFViewer);

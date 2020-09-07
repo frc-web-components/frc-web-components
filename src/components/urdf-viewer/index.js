@@ -1,70 +1,10 @@
-import URDFManipulator from './urdf-manipulator-element';
+import './urdf-manipulator-element';
+import './urdf-viewer-element';
 import { Webbit, html, css } from '@webbitjs/webbit';
-import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
-import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader';
-
-import { 
-  subscribe, 
-  subscribeAll,
-  getRawSource,
-  getRawSources, 
-  hasSourceProvider, 
-  sourceProviderAdded 
-} from '@webbitjs/store';
-
-
-customElements.define('urdf-viewer', URDFManipulator);
+import { subscribe } from '@webbitjs/store';
+import loadMesh from './load-mesh';
 
 const DEG2RAD = Math.PI / 180;
-
-const loadMeshFunc = (path, manager, done) => {
-
-  const ext = path.split(/\./g).pop().toLowerCase();
-  switch (ext) {
-
-      case 'gltf':
-      case 'glb':
-          new GLTFLoader(manager).load(
-              path,
-              result => done(result.scene),
-              null,
-              err => done(null, err)
-          );
-          break;
-      case 'obj':
-          new OBJLoader(manager).load(
-              path,
-              result => done(result),
-              null,
-              err => done(null, err)
-          );
-          break;
-      case 'dae':
-          new ColladaLoader(manager).load(
-              path,
-              result => done(result.scene),
-              null,
-              err => done(null, err)
-          );
-          break;
-      case 'stl':
-          new STLLoader(manager).load(
-              path,
-              result => {
-                  const material = new THREE.MeshPhongMaterial();
-                  const mesh = new THREE.Mesh(result, material);
-                  done(mesh);
-              },
-              null,
-              err => done(null, err)
-          );
-          break;
-
-    }
-}
-
 
 class UrdfViewer extends Webbit {
 
@@ -82,8 +22,8 @@ class UrdfViewer extends Webbit {
     return css`
       :host {
         display: inline-block;
-        width: 1000px;
-        height: 1000px;
+        width: 500px;
+        height: 500px;
         background: white;
       }
       
@@ -98,13 +38,23 @@ class UrdfViewer extends Webbit {
   static get properties() {
     return {
       urdf: { type: String },
+      up: { type: String },
+      displayShadow: { type: Boolean },
+      ambientColor: { type: String },
+      minDistance: { type: 'min-distance' },
+      maxDistance: { type: 'max-distance' },
     };
   }
 
   constructor() {
     super();
     this.urdf = '';
+    this.up = 'Z+';
+    this.displayShadow = false;
+    this.ambientColor = 'black';
     this.unsubscribe = () => {};
+    this.minDistance = .25;
+    this.maxDistance = 5;
   }
 
 
@@ -134,10 +84,12 @@ class UrdfViewer extends Webbit {
     return html`   
       <urdf-viewer 
         urdf="${this.urdf}" 
-        up="Z+" 
-        display-shadow 
-        ambient-color="black"
-        .loadMeshFunc="${loadMeshFunc}"
+        up="${this.up}" 
+        ?display-shadow="${this.displayShadow}"
+        ambient-color="${this.ambientColor}"
+        .loadMeshFunc="${loadMesh}"
+        min-distance="${this.minDistance}"
+        max-distance="${this.maxDistance}"
       ></urdf-viewer>
     `;
   }

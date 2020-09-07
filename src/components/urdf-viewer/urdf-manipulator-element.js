@@ -385,3 +385,5 @@ export default class URDFManipulator extends URDFViewer {
     }
 
 }
+
+customElements.define('urdf-manipulator', URDFManipulator);
