@@ -12,7 +12,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="multisense_sl_description/meshes/head.obj" />
+        <mesh filename="multisense_sl_description/meshes/head.dae" />
       </geometry>
       <material name="">
         <color rgba="1 1 1 1" />
@@ -44,7 +44,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_unplugged/r_clav.obj" scale="1 1 1"/>
+        <mesh filename="meshes_unplugged/r_clav.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -74,7 +74,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_v3/r_farm.obj" scale="1 1 1"/>
+        <mesh filename="meshes_v3/r_farm.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -98,7 +98,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_unplugged/l_foot.obj" scale="1 1 1"/>
+        <mesh filename="meshes_unplugged/l_foot.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -122,7 +122,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_v3/r_hand.obj" scale="1 1 1"/>
+        <mesh filename="meshes_v3/r_hand.dae" scale="1 1 1"/>
       </geometry>
       <origin rpy="0 3.14159265359 0" xyz="0 0 0"/>
     </visual>
@@ -169,7 +169,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_v3/r_larm.obj" scale="1 1 1"/>
+        <mesh filename="meshes_v3/r_larm.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -193,7 +193,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_unplugged/l_lglut.obj" scale="1 1 1"/>
+        <mesh filename="meshes_unplugged/l_lglut.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -223,7 +223,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_unplugged/l_lleg.obj" scale="1 1 1"/>
+        <mesh filename="meshes_unplugged/l_lleg.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -241,7 +241,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_unplugged/r_scap.obj" scale="1 1 1"/>
+        <mesh filename="meshes_unplugged/r_scap.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -277,7 +277,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_unplugged/l_talus.obj" scale="1 1 1"/>
+        <mesh filename="meshes_unplugged/l_talus.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -301,7 +301,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_unplugged/r_uarm.obj" scale="1 1 1"/>
+        <mesh filename="meshes_unplugged/r_uarm.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -331,7 +331,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_unplugged/l_uglut.obj" scale="1 1 1"/>
+        <mesh filename="meshes_unplugged/l_uglut.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -355,7 +355,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_unplugged/l_uleg.obj" scale="1 1 1"/>
+        <mesh filename="meshes_unplugged/l_uleg.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -400,7 +400,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_unplugged/ltorso.obj" scale="1 1 1"/>
+        <mesh filename="meshes_unplugged/ltorso.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <!-- this produces unwanted self-collision -->
@@ -419,7 +419,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_unplugged/mtorso.obj" scale="1 1 1"/>
+        <mesh filename="meshes_unplugged/mtorso.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -437,7 +437,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_unplugged/pelvis.obj" scale="1 1 1"/>
+        <mesh filename="meshes_unplugged/pelvis.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -479,7 +479,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_unplugged/r_clav.obj" scale="1 1 1"/>
+        <mesh filename="meshes_unplugged/r_clav.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -509,7 +509,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_v3/r_farm.obj" scale="1 1 1"/>
+        <mesh filename="meshes_v3/r_farm.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -533,7 +533,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_unplugged/r_foot.obj" scale="1 1 1"/>
+        <mesh filename="meshes_unplugged/r_foot.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -557,7 +557,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_v3/r_hand.obj" scale="1 1 1"/>
+        <mesh filename="meshes_v3/r_hand.dae" scale="1 1 1"/>
       </geometry>
       <origin rpy="0 3.14159265359 0" xyz="0 0 0"/>
     </visual>
@@ -604,7 +604,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_v3/r_larm.obj" scale="1 1 1"/>
+        <mesh filename="meshes_v3/r_larm.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -634,7 +634,7 @@
     </collision>
     <visual>
       <geometry>
-        <mesh filename="meshes_unplugged/r_lglut.obj" scale="1 1 1"/>
+        <mesh filename="meshes_unplugged/r_lglut.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -658,7 +658,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_unplugged/r_lleg.obj" scale="1 1 1"/>
+        <mesh filename="meshes_unplugged/r_lleg.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -676,7 +676,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_unplugged/r_scap.obj" scale="1 1 1"/>
+        <mesh filename="meshes_unplugged/r_scap.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -712,7 +712,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_unplugged/r_talus.obj" scale="1 1 1"/>
+        <mesh filename="meshes_unplugged/r_talus.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -736,7 +736,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_unplugged/r_uarm.obj" scale="1 1 1"/>
+        <mesh filename="meshes_unplugged/r_uarm.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -766,7 +766,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_unplugged/r_uglut.obj" scale="1 1 1"/>
+        <mesh filename="meshes_unplugged/r_uglut.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -790,7 +790,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_unplugged/r_uleg.obj" scale="1 1 1"/>
+        <mesh filename="meshes_unplugged/r_uleg.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
@@ -836,7 +836,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="meshes_unplugged/utorso.obj" scale="1 1 1"/>
+        <mesh filename="meshes_unplugged/utorso.dae" scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
