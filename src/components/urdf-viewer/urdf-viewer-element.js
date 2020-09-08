@@ -536,10 +536,7 @@ export default class URDFViewer extends HTMLElement {
                 this.robot = robot;
                 this.world.add(robot);
                 updateMaterials(robot);
-
-                console.log('robot:', this.robot);
                 
-
                 this._setIgnoreLimits(this.ignoreLimits);
 
                 this.dispatchEvent(new CustomEvent('urdf-processed', { bubbles: true, cancelable: true, composed: true }));
