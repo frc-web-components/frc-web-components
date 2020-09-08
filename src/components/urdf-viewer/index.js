@@ -1,22 +1,23 @@
 import './urdf-manipulator-element';
 import './urdf-viewer-element';
 import { Webbit, html, css } from '@webbitjs/webbit';
-import { subscribe } from '@webbitjs/store';
+import { subscribe, getSourceProvider } from '@webbitjs/store';
 import loadMesh from './load-mesh';
 
 const DEG2RAD = Math.PI / 180;
+const RAD2DEG = 1 / DEG2RAD;
 
 class UrdfViewer extends Webbit {
 
-  // static get metadata() {
-  //   return {
-  //     displayName: 'Text View',
-  //     category: 'Forms & Inputs',
-  //     // description: 'A group of checkboxes',
-  //     // documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
-  //     slots: [],
-  //   };
-  // }
+  static get metadata() {
+    return {
+      displayName: 'URDF Viewer',
+      category: '3D Models',
+      description: 'Component used to display and manipulate URDF models',
+      // documentationLink: 'https://frc-web-components.github.io/components/model-viewer/',
+      slots: []
+    };
+  }
 
   static get styles() {
     return css`
@@ -73,23 +74,32 @@ class UrdfViewer extends Webbit {
     this.cameraZ = -10;
     this.autoRotate = false;
     this.autoRotateSpeed = 2;
+
+    this.jointManipulated = null;
   }
 
 
   setSources() {
-    const viewer = this.shadowRoot.querySelector('urdf-viewer');
     this.unsubscribe();
 
     if (this.sourceKey) {
-      this.unsubscribe = subscribe(this.sourceProvider, this.sourceKey, source => {
-        Object.getOwnPropertyNames(source).forEach(name => {
-          viewer.setAngle(name, source[name] * DEG2RAD);
-        });
+      this.unsubscribe = subscribe(this.sourceProvider, this.sourceKey, () => {
+        this.setJointAnglesFromSource();
       }, true);
     }
   }
 
-  updated(changedProperties) {
+  setJointAnglesFromSource() {
+    const viewer = this.shadowRoot.querySelector('[part=viewer]');
+    const source = this.getSource();
+    if (viewer.robot && source && typeof source === 'object') {
+      Object.getOwnPropertyNames(source).forEach(name => {
+        viewer.setAngle(name, source[name] * DEG2RAD);
+      });
+    }
+  }
+
+  async updated(changedProperties) {
 
     if (changedProperties.has('sourceKey') || changedProperties.has('sourceProvider')) {
       if (this.sourceProvider) {
@@ -105,11 +115,27 @@ class UrdfViewer extends Webbit {
     this.cameraZ = z;
   }
 
+  onManipulationStart(ev) {
+    this.jointManipulated = ev.detail;
+  }
+
+  onManipulationEnd() {
+    const viewer = this.shadowRoot.querySelector('[part=viewer]');
+    const angle = viewer.robot.joints[this.jointManipulated].angle * RAD2DEG;
+
+    const source = this.getSource();
+    if (source && typeof source === 'object') {
+      const provider = getSourceProvider(this.sourceProvider);
+      provider.userUpdate(`${this.sourceKey}/${this.jointManipulated}`, angle);
+    }
+  }
+
   render() {
 
     if (!this.controllable) {
       return html`   
         <urdf-viewer 
+          part="viewer"
           urdf="${this.urdf}" 
           up="${this.up}" 
           ?display-shadow="${this.displayShadow}"
@@ -131,7 +157,8 @@ class UrdfViewer extends Webbit {
     }
 
     return html`   
-      <urdf-manipulator 
+      <urdf-manipulator
+        part="viewer"
         urdf="${this.urdf}" 
         up="${this.up}" 
         ?display-shadow="${this.displayShadow}"
@@ -148,6 +175,8 @@ class UrdfViewer extends Webbit {
         ?auto-rotate="${this.autoRotate}"
         auto-rotate-speed="${this.autoRotateSpeed}"
         @camera-change="${this.onCameraChange}"
+        @manipulate-start="${this.onManipulationStart}"
+        @manipulate-end="${this.onManipulationEnd}"
       ></urdf-manipulator>
     `;
   }
