@@ -17,7 +17,7 @@ export default class URDFViewer extends HTMLElement {
 
     static get observedAttributes() {
 
-        return ['package', 'urdf', 'up', 'display-shadow', 'ambient-color', 'ignore-limits'];
+        return ['package', 'urdf', 'urdf-content', 'up', 'display-shadow', 'ambient-color', 'ignore-limits'];
 
     }
 
@@ -26,6 +26,8 @@ export default class URDFViewer extends HTMLElement {
 
     get urdf() { return this.getAttribute('urdf') || ''; }
     set urdf(val) { this.setAttribute('urdf', val); }
+
+    get urdfContent() { return this.getAttribute('urdf-content') || ''; }
 
     get ignoreLimits() { return this.hasAttribute('ignore-limits') || false; }
     set ignoreLimits(val) { val ? this.setAttribute('ignore-limits', val) : this.removeAttribute('ignore-limits'); }
@@ -253,9 +255,12 @@ export default class URDFViewer extends HTMLElement {
 
         this.recenter();
 
+        console.log('attr change:', attr);
+
         switch (attr) {
 
             case 'package':
+            case 'urdf-content':
             case 'urdf': {
 
                 this._scheduleLoad();
@@ -422,8 +427,15 @@ export default class URDFViewer extends HTMLElement {
 
         // if our current model is already what's being requested
         // or has been loaded then early out
-        if (this._prevload === `${ this.package }|${ this.urdf }`) return;
-        this._prevload = `${ this.package }|${ this.urdf }`;
+        console.log('content:', this.urdfContent);
+
+        if (this.urdf) {
+            if (this._prevload === `${ this.package }|${ this.urdf }`) return;
+            this._prevload = `${ this.package }|${ this.urdf }`;
+        } else {
+            if (this._prevload === `${ this.package }|${ this.urdfContent }`) return;
+            this._prevload = `${ this.package }|${ this.urdfContent }`;
+        }
 
         // if we're already waiting on a load then early out
         if (this._loadScheduled) return;
@@ -439,7 +451,7 @@ export default class URDFViewer extends HTMLElement {
 
         requestAnimationFrame(() => {
 
-            this._loadUrdf(this.package, this.urdf);
+            this._loadUrdf(this.package, this.urdf, this.urdfContent);
             this._loadScheduled = false;
 
         });
@@ -449,11 +461,13 @@ export default class URDFViewer extends HTMLElement {
     // Watch the package and urdf field and load the robot model.
     // This should _only_ be called from _scheduleLoad because that
     // ensures the that current robot has been removed
-    _loadUrdf(pkg, urdf) {
+    _loadUrdf(pkg, urdf, urdfContent) {
+
+        console.log('urdf change:', urdf, urdfContent);
 
         this.dispatchEvent(new CustomEvent('urdf-change', { bubbles: true, cancelable: true, composed: true }));
 
-        if (urdf) {
+        if (urdf || urdfContent) {
 
             // Keep track of this request and make
             // sure it doesn't get overwritten by
@@ -556,7 +570,11 @@ export default class URDFViewer extends HTMLElement {
             loader.packages = pkg;
             loader.loadMeshCb = this.loadMeshFunc;
             loader.fetchOptions = { mode: 'cors', credentials: 'same-origin' };
-            loader.load(urdf, model => robot = model);
+            if (urdf) {
+                loader.load(urdf, model => robot = model);
+            } else {
+                robot = loader.parse(urdfContent);
+            }
 
         }
 

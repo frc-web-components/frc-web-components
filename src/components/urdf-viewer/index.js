@@ -39,6 +39,7 @@ class UrdfViewer extends Webbit {
   static get properties() {
     return {
       urdf: { type: String },
+      urdfContent: { type: String },
       controllable: { type: Boolean },
       up: { type: String },
       displayShadow: { type: Boolean },
@@ -59,6 +60,7 @@ class UrdfViewer extends Webbit {
   constructor() {
     super();
     this.urdf = '';
+    this.urdfContent = '';
     this.controllable = false;
     this.up = 'Z+';
     this.displayShadow = false;
@@ -136,7 +138,8 @@ class UrdfViewer extends Webbit {
       return html`   
         <urdf-viewer 
           part="viewer"
-          urdf="${this.urdf}" 
+          urdf="${this.urdf}"
+          urdf-content="${this.urdfContent}"
           up="${this.up}" 
           ?display-shadow="${this.displayShadow}"
           ambient-color="${this.ambientColor}"
@@ -160,6 +163,7 @@ class UrdfViewer extends Webbit {
       <urdf-manipulator
         part="viewer"
         urdf="${this.urdf}" 
+        urdf-content="${this.urdfContent}"
         up="${this.up}" 
         ?display-shadow="${this.displayShadow}"
         ambient-color="${this.ambientColor}"
