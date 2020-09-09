@@ -255,8 +255,6 @@ export default class URDFViewer extends HTMLElement {
 
         this.recenter();
 
-        console.log('attr change:', attr);
-
         switch (attr) {
 
             case 'package':
@@ -427,7 +425,6 @@ export default class URDFViewer extends HTMLElement {
 
         // if our current model is already what's being requested
         // or has been loaded then early out
-        console.log('content:', this.urdfContent);
 
         if (this.urdf) {
             if (this._prevload === `${ this.package }|${ this.urdf }`) return;
@@ -462,8 +459,6 @@ export default class URDFViewer extends HTMLElement {
     // This should _only_ be called from _scheduleLoad because that
     // ensures the that current robot has been removed
     _loadUrdf(pkg, urdf, urdfContent) {
-
-        console.log('urdf change:', urdf, urdfContent);
 
         this.dispatchEvent(new CustomEvent('urdf-change', { bubbles: true, cancelable: true, composed: true }));
 
@@ -537,7 +532,6 @@ export default class URDFViewer extends HTMLElement {
             let robot = null;
 
             const onLoad = () => {
-                console.log("ONLOAD");
 
                 // If another request has come in to load a new
                 // robot, then ignore this one

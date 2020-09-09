@@ -32,6 +32,7 @@ class CodeEditor extends Webbit {
 
   static get properties() {
     return {
+      content: { type: String, primary: true },
       mode: { type: String },
       theme: { type: String },
       fontsize: { type: String },
@@ -46,6 +47,7 @@ class CodeEditor extends Webbit {
 
   constructor() {
     super();
+    this.content = '';
     this.mode = 'javascript';
     this.theme = 'monokai';
     this.fontsize = '12px';
@@ -55,6 +57,31 @@ class CodeEditor extends Webbit {
     this.wrapmode = false;
     this.maxLines = Infinity;
     this.minLines = 0;
+
+    this.onEditTimeoutId = null;
+  }
+
+  updated(changedProps) {
+    if (changedProps.has('content')) {
+      const editorElement = this.shadowRoot.querySelector('juicy-ace-editor');
+      const currentContent = editorElement.editor.getValue();
+      if (currentContent !== this.content) {
+        editorElement.editor.setValue(this.content);
+      }
+    }
+  }
+
+  onChange(ev) {
+
+    if (this.onEditTimeoutId) {
+      clearTimeout(this.onEditTimeoutId);
+      this.onEditTimeoutId = null;
+    }
+
+    this.onEditTimeoutId = setTimeout(() => {
+      const editorElement = this.shadowRoot.querySelector('juicy-ace-editor');
+      this.content = editorElement.editor.getValue();
+    }, 500);
   }
 
   render() {
@@ -69,7 +96,8 @@ class CodeEditor extends Webbit {
         ?wrapmode="${this.wrapmode}"
         max-lines="${this.maxLines}"
         min-lines="${this.minLines}"
-      ><slot></slot></juicy-ace-editor>
+        @change="${this.onChange}"
+      ></juicy-ace-editor>
     `;
   }
 }
