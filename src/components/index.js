@@ -24,6 +24,7 @@ import './model-viewer';
 import '@vaadin/vaadin';
 import './control-panel';
 import './urdf-viewer';
+import './code-editor';
 
 // General
 import './logger';

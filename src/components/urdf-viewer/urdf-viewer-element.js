@@ -535,8 +535,9 @@ export default class URDFViewer extends HTMLElement {
             }
 
             let robot = null;
-            const manager = new THREE.LoadingManager();
-            manager.onLoad = () => {
+
+            const onLoad = () => {
+                console.log("ONLOAD");
 
                 // If another request has come in to load a new
                 // robot, then ignore this one
@@ -557,8 +558,11 @@ export default class URDFViewer extends HTMLElement {
                 this.dispatchEvent(new CustomEvent('geometry-loaded', { bubbles: true, cancelable: true, composed: true }));
 
                 this.recenter();
-
             };
+
+
+            const manager = new THREE.LoadingManager();
+            manager.onLoad = onLoad;
 
             if (this.urlModifierFunc) {
 
@@ -574,6 +578,7 @@ export default class URDFViewer extends HTMLElement {
                 loader.load(urdf, model => robot = model);
             } else {
                 robot = loader.parse(urdfContent);
+                onLoad();
             }
 
         }
