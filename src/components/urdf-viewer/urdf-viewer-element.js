@@ -568,11 +568,21 @@ export default class URDFViewer extends HTMLElement {
             loader.packages = pkg;
             loader.loadMeshCb = this.loadMeshFunc;
             loader.fetchOptions = { mode: 'cors', credentials: 'same-origin' };
-            if (urdf) {
-                loader.load(urdf, model => robot = model);
-            } else {
-                robot = loader.parse(urdfContent);
-                onLoad();
+            
+            try {
+                if (urdf) {
+                    loader.load(urdf, model => robot = model);
+                } else {
+                    robot = loader.parse(urdfContent);
+                    onLoad();
+                }
+            } catch(e) {
+                this.dispatchEvent(new CustomEvent('urdf-error', { 
+                    bubbles: true, 
+                    cancelable: true, 
+                    composed: true, 
+                    detail: e.message 
+                }));
             }
 
         }
