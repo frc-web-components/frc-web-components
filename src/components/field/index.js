@@ -117,7 +117,7 @@ class Field extends Webbit {
       });
     } else if (element.tagName === 'FRC-FIELD-OBJECT') {
       // set element pose
-      const {  rotation } = element;
+      const rotation = element.rot;
       const width = convert(element.width, element.unit || parentInfo.unit, this.unit);
       const height = convert(element.height, element.unit || parentInfo.unit, this.unit);
       const x = convert(element.x, element.unit || parentInfo.unit, this.unit);
@@ -145,7 +145,7 @@ class Field extends Webbit {
 
       if (parentInfo.isField) {
         transformations = transformations.concat([
-          { type: 'translation', x: y, y: x },
+          { type: 'translation', x: x, y: this.height - y },
           { type: 'rotation', rotation: 90 - rotation },
         ]);
       } else {
