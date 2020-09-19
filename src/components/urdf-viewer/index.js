@@ -33,6 +33,12 @@ class UrdfViewer extends Webbit {
         width: 100%;
         height: 100%;
       }
+
+      canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
     `;
   }
 
