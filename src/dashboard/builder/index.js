@@ -1,7 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 import './wom-preview-box';
 import './wom-new-element-preview-box';
-import Wom from '../wom';
 
 class DashboardBuilder extends LitElement {
 
@@ -81,15 +80,10 @@ class DashboardBuilder extends LitElement {
             );
           });
           if (editContainer) {
-            const copyElement = editContainer.querySelector('[part=copy-wom]');
+            const copyWom = editContainer.querySelector('[part=copy-wom]');
             this.wom.getRootNode().getChildren().forEach(womNode => {
               let clonedNode = womNode.getNode().cloneNode(true);
-              copyElement.appendChild(clonedNode);
-              const copyWom = new Wom(copyElement);
-              copyWom.setDashboardElement(this);
-              this.wom.setActionContext(this.wom.getSelectedActionId(), {
-                copyWom
-              });
+              copyWom.appendChild(clonedNode);
             });
           }
 
