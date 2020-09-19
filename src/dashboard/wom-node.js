@@ -35,9 +35,7 @@ export default class WomNode {
         || this.getLevel() >= this.wom.getPreviewedNode().getLevel()
       ) {
         this.wom.previewNode(this);
-        this.wom.setActionContext(this.wom.getSelectedActionId(), {
-          womPath: this.getPath()
-        });
+        console.log('path:', this.getPath());
       }
     };
 
@@ -210,10 +208,6 @@ export default class WomNode {
 
   getChildren() {
     return this.childNodes;
-  }
-
-  getChild(index) {
-    return this.childNodes[index];
   }
 
   hasChildren() {

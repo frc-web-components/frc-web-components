@@ -125,14 +125,6 @@ class Wom {
     return this.previewedNode;
   }
 
-  getNodeFromPath(path) {
-    let node = this.womNode;
-    path.forEach(index => {
-      node = node && node.getChild(index);
-    });
-    return node;
-  }
-
   selectNode(node) {
 
     if (node.getNode() === this.rootNode) {

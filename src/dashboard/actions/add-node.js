@@ -23,22 +23,12 @@ export default class AddNode extends Action {
     context
   }) {
     this.removePreviewedNode(wom);
-    const { 
-      placement, 
-      targetedNode, 
-      componentType, 
-      slot,
-      copyWom,
-      womPath,
-    } = context;
+    const { placement, targetedNode, componentType, slot } = context;
 
     if (targetedNode) {
-      console.log('copyWom, womPath:', copyWom, womPath);
       this.previewedNode = createElement(componentType, slot, true);
-      const copiedTargetedNode = copyWom.getNodeFromPath(womPath);
-      console.log('copiedTargetedNode:', copiedTargetedNode);
-      addElement(wom, this.previewedNode, copiedTargetedNode.getNode(), placement);
-      // wom.dispatchEvent('womPreviewNodeAdd', { node: this.previewedNode });
+      addElement(wom, this.previewedNode, targetedNode.getNode(), placement);
+      wom.dispatchEvent('womPreviewNodeAdd', { node: this.previewedNode });
     }
   }
 
