@@ -6,6 +6,7 @@ export default class Container extends Webbit {
     return {
       displayName: 'Container',
       category: 'Layout',
+      description: 'A container for other components.'
     };
   }
 

@@ -6,7 +6,7 @@ class ToggleButton extends Container {
   static get metadata() {
     return {
       displayName: 'Toggle Button',
-      category: 'Forms & Inputs',
+      category: 'General',
       //description: 'Component for displaying data from a 3-axis accelerometer.',
       documentationLink: 'https://frc-web-components.github.io/components/toggle-button/'
     };

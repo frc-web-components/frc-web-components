@@ -7,8 +7,10 @@ class ChartData extends Webbit {
     return {
       displayName: 'Chart Data',
       category: 'Charts & Graphs',
-      //description: 'Component for displaying data from a 3-axis accelerometer.',
-      documentationLink: 'https://frc-web-components.github.io/components/line-chart/'
+      description: 'Used to show a single data point on a line chart.',
+      documentationLink: 'https://frc-web-components.github.io/components/line-chart/',
+      slots: [],
+      allowedParents: ['frc-line-chart']
     };
   }
 

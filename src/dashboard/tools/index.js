@@ -10,7 +10,7 @@ class WomTools extends LitElement {
         display: block;
         width: 30%;
         position: relative;
-        min-width: 400px;
+        min-width: 420px;
         z-index: 2;
       }
 
@@ -153,6 +153,10 @@ class WomTools extends LitElement {
     this.wom.selectAction('redo');
   }
 
+  onScrollToNode() {
+    this.wom.getSelectedNode().getNode().scrollIntoView();
+  }
+
   onLoadExtension() {
     alert(`Loading Extensions hasn't been implemented yet!`);
   }
@@ -162,6 +166,16 @@ class WomTools extends LitElement {
       <div part="tools">
         <div part="top-menu">
           <div part="top-tools-left">
+
+            <vaadin-button 
+              theme="icon tertiary" 
+              aria-label="Scroll to Node"
+              title="Scroll to Node"
+              @click="${this.onScrollToNode}"
+              ?disabled="${!this.wom.getSelectedNode()}"
+            >
+              <iron-icon icon="vaadin:arrows-long-v"></iron-icon>
+            </vaadin-button>
 
             <vaadin-button 
               theme="icon tertiary" 

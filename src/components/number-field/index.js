@@ -1,9 +1,18 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
-import { ifDefined } from 'lit-html/directives/if-defined';
+import { html } from '@webbitjs/webbit';
 
 import TextField from '../text-field';
 
 class NumberField extends TextField {
+
+  static get metadata() {
+    return {
+      displayName: 'Number Field',
+      category: 'Forms & Inputs',
+      // description: 'A group of checkboxes',
+      // documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
+      slots: [],
+    };
+  }
 
   static get properties() {
     return {

@@ -2,6 +2,17 @@ import { Webbit, html, css } from '@webbitjs/webbit';
 
 class ToggleSwitch extends Webbit {
 
+  static get metadata() {
+    return {
+      displayName: 'Toggle Switch',
+      category: 'General',
+      // description: 'A group of checkboxes',
+      // documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
+      slots: [],
+    };
+  }
+
+
   static get styles() {
     return css`
       :host {

@@ -126,6 +126,33 @@ export default class NetworkTablesProvider extends SourceProvider {
     return false;
   }
 
+  isWsConnected() {
+    return (
+      'NetworkTables' in window
+      && 'isWsConnected' in NetworkTables
+      && NetworkTables.isWsConnected()
+    );
+  }
+
+  async addWsConnectionListener(listener, immediateNotify) {
+    if (this.isNtReady) {
+      NetworkTables.addWsConnectionListener(listener, immediateNotify);
+    } else {
+      // No NetworkTables, so can't be connected to robot
+      if (immediateNotify) {
+        listener(false);
+      }
+      await this.ntReady;
+      // Listener has already been notified, so don't immediately notify.
+      // Only send a notification if connection has changed (from false to true)
+      NetworkTables.addWsConnectionListener(listener, false);
+      if (immediateNotify && NetworkTables.isWsConnected()) {
+        listener(true);
+      }
+    }
+  }
+
+
   async addRobotConnectionListener(listener, immediateNotify) {
     if (this.isNtReady) {
       NetworkTables.addRobotConnectionListener(listener, immediateNotify);

@@ -1,15 +1,23 @@
 import { Webbit, html, css } from '@webbitjs/webbit';
 import './source-view';
-import { subscribe, getRawSource } from '@webbitjs/store';
+import { 
+  subscribe, 
+  subscribeAll,
+  getRawSource,
+  getRawSources, 
+  hasSourceProvider, 
+  sourceProviderAdded 
+} from '@webbitjs/store';
 
-class NetworkTableTree extends Webbit {
+class SourceTree extends Webbit {
 
   static get metadata() {
     return {
-      displayName: 'NetworkTable Tree',
+      displayName: 'Source Tree',
       category: 'Robot & Field Info',
-      //description: 'Component for displaying data from a 3-axis accelerometer.',
-      documentationLink: 'https://frc-web-components.github.io/components/networktable-tree/'
+      description: 'Component used to display NetworkTable values.',
+      documentationLink: 'https://frc-web-components.github.io/components/networktable-tree/',
+      slots: [],
     };
   }
 
@@ -57,14 +65,26 @@ class NetworkTableTree extends Webbit {
     this.unsubscribe = () => {};
   }
 
+  setSources() {
+    this.unsubscribe();
+    if (this.sourceKey) {
+      this.unsubscribe = subscribe(this.sourceProvider, this.sourceKey, value => {
+        this.sources = getRawSource(this.sourceProvider, this.sourceKey) || { __sources__: {} };
+        this.requestUpdate();
+      }, true);
+    } else {
+      this.unsubscribe = subscribeAll(this.sourceProvider, value => {
+        this.sources = getRawSources(this.sourceProvider) || { __sources__: {} };
+        this.requestUpdate();
+      }, true);
+    }
+  }
+
   updated(changedProperties) {
+
     if (changedProperties.has('sourceKey') || changedProperties.has('sourceProvider')) {
       if (this.sourceProvider) {
-        this.unsubscribe();
-        this.unsubscribe = subscribe(this.sourceProvider, this.sourceKey || '', value => {
-          this.sources = getRawSource(this.sourceProvider, this.sourceKey || '') || { __sources__: {} };
-          this.requestUpdate();
-        }, true);
+        this.setSources();
       }
     }
   }
@@ -98,4 +118,4 @@ class NetworkTableTree extends Webbit {
 
 }
 
-webbitRegistry.define('frc-networktable-tree', NetworkTableTree);
+webbitRegistry.define('frc-source-tree', SourceTree);

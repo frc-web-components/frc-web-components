@@ -282,12 +282,6 @@ class Wom {
 
   prependNode(node, parentNode) {
     parentNode.prepend(node);
-
-    // scroll inserted node into view
-    if (!isElementInViewport(node, this.dashboardElement)) {
-      node.scrollIntoView();
-    }
-
     this.dispatchEvent('womNodeAdd', { node });
   }
 
@@ -296,27 +290,14 @@ class Wom {
       node, 
       adjacentNode.nextSibling
     );
-
-    // scroll inserted node into view
-    if (!isElementInViewport(node, this.dashboardElement)) {
-      node.scrollIntoView();
-    }
-
     this.dispatchEvent('womNodeAdd', { node });
   }
 
   insertNodeBefore(node, adjacentNode) {
-
     adjacentNode.parentNode.insertBefore(
       node, 
       adjacentNode
     );
-    
-    // scroll inserted node into view
-    if (!isElementInViewport(node, this.dashboardElement)) {
-      node.scrollIntoView();
-    }
-
     this.dispatchEvent('womNodeAdd', { node });
   }
 

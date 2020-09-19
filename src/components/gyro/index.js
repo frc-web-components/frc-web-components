@@ -11,8 +11,9 @@ class Gyro extends Container {
     return {
       displayName: 'Gyro',
       category: 'Robot & Field Info',
-      //description: 'Component for displaying data from a 3-axis accelerometer.',
-      documentationLink: 'https://frc-web-components.github.io/components/gyro/'
+      description: 'Component for displaying data from a gyro.',
+      documentationLink: 'https://frc-web-components.github.io/components/gyro/',
+      slots: [],
     };
   }
 

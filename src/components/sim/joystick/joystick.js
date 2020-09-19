@@ -1,6 +1,5 @@
 import { html, css } from '@webbitjs/webbit';
 import Container from '../../container';
-import { getSourceProvider } from '@webbitjs/store';
 
 export default class Joystick extends Container {
 
@@ -55,14 +54,18 @@ export default class Joystick extends Container {
   onButtonPressChange(ev) {
     if (this.hasSource()) {
       const source = this.getSource();
-      source.buttons = ev.detail.buttonPresses;
+      if (source && typeof source === 'object') {
+        source.buttons = ev.detail.buttonPresses;
+      }
     }
   }
 
   onAxesChange(ev) {
     if (this.hasSource()) {
       const source = this.getSource();
-      source.axes = ev.detail.axes;
+      if (source && typeof source === 'object') {
+        source.axes = ev.detail.axes;
+      }
     }
   }
 

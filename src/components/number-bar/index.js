@@ -11,8 +11,9 @@ export default class NumberBar extends Container {
     return {
       displayName: 'Number Bar',
       category: 'General',
-      //description: 'Component for displaying data from a 3-axis accelerometer.',
-      documentationLink: 'https://frc-web-components.github.io/components/number-bar/'
+      description: 'Component for display a numerical value in a bar with a min and max range.xw',
+      documentationLink: 'https://frc-web-components.github.io/components/number-bar/',
+      slots: [],
     };
   }
 

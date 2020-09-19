@@ -1,20 +1,5 @@
 import { SourceProvider, addSourceProviderType } from '@webbitjs/store';
-import { createSocket, sendMsg } from './socket';
-
-// https://andrewdupont.net/2009/08/28/deep-extending-objects-in-javascript/
-const deepExtend = (destination, source) => {
-  for (let property in source) {
-    if (source[property] instanceof Array) {
-      destination[property] = source[property];
-    } else if (typeof source[property] === "object") {
-      destination[property] = destination[property] || {};
-      deepExtend(destination[property], source[property]);
-    } else {
-      destination[property] = source[property];
-    }
-  }
-  return destination;
-};
+import { createSocket, sendMsg, addConnectionListener } from './socket';
 
 export default class HalSimProvider extends SourceProvider {
 
@@ -23,14 +8,17 @@ export default class HalSimProvider extends SourceProvider {
   }
 
   static get settingsDefaults() {
-    return {};
+    return {
+      addressType: 'local'
+    };
   }
 
   constructor(providerName, settings) {
     super(providerName, settings);
     this.parentKeyMap = {};
-    this.dataToSend = {};
+    this.dataToSend = [];
     createSocket(
+      settings.addressType,
       data => {
         this.socketUpdate(data);
       },
@@ -40,38 +28,69 @@ export default class HalSimProvider extends SourceProvider {
     );
     // Send data every 50ms
     setInterval(() => {
-      if (Object.keys(this.dataToSend).length > 0) {
-        sendMsg(this.dataToSend);
-        this.dataToSend = {};
+      if (this.dataToSend.length > 0) {
+        this.dataToSend.forEach(data => {
+          sendMsg(data);
+        });
+        sendMsg({
+          device: '',
+          type: 'DriverStation',
+          data: {
+            '>new_data': true
+          }
+        });
+        this.dataToSend = [];
       }
     }, 50);
   }
 
-  socketUpdate(data, parentKeys = []) {
+  socketUpdate(msg) {
+    
+    const { data, device, type } = msg;
+    
+    const keyParts = [type];
+
+    if (device) {
+      keyParts.push(device);
+    }
+
     Object.entries(data).forEach(([keyPart, value]) => {
-      const keys = parentKeys.concat(keyPart);
-      if (keyPart.indexOf('<') >= 0 || keyPart.indexOf('>') >= 0) {
-        const key = keys.join('/');
-        this.parentKeyMap[key] = keys;
-        this.updateSource(key, value);
-      } else {
-        this.socketUpdate(value, keys);
-      }
+      const key = keyParts.concat(keyPart).join('/');
+      this.updateSource(key, value);
+      this.parentKeyMap[key] = {
+        dataKey: keyPart,
+        device,
+        type
+      };
     });
   }
 
   userUpdate(key, value) {
-    const parentKeys = [...this.parentKeyMap[key]];
-    let data = {
-      [parentKeys.pop()]: value
-    };
-    parentKeys.reverse().forEach(key => {
-      data = {
-        [key]: data
+    const { dataKey, device, type } = this.parentKeyMap[key];
+
+    const existingData = this.dataToSend.find(data => 
+      data.type === type && data.device === device
+    );
+
+    if (existingData) {
+      existingData.data[dataKey] = value;
+    } else {
+      const newDataToSend = {
+        device,
+        type,
+        data: {
+          [dataKey]: value,
+          '>new_data': true
+        }
       };
-    });
-    deepExtend(this.dataToSend, data);
+      this.dataToSend.push(newDataToSend);
+    }
+  }
+
+  addConnectionListener(listener, immediatelyNotify) {
+    addConnectionListener(listener, immediatelyNotify);
   }
 }
+
 
 addSourceProviderType(HalSimProvider);

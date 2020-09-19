@@ -8,7 +8,8 @@ class VoltageView extends NumberBar {
       displayName: 'Voltage View',
       category: 'Robot & Field Info',
       //description: 'Component for displaying data from a 3-axis accelerometer.',
-      documentationLink: 'https://frc-web-components.github.io/components/voltage-view/'
+      documentationLink: 'https://frc-web-components.github.io/components/voltage-view/',
+      slots: [],
     };
   }
 

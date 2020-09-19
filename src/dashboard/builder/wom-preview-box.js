@@ -30,11 +30,11 @@ class WomPreviewBox extends LitElement {
     if (changedProperties.has('wom')) {
       this.wom.addListener('womNodeSelect', (ev) => {
         const { node } = ev.detail;
-        if (!isElementInViewport(
-          node.getNode(), 
-          this.wom.getDashboardElement()
-        ))
-        node.getNode().scrollIntoView();
+        // if (!isElementInViewport(
+        //   node.getNode(), 
+        //   this.wom.getDashboardElement()
+        // ))
+        // node.getNode().scrollIntoView();
       });
     }
   }

@@ -40,14 +40,19 @@ class DashboardBuilder extends LitElement {
         });
       }
     }
+    this.wom.addListener('womActionSelect', () => {
+      this.requestUpdate();
+    });
   }
 
   render() {
     return html`
-      <wom-preview-box
-        .wom="${this.wom}"
-        .previewedNode="${this.previewedNode && this.previewedNode.getNode()}"
-      ></wom-preview-box>
+      ${this.wom.getSelectedActionId() !== 'addNode' ? html`
+        <wom-preview-box
+          .wom="${this.wom}"
+          .previewedNode="${this.previewedNode && this.previewedNode.getNode()}"
+        ></wom-preview-box>
+      ` : ''}
       <wom-new-element-preview-box
         .wom="${this.wom}"
       ></wom-new-element-preview-box>

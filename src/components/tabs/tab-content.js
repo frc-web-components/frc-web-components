@@ -3,6 +3,15 @@ import { Webbit, html, css } from '@webbitjs/webbit';
 
 class TabContent extends Webbit {
 
+  static get metadata() {
+    return {
+      displayName: 'Tab Content',
+      category: 'Layout',
+      // description: 'A group of checkboxes',
+      // documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
+    };
+  }
+
   static get styles() {
     return css`
       :host {

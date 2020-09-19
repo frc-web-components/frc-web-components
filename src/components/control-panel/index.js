@@ -51,8 +51,9 @@ class ControlPanel extends Webbit {
     return {
       displayName: 'Control Panel',
       category: 'Robot & Field Info',
-      //description: 'Component for displaying data from a 3-axis accelerometer.',
-      documentationLink: 'https://frc-web-components.github.io/components/control-panel/'
+      description: 'A component used to interact with the control panel field element for the Infinite Recharge game.',
+      documentationLink: 'https://frc-web-components.github.io/components/control-panel/',
+      slots: []
     };
   }
   

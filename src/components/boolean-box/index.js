@@ -6,7 +6,7 @@ class BooleanBox extends Webbit {
     return {
       displayName: 'Boolean Box',
       category: 'General',
-      //description: 'Component for displaying data from a 3-axis accelerometer.',
+      description: `A box that's shown as one color if true and another color if false.`,
       documentationLink: 'https://frc-web-components.github.io/components/boolean-box/'
     };
   }

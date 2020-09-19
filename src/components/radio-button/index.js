@@ -2,6 +2,17 @@ import { Webbit, html, css } from '@webbitjs/webbit';
 
 class RadioButton extends Webbit {
 
+  static get metadata() {
+    return {
+      displayName: 'Radio Button',
+      category: 'Forms & Inputs',
+      // description: 'A group of checkboxes',
+      // documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
+      slots: [],
+    };
+  }
+
+
   static get styles() {
     return css`
       :host {

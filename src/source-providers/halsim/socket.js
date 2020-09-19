@@ -1,16 +1,26 @@
 
 
-const address = "ws://localhost:8080/ws";
 var socketOpen = false;
 var socket = null;
+const listeners = [];
 
-export function createSocket(onMessage, onClose) {
+function getAddress(type) {
+  if (type === 'gitpod') {
+    return `wss://8080${window.location.href.substring(12)}wpilibws`;
+  }
+  return "ws://localhost:8080/wpilibws";
+}
 
-  socket = new WebSocket(address);
+export function createSocket(addressType, onMessage, onClose) {
+
+  socket = new WebSocket(getAddress(addressType));
   if (socket) {
     socket.onopen = function () {
       console.info("Socket opened");
       socketOpen = true;
+      listeners.forEach(listener => {
+        listener(true);
+      });
     };
 
     socket.onmessage = function (msg) {
@@ -23,10 +33,13 @@ export function createSocket(onMessage, onClose) {
         console.info("Socket closed");
         socket = null;
         onClose();
+        listeners.forEach(listener => {
+          listener(false);
+        });
       }
       // respawn the websocket
       setTimeout(() => {
-        createSocket(onMessage, onClose);
+        createSocket(addressType, onMessage, onClose);
       }, 300);
     };
   }
@@ -36,5 +49,18 @@ export function sendMsg(o) {
   if (socket) {
     var msg = JSON.stringify(o);
     socket.send(msg);
+  }
+}
+
+export function isConncted() {
+  return socketOpen;
+}
+
+export function addConnectionListener(listener, immediatelyNotify) {
+  
+  listeners.push(listener);
+
+  if (immediatelyNotify) {
+    listener(socketOpen);
   }
 }

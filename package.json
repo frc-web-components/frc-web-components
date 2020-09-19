@@ -1,6 +1,6 @@
 {
   "name": "@frc-web-components/frc-web-components",
-  "version": "1.1.13",
+  "version": "2.0.14",
   "description": "",
   "main": "src/index.js",
   "scripts": {
@@ -24,13 +24,15 @@
     "@kor-ui/grid": "^1.0.9",
     "@vaadin/vaadin": "^15.0.5",
     "@webbitjs/store": "^1.1.8",
-    "@webbitjs/webbit": "^1.2.10",
+    "@webbitjs/webbit": "^1.2.13",
     "chart.js": "^2.8.0",
     "d3": "^5.15.0",
+    "juicy-ace-editor": "^2.0.5",
     "multiselect-combo-box": "^2.4.2",
     "quaternion": "^1.1.0",
     "svg-gauge": "^1.0.6",
-    "three": "^0.116.1"
+    "three": "^0.116.1",
+    "urdf-loader": "^0.8.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",

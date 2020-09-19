@@ -8,7 +8,8 @@ class Relay extends Webbit {
       displayName: 'Relay',
       category: 'Robot & Field Info',
       //description: 'Component for displaying data from a 3-axis accelerometer.',
-      documentationLink: 'https://frc-web-components.github.io/components/relay/'
+      documentationLink: 'https://frc-web-components.github.io/components/relay/',
+      slots: [],
     };
   }
 

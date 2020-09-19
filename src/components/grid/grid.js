@@ -7,7 +7,8 @@ class Grid extends Container {
     return {
       displayName: 'Grid',
       category: 'Layout',
-      // description: 'Component for displaying data from a 3-axis accelerometer.',
+      description: 'A container for other components using a grid layout.',
+      allowedChildren: ['frc-grid-card']
       // documentationLink: 'https://frc-web-components.github.io/components/gauge/'
     };
   }

@@ -6,8 +6,9 @@ class Encoder extends Webbit {
     return {
       displayName: 'Encoder',
       category: 'Robot & Field Info',
-      //description: 'Component for displaying data from a 3-axis accelerometer.',
-      documentationLink: 'https://frc-web-components.github.io/components/encoder/'
+      description: 'Component for displaying information about an encoder',
+      documentationLink: 'https://frc-web-components.github.io/components/encoder/',
+      slots: []
     };
   }
 

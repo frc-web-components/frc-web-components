@@ -62,8 +62,9 @@ class MecanumDrivebase extends Container {
     return {
       displayName: 'Mecanum Drivebase',
       category: 'Robot & Field Info',
-      //description: 'Component for displaying data from a 3-axis accelerometer.',
-      documentationLink: 'https://frc-web-components.github.io/components/mecanum-drivebase/'
+      description: 'Component used to display wheel speeds and robot trajectory information for differential drivebases.',
+      documentationLink: 'https://frc-web-components.github.io/components/mecanum-drivebase/',
+      slots: [],
     };
   }
 
