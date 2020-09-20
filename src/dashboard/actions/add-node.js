@@ -43,7 +43,10 @@ export default class AddNode extends Action {
         y: mousePosition.y,
         width: this.previewedNode.offsetWidth,
         height: this.previewedNode.offsetHeight,
-        closestTo
+        closestTo: {
+          ...closestTo,
+          node: closestTo.node.getNode()
+        }
       });
 
 

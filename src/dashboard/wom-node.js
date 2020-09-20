@@ -57,25 +57,25 @@ const getDistanceFromNode = (node, x, y) => {
 
   if (x < left && y < top) {
     distance = getDistance(x, y, left, top);
-    placement = 'topLeft';
+    placement = (left - x) > (top - y) ? 'left' : 'top';
   } else if (x > left && x < right && y < top) {
     distance = top - y;
     placement = 'top';
   } else if (x > right && y < top) {
     distance = getDistance(x, y, right, top);
-    placement = 'topRight';
+    placement = (x - right) > (top - y) ? 'right' : 'top';
   } else if (x > right && y > top && y < bottom) {
     distance = x - right;
     placement = 'right';
   } else if (x > right && y > bottom) {
     distance = getDistance(x, y, right, bottom);
-    placement = 'bottomRight';
+    placement = (x - right) > (y - bottom) ? 'right' : 'bottom';
   } else if (x > left && x < right && y > bottom) {
     distance = y - bottom;
     placement = 'bottom';
   } else if (x < left && y > bottom) {
     distance = getDistance(x, y, left, bottom);
-    placement = 'bottomLeft';
+    placement = (left - x) > (y - bottom) ? 'left' : 'bottom';
   } else if (x < left && y > top && y < bottom) {
     distance = left - x;
     placement = 'bottom';
@@ -96,6 +96,10 @@ export default class WomNode {
     this.childBySlotNodes = this.slots.map(() => {
       return [];
     });
+
+    if (!this.node.webbitId) {
+      this.node.webbitId = webbitRegistry._generateWebbitId(this.node);
+    }
 
     this.onMouseEnter = () => {
       this.onEnter();
@@ -155,7 +159,10 @@ export default class WomNode {
 
     const closestNode = this
       .getChildren()
-      .map(node => getDistanceFromNode(node.getNode(), mouseX, mouseY))
+      .map(node => ({
+        node,
+        ...getDistanceFromNode(node.getNode(), mouseX, mouseY)
+      }))
       .reduce((closest, nodeDistance) => {
         if (!closest) {
           return nodeDistance;
@@ -176,7 +183,7 @@ export default class WomNode {
       closestTo.isParent = true;
       closestTo.placement = parentDistance.placement;
     } else {
-      closestTo.node = closestNode.__WOM_NODE__;
+      closestTo.node = closestNode.node;
       closestTo.placement = closestNode.placement;
     }
 
@@ -284,6 +291,7 @@ export default class WomNode {
   }
 
   onEnter() {
+    console.log('on enter:', this.getWebbitId());
     if (
       !this.wom.getPreviewedNode() 
       || this.getLevel() >= this.wom.getPreviewedNode().getLevel()
@@ -409,7 +417,7 @@ export default class WomNode {
   }
 
   getWebbitId() {
-    return isWebbit(this.node) ? this.node.webbitId : null;
+    return this.node.webbitId;
   }
 
   getSourceProvider() {
@@ -445,10 +453,35 @@ export default class WomNode {
   }
 
   placeLayoutElement(element, context) {
-    if (!isWebbit(this.getNode())) {
+    const { 
+      closestTo: { node, isParent, placement }
+    } = context;
 
+    if (isParent) {
+      if (placement === 'start') {
+        node.prepend(element);
+      } else  {
+        node.append(element);
+      }
     } else {
-      this.getNode().placeLayoutElement(element, context);
+      if (placement === 'left' || placement === 'top') {
+        this.getNode().insertBefore(
+          element, 
+          node
+        );
+      } else {
+        this.getNode().insertBefore(
+          element, 
+          node.nextSibling
+        );
+      }
     }
+
+    console.log('layout:', node, isParent, placement, this.wom.getPreviewedNode().getWebbitId());
+    // if (!isWebbit(this.getNode())) {
+
+    // } else {
+    //   this.getNode().placeLayoutElement(element, context);
+    // }
   }
 }
