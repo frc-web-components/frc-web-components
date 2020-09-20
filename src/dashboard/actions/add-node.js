@@ -23,12 +23,38 @@ export default class AddNode extends Action {
     context
   }) {
     this.removePreviewedNode(wom);
-    const { placement, targetedNode, componentType, slot } = context;
 
-    if (targetedNode) {
+    if (context.dragAndDrop) {
+
+      const { 
+        componentType, 
+        slot, 
+        parentNode, 
+        mousePosition, 
+        closestTo
+      } = context;
+
       this.previewedNode = createElement(componentType, slot, true);
-      addElement(wom, this.previewedNode, targetedNode.getNode(), placement);
-      wom.dispatchEvent('womPreviewNodeAdd', { node: this.previewedNode });
+
+
+
+      parentNode.placeLayoutElement(this.previewedNode, {
+        x: mousePosition.x,
+        y: mousePosition.y,
+        width: this.previewedNode.offsetWidth,
+        height: this.previewedNode.offsetHeight,
+        closestTo
+      });
+
+
+    } else {
+      const { placement, targetedNode, componentType, slot } = context;
+
+      if (targetedNode) {
+        this.previewedNode = createElement(componentType, slot, true);
+        addElement(wom, this.previewedNode, targetedNode.getNode(), placement);
+        wom.dispatchEvent('womPreviewNodeAdd', { node: this.previewedNode });
+      }
     }
   }
 

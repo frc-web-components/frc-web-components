@@ -15,6 +15,74 @@ const getChildWebbits = (domNode) => {
   });
 };
 
+const getPositionInNode = (node, x, y) => {
+  const { 
+    left, 
+    right, 
+    top, 
+    bottom, 
+    width, 
+    height 
+  } = node.getBoundingClientRect();
+
+  const yThreshhold = bottom - (x - left) * height / width;
+
+  if (y < yThreshhold) {
+    return {
+      placement: 'start',
+      distance: Math.min(x - left, y - top)
+    };
+  } else {
+    return {
+      placement: 'end',
+      distance: Math.min(right - x, bottom - y)
+    };
+  }
+}
+
+const getDistance = (x1, y1, x2, y2) => {
+  return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+};
+
+const getDistanceFromNode = (node, x, y) => {
+  const { 
+    left, 
+    right, 
+    top, 
+    bottom, 
+  } = node.getBoundingClientRect();
+
+  let distance = 0;
+  let placement = null;
+
+  if (x < left && y < top) {
+    distance = getDistance(x, y, left, top);
+    placement = 'topLeft';
+  } else if (x > left && x < right && y < top) {
+    distance = top - y;
+    placement = 'top';
+  } else if (x > right && y < top) {
+    distance = getDistance(x, y, right, top);
+    placement = 'topRight';
+  } else if (x > right && y > top && y < bottom) {
+    distance = x - right;
+    placement = 'right';
+  } else if (x > right && y > bottom) {
+    distance = getDistance(x, y, right, bottom);
+    placement = 'bottomRight';
+  } else if (x > left && x < right && y > bottom) {
+    distance = y - bottom;
+    placement = 'bottom';
+  } else if (x < left && y > bottom) {
+    distance = getDistance(x, y, left, bottom);
+    placement = 'bottomLeft';
+  } else if (x < left && y > top && y < bottom) {
+    distance = left - x;
+    placement = 'bottom';
+  }
+  return { distance, placement };
+}
+
 
 export default class WomNode {
 
@@ -56,6 +124,7 @@ export default class WomNode {
   }
 
   onMove(ev) {
+
     if (this.wom.getSelectedActionId() !== 'addNode') {
       return;
     }
@@ -84,88 +153,127 @@ export default class WomNode {
       }
     }
 
-    const target = this.node;
-    const boundingRect = target.getBoundingClientRect();
-    const offsetX = boundingRect.x;
-    const offsetY = boundingRect.y;
-    const width = target.clientWidth;
-    const height = target.clientHeight;
-    var xPos = Math.abs(offsetX - mouseX);
-    var yPos = Math.abs(offsetY - mouseY);
+    const closestNode = this
+      .getChildren()
+      .map(node => getDistanceFromNode(node.getNode(), mouseX, mouseY))
+      .reduce((closest, nodeDistance) => {
+        if (!closest) {
+          return nodeDistance;
+        }
+        return closest.distance < nodeDistance.distance ? closest : nodeDistance;
+      }, null);
+      
+    const parentDistance = getPositionInNode(this.getNode(), mouseX, mouseY);
 
-    let placement = null;
+    const closestTo = {
+      node: null,
+      isParent: false,
+      placement: ''
+    };
 
-    if (this.getLevel() === 0) {
-      placement = 'inside';
-    } else if (
-      xPos > width * .25
-      && xPos < width * .75
-      && yPos > height * .25
-      && yPos < height * .75
-    ) {
-      placement = 'inside';
-    } else if (
-      (yPos < height * .8 && xPos < 40) ||
-      (xPos < width * .8 && yPos < 40)
-    ) {
-      placement = 'before';
-    } else if (
-      (yPos > height * .2 && xPos > width - 40) ||
-      (xPos > width * .2 && yPos > height - 40)
-    ) {
-      placement = 'after';
-    }     
-    
-    if (!placement) {
-      return;
+    if (!closestNode || parentDistance.distance < closestNode.distance) {
+      closestTo.node = this;
+      closestTo.isParent = true;
+      closestTo.placement = parentDistance.placement;
+    } else {
+      closestTo.node = closestNode.__WOM_NODE__;
+      closestTo.placement = closestNode.placement;
     }
 
-    if (placement === 'inside') {
-      if (this.getChildren().length > 0 || this.slots.length === 0) {
-        return;
-      }
 
-      const { componentType } = this.wom.getActionContext();
-      const { allowedParents } = webbitRegistry.getMetadata(componentType) || {};
-      const { allowedChildren } = this.getMetadata() || {};
-
-      if (allowedChildren && allowedChildren.indexOf(componentType) < 0) {
-        return;
-      }
-
-      if (allowedParents && allowedParents.indexOf(this.getName()) < 0) {
-        return;
-      }
-
-    } else if (placement === 'before' || placement === 'after') {
-      const parent = this.getParent();
-
-      if (!parent) {
-        return;
-      }
-
-      const { componentType } = this.wom.getActionContext();
-      const { allowedParents } = webbitRegistry.getMetadata(componentType) || {};
-      const { allowedChildren } = parent.getMetadata() || {};
-
-      if (allowedChildren && allowedChildren.indexOf(componentType) < 0) {
-        return;
-      }
-
-      if (allowedParents && allowedParents.indexOf(parent.getName()) < 0) {
-        return;
-      }
-    }
-    
     this.wom.setActionContext(this.wom.getSelectedActionId(), {
-      placement,
-      slot: placement === 'inside' ? 'default' : this.getSlot(),
-      targetedNode: this,
+      dragAndDrop: true,
+      slot: this.getSlot(),
+      parentNode: this,
       mousePosition: {
         x: mouseX,
         y: mouseY
       },
+      closestTo
     });
+
+    // const target = this.node;
+    // const boundingRect = target.getBoundingClientRect();
+    // const offsetX = boundingRect.x;
+    // const offsetY = boundingRect.y;
+    // const width = target.clientWidth;
+    // const height = target.clientHeight;
+    // var xPos = Math.abs(offsetX - mouseX);
+    // var yPos = Math.abs(offsetY - mouseY);
+
+    // let placement = null;
+
+    // if (this.getLevel() === 0) {
+    //   placement = 'inside';
+    // } else if (
+    //   xPos > width * .25
+    //   && xPos < width * .75
+    //   && yPos > height * .25
+    //   && yPos < height * .75
+    // ) {
+    //   placement = 'inside';
+    // } else if (
+    //   (yPos < height * .8 && xPos < 40) ||
+    //   (xPos < width * .8 && yPos < 40)
+    // ) {
+    //   placement = 'before';
+    // } else if (
+    //   (yPos > height * .2 && xPos > width - 40) ||
+    //   (xPos > width * .2 && yPos > height - 40)
+    // ) {
+    //   placement = 'after';
+    // }     
+    
+    // if (!placement) {
+    //   return;
+    // }
+
+    // if (placement === 'inside') {
+    //   if (this.getChildren().length > 0 || this.slots.length === 0) {
+    //     return;
+    //   }
+
+    //   const { componentType } = this.wom.getActionContext();
+    //   const { allowedParents } = webbitRegistry.getMetadata(componentType) || {};
+    //   const { allowedChildren } = this.getMetadata() || {};
+
+    //   if (allowedChildren && allowedChildren.indexOf(componentType) < 0) {
+    //     return;
+    //   }
+
+    //   if (allowedParents && allowedParents.indexOf(this.getName()) < 0) {
+    //     return;
+    //   }
+
+    // } else if (placement === 'before' || placement === 'after') {
+    //   const parent = this.getParent();
+
+    //   if (!parent) {
+    //     return;
+    //   }
+
+    //   const { componentType } = this.wom.getActionContext();
+    //   const { allowedParents } = webbitRegistry.getMetadata(componentType) || {};
+    //   const { allowedChildren } = parent.getMetadata() || {};
+
+    //   if (allowedChildren && allowedChildren.indexOf(componentType) < 0) {
+    //     return;
+    //   }
+
+    //   if (allowedParents && allowedParents.indexOf(parent.getName()) < 0) {
+    //     return;
+    //   }
+    // }
+    
+    // this.wom.setActionContext(this.wom.getSelectedActionId(), {
+    //   placement,
+    //   slot: placement === 'inside' ? 'default' : this.getSlot(),
+    //   targetedNode: this,
+    //   mousePosition: {
+    //     x: mouseX,
+    //     y: mouseY
+    //   },
+    // });
   }
 
   onAdd() {
@@ -334,5 +442,13 @@ export default class WomNode {
 
   isWebbit() {
     return isWebbit(this.node);
+  }
+
+  placeLayoutElement(element, context) {
+    if (!isWebbit(this.getNode())) {
+
+    } else {
+      this.getNode().placeLayoutElement(element, context);
+    }
   }
 }
