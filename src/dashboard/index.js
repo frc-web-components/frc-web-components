@@ -31,6 +31,10 @@ class WebbitDashboard extends LitElement {
         position: relative;
       }
 
+      [part=dashboard], [part=container] {
+        padding: 5px;
+      }
+
       :host(:not([edit-mode])) {
         min-height: 100vh;
       }

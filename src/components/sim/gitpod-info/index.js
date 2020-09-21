@@ -1,4 +1,4 @@
-import { html, css, LitElement } from '@webbitjs/webbit';
+import { html, css, Webbit } from '@webbitjs/webbit';
 import { 
   sourceProviderAdded,
   getSourceProvider,
@@ -6,17 +6,27 @@ import {
 } from '@webbitjs/store';
  
 
-class GitpodInfo extends LitElement {
+class GitpodInfo extends Webbit {
+
+  static get metadata() {
+    return {
+      displayName: 'Gitpod Info',
+      category: 'Simulation',
+      // description: 'Used to show a single data point on a line chart.',
+      // documentationLink: 'https://frc-web-components.github.io/components/line-chart/',
+      slots: []
+    };
+  }
 
   static get styles() {
     return css`
       :host {
-        padding: 5px 10px;
+        margin: 5px;
+        padding-bottom: 5px;
         display: flex;
         font-family: sans-serif;
         align-items: center;
         border-bottom: 1px solid #eee;
-        margin-bottom: 5px;
       }
 
       vaadin-button {
@@ -110,4 +120,4 @@ class GitpodInfo extends LitElement {
   }
 }
 
-customElements.define('frc-sim-gitpod-info', GitpodInfo);
+webbitRegistry.define('frc-sim-gitpod-info', GitpodInfo);

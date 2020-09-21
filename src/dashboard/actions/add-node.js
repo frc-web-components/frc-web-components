@@ -70,7 +70,6 @@ export default class AddNode extends Action {
     targetedNode,
     context
   }) {
-    this.removePreviewedNode(wom);
     const { placement, componentType, slot } = context;
     const newElement = createElement(componentType, slot);
 
@@ -79,7 +78,14 @@ export default class AddNode extends Action {
       wom.selectAction('addNode', { componentType });
       wom.history.push(wom.getJson());
     });
+    
+    if (!context.dragAndDrop) {
+      addElement(wom, newElement, targetedNode.getNode(), placement);
+    } else {
+      targetedNode.getNode().replaceChild(newElement, this.previewedNode);
+      this.removePreviewedNode(wom);
+    }
 
-    addElement(wom, newElement, targetedNode.getNode(), placement);
+    this.removePreviewedNode(wom);
   };
 }

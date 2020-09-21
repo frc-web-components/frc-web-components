@@ -178,7 +178,7 @@ export default class WomNode {
       placement: ''
     };
 
-    if (!closestNode || parentDistance.distance < closestNode.distance) {
+    if (!closestNode) {
       closestTo.node = this;
       closestTo.isParent = true;
       closestTo.placement = parentDistance.placement;
@@ -189,6 +189,7 @@ export default class WomNode {
 
 
     this.wom.setActionContext(this.wom.getSelectedActionId(), {
+      targetedNode: this,
       dragAndDrop: true,
       slot: this.getSlot(),
       parentNode: this,
@@ -291,11 +292,27 @@ export default class WomNode {
   }
 
   onEnter() {
-    console.log('on enter:', this.getWebbitId());
+
     if (
       !this.wom.getPreviewedNode() 
       || this.getLevel() >= this.wom.getPreviewedNode().getLevel()
     ) {
+
+      if (this.slots.length === 0) {
+        return;
+      }
+
+      const { componentType } = this.wom.getActionContext();
+      const { allowedParents } = webbitRegistry.getMetadata(componentType) || {};
+      const { allowedChildren } = this.getMetadata() || {};
+      
+      if (allowedChildren && allowedChildren.indexOf(componentType) < 0) {
+        return;
+      }
+      if (allowedParents && allowedParents.indexOf(this.getName()) < 0) {
+        return;
+      }
+
       this.wom.previewNode(this);
     }
   }
@@ -476,8 +493,6 @@ export default class WomNode {
         );
       }
     }
-
-    console.log('layout:', node, isParent, placement, this.wom.getPreviewedNode().getWebbitId());
     // if (!isWebbit(this.getNode())) {
 
     // } else {

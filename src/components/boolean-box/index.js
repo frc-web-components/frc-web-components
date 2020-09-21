@@ -7,7 +7,8 @@ class BooleanBox extends Webbit {
       displayName: 'Boolean Box',
       category: 'General',
       description: `A box that's shown as one color if true and another color if false.`,
-      documentationLink: 'https://frc-web-components.github.io/components/boolean-box/'
+      documentationLink: 'https://frc-web-components.github.io/components/boolean-box/',
+      slots: []
     };
   }
 
@@ -17,6 +18,7 @@ class BooleanBox extends Webbit {
         display: inline-block; 
         width: 100px;
         height: 100px;
+        margin: 5px;
       }
 
       [part=box] {
@@ -35,9 +37,10 @@ class BooleanBox extends Webbit {
   static get properties() {
     return {
       value: { type: Boolean, primary: true },
-      defaultColor: { type: String, attribute: 'default-color' },
-      trueColor: { type: String, attribute: 'true-color' },
-      falseColor: { type: String, attribute: 'false-color' }
+      defaultColor: { type: String },
+      trueColor: { type: String },
+      falseColor: { type: String },
+      label: { type: String },
     };
   }
 
@@ -46,6 +49,7 @@ class BooleanBox extends Webbit {
     this.defaultColor = 'black'
     this.trueColor = 'green';
     this.falseColor = 'red';
+    this.label = '';
   }
 
   updated() {
@@ -70,7 +74,7 @@ class BooleanBox extends Webbit {
   render() {
     return html`
       <div part="box">
-        <slot></slot>
+        ${this.label}
       </div>
     `;
   }
