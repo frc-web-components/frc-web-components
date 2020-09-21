@@ -31,7 +31,6 @@ export const setProperties = (node, propertyValueMap) => {
       node[property] = value;
     }
     node.setDefaultValue(property, value);
-    console.log('set');
   });
 };
 

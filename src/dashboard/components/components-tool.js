@@ -113,7 +113,6 @@ class ComponentsTool extends LitElement {
       this.componentCategories = this.getComponentCategories();
     });
 
-    console.log('.!!!!!!!');
     document.addEventListener("dragover", ev => {
       // prevent default to allow drop
       ev.preventDefault();
@@ -168,13 +167,13 @@ class ComponentsTool extends LitElement {
 
   onComponentSelect(name) {
     this.selectedComponent = name; 
+    this.wom.removeNodePreview();
     this.wom.selectAction('addNode', {
       componentType: name
     });
   }
 
   onDragStart(ev, name) {
-    console.log('drag start');
     this.onComponentSelect(name);
     const dragImage = document.createElement('div');
     dragImage.innerText = '+';

@@ -9,7 +9,8 @@ class Tab extends Webbit {
       category: 'Layout',
       // description: 'A group of checkboxes',
       // documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
-      slots: []
+      slots: [],
+      allowedParents: ['frc-tabs']
     };
   }
 

@@ -78,7 +78,7 @@ const getDistanceFromNode = (node, x, y) => {
     placement = (left - x) > (y - bottom) ? 'left' : 'bottom';
   } else if (x < left && y > top && y < bottom) {
     distance = left - x;
-    placement = 'bottom';
+    placement = 'left';
   }
   return { distance, placement };
 }
@@ -131,10 +131,6 @@ export default class WomNode {
 
     if (this.wom.getSelectedActionId() !== 'addNode') {
       return;
-    }
-
-    if (this.getLevel() === 0 && !this.wom.getPreviewedNode()) {
-      this.wom.previewNode(this);
     }
 
     if (!this.wom.getPreviewedNode() || (this.wom.getPreviewedNode().getWebbitId() !== this.getWebbitId())) {
@@ -309,6 +305,8 @@ export default class WomNode {
       if (allowedChildren && allowedChildren.indexOf(componentType) < 0) {
         return;
       }
+
+
       if (allowedParents && allowedParents.indexOf(this.getName()) < 0) {
         return;
       }

@@ -9,6 +9,7 @@ class TabContent extends Webbit {
       category: 'Layout',
       // description: 'A group of checkboxes',
       // documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
+      allowedParents: ['frc-tabs-content']
     };
   }
 
