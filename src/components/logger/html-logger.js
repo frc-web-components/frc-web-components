@@ -34,7 +34,7 @@ const defaultOptions = {
 	name: "Html Logger",
 	enabled: true,
 	maxLogCount: 1000,
-	loggingFormat: "[LEVEL] [MESSAGE]",
+	loggingFormat: "[MESSAGE]",//"[LEVEL] [MESSAGE]",
 	argumentsSeparator: " ",
 	utcTime: false,
 	level: 0

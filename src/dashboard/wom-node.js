@@ -468,33 +468,39 @@ export default class WomNode {
   }
 
   placeLayoutElement(element, context) {
-    const { 
-      closestTo: { node, isParent, placement }
-    } = context;
 
-    if (isParent) {
-      if (placement === 'start') {
-        node.prepend(element);
-      } else  {
-        node.append(element);
-      }
+    // const { x, y } = context;
+    // element.style.left = `${x}px`;
+    // element.style.top = `${y}px`;
+
+    if (!isWebbit(this.getNode())) {
+
     } else {
-      if (placement === 'left' || placement === 'top') {
-        this.getNode().insertBefore(
-          element, 
-          node
-        );
-      } else {
-        this.getNode().insertBefore(
-          element, 
-          node.nextSibling
-        );
-      }
+      this.getNode().placeLayoutElement(element, context);
     }
-    // if (!isWebbit(this.getNode())) {
 
+    // const { 
+    //   closestTo: { node, isParent, placement }
+    // } = context;
+
+    // if (isParent) {
+    //   if (placement === 'start') {
+    //     node.prepend(element);
+    //   } else  {
+    //     node.append(element);
+    //   }
     // } else {
-    //   this.getNode().placeLayoutElement(element, context);
+    //   if (placement === 'left' || placement === 'top') {
+    //     this.getNode().insertBefore(
+    //       element, 
+    //       node
+    //     );
+    //   } else {
+    //     this.getNode().insertBefore(
+    //       element, 
+    //       node.nextSibling
+    //     );
+    //   }
     // }
   }
 }

@@ -90,13 +90,21 @@ class GitpodInfo extends Webbit {
     });
   }
 
+  onDeploy() {
+    this.dispatchEvent(new CustomEvent('deploy'));
+  }
+
+  onBuild() {
+    this.dispatchEvent(new CustomEvent('build'));
+  }
+
   render() {
     return html`
-      <vaadin-button theme="contrast small">
+      <vaadin-button theme="contrast small" @click="${this.onDeploy}">
         <iron-icon icon="vaadin:rocket" slot="prefix"></iron-icon>
         Deploy Robot Code
       </vaadin-button>
-      <vaadin-button theme="contrast small">
+      <vaadin-button theme="contrast small" @click="${this.onBuild}">
         <iron-icon icon="vaadin:building" slot="prefix"></iron-icon>
         Build Robot Code
       </vaadin-button>

@@ -41,7 +41,7 @@ import './fullscreen-container';
 import '@kor-ui/grid';
 import './grid/grid';
 import './grid/card';
-
+import './absolute-layout';
 
 // form fields
 import './combo-box';
