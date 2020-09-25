@@ -6,7 +6,7 @@ class TabsContent extends Webbit {
   static get metadata() {
     return {
       displayName: 'Tabs Content',
-      category: 'Layout',
+      category: 'Tabs',
       // description: 'A group of checkboxes',
       // documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
       allowedChildren: ['frc-tab-content']

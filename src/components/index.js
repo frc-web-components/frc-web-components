@@ -30,18 +30,10 @@ import './code-editor';
 import './logger';
 
 // Layout
-import './if';
+import './layout';
+
+// Tabs
 import './tabs';
-import './tabs/tab';
-import './tabs/tabs-content';
-import './tabs/tab-content';
-import './flexbox/flex-container';
-import './container';
-import './fullscreen-container';
-import '@kor-ui/grid';
-import './grid/grid';
-import './grid/card';
-import './absolute-layout';
 
 // form fields
 import './combo-box';
@@ -59,5 +51,8 @@ import './chart-data';
 import './line-chart';
 import './field';
 
-// sim
+// Sim
 import './sim';
+
+// Other
+import './if';

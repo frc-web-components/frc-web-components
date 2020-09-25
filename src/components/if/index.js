@@ -6,7 +6,7 @@ class If extends Container {
   static get metadata() {
     return {
       displayName: 'If',
-      category: 'Layout',
+      // category: 'Layout',
       description: 'Component for conditionally displaying content.',
       slots: ['default', 'if-true', 'if-false']
       // documentationLink: 'https://frc-web-components.github.io/components/3-axis-accelerometer/'

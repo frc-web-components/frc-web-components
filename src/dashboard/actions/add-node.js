@@ -1,6 +1,15 @@
 import Action from '../action';
 import { addElement, createElement } from './utils';
 
+
+const getAllWomNodes = (womNode) => {
+  let allNodes = [womNode];
+  womNode.getChildren().forEach(child => {
+    allNodes = allNodes.concat(getAllWomNodes(child));
+  });
+  return allNodes;
+};
+
 export default class AddNode extends Action {
 
   constructor() {
@@ -43,6 +52,7 @@ export default class AddNode extends Action {
         y: mousePosition.y,
         width: this.previewedNode.offsetWidth,
         height: this.previewedNode.offsetHeight,
+        parentNode: parentNode.getNode(),
         closestTo: {
           ...closestTo,
           node: closestTo.node.getNode()
@@ -63,12 +73,24 @@ export default class AddNode extends Action {
 
   select({ wom, context }) {
     const { componentType } = context;
-    console.log('select', componentType);
+    const allWomNodes = getAllWomNodes(wom.getRootNode());
+
+    allWomNodes.forEach(node => {
+      if (node.canContainComponent(componentType)) {
+        node.getNode().style.pointerEvents = 'all';
+      } else {
+        node.getNode().style.pointerEvents = 'none';
+      }
+    });
   }
 
   deselect({ wom }) {
     this.removePreviewedNode(wom);
-    console.log('deselect');
+    const allWomNodes = getAllWomNodes(wom.getRootNode());
+
+    allWomNodes.forEach(node => {
+      node.getNode().style.pointerEvents = 'auto';
+    });
   }
 
   execute({ 

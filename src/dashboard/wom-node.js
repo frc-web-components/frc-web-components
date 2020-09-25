@@ -1,3 +1,4 @@
+import { FlowLayout } from '@webbitjs/webbit';
 
 const isWebbit = (domNode) => {
   if (!(domNode instanceof Object)) {
@@ -195,89 +196,6 @@ export default class WomNode {
       },
       closestTo
     });
-
-    // const target = this.node;
-    // const boundingRect = target.getBoundingClientRect();
-    // const offsetX = boundingRect.x;
-    // const offsetY = boundingRect.y;
-    // const width = target.clientWidth;
-    // const height = target.clientHeight;
-    // var xPos = Math.abs(offsetX - mouseX);
-    // var yPos = Math.abs(offsetY - mouseY);
-
-    // let placement = null;
-
-    // if (this.getLevel() === 0) {
-    //   placement = 'inside';
-    // } else if (
-    //   xPos > width * .25
-    //   && xPos < width * .75
-    //   && yPos > height * .25
-    //   && yPos < height * .75
-    // ) {
-    //   placement = 'inside';
-    // } else if (
-    //   (yPos < height * .8 && xPos < 40) ||
-    //   (xPos < width * .8 && yPos < 40)
-    // ) {
-    //   placement = 'before';
-    // } else if (
-    //   (yPos > height * .2 && xPos > width - 40) ||
-    //   (xPos > width * .2 && yPos > height - 40)
-    // ) {
-    //   placement = 'after';
-    // }     
-    
-    // if (!placement) {
-    //   return;
-    // }
-
-    // if (placement === 'inside') {
-    //   if (this.getChildren().length > 0 || this.slots.length === 0) {
-    //     return;
-    //   }
-
-    //   const { componentType } = this.wom.getActionContext();
-    //   const { allowedParents } = webbitRegistry.getMetadata(componentType) || {};
-    //   const { allowedChildren } = this.getMetadata() || {};
-
-    //   if (allowedChildren && allowedChildren.indexOf(componentType) < 0) {
-    //     return;
-    //   }
-
-    //   if (allowedParents && allowedParents.indexOf(this.getName()) < 0) {
-    //     return;
-    //   }
-
-    // } else if (placement === 'before' || placement === 'after') {
-    //   const parent = this.getParent();
-
-    //   if (!parent) {
-    //     return;
-    //   }
-
-    //   const { componentType } = this.wom.getActionContext();
-    //   const { allowedParents } = webbitRegistry.getMetadata(componentType) || {};
-    //   const { allowedChildren } = parent.getMetadata() || {};
-
-    //   if (allowedChildren && allowedChildren.indexOf(componentType) < 0) {
-    //     return;
-    //   }
-
-    //   if (allowedParents && allowedParents.indexOf(parent.getName()) < 0) {
-    //     return;
-    //   }
-    // }
-    
-    // this.wom.setActionContext(this.wom.getSelectedActionId(), {
-    //   placement,
-    //   slot: placement === 'inside' ? 'default' : this.getSlot(),
-    //   targetedNode: this,
-    //   mousePosition: {
-    //     x: mouseX,
-    //     y: mouseY
-    //   },
-    // });
   }
 
   onAdd() {
@@ -288,31 +206,35 @@ export default class WomNode {
   }
 
   onEnter() {
-
     if (
       !this.wom.getPreviewedNode() 
       || this.getLevel() >= this.wom.getPreviewedNode().getLevel()
     ) {
-
-      if (this.slots.length === 0) {
-        return;
-      }
-
       const { componentType } = this.wom.getActionContext();
-      const { allowedParents } = webbitRegistry.getMetadata(componentType) || {};
-      const { allowedChildren } = this.getMetadata() || {};
-      
-      if (allowedChildren && allowedChildren.indexOf(componentType) < 0) {
-        return;
+      if (this.canContainComponent(componentType)) {
+        this.wom.previewNode(this);
       }
-
-
-      if (allowedParents && allowedParents.indexOf(this.getName()) < 0) {
-        return;
-      }
-
-      this.wom.previewNode(this);
     }
+  }
+
+  canContainComponent(componentType) {
+
+    if (this.slots.length === 0) {
+      return false;
+    }
+
+    const { allowedParents } = webbitRegistry.getMetadata(componentType) || {};
+    const { allowedChildren } = this.getMetadata() || {};
+    
+    if (allowedChildren && allowedChildren.indexOf(componentType) < 0) {
+      return false;
+    }
+
+    if (allowedParents && allowedParents.indexOf(this.getName()) < 0) {
+      return false;
+    }
+
+    return true;
   }
 
   onLeave() {
@@ -468,39 +390,10 @@ export default class WomNode {
   }
 
   placeLayoutElement(element, context) {
-
-    // const { x, y } = context;
-    // element.style.left = `${x}px`;
-    // element.style.top = `${y}px`;
-
     if (!isWebbit(this.getNode())) {
-
+      FlowLayout.placeLayoutElement(element, context);
     } else {
       this.getNode().placeLayoutElement(element, context);
     }
-
-    // const { 
-    //   closestTo: { node, isParent, placement }
-    // } = context;
-
-    // if (isParent) {
-    //   if (placement === 'start') {
-    //     node.prepend(element);
-    //   } else  {
-    //     node.append(element);
-    //   }
-    // } else {
-    //   if (placement === 'left' || placement === 'top') {
-    //     this.getNode().insertBefore(
-    //       element, 
-    //       node
-    //     );
-    //   } else {
-    //     this.getNode().insertBefore(
-    //       element, 
-    //       node.nextSibling
-    //     );
-    //   }
-    // }
   }
 }

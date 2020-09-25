@@ -25,6 +25,15 @@ const hasArrayChanged = (newVal, oldVal) => {
 
 export default class Gamepad extends Container {
 
+  static get metadata() {
+    return {
+      displayName: 'Gamepad',
+      category: 'Simulation',
+      // description: 'Component for displaying data from a 3-axis accelerometer.',
+      // documentationLink: 'https://frc-web-components.github.io/components/number-bar/'
+    };
+  }
+
   static get properties() {
     return {
       ...super.properties,

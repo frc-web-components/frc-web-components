@@ -1,11 +1,14 @@
 import { Webbit, html, css } from '@webbitjs/webbit';
+import './tab';
+import './tab-content';
+import './tabs-content';
 
 class Tabs extends Webbit {
 
   static get metadata() {
     return {
       displayName: 'Tabs',
-      category: 'Layout',
+      category: 'Tabs',
       // description: 'A group of checkboxes',
       // documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
       allowedChildren: ['frc-tab']
