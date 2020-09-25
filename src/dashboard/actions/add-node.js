@@ -61,8 +61,14 @@ export default class AddNode extends Action {
     }
   }
 
+  select({ wom, context }) {
+    const { componentType } = context;
+    console.log('select', componentType);
+  }
+
   deselect({ wom }) {
     this.removePreviewedNode(wom);
+    console.log('deselect');
   }
 
   execute({ 

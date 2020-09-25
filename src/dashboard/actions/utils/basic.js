@@ -10,6 +10,7 @@ export const createElement = (componentType, slot, isPreview) => {
   if (isPreview) {
     newElement.setAttribute('is-preview', '');
     newElement.setAttribute('webbit-id', 'preview');
+    newElement.style.pointerEvents = 'none';
   }
 
   return newElement;

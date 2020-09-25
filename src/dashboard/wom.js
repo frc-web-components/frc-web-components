@@ -189,6 +189,10 @@ class Wom {
     this.deselectAction();
     if (this.getSelectedNode() || !action.needsSelection) {
       this.selectedActionId = id;
+      action.select({ 
+        wom: this,
+        context: { ...context }
+      });
       this.dispatchEvent('womActionSelect', { 
         actionId: id,
         action: this.getAction(id)
