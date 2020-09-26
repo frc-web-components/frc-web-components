@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import { throttle } from '../../utils';
 
 class ComponentsTool extends LitElement {
 
@@ -113,14 +114,15 @@ class ComponentsTool extends LitElement {
       this.componentCategories = this.getComponentCategories();
     });
 
-    document.addEventListener("dragover", ev => {
+    document.addEventListener("dragover", throttle(ev => {
+      console.log('throttled');
       // prevent default to allow drop
       ev.preventDefault();
 
       if ('__WOM_NODE__' in ev.target) {
         ev.target.__WOM_NODE__.onMove(ev);
       }      
-    }, false);
+    }, 100), false);
 
     document.addEventListener("dragenter", ev => {
       if ('__WOM_NODE__' in ev.target) {
