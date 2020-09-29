@@ -113,22 +113,6 @@ class WomTools extends LitElement {
     }
   }
 
-  onCutNode() {
-    if (this.wom.getSelectedActionId() !== 'cutNode') {
-      this.wom.selectAction('cutNode');
-    } else {
-      this.wom.deselectAction();
-    }
-  }
-
-  onCopyNode() {
-    if (this.wom.getSelectedActionId() !== 'copyNode') {
-      this.wom.selectAction('copyNode');
-    } else {
-      this.wom.deselectAction();
-    }
-  }
-
   onRemoveNode() {
     this.wom.selectAction('removeNode');
   }
@@ -177,26 +161,6 @@ class WomTools extends LitElement {
               <iron-icon icon="vaadin:arrows-long-v"></iron-icon>
             </vaadin-button>
 
-            <vaadin-button 
-              theme="icon tertiary" 
-              aria-label="Cut Node"
-              title="Cut Node"
-              @click="${this.onCutNode}"
-              ?disabled="${!this.wom.getSelectedNode()}"
-              ?selected="${this.wom.getSelectedActionId() === 'cutNode'}"
-            >
-              <iron-icon icon="vaadin:scissors"></iron-icon>
-            </vaadin-button>
-            <vaadin-button 
-              theme="icon tertiary"
-              aria-label="Copy Node"
-              title="Copy Node"
-              @click="${this.onCopyNode}"
-              ?disabled="${!this.wom.getSelectedNode()}"
-              ?selected="${this.wom.getSelectedActionId() === 'copyNode'}"
-            >
-              <iron-icon icon="vaadin:copy"></iron-icon>
-            </vaadin-button>
             <vaadin-button 
               theme="icon tertiary" 
               aria-label="Remove Node"
