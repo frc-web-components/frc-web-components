@@ -113,36 +113,6 @@ class ComponentsTool extends LitElement {
     window.webbitRegistry.whenAnyDefined(() => {
       this.componentCategories = this.getComponentCategories();
     });
-
-    document.addEventListener("dragover", throttle(ev => {
-      console.log('throttled');
-      // prevent default to allow drop
-      ev.preventDefault();
-
-      if ('__WOM_NODE__' in ev.target) {
-        ev.target.__WOM_NODE__.onMove(ev);
-      }      
-    }, 100), false);
-
-    document.addEventListener("dragenter", ev => {
-      if ('__WOM_NODE__' in ev.target) {
-        ev.target.__WOM_NODE__.onEnter();
-      }      
-    }, false);
-
-    document.addEventListener("dragleave", ev => {
-      
-      if ('__WOM_NODE__' in ev.target) {
-        ev.target.__WOM_NODE__.onLeave();
-      }      
-    }, false);
-
-    document.addEventListener("dragend", ev => { 
-      if ('__WOM_NODE__' in ev.target) {
-        ev.target.__WOM_NODE__.onAdd();
-      }      
-      this.wom.deselectNode();
-    }, false);
   }
 
   getComponentCategories() {
@@ -173,28 +143,6 @@ class ComponentsTool extends LitElement {
     this.wom.selectAction('addNode', {
       componentType: name
     });
-  }
-
-  onDragStart(ev, name) {
-    this.onComponentSelect(name);
-    const dragImage = document.createElement('div');
-    dragImage.innerText = '+';
-    dragImage.style.fontSize = '25px';
-    dragImage.style.fontStyle = 'bold';
-    dragImage.style.width = '30px';
-    dragImage.style.height = '30px';
-    dragImage.style.display = 'black';
-    dragImage.style.lineHeight = '30px';
-    dragImage.style.textAlign = 'center';
-    dragImage.style.color = 'white';
-    dragImage.style.background = 'green';
-    dragImage.style.borderRadius = '50%';
-    dragImage.style.position = 'absolute';
-    dragImage.style.left = '-1000000px';
-    dragImage.style.top = '-1000000px';
-    dragImage.style.display = 'block';
-    document.body.appendChild(dragImage);
-    ev.dataTransfer.setDragImage(dragImage, 0, 0);
   }
 
   renderSelectedComponent() {
@@ -236,9 +184,7 @@ class ComponentsTool extends LitElement {
                   <div 
                     part="component" 
                     @click="${() => this.onComponentSelect(component.name)}"
-                    @dragstart="${(ev) => this.onDragStart(ev, component.name)}"
                     class="${this.selectedComponent === component.name ? 'selected' : ''}"
-                    draggable="true"
                   >
                     ${component.displayName}
                   </div>

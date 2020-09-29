@@ -128,83 +128,6 @@ export default class WomNode {
     node.addEventListener('click', this.onMouseClick);
   }
 
-  onMove(ev) {
-
-    if (this.wom.getSelectedActionId() !== 'addNode') {
-      return;
-    }
-
-    if (!this.wom.getPreviewedNode() || (this.wom.getPreviewedNode().getWebbitId() !== this.getWebbitId())) {
-      return;
-    }
-
-    const { mousePosition } = this.wom.getActionContext();
-
-    const mouseX = ev.clientX;
-    const mouseY = ev.clientY;
-
-    if (mousePosition) {
-      const { x, y } = mousePosition;
-      const xDistance = mouseX - x;
-      const yDistance = mouseY - y;
-      const distance = Math.sqrt(xDistance * xDistance + yDistance * yDistance);
-
-      if (distance < 20) {
-        return;
-      }
-    }
-
-    const closestNode = this
-      .getChildren()
-      .map(node => ({
-        node,
-        ...getDistanceFromNode(node.getNode(), mouseX, mouseY)
-      }))
-      .reduce((closest, nodeDistance) => {
-        if (!closest) {
-          return nodeDistance;
-        }
-        return closest.distance < nodeDistance.distance ? closest : nodeDistance;
-      }, null);
-      
-    const parentDistance = getPositionInNode(this.getNode(), mouseX, mouseY);
-
-    const closestTo = {
-      node: null,
-      isParent: false,
-      placement: ''
-    };
-
-    if (!closestNode) {
-      closestTo.node = this;
-      closestTo.isParent = true;
-      closestTo.placement = parentDistance.placement;
-    } else {
-      closestTo.node = closestNode.node;
-      closestTo.placement = closestNode.placement;
-    }
-
-
-    this.wom.setActionContext(this.wom.getSelectedActionId(), {
-      targetedNode: this,
-      dragAndDrop: true,
-      slot: this.getSlot(),
-      parentNode: this,
-      mousePosition: {
-        x: mouseX,
-        y: mouseY
-      },
-      closestTo
-    });
-  }
-
-  onAdd() {
-    const { targetedNode } = this.wom.getActionContext();
-    if (targetedNode) {
-      this.wom.targetNode(targetedNode);
-    }
-  }
-
   onEnter() {
     if (
       !this.wom.getPreviewedNode() 
@@ -387,13 +310,5 @@ export default class WomNode {
 
   isWebbit() {
     return isWebbit(this.node);
-  }
-
-  placeLayoutElement(element, context) {
-    if (!isWebbit(this.getNode())) {
-      FlowLayout.placeLayoutElement(element, context);
-    } else {
-      this.getNode().placeLayoutElement(element, context);
-    }
   }
 }
