@@ -87,7 +87,7 @@ class WomTools extends LitElement {
   addWomListeners() {
     [
       'womNodeSelect', 'womNodeDeselect', 'womActionSelect',
-      'womNodeTarget', 'womActionDeselect', 'womActionExecute',
+      'womActionDeselect', 'womActionExecute',
       'womActionContextSet', 'womNodeAdd', 'womNodeRemove',
       'womChange', 'womNodePreview', 'womNodePreviewRemove'
     ].forEach(eventName => {
@@ -234,7 +234,6 @@ class WomTools extends LitElement {
                   .node="${this.wom.getRootNode()}"
                   .selectedNode="${this.wom ? this.wom.getSelectedNode() : null}"
                   .container="${this.toolsTopElement}"
-                  ?target-needed="${this.wom && this.wom.isActionTargetNeeded()}"
                   level="0"
                 ></wom-viewer>
               ` : ''}

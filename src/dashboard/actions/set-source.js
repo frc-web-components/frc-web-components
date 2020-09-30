@@ -3,10 +3,8 @@ import { setWebbitSource } from './utils';
 
 export default class SetSource extends Action {
 
-  constructor() {
-    super({
-      needsSelection: true,
-    });
+  get needsSelection() {
+    return true;
   }
 
   execute({ wom, selectedNode, context }) {

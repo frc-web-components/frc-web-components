@@ -92,7 +92,7 @@ class WebbitDashboard extends LitElement {
   addWomListeners() {
     [
       'womNodeSelect', 'womNodeDeselect', 'womActionSelect',
-      'womNodeTarget', 'womActionDeselect', 'womActionExecute',
+       'womActionDeselect', 'womActionExecute',
       'womActionContextSet', 'womNodeAdd', 'womNodeRemove',
       'womChange', 'womNodePreview', 'womNodePreviewRemove'
     ].forEach(eventName => {

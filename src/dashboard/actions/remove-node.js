@@ -3,9 +3,7 @@ import Action from '../action';
 export default class RemoveNode extends Action {
 
   constructor() {
-    super({
-      needsSelection: true
-    });
+    super(true);
   }
 
   execute({ wom, selectedNode }) {

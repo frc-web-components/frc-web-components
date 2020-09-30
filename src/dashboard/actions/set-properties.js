@@ -3,12 +3,10 @@ import { setProperties, setWebbitId } from './utils';
 
 export default class SetProperties extends Action {
 
-  constructor() {
-    super({
-      needsSelection: true,
-    });
+  get needsSelection() {
+    return true;
   }
-
+  
   execute({ wom, selectedNode, context }) {
     const { propertyValueMap, webbitId } = context;
     setProperties(selectedNode.getNode(), propertyValueMap);

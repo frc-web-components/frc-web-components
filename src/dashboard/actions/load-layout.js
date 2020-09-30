@@ -4,13 +4,6 @@ import { loadLayout, hasLayoutChanged } from './utils';
 
 export default class LoadLayout extends Action {
 
-  constructor() {
-    super({
-      needsSelection: false,
-      needsTarget: false,
-    });
-  }
-
   execute({ wom }) {
     loadJson().then(({ result, error }) => {
       if (error) {

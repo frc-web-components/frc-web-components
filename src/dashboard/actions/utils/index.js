@@ -1,6 +1,5 @@
 export  { 
   createElement, 
-  addElement, 
   setProperties, 
   setWebbitId, 
   setWebbitSource,

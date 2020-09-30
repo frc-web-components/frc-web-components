@@ -1,18 +1,12 @@
 
 export default class Action {
 
-  constructor({ needsSelection, needsTarget }) {
-    this.needsSelection = needsSelection;
-    this.needsTarget = needsTarget;
+  get needsSelection() {
+    return false;
   }
 
-  isReady(hasSelection, hasTarget) {
-    
+  isReady(hasSelection) {
     if (this.needsSelection && !hasSelection) {
-      return false;
-    }
-
-    if (this.needsTarget && !hasTarget) {
       return false;
     }
 

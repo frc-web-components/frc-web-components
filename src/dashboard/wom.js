@@ -149,23 +149,6 @@ class Wom {
     return this.selectedNode ? this.selectedNode.getNode().__WOM_NODE__ : null;
   }
 
-  targetNode(node) {
-    const action = this.getAction(this.getSelectedActionId());
-    if (action) {
-      this.dispatchEvent('womNodeTarget', { node });
-      this.executeAction(node);
-    }
-  }
-
-  interactWithNode(node) {
-    const action = this.getAction(this.getSelectedActionId());
-    if (action) {
-      this.targetNode(node);
-    } else {
-      this.selectNode(node);
-    }
-  }
-
   addAction(id, action) {
     this.actions[id] = action;
   }
@@ -225,32 +208,25 @@ class Wom {
     return this.selectedActionId;
   }
 
-  executeAction(targetedNode) {
+  executeAction() {
 
     const actionId = this.getSelectedActionId();
     const action = this.getAction(actionId);
     const selectedNode = this.getSelectedNode();
 
-    if (!actionId || !action.isReady(!!selectedNode, !!targetedNode)) {
+    if (!actionId || !action.isReady(!!selectedNode)) {
       return;
     }
 
     action.execute({
       wom: this,
       selectedNode,
-      targetedNode,
       context: this.getActionContext(),
     });
     this.dispatchEvent('womActionExecute', {
       actionId,
       action
     })
-  }
-
-  isActionTargetNeeded() {
-    const actionId = this.getSelectedActionId();
-    const action = this.getAction(actionId);
-    return action && action.needsTarget;
   }
 
   setActionContext(id, context) {

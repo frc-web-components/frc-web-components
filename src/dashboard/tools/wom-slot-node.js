@@ -9,16 +9,6 @@ class WomSlotNode extends LitElement {
         font-family: sans-serif;
         font-size: 15px;
       }
-
-      :host([target-needed]) header:hover, 
-      :host([target-needed]) header:hover .key, 
-      :host([target-needed]) header:hover .key label {
-        cursor: cell;
-      }
-
-      :host([target-needed]) header:hover .key {
-        box-shadow: 0px 8px 0px 0px #87b187
-      }
       
       header {
         padding: 3px 0;
@@ -88,25 +78,14 @@ class WomSlotNode extends LitElement {
 
   }
 
-  onActionPreview() {
-    this.wom.setActionContext(this.wom.getSelectedActionId(), {
-      placement: 'inside',
-      slot: this.slot,
-      targetedNode: this.parentNode
-    });
-  }
-
   onSelect() {
-    this.wom.interactWithNode(this.parentNode);
+    this.wom.selectNode(this.parentNode);
   }
 
   render() {
     return html`
       <div class="node">
-        <header 
-          @mousemove="${this.onActionPreview}" 
-          @click="${this.onSelect}"
-        >
+        <header @click="${this.onSelect}">
           <span class="key">
             <label>${this.slot}</label>
           </span>

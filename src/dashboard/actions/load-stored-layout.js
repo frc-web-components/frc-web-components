@@ -3,13 +3,6 @@ import { loadLayout } from './utils';
 
 export default class LoadStoredLayout extends Action {
 
-  constructor() {
-    super({
-      needsSelection: false,
-      needsTarget: false,
-    });
-  }
-
   execute({ wom }) {
     const layoutJson = wom.history.getStoredLayout();
     console.log('layoutJson', layoutJson);

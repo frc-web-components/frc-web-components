@@ -13,16 +13,6 @@ class WomViewer extends LitElement {
         font-size: 15px;
       }
 
-      :host([target-needed]:not([level="0"])) header:hover, 
-      :host([target-needed]:not([level="0"])) header:hover .key, 
-      :host([target-needed]:not([level="0"])) header:hover .key label {
-        cursor: cell;
-      }
-
-      :host([target-needed]:not([level="0"])) header:hover .key {
-        box-shadow: 0px var(--add-element-position, 8px) 0px 0px #87b187
-      }
-      
       header {
         padding: 3px 0;
         display: flex;
@@ -94,7 +84,6 @@ class WomViewer extends LitElement {
       node: { type: Object },
       selectedNode: { type: Object },
       level: { type: Number },
-      targetNeeded: { type: Boolean, attribute: 'target-needed', reflect: true },
       container: { type: Object }
     };
   }
@@ -107,7 +96,6 @@ class WomViewer extends LitElement {
     this.node = null;
     this.selectedNode = null;
     this.level = 0;
-    this.targetNeeded = false;
     this.headerNode = null;
     this.container = null;
   }
@@ -168,7 +156,7 @@ class WomViewer extends LitElement {
 
     // select if click element isn't caret
     if (target.nodeName !== 'IRON-ICON') {
-      this.wom.interactWithNode(this.node);
+      this.wom.selectNode(this.node);
     }
   }
 
@@ -179,37 +167,6 @@ class WomViewer extends LitElement {
   onPreviewEnd() {
     if (this.wom.getPreviewedNode().getNode() === this.node.getNode()) {
       this.wom.removeNodePreview();
-    }
-  }
-
-  onActionPreview(ev) {
-
-    // Don't allow elements to be added before or after root node
-    if (this.level === 0) {
-      return;
-    }
-
-    const target = this.headerNode;
-    const offset = target.getBoundingClientRect().y;
-    const height = target.clientHeight;
-    const y = ev.clientY;
-    var loc = Math.abs(offset - y);
-
-    if (loc < height / 2) {
-      target.style.setProperty('--add-element-position', '-8px');
-      this.wom.setActionContext(this.wom.getSelectedActionId(), {
-        placement: 'before',
-        slot: this.slot,
-        targetedNode: this.node
-      });
-    }
-    else {
-      target.style.setProperty('--add-element-position', '8px');
-      this.wom.setActionContext(this.wom.getSelectedActionId(), {
-        placement: 'after',
-        slot: this.slot,
-        targetedNode: this.node
-      });
     }
   }
 
@@ -245,7 +202,6 @@ class WomViewer extends LitElement {
         <header 
           class="${this.expanded ? 'expanded' : 'collapsed'} ${this.isSelected() ? 'selected' : ''}"
           @click="${this.onSelect}"  
-          @mousemove="${this.onActionPreview}"
           @mouseenter="${this.onPreview}"
           @mouseleave="${this.onPreviewEnd}"
         >
@@ -270,7 +226,6 @@ class WomViewer extends LitElement {
                 .parentNode="${this.node}"
                 slot="${slot}"
                 level="${this.level + 1}"
-                ?target-needed="${this.targetNeeded}"
               ></wom-slot-node>
               ${children.map(node => html`
                 <wom-viewer
@@ -280,7 +235,6 @@ class WomViewer extends LitElement {
                   .selectedNode="${this.selectedNode}"
                   .container="${this.container}"
                   level="${this.level + 1}"
-                  ?target-needed="${this.targetNeeded}"
                 ></wom-viewer>
               `)}
             `)}
