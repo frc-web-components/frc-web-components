@@ -1,11 +1,11 @@
 import Action from '../action';
-import { saveJson } from '../utils';
+import { saveHtml } from '../utils';
 
 export default class SaveLayout extends Action {
 
   execute({ wom }) {
-    const json = wom.getJson();
-    saveJson(json);
+    const html = wom.getHtml();
+    saveHtml(html);
     wom.deselectAction();
   };
 }

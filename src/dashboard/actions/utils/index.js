@@ -5,7 +5,4 @@ export  {
   setWebbitSource,
   hasLayoutChanged,
   isLayoutEmpty,
-  newLayout
 } from './basic';
-
-export { loadLayout } from './loadLayout';

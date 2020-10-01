@@ -9,14 +9,13 @@ class WomHistory {
   }
 
   storeLayout() {
-    const layout = this.getCurrentLayout();
-    window.localStorage['currentWomLayout'] = JSON.stringify(layout);
+    window.localStorage['currentWomLayout'] = this.getCurrentLayout();
   }
 
   getStoredLayout() {
     if ('currentWomLayout' in window.localStorage) {
       try {
-        return JSON.parse(window.localStorage['currentWomLayout']);
+        return window.localStorage['currentWomLayout'];
       } catch(e) {}
     }
     return null;
@@ -31,7 +30,7 @@ class WomHistory {
   }
 
   getLayout(position) {
-    return JSON.parse(JSON.stringify(this.history[position]));
+    return this.history[position];
   }
 
   getCurrentLayout() {
@@ -60,18 +59,15 @@ class WomHistory {
     }
   }
 
-  push(layoutJson) {
+  push(layout) {
 
-    const jsonString = JSON.stringify(layoutJson);
-    const currentJsonString = JSON.stringify(this.history[this.position]);
-
-    if (jsonString === currentJsonString) {
+    if (layout === this.history[this.position]) {
       return;
     }
 
     this.history = this.history
       .slice(0, this.position + 1)
-      .concat(JSON.parse(jsonString));
+      .concat(layout);
 
     this.position = this.getHistoryLength() - 1;
     this.storeLayout();
@@ -96,6 +92,14 @@ class Wom {
     this.observeMutations();
     this.history = new WomHistory();
   }
+
+  getHtml() {
+    return this.womNode.getHtml();
+  }
+
+  setHtml(html) {
+    this.womNode.setHtml(html);
+  } 
 
   setDashboardElement(dashboardElement) {
     this.dashboardElement = dashboardElement;
@@ -260,27 +264,6 @@ class Wom {
     return this.actionContext;
   }
 
-  prependNode(node, parentNode) {
-    parentNode.prepend(node);
-    this.dispatchEvent('womNodeAdd', { node });
-  }
-
-  insertNodeAfter(node, adjacentNode) {
-    adjacentNode.parentNode.insertBefore(
-      node, 
-      adjacentNode.nextSibling
-    );
-    this.dispatchEvent('womNodeAdd', { node });
-  }
-
-  insertNodeBefore(node, adjacentNode) {
-    adjacentNode.parentNode.insertBefore(
-      node, 
-      adjacentNode
-    );
-    this.dispatchEvent('womNodeAdd', { node });
-  }
-
   removeNode(node) {
     node.getNode().remove();
     this.dispatchEvent('womNodeRemove', { node });
@@ -297,13 +280,6 @@ class Wom {
     return this.mode;
   }
 
-  save() {
-
-  }
-
-  load(config) {
-
-  }
 
   addListener(eventName, callback) {
     this.rootNode.addEventListener(eventName, callback);
@@ -323,30 +299,13 @@ class Wom {
 
   observeMutations() {
     const observer = new MutationObserver((mutations) => { 
-      if (this.hasNonPreviewChangeMutation(mutations)) {
-        this.build();
-      }
+      this.build();
     });
     observer.observe(this.rootNode, {
       childList: true,
       subtree: true,
       attributeFilter: ['webbit-id']
     });
-  }
-
-  hasNonPreviewChangeMutation(mutations) {
-
-    for (let mutation of mutations) {
-      const [addedNode] = mutation.addedNodes;
-      const [removedNode] = mutation.removedNodes;
-      const node = addedNode || removedNode;
-
-      if (!node || !node.hasAttribute('is-preview')) {
-        return true;
-      }
-    }
-
-    return false;
   }
 
   getRootNode() {
@@ -372,11 +331,6 @@ class Wom {
 
     this.rootNode.dispatchEvent(event);
   }
-
-  getJson() {
-    return this.womNode.getJson();
-  }
 }
-
 
 export default Wom;

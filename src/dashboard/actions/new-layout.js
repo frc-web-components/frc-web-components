@@ -11,9 +11,9 @@ export default class NewLayout extends Action {
     }
 
     wom.addListenerOnce('womChange', () => {
-      wom.history.push(wom.getJson());
+      wom.history.push(wom.getHtml());
     });
-    newLayout(wom);
+    wom.setHtml('')
     wom.deselectAction();
   };
 }

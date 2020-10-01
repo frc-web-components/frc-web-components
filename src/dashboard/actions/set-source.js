@@ -14,7 +14,7 @@ export default class SetSource extends Action {
       sourceProvider,
       sourceKey
     );
-    wom.history.push(wom.getJson());
+    wom.history.push(wom.getHtml());
     wom.deselectAction();
   }
 }

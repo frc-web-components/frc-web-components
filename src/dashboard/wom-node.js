@@ -166,6 +166,14 @@ export default class WomNode {
     }
   }
 
+  getHtml() {
+    return this.node.innerHTML;
+  }
+
+  setHtml(html) {
+    this.node.innerHTML = html;
+  }
+
   getParent() {
     const parentNode = this.ancestors[this.ancestors.length - 1];
     return parentNode || null;
@@ -209,21 +217,6 @@ export default class WomNode {
       return [];
     });
     this.wom.dispatchEvent('womNodeDestroy', { node: this });
-  }
-
-  getJson() {
-    return {
-      name: this.getName(),
-      slot: this.node.getAttribute('slot') || '',
-      webbit: {
-        isWebbit: this.isWebbit(),
-        id: this.getWebbitId(),
-        sourceProvider: this.getSourceProvider(),
-        sourceKey: this.getSourceKey(),
-        properties: this.getDefaultProps(),
-      },
-      children: this.getChildren().map(node => node.getJson())
-    };
   }
 
   build() {

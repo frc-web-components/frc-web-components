@@ -6,12 +6,12 @@ export default class SetProperties extends Action {
   get needsSelection() {
     return true;
   }
-  
+
   execute({ wom, selectedNode, context }) {
     const { propertyValueMap, webbitId } = context;
     setProperties(selectedNode.getNode(), propertyValueMap);
     setWebbitId(selectedNode.getNode(), webbitId);
-    wom.history.push(wom.getJson());
+    wom.history.push(wom.getHtml());
     wom.deselectAction();
   }
 }

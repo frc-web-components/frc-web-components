@@ -27,18 +27,10 @@ export const setWebbitSource = (node, sourceProvider, sourceKey) => {
   node.sourceKey = sourceKey;
 };
 
-export const hasLayoutChanged = (wom, layoutJson) => {
-  const jsonString = JSON.stringify(layoutJson);
-  const currentJsonString = JSON.stringify(wom.history.getCurrentLayout());
-  return jsonString !== currentJsonString;
+export const hasLayoutChanged = (wom, html) => {
+  return wom.history.getCurrentLayout() !== html;
 };
 
 export const isLayoutEmpty = (wom) => {
   return wom.womNode.getChildren().length === 0;
-};
-
-export const newLayout = (wom) => {
-  wom.womNode.getChildren().forEach(node => {
-    wom.removeNode(node);
-  });
 };

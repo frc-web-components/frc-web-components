@@ -1,11 +1,11 @@
 import Action from '../action';
-import { loadJson } from '../utils';
-import { loadLayout, hasLayoutChanged } from './utils';
+import { loadHtml } from '../utils';
+import { hasLayoutChanged } from './utils';
 
 export default class LoadLayout extends Action {
 
   execute({ wom }) {
-    loadJson().then(({ result, error }) => {
+    loadHtml().then(({ result, error }) => {
       if (error) {
         alert('error loading layout!');
         wom.deselectAction();
@@ -16,10 +16,9 @@ export default class LoadLayout extends Action {
         return;
       }
       wom.addListenerOnce('womChange', () => {
-        wom.history.push(wom.getJson());
+        wom.history.push(wom.getHtml());
       });
-      loadLayout(wom, result);
-      wom.deselectNode();
+      wom.setHtml(result);
     });
   };
 }

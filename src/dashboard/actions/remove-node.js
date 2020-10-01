@@ -2,8 +2,8 @@ import Action from '../action';
 
 export default class RemoveNode extends Action {
 
-  constructor() {
-    super(true);
+  get needsSelection() {
+    return true;
   }
 
   execute({ wom, selectedNode }) {
@@ -19,7 +19,7 @@ export default class RemoveNode extends Action {
     }
 
     wom.addListenerOnce('womChange', () => {
-      wom.history.push(wom.getJson());
+      wom.history.push(wom.getHtml());
     });
 
     wom.removeNode(selectedNode);
