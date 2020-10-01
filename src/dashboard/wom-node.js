@@ -16,75 +16,6 @@ const getChildWebbits = (domNode) => {
   });
 };
 
-const getPositionInNode = (node, x, y) => {
-  const { 
-    left, 
-    right, 
-    top, 
-    bottom, 
-    width, 
-    height 
-  } = node.getBoundingClientRect();
-
-  const yThreshhold = bottom - (x - left) * height / width;
-
-  if (y < yThreshhold) {
-    return {
-      placement: 'start',
-      distance: Math.min(x - left, y - top)
-    };
-  } else {
-    return {
-      placement: 'end',
-      distance: Math.min(right - x, bottom - y)
-    };
-  }
-}
-
-const getDistance = (x1, y1, x2, y2) => {
-  return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-};
-
-const getDistanceFromNode = (node, x, y) => {
-  const { 
-    left, 
-    right, 
-    top, 
-    bottom, 
-  } = node.getBoundingClientRect();
-
-  let distance = 0;
-  let placement = null;
-
-  if (x < left && y < top) {
-    distance = getDistance(x, y, left, top);
-    placement = (left - x) > (top - y) ? 'left' : 'top';
-  } else if (x > left && x < right && y < top) {
-    distance = top - y;
-    placement = 'top';
-  } else if (x > right && y < top) {
-    distance = getDistance(x, y, right, top);
-    placement = (x - right) > (top - y) ? 'right' : 'top';
-  } else if (x > right && y > top && y < bottom) {
-    distance = x - right;
-    placement = 'right';
-  } else if (x > right && y > bottom) {
-    distance = getDistance(x, y, right, bottom);
-    placement = (x - right) > (y - bottom) ? 'right' : 'bottom';
-  } else if (x > left && x < right && y > bottom) {
-    distance = y - bottom;
-    placement = 'bottom';
-  } else if (x < left && y > bottom) {
-    distance = getDistance(x, y, left, bottom);
-    placement = (left - x) > (y - bottom) ? 'left' : 'bottom';
-  } else if (x < left && y > top && y < bottom) {
-    distance = left - x;
-    placement = 'left';
-  }
-  return { distance, placement };
-}
-
-
 export default class WomNode {
 
   constructor(node, wom, ancestors = []) {
@@ -102,14 +33,6 @@ export default class WomNode {
       this.node.webbitId = webbitRegistry._generateWebbitId(this.node);
     }
 
-    this.onMouseEnter = () => {
-      this.onEnter();
-    };
-
-    this.onMouseLeave = () => {
-      this.onLeave();
-    };
-
     this.onMouseClick = (ev) => {
       ev.stopPropagation();
 
@@ -123,21 +46,7 @@ export default class WomNode {
       this.wom.selectNode(this);
     }
 
-    node.addEventListener('mouseover', this.onMouseEnter);
-    node.addEventListener('mouseleave', this.onMouseLeave);
     node.addEventListener('click', this.onMouseClick);
-  }
-
-  onEnter() {
-    if (
-      !this.wom.getPreviewedNode() 
-      || this.getLevel() >= this.wom.getPreviewedNode().getLevel()
-    ) {
-      const { componentType } = this.wom.getActionContext();
-      if (this.canContainComponent(componentType)) {
-        this.wom.previewNode(this);
-      }
-    }
   }
 
   canContainComponent(componentType) {
@@ -158,12 +67,6 @@ export default class WomNode {
     }
 
     return true;
-  }
-
-  onLeave() {
-    if (this.wom.getPreviewedNode() && this.wom.getPreviewedNode().getWebbitId() === this.getWebbitId()) {
-      this.wom.removeNodePreview();
-    }
   }
 
   getHtml() {

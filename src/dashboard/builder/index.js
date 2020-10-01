@@ -1,6 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
 import './wom-preview-box';
-import './wom-new-element-preview-box';
 
 class DashboardBuilder extends LitElement {
 
@@ -10,52 +9,51 @@ class DashboardBuilder extends LitElement {
         display: block;
         width: 70%;
       }
-
     `;
   }
 
   static get properties() {
     return {
       wom: { type: Object },
-      previewedNode: { type: Object }
     };
   }
 
   constructor() {
     super();
     this.wom = null;
-    this.previewedNode = null;
   }
 
   updated(changedProps) {
-    if (changedProps.has('wom')) {
-      if (!this.wom) {
-        this.previewedNode = null;
-      } else {
-        this.wom.addListener('womNodePreview', (ev) => {
-          this.previewedNode = ev.detail.node;
-        });
-        this.wom.addListener('womNodePreviewRemove', (ev) => {
-          this.previewedNode = null;
-        });
-      }
-    }
-    this.wom.addListener('womActionSelect', () => {
-      this.requestUpdate();
+    [
+      'womNodePreview', 
+      'womNodePreviewRemove', 
+      'womNodeSelect', 
+      'womNodeDeselect'
+    ].forEach(eventName => {
+      this.wom.addListener(eventName, () => {
+        this.requestUpdate();
+      });
     });
   }
 
   render() {
     return html`
-      ${this.wom.getSelectedActionId() !== 'addNode' ? html`
-        <wom-preview-box
-          .wom="${this.wom}"
-          .previewedNode="${this.previewedNode && this.previewedNode.getNode()}"
-        ></wom-preview-box>
-      ` : ''}
-      <wom-new-element-preview-box
+      <wom-preview-box
         .wom="${this.wom}"
-      ></wom-new-element-preview-box>
+        .previewedNode="${
+          this.wom.getPreviewedNode() 
+          && this.wom.getPreviewedNode().getNode()
+        }"
+      ></wom-preview-box>
+      <wom-preview-box
+        background="none"
+        border="2px dashed green"
+        .wom="${this.wom}"
+        .previewedNode="${
+          this.wom.getSelectedNode() 
+          && this.wom.getSelectedNode().getNode()
+        }"
+      ></wom-preview-box>
       <div part="container">
         <slot></slot>
       </div>
