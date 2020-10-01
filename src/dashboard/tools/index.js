@@ -86,9 +86,8 @@ class WomTools extends LitElement {
 
   addWomListeners() {
     [
-      'womNodeSelect', 'womNodeDeselect', 'womActionSelect',
-      'womActionDeselect', 'womActionExecute',
-      'womActionContextSet', 'womNodeAdd', 'womNodeRemove',
+      'womNodeSelect', 'womNodeDeselect', 'womActionExecute',
+      'womNodeAdd', 'womNodeRemove',
       'womChange', 'womNodePreview', 'womNodePreviewRemove'
     ].forEach(eventName => {
       this.wom.addListener(eventName, () => {
@@ -114,27 +113,27 @@ class WomTools extends LitElement {
   }
 
   onRemoveNode() {
-    this.wom.selectAction('removeNode');
+    this.wom.executeAction('removeNode');
   }
 
   onSaveLayout() {
-    this.wom.selectAction('saveLayout');
+    this.wom.executeAction('saveLayout');
   }
 
   onNewLayout() {
-    this.wom.selectAction('newLayout');
+    this.wom.executeAction('newLayout');
   }
 
   onLoadLayout() {
-    this.wom.selectAction('loadLayout');
+    this.wom.executeAction('loadLayout');
   }
 
   onUndo() {
-    this.wom.selectAction('undo');
+    this.wom.executeAction('undo');
   }
 
   onRedo() {
-    this.wom.selectAction('redo');
+    this.wom.executeAction('redo');
   }
 
   onScrollToNode() {

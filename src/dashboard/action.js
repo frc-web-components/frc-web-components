@@ -5,19 +5,5 @@ export default class Action {
     return false;
   }
 
-  isReady(hasSelection) {
-    if (this.needsSelection && !hasSelection) {
-      return false;
-    }
-
-    return true;
-  }
-
-  select() {}
-
-  deselect() {}
-
-  contextChange() {}
-
   execute() {}
 }

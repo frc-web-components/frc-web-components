@@ -140,7 +140,7 @@ class ComponentsTool extends LitElement {
   onComponentSelect(name) {
     this.selectedComponent = name; 
     this.wom.removeNodePreview();
-    this.wom.selectAction('addNode', {
+    this.wom.executeAction('addNode', {
       componentType: name
     });
   }

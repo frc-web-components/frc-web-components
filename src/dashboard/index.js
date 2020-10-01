@@ -86,14 +86,13 @@ class WebbitDashboard extends LitElement {
     });
 
     this.addActions();
-    this.wom.selectAction('loadStoredLayout');
+    this.wom.executeAction('loadStoredLayout');
   }
 
   addWomListeners() {
     [
-      'womNodeSelect', 'womNodeDeselect', 'womActionSelect',
-       'womActionDeselect', 'womActionExecute',
-      'womActionContextSet', 'womNodeAdd', 'womNodeRemove',
+      'womNodeSelect', 'womNodeDeselect','womActionExecute',
+      , 'womNodeAdd', 'womNodeRemove',
       'womChange', 'womNodePreview', 'womNodePreviewRemove'
     ].forEach(eventName => {
       this.wom.addListener(eventName, () => {
@@ -124,11 +123,7 @@ class WebbitDashboard extends LitElement {
     }
 
     if(ev.key === "Escape") {
-      if (this.wom.getSelectedActionId()) {
-        this.wom.deselectAction();
-      } else {
-        this.wom.deselectNode();
-      }
+      this.wom.deselectNode();
     }
   }
 

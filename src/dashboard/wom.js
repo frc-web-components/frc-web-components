@@ -86,8 +86,6 @@ class Wom {
     this.selectedNode = null;
     this.womNode = new WomNode(this.rootNode, this);
     this.actions = {};
-    this.selectedActionId = null;
-    this.actionContext = {};
     this.mode = 'live';
     this.observeMutations();
     this.history = new WomHistory();
@@ -141,7 +139,6 @@ class Wom {
   }
 
   deselectNode() {
-    this.deselectAction();
     if (this.getSelectedNode()) {
       const deselectedNode = this.selectedNode;
       this.selectedNode = null;
@@ -165,103 +162,24 @@ class Wom {
     return Object.keys(this.actions);
   }
 
-  selectAction(id, context) {
+  executeAction(actionId, context) {
 
-    const action = this.getAction(id);
-
-    if (!action) {
-      return;
-    }
-
-    this.deselectAction();
-    if (this.getSelectedNode() || !action.needsSelection) {
-      this.selectedActionId = id;
-      action.select({ 
-        wom: this,
-        context: { ...context }
-      });
-      this.dispatchEvent('womActionSelect', { 
-        actionId: id,
-        action: this.getAction(id)
-      });
-      this.setActionContext(id, context);
-      this.executeAction();
-    }
-  }
-
-  deselectAction() {
-    const prevSelectedActionId = this.getSelectedActionId();
-    if (prevSelectedActionId) {
-      const action = this.getAction(prevSelectedActionId);
-      this.selectedActionId = null;
-      action.deselect({
-        wom: this,
-        selectedNode: this.getSelectedNode(),
-        context: this.getActionContext(),
-      });
-      this.actionContext = {};
-
-      this.dispatchEvent('womActionDeselect', { 
-        actionId: prevSelectedActionId,
-        action
-      });
-    }
-  }
-
-  getSelectedActionId() {
-    return this.selectedActionId;
-  }
-
-  executeAction() {
-
-    const actionId = this.getSelectedActionId();
     const action = this.getAction(actionId);
     const selectedNode = this.getSelectedNode();
 
-    if (!actionId || !action.isReady(!!selectedNode)) {
+    if (!action || action.needsSelection && !selectedNode) {
       return;
     }
 
     action.execute({
       wom: this,
       selectedNode,
-      context: this.getActionContext(),
+      context: context || {},
     });
     this.dispatchEvent('womActionExecute', {
       actionId,
       action
     })
-  }
-
-  setActionContext(id, context) {
-
-    const actionId = this.getSelectedActionId();
-    const action = this.getAction(actionId);
-
-    if (!action || id !== actionId) {
-      return;
-    }
-
-    this.actionContext = {
-      ...this.actionContext,
-      ...context
-    };
-
-    action.contextChange({
-      wom: this,
-      selectedNode: this.getSelectedNode(),
-      context: this.actionContext,
-    });
-
-    this.dispatchEvent('womActionContextSet', {
-      actionId,
-      action,
-      actionContext: this.actionContext
-    });
-  }
-
-  getActionContext() {
-    return this.actionContext;
   }
 
   removeNode(node) {
@@ -317,7 +235,6 @@ class Wom {
   }
 
   destroy() {
-    this.deselectAction();
     this.deselectNode();
     this.womNode.destroy();
   }

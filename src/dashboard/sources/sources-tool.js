@@ -113,7 +113,7 @@ class SourcesTool extends LitElement {
   }
 
   onConfirm() {
-    this.wom.selectAction('setSource', {
+    this.wom.executeAction('setSource', {
       sourceProvider: this.sourceProviderInput,
       sourceKey: this.sourceKeyInput
     });

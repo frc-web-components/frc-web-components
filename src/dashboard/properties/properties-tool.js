@@ -115,7 +115,7 @@ class PropertiesTool extends LitElement {
     const webbitIdNode = this.shadowRoot.querySelector('[part="webbit-id"]');
 
     if (!webbitIdNode.invalid && propertiesViewElement.isValid()) {
-      this.wom.selectAction('setProperties', { 
+      this.wom.executeAction('setProperties', { 
         propertyValueMap: propertiesViewElement.getPropertyValueMap(), 
         webbitId: this.webbitIdInput
       });
