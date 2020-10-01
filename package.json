@@ -27,6 +27,7 @@
     "@webbitjs/webbit": "^1.4.3",
     "chart.js": "^2.8.0",
     "d3": "^5.15.0",
+    "interactjs": "^1.10.0",
     "juicy-ace-editor": "^2.0.5",
     "multiselect-combo-box": "^2.4.2",
     "quaternion": "^1.1.0",

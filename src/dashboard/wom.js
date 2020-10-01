@@ -1,5 +1,6 @@
 import WomNode from './wom-node';
 import { isElementInViewport } from './utils';
+import { addInteraction, removeInteraction } from './interact';
 
 class WomHistory {
 
@@ -135,11 +136,13 @@ class Wom {
 
     this.deselectNode();
     this.selectedNode = node;
+    addInteraction(node.getNode());
     this.dispatchEvent('womNodeSelect', { node });
   }
 
   deselectNode() {
     if (this.getSelectedNode()) {
+      removeInteraction(this.getSelectedNode().getNode());
       const deselectedNode = this.selectedNode;
       this.selectedNode = null;
       this.dispatchEvent('womNodeDeselect', { node: deselectedNode });
