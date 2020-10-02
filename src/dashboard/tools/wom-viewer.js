@@ -147,11 +147,6 @@ class WomViewer extends LitElement {
 
   onSelect(ev) {
 
-    // Don't allow the root node to be selected
-    if (this.level === 0) {
-      return;
-    }
-
     const target = ev.target || ev.path[0];
 
     // select if click element isn't caret
