@@ -12,6 +12,7 @@ class WomTools extends LitElement {
         position: relative;
         min-width: 420px;
         z-index: 2;
+        background: white;
       }
 
       [part=tools] {
@@ -155,7 +156,7 @@ class WomTools extends LitElement {
               aria-label="Scroll to Node"
               title="Scroll to Node"
               @click="${this.onScrollToNode}"
-              ?disabled="${!this.wom.getSelectedNode()}"
+              ?disabled="${!this.wom.getSelectedNode() || this.wom.getSelectedNode() === this.wom.getRootNode()}"
             >
               <iron-icon icon="vaadin:arrows-long-v"></iron-icon>
             </vaadin-button>
@@ -165,7 +166,7 @@ class WomTools extends LitElement {
               aria-label="Remove Node"
               title="Remove Node"
               @click="${this.onRemoveNode}"
-              ?disabled="${!this.wom.getSelectedNode()}"
+              ?disabled="${!this.wom.getSelectedNode() || this.wom.getSelectedNode() === this.wom.getRootNode()}"
             >
               <iron-icon icon="vaadin:trash"></iron-icon>
             </vaadin-button>

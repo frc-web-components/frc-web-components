@@ -129,14 +129,11 @@ class Wom {
   }
 
   selectNode(node) {
-
-    if (node.getNode() === this.rootNode) {
-      return;
-    }
-
     this.deselectNode();
     this.selectedNode = node;
-    addInteraction(node.getNode());
+    if (node.getNode() !== this.rootNode) {
+      addInteraction(node.getNode());
+    }
     this.dispatchEvent('womNodeSelect', { node });
   }
 

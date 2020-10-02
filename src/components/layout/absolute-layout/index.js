@@ -1,6 +1,6 @@
-import { Webbit, html, css, AbsoluteLayout } from '@webbitjs/webbit';
+import { Webbit, html, css } from '@webbitjs/webbit';
 
-export default class AbsoluteLayoutElement extends Webbit {
+export default class AbsoluteLayout extends Webbit {
 
   static get metadata() {
     return {
@@ -14,19 +14,21 @@ export default class AbsoluteLayoutElement extends Webbit {
     return css`
       :host {
         display: inline-block;
-        width: 100%;
-        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        width: 100vw;
+        height: 100vh;
         position: relative;
+      }
+
+      ::slotted(*) {
+        position: absolute;
       }
     `;
   }
 
   constructor() {
     super();
-  }
-
-  placeLayoutElement(element, context) {
-    AbsoluteLayout.placeLayoutElement(element, context);
   }
 
   render() {
@@ -36,4 +38,4 @@ export default class AbsoluteLayoutElement extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-absolute-layout', AbsoluteLayoutElement);
+webbitRegistry.define('frc-absolute-layout', AbsoluteLayout);

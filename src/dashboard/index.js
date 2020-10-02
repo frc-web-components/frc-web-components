@@ -12,6 +12,7 @@ import Redo from './actions/Redo';
 import LoadStoredLayout from './actions/load-stored-layout';
 import './builder/index';
 import './tools';
+import AbsoluteLayout from '../components/layout/absolute-layout';
 
 class WebbitDashboard extends LitElement {
 
@@ -28,7 +29,7 @@ class WebbitDashboard extends LitElement {
         display: block;
         position: relative;
       }
-
+      
       [part=dashboard], [part=container] {
         padding: 5px;
       }
@@ -53,7 +54,7 @@ class WebbitDashboard extends LitElement {
 
   constructor() {
     super();
-    this.wom = new Wom(this);
+    this.wom = new Wom(document.querySelector('frc-dashboard-builder > frc-absolute-layout'));
     this.editMode = false;
     this.dashboardNode = null;
   }

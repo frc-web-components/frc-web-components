@@ -1,7 +1,7 @@
 import { addSourceProvider, setDefaultSourceProvider } from '@webbitjs/store';
-import { LitElement, html } from 'lit-element';
+import WebbitDashboard from './dashboard';
 
-class FrcDashboard extends LitElement {
+class FrcDashboardBuilder extends WebbitDashboard {
 
   static get properties() {
     return {
@@ -52,12 +52,7 @@ class FrcDashboard extends LitElement {
     }
     return script;
   }
-
-  render() {
-    return html`
-      <slot></slot>
-    `;
-  }
 }
 
-customElements.define('frc-dashboard', FrcDashboard);
+
+customElements.define('frc-dashboard-builder', FrcDashboardBuilder);

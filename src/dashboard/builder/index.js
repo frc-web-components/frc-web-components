@@ -51,6 +51,7 @@ class DashboardBuilder extends LitElement {
         .wom="${this.wom}"
         .previewedNode="${
           this.wom.getSelectedNode() 
+          && this.wom.getSelectedNode() !== this.wom.getRootNode()
           && this.wom.getSelectedNode().getNode()
         }"
       ></wom-preview-box>
