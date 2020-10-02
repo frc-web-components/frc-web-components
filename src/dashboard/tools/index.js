@@ -10,7 +10,7 @@ class WomTools extends LitElement {
         display: block;
         width: 30%;
         position: relative;
-        min-width: 420px;
+        min-width: 5px;
         z-index: 2;
         background: white;
       }
