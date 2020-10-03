@@ -73,7 +73,7 @@ class DashboardToolsBottom extends LitElement {
         selected="${this.selectedTab}" 
         @selected-changed="${this.onTabChange}"
       >
-        <vaadin-tab>Components</vaadin-tab>
+        <vaadin-tab>Add Elements</vaadin-tab>
         <vaadin-tab>Properties</vaadin-tab>
         <vaadin-tab>Sources</vaadin-tab>
         <vaadin-tab>Styles</vaadin-tab>
@@ -81,6 +81,7 @@ class DashboardToolsBottom extends LitElement {
       <div part="tab-content">
         ${this.selectedTab === 0 ? html`
         <dashboard-components-tool
+          .selectedNode="${this.selectedNode}"
           .wom="${this.wom}"
         ></dashboard-components-tool>
         ` : ''}

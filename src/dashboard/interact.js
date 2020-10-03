@@ -46,7 +46,6 @@ export function addInteraction(element) {
   
           target.setAttribute('data-x', x)
           target.setAttribute('data-y', y)
-          target.textContent = Math.round(event.rect.width) + '\u00D7' + Math.round(event.rect.height)
         }
       },
       modifiers: [
@@ -73,5 +72,47 @@ export function addInteraction(element) {
         })
       ]
     })
+
+
+    // interact('frc-absolute-layout div').dropzone({
+    //   // only accept elements matching this CSS selector
+    //   accept: '[webbit-id]',
+    //   // Require a 75% element overlap for a drop to be possible
+    //   overlap: 0.75,
+    
+    //   // listen for drop related events:
+    
+    //   ondropactivate: function (event) {
+    //     // add active dropzone feedback
+    //     event.target.classList.add('drop-active')
+    //   },
+    //   ondragenter: function (event) {
+    //     var draggableElement = event.relatedTarget
+    //     var dropzoneElement = event.target
+    
+    //     // feedback the possibility of a drop
+    //     dropzoneElement.classList.add('drop-target')
+    //     draggableElement.classList.add('can-drop')
+    //     draggableElement.textContent = 'Dragged in'
+    //   },
+    //   ondragleave: function (event) {
+    //     // remove the drop feedback style
+    //     event.target.classList.remove('drop-target')
+    //     event.relatedTarget.classList.remove('can-drop')
+    //     event.relatedTarget.textContent = 'Dragged out'
+    //   },
+    //   ondrop: function (event) {
+    //     event.relatedTarget.textContent = 'Dropped'
+    //     var draggableElement = event.relatedTarget
+    //     var dropzoneElement = event.target;
+    //     // console.log('dropsies:', dropzoneElement, draggableElement);
+    //     dropzoneElement.append(draggableElement);
+    //   },
+    //   ondropdeactivate: function (event) {
+    //     // remove active dropzone feedback
+    //     event.target.classList.remove('drop-active')
+    //     event.target.classList.remove('drop-target')
+    //   }
+    // })
 
 }

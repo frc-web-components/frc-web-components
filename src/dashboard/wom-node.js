@@ -24,7 +24,6 @@ export default class WomNode {
     this.wom = wom;
     this.ancestors = ancestors;
     this.childNodes = [];
-    console.log('node:', node);
     this.slots = isWebbit(node) ? this.getMetadata().slots : ['default'];
     this.childBySlotNodes = this.slots.map(() => {
       return [];

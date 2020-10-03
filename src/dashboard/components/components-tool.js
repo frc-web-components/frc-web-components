@@ -7,12 +7,12 @@ class ComponentsTool extends LitElement {
     return css`
 
       :host {
-        display: flex;
+        display: block;
         padding: 15px 10px;
         font-family: sans-serif;
       }
 
-      header {
+      /* header {
         margin-top: 0;
         margin-bottom: 10px;
         font-weight: bold;
@@ -65,6 +65,64 @@ class ComponentsTool extends LitElement {
 
       [part=component].selected {
         background-color: #4781eb;
+      } */
+
+      [part=fields] {
+        display: flex;
+      }
+
+      [part=components] {
+        flex: 1;
+      }
+
+      [part=components] vaadin-text-field {
+        width: 100%;
+        padding-top: 0;
+      }
+
+      [part=slots] {
+        width: 180px;
+      }
+
+      [part=fields] > * {
+        margin-right: 7px;
+        padding-top: 0;
+      }
+
+      vaadin-combo-box::part(text-field) {
+        padding-top: 0;
+      }
+
+      p {
+        margin-top: 0;
+        font-weight: bold;
+      }
+
+      p span {
+        color: purple;
+      }
+
+      [part=components-list] {
+        position: absolute;
+        width: 100%;
+        border-radius: 4px;
+        box-shadow: rgba(0, 0, 0, 0.3) 4px 4px 15px 2px;
+        padding: 5px 7px;
+        max-height: 250px;
+        overflow: auto;
+        box-sizing: border-box;
+      }
+
+      [part=component] {
+        padding-left: 20px;
+      }
+
+      [part=component]:not(.selected):hover {
+        background-color: #a1bbeb;
+      }
+
+      [part=component].selected {
+        background-color: #4781eb;
       }
     `;
   }
@@ -72,16 +130,20 @@ class ComponentsTool extends LitElement {
   static get properties() {
     return {
       wom: { type: Object },
+      selectedNode: { type: Object, attribute: false },
       componentCategories: { type: Array, attribute: false },
-      selectedComponent: { type: String, attribute: false }
+      selectedComponent: { type: String, attribute: false },
+      showComponentList: { type: Boolean, attribute: false }
     };
   }
 
   constructor() {
     super();
     this.wom = null;
+    this.selectedNode = null;
     this.componentCategories = [];
     this.selectedComponent = '';
+    this.showComponentList = false;
   }
 
   getComponents() {
@@ -171,28 +233,79 @@ class ComponentsTool extends LitElement {
     `;
   }
 
+  toggleShowComponentList() {
+    this.showComponentList = !this.showComponentList;
+  }
+
+  renderComponentList() {
+    return html`
+      <vaadin-accordion opened="${null}">
+        ${this.componentCategories.map(category => html`
+          <vaadin-accordion-panel theme="small">
+            <div part="category-name" slot="summary">${category.name}</div>
+            <div part="component-list">
+              ${category.components.map(component => html`
+                <div 
+                  part="component" 
+                  @click="${() => this.onComponentSelect(component.name)}"
+                  class="${this.selectedComponent === component.name ? 'selected' : ''}"
+                >
+                  ${component.displayName}
+                </div>
+              `)}
+            </div>
+          </vaadin-accordion-panel>
+        `)}
+      </vaadin-accordion>
+    `;
+  }
+
   render() {
+
+    if (!this.selectedNode) {
+      return html`Select an element to begin adding.`;
+    }
+
+    return html`
+      <p>Add elements to <span>${this.selectedNode.getWebbitId()}</span></p>
+      <div part="fields">
+        <div part="components" style="position: relative">
+          <vaadin-text-field
+            label="Component"
+            clear-button-visible 
+            value="${this.sourceKeyInput || ''}"
+            @change="${this.onSourceKeyInputChange}"
+            theme="small"
+          >
+              <iron-icon 
+                slot="suffix" 
+                icon="vaadin:angle-down"
+                style="cursor: pointer"
+                @click="${this.toggleShowComponentList}"
+              ></iron-icon>
+          </vaadin-text-field>
+          ${this.showComponentList ? html`
+            <div part="components-list">
+              ${this.renderComponentList()}
+            </div>
+          ` : ''}
+        </div>
+        <vaadin-combo-box
+          part="slots"
+          items='["a", "b"]'
+          label="Slot"
+          clear-button-visible 
+          value="${this.sourceProviderInput || ''}"
+          @change="${this.onSourceProviderInputChange}"
+          theme="small"
+        ></vaadin-combo-box>
+      </div>
+    `
+
     return html`
       <div part="all-components">
         <header>All Components</header>
-        <vaadin-accordion opened="${null}">
-          ${this.componentCategories.map(category => html`
-            <vaadin-accordion-panel theme="small">
-              <div part="category-name" slot="summary">${category.name}</div>
-              <div part="component-list">
-                ${category.components.map(component => html`
-                  <div 
-                    part="component" 
-                    @click="${() => this.onComponentSelect(component.name)}"
-                    class="${this.selectedComponent === component.name ? 'selected' : ''}"
-                  >
-                    ${component.displayName}
-                  </div>
-                `)}
-              </div>
-            </vaadin-accordion-panel>
-          `)}
-        </vaadin-accordion>
+        
       </div>
       ${this.renderSelectedComponent()}
     `;
