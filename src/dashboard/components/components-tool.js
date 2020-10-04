@@ -12,61 +12,6 @@ class ComponentsTool extends LitElement {
         font-family: sans-serif;
       }
 
-      /* header {
-        margin-top: 0;
-        margin-bottom: 10px;
-        font-weight: bold;
-      }
-
-      header span {
-        color: purple;
-      }
-
-      p {
-        margin: 0 0 5px;
-        font-size: 15px;
-      }
-
-      [part=all-components] {
-        width: 60%;
-        margin-right: 15px;
-      }
-
-      [part=selected-component] {
-        flex: 1;
-      }
-
-      [part=all-components] header {
-        margin-bottom: 8px;
-        text-transform: uppercase;
-        font-size: 15px;
-      }
-
-      [part=component] {
-        color: #333;
-        cursor: grab;
-      }
-
-      [part=component]:active {
-        cursor: grabbing;
-      }
-
-      [part=category-name] {
-        text-transform: capitalize;
-      }
-      
-      [part=component] {
-        padding-left: 20px;
-      }
-
-      [part=component]:not(.selected):hover {
-        background-color: #a1bbeb;
-      }
-
-      [part=component].selected {
-        background-color: #4781eb;
-      } */
-
       [part=fields] {
         display: flex;
       }
@@ -135,6 +80,7 @@ class ComponentsTool extends LitElement {
       componentCategories: { type: Array, attribute: false },
       selectedComponent: { type: String, attribute: false },
       showComponentList: { type: Boolean, attribute: false },
+      selectedSlot: { type: String, attribute: false },
     };
   }
 
@@ -144,6 +90,7 @@ class ComponentsTool extends LitElement {
     this.selectedNode = null;
     this.componentCategories = [];
     this.selectedComponent = '';
+    this.selectedSlot = '';
     this.showComponentList = false;
   }
 
@@ -174,6 +121,7 @@ class ComponentsTool extends LitElement {
   updated(changedProps) {
     if (changedProps.has('selectedNode') && this.selectedNode) {
       this.componentCategories = this.getComponentCategories();
+      this.selectedSlot = this.selectedNode.getSlots()[0] || '';
     }
   }
 
@@ -240,6 +188,11 @@ class ComponentsTool extends LitElement {
     this.showComponentList = !this.showComponentList;
   }
 
+  onSlotChange(ev) {
+    const input = ev.target || ev.path[0];
+    this.selectedSlot = input.value;
+  }
+
   renderComponentList() {
     return html`
       <vaadin-accordion opened="${null}">
@@ -289,7 +242,6 @@ class ComponentsTool extends LitElement {
             label="Component"
             clear-button-visible 
             value="${this.selectedComponent || ''}"
-            @change="${this.onSourceKeyInputChange}"
             theme="small"
           >
               <iron-icon 
@@ -307,11 +259,12 @@ class ComponentsTool extends LitElement {
         </div>
         <vaadin-combo-box
           part="slots"
-          items='["a", "b"]'
+          .items="${this.selectedNode.getSlots()}"
           label="Slot"
           clear-button-visible 
-          value="${this.sourceProviderInput || ''}"
-          @change="${this.onSourceProviderInputChange}"
+          value="${this.selectedSlot}"
+          ?readonly="${this.selectedNode.getSlots().length === 1}"
+          @change="${this.onSlotChange}"
           theme="small"
         ></vaadin-combo-box>
       </div>
