@@ -115,6 +115,7 @@ class ComponentsTool extends LitElement {
 
       [part=component] {
         padding-left: 20px;
+        cursor: pointer;
       }
 
       [part=component]:not(.selected):hover {
@@ -133,7 +134,7 @@ class ComponentsTool extends LitElement {
       selectedNode: { type: Object, attribute: false },
       componentCategories: { type: Array, attribute: false },
       selectedComponent: { type: String, attribute: false },
-      showComponentList: { type: Boolean, attribute: false }
+      showComponentList: { type: Boolean, attribute: false },
     };
   }
 
@@ -170,11 +171,10 @@ class ComponentsTool extends LitElement {
     });
   }
 
-  firstUpdated() {
-    this.componentCategories = this.getComponentCategories();
-    window.webbitRegistry.whenAnyDefined(() => {
+  updated(changedProps) {
+    if (changedProps.has('selectedNode') && this.selectedNode) {
       this.componentCategories = this.getComponentCategories();
-    });
+    }
   }
 
   getComponentCategories() {
@@ -182,6 +182,9 @@ class ComponentsTool extends LitElement {
 
     this.getComponents().forEach(name => {
       const { displayName, category } = this.getComponentMetadata(name);
+      if (!this.selectedNode.canContainComponent(name)) {
+        return;
+      }
       const categoryName = category.toLowerCase();
       if (categoryName in categories) {
         categories[categoryName].push({ displayName, name });
@@ -201,10 +204,10 @@ class ComponentsTool extends LitElement {
 
   onComponentSelect(name) {
     this.selectedComponent = name; 
-    this.wom.removeNodePreview();
-    this.wom.executeAction('addNode', {
-      componentType: name
-    });
+    this.showComponentList = false;
+    // this.wom.executeAction('addNode', {
+    //   componentType: name
+    // });
   }
 
   renderSelectedComponent() {
@@ -266,6 +269,18 @@ class ComponentsTool extends LitElement {
       return html`Select an element to begin adding.`;
     }
 
+    if (this.selectedNode.getSlots().length === 0) {
+      return html`
+        <p>Elements of type <span>${this.selectedNode.getName()}</span> can't contain other elements.</p>
+      `;
+    }
+
+    if (Object.keys(this.componentCategories).length === 0) {
+      return html`
+        <p>There are no available elements to add to element of type <span>${this.selectedNode.getName()}</span>.</p>
+      `;
+    }
+
     return html`
       <p>Add elements to <span>${this.selectedNode.getWebbitId()}</span></p>
       <div part="fields">
@@ -273,7 +288,7 @@ class ComponentsTool extends LitElement {
           <vaadin-text-field
             label="Component"
             clear-button-visible 
-            value="${this.sourceKeyInput || ''}"
+            value="${this.selectedComponent || ''}"
             @change="${this.onSourceKeyInputChange}"
             theme="small"
           >
