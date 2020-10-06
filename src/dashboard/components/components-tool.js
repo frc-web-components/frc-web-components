@@ -186,8 +186,17 @@ class ComponentsTool extends LitElement {
     this.showComponentList = false;
   }
 
-  onApppendElement() {
+  onPrependElement() {
     this.wom.executeAction('addNode', {
+      prepend: true,
+      componentType: this.selectedComponent,
+      slot: this.selectedSlot
+    });
+  }
+
+  onAppendElement() {
+    this.wom.executeAction('addNode', {
+      prepend: false,
       componentType: this.selectedComponent,
       slot: this.selectedSlot
     });
@@ -305,7 +314,16 @@ class ComponentsTool extends LitElement {
           theme="success primary small" 
           aria-label="Confirm"
           ?disabled="${!this.selectedComponent}"
-          @click="${this.onApppendElement}"
+          @click="${this.onPrependElement}"
+        >
+          Prepend Element
+        </vaadin-button>
+        <vaadin-button 
+          part="confirm-button" 
+          theme="success primary small" 
+          aria-label="Confirm"
+          ?disabled="${!this.selectedComponent}"
+          @click="${this.onAppendElement}"
         >
           Append Element
         </vaadin-button>

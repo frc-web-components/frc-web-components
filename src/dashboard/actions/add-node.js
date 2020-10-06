@@ -8,13 +8,17 @@ export default class AddNode extends Action {
   }
 
   execute({ wom, context, selectedNode }) {
-    const { componentType, slot } = context;
+    const { componentType, slot, prepend } = context;
     const newElement = createElement(componentType, slot);
 
     wom.addListenerOnce('womChange', () => {
       wom.history.push(wom.getHtml());
     });
 
-    selectedNode.getNode().append(newElement);
+    if (prepend) {
+      selectedNode.getNode().prepend(newElement);
+    } else {
+      selectedNode.getNode().append(newElement);
+    }
   };
 }
