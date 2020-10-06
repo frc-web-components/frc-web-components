@@ -8,6 +8,7 @@ class ComponentsTool extends LitElement {
 
       :host {
         display: block;
+        position: relative;
         padding: 15px 10px;
         font-family: sans-serif;
       }
@@ -43,8 +44,12 @@ class ComponentsTool extends LitElement {
         font-weight: bold;
       }
 
-      p span {
+      p span, header span {
         color: purple;
+      }
+
+      header {
+        font-weight: bold;
       }
 
       [part=components-list] {
@@ -56,6 +61,8 @@ class ComponentsTool extends LitElement {
         max-height: 250px;
         overflow: auto;
         box-sizing: border-box;
+        background: white;
+        z-index: 1;
       }
 
       [part=component] {
@@ -69,6 +76,19 @@ class ComponentsTool extends LitElement {
 
       [part=component].selected {
         background-color: #4781eb;
+      }
+
+      [part=buttons] vaadin-button {
+        margin-right: 7px;
+      }
+
+      [part=selected-component-details] {
+        margin: 10px 0;
+      }
+
+      [part=selected-component-details] p {
+        font-weight: normal;
+        margin-top: 10px;
       }
     `;
   }
@@ -120,8 +140,19 @@ class ComponentsTool extends LitElement {
 
   updated(changedProps) {
     if (changedProps.has('selectedNode') && this.selectedNode) {
+      this.showComponentList = false;
       this.componentCategories = this.getComponentCategories();
       this.selectedSlot = this.selectedNode.getSlots()[0] || '';
+      if (this.selectedNode.getSlots().length === 0) {
+        return;
+      } else if (this.componentCategories.length === 1) {
+        const { components } = this.componentCategories[0];
+        if (components.length === 1) {
+          this.selectedComponent = components[0].name;
+        }
+      } else if (!this.selectedNode.canContainComponent(this.selectedComponent)) {
+        this.selectedComponent = '';
+      }
     }
   }
 
@@ -153,35 +184,13 @@ class ComponentsTool extends LitElement {
   onComponentSelect(name) {
     this.selectedComponent = name; 
     this.showComponentList = false;
-    // this.wom.executeAction('addNode', {
-    //   componentType: name
-    // });
   }
 
-  renderSelectedComponent() {
-    if (!this.selectedComponent) {
-      return html`
-        <div part="selected-component">
-          <header>Selected component</header>
-          <p>No component is currently selected.</p>
-        </div>
-      `;
-    }
-
-    const metadata = this.getComponentMetadata(this.selectedComponent);
-
-    return html`
-      <div part="selected-component">
-        <header><span>${metadata.displayName}</span> component</header>
-        <p>
-          ${metadata.description}
-          ${' '}
-          ${metadata.documentationLink ? html`
-            Examples and documentation can be found <a href="${metadata.documentationLink}" target="_blank">here</a>.
-          ` : ''}
-        </p>
-      </div>
-    `;
+  onApppendElement() {
+    this.wom.executeAction('addNode', {
+      componentType: this.selectedComponent,
+      slot: this.selectedSlot
+    });
   }
 
   toggleShowComponentList() {
@@ -191,6 +200,27 @@ class ComponentsTool extends LitElement {
   onSlotChange(ev) {
     const input = ev.target || ev.path[0];
     this.selectedSlot = input.value;
+  }
+
+  renderSelectedComponentDetails() {
+    if (!this.selectedComponent) {
+      return html`
+        <p>Select a component to view details.</p>
+      `;
+    }
+
+    const metadata = this.getComponentMetadata(this.selectedComponent);
+
+    return html`
+      <header><span>${metadata.displayName}</span> component</header>
+      <p>
+        ${metadata.description}
+        ${' '}
+        ${metadata.documentationLink ? html`
+          Examples and documentation can be found <a href="${metadata.documentationLink}" target="_blank">here</a>.
+        ` : ''}
+      </p>
+    `;
   }
 
   renderComponentList() {
@@ -240,7 +270,6 @@ class ComponentsTool extends LitElement {
         <div part="components" style="position: relative">
           <vaadin-text-field
             label="Component"
-            clear-button-visible 
             value="${this.selectedComponent || ''}"
             theme="small"
           >
@@ -261,22 +290,27 @@ class ComponentsTool extends LitElement {
           part="slots"
           .items="${this.selectedNode.getSlots()}"
           label="Slot"
-          clear-button-visible 
           value="${this.selectedSlot}"
           ?readonly="${this.selectedNode.getSlots().length === 1}"
           @change="${this.onSlotChange}"
           theme="small"
         ></vaadin-combo-box>
       </div>
-    `
-
-    return html`
-      <div part="all-components">
-        <header>All Components</header>
-        
+      <div part="selected-component-details">
+        ${this.renderSelectedComponentDetails()}
       </div>
-      ${this.renderSelectedComponent()}
-    `;
+      <div part="buttons">
+        <vaadin-button 
+          part="confirm-button" 
+          theme="success primary small" 
+          aria-label="Confirm"
+          ?disabled="${!this.selectedComponent}"
+          @click="${this.onApppendElement}"
+        >
+          Append Element
+        </vaadin-button>
+      </div>
+    `
   }
 }
 

@@ -133,6 +133,7 @@ class Wom {
     this.selectedNode = node;
     if (node.getNode() !== this.rootNode) {
       addInteraction(node.getNode());
+      node.getNode().style.touchAction = 'none';
     }
     this.dispatchEvent('womNodeSelect', { node });
   }
@@ -140,6 +141,7 @@ class Wom {
   deselectNode() {
     if (this.getSelectedNode()) {
       removeInteraction(this.getSelectedNode().getNode());
+      this.getSelectedNode().getNode().style.touchAction = 'unset';
       const deselectedNode = this.selectedNode;
       this.selectedNode = null;
       this.dispatchEvent('womNodeDeselect', { node: deselectedNode });
