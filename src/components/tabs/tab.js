@@ -26,6 +26,7 @@ class Tab extends Webbit {
     return {
       selected: { type: Boolean, primary: true },
       disabled: { type: Boolean },
+      label: { type: String }
     };
   }
 
@@ -33,29 +34,16 @@ class Tab extends Webbit {
     super();
     this.selected = false;
     this.disabled = false;
-  }
-
-  getText() {
-    const slot = this.shadowRoot.querySelector('slot');
-
-    if (!slot) {
-      return '';
-    }
-
-    const [node] = slot.assignedNodes();
-    return node ? node.textContent : '';
+    this.label = 'Tab';
   }
 
   firstUpdated() {
     super.firstUpdated();
-    const slot = this.shadowRoot.querySelector('slot');
-    slot.addEventListener('slotchange', (e) => {
-      this.dispatchChangeEvent();
-    });
-
+ 
     const observer = new MutationObserver(() => {
       this.dispatchChangeEvent();    
     });
+    
     observer.observe(this, {
       childList: true,
       characterData: true,
@@ -82,7 +70,7 @@ class Tab extends Webbit {
   render() {
     return html`
       <vaadin-tab ?selected="${this.selected}" ?disabled="${this.disabled}">
-        <slot></slot>
+        ${this.label}
       </vaadin-tab>
     `;
   }

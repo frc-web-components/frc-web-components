@@ -65,13 +65,13 @@ class Tabs extends Webbit {
 
     this.tabs.forEach((tab, index) => {
       const vaadinTab = document.createElement('vaadin-tab');
-      vaadinTab.innerText = tab.getText();
+      vaadinTab.innerText = tab.label;
       vaadinTab.disabled = tab.disabled;
       vaadinTabs.appendChild(vaadinTab);
 
       const event = () => {
         vaadinTab.disabled = tab.disabled;
-        vaadinTab.innerText = tab.getText();
+        vaadinTab.innerText = tab.label;
         if (tab.selected) {
           this.selectTab(index);
         }
@@ -84,7 +84,9 @@ class Tabs extends Webbit {
 
   firstUpdated() {
     super.firstUpdated();
-    const observer = new MutationObserver(this.updateTabs);
+    const observer = new MutationObserver(() => {
+      this.updateTabs();
+    });
     observer.observe(this, {
       childList: true
     });
