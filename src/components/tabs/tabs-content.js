@@ -69,15 +69,20 @@ class TabsContent extends Webbit {
     this.slotElement = this.shadowRoot.querySelector('slot'); 
     this.slotElement.addEventListener('slotchange', () => {
       this.updateContents();
+      this.updateSelected();
     });
     this.updateContents();
   }
 
-  updated() {
+  updateSelected() {
     this.contents.forEach((content, index) => {
       content.selected = this.selected === index;
       content.style.display = this.selected === index ? 'block' : 'none';
     });
+  }
+
+  updated() {
+    this.updateSelected();
   }
 
   render() {
