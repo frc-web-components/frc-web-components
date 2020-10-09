@@ -31,7 +31,7 @@ export default class NtEntryDefault extends Webbit {
     return value !== undefined;
   }
 
-  async update(changedProps) {
+  async updated(changedProps) {
     if (!changedProps.has('key') && !changedProps.has('defaultValue'))  {
       return;
     }
@@ -40,7 +40,8 @@ export default class NtEntryDefault extends Webbit {
       return;
     }
 
-    await this.isSourceSet();
-    this.provider.userUpdate(this.key, this.defaultValue);
+    if (!await this.isSourceSet()) {
+      this.provider.userUpdate(this.key, this.defaultValue);
+    }
   }
 }

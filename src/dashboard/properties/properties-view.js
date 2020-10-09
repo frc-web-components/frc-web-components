@@ -3,6 +3,7 @@ import './string-property-view';
 import './number-property-view';
 import './boolean-property-view';
 import './array-property-view';
+import './boolean-array-property-view';
 
 class PropertiesView extends LitElement {
 
@@ -80,7 +81,7 @@ class PropertiesView extends LitElement {
     return html`
       <vaadin-form-layout>
         ${categoryProperties.map(([name, property]) => html`
-          ${property.type === String ? html`
+          ${property.inputType === 'String' ? html`
             <dashboard-string-property-view
               part="input"
               .selectedNode="${this.selectedNode}"
@@ -89,7 +90,7 @@ class PropertiesView extends LitElement {
             ></dashboard-string-property-view>
           ` : ''}
 
-          ${property.type === Number ? html`
+          ${property.inputType === 'Number' ? html`
             <dashboard-number-property-view
               part="input"
               .selectedNode="${this.selectedNode}"
@@ -98,7 +99,7 @@ class PropertiesView extends LitElement {
             ></dashboard-number-property-view>
           ` : ''}
 
-          ${property.type === Boolean ? html`
+          ${property.inputType === 'Boolean' ? html`
             <dashboard-boolean-property-view
               part="input"
               .selectedNode="${this.selectedNode}"
@@ -107,13 +108,22 @@ class PropertiesView extends LitElement {
             ></dashboard-boolean-property-view>
           ` : ''}
 
-          ${property.type === Array ? html`
+          ${property.inputType === 'Array' ? html`
             <dashboard-array-property-view
               part="input"
               .selectedNode="${this.selectedNode}"
               .propertyName="${name}"
               .property="${property}"
             ></dashboard-array-property-view>
+          ` : ''}
+
+          ${property.inputType === 'BooleanArray' ? html`
+            <dashboard-boolean-array-property-view
+              part="input"
+              .selectedNode="${this.selectedNode}"
+              .propertyName="${name}"
+              .property="${property}"
+            ></dashboard-boolean-array-property-view>
           ` : ''}
         `)}
       </vaadin-form-layout>
