@@ -69,8 +69,29 @@ export default class WomNode {
     return true;
   }
 
-  getHtml() {
-    return this.node.innerHTML;
+  async getHtml() {
+    return new Promise(resolve => {
+      window.webbitRegistry.setCloning(true);
+      const clonedNode = this.node.cloneNode(true);
+      clonedNode.style.display = 'none';
+      document.body.append(clonedNode);
+      clonedNode.querySelectorAll('[webbit-id]').forEach(node => {
+        if (!isWebbit(node)) {
+          return;
+        }
+        node.isClone = true;
+        const originalWebbit = window.webbitRegistry.getWebbit(node.webbitId);
+
+        Object.entries(originalWebbit.defaultProps).forEach(([prop, value]) => {
+          node[prop] = value;
+        });
+      });
+      window.webbitRegistry.setCloning(false);
+      clonedNode.remove();
+      setTimeout(() => {
+        resolve(clonedNode.innerHTML);
+      });
+    });
   }
 
   setHtml(html) {

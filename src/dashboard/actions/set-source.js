@@ -14,6 +14,8 @@ export default class SetSource extends Action {
       sourceProvider,
       sourceKey
     );
-    wom.history.push(wom.getHtml());
+    setTimeout(async () => {
+      wom.history.push(await wom.getHtml());
+    });
   }
 }

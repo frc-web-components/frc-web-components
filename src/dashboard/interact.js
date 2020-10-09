@@ -51,9 +51,9 @@ export function addInteraction(wom, element) {
           target.setAttribute('data-x', x)
           target.setAttribute('data-y', y)
         },
-        end: () => {
+        end: async () => {
           console.log('resize');
-          wom.history.push(wom.getHtml());
+          wom.history.push(await wom.getHtml());
         }
       },
       modifiers: [
@@ -73,9 +73,9 @@ export function addInteraction(wom, element) {
     .draggable({
       listeners: { 
         move: dragMoveListener,
-        end: () => {
+        end: async () => {
           console.log('drag');
-          wom.history.push(wom.getHtml());
+          wom.history.push(await wom.getHtml());
         }
       },
       inertia: true,

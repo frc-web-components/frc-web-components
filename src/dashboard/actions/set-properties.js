@@ -9,8 +9,12 @@ export default class SetProperties extends Action {
 
   execute({ wom, selectedNode, context }) {
     const { propertyValueMap, webbitId } = context;
+
     setProperties(selectedNode.getNode(), propertyValueMap);
     setWebbitId(selectedNode.getNode(), webbitId);
-    wom.history.push(wom.getHtml());
+
+    setTimeout(async () => {
+      wom.history.push(await wom.getHtml());
+    });
   }
 }

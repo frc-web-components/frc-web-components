@@ -11,7 +11,6 @@ import './gauge';
 import './gyro';
 import './label';
 import './mecanum-drivebase';
-import './source-tree';
 import './number-bar';
 import './number-slider';
 import './pdp';
@@ -25,6 +24,9 @@ import '@vaadin/vaadin';
 import './control-panel';
 import './urdf-viewer';
 import './code-editor';
+
+// Sources
+import './source';
 
 // General
 import './logger';

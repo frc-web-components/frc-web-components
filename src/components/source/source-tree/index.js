@@ -14,7 +14,7 @@ class SourceTree extends Webbit {
   static get metadata() {
     return {
       displayName: 'Source Tree',
-      category: 'Robot & Field Info',
+      category: 'Sources',
       description: 'Component used to display NetworkTable values.',
       documentationLink: 'https://frc-web-components.github.io/components/networktable-tree/',
       slots: [],

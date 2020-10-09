@@ -18,8 +18,8 @@ export default class RemoveNode extends Action {
       wom.deselectNode();
     }
 
-    wom.addListenerOnce('womChange', () => {
-      wom.history.push(wom.getHtml());
+    wom.addListenerOnce('womChange', async () => {
+      wom.history.push(await wom.getHtml());
     });
 
     wom.removeNode(selectedNode);

@@ -92,8 +92,8 @@ class Wom {
     this.history = new WomHistory();
   }
 
-  getHtml() {
-    return this.womNode.getHtml();
+  async getHtml() {
+    return await this.womNode.getHtml();
   }
 
   setHtml(html) {

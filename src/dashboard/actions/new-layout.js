@@ -5,8 +5,8 @@ export default class NewLayout extends Action {
 
   execute({ wom }) {
     if (!isLayoutEmpty(wom)) {
-      wom.addListenerOnce('womChange', () => {
-        wom.history.push(wom.getHtml());
+      wom.addListenerOnce('womChange', async () => {
+        wom.history.push(await wom.getHtml());
       });
       wom.setHtml('');
     }

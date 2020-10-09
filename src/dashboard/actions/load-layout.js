@@ -13,8 +13,8 @@ export default class LoadLayout extends Action {
       if (!hasLayoutChanged(wom, result)) {
         return;
       }
-      wom.addListenerOnce('womChange', () => {
-        wom.history.push(wom.getHtml());
+      wom.addListenerOnce('womChange', async () => {
+        wom.history.push(await wom.getHtml());
       });
       wom.setHtml(result);
     });
