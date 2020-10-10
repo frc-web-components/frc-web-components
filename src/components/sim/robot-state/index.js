@@ -1,12 +1,13 @@
-import { html, css } from '@webbitjs/webbit';
-import Container from '../../container';
+import { Webbit, html, css } from '@webbitjs/webbit';
+import { containerStyles } from '../../styles';
 
-class RobotState extends Container {
+class RobotState extends Webbit {
 
   static get metadata() {
     return {
       displayName: 'Robot State',
       category: 'Simulation',
+      slots: [],
       //description: 'Component for displaying data from a 3-axis accelerometer.',
       // documentationLink: 'https://frc-web-components.github.io/components/relay/'
     };
@@ -14,8 +15,13 @@ class RobotState extends Container {
 
   static get styles() {
     return [
-      super.styles,
+      containerStyles,
       css`
+        :host {
+          display: inline-block;
+          font-family: sans-serif;
+        }
+
         [part=header] {
           display: block;
           font-size: 15px;
@@ -37,7 +43,6 @@ class RobotState extends Container {
 
   static get properties() {
     return {
-      ...super.properties,
       enabled: { type: Boolean },
       autonomous: { type: Boolean },
       test: { type: Boolean }
@@ -49,9 +54,6 @@ class RobotState extends Container {
 
     this.sourceKey = 'driverStation';
     this.sourceProvider = 'HALSim';
-
-    this.display = 'inline-block';
-    this.fontFamily = 'sans-serif';
     
     this.enabled = false;
     this.autonomous = false;

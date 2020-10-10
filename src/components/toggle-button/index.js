@@ -1,7 +1,7 @@
-import { html, css } from '@webbitjs/webbit';
-import Container from '../container';
+import { Webbit, html, css } from '@webbitjs/webbit';
+import { containerStyles } from '../styles';
 
-class ToggleButton extends Container {
+class ToggleButton extends Webbit {
 
   static get metadata() {
     return {
@@ -14,8 +14,13 @@ class ToggleButton extends Container {
 
   static get styles() {
     return [
-      super.styles,
+      containerStyles,
       css`
+        :host {
+          width: 100px;
+          height: 50px;
+        }
+
         [part=button] {
           width: 100%;
           height: 100%;
@@ -26,16 +31,15 @@ class ToggleButton extends Container {
 
   static get properties() {
     return {
-      ...super.properties,
       toggled: { type: Boolean, primary: true },
+      label: { type: String }
     }
   }
 
   constructor() {
     super();
-    this.width = '100px';
-    this.height = '50px';
     this.toggled = false;
+    this.label = '';
   }
 
   onClick() {
@@ -49,7 +53,7 @@ class ToggleButton extends Container {
         part="button"
         @click="${this.onClick}"
       >
-        <slot></slot>
+        ${this.label}
       </vaadin-button>
     `;
   }

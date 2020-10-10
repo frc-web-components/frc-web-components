@@ -1,12 +1,13 @@
-import { html, css } from '@webbitjs/webbit';
-import Container from '../../container';
+import { Webbit, html, css } from '@webbitjs/webbit';
+import { containerStyles } from '../../styles';
 
-export default class Joystick extends Container {
+export default class Joystick extends Webbit {
 
   static get metadata() {
     return {
       displayName: 'Joystick',
       category: 'Simulation',
+      slots: [],
       // description: 'Component for displaying data from a 3-axis accelerometer.',
       // documentationLink: 'https://frc-web-components.github.io/components/number-bar/'
     };
@@ -14,15 +15,19 @@ export default class Joystick extends Container {
 
   static get properties() {
     return {
-      ...super.properties,
       gamepad: { type: Number },
     };
   }
 
   static get styles() {
     return [
-      super.styles,
+      containerStyles,
       css`
+        :host {
+          display: inline-block;
+          font-family: sans-serif;
+        }
+
         label {
           font-size: 15px;
           text-align: right;
@@ -46,8 +51,6 @@ export default class Joystick extends Container {
 
   constructor() {
     super();
-    this.display = 'inline-block';
-    this.fontFamily = 'sans-serif';
     this.gamepad = 0;
   }
 

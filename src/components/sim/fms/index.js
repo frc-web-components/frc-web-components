@@ -1,12 +1,13 @@
-import { html, css } from '@webbitjs/webbit';
-import Container from '../../container';
+import { Webbit, html, css } from '@webbitjs/webbit';
+import { containerStyles } from '../../styles';
 
-export default class Fms extends Container {
+export default class Fms extends Webbit {
 
   static get metadata() {
     return {
       displayName: 'FMS',
       category: 'Simulation',
+      slots: [],
       // description: 'Component for displaying data from a 3-axis accelerometer.',
       // documentationLink: 'https://frc-web-components.github.io/components/number-bar/'
     };
@@ -14,7 +15,6 @@ export default class Fms extends Container {
 
   static get properties() {
     return {
-      ...super.properties,
       fms: { type: Boolean },
       ds: { type: Boolean },
       station: { type: String },
@@ -25,8 +25,15 @@ export default class Fms extends Container {
 
   static get styles() {
     return [
-      super.styles,
+      containerStyles,
       css`
+        :host {
+          display: inline-block;
+          width: 300px;
+          height: auto;
+          font-family: sans-serif;
+        }
+
         [part=form] {
           width: 100%;
           display: inline-grid;
@@ -62,11 +69,6 @@ export default class Fms extends Container {
 
   constructor() {
     super();
-  
-    this.display = 'inline-block';
-    this.width = '300px';
-    this.height = 'auto';
-    this.fontFamily = 'sans-serif';
 
     this.fms = false;
     this.ds = false;

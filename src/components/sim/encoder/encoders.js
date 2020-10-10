@@ -1,5 +1,5 @@
-import { html, css } from '@webbitjs/webbit';
-import Container from '../../container';
+import { Webbit, html, css } from '@webbitjs/webbit';
+import { containerStyles } from '../../styles';
 
 function getRange(length) {
   const array = [];
@@ -9,27 +9,29 @@ function getRange(length) {
   return array;
 } 
 
-export default class Encoders extends Container {
+export default class Encoders extends Webbit {
 
   static get metadata() {
     return {
       displayName: 'Encoders',
       category: 'Simulation',
+      slots: [],
       // description: 'Component for displaying data from a 3-axis accelerometer.',
       // documentationLink: 'https://frc-web-components.github.io/components/number-bar/'
     };
   }
 
-  static get properties() {
-    return {
-      ...super.properties,
-    };
-  }
-
   static get styles() {
     return [
-      super.styles,
+      containerStyles,
       css`
+        :host {
+          display: inline-block;
+          height: auto;
+          width: auto;
+          font-family: sans-serif;
+        }
+
         label {
           font-size: 15px;
           text-align: right;
@@ -62,11 +64,6 @@ export default class Encoders extends Container {
     super();
     this.sourceKey = 'Encoder';
     this.sourceProvider = 'HALSim';
-
-    this.display = 'inline-block';
-    this.height = 'auto';
-    this.width = 'auto';
-    this.fontFamily = 'sans-serif';
   }
 
   renderInputs() {

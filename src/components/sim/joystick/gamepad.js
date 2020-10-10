@@ -1,5 +1,5 @@
-import { html, css } from '@webbitjs/webbit';
-import Container from '../../container';
+import { Webbit, html, css } from '@webbitjs/webbit';
+import { containerStyles } from '../../styles';
 
 const hasArrayChanged = (newVal, oldVal) => {
   if (newVal === oldVal) {
@@ -23,12 +23,13 @@ const hasArrayChanged = (newVal, oldVal) => {
   return false;
 }
 
-export default class Gamepad extends Container {
+export default class Gamepad extends Webbit {
 
   static get metadata() {
     return {
       displayName: 'Gamepad',
       category: 'Simulation',
+      slots: [],
       // description: 'Component for displaying data from a 3-axis accelerometer.',
       // documentationLink: 'https://frc-web-components.github.io/components/number-bar/'
     };
@@ -36,7 +37,6 @@ export default class Gamepad extends Container {
 
   static get properties() {
     return {
-      ...super.properties,
       axes: { 
         type: Array,
         hasChanged: hasArrayChanged
@@ -53,8 +53,14 @@ export default class Gamepad extends Container {
 
   static get styles() {
     return [
-      super.styles,
+      containerStyles,
       css`
+        :host {
+          display: inline-block;
+          font-family: sans-serif;
+          width: 300px;
+        }
+
         label {
           font-size: 15px;
           text-align: right;
@@ -130,10 +136,6 @@ export default class Gamepad extends Container {
 
   constructor() {
     super();
-    this.display = 'inline-block';
-    this.fontFamily = 'sans-serif';
-    this.width = '300px';
-
     this.axes = [];
     this.connected = false;
     this.id = 'Unknown Gamepad';

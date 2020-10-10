@@ -1,12 +1,13 @@
-import { html, css } from '@webbitjs/webbit';
-import Container from '../../container';
+import { Webbit, html, css } from '@webbitjs/webbit';
+import { containerStyles } from '../../styles';
 
-export default class Field2d extends Container {
+export default class Field2d extends Webbit {
 
   static get metadata() {
     return {
       displayName: 'Field2D',
       category: 'Simulation',
+      slots: [],
       // description: 'Component for displaying data from a 3-axis accelerometer.',
       // documentationLink: 'https://frc-web-components.github.io/components/number-bar/'
     };
@@ -14,7 +15,6 @@ export default class Field2d extends Container {
 
   static get properties() {
     return {
-      ...super.properties,
       x: { type: Number },
       y: { type: Number },
       rot: { type: Number },
@@ -23,8 +23,15 @@ export default class Field2d extends Container {
 
   static get styles() {
     return [
-      super.styles,
+      containerStyles,
       css`
+        :host {
+          display: inline-block;
+          width: 200px;
+          height: auto;
+          font-family: sans-serif;
+        }
+
         [part=form] {
           width: 100%;
           display: inline-grid;
@@ -57,11 +64,6 @@ export default class Field2d extends Container {
 
   constructor() {
     super();
-  
-    this.display = 'inline-block';
-    this.width = '200px';
-    this.height = 'auto';
-    this.fontFamily = 'sans-serif';
 
     this.x = 0;
     this.y = 0;

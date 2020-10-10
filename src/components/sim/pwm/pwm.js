@@ -1,12 +1,13 @@
-import { html, css } from '@webbitjs/webbit';
-import Container from '../../container';
+import { Webbit, html, css } from '@webbitjs/webbit';
+import { containerStyles } from '../../styles';
 
-export default class Pwm extends Container {
+export default class Pwm extends Webbit {
 
   static get metadata() {
     return {
       displayName: 'PWM',
       category: 'Simulation',
+      slots: [],
       // description: 'Component for displaying data from a 3-axis accelerometer.',
       // documentationLink: 'https://frc-web-components.github.io/components/number-bar/'
     };
@@ -14,7 +15,6 @@ export default class Pwm extends Container {
 
   static get properties() {
     return {
-      ...super.properties,
       init: { type: Boolean },
       speed: { type: Number },
       positive: { type: Boolean },
@@ -23,10 +23,14 @@ export default class Pwm extends Container {
 
   static get styles() {
     return [
-      super.styles,
+      containerStyles,
       css`
         :host {
           user-select: none;
+          display: inline-block;
+          height: auto;
+          width: 150px;
+          font-family: sans-serif;
         }
 
         [part=bar] {
@@ -47,10 +51,6 @@ export default class Pwm extends Container {
 
   constructor() {
     super();
-    this.display = 'inline-block';
-    this.height = 'auto';
-    this.width = '150px';
-    this.fontFamily = 'sans-serif';
     this.speed = 0;
     this.positive = false;
   }

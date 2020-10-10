@@ -1,12 +1,13 @@
-import { html, css } from '@webbitjs/webbit';
-import Container from '../../container';
+import { Webbit, html, css } from '@webbitjs/webbit';
+import { containerStyles } from '../../styles';
 
-export default class Relay extends Container {
+export default class Relay extends Webbit {
 
   static get metadata() {
     return {
       displayName: 'Relay',
       category: 'Simulation',
+      slots: [],
       // description: 'Component for displaying data from a 3-axis accelerometer.',
       // documentationLink: 'https://frc-web-components.github.io/components/number-bar/'
     };
@@ -14,7 +15,6 @@ export default class Relay extends Container {
 
   static get properties() {
     return {
-      ...super.properties,
       fwd: { type: Boolean },
       rev: { type: Boolean },
       initFwd: { type: Boolean },
@@ -24,8 +24,13 @@ export default class Relay extends Container {
 
   static get styles() {
     return [
-      super.styles,
+      containerStyles,
       css`
+        :host {
+          display: inline-block;
+          font-family: sans-serif;
+        }
+
         vaadin-checkbox::part(label) {
           color: black;
           margin-right: 2px;
@@ -39,10 +44,7 @@ export default class Relay extends Container {
   }
 
   constructor() {
-    super();
-    this.display = 'inline-block';
-    this.fontFamily = 'sans-serif';
-    
+    super();    
     this.fwd = false;
     this.rev = false;
     this.initFwd = false;
