@@ -1,8 +1,8 @@
-import { html, css } from '@webbitjs/webbit';
-import Container from '../container';
+import { Webbit, html, css } from '@webbitjs/webbit';
+import { containerStyles } from '../styles';
 import Gauge from 'svg-gauge';
 
-class GaugeWebbit extends Container {
+class GaugeWebbit extends Webbit {
 
   static get metadata() {
     return {
@@ -16,8 +16,13 @@ class GaugeWebbit extends Container {
 
   static get styles() {
     return [
-      super.styles,
+      containerStyles,
       css`
+        :host {
+          width: 200px;
+          height: 200px;
+        }
+
         .gauge-container-container {
           height: 100%;
           display: flex;
@@ -70,8 +75,6 @@ class GaugeWebbit extends Container {
 
   constructor() {
     super();
-    this.width = '200px';
-    this.height = '200px';
     this.min = 0;
     this.max = 100;
     this.value = 0;
@@ -110,7 +113,6 @@ class GaugeWebbit extends Container {
   }
 
   updated(changedProperties) {
-    super.updated(changedProperties);
     if (changedProperties.has('min') || changedProperties.has('max')) {
       this.gaugeInit();
     }

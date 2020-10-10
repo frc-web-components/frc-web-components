@@ -1,7 +1,7 @@
-import { html, css } from '@webbitjs/webbit';
-import Container from '../../container';
+import { Webbit, html, css } from '@webbitjs/webbit';
+import { containerStyles } from '../../styles';
 
-export default class AnalogInput extends Container {
+export default class AnalogInput extends Webbit {
 
   static get metadata() {
     return {
@@ -22,10 +22,14 @@ export default class AnalogInput extends Container {
 
   static get styles() {
     return [
-      super.styles,
+      containerStyles,
       css`
         :host {
           user-select: none;
+          display: inline-block;
+          height: auto;
+          width: 150px;
+          font-family: sans-serif;
         }
 
         [part=bar] {
@@ -37,10 +41,6 @@ export default class AnalogInput extends Container {
 
   constructor() {
     super();
-    this.display = 'inline-block';
-    this.height = 'auto';
-    this.width = '150px';
-    this.fontFamily = 'sans-serif';
     this.voltage = 0;
   }
 

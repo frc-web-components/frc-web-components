@@ -1,7 +1,7 @@
-import { html, css } from '@webbitjs/webbit';
-import Container from '../../container';
+import { Webbit, html, css } from '@webbitjs/webbit';
+import { containerStyles } from '../../styles';
 
-export default class DigitalIO extends Container {
+export default class DigitalIO extends Webbit {
 
   static get metadata() {
     return {
@@ -22,8 +22,17 @@ export default class DigitalIO extends Container {
 
   static get styles() {
     return [
-      super.styles,
+      containerStyles,
       css`
+        :host {
+          display: inline-block;
+          padding: 0;
+          margin: 5px;
+          height: auto;
+          width: auto;
+          font-family: sans-serif;
+        }
+
         button {
           display: inline-block;
           width: 20px;
@@ -45,12 +54,6 @@ export default class DigitalIO extends Container {
 
   constructor() {
     super();
-    this.display = 'inline-block';
-    this.padding = '0';
-    this.margin = '5px';
-    this.height = 'auto';
-    this.width = 'auto';
-    this.fontFamily = 'sans-serif';
     this.value = false;
     this.input = true;
   }

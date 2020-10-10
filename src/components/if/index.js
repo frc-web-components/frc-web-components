@@ -1,7 +1,7 @@
-import { html } from '@webbitjs/webbit';
-import Container from '../container';
+import { html, Webbit } from '@webbitjs/webbit';
+import { containerStyles } from '../styles';
 
-class If extends Container {
+class If extends Webbit {
 
   static get metadata() {
     return {
@@ -15,7 +15,7 @@ class If extends Container {
 
   static get styles() {
     return [
-      super.styles
+      containerStyles
     ];
   }
 

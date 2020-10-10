@@ -1,5 +1,5 @@
 import { Webbit, html, css } from '@webbitjs/webbit';
-import Container from '../container';
+import { containerStyles } from '../styles';
 import * as CurvedArrow from '../curved-arrow';
 
 /** 
@@ -56,7 +56,7 @@ function generateX(width) {
   return `<g class="x">${lineA} ${lineB}</g>`;
 }
 
-class MecanumDrivebase extends Container {
+class MecanumDrivebase extends Webbit {
 
   static get metadata() {
     return {
@@ -70,8 +70,14 @@ class MecanumDrivebase extends Container {
 
   static get styles() {
     return [
-      super.styles,
+      containerStyles,
       css`
+        :host {
+          width: 400px;
+          height: 300px;
+          padding: 0 10px;
+        }
+
         .diff-drive-container {
             height: 100%;
             width: 100%;
@@ -184,9 +190,6 @@ class MecanumDrivebase extends Container {
 
   constructor() {
     super();
-    this.width = '400px';
-    this.height = '300px';
-    this.padding = '0 10px';
     this.frontLeftMotorSpeed = 0;
     this.frontRightMotorSpeed = 0;
     this.rearLeftMotorSpeed = 0;

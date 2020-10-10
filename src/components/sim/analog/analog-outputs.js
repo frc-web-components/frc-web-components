@@ -1,5 +1,5 @@
-import { html, css } from '@webbitjs/webbit';
-import Container from '../../container';
+import { Webbit, html, css } from '@webbitjs/webbit';
+import { containerStyles } from '../../styles';
 
 function getRange(length) {
   const array = [];
@@ -9,7 +9,7 @@ function getRange(length) {
   return array;
 } 
 
-export default class AnalogOutputs extends Container {
+export default class AnalogOutputs extends Webbit {
 
   static get metadata() {
     return {
@@ -28,8 +28,15 @@ export default class AnalogOutputs extends Container {
 
   static get styles() {
     return [
-      super.styles,
+      containerStyles,
       css`
+        :host {
+          display: inline-block;
+          height: auto;
+          width: 200px;
+          font-family: sans-serif;
+        }
+
         [part=inputs] {
           width: 100%;
           display: inline-grid;
@@ -71,11 +78,6 @@ export default class AnalogOutputs extends Container {
     super();
     this.sourceKey = 'AO';
     this.sourceProvider = 'HALSim';
-
-    this.display = 'inline-block';
-    this.height = 'auto';
-    this.width = '200px';
-    this.fontFamily = 'sans-serif';
   }
 
   renderInputs() {

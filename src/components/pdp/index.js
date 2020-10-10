@@ -1,6 +1,5 @@
-import { html, css } from '@webbitjs/webbit';
-import Container from '../container';
-
+import { Webbit, html, css } from '@webbitjs/webbit';
+import { containerStyles } from '../styles';
 
 function getRange(start, end) {
   const range = [];
@@ -14,7 +13,7 @@ function clamp(value, min, max) {
   return Math.min(max, Math.max(value, min));
 }
 
-class Pdp extends Container {
+class Pdp extends Webbit {
 
   static get metadata() {
     return {
@@ -44,8 +43,13 @@ class Pdp extends Container {
 
   static get styles() {
     return [
-      super.styles,
+      containerStyles,
       css`
+        :host {
+          width: 350px;
+          margin: 5px;
+        }
+
         [part=channels] {
           display: grid;
           grid-auto-flow: column;
@@ -88,8 +92,6 @@ class Pdp extends Container {
 
   constructor() {
     super();
-    this.width = '350px';
-    this.margin = '5px';
     for (let i = 0; i < 16; i++) {
       this[`chan${i}`] = 0;
     }

@@ -1,11 +1,11 @@
 import { Webbit, html, css } from '@webbitjs/webbit';
-import Container from '../container';
+import { containerStyles } from '../styles';
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(value, min));
 }
 
-export default class NumberBar extends Container {
+export default class NumberBar extends Webbit {
 
   static get metadata() {
     return {
@@ -55,8 +55,15 @@ export default class NumberBar extends Container {
 
   static get styles() {
     return [
-      super.styles,
+      containerStyles,
       css`
+        :host {
+          display: inline-block;
+          width: 300px;
+          height: auto;
+          font-family: sans-serif;
+        }
+
         :host([num-tick-marks="0"]) [part=bar] {
           width: 100%;
           margin: 0;
@@ -81,10 +88,6 @@ export default class NumberBar extends Container {
 
   constructor() {
     super();
-    this.display = 'inline-block';
-    this.width = '300px';
-    this.height = 'auto';
-    this.fontFamily = 'sans-serif';
     this.value = 0;
     this.min = -1;
     this.max = 1;

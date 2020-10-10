@@ -1,11 +1,11 @@
-import { css, svg } from '@webbitjs/webbit';
-import Container from '../container';
+import { Webbit, css, svg } from '@webbitjs/webbit';
+import { containerStyles } from '../styles';
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(value, min));
 }
 
-class Gyro extends Container {
+class Gyro extends Webbit {
 
   static get metadata() {
     return {
@@ -19,10 +19,12 @@ class Gyro extends Container {
 
   static get styles() {
     return [
-      super.styles,
+      containerStyles,
       css`
         :host { 
           position: relative;
+          width: 300px;
+          height: auto;
         }
 
         .container {
@@ -107,8 +109,6 @@ class Gyro extends Container {
 
   constructor() {
     super();
-    this.width = '300px';
-    this.height = 'auto';
     this.value = 0;
     this.hideLabel = false;
     this.precision = 2;

@@ -1,7 +1,7 @@
-import { html } from '@webbitjs/webbit';
-import Container from '../container';
+import { Webbit, html } from '@webbitjs/webbit';
+import { containerStyles } from '../styles';
 
-class Checkbox extends Container {
+class Checkbox extends Webbit {
 
   static get metadata() {
     return {
@@ -15,7 +15,7 @@ class Checkbox extends Container {
 
   static get styles() {
     return [
-      super.styles,
+      containerStyles,
     ];
   }
 
