@@ -1,42 +1,46 @@
 import NtEntry from './nt-entry';
 
+function isBooleanArray(value) {
+  if (value instanceof Array) {
+    for (let element of value) {
+      if (typeof element !== 'boolean') {
+        return false;
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
 class NtBooleanArray extends NtEntry {
 
-  static get properties() {
+  static get metadata() {
     return {
-      key: { type: String },
-      value: { type: Array, reflect: true },
-      immediateNotify: { type: Boolean, attribute: 'immediate-notify' }
+      displayName: 'NT Boolean Array',
+      category: 'Sources',
+      description: `Component to set a NetworkTables entry's value if it hasn't already been set.`,
+      // documentationLink: 'https://frc-web-components.github.io/components/networktable-tree/',
+      slots: [],
     };
   }
 
-  isBooleanArray(value) {
-    if (value instanceof Array) {
-      for (let element of value) {
-        if (typeof element !== 'boolean') {
-          return false;
+  static get properties() {
+    return {
+      ...super.properties,
+      defaultValue: { 
+        type: Array,
+        inputType: 'BooleanArray',
+        set(value) {
+          return isBooleanArray(value) ? value : [];
         }
-      }
-      return true;
-    }
-    return false;
+      },
+    };
   }
 
-  set value(value) {
-    if (this.isBooleanArray(value)) {
-      this.hasProvider.then(provider => {
-        provider.userUpdate(this.key, value);
-      });
-    }
-  }
-
-  get value() {
-    if (!this.provider) {
-      return undefined;
-    }
-    const value = this.provider.getSource(this.key);
-    return this.isBooleanArray(value) ? value : undefined;
+  constructor() {
+    super();
+    this.defaultValue = [];
   }
 }
 
-customElements.define('nt-boolean-array', NtBooleanArray);
+webbitRegistry.define('frc-nt-boolean-array', NtBooleanArray);

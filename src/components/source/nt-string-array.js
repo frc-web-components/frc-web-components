@@ -1,42 +1,46 @@
 import NtEntry from './nt-entry';
 
+function isStringArray(value) {
+  if (value instanceof Array) {
+    for (let element of value) {
+      if (typeof element !== 'string') {
+        return false;
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
 class NtStringArray extends NtEntry {
 
-  static get properties() {
+  static get metadata() {
     return {
-      key: { type: String },
-      value: { type: Array, reflect: true },
-      immediateNotify: { type: Boolean, attribute: 'immediate-notify' }
+      displayName: 'NT String Array',
+      category: 'Sources',
+      description: `Component to set a NetworkTables entry's value if it hasn't already been set.`,
+      // documentationLink: 'https://frc-web-components.github.io/components/networktable-tree/',
+      slots: [],
     };
   }
 
-  isStringArray(value) {
-    if (value instanceof Array) {
-      for (let element of value) {
-        if (typeof element !== 'string') {
-          return false;
+  static get properties() {
+    return {
+      ...super.properties,
+      defaultValue: { 
+        type: Array,
+        inputType: 'StringArray',
+        set(value) {
+          return isStringArray(value) ? value : [];
         }
-      }
-      return true;
-    }
-    return false;
+      },
+    };
   }
 
-  set value(value) {
-    if (this.isStringArray(value)) {
-      this.hasProvider.then(provider => {
-        provider.userUpdate(this.key, value);
-      });
-    }
-  }
-
-  get value() {
-    if (!this.provider) {
-      return undefined;
-    }
-    const value = this.provider.getSource(this.key);
-    return this.isStringArray(value) ? value : undefined;
+  constructor() {
+    super();
+    this.defaultValue = [];
   }
 }
 
-customElements.define('nt-string-array', NtStringArray);
+webbitRegistry.define('frc-nt-string-array', NtStringArray);

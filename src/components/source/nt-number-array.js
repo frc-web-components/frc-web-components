@@ -1,42 +1,46 @@
 import NtEntry from './nt-entry';
 
+function isNumberArray(value) {
+  if (value instanceof Array) {
+    for (let element of value) {
+      if (typeof element !== 'number') {
+        return false;
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
 class NtNumberArray extends NtEntry {
 
-  static get properties() {
+  static get metadata() {
     return {
-      key: { type: String },
-      value: { type: Array, reflect: true },
-      immediateNotify: { type: Boolean, attribute: 'immediate-notify' }
+      displayName: 'NT Number Array',
+      category: 'Sources',
+      description: `Component to set a NetworkTables entry's value if it hasn't already been set.`,
+      // documentationLink: 'https://frc-web-components.github.io/components/networktable-tree/',
+      slots: [],
     };
   }
 
-  isNumberArray(value) {
-    if (value instanceof Array) {
-      for (let element of value) {
-        if (typeof element !== 'number' || element === Infinity || isNaN(element)) {
-          return false;
+  static get properties() {
+    return {
+      ...super.properties,
+      defaultValue: { 
+        type: Array,
+        inputType: 'NumberArray',
+        set(value) {
+          return isNumberArray(value) ? value : [];
         }
-      }
-      return true;
-    }
-    return false;
+      },
+    };
   }
 
-  set value(value) {
-    if (this.isNumberArray(value)) {
-      this.hasProvider.then(provider => {
-        provider.userUpdate(this.key, value);
-      });
-    }
-  }
-
-  get value() {
-    if (!this.provider) {
-      return undefined;
-    }
-    const value = this.provider.getSource(this.key);
-    return this.isNumberArray(value) ? value : undefined;
+  constructor() {
+    super();
+    this.defaultValue = [];
   }
 }
 
-customElements.define('nt-number-array', NtNumberArray);
+webbitRegistry.define('frc-nt-number-array', NtNumberArray);

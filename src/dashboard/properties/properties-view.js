@@ -4,6 +4,8 @@ import './number-property-view';
 import './boolean-property-view';
 import './array-property-view';
 import './boolean-array-property-view';
+import './string-array-property-view';
+import './number-array-property-view';
 
 class PropertiesView extends LitElement {
 
@@ -124,6 +126,24 @@ class PropertiesView extends LitElement {
               .propertyName="${name}"
               .property="${property}"
             ></dashboard-boolean-array-property-view>
+          ` : ''}
+
+          ${property.inputType === 'StringArray' ? html`
+            <dashboard-string-array-property-view
+              part="input"
+              .selectedNode="${this.selectedNode}"
+              .propertyName="${name}"
+              .property="${property}"
+            ></dashboard-string-array-property-view>
+          ` : ''}
+
+          ${property.inputType === 'NumberArray' ? html`
+            <dashboard-number-array-property-view
+              part="input"
+              .selectedNode="${this.selectedNode}"
+              .propertyName="${name}"
+              .property="${property}"
+            ></dashboard-number-array-property-view>
           ` : ''}
         `)}
       </vaadin-form-layout>

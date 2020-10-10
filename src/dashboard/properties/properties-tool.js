@@ -188,7 +188,7 @@ class PropertiesTool extends LitElement {
         Select an element to view its properties.
       ` : ''}
       ${(this.selectedNode && !this.selectedNode.isWebbit()) ? html`
-        This properties for this element cannot be changed.
+        The properties for this element cannot be changed.
       ` : ''}
 
       ${this.selectedNode && this.selectedNode.isWebbit() ? html`

@@ -1,10 +1,10 @@
-import NtEntryDefault from './nt-entry-default';
+import NtEntry from './nt-entry';
 
-class NtBooleanDefault extends NtEntryDefault {
+class NtNumber extends NtEntry {
 
   static get metadata() {
     return {
-      displayName: 'NT Boolean Default',
+      displayName: 'NT Number',
       category: 'Sources',
       description: `Component to set a NetworkTables entry's value if it hasn't already been set.`,
       // documentationLink: 'https://frc-web-components.github.io/components/networktable-tree/',
@@ -15,14 +15,14 @@ class NtBooleanDefault extends NtEntryDefault {
   static get properties() {
     return {
       ...super.properties,
-      defaultValue: { type: Boolean },
+      defaultValue: { type: Number },
     };
   }
 
   constructor() {
     super();
-    this.defaultValue = false;
+    this.defaultValue = 0;
   }
 }
 
-webbitRegistry.define('nt-boolean-default', NtBooleanDefault);
+webbitRegistry.define('frc-nt-number', NtNumber);

@@ -1,7 +1,7 @@
 import { LitElement, Webbit } from '@webbitjs/webbit';
 import { getSourceProvider, sourceProviderAdded } from '@webbitjs/store';
 
-export default class NtEntryDefault extends Webbit {
+export default class NtEntry extends Webbit {
 
   static get properties() {
     return {

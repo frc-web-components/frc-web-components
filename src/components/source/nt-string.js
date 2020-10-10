@@ -1,10 +1,10 @@
-import NtEntryDefault from './nt-entry-default';
+import NtEntry from './nt-entry';
 
-class NtStringDefault extends NtEntryDefault {
+class NtString extends NtEntry {
 
   static get metadata() {
     return {
-      displayName: 'NT String Default',
+      displayName: 'NT String',
       category: 'Sources',
       description: `Component to set a NetworkTables entry's value if it hasn't already been set.`,
       // documentationLink: 'https://frc-web-components.github.io/components/networktable-tree/',
@@ -25,4 +25,4 @@ class NtStringDefault extends NtEntryDefault {
   }
 }
 
-webbitRegistry.define('nt-string-default', NtStringDefault);
+webbitRegistry.define('frc-nt-string', NtString);
