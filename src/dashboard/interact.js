@@ -16,10 +16,6 @@ function dragMoveListener (event) {
   target.setAttribute('data-y', y)
 }
 
-function saveLayout(wom) {
-  console.log('end');
-}
-
 export function removeInteraction(element) {
   interact(element).unset();
 }
@@ -52,7 +48,6 @@ export function addInteraction(wom, element) {
           target.setAttribute('data-y', y)
         },
         end: async () => {
-          console.log('resize');
           wom.history.push(await wom.getHtml());
         }
       },
@@ -64,7 +59,7 @@ export function addInteraction(wom, element) {
   
         // minimum size
         interact.modifiers.restrictSize({
-          min: { width: 100, height: 50 }
+          min: { width: 20, height: 20 }
         })
       ],
   
@@ -74,7 +69,6 @@ export function addInteraction(wom, element) {
       listeners: { 
         move: dragMoveListener,
         end: async () => {
-          console.log('drag');
           wom.history.push(await wom.getHtml());
         }
       },
