@@ -13,6 +13,7 @@ class PropertiesView extends LitElement {
     return css`
       :host {
         display: block;
+        margin-bottom: 10px;
       }
 
       [part=category-name] {
@@ -158,18 +159,8 @@ class PropertiesView extends LitElement {
       return property.canConnectToSources;
     });
 
-    const categories = [this.selectedNode.getDisplayName(), 'Styles'];
-
-
     return html`
-      <vaadin-accordion>
-        ${categories.map(category => html`
-          <vaadin-accordion-panel>
-            <div part="category-name" slot="summary">${category}</div>
-            ${this.renderProperties(propertiesForSources, category)}
-          </vaadin-accordion-panel>
-        `)}
-      </vaadin-accordion>
+      ${this.renderProperties(propertiesForSources, this.selectedNode.getDisplayName())}
     `;
   }
 }
