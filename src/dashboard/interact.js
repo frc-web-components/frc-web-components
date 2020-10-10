@@ -25,7 +25,7 @@ export function addInteraction(wom, element) {
   interact(element)
     .resizable({
       // resize from all edges and corners
-      edges: { left: true, right: true, bottom: true, top: true },
+      edges: { left: true, right: true },
   
       listeners: {
         move (event) {
