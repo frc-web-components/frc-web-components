@@ -12,6 +12,12 @@ class CheckboxGroup extends Webbit {
       allowedChildren: ['frc-checkbox'],
       resizable: { left: true, right: true },
       layout: 'none',
+      dashboardHtml: `
+        <frc-checkbox-group>
+          <frc-checkbox value="checkbox1" label="Checkbox 1"></frc-checkbox>
+          <frc-checkbox value="checkbox2" label="Checkbox 2"></frc-checkbox>
+        </frc-checkbox-group>
+      `
     };
   }
 

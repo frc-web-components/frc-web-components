@@ -1,9 +1,14 @@
 
 export const createElement = (componentType, slot) => {
   const parentNode = document.createElement('div');
-  parentNode.innerHTML = `
-    <${componentType}></${componentType}>
-  `
+  const { dashboardHtml } = window.webbitRegistry.getMetadata(componentType) || {};
+ 
+  if (dashboardHtml) {
+    parentNode.innerHTML = dashboardHtml;
+  } else {
+    parentNode.innerHTML = `<${componentType}></${componentType}>`;
+  }
+
   const newElement = parentNode.querySelector(componentType);
   newElement.setAttribute('slot', slot === 'default' ? '' : slot);
   return newElement;
