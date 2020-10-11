@@ -9,7 +9,8 @@ class CheckboxGroup extends Webbit {
       category: 'Forms & Inputs',
       description: 'A group of checkboxes',
       documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
-      allowedChildren: ['frc-checkbox']
+      allowedChildren: ['frc-checkbox'],
+      resizable: { left: true, right: true }
     };
   }
 
@@ -73,7 +74,7 @@ class CheckboxGroup extends Webbit {
       checkbox.updateComplete.then(() => {
         checkbox.style.display = 'none';
         const vaadinCheckbox = checkbox.shadowRoot.querySelector('vaadin-checkbox');
-        vaadinCheckbox.innerHTML = checkbox.innerHTML;
+        vaadinCheckbox.innerHTML = checkbox.label;
         this.checkboxGroup.appendChild(vaadinCheckbox);
       });
     });

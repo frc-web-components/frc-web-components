@@ -24,7 +24,7 @@
     "@kor-ui/grid": "^1.0.9",
     "@vaadin/vaadin": "^15.0.5",
     "@webbitjs/store": "^1.1.8",
-    "@webbitjs/webbit": "^1.4.6",
+    "@webbitjs/webbit": "^1.4.8",
     "chart.js": "^2.8.0",
     "d3": "^5.15.0",
     "interactjs": "^1.10.0",

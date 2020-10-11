@@ -132,16 +132,16 @@ class Wom {
     this.deselectNode();
     this.selectedNode = node;
     if (node.getNode() !== this.rootNode) {
-      addInteraction(this, node.getNode());
-      node.getNode().style.touchAction = 'none';
+      addInteraction(this, node);
+      node.getNode().classList.add("draggable");
     }
     this.dispatchEvent('womNodeSelect', { node });
   }
 
   deselectNode() {
     if (this.getSelectedNode()) {
-      removeInteraction(this.getSelectedNode().getNode());
-      this.getSelectedNode().getNode().style.touchAction = 'unset';
+      removeInteraction(this.getSelectedNode());
+      this.getSelectedNode().getNode().classList.remove("draggable");
       const deselectedNode = this.selectedNode;
       this.selectedNode = null;
       this.dispatchEvent('womNodeDeselect', { node: deselectedNode });

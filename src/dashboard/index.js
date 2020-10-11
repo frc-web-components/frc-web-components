@@ -75,7 +75,16 @@ class WebbitDashboard extends LitElement {
   firstUpdated() {
     const css = document.createElement('style');
     css.type = 'text/css';
-    const styles = 'body { margin: 0; }';
+    const styles = `
+      body { 
+        margin: 0; 
+      }
+
+      .draggable {
+        touch-action: none;
+        user-select: none;
+      }
+    `;
 
     if (css.styleSheet) css.styleSheet.cssText = styles;
     else css.appendChild(document.createTextNode(styles));

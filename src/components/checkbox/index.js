@@ -9,7 +9,8 @@ class Checkbox extends Webbit {
       category: 'Forms & Inputs',
       description: 'A checkbox',
       documentationLink: 'https://frc-web-components.github.io/components/checkbox/',
-      slots: []
+      slots: [],
+      resizable: {}
     };
   }
 
@@ -24,7 +25,8 @@ class Checkbox extends Webbit {
       ...super.properties,
       checked: { type: Boolean, primary: true },
       value: { type: String },
-      disabled: { type: Boolean }
+      disabled: { type: Boolean },
+      label: { type: String },
     };
   }
 
@@ -33,6 +35,7 @@ class Checkbox extends Webbit {
     this.checked = false;
     this.value = '';
     this.disabled = false;
+    this.label = 'label';
   }
 
   firstUpdated() {
@@ -76,7 +79,7 @@ class Checkbox extends Webbit {
         ?disabled="${this.disabled}"
         @change="${this.onChange}"
       >
-        <slot></slot>
+        ${this.label}
       </vaadin-checkbox>
     `;
   }

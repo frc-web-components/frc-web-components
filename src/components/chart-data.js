@@ -10,7 +10,9 @@ class ChartData extends Webbit {
       description: 'Used to show a single data point on a line chart.',
       documentationLink: 'https://frc-web-components.github.io/components/line-chart/',
       slots: [],
-      allowedParents: ['frc-line-chart']
+      allowedParents: ['frc-line-chart'],
+      movable: false,
+      resizable: { left: false, right: false, top: false, bottom: false }
     };
   }
 
