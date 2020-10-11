@@ -90,6 +90,7 @@ class Wom {
     this.mode = 'live';
     this.observeMutations();
     this.history = new WomHistory();
+    this.selectionEnabled = true;
   }
 
   async getHtml() {
@@ -249,6 +250,15 @@ class Wom {
     });
 
     this.rootNode.dispatchEvent(event);
+  }
+
+  toggleSelectionTool() {
+    this.selectionEnabled = !this.selectionEnabled;
+    this.dispatchEvent('selectionToolToggle');
+  }
+
+  isSelectionEnabled() {
+    return this.selectionEnabled;
   }
 }
 

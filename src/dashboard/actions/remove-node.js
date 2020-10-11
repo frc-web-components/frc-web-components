@@ -12,14 +12,16 @@ export default class RemoveNode extends Action {
       || selectedNode.getPreviousSibling()
       || selectedNode.getParent()
     );
-    if (nextSelectedNode) {
-      wom.selectNode(nextSelectedNode);
-    } else {
+    
+    if (!nextSelectedNode) {
       wom.deselectNode();
     }
 
     wom.addListenerOnce('womChange', async () => {
       wom.history.push(await wom.getHtml());
+      if (nextSelectedNode) {
+        wom.selectNode(nextSelectedNode);
+      }
     });
 
     wom.removeNode(selectedNode);

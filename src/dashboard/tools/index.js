@@ -89,7 +89,7 @@ class WomTools extends LitElement {
     [
       'womNodeSelect', 'womNodeDeselect', 'womActionExecute',
       'womNodeAdd', 'womNodeRemove',
-      'womChange', 'womNodePreview', 'womNodePreviewRemove'
+      'womChange', 'womNodePreview', 'womNodePreviewRemove', 'selectionToolToggle'
     ].forEach(eventName => {
       this.wom.addListener(eventName, () => {
         this.requestUpdate();
@@ -111,6 +111,10 @@ class WomTools extends LitElement {
         this.womViewerNode.requestUpdate();
       });
     }
+  }
+
+  toggleSelectionTool() {
+    this.wom.toggleSelectionTool();
   }
 
   onRemoveNode() {
@@ -150,6 +154,16 @@ class WomTools extends LitElement {
       <div part="tools">
         <div part="top-menu">
           <div part="top-tools-left">
+
+            <vaadin-button 
+              theme="icon tertiary" 
+              aria-label="Selection Tool"
+              title="Selection Tool"
+              ?selected="${this.wom.isSelectionEnabled()}"
+              @click="${this.toggleSelectionTool}"
+            >
+              <iron-icon icon="vaadin:area-select"></iron-icon>
+            </vaadin-button>
 
             <vaadin-button 
               theme="icon tertiary" 

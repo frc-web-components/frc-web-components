@@ -33,20 +33,7 @@ export default class WomNode {
       this.node.webbitId = webbitRegistry._generateWebbitId(this.node);
     }
 
-    this.onMouseClick = (ev) => {
-      ev.stopPropagation();
-
-      const { width, height } = this.wom.getDashboardElement().getBoundingClientRect();
-      const { clientX, clientY } = ev;
-
-      if ((clientX > width || clientY > height)) {
-        return;
-      }
-
-      this.wom.selectNode(this);
-    }
-
-    node.addEventListener('click', this.onMouseClick);
+    this.selectionBox = null;
   }
 
   canContainComponent(componentType) {
@@ -128,12 +115,6 @@ export default class WomNode {
   }
 
   destroy() {
-    if (this.getLevel() > 0) {
-      this.node.removeEventListener('mouseover', this.onMouseEnter);
-      this.node.removeEventListener('mouseleave', this.onMouseLeave);
-      this.node.removeEventListener('click', this.onMouseClick);
-    }
-
     this.childNodes.forEach(node => {
       node.destroy();
     });
@@ -178,6 +159,15 @@ export default class WomNode {
 
   getChildren() {
     return this.childNodes;
+  }
+
+  getDescendents() {
+    let descendents = [];
+    this.getChildren().forEach(child => {
+      descendents.push(child);
+      descendents = descendents.concat(child.getDescendents());
+    });
+    return descendents;
   }
 
   hasChildren() {
@@ -232,5 +222,13 @@ export default class WomNode {
 
   isWebbit() {
     return isWebbit(this.node);
+  }
+
+  setSelectionBox(box) {
+    this.selectionBox = box;
+  }
+
+  getSelectionBox() {
+    return this.selectionBox;
   }
 }

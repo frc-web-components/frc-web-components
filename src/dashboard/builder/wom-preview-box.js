@@ -9,6 +9,7 @@ class WomPreviewBox extends LitElement {
       previewedNode: { type: Object },
       background: { type: String },
       border: { type: String },
+      zIndex: { type: Number, attribute: 'z-index' },
     };
   }
 
@@ -23,31 +24,36 @@ class WomPreviewBox extends LitElement {
     this.previewedNode = null;
     this.background = 'rgba(3, 132, 210, .5)';
     this.border = 'none';
+    this.zIndex = 1;
   }
 
   updated(changedProperties) {
-
-    if (changedProperties.has('wom')) {
-      this.wom.addListener('womNodeSelect', (ev) => {
-        const { node } = ev.detail;
-        // if (!isElementInViewport(
-        //   node.getNode(), 
-        //   this.wom.getDashboardElement()
-        // ))
-        // node.getNode().scrollIntoView();
-      });
+    if (changedProperties.has('border')) {
+      this.previewElement.style.border = this.border;
+    } 
+    
+    if (changedProperties.has('zIndex')) {
+      this.previewElement.style.zIndex = this.zIndex.toString();
     }
   }
 
   firstUpdated() {
     this.previewElement = document.createElement('div');
     this.previewElement.style.background = this.background;
-    this.previewElement.style.border = this.border;
     this.previewElement.style.position = 'absolute';
-    this.previewElement.style.zIndex = '1';
-    this.previewElement.style.pointerEvents = 'none';
+    this.previewElement.addEventListener('click', () => {
+      const event = new CustomEvent('boxClick', {
+        detail: {}
+      });
+      this.dispatchEvent(event);
+    });
+    // this.previewElement.style.pointerEvents = 'none';
     document.body.appendChild(this.previewElement);
 
+    const event = new CustomEvent('boxInitialized', {
+      detail: {}
+    });
+    this.dispatchEvent(event);
 
     const setPreviewBounds = () => { 
       if (this.previewedNode && this.wom) {
@@ -66,6 +72,7 @@ class WomPreviewBox extends LitElement {
         this.previewElement.style.top = boundedTop + 'px';
         this.previewElement.style.width = boundedWidth + 'px';
         this.previewElement.style.height = boundedHeight + 'px';
+        this.previewElement.style.boxSizing = 'border-box';
       } else {
         this.previewElement.style.display = 'none';
       }
@@ -73,8 +80,6 @@ class WomPreviewBox extends LitElement {
     };
     window.requestAnimationFrame(setPreviewBounds);
   }
-
-
 
   disconnectedCallback() {
     super.disconnectedCallback();
