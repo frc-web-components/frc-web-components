@@ -131,7 +131,7 @@ class Wom {
   selectNode(node) {
     this.deselectNode();
     this.selectedNode = node;
-    if (node.getNode() !== this.rootNode) {
+    if (node.getNode() !== this.rootNode && node.getParent().getLayout() === 'absolute') {
       addInteraction(this, node);
       node.getNode().classList.add("draggable");
     }

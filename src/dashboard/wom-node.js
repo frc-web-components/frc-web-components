@@ -193,6 +193,11 @@ export default class WomNode {
     return metadata ? metadata.displayName : this.getName();
   }
 
+  getLayout() {
+    const metadata = this.getMetadata();
+    return metadata ? metadata.layout : 'absolute';
+  }
+
   getWebbitId() {
     return this.node.webbitId;
   }

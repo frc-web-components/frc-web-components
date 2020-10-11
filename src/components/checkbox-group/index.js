@@ -10,7 +10,8 @@ class CheckboxGroup extends Webbit {
       description: 'A group of checkboxes',
       documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
       allowedChildren: ['frc-checkbox'],
-      resizable: { left: true, right: true }
+      resizable: { left: true, right: true },
+      layout: 'none',
     };
   }
 
