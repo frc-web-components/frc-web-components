@@ -8,7 +8,15 @@ class RadioGroup extends Webbit {
       category: 'Forms & Inputs',
       // description: 'A group of checkboxes',
       // documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
-      allowedChildren: ['frc-radio-button']
+      allowedChildren: ['frc-radio-button'],
+      resizable: { left: true, right: true },
+      layout: 'none',
+      dashboardHtml: `
+        <frc-radio-group>
+          <frc-radio-button value="radio1" label="Radio 1"></frc-radio-button>
+          <frc-radio-button value="radio2" label="Radio 2"></frc-radio-button>
+        </frc-radio-group>
+      `
     };
   }
 
@@ -61,23 +69,25 @@ class RadioGroup extends Webbit {
               this.setAttribute(attributeName, value);
             }
           }
+        } else if (mutation.type === 'childList') {
+           // add elements to actual radio vaadin group
+          radioGroup.innerHtml = '';
+          const radioButtons = this.querySelectorAll('frc-radio-button');
+          radioButtons.forEach(radioButton => {
+            radioButton.updateComplete.then(() => {
+              radioButton.style.display = 'none';
+              const vaadinRadioButton = radioButton.shadowRoot.querySelector('vaadin-radio-button');
+              vaadinRadioButton.innerHTML = radioButton.label;
+              radioGroup.appendChild(vaadinRadioButton);
+            });
+          });
         }
       });
     });
 
     observer.observe(radioGroup, {
-      attributes: true
-    });
-
-    // add elements to actual radio vaadin group
-    const radioButtons = this.querySelectorAll('frc-radio-button');
-    radioButtons.forEach(radioButton => {
-      radioButton.updateComplete.then(() => {
-        radioButton.style.display = 'none';
-        const vaadinRadioButton = radioButton.shadowRoot.querySelector('vaadin-radio-button');
-        vaadinRadioButton.innerHTML = radioButton.innerHTML;
-        radioGroup.appendChild(vaadinRadioButton);
-      });
+      attributes: true,
+      childList: true
     });
   }
 

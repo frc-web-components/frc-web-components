@@ -9,6 +9,7 @@ class RadioButton extends Webbit {
       // description: 'A group of checkboxes',
       // documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
       slots: [],
+      resizable: {}
     };
   }
 
@@ -26,7 +27,8 @@ class RadioButton extends Webbit {
     return {
       checked: { type: Boolean, primary: true },
       value: { type: String },
-      disabled: { type: Boolean }
+      disabled: { type: Boolean },
+      label: { type: String }
     };
   }
 
@@ -35,6 +37,7 @@ class RadioButton extends Webbit {
     this.checked = false;
     this.value = '';
     this.disabled = false;
+    this.label = 'label';
   }
 
   firstUpdated() {
@@ -78,7 +81,7 @@ class RadioButton extends Webbit {
         ?disabled="${this.disabled}"
         @checked-changed="${this.onChange}"
       >
-        <slot></slot>
+        ${this.label}
       </vaadin-radio-button>
     `;
   }

@@ -1,4 +1,4 @@
-import { Webbit, html } from '@webbitjs/webbit';
+import { Webbit, html, css } from '@webbitjs/webbit';
 import { containerStyles } from '../styles';
 
 class ComboBox extends Webbit {
@@ -9,13 +9,31 @@ class ComboBox extends Webbit {
       category: 'Forms & Inputs',
       description: 'An input field with a dropdown used to select different options.',
       documentationLink: 'https://frc-web-components.github.io/components/combo-box/',
-      slots: []
+      slots: [],
+      resizable: { left: true, right: true },
+      minSize: { width: 50, height: 10 },
+      dashboardHtml: `
+        <frc-combo-box 
+          options='["Option 1", "Option 2"]'
+          selected="Option 1"
+        ></frc-combo-box>
+      `
     };
   }
 
   static get styles() {
     return [
-      containerStyles
+      containerStyles,
+      css`
+        :host {
+          width: 200px;
+          height: auto;
+        }
+
+        vaadin-combo-box {
+          width: 100%;
+        }
+      `
     ];
   }
 

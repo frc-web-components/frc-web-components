@@ -69,7 +69,6 @@ class DashboardBuilder extends LitElement {
             @boxInitialized="${ev => {
               const target = ev.target || ev.path[0];
               descendent.setSelectionBox(target.previewElement);
-              console.log('setSelectionBox');
             }}"
           ></wom-preview-box>
         `;
