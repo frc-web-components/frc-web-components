@@ -9,7 +9,8 @@ export default class DigitalIO extends Webbit {
       category: 'Simulation',
       slots: [],
       // description: 'Component for displaying data from a 3-axis accelerometer.',
-      // documentationLink: 'https://frc-web-components.github.io/components/number-bar/'
+      // documentationLink: 'https://frc-web-components.github.io/components/number-bar/',
+      resizable: { },
     };
   }
 

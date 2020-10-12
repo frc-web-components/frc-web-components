@@ -22,6 +22,8 @@ class Pdp extends Webbit {
       //description: 'Component for displaying data from a 3-axis accelerometer.',
       documentationLink: 'https://frc-web-components.github.io/components/power-distribution-panel/',
       slots: [],
+      resizable: { left: true, right: true },
+      minSize: { width: 224 },
     };
   }
 

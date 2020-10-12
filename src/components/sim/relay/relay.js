@@ -10,6 +10,8 @@ export default class Relay extends Webbit {
       slots: [],
       // description: 'Component for displaying data from a 3-axis accelerometer.',
       // documentationLink: 'https://frc-web-components.github.io/components/number-bar/'
+      resizable: { left: true, right: true },
+      minSize: { width: 50 }
     };
   }
 

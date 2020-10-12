@@ -9,7 +9,12 @@ class TabContent extends Webbit {
       category: 'Tabs',
       // description: 'A group of checkboxes',
       // documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
-      allowedParents: ['frc-tabs-content']
+      allowedParents: ['frc-tabs-content'],
+      dashboardHtml: `
+        <frc-tab-content>
+          <frc-label text="Content for tab"></frc-label>
+        </frc-tab-content>
+      `
     };
   }
 
@@ -17,6 +22,13 @@ class TabContent extends Webbit {
     return css`
       :host {
         display: none;
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      ::slotted(*) {
+        position: absolute;
       }
     `;
   }

@@ -9,6 +9,8 @@ class NumberSlider extends Webbit {
       // description: 'A group of checkboxes',
       // documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
       slots: [],
+      resizable: { left: true, right: true },
+      minSize: { width: 80, height: 10 },
     };
   }
 

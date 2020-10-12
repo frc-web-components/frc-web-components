@@ -11,7 +11,15 @@ class Tabs extends Webbit {
       category: 'Tabs',
       // description: 'A group of checkboxes',
       // documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
-      allowedChildren: ['frc-tab']
+      allowedChildren: ['frc-tab'],
+      layout: 'none',
+      resizable: { left: true, right: true },
+      dashboardHtml: `
+        <frc-tabs>
+          <frc-tab label="Tab 1"></frc-tab>
+          <frc-tab label="Tab 2"></frc-tab>
+        </frc-tabs>
+      `
     };
   }
 

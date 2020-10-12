@@ -8,7 +8,9 @@ class BasicSubsystem extends Webbit {
       category: 'Robot & Field Info',
       description: 'Component for displaying the state of a command based subsystem.',
       documentationLink: 'https://frc-web-components.github.io/components/basic-subsystem/',
-      slots: []
+      slots: [],
+      resizable: { left: true, right: true },
+      minSize: { width: 50, height: 10 }
     };
   }
 
