@@ -148,7 +148,12 @@ class LineChart extends Webbit {
       description: 'A component used to graph data over time.',
 			documentationLink: 'https://frc-web-components.github.io/components/line-chart/',
 			allowedChildren: ['frc-chart-data'],
-			minSize: { width: 50, height: 50 }
+			minSize: { width: 50, height: 50 },
+			dashboardHtml: `
+				<frc-line-chart title="Line Chart">
+					<frc-chart-data label="Data" color="green"></frc-chart-data>
+				</frc-line-chart>
+			`
     };
   }
 

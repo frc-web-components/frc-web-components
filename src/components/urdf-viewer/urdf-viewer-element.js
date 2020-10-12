@@ -226,6 +226,7 @@ export default class URDFViewer extends HTMLElement {
             ${ this.tagName } canvas {
                 width: 100%;
                 height: 100%;
+                outline: none;
             }
         `;
             document.head.appendChild(styletag);

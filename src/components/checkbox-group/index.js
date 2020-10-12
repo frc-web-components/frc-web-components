@@ -67,23 +67,25 @@ class CheckboxGroup extends Webbit {
               this.setAttribute(attributeName, value);
             }
           }
+        } else if (mutation.type === 'childList') {
+          // add elements to actual checkbox vaadin group
+          this.checkboxGroup.innerHtml = '';
+          const checkboxes = this.querySelectorAll('frc-checkbox');
+          checkboxes.forEach(checkbox => {
+            checkbox.updateComplete.then(() => {
+              checkbox.style.display = 'none';
+              const vaadinCheckbox = checkbox.shadowRoot.querySelector('vaadin-checkbox');
+              vaadinCheckbox.innerHTML = checkbox.label;
+              this.checkboxGroup.appendChild(vaadinCheckbox);
+            });
+          });
         }
       });
     });
 
     observer.observe(this.checkboxGroup, {
-      attributes: true
-    });
-
-    // add elements to actual checkbox vaadin group
-    const checkboxes = this.querySelectorAll('frc-checkbox');
-    checkboxes.forEach(checkbox => {
-      checkbox.updateComplete.then(() => {
-        checkbox.style.display = 'none';
-        const vaadinCheckbox = checkbox.shadowRoot.querySelector('vaadin-checkbox');
-        vaadinCheckbox.innerHTML = checkbox.label;
-        this.checkboxGroup.appendChild(vaadinCheckbox);
-      });
+      attributes: true,
+      childList: true
     });
   }
 

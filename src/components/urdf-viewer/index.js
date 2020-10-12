@@ -3,7 +3,6 @@ import './urdf-viewer-element';
 import { Webbit, html, css } from '@webbitjs/webbit';
 import { subscribe, getSourceProvider } from '@webbitjs/store';
 import loadMesh from './load-mesh';
-import exampleUrdf from './example-urdf';
 
 const DEG2RAD = Math.PI / 180;
 const RAD2DEG = 1 / DEG2RAD;
@@ -16,7 +15,17 @@ class UrdfViewer extends Webbit {
       category: '3D Models',
       description: 'Component used to display and manipulate URDF models',
       // documentationLink: 'https://frc-web-components.github.io/components/model-viewer/',
-      slots: []
+      slots: [],
+      dashboardHtml: `
+        <frc-urdf-viewer
+          urdf="https://rawcdn.githack.com/frc-web-components/frc-web-components/b0fbd5c90d50035012ce04d8dcde041fea7ed79b/models/urdf/pi-bot.urdf"
+          max-distance=".75"
+          controllable
+          camera-x="0.58"
+          camera-y="0.3"
+          camera-z="0.48"
+        ></frc-urdf-viewer>
+      `
     };
   }
 
@@ -24,8 +33,8 @@ class UrdfViewer extends Webbit {
     return css`
       :host {
         display: inline-block;
-        width: 500px;
-        height: 500px;
+        width: 300px;
+        height: 300px;
         background: white;
       }
       
@@ -39,6 +48,7 @@ class UrdfViewer extends Webbit {
         display: block;
         width: 100%;
         height: 100%;
+        outline: none;
       }
     `;
   }
@@ -67,7 +77,7 @@ class UrdfViewer extends Webbit {
   constructor() {
     super();
     this.urdf = '';
-    this.urdfContent = exampleUrdf;
+    this.urdfContent = '';
     this.controllable = false;
     this.up = 'Z+';
     this.displayShadow = false;
