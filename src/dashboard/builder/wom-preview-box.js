@@ -41,7 +41,15 @@ class WomPreviewBox extends LitElement {
     this.previewElement = document.createElement('div');
     this.previewElement.style.background = this.background;
     this.previewElement.style.position = 'absolute';
-    this.previewElement.addEventListener('click', () => {
+    this.previewElement.addEventListener('click', ev => {
+
+      const { width, height } = this.wom.getDashboardElement().getBoundingClientRect();
+      const { clientX, clientY } = ev;
+
+      if ((clientX > width || clientY > height)) {
+        return;
+      }
+
       const event = new CustomEvent('boxClick', {
         detail: {}
       });

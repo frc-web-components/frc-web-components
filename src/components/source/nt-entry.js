@@ -16,12 +16,20 @@ export default class NtEntry extends Webbit {
 
     this.provider = null;
     this.hasProvider = new Promise(resolve => {
-      sourceProviderAdded(providerName => {
-        if (providerName === 'NetworkTables') {
-          this.provider = getSourceProvider('NetworkTables');
-          resolve(this.provider);
-        }
-      });
+
+      const provider = getSourceProvider('NetworkTables');
+
+      if (provider) {
+        this.provider = provider;
+        resolve(this.provider);
+      } else {
+        sourceProviderAdded(providerName => {
+          if (providerName === 'NetworkTables') {
+            this.provider = getSourceProvider('NetworkTables');
+            resolve(this.provider);
+          }
+        });
+      }
     });
   }
 

@@ -10,13 +10,13 @@ class WomHistory {
   }
 
   storeLayout() {
-    window.localStorage['currentWomLayout'] = this.getCurrentLayout();
+    window.localStorage['savedWomLayout'] = this.getCurrentLayout();
   }
 
   getStoredLayout() {
-    if ('currentWomLayout' in window.localStorage) {
+    if ('savedWomLayout' in window.localStorage) {
       try {
-        return window.localStorage['currentWomLayout'];
+        return window.localStorage['savedWomLayout'];
       } catch(e) {}
     }
     return null;
