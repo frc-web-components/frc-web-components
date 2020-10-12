@@ -19,7 +19,7 @@ import './text-view';
 import './toggle-button';
 import './toggle-switch';
 import './voltage-view';
-import './model-viewer';
+// import './model-viewer';
 import '@vaadin/vaadin';
 import './control-panel';
 import './urdf-viewer';

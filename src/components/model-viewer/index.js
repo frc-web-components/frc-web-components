@@ -1,6 +1,8 @@
 import { Webbit, html, css } from '@webbitjs/webbit';
-
 import './model-element/index';
+
+// https://bl.ocks.org/duhaime/8c2be958e71ea1814e8c11f95592a3a4
+// use this example
 
 const Quaternion = require('quaternion');
 const rad = Math.PI / 180;

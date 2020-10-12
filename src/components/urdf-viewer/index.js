@@ -3,6 +3,7 @@ import './urdf-viewer-element';
 import { Webbit, html, css } from '@webbitjs/webbit';
 import { subscribe, getSourceProvider } from '@webbitjs/store';
 import loadMesh from './load-mesh';
+import exampleUrdf from './example-urdf';
 
 const DEG2RAD = Math.PI / 180;
 const RAD2DEG = 1 / DEG2RAD;
@@ -50,8 +51,8 @@ class UrdfViewer extends Webbit {
       up: { type: String },
       displayShadow: { type: Boolean },
       ambientColor: { type: String },
-      minDistance: { type: 'min-distance' },
-      maxDistance: { type: 'max-distance' },
+      minDistance: { type: Number },
+      maxDistance: { type: Number },
       robotX: { type: Number },
       robotY: { type: Number },
       robotZ: { type: Number },
@@ -66,7 +67,7 @@ class UrdfViewer extends Webbit {
   constructor() {
     super();
     this.urdf = '';
-    this.urdfContent = '';
+    this.urdfContent = exampleUrdf;
     this.controllable = false;
     this.up = 'Z+';
     this.displayShadow = false;
