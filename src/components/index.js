@@ -21,6 +21,7 @@ import './toggle-switch';
 import './voltage-view';
 // import './model-viewer';
 import '@vaadin/vaadin';
+import '@vaadin/vaadin-menu-bar';
 import './control-panel';
 import './urdf-viewer';
 import './code-editor';
