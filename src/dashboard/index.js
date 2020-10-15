@@ -54,7 +54,8 @@ class WebbitDashboard extends LitElement {
 
   constructor() {
     super();
-    this.wom = new Wom(document.querySelector('frc-dashboard-builder > frc-absolute-layout'));
+    const dashboardRoot = document.querySelector('[dashboard-root]') || this;
+    this.wom = new Wom(dashboardRoot);
     this.editMode = false;
     this.dashboardNode = null;
   }
