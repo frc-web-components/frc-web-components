@@ -8,6 +8,7 @@ import './nt-number-array';
 import './nt-string-array';
 import './nt-robot-connection';
 import './nt-global-listener';
+import './networktables';
 
 const getType = (value) => {
   if (['number', 'boolean', 'string'].includes(typeof value)) {
