@@ -1,4 +1,20 @@
 const path = require('path');
+const { GenerateSW } = require('workbox-webpack-plugin');
+
+const isDevServer = process.env.WEBPACK_DEV_SERVER;
+
+const plugins = isDevServer
+  ? []
+  : [
+    new GenerateSW({
+      swDest: 'sw.js',
+      clientsClaim: true,
+      skipWaiting: true,
+      maximumFileSizeToCacheInBytes: 20000000
+    })
+  ];
+
+
 
 module.exports = {
   context: path.resolve(__dirname, "src"),
@@ -38,6 +54,7 @@ module.exports = {
       },
     ]
   },
+  plugins,
   devtool: 'source-map',
   devServer: {
     contentBase: path.resolve(__dirname, 'build/'),

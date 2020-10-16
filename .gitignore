@@ -104,5 +104,7 @@ typings/
 
 # frc-web-components
 .DS_Store
-build/
+build/*
 .wpilib/
+!build/icon.png
+!build/manifest.webmanifest
