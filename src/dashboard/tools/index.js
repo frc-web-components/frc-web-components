@@ -97,11 +97,27 @@ class WomTools extends LitElement {
 
     this.menuItems = [
       {
+        text: 'Dashboard',
+        children: [
+          { text: 'About' },
+          { text: 'Documentation', action: () => window.open('https://frc-web-components.github.io/', '_blank') },
+          { text: 'Update' },
+          { component: 'hr' },
+          { text: 'Preferences' },
+        ]
+      },
+      {
         text: 'File',
         children: [
           { text: 'New Layout', action: 'newLayout' },
+          { text: 'New Window' },
+          { component: 'hr' },
           { text: 'Open Layout', action: 'loadLayout' },
-          { text: 'Download Layout', action: 'saveLayout' },
+          { text: 'Open Recent Layout' },
+          { text: 'Open Robot Layout' },
+          { component: 'hr' },
+          { text: 'Save Layout', action: 'saveLayout' },
+          { text: 'Save Robot Layout' },
           { component: 'hr' },
           { text: 'Load Extension', action: this.onLoadExtension },
         ]
@@ -116,12 +132,21 @@ class WomTools extends LitElement {
           { text: 'Copy Node', disabled: !isNodeSelected },
           { text: 'Paste Node', disabled: !isNodeSelected },
           { text: 'Delete Node', disabled: !isNodeSelected, action: 'removeNode' },
+          { component: 'hr' },
+          { text: 'Edit Node HTML', disabled: !isNodeSelected },
         ]
       },
       { 
         text: 'View',
         children: [
           { text: 'Scroll to Node', disabled: !isNodeSelected, action: this.onScrollToNode },
+        ]
+      },
+      { 
+        text: 'Recording',
+        children: [
+          { text: 'Start Recording' },
+          { text: 'Load Playback' },
         ]
       },
     ];
