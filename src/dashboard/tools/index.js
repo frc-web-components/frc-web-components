@@ -70,6 +70,28 @@ class WomTools extends LitElement {
       dashboard-tools-bottom {
         overflow: unset;
       }
+
+      [part=node-html-editor] {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        padding-top: 10px;
+        box-sizing: border-box;
+      }
+
+      [part=node-html-editor] juicy-ace-editor {
+        flex: 1;
+      }
+
+      [part=node-html-editor] [part=editor-buttons] {
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      [part=node-html-editor] [part=editor-buttons] vaadin-button {
+        margin-right: 5px;
+      }
     `;
   }
 
@@ -77,6 +99,8 @@ class WomTools extends LitElement {
     return {
       wom: { type: Object },
       menuItems: { type: Array },
+      editingNodeHtml: { type: Boolean },
+      nodeHtmlEditorContent: { type: String }
     };
   }
 
@@ -85,6 +109,8 @@ class WomTools extends LitElement {
     this.wom = null;
     this.toolsTopElement = null;
     this.setMenuItems();
+    this.editingNodeHtml = false;
+    this.nodeHtmlEditorContent = '';
   }
 
   setMenuItems() {
@@ -133,7 +159,7 @@ class WomTools extends LitElement {
           { text: 'Paste Node', disabled: !isNodeSelected },
           { text: 'Delete Node', disabled: !isNodeSelected, action: 'removeNode' },
           { component: 'hr' },
-          { text: 'Edit Node HTML', disabled: !isNodeSelected },
+          { text: 'Edit Node HTML', disabled: !isNodeSelected, action: this.editNodeHtml },
         ]
       },
       { 
@@ -167,6 +193,14 @@ class WomTools extends LitElement {
   
   firstUpdated() {
     this.toolsTopElement = this.shadowRoot.querySelector('[part="tools-top"]');
+
+    const observer = new MutationObserver(() => {
+      const nodeHtmlEditor = this.shadowRoot.querySelector('juicy-ace-editor');
+      nodeHtmlEditor.editor.setValue(this.nodeHtmlEditorContent);
+    });
+    observer.observe(this.shadowRoot, {
+      childList: true
+    });
   }
 
   updated(changedProps) {
@@ -194,16 +228,58 @@ class WomTools extends LitElement {
     alert(`Loading Extensions hasn't been implemented yet!`);
   }
 
+  editNodeHtml() {
+    this.editingNodeHtml = true;
+    const selectedNode = this.wom.getSelectedNode().getNode();
+    const editorNode = this.shadowRoot.querySelector('juicy-ace-editor');
+    this.nodeHtmlEditorContent = selectedNode.outerHTML;
+  }
+
   menuItemSelected(ev) {
     const item = ev.detail.value;
     if (typeof item.action === 'string') {
       this.wom.executeAction(item.action);
     } else if (typeof item.action === 'function') {
-      item.action();
+      item.action.bind(this)();
     }
   }
 
   render() {
+
+    if (this.editingNodeHtml) {
+      return html`
+        <div part="tools">
+          <div part="node-html-editor">
+            <juicy-ace-editor
+              theme="ace/theme/monokai"
+              mode="ace/mode/html"
+              tabsize="4"
+              wrapmode
+            ></juicy-ace-editor>
+            <div part="editor-buttons">
+              <vaadin-button 
+                part="confirm-button" 
+                theme="success primary small" 
+                aria-label="Confirm"
+                @click="${this.onConfirm}"
+              >
+                Confirm
+              </vaadin-button>
+
+              <vaadin-button 
+                part="cancel-button" 
+                theme="error primary small" 
+                aria-label="Cancel"
+                @click="${this.onCancel}"
+              >
+                Cancel
+              </vaadin-button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
     return html`
       <div part="tools">
         <div part="top-menu">
