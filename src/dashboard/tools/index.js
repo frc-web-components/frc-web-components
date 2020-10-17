@@ -76,6 +76,7 @@ class WomTools extends LitElement {
   static get properties() {
     return {
       wom: { type: Object },
+      menuItems: { type: Array },
     };
   }
 
@@ -83,6 +84,47 @@ class WomTools extends LitElement {
     super();
     this.wom = null;
     this.toolsTopElement = null;
+    this.setMenuItems();
+  }
+
+  setMenuItems() {
+
+    if (!this.wom) {
+      return;
+    }
+
+    const isNodeSelected = this.wom.getSelectedNode() && this.wom.getSelectedNode() !== this.wom.getRootNode();
+
+    this.menuItems = [
+      {
+        text: 'File',
+        children: [
+          { text: 'New Layout', action: 'newLayout' },
+          { text: 'Open Layout', action: 'loadLayout' },
+          { text: 'Download Layout', action: 'saveLayout' },
+          { component: 'hr' },
+          { text: 'Load Extension', action: this.onLoadExtension },
+        ]
+      },
+      { 
+        text: 'Edit',
+        children: [
+          { text: 'Undo', disabled: this.wom.history.atBeginning(), action: 'undo' },
+          { text: 'Redo', disabled: this.wom.history.atEnd(), action: 'redo' },
+          { component: 'hr' },
+          { text: 'Cut Node', disabled: !isNodeSelected },
+          { text: 'Copy Node', disabled: !isNodeSelected },
+          { text: 'Paste Node', disabled: !isNodeSelected },
+          { text: 'Delete Node', disabled: !isNodeSelected, action: 'removeNode' },
+        ]
+      },
+      { 
+        text: 'View',
+        children: [
+          { text: 'Scroll to Node', disabled: !isNodeSelected, action: this.onScrollToNode },
+        ]
+      },
+    ];
   }
 
   addWomListeners() {
@@ -92,6 +134,7 @@ class WomTools extends LitElement {
       'womChange', 'womNodePreview', 'womNodePreviewRemove', 'selectionToolToggle'
     ].forEach(eventName => {
       this.wom.addListener(eventName, () => {
+        this.setMenuItems();
         this.requestUpdate();
       });
     });
@@ -110,35 +153,12 @@ class WomTools extends LitElement {
         }
         this.womViewerNode.requestUpdate();
       });
+      this.setMenuItems();
     }
   }
 
   toggleSelectionTool() {
     this.wom.toggleSelectionTool();
-  }
-
-  onRemoveNode() {
-    this.wom.executeAction('removeNode');
-  }
-
-  onSaveLayout() {
-    this.wom.executeAction('saveLayout');
-  }
-
-  onNewLayout() {
-    this.wom.executeAction('newLayout');
-  }
-
-  onLoadLayout() {
-    this.wom.executeAction('loadLayout');
-  }
-
-  onUndo() {
-    this.wom.executeAction('undo');
-  }
-
-  onRedo() {
-    this.wom.executeAction('redo');
   }
 
   onScrollToNode() {
@@ -149,95 +169,35 @@ class WomTools extends LitElement {
     alert(`Loading Extensions hasn't been implemented yet!`);
   }
 
+  menuItemSelected(ev) {
+    const item = ev.detail.value;
+    if (typeof item.action === 'string') {
+      this.wom.executeAction(item.action);
+    } else if (typeof item.action === 'function') {
+      item.action();
+    }
+  }
+
   render() {
     return html`
       <div part="tools">
         <div part="top-menu">
-          <div part="top-tools-left">
 
-            <vaadin-button 
-              theme="icon tertiary" 
-              aria-label="Selection Tool"
-              title="Selection Tool"
-              ?selected="${this.wom.isSelectionEnabled()}"
-              @click="${this.toggleSelectionTool}"
-            >
-              <iron-icon icon="vaadin:area-select"></iron-icon>
-            </vaadin-button>
+          <vaadin-button 
+            theme="icon tertiary" 
+            aria-label="Selection Tool"
+            title="Selection Tool"
+            ?selected="${this.wom.isSelectionEnabled()}"
+            @click="${this.toggleSelectionTool}"
+          >
+            <iron-icon icon="vaadin:area-select"></iron-icon>
+          </vaadin-button>
+          <vaadin-menu-bar 
+            .items="${this.menuItems}"
+            theme="small tertiary"
+            @item-selected="${this.menuItemSelected}"
+          ></vaadin-menu-bar>
 
-            <vaadin-button 
-              theme="icon tertiary" 
-              aria-label="Scroll to Node"
-              title="Scroll to Node"
-              @click="${this.onScrollToNode}"
-              ?disabled="${!this.wom.getSelectedNode() || this.wom.getSelectedNode() === this.wom.getRootNode()}"
-            >
-              <iron-icon icon="vaadin:arrows-long-v"></iron-icon>
-            </vaadin-button>
-
-            <vaadin-button 
-              theme="icon tertiary" 
-              aria-label="Remove Node"
-              title="Remove Node"
-              @click="${this.onRemoveNode}"
-              ?disabled="${!this.wom.getSelectedNode() || this.wom.getSelectedNode() === this.wom.getRootNode()}"
-            >
-              <iron-icon icon="vaadin:trash"></iron-icon>
-            </vaadin-button>
-            <vaadin-button 
-              theme="icon tertiary" 
-              aria-label="Undo"
-              title="Undo"
-              @click="${this.onUndo}"
-              ?disabled="${this.wom.history.atBeginning()}"
-            >
-              <iron-icon icon="vaadin:rotate-left"></iron-icon>
-            </vaadin-button>
-            <vaadin-button 
-              theme="icon tertiary" 
-              aria-label="Redo"
-              title="Redo"
-              @click="${this.onRedo}"
-              ?disabled="${this.wom.history.atEnd()}"
-            >
-              <iron-icon icon="vaadin:rotate-right"></iron-icon>
-            </vaadin-button>
-          </div>
-          <div part="top-tools-separator"></div>
-          <div part="top-tools-right">
-            <vaadin-button 
-              theme="icon tertiary" 
-              aria-label="New layout"
-              title="New Layout"
-              @click="${this.onNewLayout}"
-            >
-              <iron-icon icon="vaadin:file-add"></iron-icon>
-            </vaadin-button>
-            <vaadin-button 
-              theme="icon tertiary" 
-              aria-label="Open Layout"
-              title="Open Layout"
-              @click="${this.onLoadLayout}" 
-            >
-              <iron-icon icon="vaadin:folder-open"></iron-icon>
-            </vaadin-button>
-            <vaadin-button 
-              theme="icon tertiary" 
-              aria-label="Download Layout"
-              title="Download Layout"
-              @click="${this.onSaveLayout}"
-            >
-              <iron-icon icon="vaadin:download-alt"></iron-icon>
-            </vaadin-button>
-            <vaadin-button 
-              theme="icon tertiary" 
-              aria-label="Load Extension"
-              title="Load Extension"
-              @click="${this.onLoadExtension}"
-            >
-              <iron-icon icon="vaadin:puzzle-piece"></iron-icon>
-            </vaadin-button>
-          </div>
         </div>
         <vaadin-split-layout part="tools-splitter" theme="small" orientation="vertical">
           <div part="tools-top" style="height: 40%">
