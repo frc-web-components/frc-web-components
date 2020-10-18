@@ -1,6 +1,8 @@
 import { LitElement, html, css } from 'lit-element';
 import './tools-bottom';
 import './wom-viewer';
+const beautify_html = require('js-beautify').html;
+
 
 class WomTools extends LitElement {
 
@@ -119,7 +121,8 @@ class WomTools extends LitElement {
       return;
     }
 
-    const isNodeSelected = this.wom.getSelectedNode() && this.wom.getSelectedNode() !== this.wom.getRootNode();
+    const isNodeSelected = this.wom.getSelectedNode();
+    const isNonRootSelected = this.wom.getSelectedNode() && this.wom.getSelectedNode() !== this.wom.getRootNode();
 
     this.menuItems = [
       {
@@ -154,10 +157,10 @@ class WomTools extends LitElement {
           { text: 'Undo', disabled: this.wom.history.atBeginning(), action: 'undo' },
           { text: 'Redo', disabled: this.wom.history.atEnd(), action: 'redo' },
           { component: 'hr' },
-          { text: 'Cut Node', disabled: !isNodeSelected },
-          { text: 'Copy Node', disabled: !isNodeSelected },
-          { text: 'Paste Node', disabled: !isNodeSelected },
-          { text: 'Delete Node', disabled: !isNodeSelected, action: 'removeNode' },
+          { text: 'Cut Node', disabled: !isNonRootSelected },
+          { text: 'Copy Node', disabled: !isNonRootSelected },
+          { text: 'Paste Node', disabled: !isNonRootSelected },
+          { text: 'Delete Node', disabled: !isNonRootSelected, action: 'removeNode' },
           { component: 'hr' },
           { text: 'Edit Node HTML', disabled: !isNodeSelected, action: this.editNodeHtml },
         ]
@@ -165,7 +168,7 @@ class WomTools extends LitElement {
       { 
         text: 'View',
         children: [
-          { text: 'Scroll to Node', disabled: !isNodeSelected, action: this.onScrollToNode },
+          { text: 'Scroll to Node', disabled: !isNonRootSelected, action: this.onScrollToNode },
         ]
       },
       { 
@@ -228,11 +231,43 @@ class WomTools extends LitElement {
     alert(`Loading Extensions hasn't been implemented yet!`);
   }
 
-  editNodeHtml() {
-    this.editingNodeHtml = true;
-    const selectedNode = this.wom.getSelectedNode().getNode();
+  async editNodeHtml() {
+    const selectedNode = this.wom.getSelectedNode();
+    const isRootNode = selectedNode === this.wom.getRootNode();
     const editorNode = this.shadowRoot.querySelector('juicy-ace-editor');
-    this.nodeHtmlEditorContent = selectedNode.outerHTML;
+    const html = await selectedNode.getHtml(!isRootNode);
+    this.nodeHtmlEditorContent = '\n' + beautify_html(html, {
+      'wrap-attributes': 'force-expand-multiline'
+    }) + '\n';
+    this.editingNodeHtml = true;
+  }
+
+  onCancelEditHtml() {
+    this.editingNodeHtml = false;
+  }
+
+  onConfirmEditHtml() {
+    const selectedNode = this.wom.getSelectedNode();
+    const isRootNode = selectedNode === this.wom.getRootNode();
+    const editorNode = this.shadowRoot.querySelector('juicy-ace-editor');
+    const domNode = selectedNode.getNode();
+
+    if (isRootNode) {
+      domNode.innerHTML = editorNode.editor.getValue();
+    } else {
+      const tempElement = document.createElement('div');
+      tempElement.innerHTML = editorNode.editor.getValue();
+      
+      if (tempElement.children.length !== 1) {
+        alert(`Error setting node HTML: Trying to replace element with multiple elements`);
+      }
+
+      const newElement = tempElement.children[0];
+      domNode.replaceWith(newElement);
+      setTimeout(() => {
+        this.wom.selectNode(newElement.__WOM_NODE__);
+      });
+    }
   }
 
   menuItemSelected(ev) {
@@ -254,25 +289,24 @@ class WomTools extends LitElement {
               theme="ace/theme/monokai"
               mode="ace/mode/html"
               tabsize="4"
-              wrapmode
             ></juicy-ace-editor>
             <div part="editor-buttons">
               <vaadin-button 
                 part="confirm-button" 
                 theme="success primary small" 
                 aria-label="Confirm"
-                @click="${this.onConfirm}"
+                @click="${this.onConfirmEditHtml}"
               >
-                Confirm
+                Set Node HTML
               </vaadin-button>
 
               <vaadin-button 
                 part="cancel-button" 
                 theme="error primary small" 
                 aria-label="Cancel"
-                @click="${this.onCancel}"
+                @click="${this.onCancelEditHtml}"
               >
-                Cancel
+                Close
               </vaadin-button>
             </div>
           </div>

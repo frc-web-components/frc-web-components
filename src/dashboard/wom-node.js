@@ -56,13 +56,12 @@ export default class WomNode {
     return true;
   }
 
-  async getHtml() {
+  async getHtml(outer) {
     return new Promise(resolve => {
       window.webbitRegistry.setCloning(true);
       const clonedNode = this.node.cloneNode(true);
-      clonedNode.style.display = 'none';
       document.body.append(clonedNode);
-      clonedNode.querySelectorAll('[webbit-id]').forEach(node => {
+      [...clonedNode.querySelectorAll('[webbit-id]'), clonedNode].forEach(node => {
         if (!isWebbit(node)) {
           return;
         }
@@ -76,7 +75,7 @@ export default class WomNode {
       window.webbitRegistry.setCloning(false);
       clonedNode.remove();
       setTimeout(() => {
-        resolve(clonedNode.innerHTML);
+        resolve(outer ? clonedNode.outerHTML : clonedNode.innerHTML);
       });
     });
   }
