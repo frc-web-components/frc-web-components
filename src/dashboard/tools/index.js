@@ -94,6 +94,7 @@ class WomTools extends LitElement {
       [part=node-html-editor] [part=editor-buttons] vaadin-button {
         margin-right: 5px;
       }
+      
     `;
   }
 
@@ -126,7 +127,7 @@ class WomTools extends LitElement {
       {
         text: 'Dashboard',
         children: [
-          { text: 'About' },
+          { text: 'About', action: this.openAboutDialog },
           { text: 'Documentation', action: () => window.open('https://frc-web-components.github.io/', '_blank') },
           { text: 'Update' },
           { component: 'hr' },
@@ -217,6 +218,38 @@ class WomTools extends LitElement {
     observer.observe(this.shadowRoot, {
       childList: true
     });
+
+    const aboutDialog = this.shadowRoot.querySelector('[part=about-dialog]');
+    
+    aboutDialog.renderer = function(root, dialog) {
+
+      if (root.firstElementChild) {
+        return;
+      }
+
+      const div = window.document.createElement('div');
+      div.innerHTML = `
+        <style>
+          .about-dialog-content {
+            text-align: center;
+          }
+
+          .about-dialog-content p {
+            font-size: 20px;
+            font-weight: bold;
+          }
+        </style>
+        <div class="about-dialog-content">
+          <p>FWC Dashboard</p>
+          <vaadin-button>Close</vaadin-button>
+        </div>
+      `;
+      const closeButton = div.querySelector('vaadin-button');
+      closeButton.addEventListener('click', function() {
+        aboutDialog.opened = false;
+      });
+      root.appendChild(div);
+    }
   }
 
   updated(changedProps) {
@@ -277,6 +310,11 @@ class WomTools extends LitElement {
     }
   }
 
+  openAboutDialog() {
+    const aboutDialog = this.shadowRoot.querySelector('[part=about-dialog]');
+    aboutDialog.opened = true;
+  }
+
   menuItemSelected(ev) {
     const item = ev.detail.value;
     if (typeof item.action === 'string') {
@@ -323,6 +361,7 @@ class WomTools extends LitElement {
 
     return html`
       <div part="tools">
+        <vaadin-dialog part="about-dialog"></vaadin-dialog>
         <div part="top-menu">
 
           <vaadin-button 
