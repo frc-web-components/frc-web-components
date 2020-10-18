@@ -101,7 +101,6 @@ class WomTools extends LitElement {
     return {
       wom: { type: Object },
       menuItems: { type: Array },
-      editingNodeHtml: { type: Boolean },
       nodeHtmlEditorContent: { type: String }
     };
   }
@@ -111,7 +110,6 @@ class WomTools extends LitElement {
     this.wom = null;
     this.toolsTopElement = null;
     this.setMenuItems();
-    this.editingNodeHtml = false;
     this.nodeHtmlEditorContent = '';
   }
 
@@ -192,6 +190,21 @@ class WomTools extends LitElement {
         this.requestUpdate();
       });
     });
+
+    this.wom.addListener('womEditingNodeHtmlChange', async ev => {
+      if (ev.detail.editing) {
+        const selectedNode = this.wom.getSelectedNode();
+        const isRootNode = selectedNode === this.wom.getRootNode();
+        const editorNode = this.shadowRoot.querySelector('juicy-ace-editor');
+        const html = await selectedNode.getHtml(!isRootNode);
+        this.nodeHtmlEditorContent = '\n' + beautify_html(html, {
+          'wrap-attributes': 'force-expand-multiline'
+        }) + '\n';
+      } else {
+        
+      }
+      this.requestUpdate();
+    });
   }
   
   firstUpdated() {
@@ -232,18 +245,11 @@ class WomTools extends LitElement {
   }
 
   async editNodeHtml() {
-    const selectedNode = this.wom.getSelectedNode();
-    const isRootNode = selectedNode === this.wom.getRootNode();
-    const editorNode = this.shadowRoot.querySelector('juicy-ace-editor');
-    const html = await selectedNode.getHtml(!isRootNode);
-    this.nodeHtmlEditorContent = '\n' + beautify_html(html, {
-      'wrap-attributes': 'force-expand-multiline'
-    }) + '\n';
-    this.editingNodeHtml = true;
+    this.wom.setEditingNodeHtml(true);
   }
 
   onCancelEditHtml() {
-    this.editingNodeHtml = false;
+    this.wom.setEditingNodeHtml(false);
   }
 
   onConfirmEditHtml() {
@@ -266,6 +272,7 @@ class WomTools extends LitElement {
       domNode.replaceWith(newElement);
       setTimeout(() => {
         this.wom.selectNode(newElement.__WOM_NODE__);
+        this.wom.setEditingNodeHtml(true);
       });
     }
   }
@@ -281,7 +288,7 @@ class WomTools extends LitElement {
 
   render() {
 
-    if (this.editingNodeHtml) {
+    if (this.wom.isEditingNodeHtml()) {
       return html`
         <div part="tools">
           <div part="node-html-editor">

@@ -91,6 +91,18 @@ class Wom {
     this.observeMutations();
     this.history = new WomHistory();
     this.selectionEnabled = true;
+    this.editingNodeHtml = false;
+  }
+
+  setEditingNodeHtml(editing) {
+    if (this.getSelectedNode() && this.editingNodeHtml !== editing) {
+      this.editingNodeHtml = editing;
+      this.dispatchEvent('womEditingNodeHtmlChange', { editing });
+    }
+  }
+
+  isEditingNodeHtml() {
+    return this.editingNodeHtml;
   }
 
   async getHtml() {
@@ -142,6 +154,7 @@ class Wom {
   deselectNode() {
     if (this.getSelectedNode()) {
       removeInteraction(this.getSelectedNode());
+      this.setEditingNodeHtml(false);
       this.getSelectedNode().getNode().classList.remove("draggable");
       const deselectedNode = this.selectedNode;
       this.selectedNode = null;
