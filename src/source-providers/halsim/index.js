@@ -1,5 +1,10 @@
 import { SourceProvider, addSourceProviderType } from '@webbitjs/store';
-import { createSocket, sendMsg, addConnectionListener } from './socket';
+import { 
+  connect, 
+  sendMsg, 
+  addConnectionListener, 
+  addMessageListener
+} from './socket';
 
 export default class HalSimProvider extends SourceProvider {
 
@@ -9,7 +14,7 @@ export default class HalSimProvider extends SourceProvider {
 
   static get settingsDefaults() {
     return {
-      addressType: 'local'
+      address: 'localhost'
     };
   }
 
@@ -17,15 +22,19 @@ export default class HalSimProvider extends SourceProvider {
     super(providerName, settings);
     this.parentKeyMap = {};
     this.dataToSend = [];
-    createSocket(
-      settings.addressType,
-      data => {
-        this.socketUpdate(data);
-      },
-      () => {
+
+    addConnectionListener(connected => {
+      if (!connected) {
         this.clearSources();
-      },
-    );
+      }
+    });
+
+    addMessageListener(message => {
+      this.socketUpdate(message);
+    });
+
+    this.setAddress(settings.address);
+
     // Send data every 50ms
     setInterval(() => {
       if (this.dataToSend.length > 0) {
@@ -42,6 +51,14 @@ export default class HalSimProvider extends SourceProvider {
         this.dataToSend = [];
       }
     }, 50);
+  }
+
+  setAddress(address) {
+    if (address === 'gitpod') {
+      connect(`wss://8080${window.location.href.substring(12)}wpilibws`);
+    } else {
+      connect("ws://localhost:8080/wpilibws");
+    }
   }
 
   socketUpdate(msg) {

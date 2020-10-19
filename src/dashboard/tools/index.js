@@ -131,7 +131,7 @@ class WomTools extends LitElement {
           { text: 'Documentation', action: () => window.open('https://frc-web-components.github.io/', '_blank') },
           { text: 'Update' },
           { component: 'hr' },
-          { text: 'Preferences' },
+          { text: 'Preferences', action: this.openPreferencesDialog },
         ]
       },
       {
@@ -250,6 +250,38 @@ class WomTools extends LitElement {
       });
       root.appendChild(div);
     }
+
+    const preferencesDialog = this.shadowRoot.querySelector('[part=preferences-dialog]');
+    
+    preferencesDialog.renderer = function(root, dialog) {
+
+      if (root.firstElementChild) {
+        return;
+      }
+
+      const div = window.document.createElement('div');
+      div.innerHTML = `
+        <style>
+          .preferences-dialog-content {
+            text-align: center;
+          }
+
+          .preferences-dialog-content p {
+            font-size: 20px;
+            font-weight: bold;
+          }
+        </style>
+        <div class="preferences-dialog-content">
+          <p>FWC Dashboard</p>
+          <vaadin-button>Close</vaadin-button>
+        </div>
+      `;
+      const closeButton = div.querySelector('vaadin-button');
+      closeButton.addEventListener('click', function() {
+        preferencesDialog.opened = false;
+      });
+      root.appendChild(div);
+    }
   }
 
   updated(changedProps) {
@@ -315,6 +347,11 @@ class WomTools extends LitElement {
     aboutDialog.opened = true;
   }
 
+  openPreferencesDialog() {
+    const aboutDialog = this.shadowRoot.querySelector('[part=preferences-dialog]');
+    aboutDialog.opened = true;
+  }
+
   menuItemSelected(ev) {
     const item = ev.detail.value;
     if (typeof item.action === 'string') {
@@ -362,6 +399,7 @@ class WomTools extends LitElement {
     return html`
       <div part="tools">
         <vaadin-dialog part="about-dialog"></vaadin-dialog>
+        <vaadin-dialog part="preferences-dialog"></vaadin-dialog>
         <div part="top-menu">
 
           <vaadin-button 

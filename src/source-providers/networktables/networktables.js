@@ -751,7 +751,7 @@ const NetworkTables = new function () {
 		}
 	}
 
-	this.init = function(host) {
+	this.connect = function(host) {
 		ntHost = host || window.location.host;
 		createSocket();
 	};

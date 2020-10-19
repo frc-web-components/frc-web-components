@@ -39,15 +39,12 @@ export default class NetworkTablesProvider extends SourceProvider {
 
   constructor(providerName, settings) {
     super(providerName, settings);
-    this.address = localStorage.robotAddress || settings.address;
+    this.setAddress(settings.address);
     this.updatedEntriesBeforeReady = [];
     this.isNtReady = false;
     this.ntReady = new Promise(resolve => {
       const interval = setInterval(() => {
-        if (
-          'NetworkTables' in window && 
-          ('isWsConnected' in NetworkTables ? NetworkTables.isWsConnected() : true)
-        ) {
+        if (NetworkTables.isWsConnected()) {
           this.isNtReady = true;
           resolve();
           clearInterval(interval);
@@ -59,15 +56,6 @@ export default class NetworkTablesProvider extends SourceProvider {
       this.updatedEntriesBeforeReady.forEach(key => {
         NetworkTables.putValue(key, this.getSource(key));
       });
-
-      if ('connect' in NetworkTables) {
-        // Keep trying to connect if a connection hasn't been found
-        setInterval(() => {
-          if (!NetworkTables.isRobotConnected()) {
-            NetworkTables.connect(this.address);
-          }
-        }, 500);
-      }
   
       NetworkTables.addRobotConnectionListener(connected => {
         if (!connected) {
@@ -81,8 +69,13 @@ export default class NetworkTablesProvider extends SourceProvider {
     });
   }
 
-  onSettingsChange(settings) {
-    this.address = settings.address;
+  setAddress(address) {
+    if (address === 'gitpod') {
+      const addressPart = window.location.href.substring(12, window.location.href.length - 1);
+      NetworkTables.connect(`8888${addressPart}`);
+    } else {
+      NetworkTables.connect(`${address}:8888`);
+    }
   }
 
   userUpdate(key, value) {
@@ -128,11 +121,7 @@ export default class NetworkTablesProvider extends SourceProvider {
   }
 
   isWsConnected() {
-    return (
-      'NetworkTables' in window
-      && 'isWsConnected' in NetworkTables
-      && NetworkTables.isWsConnected()
-    );
+    return NetworkTables.isWsConnected();
   }
 
   async addWsConnectionListener(listener, immediateNotify) {
