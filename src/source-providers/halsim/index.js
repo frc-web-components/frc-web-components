@@ -57,7 +57,7 @@ export default class HalSimProvider extends SourceProvider {
     if (address === 'gitpod') {
       connect(`wss://8080${window.location.href.substring(12)}wpilibws`);
     } else {
-      connect("ws://localhost:8080/wpilibws");
+      connect(`ws://${address}:8080/wpilibws`);
     }
   }
 

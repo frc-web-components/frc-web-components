@@ -8,7 +8,8 @@ let reconnectTimeoutId = null;
 
 export function connect(address) {
 
-  if (socketOpen) {
+  if (socket) {
+    console.log("SOCKET:", socket.url);
     if (reconnectTimeoutId !== null) {
       clearTimeout(reconnectTimeoutId);
     }
@@ -35,15 +36,16 @@ export function connect(address) {
     socket.onclose = function () {
       if (socketOpen) {
         console.info("Socket closed");
-        socket = null;
         connectionListeners.forEach(listener => {
           listener(false);
         });
       }
       // respawn the websocket
-      reconnectTimeoutId = setTimeout(() => {
-        connect(address);
-      }, 300);
+      if (socket === this) {
+        reconnectTimeoutId = setTimeout(() => {
+          connect(address);
+        }, 300);
+      }
     };
   }
 }
