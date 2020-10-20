@@ -92,6 +92,19 @@ class Wom {
     this.history = new WomHistory();
     this.selectionEnabled = true;
     this.editingNodeHtml = false;
+    this.clipboardNode = null;
+  }
+
+  async setClipboard(node) {
+    this.clipboardNode = {
+      html: await node.getHtml(true),
+      componentType: node.getName(),
+    };
+    this.dispatchEvent('womClipboardSet');
+  }
+
+  getClipboard() {
+    return this.clipboardNode;
   }
 
   setEditingNodeHtml(editing) {

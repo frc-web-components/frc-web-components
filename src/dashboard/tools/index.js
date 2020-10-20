@@ -124,6 +124,13 @@ class WomTools extends LitElement {
 
     const isNodeSelected = this.wom.getSelectedNode();
     const isNonRootSelected = this.wom.getSelectedNode() && this.wom.getSelectedNode() !== this.wom.getRootNode();
+    const isClipboardSet = this.wom.getClipboard() !== null;
+    
+    const canSelectedContainClipboardNode = (
+      isClipboardSet 
+      && isNodeSelected 
+      && this.wom.getSelectedNode().canContainComponent(this.wom.getClipboard().componentType)
+    );
 
     this.menuItems = [
       {
@@ -158,9 +165,9 @@ class WomTools extends LitElement {
           { component: this.getMenuItemWithShortcut('Undo', isMac ? '&#8984;Z' : 'Ctrl+Z'), disabled: this.wom.history.atBeginning(), action: 'undo' },
           { component: this.getMenuItemWithShortcut('Redo', isMac ? '&#8679;&#8984;Z' : 'Ctrl+Y'), disabled: this.wom.history.atEnd(), action: 'redo' },
           { component: 'hr' },
-          { component: this.getMenuItemWithShortcut('Cut Node', isMac ? '&#8984;X' : 'Ctrl+X'), disabled: !isNonRootSelected },
-          { component: this.getMenuItemWithShortcut('Copy Node', isMac ? '&#8984;C' : 'Ctrl+C'), disabled: !isNonRootSelected },
-          { component: this.getMenuItemWithShortcut('Paste Node', isMac ? '&#8984;V' : 'Ctrl+V'), disabled: !isNonRootSelected },
+          { component: this.getMenuItemWithShortcut('Cut Node', isMac ? '&#8984;X' : 'Ctrl+X'), disabled: !isNonRootSelected, action: 'cutNode' },
+          { component: this.getMenuItemWithShortcut('Copy Node', isMac ? '&#8984;C' : 'Ctrl+C'), disabled: !isNonRootSelected, action: 'copyNode' },
+          { component: this.getMenuItemWithShortcut('Paste Node', isMac ? '&#8984;V' : 'Ctrl+V'), disabled: !isNodeSelected || !isClipboardSet || !canSelectedContainClipboardNode, action: 'pasteNode' },
           { text: 'Delete Node', disabled: !isNonRootSelected, action: 'removeNode' },
           { component: 'hr' },
           { text: 'Edit Node HTML', disabled: !isNodeSelected, action: this.editNodeHtml },
@@ -203,7 +210,7 @@ class WomTools extends LitElement {
   addWomListeners() {
     [
       'womNodeSelect', 'womNodeDeselect', 'womActionExecute',
-      'womNodeAdd', 'womNodeRemove',
+      'womNodeAdd', 'womNodeRemove', 'womClipboardSet',
       'womChange', 'womNodePreview', 'womNodePreviewRemove', 'selectionToolToggle'
     ].forEach(eventName => {
       this.wom.addListener(eventName, () => {

@@ -8,11 +8,13 @@ import SaveLayout from './actions/save-layout';
 import NewLayout from './actions/new-layout';
 import LoadLayout from './actions/load-layout';
 import Undo from './actions/undo';
-import Redo from './actions/Redo';
+import Redo from './actions/redo';
+import CopyNode from './actions/copy-node';
+import CutNode from './actions/cut-node';
+import PasteNode from './actions/paste-node';
 import LoadStoredLayout from './actions/load-stored-layout';
 import './builder/index';
 import './tools';
-import AbsoluteLayout from '../components/layout/absolute-layout';
 
 class WebbitDashboard extends LitElement {
 
@@ -71,6 +73,9 @@ class WebbitDashboard extends LitElement {
     this.wom.addAction('undo', new Undo());
     this.wom.addAction('redo', new Redo());
     this.wom.addAction('loadStoredLayout', new LoadStoredLayout());
+    this.wom.addAction('copyNode', new CopyNode());
+    this.wom.addAction('cutNode', new CutNode());
+    this.wom.addAction('pasteNode', new PasteNode());
   }
 
   firstUpdated() {
