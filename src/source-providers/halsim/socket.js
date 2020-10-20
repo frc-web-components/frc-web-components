@@ -1,19 +1,23 @@
 
 
 var socketOpen = false;
-var socket = null;
+let socket = null;
 const connectionListeners = [];
 const messageListeners = [];
 let reconnectTimeoutId = null;
 
 export function connect(address) {
 
-  if (socket) {
-    console.log("SOCKET:", socket.url);
+  if (socket && socket.url !== address) {
     if (reconnectTimeoutId !== null) {
       clearTimeout(reconnectTimeoutId);
     }
+    socket.onclose = () => {};
     socket.close();
+    console.info("Socket closed");
+    connectionListeners.forEach(listener => {
+      listener(false);
+    });
   }
 
   socket = new WebSocket(address);
@@ -41,11 +45,9 @@ export function connect(address) {
         });
       }
       // respawn the websocket
-      if (socket === this) {
-        reconnectTimeoutId = setTimeout(() => {
-          connect(address);
-        }, 300);
-      }
+      reconnectTimeoutId = setTimeout(() => {
+        connect(address);
+      }, 300);
     };
   }
 }

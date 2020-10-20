@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import { getSourceProvider } from '@webbitjs/store';
 import './tools-bottom';
 import './wom-viewer';
 const beautify_html = require('js-beautify').html;
@@ -209,6 +210,8 @@ class WomTools extends LitElement {
   }
   
   firstUpdated() {
+    const halsimProvider = getSourceProvider('HALSim');
+
     this.toolsTopElement = this.shadowRoot.querySelector('[part="tools-top"]');
 
     const observer = new MutationObserver(() => {
@@ -255,32 +258,61 @@ class WomTools extends LitElement {
     
     preferencesDialog.renderer = function(root, dialog) {
 
-      if (root.firstElementChild) {
-        return;
+      if (!root.firstElementChild) {
+
+
+        const div = window.document.createElement('div');
+        div.innerHTML = `
+          <style>
+            .preferences-dialog-content {
+              width: 250px;
+            }
+
+            .preferences-dialog-content p {
+              font-size: 20px;
+              font-weight: bold;
+              margin: 0 0 5px;
+            }
+
+            .preferences-dialog-content vaadin-text-field {
+              width: 100%;
+            }
+
+            .preferences-dialog-buttons {
+              display: flex;
+              justify-content: flex-end;
+              margin-top: 10px;
+            }
+
+            .preferences-dialog-buttons vaadin-button {
+              margin-left: 5px;
+            }
+          </style>
+          <div class="preferences-dialog-content">
+            <p>Connection Settings</p>
+            <vaadin-text-field label="Server" theme="small"></vaadin-text-field>
+            <div class="preferences-dialog-buttons">
+              <vaadin-button part="confirm-button" theme="success primary small">Confirm</vaadin-button>
+              <vaadin-button part="close-button" theme="small">Close</vaadin-button>
+            </div>
+          </div>
+        `;
+        const closeButton = div.querySelector('[part=close-button]');
+        closeButton.addEventListener('click', function() {
+          preferencesDialog.opened = false;
+        });
+
+        const serverInput = div.querySelector('vaadin-text-field');
+        const confirmButton = div.querySelector('[part=confirm-button]');
+        confirmButton.addEventListener('click', function() {
+          localStorage.robotAddress = serverInput.value;
+          halsimProvider.setAddress(localStorage.robotAddress);
+        });
+        root.appendChild(div);
       }
 
-      const div = window.document.createElement('div');
-      div.innerHTML = `
-        <style>
-          .preferences-dialog-content {
-            text-align: center;
-          }
-
-          .preferences-dialog-content p {
-            font-size: 20px;
-            font-weight: bold;
-          }
-        </style>
-        <div class="preferences-dialog-content">
-          <p>FWC Dashboard</p>
-          <vaadin-button>Close</vaadin-button>
-        </div>
-      `;
-      const closeButton = div.querySelector('vaadin-button');
-      closeButton.addEventListener('click', function() {
-        preferencesDialog.opened = false;
-      });
-      root.appendChild(div);
+      const serverInput = root.querySelector('.preferences-dialog-content vaadin-text-field');
+      serverInput.value = localStorage.robotAddress;
     }
   }
 

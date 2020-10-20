@@ -18,11 +18,15 @@ class FrcDashboard extends LitElement {
   firstUpdated() {
     super.firstUpdated();
 
+    if (!localStorage.robotAddress) {
+      localStorage.robotAddress = this.address;
+    }
+
     addSourceProvider('HALSim', 'HALSim', {
-      address: this.address
+      address: localStorage.robotAddress
     });
     addSourceProvider('NetworkTables', 'NetworkTables', {
-      address: this.address
+      address: localStorage.robotAddress
     });
     addSourceProvider('Gamepad', 'Gamepad');
     setDefaultSourceProvider('NetworkTables');
