@@ -167,7 +167,7 @@ class WomTools extends LitElement {
           { component: 'hr' },
           { component: this.getMenuItemWithShortcut('Cut Node', isMac ? '&#8984;X' : 'Ctrl+X'), disabled: !isNonRootSelected, action: 'cutNode' },
           { component: this.getMenuItemWithShortcut('Copy Node', isMac ? '&#8984;C' : 'Ctrl+C'), disabled: !isNonRootSelected, action: 'copyNode' },
-          { component: this.getMenuItemWithShortcut('Paste Node', isMac ? '&#8984;V' : 'Ctrl+V'), disabled: !isNodeSelected || !isClipboardSet || !canSelectedContainClipboardNode, action: 'pasteNode' },
+          { component: this.getMenuItemWithShortcut('Paste Node', isMac ? '&#8984;V' : 'Ctrl+V'), disabled: !canSelectedContainClipboardNode, action: 'pasteNode' },
           { text: 'Delete Node', disabled: !isNonRootSelected, action: 'removeNode' },
           { component: 'hr' },
           { text: 'Edit Node HTML', disabled: !isNodeSelected, action: this.editNodeHtml },
@@ -270,6 +270,37 @@ class WomTools extends LitElement {
     hotkeys('command+s,ctrl+s', ev => {
       ev.preventDefault();
       this.wom.executeAction('saveLayout');
+    });
+
+    hotkeys('command+c,ctrl+c', ev => {
+      ev.preventDefault();
+      const isNonRootSelected = this.wom.getSelectedNode() && this.wom.getSelectedNode() !== this.wom.getRootNode();
+      if (isNonRootSelected) {
+        this.wom.executeAction('copyNode');
+      }
+    });
+
+    hotkeys('command+x,ctrl+x', ev => {
+      ev.preventDefault();
+      const isNonRootSelected = this.wom.getSelectedNode() && this.wom.getSelectedNode() !== this.wom.getRootNode();
+      if (isNonRootSelected) {
+        this.wom.executeAction('cutNode');
+      }
+    });
+
+    hotkeys('command+v,ctrl+v', ev => {
+      ev.preventDefault();
+      const isNodeSelected = this.wom.getSelectedNode();
+      const isClipboardSet = this.wom.getClipboard() !== null;
+      
+      const canSelectedContainClipboardNode = (
+        isClipboardSet 
+        && isNodeSelected 
+        && this.wom.getSelectedNode().canContainComponent(this.wom.getClipboard().componentType)
+      );
+      if (canSelectedContainClipboardNode) {
+        this.wom.executeAction('pasteNode');
+      }
     });
   }
   
