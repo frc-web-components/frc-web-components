@@ -1,9 +1,10 @@
 import { LitElement, html, css } from 'lit-element';
 import { getSourceProvider } from '@webbitjs/store';
+import hotkeys from 'hotkeys-js';
 import './tools-bottom';
 import './wom-viewer';
 const beautify_html = require('js-beautify').html;
-
+const isMac = navigator.userAgent.indexOf('Mac OS X') != -1;
 
 class WomTools extends LitElement {
 
@@ -130,7 +131,7 @@ class WomTools extends LitElement {
         children: [
           { text: 'About', action: this.openAboutDialog },
           { text: 'Documentation', action: () => window.open('https://frc-web-components.github.io/', '_blank') },
-          { text: 'Update' },
+          { text: 'Update', disabled: true },
           { component: 'hr' },
           { text: 'Preferences', action: this.openPreferencesDialog },
         ]
@@ -138,28 +139,28 @@ class WomTools extends LitElement {
       {
         text: 'File',
         children: [
-          { text: 'New Layout', action: 'newLayout' },
-          { text: 'New Window' },
+          { component: this.getMenuItemWithShortcut('New Layout', isMac ? '&#8984;N' : 'Ctrl+N'), action: 'newLayout' },
+          { component: this.getMenuItemWithShortcut('New Window', isMac ? '&#8679;&#8984;N' : 'Ctrl+Shift+N'), disabled: true },
           { component: 'hr' },
-          { text: 'Open Layout', action: 'loadLayout' },
-          { text: 'Open Recent Layout' },
-          { text: 'Open Robot Layout' },
+          { component: this.getMenuItemWithShortcut('Open Layout', isMac ? '&#8984;O' : 'Ctrl+O'), action: 'loadLayout' },
+          { text: 'Open Recent Layout', disabled: true },
+          { text: 'Open Robot Layout', disabled: true },
           { component: 'hr' },
-          { text: 'Save Layout', action: 'saveLayout' },
-          { text: 'Save Robot Layout' },
+          { component: this.getMenuItemWithShortcut('Save Layout', isMac ? '&#8984;S' : 'Ctrl+S'), action: 'saveLayout' },
+          { text: 'Save Robot Layout', disabled: true },
           { component: 'hr' },
-          { text: 'Load Extension', action: this.onLoadExtension },
+          { text: 'Load Extension', action: this.onLoadExtension, disabled: true },
         ]
       },
       { 
         text: 'Edit',
         children: [
-          { text: 'Undo', disabled: this.wom.history.atBeginning(), action: 'undo' },
-          { text: 'Redo', disabled: this.wom.history.atEnd(), action: 'redo' },
+          { component: this.getMenuItemWithShortcut('Undo', isMac ? '&#8984;Z' : 'Ctrl+Z'), disabled: this.wom.history.atBeginning(), action: 'undo' },
+          { component: this.getMenuItemWithShortcut('Redo', isMac ? '&#8679;&#8984;Z' : 'Ctrl+Y'), disabled: this.wom.history.atEnd(), action: 'redo' },
           { component: 'hr' },
-          { text: 'Cut Node', disabled: !isNonRootSelected },
-          { text: 'Copy Node', disabled: !isNonRootSelected },
-          { text: 'Paste Node', disabled: !isNonRootSelected },
+          { component: this.getMenuItemWithShortcut('Cut Node', isMac ? '&#8984;X' : 'Ctrl+X'), disabled: !isNonRootSelected },
+          { component: this.getMenuItemWithShortcut('Copy Node', isMac ? '&#8984;C' : 'Ctrl+C'), disabled: !isNonRootSelected },
+          { component: this.getMenuItemWithShortcut('Paste Node', isMac ? '&#8984;V' : 'Ctrl+V'), disabled: !isNonRootSelected },
           { text: 'Delete Node', disabled: !isNonRootSelected, action: 'removeNode' },
           { component: 'hr' },
           { text: 'Edit Node HTML', disabled: !isNodeSelected, action: this.editNodeHtml },
@@ -174,11 +175,29 @@ class WomTools extends LitElement {
       { 
         text: 'Recording',
         children: [
-          { text: 'Start Recording' },
-          { text: 'Load Playback' },
+          { text: 'Start Recording', disabled: true },
+          { text: 'Load Playback', disabled: true },
         ]
       },
     ];
+  }
+  
+  getMenuItemWithShortcut(text, shortcut) {
+    const item = window.document.createElement('vaadin-context-menu-item');
+    item.innerHTML = `
+      <div style="
+        display: flex;
+        justify-content: space-between;
+      ">
+        <span>${text}</span>
+        <span style="
+          margin-left: px;
+          margin-left: 15px;
+          font-size: 15px;
+        ">${shortcut}</span>
+      </div>
+    `;
+    return item;
   }
 
   addWomListeners() {
@@ -197,7 +216,6 @@ class WomTools extends LitElement {
       if (ev.detail.editing) {
         const selectedNode = this.wom.getSelectedNode();
         const isRootNode = selectedNode === this.wom.getRootNode();
-        const editorNode = this.shadowRoot.querySelector('juicy-ace-editor');
         const html = await selectedNode.getHtml(!isRootNode);
         this.nodeHtmlEditorContent = '\n' + beautify_html(html, {
           'wrap-attributes': 'force-expand-multiline'
@@ -208,8 +226,48 @@ class WomTools extends LitElement {
       this.requestUpdate();
     });
   }
+
+  addShortcuts() {
+    hotkeys('command+z,ctrl+z', ev => {
+      ev.preventDefault();
+      if (!this.wom.history.atBeginning()) {
+        this.wom.executeAction('undo');
+      }
+    });
+
+    hotkeys('shift+command+z,ctrl+y', ev => {
+      ev.preventDefault();
+      if (!this.wom.history.atEnd()) {
+        this.wom.executeAction('redo');
+      }
+    });
+
+    hotkeys('backspace,del,delete', ev => {
+      ev.preventDefault();
+      const isNonRootSelected = this.wom.getSelectedNode() && this.wom.getSelectedNode() !== this.wom.getRootNode();
+      if (isNonRootSelected) {
+        this.wom.executeAction('removeNode');
+      }
+    });
+
+    hotkeys('command+n,ctrl+n', ev => {
+      ev.preventDefault();
+      this.wom.executeAction('newLayout');
+    });
+
+    hotkeys('command+o,ctrl+o', ev => {
+      ev.preventDefault();
+      this.wom.executeAction('loadLayout');
+    });
+
+    hotkeys('command+s,ctrl+s', ev => {
+      ev.preventDefault();
+      this.wom.executeAction('saveLayout');
+    });
+  }
   
   firstUpdated() {
+    this.addShortcuts();
     const halsimProvider = getSourceProvider('HALSim');
 
     this.toolsTopElement = this.shadowRoot.querySelector('[part="tools-top"]');
