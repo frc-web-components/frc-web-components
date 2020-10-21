@@ -132,22 +132,31 @@ class WomTools extends LitElement {
       && this.wom.getSelectedNode().canContainComponent(this.wom.getClipboard().componentType)
     );
 
+    const dashboardMenuItems = [
+      ...[
+        { text: 'About', action: this.openAboutDialog },
+        { text: 'Documentation', action: () => window.open('https://frc-web-components.github.io/', '_blank') },
+      ],
+      ...(
+        window.pwaHelper.deferredPrompt
+          ? [{ text: 'Install', action: () => window.pwaHelper.deferredPrompt.prompt() }]
+          : []
+      ),
+      ...[
+        { component: 'hr' },
+        { text: 'Preferences', action: this.openPreferencesDialog },
+      ]
+    ];
+
     this.menuItems = [
       {
         text: 'Dashboard',
-        children: [
-          { text: 'About', action: this.openAboutDialog },
-          { text: 'Documentation', action: () => window.open('https://frc-web-components.github.io/', '_blank') },
-          { text: 'Update', disabled: true },
-          { component: 'hr' },
-          { text: 'Preferences', action: this.openPreferencesDialog },
-        ]
+        children: dashboardMenuItems
       },
       {
         text: 'File',
         children: [
           { component: this.getMenuItemWithShortcut('New Layout', isMac ? '&#8984;N' : 'Ctrl+N'), action: 'newLayout' },
-          { component: this.getMenuItemWithShortcut('New Window', isMac ? '&#8679;&#8984;N' : 'Ctrl+Shift+N'), disabled: true },
           { component: 'hr' },
           { component: this.getMenuItemWithShortcut('Open Layout', isMac ? '&#8984;O' : 'Ctrl+O'), action: 'loadLayout' },
           { text: 'Open Recent Layout', disabled: true },
@@ -410,6 +419,11 @@ class WomTools extends LitElement {
       const serverInput = root.querySelector('.preferences-dialog-content vaadin-text-field');
       serverInput.value = localStorage.robotAddress;
     }
+
+    window.addEventListener('beforeinstallprompt', () => {
+      this.setMenuItems();
+      this.requestUpdate();
+    });
   }
 
   updated(changedProps) {
