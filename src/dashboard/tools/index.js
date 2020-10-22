@@ -244,21 +244,39 @@ class WomTools extends LitElement {
   }
 
   addShortcuts() {
-    hotkeys('command+z,ctrl+z', ev => {
+
+    hotkeys.setScope('dashboard');
+
+    hotkeys('command+z,ctrl+z', 'dashboard', ev => {
+
+      if (document.activeElement !== document.body) {
+        return;
+      }
+
       ev.preventDefault();
       if (!this.wom.history.atBeginning()) {
         this.wom.executeAction('undo');
       }
     });
 
-    hotkeys('shift+command+z,ctrl+y', ev => {
+    hotkeys('shift+command+z,ctrl+y', 'dashboard', ev => {
+
+      if (document.activeElement !== document.body) {
+        return;
+      }
+
       ev.preventDefault();
       if (!this.wom.history.atEnd()) {
         this.wom.executeAction('redo');
       }
     });
 
-    hotkeys('backspace,del,delete', ev => {
+    hotkeys('backspace,del,delete', 'dashboard', ev => {
+
+      if (document.activeElement !== document.body) {
+        return;
+      }
+
       ev.preventDefault();
       const isNonRootSelected = this.wom.getSelectedNode() && this.wom.getSelectedNode() !== this.wom.getRootNode();
       if (isNonRootSelected) {
@@ -266,22 +284,34 @@ class WomTools extends LitElement {
       }
     });
 
-    hotkeys('command+n,ctrl+n', ev => {
+    hotkeys('command+n,ctrl+n', 'dashboard', ev => {
+      if (document.activeElement !== document.body) {
+        return;
+      }
       ev.preventDefault();
       this.wom.executeAction('newLayout');
     });
 
-    hotkeys('command+o,ctrl+o', ev => {
+    hotkeys('command+o,ctrl+o', 'dashboard', ev => {
+      if (document.activeElement !== document.body) {
+        return;
+      }
       ev.preventDefault();
       this.wom.executeAction('loadLayout');
     });
 
-    hotkeys('command+s,ctrl+s', ev => {
+    hotkeys('command+s,ctrl+s', 'dashboard', ev => {
+      if (document.activeElement !== document.body) {
+        return;
+      }
       ev.preventDefault();
       this.wom.executeAction('saveLayout');
     });
 
-    hotkeys('command+c,ctrl+c', ev => {
+    hotkeys('command+c,ctrl+c', 'dashboard', ev => {
+      if (document.activeElement !== document.body) {
+        return;
+      }
       ev.preventDefault();
       const isNonRootSelected = this.wom.getSelectedNode() && this.wom.getSelectedNode() !== this.wom.getRootNode();
       if (isNonRootSelected) {
@@ -289,7 +319,10 @@ class WomTools extends LitElement {
       }
     });
 
-    hotkeys('command+x,ctrl+x', ev => {
+    hotkeys('command+x,ctrl+x', 'dashboard', ev => {
+      if (document.activeElement !== document.body) {
+        return;
+      }
       ev.preventDefault();
       const isNonRootSelected = this.wom.getSelectedNode() && this.wom.getSelectedNode() !== this.wom.getRootNode();
       if (isNonRootSelected) {
@@ -297,7 +330,10 @@ class WomTools extends LitElement {
       }
     });
 
-    hotkeys('command+v,ctrl+v', ev => {
+    hotkeys('command+v,ctrl+v', 'dashboard', ev => {
+      if (document.activeElement !== document.body) {
+        return;
+      }
       ev.preventDefault();
       const isNodeSelected = this.wom.getSelectedNode();
       const isClipboardSet = this.wom.getClipboard() !== null;
@@ -311,6 +347,11 @@ class WomTools extends LitElement {
         this.wom.executeAction('pasteNode');
       }
     });
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    hotkeys.deleteScope('dashboard');
   }
   
   firstUpdated() {
