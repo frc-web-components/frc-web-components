@@ -459,7 +459,7 @@ class WomTools extends LitElement {
     this.wom.setEditingNodeHtml(false);
   }
 
-  onConfirmEditHtml() {
+  async onConfirmEditHtml() {
     const selectedNode = this.wom.getSelectedNode();
     const isRootNode = selectedNode === this.wom.getRootNode();
     const editorNode = this.shadowRoot.querySelector('juicy-ace-editor');
@@ -467,6 +467,7 @@ class WomTools extends LitElement {
 
     if (isRootNode) {
       domNode.innerHTML = editorNode.editor.getValue();
+      this.wom.history.push(await this.wom.getHtml());
     } else {
       const tempElement = document.createElement('div');
       tempElement.innerHTML = editorNode.editor.getValue();
@@ -477,9 +478,10 @@ class WomTools extends LitElement {
 
       const newElement = tempElement.children[0];
       domNode.replaceWith(newElement);
-      setTimeout(() => {
+      setTimeout(async () => {
         this.wom.selectNode(newElement.__WOM_NODE__);
         this.wom.setEditingNodeHtml(true);
+        this.wom.history.push(await this.wom.getHtml());
       });
     }
   }
