@@ -131,7 +131,9 @@ class WomViewer extends LitElement {
         this.selectedNode === this.node && 
         !isElementInViewport(this.headerNode, this.container)
       ) {
-        this.headerNode.scrollIntoView();
+        if ('scrollIntoViewIfNeeded' in this.headerNode) {
+          this.headerNode.scrollIntoViewIfNeeded();
+        }
       }
     }
   }
