@@ -30,18 +30,19 @@ class WebbitDashboard extends LitElement {
       :host {
         display: block;
         position: relative;
-      }
-      
-      [part=dashboard], [part=container] {
-        padding: 5px;
+        overflow: hidden;
       }
 
       :host(:not([edit-mode])) {
-        min-height: 100vh;
+        height: 100vh;
       }
 
       :host [part=editor] {
         height: 100vh;
+      }
+
+      [part=dashboard] {
+        padding-right: 5px;
       }
 
       [part=container] {
