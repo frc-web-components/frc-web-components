@@ -138,7 +138,7 @@ class WomTools extends LitElement {
         { text: 'Documentation', action: () => window.open('https://frc-web-components.github.io/', '_blank') },
       ],
       ...(
-        window.pwaHelper.deferredPrompt
+        'pwaHelper' in window && window.pwaHelper.deferredPrompt
           ? [{ text: 'Install', action: () => window.pwaHelper.deferredPrompt.prompt() }]
           : []
       ),
