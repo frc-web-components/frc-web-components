@@ -1,6 +1,6 @@
 {
   "name": "@frc-web-components/frc-web-components",
-  "version": "2.1.18",
+  "version": "2.2.0",
   "description": "",
   "main": "src/index.js",
   "scripts": {
