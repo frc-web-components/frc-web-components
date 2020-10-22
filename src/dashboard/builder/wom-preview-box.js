@@ -75,12 +75,18 @@ class WomPreviewBox extends LitElement {
         const boundedWidth = boundedRight - boundedLeft;
         const boundedHeight = boundedBottom - boundedTop;
 
-        this.previewElement.style.display = 'block';
+        this.previewElement.style.display = (x < boundingRect.right) ? 'block' : 'none';
         this.previewElement.style.left = boundedLeft + 'px';
         this.previewElement.style.top = boundedTop + 'px';
         this.previewElement.style.width = boundedWidth + 'px';
         this.previewElement.style.height = boundedHeight + 'px';
         this.previewElement.style.boxSizing = 'border-box';
+
+        this.previewElement.style.borderRight = right > boundingRect.right ? 'none' : this.border;
+        this.previewElement.style.borderLeft = x < boundingRect.x ? 'none' : this.border;
+        this.previewElement.style.borderTop = y < boundingRect.y ? 'none' : this.border;
+        this.previewElement.style.borderBottom = bottom > boundingRect.bottom ? 'none' : this.border;
+
       } else {
         this.previewElement.style.display = 'none';
       }
