@@ -13,7 +13,7 @@ class NumberPropertyView extends PropertyView {
       <vaadin-number-field
         part="input"
         value="${this.inputValue || ''}"
-        @change="${this.onInputChange}"
+        @input="${this.onInputChange}"
         theme="small"
         has-controls
       ></vaadin-number-field>
