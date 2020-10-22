@@ -1,5 +1,4 @@
 import { Webbit, html, css } from '@webbitjs/webbit';
-import '@vaadin/vaadin-button';
 
 class Relay extends Webbit {
 

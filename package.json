@@ -22,7 +22,7 @@
   "dependencies": {
     "@google/model-viewer": "^0.8.1",
     "@kor-ui/grid": "^1.0.9",
-    "@vaadin/vaadin": "^15.0.5",
+    "@vaadin/vaadin": "^17.0.7",
     "@webbitjs/store": "^1.1.8",
     "@webbitjs/webbit": "^1.4.10",
     "chart.js": "^2.8.0",

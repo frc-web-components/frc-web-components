@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import { getSourceProviderNames, getSources } from '@webbitjs/store';
 import './sources-view';
 
 class SourcesTool extends LitElement {
@@ -15,11 +16,18 @@ class SourcesTool extends LitElement {
         display: flex;
       }
 
-      [part=source-fields] vaadin-text-field {
+      [part=source-fields] vaadin-combo-box {
         flex: 1;
         margin-right: 7px;
         min-width: 120px;
+      }
+
+      [part=source-fields] vaadin-combo-box::part(text-field) {
         padding-top: 0;
+      }
+
+      [part=source-key-dropdown] {
+        --vaadin-combo-box-overlay-width: 400px;
       }
 
       [part=buttons] {
@@ -126,24 +134,39 @@ class SourcesTool extends LitElement {
     this.sourceProviderInput = sourceProvider;
   }
 
+  getSourceKeyItems() {
+    const sources = getSources(this.sourceProviderInput || '') || {};
+    const keys = Object.getOwnPropertyNames(sources);
+    const blankKeyIndex = keys.indexOf('');
+    if (blankKeyIndex > -1) {
+      keys.splice(blankKeyIndex, 1);
+    }
+    return keys;
+  }
+
   renderWebbit() {
     return html`
       <p>Source for <span>${this.selectedNode.getWebbitId()}</span></p>
       <div part="source-fields">
-        <vaadin-text-field
+        <vaadin-combo-box
+          part="source-key-dropdown"
           label="Source Key"
           clear-button-visible 
           value="${this.sourceKeyInput || ''}"
+          .items="${this.getSourceKeyItems()}"
           @change="${this.onSourceKeyInputChange}"
           theme="small"
-        ></vaadin-text-field>
-        <vaadin-text-field
+          allow-custom-value
+        >
+        </vaadin-combo-box>
+        <vaadin-combo-box 
           label="Source Provider"
-          clear-button-visible 
+          clear-button-visible
           value="${this.sourceProviderInput || ''}"
+          .items="${getSourceProviderNames()}"
           @change="${this.onSourceProviderInputChange}"
           theme="small"
-        ></vaadin-text-field>
+        ></vaadin-combo-box>
       </div>
 
       <div part="buttons">
