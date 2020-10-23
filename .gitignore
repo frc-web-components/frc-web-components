@@ -108,3 +108,4 @@ build/*
 .wpilib/
 !build/icon.png
 !build/manifest.webmanifest
+!build/index.html

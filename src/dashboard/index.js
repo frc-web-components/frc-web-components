@@ -43,6 +43,7 @@ class WebbitDashboard extends LitElement {
 
       [part=dashboard] {
         padding-right: 5px;
+        overflow: hidden !important;
       }
 
       [part=container] {

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="manifest" href="/manifest.webmanifest">
+  </head>
+  <body>
+
+    <script>
+      window.pwaHelper = {
+        deferredPrompt: null,
+        isPwa: false,
+      };
+
+      window.addEventListener('beforeinstallprompt', ev => {
+          // Stash the event so it can be triggered later.
+          window.pwaHelper.deferredPrompt = ev;
+      });
+
+      window.addEventListener('DOMContentLoaded', () => {
+        window.pwaHelper.isPwa = window.matchMedia('(display-mode: standalone)').matches;
+      });
+    </script>
+
+    <frc-dashboard-builder address-type="local" edit-mode>
+        <frc-absolute-layout dashboard-root>
+          <vaadin-menu-bar></vaadin-menu-bar>
+        </frc-absolute-layout>
+    </frc-dashboard-builder>
+    <script src="./frc-web-components.js"></script>
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').then(registration => {
+            console.log('SW registered: ', registration);
+          }).catch(registrationError => {
+            console.log('SW registration failed: ', registrationError);
+          });
+        });
+      }
+    </script>
+  </body>
+</html>
