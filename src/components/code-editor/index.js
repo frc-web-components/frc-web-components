@@ -80,15 +80,14 @@ class CodeEditor extends Webbit {
   updated(changedProps) {
     if (changedProps.has('content')) {
       const editorElement = this.shadowRoot.querySelector('juicy-ace-editor');
-      const currentContent = editorElement.editor.getValue();
+      const currentContent = editorElement.value;
       if (currentContent !== this.content) {
-        editorElement.editor.setValue(this.content);
+        editorElement.value = this.content;
       }
     }
   }
 
   onChange(ev) {
-
     if (this.onEditTimeoutId) {
       clearTimeout(this.onEditTimeoutId);
       this.onEditTimeoutId = null;
@@ -96,7 +95,7 @@ class CodeEditor extends Webbit {
 
     this.onEditTimeoutId = setTimeout(() => {
       const editorElement = this.shadowRoot.querySelector('juicy-ace-editor');
-      this.content = editorElement.editor.getValue();
+      this.content = editorElement.value;
     }, 500);
   }
 

@@ -35,6 +35,7 @@ class PropertiesView extends LitElement {
     super();
     this.wom = null;
     this.selectedNode = null;
+    this.inputElements = [];
   }
 
   updated(changedProperties) {

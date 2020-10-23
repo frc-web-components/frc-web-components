@@ -13,6 +13,7 @@ class StringDropdownPropertyView extends PropertyView {
         @change="${this.onInputChange}"
         theme="small"
         ?clear-button-visible="${this.clearButtonVisible}"
+        allow-custom-value
       >
       </vaadin-combo-box>
     `;
