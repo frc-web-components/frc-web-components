@@ -17,7 +17,7 @@ export default class PropertyView extends LitElement {
         text-transform: capitalize;
       }
 
-      vaadin-text-field, vaadin-number-field, multiselect-combo-box {
+      vaadin-text-field, vaadin-number-field, multiselect-combo-box, vaadin-text-area, vaadin-combo-box {
         width: 100%;
       }
     `;

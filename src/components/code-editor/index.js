@@ -32,9 +32,25 @@ class CodeEditor extends Webbit {
 
   static get properties() {
     return {
-      content: { type: String, primary: true },
-      mode: { type: String },
-      theme: { type: String },
+      content: { 
+        type: String, 
+        inputType: 'Textarea',
+        primary: true 
+      },
+      mode: { 
+        type: String,
+        inputType: 'StringDropdown',
+        getOptions() {
+          return ['javascript', 'json', 'html', 'xml', 'css'];
+        }
+      },
+      theme: { 
+        type: String,
+        inputType: 'StringDropdown',
+        getOptions() {
+          return ['monokai', 'plain'];
+        }
+      },
       fontsize: { type: String },
       softtab: { type: Boolean },
       tabsize: { type: Number },
@@ -88,7 +104,7 @@ class CodeEditor extends Webbit {
     return html`   
       <juicy-ace-editor
         mode="${this.mode ? ('ace/mode/' + this.mode) : ''}"
-        theme="${this.theme ? ('ace/theme/' + this.theme) : ''}"
+        theme="${this.theme && this.theme !== 'plain' ? ('ace/theme/' + this.theme) : ''}"
         fontsize="${this.fontsize}"
         ?softtabs="${this.softtabs}"
         tabsize="${this.tabsize}"

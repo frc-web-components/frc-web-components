@@ -1,19 +1,19 @@
 import PropertyView from './property-view';
 import { html } from 'lit-element';
 
-class StringPropertyView extends PropertyView {
+class TextAreaPropertyView extends PropertyView {
 
   renderInputField() {
     return html`
-      <vaadin-text-field
+      <vaadin-text-area
         part="input"
         value="${this.inputValue || ''}"
         @input="${this.onInputChange}"
         @change="${this.onInputChange}"
         theme="small"
-      ></vaadin-text-field>
+      ></vaadin-text-area>
     `;
   }
 }
 
-customElements.define('dashboard-string-property-view', StringPropertyView);
+customElements.define('dashboard-text-area-property-view', TextAreaPropertyView);

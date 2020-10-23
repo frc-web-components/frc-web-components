@@ -14,6 +14,7 @@ class NumberPropertyView extends PropertyView {
         part="input"
         value="${this.inputValue || ''}"
         @input="${this.onInputChange}"
+        @change="${this.onInputChange}"
         theme="small"
         has-controls
       ></vaadin-number-field>
