@@ -9,7 +9,7 @@ class ToggleButton extends Webbit {
       category: 'General',
       //description: 'Component for displaying data from a 3-axis accelerometer.',
       documentationLink: 'https://frc-web-components.github.io/components/toggle-button/',
-      slots: []
+      slots: [],
     };
   }
 
@@ -25,6 +25,7 @@ class ToggleButton extends Webbit {
         [part=button] {
           width: 100%;
           height: 100%;
+          margin: 0;
         }
       `
     ];

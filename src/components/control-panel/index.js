@@ -65,12 +65,14 @@ class ControlPanel extends Webbit {
         width: 300px;
         align-items: center;
         flex-direction: row;
+        justify-content: center;
         position: relative;
         margin: 15px;
       }
 
       [part=control-panel] {
         width: 100%;
+        max-width: var(--control-panel-height, 100%);
         display: inline-block;
         border: none;
         border-radius: 50%;
@@ -179,6 +181,12 @@ class ControlPanel extends Webbit {
 
   setDesiredColor(color) {
     this.desiredColor = color;
+  }
+
+  resized() {
+    const { height } = this.getBoundingClientRect();
+    this.style.setProperty('--control-panel-height', `${height}px`);
+    this.requestUpdate();
   }
 
   render() {

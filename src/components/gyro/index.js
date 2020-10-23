@@ -22,13 +22,19 @@ class Gyro extends Webbit {
       containerStyles,
       css`
         :host { 
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
           position: relative;
           width: 300px;
           height: auto;
         }
 
         .container {
-          height: var(--gyro-container-height);
+          position: relative;
+          width: var(--gyro-container-size);
+          height: var(--gyro-container-size);
+
         }
 
         svg {
@@ -132,8 +138,8 @@ class Gyro extends Webbit {
   }
 
   resized() {
-    const { width } = this.getBoundingClientRect();
-    this.containerNode.style.setProperty('--gyro-container-height', `${width}px`);
+    const { width, height } = this.getBoundingClientRect();
+    this.containerNode.style.setProperty('--gyro-container-size', `${Math.min(width, height)}px`);
     this.requestUpdate();
   }
 

@@ -57,10 +57,9 @@ class Pdp extends Webbit {
           grid-auto-flow: column;
           grid-template-columns: min-content 1fr min-content 1fr;
           grid-template-rows: auto auto auto auto auto auto auto auto;
-          column-gap: 5px;
-          row-gap: 5px;
           width: 100%;
           height: auto;
+          align-items: center;
         }
 
         .channel, .voltage, .total-current {
@@ -74,15 +73,15 @@ class Pdp extends Webbit {
         }
 
         [part=voltage-and-total-current] {
-          margin-top: 15px;
+          margin-top: 5px;
           display: grid;
           grid-auto-flow: column;
           grid-template-columns: min-content auto;
           grid-template-rows: auto auto;
           column-gap: 10px;
-          row-gap: 8px;
           width: 100%;
           height: auto;
+          align-items: center;
         }
 
         [part=voltage-and-total-current] {

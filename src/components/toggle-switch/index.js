@@ -9,6 +9,7 @@ class ToggleSwitch extends Webbit {
       // description: 'A group of checkboxes',
       // documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
       slots: [],
+      resizable: { bottom: true, right: true },
     };
   }
 
