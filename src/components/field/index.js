@@ -59,7 +59,17 @@ class Field extends Webbit {
     return {
       width: { type: Number },
       height: { type: Number },
-      image: { type: String },
+      image: { 
+        type: String,
+        inputType: 'StringDropdown',
+        getOptions() {
+          return [
+            'https://rawcdn.githack.com/frc-web-components/frc-web-components/c33169e74cc12943d310f18c05d0d2495bed54df/field-images/2018-field.jpg',
+            'https://rawcdn.githack.com/frc-web-components/frc-web-components/c33169e74cc12943d310f18c05d0d2495bed54df/field-images/2019-field.jpg',
+            'https://rawcdn.githack.com/frc-web-components/frc-web-components/c33169e74cc12943d310f18c05d0d2495bed54df/field-images/2020-field.png',
+          ];
+        }
+      },
       gridSize: { type: Number, attribute: 'grid-size' },
       hideGrid: { type: Boolean, attribute: 'hide-grid' },
       swapAxes: { type: Boolean, attribute: 'swap-axes' },
