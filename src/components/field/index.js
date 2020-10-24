@@ -192,22 +192,19 @@ class Field extends Webbit {
       const x = convert(element.x, element.unit || parentInfo.unit, this.unit);
       const y = convert(element.y, element.unit || parentInfo.unit, this.unit);
 
-      const widthPx = toPx(width);
-      const heightPx = toPx(height);
-
-      element.style.width = toPx(width);
-      element.style.height = toPx(height);
-      element.style.transformOrigin = parentInfo.isField ? 'center center' : 'auto auto';
+      element.style.width = `${toPx(width)}px`;
+      element.style.height = `${toPx(height)}px`;
+      // element.style.transformOrigin = parentInfo.isField ? 'center center' : 'auto auto';
 
       const translateY = parentInfo.isField
-        ? (y - width / 2)
+        ? (parentInfo.height - y - height / 2)
         : (x + parentInfo.width / 2 - width / 2);
 
       const translateX = parentInfo.isField
-        ? (x - height / 2)
+        ? (x - width / 2)
         : (-y - height / 2 + parentInfo.height / 2);
 
-      element.style.transform = `translate(${toPx(translateY)}px, ${toPx(translateX)}px) rotate(${-rotation + (parentInfo.isField ? 90 : 0)}deg)`;
+      element.style.transform = `translate(${toPx(translateX)}px, ${toPx(translateY)}px) rotate(${-rotation + (parentInfo.isField ? 90 : 0)}deg)`;
 
       // construct parent info for children
       let transformations = parentInfo.transformations;
