@@ -295,6 +295,7 @@ class Field extends Webbit {
   firstUpdated() {
     super.firstUpdated();
 
+    const field = this.shadowRoot.querySelector('[part=field]');
     const canvas = this.shadowRoot.querySelector('[part=top-canvas]');
     const ctx = canvas.getContext("2d");
 
@@ -308,7 +309,7 @@ class Field extends Webbit {
       bottomCtx.clearRect(0, 0, bottomCanvas.width, bottomCanvas.height);
       bottomCtx.beginPath();
 
-      const rect = this.getBoundingClientRect();
+      const rect = field.getBoundingClientRect();
       this.setElementPose(this, {
         canvas,
         ctx,
