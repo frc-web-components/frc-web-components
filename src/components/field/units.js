@@ -1,5 +1,5 @@
 
-export const baseUnit = 'm';
+export const baseUnit = 'ft';
 
 export const toBaseConversions = {
   // metric

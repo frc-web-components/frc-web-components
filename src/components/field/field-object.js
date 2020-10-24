@@ -2,6 +2,17 @@ import { Webbit, html, svg, css } from '@webbitjs/webbit';
 
 class FieldObject extends Webbit {
 
+  static get metadata() {
+    return {
+      displayName: 'Field Object',
+      category: 'Field',
+      // description: 'Component for displaying information about an encoder',
+      // documentationLink: 'https://frc-web-components.github.io/components/encoder/',
+      allowedParents: ['frc-field-object', 'frc-field'],
+      allowedChildren: ['frc-field-object', 'frc-field-camera', 'frc-field-drawing', 'frc-field-trajectory', 'frc-field-robot'],
+    };
+  }
+
   static get styles() {
     return css`
       :host {

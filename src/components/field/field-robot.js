@@ -2,6 +2,17 @@ import FieldDrawing from './field-drawing';
 
 class FieldRobot extends FieldDrawing {
 
+  static get metadata() {
+    return {
+      displayName: 'Field Robot',
+      category: 'Field',
+      // description: 'Component for displaying information about an encoder',
+      // documentationLink: 'https://frc-web-components.github.io/components/encoder/',
+      slots: [],
+      allowedParents: ['frc-field-object'],
+    };
+  }
+
   static get properties() {
     return {
       ...super.properties,

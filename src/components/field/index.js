@@ -9,16 +9,29 @@ import './field-robot';
 
 class Field extends Webbit {
 
+  static get metadata() {
+    return {
+      displayName: 'Field',
+      category: 'Field',
+      // description: 'Component for displaying information about an encoder',
+      // documentationLink: 'https://frc-web-components.github.io/components/encoder/',
+      allowedChildren: ['frc-field-object', 'frc-field-camera', 'frc-field-drawing', 'frc-field-trajectory', 'frc-field-robot'],
+
+    };
+  }
+
   static get styles() {
     return css`
       :host {
-        display: inline-block;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
         width: 400px;
       }
 
       [part=field] {
         position: relative;
-        width: 100%;
+        width: var(--field-width, 100%);
         height: var(--field-height, 400px);
         background-image: var(--field-image);
         background-size: cover;
@@ -79,8 +92,8 @@ class Field extends Webbit {
 
   constructor() {
     super();
-    this.width = 20;
-    this.height = 20;
+    this.width = 54;
+    this.height = 27;
     this.image = '';
     this.gridSize = 1;
     this.hideGrid = false;
@@ -269,10 +282,18 @@ class Field extends Webbit {
   }
 
   resizeField() {
-      const { width } = this.getBoundingClientRect();
+      const { width, height } = this.getBoundingClientRect();
       const fieldElement = this.shadowRoot.querySelector('[part=field]');
-      const height = !this.width ? 0 : (this.height / this.width) * width;
-      fieldElement.style.setProperty('--field-height', `${height}px`);
+      const fieldHeight = !this.width ? 0 : (this.height / this.width) * width;
+
+      if (fieldHeight <= height) {
+        fieldElement.style.setProperty('--field-width', `${width}px`);
+        fieldElement.style.setProperty('--field-height', `${fieldHeight}px`);
+      } else {
+        const fieldWidth = !this.height ? 0 : (this.width / this.height) * height;
+        fieldElement.style.setProperty('--field-width', `${fieldWidth}px`);
+        fieldElement.style.setProperty('--field-height', `${height}px`);
+      }
   }
 
   resized() {
