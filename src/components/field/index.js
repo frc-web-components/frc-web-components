@@ -6,6 +6,23 @@ import './field-trajectory';
 import './field-camera';
 import './field-robot';
 
+const fieldConfig = [
+  {
+    label: '2018 Field',
+    image: 'https://rawcdn.githack.com/frc-web-components/frc-web-components/c33169e74cc12943d310f18c05d0d2495bed54df/field-images/2018-field.jpg',
+    size: { width: 54, height: 27, unit: 'ft' },
+  },
+  {
+    label: '2019 Field',
+    image: 'https://rawcdn.githack.com/frc-web-components/frc-web-components/c33169e74cc12943d310f18c05d0d2495bed54df/field-images/2019-field.jpg',
+    size: { width: 54, height: 27, unit: 'ft' },
+  },
+  {
+    label: '2020 Field',
+    image: 'https://rawcdn.githack.com/frc-web-components/frc-web-components/c33169e74cc12943d310f18c05d0d2495bed54df/field-images/2020-field.png',
+    size: { width: 52.4375, height: 26.9375, unit: 'ft' },
+  },
+]
 
 class Field extends Webbit {
 
@@ -70,23 +87,50 @@ class Field extends Webbit {
 
   static get properties() {
     return {
-      width: { type: Number },
-      height: { type: Number },
+      width: { 
+        type: Number,
+        get() {
+          const config = fieldConfig.find(field => field.label === this._image);
+          return config && this._useFieldConfig ? config.size.width : this._width;
+        }
+      },
+      height: { 
+        type: Number,
+        get() {
+          const config = fieldConfig.find(field => field.label === this._image);
+          return config && this._useFieldConfig ? config.size.height : this._height;
+        }
+      },
+      unit: { 
+        type: String,
+        inputType: 'StringDropdown',
+        getOptions() {
+          return Object.keys(toBaseConversions);
+        },
+        get() {
+          const config = fieldConfig.find(field => field.label === this._image);
+          return config && this._useFieldConfig ? config.size.unit : this._unit;
+        }
+      },
       image: { 
         type: String,
         inputType: 'StringDropdown',
         getOptions() {
-          return [
-            'https://rawcdn.githack.com/frc-web-components/frc-web-components/c33169e74cc12943d310f18c05d0d2495bed54df/field-images/2018-field.jpg',
-            'https://rawcdn.githack.com/frc-web-components/frc-web-components/c33169e74cc12943d310f18c05d0d2495bed54df/field-images/2019-field.jpg',
-            'https://rawcdn.githack.com/frc-web-components/frc-web-components/c33169e74cc12943d310f18c05d0d2495bed54df/field-images/2020-field.png',
-          ];
+          return fieldConfig.map(field => field.label);
+        },
+        get() {
+          const config = fieldConfig.find(field => field.label === this._image);
+          return config ? config.image : this._image;
+        },
+        set(image) {
+          const config = fieldConfig.find(field => field.image === image);
+          return config ? config.label : image;
         }
       },
-      gridSize: { type: Number, attribute: 'grid-size' },
-      hideGrid: { type: Boolean, attribute: 'hide-grid' },
-      swapAxes: { type: Boolean, attribute: 'swap-axes' },
-      unit: { type: String }
+      useFieldConfig: { type: Boolean },
+      gridSize: { type: Number },
+      hideGrid: { type: Boolean },
+      swapAxes: { type: Boolean },
     };
   }
 
@@ -95,6 +139,7 @@ class Field extends Webbit {
     this.width = 54;
     this.height = 27;
     this.image = '';
+    this.useFieldConfig = false;
     this.gridSize = 1;
     this.hideGrid = false;
     this.swapAxes = false;
@@ -108,9 +153,10 @@ class Field extends Webbit {
       this.resizeField();
     }
 
-    if (changedProperties.has('image')) {
+    if (changedProperties.has('image') || changedProperties.has('useFieldConfig')) {
       const fieldElement = this.shadowRoot.querySelector('[part=field]');
       fieldElement.style.setProperty('--field-image', `url(${this.image}`);
+      this.resizeField();
     }
   }
 
