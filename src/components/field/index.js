@@ -198,11 +198,11 @@ class Field extends Webbit {
 
       const translateY = parentInfo.isField
         ? (parentInfo.height - y - height / 2)
-        : (x + parentInfo.width / 2 - width / 2);
+        : (-y + parentInfo.height / 2 - height / 2);
 
       const translateX = parentInfo.isField
         ? (x - width / 2)
-        : (-y - height / 2 + parentInfo.height / 2);
+        : (x - width / 2 + parentInfo.width / 2);
 
       element.style.transform = `translate(${toPx(translateX)}px, ${toPx(translateY)}px) rotate(${-rotation + (parentInfo.isField ? 90 : 0)}deg)`;
 
@@ -295,7 +295,8 @@ class Field extends Webbit {
   firstUpdated() {
     super.firstUpdated();
 
-    const field = this.shadowRoot.querySelector('[part=field]');
+    this.field = this.shadowRoot.querySelector('[part=field]');;
+    const field = this.field;
     const canvas = this.shadowRoot.querySelector('[part=top-canvas]');
     const ctx = canvas.getContext("2d");
 
@@ -347,7 +348,7 @@ class Field extends Webbit {
 
   render() {
     
-    const { width, height } = this.getBoundingClientRect();
+    const { width, height } = this.field ? this.field.getBoundingClientRect() : { width: 0, height: 0 };
     const patternSize = (this.gridSize / this.width) * width;
 
     return html`   

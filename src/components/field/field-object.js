@@ -17,6 +17,7 @@ class FieldObject extends Webbit {
     return css`
       :host {
         display: inline-block;
+        position: relative;
       }
 
       [part=field-object] {
