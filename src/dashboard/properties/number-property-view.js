@@ -12,7 +12,7 @@ class NumberPropertyView extends PropertyView {
     return html`
       <vaadin-number-field
         part="input"
-        value="${this.inputValue || ''}"
+        value="${typeof this.inputValue === 'number' ? this.inputValue : ''}"
         @input="${this.onInputChange}"
         @change="${this.onInputChange}"
         theme="small"

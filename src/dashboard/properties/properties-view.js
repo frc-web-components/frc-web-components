@@ -79,14 +79,11 @@ class PropertiesView extends LitElement {
     }
   }
 
-  renderProperties(properties, category) {
-    const categoryProperties = properties.filter(([name, property]) => {
-      return property.category === category;
-    });
+  renderProperties(properties) {
 
     return html`
       <vaadin-form-layout>
-        ${categoryProperties.map(([name, property]) => html`
+        ${properties.map(([name, property]) => html`
           ${property.inputType === 'String' ? html`
             <dashboard-string-property-view
               part="input"
@@ -181,7 +178,7 @@ class PropertiesView extends LitElement {
     });
 
     return html`
-      ${this.renderProperties(propertiesForSources, this.selectedNode.getDisplayName())}
+      ${this.renderProperties(propertiesForSources)}
     `;
   }
 }

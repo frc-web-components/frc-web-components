@@ -1,6 +1,6 @@
-import FieldDrawing from './field-drawing';
+import FieldObject from './field-object';
 
-class FieldTrajectory extends FieldDrawing {
+class FieldTrajectory extends FieldObject {
 
   static get metadata() {
     return {
@@ -9,7 +9,7 @@ class FieldTrajectory extends FieldDrawing {
       // description: 'Component for displaying information about an encoder',
       // documentationLink: 'https://frc-web-components.github.io/components/encoder/',
       slots: [],
-      allowedParents: ['frc-field-object'],
+      allowedParents: ['frc-field'],
     };
   }
 

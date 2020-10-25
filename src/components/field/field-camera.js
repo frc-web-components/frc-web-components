@@ -1,6 +1,6 @@
-import FieldDrawing from './field-drawing';
+import FieldObject from './field-object';
 
-class FieldCamera extends FieldDrawing {
+class FieldCamera extends FieldObject {
 
   static get metadata() {
     return {
@@ -9,7 +9,7 @@ class FieldCamera extends FieldDrawing {
       // description: 'Component for displaying information about an encoder',
       // documentationLink: 'https://frc-web-components.github.io/components/encoder/',
       slots: [],
-      allowedParents: ['frc-field-object'],
+      allowedParents: ['frc-field-object', 'frc-field-robot', 'frc-field'],
     };
   }
 
@@ -17,9 +17,6 @@ class FieldCamera extends FieldDrawing {
     return {
       ...super.properties,
       fov: { type: Number },
-      angle: { type: Number },
-      x: { type: Number },
-      y: { type: Number },
       range: { type: Number },
       seesTarget: { type: Boolean },
       targetDistance: { 
@@ -37,9 +34,6 @@ class FieldCamera extends FieldDrawing {
   constructor() {
     super();
     this.fov = 60;
-    this.angle = 0;
-    this.x = 0;
-    this.y = 0;
     this.range = 5;
     this.seesTarget = false;
   }
@@ -54,7 +48,7 @@ class FieldCamera extends FieldDrawing {
       ctx.lineWidth = 1 / scalingFactor;
       ctx.fillStyle = this.seesTarget ? 'rgba(0, 255, 0, .4)' : 'rgba(255, 0, 0, .4)';
       ctx.translate(this.x, this.y);
-      ctx.rotate(this.angle * Math.PI / 180);
+      ctx.rotate(this.rot * Math.PI / 180);
       ctx.moveTo(0, 0);
       const x = distance * Math.tan(this.fov / 2 * Math.PI / 180);
 
@@ -68,7 +62,7 @@ class FieldCamera extends FieldDrawing {
       ctx.lineWidth = 1 / scalingFactor;
       ctx.strokeStyle = this.seesTarget ? "rgb(0, 255, 0)" : 'rgb(255, 0, 0)';
       ctx.translate(this.x, this.y);
-      ctx.rotate(this.angle * Math.PI / 180);
+      ctx.rotate(this.rot * Math.PI / 180);
       ctx.moveTo(0, 0);
       ctx.lineTo(0, distance);
       ctx.stroke();

@@ -1,6 +1,7 @@
-import { Webbit, html, svg, css } from '@webbitjs/webbit';
+import { Webbit, html, css } from '@webbitjs/webbit';
+import { toBaseConversions } from './units';
 
-class FieldObject extends Webbit {
+export default class FieldObject extends Webbit {
 
   static get metadata() {
     return {
@@ -9,7 +10,7 @@ class FieldObject extends Webbit {
       // description: 'Component for displaying information about an encoder',
       // documentationLink: 'https://frc-web-components.github.io/components/encoder/',
       allowedParents: ['frc-field-object', 'frc-field'],
-      allowedChildren: ['frc-field-object', 'frc-field-camera', 'frc-field-drawing', 'frc-field-trajectory', 'frc-field-robot'],
+      allowedChildren: ['frc-field-object', 'frc-field-camera'],
     };
   }
 
@@ -36,8 +37,20 @@ class FieldObject extends Webbit {
       rot: { type: Number },
       width: { type: Number },
       height: { type: Number },
+      unit: { 
+        type: String,
+        inputType: 'StringDropdown',
+        getOptions() {
+          return Object.keys(toBaseConversions);
+        }
+      },
       image: { type: String },
-      unit: { type: String }
+      draw: { 
+        type: Function,
+        converter: (value) => {
+          return typeof value === 'function' ? value : eval(value);
+        }
+      },
     };
   }
 
@@ -50,6 +63,7 @@ class FieldObject extends Webbit {
     this.height = 1;
     this.image = '';
     this.unit = '';
+    this.draw = () => {};
   }
 
   updated(changedProperties) {
@@ -65,12 +79,15 @@ class FieldObject extends Webbit {
 
 
   render() {
-
     return html`   
       <div part="field-object">
         <slot></slot>
       </div>
     `;
+  }
+
+  renderDrawing(args) {
+    this.draw.bind(args)();
   }
 }
 

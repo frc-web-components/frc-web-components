@@ -1,7 +1,6 @@
 import { Webbit, html, svg, css } from '@webbitjs/webbit';
 import { baseUnit, toBaseConversions, convert } from './units';
 import './field-object';
-import FieldDrawing from './field-drawing';
 import './field-trajectory';
 import './field-camera';
 import './field-robot';
@@ -144,7 +143,6 @@ class Field extends Webbit {
     this.hideGrid = false;
     this.swapAxes = false;
     this.objectElements = [];
-    this.drawingElements = [];
     this.unit = baseUnit;
   }
 
@@ -160,136 +158,148 @@ class Field extends Webbit {
     }
   }
 
-  setElementPose(element, fieldInfo, parentInfo) {
+  setFieldPose(fieldInfo) {
 
-    const { toPx, toLength, ctx, canvas, bottomCtx, bottomCanvas, rect } = fieldInfo;
+    // construct info for children
+    const elementInfo = {
+      transformations: [],
+      x: 0,
+      y: 0,
+      width: this.width,
+      height: this.height,
+      rotation: 0,
+      isField: true,
+      unit: this.unit,
+    };
 
-    if (element.tagName === 'FRC-FIELD') {
-      // construct info for children
-      const elementInfo = {
-        transformations: [],
-        x: 0,
-        y: 0,
-        width: this.width,
-        height: this.height,
-        rotation: 0,
-        isField: true,
-        unit: this.unit,
-      };
+    // set child poses relative to parent
+    this.childNodes.forEach(childNode => {
+      this.setObjectPose(childNode, fieldInfo, elementInfo);
+      this.setDrawingPose(childNode, fieldInfo, elementInfo);
+    });
+  }
 
-      // set child poses relative to parent
-      element.childNodes.forEach(childNode => {
-        const { tagName, constructor } = childNode;
-        if (tagName === 'FRC-FIELD-OBJECT' || constructor.__IS_FIELD_DRAWING__) {
-          this.setElementPose(childNode, fieldInfo, elementInfo)
-        }
-      });
-    } else if (element.tagName === 'FRC-FIELD-OBJECT') {
-      // set element pose
-      const rotation = element.rot;
-      const width = convert(element.width, element.unit || parentInfo.unit, this.unit);
-      const height = convert(element.height, element.unit || parentInfo.unit, this.unit);
-      const x = convert(element.x, element.unit || parentInfo.unit, this.unit);
-      const y = convert(element.y, element.unit || parentInfo.unit, this.unit);
+  setObjectPose(element, fieldInfo, parentInfo) {
+    const { toPx } = fieldInfo;
+    // set element pose
+    const rotation = element.rot;
+    const width = convert(element.width, element.unit || parentInfo.unit, this.unit);
+    const height = convert(element.height, element.unit || parentInfo.unit, this.unit);
+    const x = convert(element.x, element.unit || parentInfo.unit, this.unit);
+    const y = convert(element.y, element.unit || parentInfo.unit, this.unit);
 
-      element.style.width = `${toPx(width)}px`;
-      element.style.height = `${toPx(height)}px`;
-      // element.style.transformOrigin = parentInfo.isField ? 'center center' : 'auto auto';
+    element.style.width = `${toPx(width)}px`;
+    element.style.height = `${toPx(height)}px`;
+    // element.style.transformOrigin = parentInfo.isField ? 'center center' : 'auto auto';
 
-      const translateY = parentInfo.isField
-        ? (parentInfo.height - y - height / 2)
-        : (-y + parentInfo.height / 2 - height / 2);
+    const translateY = parentInfo.isField
+      ? (parentInfo.height - y - height / 2)
+      : (-y + parentInfo.height / 2 - height / 2);
 
-      const translateX = parentInfo.isField
-        ? (x - width / 2)
-        : (x - width / 2 + parentInfo.width / 2);
+    const translateX = parentInfo.isField
+      ? (x - width / 2)
+      : (x - width / 2 + parentInfo.width / 2);
 
-      element.style.transform = `translate(${toPx(translateX)}px, ${toPx(translateY)}px) rotate(${-rotation + (parentInfo.isField ? 90 : 0)}deg)`;
+    element.style.transform = `translate(${toPx(translateX)}px, ${toPx(translateY)}px) rotate(${-rotation + (parentInfo.isField ? 90 : 0)}deg)`;
 
-      // construct parent info for children
-      let transformations = parentInfo.transformations;
+    // construct parent info for children
+    let transformations = parentInfo.transformations;
 
-      if (parentInfo.isField) {
-        transformations = transformations.concat([
-          { type: 'translation', x: x, y: this.height - y },
-          { type: 'rotation', rotation: 90 - rotation },
-        ]);
-      } else {
-        transformations = transformations.concat([
-          { type: 'translation', x, y: -y },
-          { type: 'rotation', rotation: -rotation },
-        ]);
-      }
-
-      const elementInfo = {
-        transformations,
-        x,
-        y,
-        width,
-        height,
-        rotation,
-        unit: element.unit || parentInfo.unit
-      };
-
-      // set child poses relative to parent
-      element.childNodes.forEach(childNode => {
-        const { tagName, constructor } = childNode;
-        if (tagName === 'FRC-FIELD-OBJECT' || constructor.__IS_FIELD_DRAWING__) {
-          this.setElementPose(childNode, fieldInfo, elementInfo)
-        }
-      });
-
-    } else if (element.constructor.__IS_FIELD_DRAWING__) {
-      // set element pose
-      ctx.save();
-      bottomCtx.save();
-
-      const scale = rect.width * 2 / this.width;
-      ctx.scale(scale, scale);
-      bottomCtx.scale(scale, scale);
-
-      // transform
-      if (parentInfo.transformations.length === 0) {
-        parentInfo.transformations.push({ type: 'rotation', rotation: 90 }); 
-      }
-
-      parentInfo.transformations.forEach(({ type, x, y, rotation }) => {
-        if (type === 'translation') {
-          ctx.translate(x, y);
-          bottomCtx.translate(x, y);
-        } else {
-          ctx.rotate(rotation * Math.PI / 180);
-          bottomCtx.rotate(rotation * Math.PI / 180);
-        }
-      });
-
-      // flip y
-      ctx.scale(1, -1);
-      bottomCtx.scale(1, -1);
-
-      // scale based on the units the drawing is in
-      const unitScale = convert(1, element.unit || parentInfo.unit, this.unit);
-      ctx.scale(unitScale, unitScale);
-      bottomCtx.scale(unitScale, unitScale);
-
-      // This is to prevent previous drawings from affecting current drawing
-      ctx.beginPath();
-      bottomCtx.beginPath();
-      
-      element.renderDrawing({ 
-        canvas, 
-        ctx,
-        bottomCanvas,
-        bottomCtx,
-        scalingFactor: unitScale * scale / 2, 
-        source: element.getSource() || {},
-        parentWidth: parentInfo.width / unitScale,
-        parentHeight: parentInfo.height / unitScale
-      });
-      
-      ctx.restore();
-      bottomCtx.restore();
+    if (parentInfo.isField) {
+      transformations = transformations.concat([
+        { type: 'translation', x: x, y: this.height - y },
+        { type: 'rotation', rotation: 90 - rotation },
+      ]);
+    } else {
+      transformations = transformations.concat([
+        { type: 'translation', x, y: -y },
+        { type: 'rotation', rotation: -rotation },
+      ]);
     }
+
+    const elementInfo = {
+      transformations,
+      x,
+      y,
+      width,
+      height,
+      rotation,
+      unit: element.unit || parentInfo.unit
+    };
+
+    // set child poses relative to parent
+    element.childNodes.forEach(childNode => {
+      this.setObjectPose(childNode, fieldInfo, elementInfo);
+      this.setDrawingPose(childNode, fieldInfo, elementInfo);
+    });
+  }
+
+  setDrawingPose(element, fieldInfo, parentInfo) {
+
+    const { ctx, canvas, bottomCtx, bottomCanvas, rect } = fieldInfo;
+
+    const rotation = element.rot;
+    const height = convert(element.height, element.unit || parentInfo.unit, this.unit);
+    const x = convert(element.x, element.unit || parentInfo.unit, this.unit);
+    const y = convert(element.y, element.unit || parentInfo.unit, this.unit);
+
+    // set element pose
+    ctx.save();
+    bottomCtx.save();
+
+    const scale = rect.width * 2 / this.width;
+    ctx.scale(scale, scale);
+    bottomCtx.scale(scale, scale);
+
+    let transformations = [...parentInfo.transformations];
+
+    // transform
+    if (transformations.length === 0) {
+      transformations = transformations.concat([
+        { type: 'translation', x, y: parentInfo.height - y },
+        { type: 'rotation', rotation: 90 - rotation }
+      ])
+    } else {
+      transformations = transformations.concat([
+        { type: 'translation', x, y: -y },
+        { type: 'rotation', rotation: -rotation },
+      ]);
+    }
+
+    transformations.forEach(({ type, x, y, rotation }) => {
+      if (type === 'translation') {
+        ctx.translate(x, y);
+        bottomCtx.translate(x, y);
+      } else {
+        ctx.rotate(rotation * Math.PI / 180);
+        bottomCtx.rotate(rotation * Math.PI / 180);
+      }
+    });
+
+    // flip y
+    ctx.scale(1, -1);
+    bottomCtx.scale(1, -1);
+
+    // scale based on the units the drawing is in
+    const unitScale = convert(1, element.unit || parentInfo.unit, this.unit);
+    ctx.scale(unitScale, unitScale);
+    bottomCtx.scale(unitScale, unitScale);
+
+    // This is to prevent previous drawings from affecting current drawing
+    ctx.beginPath();
+    bottomCtx.beginPath();
+    
+    element.renderDrawing({ 
+      canvas, 
+      ctx,
+      bottomCanvas,
+      bottomCtx,
+      scalingFactor: unitScale * scale / 2, 
+      source: element.getSource() || {}
+    });
+    
+    ctx.restore();
+    bottomCtx.restore();
   }
 
   firstUpdated() {
@@ -311,7 +321,7 @@ class Field extends Webbit {
       bottomCtx.beginPath();
 
       const rect = field.getBoundingClientRect();
-      this.setElementPose(this, {
+      this.setFieldPose({
         canvas,
         ctx,
         bottomCanvas,
