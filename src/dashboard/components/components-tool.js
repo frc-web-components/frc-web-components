@@ -259,7 +259,7 @@ class ComponentsTool extends LitElement {
   render() {
 
     if (!this.selectedNode) {
-      return html`Select an element to begin adding.`;
+      return html`<p>Select an element to begin adding.</p>`;
     }
 
     if (this.selectedNode.getSlots().length === 0) {

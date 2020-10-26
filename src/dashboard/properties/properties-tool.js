@@ -183,18 +183,20 @@ class PropertiesTool extends LitElement {
 
 
   render() {
-    return html`
-      ${!this.selectedNode ? html`
-        Select an element to view its properties.
-      ` : ''}
-      ${(this.selectedNode && !this.selectedNode.isWebbit()) ? html`
-        The properties for this element cannot be changed.
-      ` : ''}
 
-      ${this.selectedNode && this.selectedNode.isWebbit() ? html`
-        ${this.renderWebbit()}
-      ` : ''}
-    `;
+    if (!this.selectedNode) {
+      return html`<p>Select an element to view its properties.</p>`;
+    }
+
+    if (this.selectedNode === this.wom.getRootNode()) {
+      return html`<p>The properties for the root node cannot be changed.</p>`;
+    }
+
+    if (this.selectedNode && !this.selectedNode.isWebbit()) {
+      return html`<p>This element does not contain any properties.</p>`;
+    }
+
+    return this.renderWebbit();
   }
 }
 

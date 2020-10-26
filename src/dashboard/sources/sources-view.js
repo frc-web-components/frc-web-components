@@ -105,7 +105,7 @@ class SourcesView extends LitElement {
     }
 
     return html`
-      <p>All Sources</p>
+      <p>Available Sources</p>
       <vaadin-accordion opened="${null}">
         ${this.providers.map(provider => html`
           <vaadin-accordion-panel theme="small">

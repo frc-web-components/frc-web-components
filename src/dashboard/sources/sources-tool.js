@@ -190,27 +190,35 @@ class SourcesTool extends LitElement {
           Cancel
         </vaadin-button>
       </div>
-      <dashboard-sources-view
-        selected-source-key="${this.sourceKeyInput}"
-        selected-source-provider="${this.sourceProviderInput}"
-        @sourceSelect="${this.onSourceSelect}"
-      ></dashboard-sources-view>
     `;
+  }
+
+  renderSelectedNodeInputs() {
+
+    if (!this.selectedNode) {
+      return html`<p>Select an element to change its source.</p>`;
+    }
+
+    if (this.selectedNode === this.wom.getRootNode()) {
+      return html`<p>The source for the root node cannot be changed.</p>`;
+    }
+
+    if (this.selectedNode && !this.selectedNode.isWebbit()) {
+      return html`<p>Sources cannot be applied to this element.</p>`;
+    }
+
+    return this.renderWebbit();
   }
 
 
   render() {
     return html`
-      ${!this.selectedNode ? html`
-        Select an element to view sources.
-      ` : ''}
-      ${(this.selectedNode && !this.selectedNode.isWebbit()) ? html`
-        Sources cannot be applied to this element.
-      ` : ''}
-
-      ${this.selectedNode && this.selectedNode.isWebbit() ? html`
-        ${this.renderWebbit()}
-      ` : ''}
+      ${this.renderSelectedNodeInputs()}
+      <dashboard-sources-view
+        selected-source-key="${this.sourceKeyInput}"
+        selected-source-provider="${this.sourceProviderInput}"
+        @sourceSelect="${this.onSourceSelect}"
+      ></dashboard-sources-view>
     `;
   }
 }
