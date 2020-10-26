@@ -31,7 +31,7 @@ class Field extends Webbit {
       category: 'Field',
       // description: 'Component for displaying information about an encoder',
       // documentationLink: 'https://frc-web-components.github.io/components/encoder/',
-      allowedChildren: ['frc-field-object', 'frc-field-camera', 'frc-field-drawing', 'frc-field-trajectory', 'frc-field-robot'],
+      allowedChildren: ['frc-field-object', 'frc-field-camera', 'frc-field-trajectory', 'frc-field-robot'],
 
     };
   }
@@ -183,10 +183,11 @@ class Field extends Webbit {
     const { toPx } = fieldInfo;
     // set element pose
     const rotation = element.rot;
-    const width = convert(element.width, element.unit || parentInfo.unit, this.unit);
-    const height = convert(element.height, element.unit || parentInfo.unit, this.unit);
-    const x = convert(element.x, element.unit || parentInfo.unit, this.unit);
-    const y = convert(element.y, element.unit || parentInfo.unit, this.unit);
+    const unit = typeof toBaseConversions[element.unit] !== 'undefined' ? element.unit : parentInfo.unit;
+    const width = convert(element.width, unit, this.unit);
+    const height = convert(element.height, unit, this.unit);
+    const x = convert(element.x, unit, this.unit);
+    const y = convert(element.y, unit, this.unit);
 
     element.style.width = `${toPx(width)}px`;
     element.style.height = `${toPx(height)}px`;
@@ -224,7 +225,7 @@ class Field extends Webbit {
       width,
       height,
       rotation,
-      unit: element.unit || parentInfo.unit
+      unit
     };
 
     // set child poses relative to parent
@@ -239,9 +240,9 @@ class Field extends Webbit {
     const { ctx, canvas, bottomCtx, bottomCanvas, rect } = fieldInfo;
 
     const rotation = element.rot;
-    const height = convert(element.height, element.unit || parentInfo.unit, this.unit);
-    const x = convert(element.x, element.unit || parentInfo.unit, this.unit);
-    const y = convert(element.y, element.unit || parentInfo.unit, this.unit);
+    const unit = typeof toBaseConversions[element.unit] !== 'undefined' ? element.unit : parentInfo.unit;
+    const x = convert(element.x, unit, this.unit);
+    const y = convert(element.y, unit, this.unit);
 
     // set element pose
     ctx.save();
@@ -281,7 +282,7 @@ class Field extends Webbit {
     bottomCtx.scale(1, -1);
 
     // scale based on the units the drawing is in
-    const unitScale = convert(1, element.unit || parentInfo.unit, this.unit);
+    const unitScale = convert(1, unit, this.unit);
     ctx.scale(unitScale, unitScale);
     bottomCtx.scale(unitScale, unitScale);
 

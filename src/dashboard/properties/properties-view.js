@@ -8,6 +8,8 @@ import './string-array-property-view';
 import './number-array-property-view';
 import './text-area-property-view';
 import './string-dropdown-property-view';
+import './color-picker-property-view';
+import './function-property-view';
 
 class PropertiesView extends LitElement {
 
@@ -163,6 +165,24 @@ class PropertiesView extends LitElement {
               .propertyName="${name}"
               .property="${property}"
             ></dashboard-string-dropdown-property-view>
+          ` : ''}
+
+          ${property.inputType === 'ColorPicker' ? html`
+            <dashboard-color-picker-property-view
+              part="input"
+              .selectedNode="${this.selectedNode}"
+              .propertyName="${name}"
+              .property="${property}"
+            ></dashboard-color-picker-property-view>
+          ` : ''}
+
+          ${property.inputType === 'Function' ? html`
+            <dashboard-function-property-view
+              part="input"
+              .selectedNode="${this.selectedNode}"
+              .propertyName="${name}"
+              .property="${property}"
+            ></dashboard-function-property-view>
           ` : ''}
         `)}
       </vaadin-form-layout>

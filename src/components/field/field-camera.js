@@ -1,4 +1,5 @@
 import FieldObject from './field-object';
+import { objectWithout } from './utils';
 
 class FieldCamera extends FieldObject {
 
@@ -15,7 +16,7 @@ class FieldCamera extends FieldObject {
 
   static get properties() {
     return {
-      ...super.properties,
+      ...objectWithout(super.properties, ['width', 'height', 'draw']),
       fov: { type: Number },
       range: { type: Number },
       seesTarget: { type: Boolean },
@@ -47,8 +48,7 @@ class FieldCamera extends FieldObject {
       ctx.save();
       ctx.lineWidth = 1 / scalingFactor;
       ctx.fillStyle = this.seesTarget ? 'rgba(0, 255, 0, .4)' : 'rgba(255, 0, 0, .4)';
-      ctx.translate(this.x, this.y);
-      ctx.rotate(this.rot * Math.PI / 180);
+      // ctx.translate(this.x, this.y);
       ctx.moveTo(0, 0);
       const x = distance * Math.tan(this.fov / 2 * Math.PI / 180);
 
@@ -61,8 +61,7 @@ class FieldCamera extends FieldObject {
       ctx.beginPath();
       ctx.lineWidth = 1 / scalingFactor;
       ctx.strokeStyle = this.seesTarget ? "rgb(0, 255, 0)" : 'rgb(255, 0, 0)';
-      ctx.translate(this.x, this.y);
-      ctx.rotate(this.rot * Math.PI / 180);
+      // ctx.translate(this.x, this.y);
       ctx.moveTo(0, 0);
       ctx.lineTo(0, distance);
       ctx.stroke();

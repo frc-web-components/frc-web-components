@@ -9,7 +9,7 @@ export default class FieldObject extends Webbit {
       category: 'Field',
       // description: 'Component for displaying information about an encoder',
       // documentationLink: 'https://frc-web-components.github.io/components/encoder/',
-      allowedParents: ['frc-field-object', 'frc-field'],
+      allowedParents: ['frc-field-object', 'frc-field', 'frc-field-robot'],
       allowedChildren: ['frc-field-object', 'frc-field-camera'],
     };
   }
@@ -18,7 +18,7 @@ export default class FieldObject extends Webbit {
     return css`
       :host {
         display: inline-block;
-        position: relative;
+        position: absolute;
       }
 
       [part=field-object] {
@@ -41,16 +41,11 @@ export default class FieldObject extends Webbit {
         type: String,
         inputType: 'StringDropdown',
         getOptions() {
-          return Object.keys(toBaseConversions);
+          return ['inherit', ...Object.keys(toBaseConversions)];
         }
       },
       image: { type: String },
-      draw: { 
-        type: Function,
-        converter: (value) => {
-          return typeof value === 'function' ? value : eval(value);
-        }
-      },
+      draw: { type: String, inputType: 'Function' },
     };
   }
 
@@ -62,14 +57,19 @@ export default class FieldObject extends Webbit {
     this.width = 1;
     this.height = 1;
     this.image = '';
-    this.unit = '';
-    this.draw = () => {};
+    this.unit = 'inherit';
+    this.draw = '';
+    this.drawFunction = new Function();
   }
 
   updated(changedProperties) {
     if (changedProperties.has('image')) {
       const fieldElement = this.shadowRoot.querySelector('[part=field-object]');
       fieldElement.style.setProperty('--field-object-image', `url(${this.image}`);
+    }
+
+    if (changedProperties.has('draw')) {
+      this.drawFunction = new Function(this.draw);
     }
   }
 
@@ -87,7 +87,20 @@ export default class FieldObject extends Webbit {
   }
 
   renderDrawing(args) {
-    this.draw.bind(args)();
+    try {
+      this.drawFunction.bind({
+        ...args,
+        width: this.width,
+        height: this.height,
+        x: this.x,
+        y: this.y,
+        rot: this.rot,
+        image: this.image,
+        unit: this.unit,
+      })();
+    } catch(e) {
+      console.error(`Error drawing element ${this.webbitId}:`, e);
+    }
   }
 }
 

@@ -1,4 +1,5 @@
 import FieldObject from './field-object';
+import { objectWithout } from './utils';
 
 class FieldRobot extends FieldObject {
 
@@ -8,21 +9,23 @@ class FieldRobot extends FieldObject {
       category: 'Field',
       // description: 'Component for displaying information about an encoder',
       // documentationLink: 'https://frc-web-components.github.io/components/encoder/',
-      allowedParents: ['frc-field-object', 'frc-field'],
-      allowedChildren: ['frc-field-camera']
+      allowedParents: ['frc-field'],
+      allowedChildren: ['frc-field-camera', 'frc-field-object']
     };
   }
 
   static get properties() {
     return {
-      ...super.properties,
-      color: { type: String }
+      ...objectWithout(super.properties, ['draw']),
+      color: { type: String, inputType: 'ColorPicker' }
     };  
   }
 
   constructor() {
     super();
-    this.color = 'blue';
+    this.color = '#0000ff';
+    this.width = 2;
+    this.height = 3;
   }
 
   renderDrawing({ bottomCtx, scalingFactor }) {

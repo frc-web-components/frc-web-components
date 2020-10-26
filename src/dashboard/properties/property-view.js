@@ -20,6 +20,16 @@ export default class PropertyView extends LitElement {
       vaadin-text-field, vaadin-number-field, multiselect-combo-box, vaadin-text-area, vaadin-combo-box {
         width: 100%;
       }
+
+      input[type=color] {
+        width: calc(100% - 5px);
+        min-width: 163px;
+      }
+
+      juicy-ace-editor {
+        margin-top: 12px;
+        height: 300px;
+      }
     `;
   }
 

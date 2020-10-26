@@ -1,4 +1,6 @@
 import FieldObject from './field-object';
+import { objectWithout } from './utils';
+
 
 class FieldTrajectory extends FieldObject {
 
@@ -15,11 +17,11 @@ class FieldTrajectory extends FieldObject {
 
   static get properties() {
     return {
-      ...super.properties,
-      xs: { type: Array },
-      ys: { type: Array },
-      startRotation: { type: Number },
-      endRotation: { type: Number }
+      ...objectWithout(super.properties, ['width', 'height', 'image', 'draw']),
+      xs: { type: Array, inputType: 'NumberArray' },
+      ys: { type: Array, inputType: 'NumberArray' },
+      startRot: { type: Number },
+      endRot: { type: Number }
     };
   }
 
@@ -27,24 +29,24 @@ class FieldTrajectory extends FieldObject {
     super();
     this.xs = [];
     this.ys = [];
-    this.startRotation = 0;
-    this.endRotation = 0;
+    this.startRot = 0;
+    this.endRot = 0;
   }
 
-  renderDrawing({ bottomCtx, scalingFactor, parentWidth, parentHeight }) {
+  renderDrawing({ bottomCtx, scalingFactor }) {
     bottomCtx.lineWidth = 4 / scalingFactor;
     bottomCtx.strokeStyle = "rgba(235, 164, 52, .5)";
 
     for (let i = 0; i < this.xs.length - 1; i++) {
-      bottomCtx.moveTo(this.ys[i], this.xs[i]);
-      bottomCtx.lineTo(this.ys[i + 1], this.xs[i + 1]);
+      bottomCtx.moveTo(-this.ys[i], this.xs[i]);
+      bottomCtx.lineTo(-this.ys[i + 1], this.xs[i + 1]);
     }
 
     bottomCtx.stroke();
 
-    this.drawArrow(bottomCtx, this.xs[0], this.ys[0], this.startRotation, scalingFactor);
+    this.drawArrow(bottomCtx, this.xs[0],-this.ys[0], this.startRot, scalingFactor);
     const lastIndex = this.xs.length - 1;
-    this.drawArrow(bottomCtx, this.xs[lastIndex], this.ys[lastIndex], this.endRotation, scalingFactor);  
+    this.drawArrow(bottomCtx, this.xs[lastIndex], -this.ys[lastIndex], this.endRot, scalingFactor);  
   }
 
   drawArrow(ctx, x, y, rotation, scalingFactor) {
