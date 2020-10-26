@@ -47,6 +47,10 @@ export default class Joystick extends Webbit {
         vaadin-checkbox::part(checkbox)::after {
           border-color: black;
         }
+
+        frc-sim-gamepad {
+          width: 100%;
+        }
       `
     ];
   }

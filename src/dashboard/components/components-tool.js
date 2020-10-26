@@ -161,9 +161,10 @@ class ComponentsTool extends LitElement {
 
     this.getComponents().forEach(name => {
       const { displayName, category } = this.getComponentMetadata(name);
-      if (!this.selectedNode.canContainComponent(name)) {
+      if (!this.selectedNode.canContainComponent(name) || !category) {
         return;
       }
+      
       const categoryName = category.toLowerCase();
       if (categoryName in categories) {
         categories[categoryName].push({ displayName, name });
