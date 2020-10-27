@@ -149,12 +149,15 @@ class Field extends Webbit {
   updated(changedProperties) {
     if (changedProperties.has('width') || changedProperties.has('height')) {
       this.resizeField();
+      this.requestUpdate();
+
     }
 
     if (changedProperties.has('image') || changedProperties.has('useFieldConfig')) {
       const fieldElement = this.shadowRoot.querySelector('[part=field]');
       fieldElement.style.setProperty('--field-image', `url(${this.image}`);
       this.resizeField();
+      this.requestUpdate();
     }
   }
 
