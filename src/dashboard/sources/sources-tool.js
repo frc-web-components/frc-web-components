@@ -48,6 +48,14 @@ class SourcesTool extends LitElement {
         color: purple;
       }
 
+      vaadin-form-layout vaadin-combo-box, vaadin-form-layout multiselect-combo-box {
+        width: calc(100% - 5px);
+      }
+
+      vaadin-form-layout vaadin-form-item::part(label) {
+        margin-top: 10px;
+      }
+
     `;
   }
 
@@ -57,6 +65,7 @@ class SourcesTool extends LitElement {
       selectedNode: { type: Object, attribute: false },
       sourceKeyInput: { type: String, attribute: false },
       sourceProviderInput: { type: String, attribute: false },
+      fromPropertiesInput: { type: Array, attribute: false }
     };
   }
 
@@ -66,6 +75,7 @@ class SourcesTool extends LitElement {
     this.selectedNode = null;
     this.sourceKeyInput = '';
     this.sourceProviderInput = '';
+    this.fromPropertiesInput = [];
   }
 
   getSourceKey() {
@@ -123,7 +133,8 @@ class SourcesTool extends LitElement {
   onConfirm() {
     this.wom.executeAction('setSource', {
       sourceProvider: this.sourceProviderInput,
-      sourceKey: this.sourceKeyInput
+      sourceKey: this.sourceKeyInput,
+      fromProperties: this.fromPropertiesInput.map(item => item.value),
     });
     this.requestUpdate();
   }
@@ -144,30 +155,72 @@ class SourcesTool extends LitElement {
     return keys;
   }
 
+  getProperties() {
+    const properties = Object.entries(this.selectedNode.getNode().constructor.properties);
+
+    return properties
+      .filter(([name, property]) => {
+        return property.canConnectToSources;
+      })
+      .map(([name, property]) => {
+        return {
+          value: name,
+          label: property.attribute.replace(/-/g, ' ')
+        };
+      });
+  }
+
+  onSetFromPropertiesInputChange() {
+    const inputElement = this.shadowRoot.querySelector('[part=set-from-properties-dropdown]');
+    this.fromPropertiesInput = inputElement.selectedItems;
+  }
+
   renderWebbit() {
     return html`
       <p>Source for <span>${this.selectedNode.getWebbitId()}</span></p>
-      <div part="source-fields">
-        <vaadin-combo-box
-          part="source-key-dropdown"
-          label="Source Key"
-          clear-button-visible 
-          value="${this.sourceKeyInput || ''}"
-          .items="${this.getSourceKeyItems()}"
-          @change="${this.onSourceKeyInputChange}"
-          theme="small"
-          allow-custom-value
-        >
-        </vaadin-combo-box>
-        <vaadin-combo-box 
-          label="Source Provider"
-          clear-button-visible
-          value="${this.sourceProviderInput || ''}"
-          .items="${getSourceProviderNames()}"
-          @change="${this.onSourceProviderInputChange}"
-          theme="small"
-        ></vaadin-combo-box>
-      </div>
+      <vaadin-form-layout>
+        <vaadin-form-item>
+          <label slot="label">Source Key</label>
+          <vaadin-combo-box
+            part="source-key-dropdown"
+            clear-button-visible 
+            value="${this.sourceKeyInput || ''}"
+            .items="${this.getSourceKeyItems()}"
+            @change="${this.onSourceKeyInputChange}"
+            theme="small"
+            allow-custom-value
+          >
+          </vaadin-combo-box>
+        </vaadin-form-item>
+        <vaadin-form-item>
+          <label slot="label">Source Provider</label>
+          <vaadin-combo-box 
+            clear-button-visible
+            value="${this.sourceProviderInput || ''}"
+            .items="${getSourceProviderNames()}"
+            @change="${this.onSourceProviderInputChange}"
+            theme="small"
+          ></vaadin-combo-box>
+        </vaadin-form-item>
+        <vaadin-form-item>
+          <label 
+            slot="label" 
+            title="Each property listed will have its source's initial value be set to the property's value."
+          >Set Source Defaults from Properties</label>
+          <multiselect-combo-box
+            part="set-from-properties-dropdown"
+            clear-button-visible 
+            value="${this.fromPropertiesInput || []}"
+            .items="${this.getProperties()}"
+            @change="${this.onSetFromPropertiesInputChange}"
+            theme="small"
+            item-label-path="label" 
+            item-value-path="value"
+            item-id-path="value"
+          >
+          </multiselect-combo-box>
+        </vaadin-form-item>
+      </vaadin-form-layout>
 
       <div part="buttons">
         <vaadin-button 

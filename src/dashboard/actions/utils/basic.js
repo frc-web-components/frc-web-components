@@ -27,9 +27,10 @@ export const setWebbitId = (node, webbitId) => {
   node.webbitId = webbitId;
 };
 
-export const setWebbitSource = (node, sourceProvider, sourceKey) => {
+export const setWebbitSource = (node, sourceProvider, sourceKey, fromProperties) => {
   node.sourceProvider = sourceProvider;
   node.sourceKey = sourceKey;
+  node.fromProperties = fromProperties;
 };
 
 export const hasLayoutChanged = (wom, html) => {

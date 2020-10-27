@@ -8,11 +8,12 @@ export default class SetSource extends Action {
   }
 
   execute({ wom, selectedNode, context }) {
-    const { sourceProvider, sourceKey } = context;
+    const { sourceProvider, sourceKey, fromProperties } = context;
     setWebbitSource(
       selectedNode.getNode(), 
       sourceProvider,
-      sourceKey
+      sourceKey,
+      fromProperties
     );
     setTimeout(async () => {
       wom.history.push(await wom.getHtml());
