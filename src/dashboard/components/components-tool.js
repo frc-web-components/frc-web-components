@@ -150,8 +150,6 @@ class ComponentsTool extends LitElement {
         if (components.length === 1) {
           this.selectedComponent = components[0].name;
         }
-      } else if (!this.selectedNode.canContainComponent(this.selectedComponent)) {
-        this.selectedComponent = '';
       }
     }
   }
@@ -215,27 +213,79 @@ class ComponentsTool extends LitElement {
   renderSelectedComponentDetails() {
     if (!this.selectedComponent) {
       return html`
-        <p>Select a component to view details.</p>
+        <div part="selected-component-details">
+          <p>Select a component to view details.</p>
+        </div>
       `;
     }
 
     const metadata = this.getComponentMetadata(this.selectedComponent);
 
+    if (!metadata) {
+      return html`
+        <div part="selected-component-details">
+          <p>Component <span>${this.selectedComponent}</span> does not exist.</p>
+        </div>
+      `;
+    }
+
+    if (!this.selectedNode.canContainComponent(this.selectedComponent)) {
+      return html`
+        <div part="selected-component-details">
+          <p>Component <span>${this.selectedComponent}</span> cannot be added to the selected element.</p>
+        </div>
+      `;
+    }
+
     return html`
-      <header><span>${metadata.displayName}</span> component</header>
-      <p>
-        ${metadata.description}
-        ${' '}
-        ${metadata.documentationLink ? html`
-          Examples and documentation can be found <a href="${metadata.documentationLink}" target="_blank">here</a>.
-        ` : ''}
-      </p>
+      <div part="selected-component-details">
+        <header><span>${metadata.displayName}</span> component</header>
+        <p>
+          ${metadata.description}
+          ${' '}
+          ${metadata.documentationLink ? html`
+            Examples and documentation can be found <a href="${metadata.documentationLink}" target="_blank">here</a>.
+          ` : ''}
+        </p>
+      </div>
+      <div part="buttons">
+        <vaadin-button 
+          part="confirm-button" 
+          theme="success primary small" 
+          aria-label="Confirm"
+          ?disabled="${!this.selectedComponent}"
+          @click="${this.onPrependElement}"
+        >
+          Prepend Element
+        </vaadin-button>
+        <vaadin-button 
+          part="confirm-button" 
+          theme="success primary small" 
+          aria-label="Confirm"
+          ?disabled="${!this.selectedComponent}"
+          @click="${this.onAppendElement}"
+        >
+          Append Element
+        </vaadin-button>
+      </div>
     `;
   }
 
   renderComponentList() {
+
+    const metadata = this.getMetadata(this.selectedComponent) || {};
+    const canContain = this.selectedNode.canContainComponent(this.selectedComponent);
+    const accordionOpenIndex = (metadata && canContain)
+      ? this.componentCategories.findIndex(category => {
+        if (typeof metadata.category !== 'string') {
+          return false;
+        }
+        return category.name === metadata.category.toLowerCase();
+      })
+      : null;
+
     return html`
-      <vaadin-accordion opened="${null}">
+      <vaadin-accordion opened="${accordionOpenIndex}">
         ${this.componentCategories.map(category => html`
           <vaadin-accordion-panel theme="small">
             <div part="category-name" slot="summary">${category.name}</div>
@@ -254,6 +304,11 @@ class ComponentsTool extends LitElement {
         `)}
       </vaadin-accordion>
     `;
+  }
+
+  onSelectedComponentInput() {
+    const selectedComponentInput = this.shadowRoot.querySelector('[part=selected-component-input]');
+    this.onComponentSelect(selectedComponentInput.value);
   }
 
   render() {
@@ -279,9 +334,11 @@ class ComponentsTool extends LitElement {
       <div part="fields">
         <div part="components" style="position: relative">
           <vaadin-text-field
+            part="selected-component-input"
             label="Component"
             value="${this.selectedComponent || ''}"
             theme="small"
+            @input="${this.onSelectedComponentInput}"
           >
               <iron-icon 
                 slot="suffix" 
@@ -306,29 +363,7 @@ class ComponentsTool extends LitElement {
           theme="small"
         ></vaadin-combo-box>
       </div>
-      <div part="selected-component-details">
-        ${this.renderSelectedComponentDetails()}
-      </div>
-      <div part="buttons">
-        <vaadin-button 
-          part="confirm-button" 
-          theme="success primary small" 
-          aria-label="Confirm"
-          ?disabled="${!this.selectedComponent}"
-          @click="${this.onPrependElement}"
-        >
-          Prepend Element
-        </vaadin-button>
-        <vaadin-button 
-          part="confirm-button" 
-          theme="success primary small" 
-          aria-label="Confirm"
-          ?disabled="${!this.selectedComponent}"
-          @click="${this.onAppendElement}"
-        >
-          Append Element
-        </vaadin-button>
-      </div>
+      ${this.renderSelectedComponentDetails()}
     `
   }
 }
