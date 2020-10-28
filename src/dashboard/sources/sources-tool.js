@@ -88,10 +88,24 @@ class SourcesTool extends LitElement {
     return sourceProvider;
   }
 
+  getFromProperties() {
+    const fromProperties = this.selectedNode.getNode().fromProperties;
+    return fromProperties;
+  }
+
   updated(changedProperties) {
     if (changedProperties.has('selectedNode') && this.selectedNode) {
       this.sourceKeyInput = this.getSourceKey();
       this.sourceProviderInput = this.getSourceProvider();
+      const properties = this.selectedNode.getNode().constructor.properties;
+      this.fromPropertiesInput = this.getFromProperties()
+        .filter(name => name in properties && properties[name].canConnectToSources)
+        .map(name => ({
+          value: name,
+          label: properties[name].attribute.replace(/-/g, ' ')
+        }));
+
+      console.log('fromPropertiesInput:', this.fromPropertiesInput);
     }
   }
 
@@ -111,8 +125,28 @@ class SourcesTool extends LitElement {
     return this.getSourceProvider() !== this.sourceProviderInput;
   }
 
+  isFromPropertiesInputModified() {
+    if (!this.selectedNode) {
+      return false;
+    }
+
+    const fromProperties = this.getFromProperties();
+
+    if (fromProperties.length !== this.fromPropertiesInput.length) {
+      return true;
+    }
+
+    for (let property of this.fromPropertiesInput) {
+      if (!fromProperties.includes(property.value)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   isInputModified() {
-    return this.isSourceKeyInputModified() || this.isSourceProviderInputModified();
+    return this.isSourceKeyInputModified() || this.isSourceProviderInputModified() || this.isFromPropertiesInputModified();
   }
 
   onSourceKeyInputChange(ev) {
@@ -173,6 +207,7 @@ class SourcesTool extends LitElement {
   onSetFromPropertiesInputChange() {
     const inputElement = this.shadowRoot.querySelector('[part=set-from-properties-dropdown]');
     this.fromPropertiesInput = inputElement.selectedItems;
+    console.log('this.fromPropertiesInput:', this.fromPropertiesInput);
   }
 
   renderWebbit() {
@@ -210,7 +245,7 @@ class SourcesTool extends LitElement {
           <multiselect-combo-box
             part="set-from-properties-dropdown"
             clear-button-visible 
-            value="${this.fromPropertiesInput || []}"
+            .selectedItems="${this.fromPropertiesInput || []}"
             .items="${this.getProperties()}"
             @change="${this.onSetFromPropertiesInputChange}"
             theme="small"

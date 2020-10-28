@@ -54,7 +54,9 @@ export default class NetworkTablesProvider extends SourceProvider {
     
     this.ntReady.then(() => {
       this.updatedEntriesBeforeReady.forEach(key => {
-        NetworkTables.putValue(key, this.getSource(key));
+        if (typeof NetworkTables.getValue(key) === 'undefined') {
+          NetworkTables.putValue(key, this.getSource(key));
+        }
       });
   
       NetworkTables.addRobotConnectionListener(connected => {
