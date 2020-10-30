@@ -1,6 +1,7 @@
 import { Webbit, html, css } from '@webbitjs/webbit';
-import defaultOptions from './line-chart-options';
+import defaultOptions, { yAxisDefaults } from './line-chart-options';
 import { colors, shuffle } from '../chart-utils';
+import './chart-axis';
 
 class LineChartData {
 
@@ -43,8 +44,6 @@ class LineChartData {
 	}
 
 	updateChart(chart) {
-
-    console.log('chart:', chart.chart);
 
 		chart.chart.data.labels = this.data.map(point => point.time.toFixed(1));
 
@@ -149,7 +148,7 @@ class LineChart extends Webbit {
       category: 'Charts & Graphs',
       description: 'A component used to graph data over time.',
       documentationLink: 'https://frc-web-components.github.io/components/line-chart/',
-      allowedChildren: ['frc-chart-data'],
+      allowedChildren: ['frc-chart-data', 'frc-chart-axis'],
       minSize: { width: 50, height: 50 },
       dashboardHtml: `
         <frc-line-chart title="Line Chart">
@@ -200,7 +199,27 @@ class LineChart extends Webbit {
 
 		this.plugins = [{
 			beforeUpdate: (chart, options) => {
-				chart.options.title.text = this.title;
+        chart.options.title.text = this.title;
+        chart.options.scales.xAxes[0].scaleLabel.labelString = this.xAxisLabel;
+
+        const currentAxes = chart.options.scales.yAxes;
+
+        for (let i = currentAxes.length; i < this.axisElements.length; i++) {
+          currentAxes.push(yAxisDefaults);
+        }
+
+        for (let i = 0; i < this.axisElements.length; i++) {
+          currentAxes[i].display = true;
+          currentAxes[i].id = this.axisElements[i].id;
+          currentAxes[i].position = this.axisElements[i].position;
+          currentAxes[i].scaleLabel.labelString = this.axisElements[i].label;
+          currentAxes[i].ticks.suggestedMin = this.axisElements[i].min;
+          currentAxes[i].ticks.suggestedMax = this.axisElements[i].max;
+        }
+
+        for (let i = this.axisElements.length; i < currentAxes.length; i++) {
+          currentAxes[i].display = false;
+        }
 			}
     }]
 
@@ -229,11 +248,7 @@ class LineChart extends Webbit {
   }
 
 	updateChart() {
-		if (this.chartData) {
-      if (!this.chartElement.chart) {
-        this.chartElement = this.shadowRoot.querySelector('#chart');
-        console.log('...');
-      }
+		if (this.chartData && this.chartElement.chart) {
 			this.dataElements.forEach((element, i) => {
 				this.chartData.setColor(i, element.color);
 				this.chartData.setLabel(i, element.label);
@@ -250,7 +265,7 @@ class LineChart extends Webbit {
 			this.updateChart.bind(this), 
 			parseInt(this.timeStep * 1000)
 		);
-	}
+  }
 
 	updated(changedProperties) {
 		if (!this.chartData) {
@@ -266,9 +281,8 @@ class LineChart extends Webbit {
 		}
   }
   
-  getOptions() {
-    const options = {...defaultOptions};
-    options.scales.yAxes = this.axisElements.map(axisElement => {
+  getAxes() {
+    return this.axisElements.map(axisElement => {
       return {
         display: true,
         id: axisElement.id,
@@ -283,8 +297,6 @@ class LineChart extends Webbit {
         }
       };
     });
-
-    return options;
   }
 
   render() {
@@ -296,7 +308,7 @@ class LineChart extends Webbit {
 					labels: [],
 					datasets: []
 				}}" 
-        .options="${this.getOptions()}"
+        .options="${defaultOptions}"
 				.plugins="${this.plugins}"
       >
 			</frc-base-chart>

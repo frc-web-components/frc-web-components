@@ -1,3 +1,15 @@
+export const yAxisDefaults = {
+  display: true,
+  scaleLabel: {
+    display: true,
+    labelString: '',
+  },
+  ticks: {
+    suggestedMin: -1,
+    suggestedMax: 1
+  }
+};
+
 const options = {
   title: {
     display: true,
@@ -18,8 +30,19 @@ const options = {
         padding: 10
       }
     }],
-    yAxes: []
+    yAxes: [{
+      display: true,
+      scaleLabel: {
+        display: true,
+        labelString: '',
+      },
+      ticks: {
+        suggestedMin: -1,
+        suggestedMax: 1
+      }
+    }]
   }
 };
+
 
 export default options;
