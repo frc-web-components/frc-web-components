@@ -18,17 +18,7 @@ const options = {
         padding: 10
       }
     }],
-    yAxes: [{
-      display: true,
-      scaleLabel: {
-        display: true,
-        labelString: '',
-      },
-      ticks: {
-        suggestedMin: -1,
-        suggestedMax: 1
-      }
-    }]
+    yAxes: []
   }
 };
 

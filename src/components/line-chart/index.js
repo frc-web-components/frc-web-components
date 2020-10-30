@@ -44,6 +44,8 @@ class LineChartData {
 
 	updateChart(chart) {
 
+    console.log('chart:', chart.chart);
+
 		chart.chart.data.labels = this.data.map(point => point.time.toFixed(1));
 
 		// https://stackoverflow.com/a/41878442
@@ -146,14 +148,14 @@ class LineChart extends Webbit {
       displayName: 'Line Chart',
       category: 'Charts & Graphs',
       description: 'A component used to graph data over time.',
-			documentationLink: 'https://frc-web-components.github.io/components/line-chart/',
-			allowedChildren: ['frc-chart-data'],
-			minSize: { width: 50, height: 50 },
-			dashboardHtml: `
-				<frc-line-chart title="Line Chart">
-					<frc-chart-data label="Data" color="green"></frc-chart-data>
-				</frc-line-chart>
-			`
+      documentationLink: 'https://frc-web-components.github.io/components/line-chart/',
+      allowedChildren: ['frc-chart-data'],
+      minSize: { width: 50, height: 50 },
+      dashboardHtml: `
+        <frc-line-chart title="Line Chart">
+          <frc-chart-data label="Data" color="green"></frc-chart-data>
+        </frc-line-chart>
+      `
     };
   }
 
@@ -174,10 +176,7 @@ class LineChart extends Webbit {
   static get properties() {
     return {
       title: { type: String },
-			minY: { type: Number, attribute: 'min-y' },
-			maxY: { type: Number, attribute: 'max-y' },
 			xAxisLabel: { type: String, attribute: 'x-axis-label' },
-			yAxisLabel: { type: String, attribute: 'y-axis-label' },
 			trackedTime: { type: Number, attribute: 'tracked-time' },
 			timeStep: { 
 				type: Number, 
@@ -192,11 +191,9 @@ class LineChart extends Webbit {
   constructor() {
     super();
 		this.title = '';
-		this.minY = -1;
-		this.maxY = 1;
 		this.xAxisLabel = 'Time (seconds)';
-		this.yAxisLabel = 'Value';
-		this.dataElements = [];
+    this.dataElements = [];
+    this.axisElements = [];
 		this.trackedTime = 30;
 		this.timeStep = .1;
 		this.timeStepIntervalId = null;
@@ -204,12 +201,6 @@ class LineChart extends Webbit {
 		this.plugins = [{
 			beforeUpdate: (chart, options) => {
 				chart.options.title.text = this.title;
-				chart.options.scales.yAxes[0].ticks.suggestedMin = this.minY;
-				chart.options.scales.yAxes[0].ticks.suggestedMax = this.maxY;
-
-				// sets labels
-				chart.options.scales.xAxes[0].scaleLabel.labelString = this.xAxisLabel;
-				chart.options.scales.yAxes[0].scaleLabel.labelString = this.yAxisLabel;
 			}
     }]
 
@@ -232,12 +223,17 @@ class LineChart extends Webbit {
 			});
 			this.chartData = new LineChartData(this.dataElements.length);
 			this.chartData.setTrackedTime(this.trackedTime);
-			this.updateTimeStep();
+      this.updateTimeStep();
+      this.axisElements = elements.filter(element => element.tagName === 'FRC-CHART-AXIS');
 		});
   }
 
 	updateChart() {
 		if (this.chartData) {
+      if (!this.chartElement.chart) {
+        this.chartElement = this.shadowRoot.querySelector('#chart');
+        console.log('...');
+      }
 			this.dataElements.forEach((element, i) => {
 				this.chartData.setColor(i, element.color);
 				this.chartData.setLabel(i, element.label);
@@ -268,7 +264,28 @@ class LineChart extends Webbit {
 		if (changedProperties.has('timeStep')) {
 			this.updateTimeStep();
 		}
-	}
+  }
+  
+  getOptions() {
+    const options = {...defaultOptions};
+    options.scales.yAxes = this.axisElements.map(axisElement => {
+      return {
+        display: true,
+        id: axisElement.id,
+        position: axisElement.position,
+        scaleLabel: {
+          display: true,
+          labelString: axisElement.label,
+        },
+        ticks: {
+          suggestedMin: axisElement.min,
+          suggestedMax: axisElement.max
+        }
+      };
+    });
+
+    return options;
+  }
 
   render() {
     return html`
@@ -279,7 +296,7 @@ class LineChart extends Webbit {
 					labels: [],
 					datasets: []
 				}}" 
-        .options="${defaultOptions}"
+        .options="${this.getOptions()}"
 				.plugins="${this.plugins}"
       >
 			</frc-base-chart>
