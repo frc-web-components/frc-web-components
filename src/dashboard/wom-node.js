@@ -36,7 +36,7 @@ export default class WomNode {
     this.selectionBox = null;
   }
 
-  canContainComponent(componentType) {
+  canContainComponent(componentType, slot) {
 
     if (this.slots.length === 0) {
       return false;
@@ -45,8 +45,17 @@ export default class WomNode {
     const { allowedParents } = webbitRegistry.getMetadata(componentType) || {};
     const { allowedChildren } = this.getMetadata() || {};
     
-    if (allowedChildren && allowedChildren.indexOf(componentType) < 0) {
-      return false;
+    if (allowedChildren instanceof Array) {
+      if (allowedChildren.indexOf(componentType) < 0) {
+        return false;
+      }
+    } else if (typeof allowedChildren === 'object') {
+      if (
+        typeof allowedChildren[slot] === 'undefined' 
+        || allowedChildren[slot].indexOf(componentType) < 0
+      ) {
+        return false;
+      }
     }
 
     if (allowedParents && allowedParents.indexOf(this.getName()) < 0) {

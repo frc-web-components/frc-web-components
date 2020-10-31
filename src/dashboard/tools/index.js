@@ -129,7 +129,7 @@ class WomTools extends LitElement {
     const canSelectedContainClipboardNode = (
       isClipboardSet 
       && isNodeSelected 
-      && this.wom.getSelectedNode().canContainComponent(this.wom.getClipboard().componentType)
+      && this.wom.getSelectedNode().canContainComponent(this.wom.getClipboard().componentType, this.wom.getClipboard().slot)
     );
 
     const dashboardMenuItems = [
@@ -341,7 +341,7 @@ class WomTools extends LitElement {
       const canSelectedContainClipboardNode = (
         isClipboardSet 
         && isNodeSelected 
-        && this.wom.getSelectedNode().canContainComponent(this.wom.getClipboard().componentType)
+        && this.wom.getSelectedNode().canContainComponent(this.wom.getClipboard().componentType, this.wom.getClipboard().slot)
       );
       if (canSelectedContainClipboardNode) {
         this.wom.executeAction('pasteNode');

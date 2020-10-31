@@ -99,6 +99,7 @@ class Wom {
     this.clipboardNode = {
       html: await node.getHtml(true),
       componentType: node.getName(),
+      slot: node.getSlot(),
     };
     this.dispatchEvent('womClipboardSet');
   }

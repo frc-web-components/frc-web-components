@@ -1,16 +1,21 @@
 export const yAxisDefaults = {
+  type: 'linear',
   display: true,
   scaleLabel: {
     display: true,
     labelString: '',
   },
   ticks: {
-    suggestedMin: -1,
-    suggestedMax: 1
+    min: -1,
+    max: 1
+  },
+  gridLines: {
+    display: true
   }
 };
 
 const options = {
+  responsive: true,
   title: {
     display: true,
     text: ''
@@ -31,14 +36,18 @@ const options = {
       }
     }],
     yAxes: [{
+      type: 'linear',
       display: true,
       scaleLabel: {
         display: true,
         labelString: '',
       },
       ticks: {
-        suggestedMin: -1,
-        suggestedMax: 1
+        min: -1,
+        max: 1
+      },
+      gridLines: {
+        display: true
       }
     }]
   }

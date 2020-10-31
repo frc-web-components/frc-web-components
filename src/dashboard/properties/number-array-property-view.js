@@ -55,7 +55,7 @@ class NumberArrayPropertyView extends PropertyView {
   onCustomValueSet(ev) {
     const value = parseFloat(ev.detail);
     if (!isNaN(value)) {
-      this.inputValue = this.inputValue.concat(ev.detail);
+      this.inputValue = this.inputValue.concat(value);
       this.requestUpdate();
       this.dispatchPropertyChangeEvent();
     }

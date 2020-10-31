@@ -161,12 +161,16 @@ class LineChart extends Webbit {
       category: 'Charts & Graphs',
       description: 'A component used to graph data over time.',
       documentationLink: 'https://frc-web-components.github.io/components/line-chart/',
-      allowedChildren: ['frc-chart-data', 'frc-chart-axis'],
+      allowedChildren: {
+        data: ['frc-chart-data'],
+        axes: ['frc-chart-axis'],
+      },
+      slots: ['data', 'axes'],
       minSize: { width: 50, height: 50 },
       dashboardHtml: `
-		    <frc-line-chart title="Line Chart">
-          <frc-chart-axis></frc-chart-axis>
-          <frc-chart-data label="Data" color="#00aa00"></frc-chart-data>
+        <frc-line-chart title="Line Chart">
+          <frc-chart-axis slot="axes"></frc-chart-axis>
+          <frc-chart-data slot="data" label="Data" color="#00aa00"></frc-chart-data>
         </frc-line-chart>
       `
     };
@@ -224,11 +228,31 @@ class LineChart extends Webbit {
 
         for (let i = 0; i < this.axisElements.length; i++) {
           currentAxes[i].display = true;
+          currentAxes[i].type = this.axisElements[i].scaleType;
           currentAxes[i].id = this.axisElements[i].axisId;
           currentAxes[i].position = this.axisElements[i].position;
           currentAxes[i].scaleLabel.labelString = this.axisElements[i].label;
-          currentAxes[i].ticks.suggestedMin = this.axisElements[i].min;
-          currentAxes[i].ticks.suggestedMax = this.axisElements[i].max;
+          currentAxes[i].ticks.min = this.axisElements[i].min;
+          currentAxes[i].ticks.max = this.axisElements[i].max;
+          // currentAxes[i].ticks.userCallback  = (label, index) => {
+          //   if (this.axisElements[i].scaleType === 'linear') {
+          //     return label;
+          //   }
+          //   return index % 3 === 0 ? label: '';
+          // }
+          if (this.axisElements[i].tickValues.length === 0) {
+            currentAxes[i].afterBuildTicks = null;
+          } else {
+          currentAxes[i].afterBuildTicks = (chartObj) => {
+            chartObj.ticks.splice(0, chartObj.ticks.length);
+            for (let tick of this.axisElements[i].tickValues) {
+              console.log('tick:', tick, typeof tick)
+              chartObj.ticks.push(tick);
+            }
+          }
+        }
+
+          currentAxes[i].gridLines.display = !this.axisElements[i].hideGridLines;
         }
 
         for (let i = this.axisElements.length; i < currentAxes.length; i++) {
@@ -245,41 +269,45 @@ class LineChart extends Webbit {
 		super.firstUpdated();
 		this.chartElement = this.shadowRoot.querySelector('#chart');
 
-		const slot = this.shadowRoot.querySelector('slot');
-		slot.addEventListener('slotchange', e => {
-      let elements = [...slot.assignedElements()];
-      
-      this.axisElements = elements.filter(element => element.tagName === 'FRC-CHART-AXIS');
-      for (let i = 0; i < this.axisElements.length; i++) {
-        if (this.axisElements[i].defaultProps.axisId) {
-          continue;
-        }
-        const axisIds = this.axisElements.map(axis => axis.axisId);
-        for (let j = 0; j < this.axisElements.length; j++) {
-          const id = `Axis ${j + 1}`;
-          if (!axisIds.includes(id)) {
-            this.axisElements[i].axisId = id;
-            this.axisElements[i].setDefaultValue('axisId', id);
-            break;
+		const slots = this.shadowRoot.querySelectorAll('slot');
+    slots.forEach(slot => {
+      slot.addEventListener('slotchange', e => {
+        let elements = [...slots].reduce((els, s) => {
+          return els.concat([...s.assignedElements()]);
+        }, []);
+        
+        this.axisElements = elements.filter(element => element.tagName === 'FRC-CHART-AXIS');
+        for (let i = 0; i < this.axisElements.length; i++) {
+          if (this.axisElements[i].defaultProps.axisId) {
+            continue;
+          }
+          const axisIds = this.axisElements.map(axis => axis.axisId);
+          for (let j = 0; j < this.axisElements.length; j++) {
+            const id = `Axis ${j + 1}`;
+            if (!axisIds.includes(id)) {
+              this.axisElements[i].axisId = id;
+              this.axisElements[i].setDefaultValue('axisId', id);
+              break;
+            }
           }
         }
-      }
 
-      this.dataElements = elements.filter(element => element.tagName === 'FRC-CHART-DATA');
-			this.dataElements.forEach((element, i) => {
-				if (!element.color) {
-					element.color = this.randomizedColors[i];
-        }
-        if (!element.defaultProps.axisId) {
-          const axisId = this.axisElements.length > 0 ? this.axisElements[0].axisId : 'Axis 1';
-          element.axisId = axisId;
-          element.setDefaultValue('axisId', axisId);
-        }
-			});
-			this.chartData = new LineChartData(this.dataElements.length);
-			this.chartData.setTrackedTime(this.trackedTime);
-      this.updateTimeStep();
-		});
+        this.dataElements = elements.filter(element => element.tagName === 'FRC-CHART-DATA');
+        this.dataElements.forEach((element, i) => {
+          if (!element.color) {
+            element.color = this.randomizedColors[i];
+          }
+          if (!element.defaultProps.axisId) {
+            const axisId = this.axisElements.length > 0 ? this.axisElements[0].axisId : 'Axis 1';
+            element.axisId = axisId;
+              element.setDefaultValue('axisId', axisId);
+            }
+        });
+        this.chartData = new LineChartData(this.dataElements.length);
+        this.chartData.setTrackedTime(this.trackedTime);
+        this.updateTimeStep();
+      });
+    });
   }
 
 	updateChart() {
@@ -316,24 +344,6 @@ class LineChart extends Webbit {
 			this.updateTimeStep();
 		}
   }
-  
-  getAxes() {
-    return this.axisElements.map(axisElement => {
-      return {
-        display: true,
-        id: axisElement.axisId,
-        position: axisElement.position,
-        scaleLabel: {
-          display: true,
-          labelString: axisElement.label,
-        },
-        ticks: {
-          suggestedMin: axisElement.min,
-          suggestedMax: axisElement.max
-        }
-      };
-    });
-  }
 
   render() {
     return html`
@@ -348,7 +358,8 @@ class LineChart extends Webbit {
 				.plugins="${this.plugins}"
       >
 			</frc-base-chart>
-			<slot></slot>
+      <slot name="data"></slot>
+      <slot name="axes"></slot>
     `;
   }
 }

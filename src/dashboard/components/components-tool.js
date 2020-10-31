@@ -141,8 +141,20 @@ class ComponentsTool extends LitElement {
   updated(changedProps) {
     if (changedProps.has('selectedNode') && this.selectedNode) {
       this.showComponentList = false;
-      this.componentCategories = this.getComponentCategories();
       this.selectedSlot = this.selectedNode.getSlots()[0] || '';
+      this.componentCategories = this.getComponentCategories();
+      if (this.selectedNode.getSlots().length === 0) {
+        return;
+      } else if (this.componentCategories.length === 1) {
+        const { components } = this.componentCategories[0];
+        if (components.length === 1) {
+          this.selectedComponent = components[0].name;
+        }
+      }
+    }
+
+    if (changedProps.has('selectedSlot')) {
+      this.componentCategories = this.getComponentCategories();
       if (this.selectedNode.getSlots().length === 0) {
         return;
       } else if (this.componentCategories.length === 1) {
@@ -159,7 +171,7 @@ class ComponentsTool extends LitElement {
 
     this.getComponents().forEach(name => {
       const { displayName, category } = this.getComponentMetadata(name);
-      if (!this.selectedNode.canContainComponent(name) || !category) {
+      if (!this.selectedNode.canContainComponent(name, this.selectedSlot) || !category) {
         return;
       }
       
@@ -229,7 +241,7 @@ class ComponentsTool extends LitElement {
       `;
     }
 
-    if (!this.selectedNode.canContainComponent(this.selectedComponent)) {
+    if (!this.selectedNode.canContainComponent(this.selectedComponent, this.selectedSlot)) {
       return html`
         <div part="selected-component-details">
           <p>Component <span>${this.selectedComponent}</span> cannot be added to the selected element.</p>
@@ -274,7 +286,7 @@ class ComponentsTool extends LitElement {
   renderComponentList() {
 
     const metadata = this.getMetadata(this.selectedComponent) || {};
-    const canContain = this.selectedNode.canContainComponent(this.selectedComponent);
+    const canContain = this.selectedNode.canContainComponent(this.selectedComponent, this.selectedSlot);
     const accordionOpenIndex = (metadata && canContain)
       ? this.componentCategories.findIndex(category => {
         if (typeof metadata.category !== 'string') {

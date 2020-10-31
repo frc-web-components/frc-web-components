@@ -13,9 +13,9 @@ export default class PasteNode extends Action {
       return;
     }
 
-    const { html, componentType } = clipboard;
+    const { html, componentType, slot } = clipboard;
 
-    if (!selectedNode.canContainComponent(componentType)) {
+    if (!selectedNode.canContainComponent(componentType, slot)) {
       return;
     }
 
