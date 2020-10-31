@@ -7,7 +7,7 @@ class StringDropdownPropertyView extends PropertyView {
     return html`
       <vaadin-combo-box 
         part="input"
-        .items="${this.property.getOptions()}" 
+        .items="${this.property.getOptions.bind(this.selectedNode.getNode())()}" 
         value="${this.inputValue || ''}"
         @input="${this.onInputChange}"
         @change="${this.onInputChange}"

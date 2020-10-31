@@ -7,7 +7,7 @@ class StringPropertyView extends PropertyView {
     return html`
       <vaadin-text-field
         part="input"
-        value="${this.inputValue || ''}"
+        .value="${this.inputValue || ''}"
         @input="${this.onInputChange}"
         @change="${this.onInputChange}"
         theme="small"

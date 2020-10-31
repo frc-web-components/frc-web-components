@@ -26,20 +26,26 @@ class ChartAxis extends Webbit {
 
   static get properties() {
     return {
-      id: { type: String },
+      axisId: { type: String },
       min: { type: Number },
       max: { type: Number },
       label: { type: String },
-      position: { type: String },
+      position: { 
+        type: String,
+        inputType: 'StringDropdown',
+        getOptions() {
+          return ['left', 'right'];
+        }
+      },
     };
   }
 
   constructor() {
     super();
-    this.id = '';
+    this.axisId = '';
     this.min = -1;
     this.max = 1;
-    this.label = '';
+    this.label = 'Value';
     this.position = 'left';
   }
 }

@@ -26,15 +26,24 @@ class ChartData extends Webbit {
 
   static get properties() {
     return {
+      axisId: { 
+        type: String,
+        inputType: 'StringDropdown',
+        getOptions() {
+          const chart = this.parentElement;
+          return chart.axisElements.map(axis => axis.axisId);
+        }
+      },
       value: { type: Number, primary: true },
       label: { type: String },
-      color: { type: String }
+      color: { type: String, inputType: 'ColorPicker' }
     };
   }
 
   constructor() {
     super();
     this.value = 0;
+    this.axisId = '';
     this.label = '';
     this.color = '';
   }

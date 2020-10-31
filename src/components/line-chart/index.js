@@ -8,11 +8,15 @@ class LineChartData {
 	constructor(valueCount, chart) {
 		this.valueCount = valueCount;
 		this.data = [];
+		this.dataIds = [];
 		this.dataLabels = [];
 		this.dataColors = [];
 		this.chart = chart;
 
+
+
 		for (let i = 0; i < valueCount; i++) {
+			this.dataIds.push('');
 			this.dataLabels.push('');
 			this.dataColors.push('');
 		}
@@ -56,17 +60,22 @@ class LineChartData {
 			return dataset.hidden;
 		});
 
+		const yAxisIds = chart.chart.options.scales.yAxes.map(axis => axis.id);
+
 		chart.chart.data.datasets.splice(0, chart.chart.data.datasets.length);
 		this.dataLabels.forEach((label, index) => {
-			chart.chart.data.datasets.push({
-				label: label,
-				data: this.data.map(point => point.values[index]),
-				fill: false,
-				pointRadius: 0,
-				borderColor: this.dataColors[index],
-				borderWidth: 2,
-				hidden: hiddenValues[index]
-			});
+			if (yAxisIds.includes(this.dataIds[index])) {
+				chart.chart.data.datasets.push({
+					yAxisID: this.dataIds[index],
+					label: label,
+					data: this.data.map(point => point.values[index]),
+					fill: false,
+					pointRadius: 0,
+					borderColor: this.dataColors[index],
+					borderWidth: 2,
+					hidden: hiddenValues[index]
+				});
+			}
 		});
 
 		chart.updateChart();
@@ -130,6 +139,10 @@ class LineChartData {
 		this.data = newData;
 	}
 
+	setId(index, id) {
+		this.dataIds[index] = id;
+	}
+
 	setColor(index, color) {
 		this.dataColors[index] = color;
 	}
@@ -151,8 +164,9 @@ class LineChart extends Webbit {
       allowedChildren: ['frc-chart-data', 'frc-chart-axis'],
       minSize: { width: 50, height: 50 },
       dashboardHtml: `
-        <frc-line-chart title="Line Chart">
-          <frc-chart-data label="Data" color="green"></frc-chart-data>
+		    <frc-line-chart title="Line Chart">
+          <frc-chart-axis></frc-chart-axis>
+          <frc-chart-data label="Data" color="#00aa00"></frc-chart-data>
         </frc-line-chart>
       `
     };
@@ -210,7 +224,7 @@ class LineChart extends Webbit {
 
         for (let i = 0; i < this.axisElements.length; i++) {
           currentAxes[i].display = true;
-          currentAxes[i].id = this.axisElements[i].id;
+          currentAxes[i].id = this.axisElements[i].axisId;
           currentAxes[i].position = this.axisElements[i].position;
           currentAxes[i].scaleLabel.labelString = this.axisElements[i].label;
           currentAxes[i].ticks.suggestedMin = this.axisElements[i].min;
@@ -233,23 +247,45 @@ class LineChart extends Webbit {
 
 		const slot = this.shadowRoot.querySelector('slot');
 		slot.addEventListener('slotchange', e => {
-			let elements = [...slot.assignedElements()];
-			this.dataElements = elements.filter(element => element.tagName === 'FRC-CHART-DATA');
+      let elements = [...slot.assignedElements()];
+      
+      this.axisElements = elements.filter(element => element.tagName === 'FRC-CHART-AXIS');
+      for (let i = 0; i < this.axisElements.length; i++) {
+        if (this.axisElements[i].defaultProps.axisId) {
+          continue;
+        }
+        const axisIds = this.axisElements.map(axis => axis.axisId);
+        for (let j = 0; j < this.axisElements.length; j++) {
+          const id = `Axis ${j + 1}`;
+          if (!axisIds.includes(id)) {
+            this.axisElements[i].axisId = id;
+            this.axisElements[i].setDefaultValue('axisId', id);
+            break;
+          }
+        }
+      }
+
+      this.dataElements = elements.filter(element => element.tagName === 'FRC-CHART-DATA');
 			this.dataElements.forEach((element, i) => {
 				if (!element.color) {
 					element.color = this.randomizedColors[i];
-				}
+        }
+        if (!element.defaultProps.axisId) {
+          const axisId = this.axisElements.length > 0 ? this.axisElements[0].axisId : 'Axis 1';
+          element.axisId = axisId;
+          element.setDefaultValue('axisId', axisId);
+        }
 			});
 			this.chartData = new LineChartData(this.dataElements.length);
 			this.chartData.setTrackedTime(this.trackedTime);
       this.updateTimeStep();
-      this.axisElements = elements.filter(element => element.tagName === 'FRC-CHART-AXIS');
 		});
   }
 
 	updateChart() {
 		if (this.chartData && this.chartElement.chart) {
 			this.dataElements.forEach((element, i) => {
+				this.chartData.setId(i, element.axisId);
 				this.chartData.setColor(i, element.color);
 				this.chartData.setLabel(i, element.label);
 			});
@@ -285,7 +321,7 @@ class LineChart extends Webbit {
     return this.axisElements.map(axisElement => {
       return {
         display: true,
-        id: axisElement.id,
+        id: axisElement.axisId,
         position: axisElement.position,
         scaleLabel: {
           display: true,

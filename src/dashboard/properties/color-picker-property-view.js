@@ -8,7 +8,7 @@ class ColorPickerPropertyView extends PropertyView {
       <input
         part="input"
         type="color"
-        value="${this.inputValue || ''}"
+        .value="${this.inputValue || ''}"
         @change="${this.onInputChange}"
         theme="small"
       />
