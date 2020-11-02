@@ -59,3 +59,6 @@ import './sim';
 
 // Other
 import './if';
+
+// camera
+import './camera';
