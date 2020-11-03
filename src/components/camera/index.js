@@ -1,5 +1,7 @@
 import { Webbit, html, css } from '@webbitjs/webbit';
 
+let nextStreamId = 0;
+
 class Camera extends Webbit {
 
   static get metadata() {
@@ -43,6 +45,7 @@ class Camera extends Webbit {
     this.connected = false;
     this.url = '';
     this.loaded = false;
+    this.streamsLoadingIds = [];
   }
 
   getStreams() {
@@ -50,31 +53,80 @@ class Camera extends Webbit {
       return stream.replace('mjpg:', ''); 
     });
 
-    uniqueStreams.forEach(stream => {
-      if (stream.indexOf('0.0.0.0') > -1) {
-        uniqueStreams.push(stream.replace('0.0.0.0', '127.0.0.1'));
-      }
+    [...uniqueStreams].forEach(stream => {
+      const url = new URL(stream);
+      uniqueStreams.push(`${url.protocol}//127.0.0.1:${url.port}${url.pathname}${url.search}`);
     });
 
-    return uniqueStreams;
+    return [...new Set(uniqueStreams)];
+  }
+
+  isStreaming() {
+    return this.connected && this.url;
+  }
+
+  firstUpdated() {
+    super.firstUpdated();
+
+    setInterval(() => {
+
+      // If the element is not in the dom, don't try to load streams
+      if (!this.isConnected) {
+        return;
+      }
+
+      if (!this.isStreaming()) {
+        this.getStreams().forEach(stream => {
+          this.loadStream(stream);
+        });
+      }
+
+    }, 1000);
+  }
+
+  loadStream(url) {
+    const streamId = nextStreamId;
+    nextStreamId++;
+    this.streamsLoadingIds.push(streamId);
+
+    let img = new Image();
+    img.src = url;
+
+    const timeoutId = setTimeout(() => {
+      img.onload = () => {};
+
+      // If the current stream is no longer streaming, disconnect from it
+      if (this.url === url && this.streamsLoadingIds.indexOf(streamId) >= 0) {
+        this.url = '';
+      }
+
+      // Remove from the streamsLoadingIds array
+      const index = this.streamsLoadingIds.indexOf(streamId);
+      if (index >= 0) {
+        this.streamsLoadingIds.splice(index, 1);
+      }
+    }, 10000);
+
+    img.onload = () => {
+      clearTimeout(timeoutId);
+
+      img.onload = () => {};
+      if (!this.isStreaming() && this.streamsLoadingIds.indexOf(streamId) >= 0) {
+        this.url = img.src;
+        this.streamsLoadingIds = [];
+
+        setTimeout(() => {
+          this.loadStream(url);
+        }, 2000);
+      }
+      this.loaded = true;
+    };
   }
 
   updated(changedProps) {
-    if (changedProps.has('streams')) {
-      this.getStreams().forEach((stream) => {
-        let img = new Image();
-        // remove mjpg:
-        img.src = stream;
-
-        img.onload = () => {
-          img.onload = () => {}
-          if (!this.loaded) {
-              this.url = img.src;
-              console.log('src loaded:', img.src);
-          }
-          this.loaded = true;
-        }
-      });
+    if (changedProps.has('streams') || changedProps.has('connected')) {
+      this.url = '';
+      this.streamsLoadingIds = [];
     }
   }
 
