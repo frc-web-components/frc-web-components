@@ -30,6 +30,28 @@ class Camera extends Webbit {
         max-width: 100%;
         max-height: 100%;
       }
+
+      [part=x-crosshair], [part=y-crosshair] {
+        position: absolute;
+        box-sizing: border-box;
+        border-style: dashed;
+      }
+
+      [part=x-crosshair] {
+        border-top-width: var(--crosshair-width, 2px);
+        border-bottom-width: 0px;
+        border-color: var(--crosshair-color, white);
+        width: var(--image-width, 100%);
+        height: 0px;
+      } 
+
+      [part=y-crosshair] {
+        border-left-width: var(--crosshair-width, 2px);
+        border-right-width: 0px;
+        border-color: var(--crosshair-color, white);
+        width: 0px;
+        height: var(--image-height, 100%);
+      }
     `;
   }
 
@@ -39,6 +61,9 @@ class Camera extends Webbit {
       width: { type: Number },
       height: { type: Number },
       compression: { type: Number },
+      hideCrosshair: { type: Boolean },
+      crosshairColor: { type: String, inputType: 'ColorPicker' },
+      crosshairWidth: { type: Number },
       streams: { type: Array, inputType: 'StringArray' },
       connected: { type: Boolean },
       url: { type: String, reflect: false, attribute: false },
@@ -56,6 +81,9 @@ class Camera extends Webbit {
     this.width = -1;
     this.height = -1;
     this.compression = -1;
+    this.hideCrosshair = false;
+    this.crosshairColor = '#ffffff';
+    this.crosshairWidth = 2;
   }
 
   getStreams() {
@@ -153,6 +181,9 @@ class Camera extends Webbit {
     }
 
     this.setImageSize();
+    const crosshairWidth = Math.max(0, parseInt(this.crosshairWidth));
+    this.style.setProperty('--crosshair-width', `${crosshairWidth}px`);
+    this.style.setProperty('--crosshair-color', this.crosshairColor);
   }
 
   resized() {
@@ -165,11 +196,11 @@ class Camera extends Webbit {
     const { width, height } = this.getBoundingClientRect();
 
     if (height < (naturalHeight / naturalWidth * width)) {
-      this.cameraFeedNode.style.setProperty('--image-width', `${naturalWidth / naturalHeight * height}px`);
-      this.cameraFeedNode.style.setProperty('--image-height', `${height}px`);
+      this.style.setProperty('--image-width', `${naturalWidth / naturalHeight * height}px`);
+      this.style.setProperty('--image-height', `${height}px`);
     } else {
-      this.cameraFeedNode.style.setProperty('--image-width', `${width}px`);
-      this.cameraFeedNode.style.setProperty('--image-height', `${naturalHeight / naturalWidth * width}px`);
+      this.style.setProperty('--image-width', `${width}px`);
+      this.style.setProperty('--image-height', `${naturalHeight / naturalWidth * width}px`);
     }
   }
 
@@ -197,6 +228,10 @@ class Camera extends Webbit {
   render() {
     return html`
       <img part="camera-feed" .src="${this.getUrl()}" />
+      ${!this.hideCrosshair ? html`
+        <div part="x-crosshair"></div>
+        <div part="y-crosshair"></div>
+      ` : ''}
     `;
   }
 }
