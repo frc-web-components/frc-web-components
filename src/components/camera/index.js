@@ -25,17 +25,23 @@ class Camera extends Webbit {
       }
 
       [part=camera-feed] {
-        width: 100%;
-        height: 100%;
+        width: var(--image-width, 100%);
+        height: var(--image-height, 100%);
+        max-width: 100%;
+        max-height: 100%;
       }
     `;
   }
 
   static get properties() {
     return {
+      fps: { type: Number },
+      width: { type: Number },
+      height: { type: Number },
+      compression: { type: Number },
       streams: { type: Array, inputType: 'StringArray' },
       connected: { type: Boolean },
-      url: { type: String, reflect: false, attribute: false }
+      url: { type: String, reflect: false, attribute: false },
     };
   }
 
@@ -46,6 +52,10 @@ class Camera extends Webbit {
     this.url = '';
     this.loaded = false;
     this.streamsLoadingIds = [];
+    this.fps = -1;
+    this.width = -1;
+    this.height = -1;
+    this.compression = -1;
   }
 
   getStreams() {
@@ -65,8 +75,12 @@ class Camera extends Webbit {
     return this.connected && this.url;
   }
 
+
+
   firstUpdated() {
     super.firstUpdated();
+
+    this.cameraFeedNode = this.shadowRoot.querySelector('[part=camera-feed]');
 
     setInterval(() => {
 
@@ -81,6 +95,15 @@ class Camera extends Webbit {
         });
       }
 
+    }, 1000);
+
+    setInterval(() => {
+      // If the element is not in the dom, don't try to load streams
+      if (!this.isConnected) {
+        return;
+      }
+
+      this.setImageSize();
     }, 1000);
   }
 
@@ -128,11 +151,52 @@ class Camera extends Webbit {
       this.url = '';
       this.streamsLoadingIds = [];
     }
+
+    this.setImageSize();
+  }
+
+  resized() {
+    this.setImageSize();
+  }
+
+  setImageSize() {
+
+    const { naturalWidth, naturalHeight } = this.cameraFeedNode;
+    const { width, height } = this.getBoundingClientRect();
+
+    if (height < (naturalHeight / naturalWidth * width)) {
+      this.cameraFeedNode.style.setProperty('--image-width', `${naturalWidth / naturalHeight * height}px`);
+      this.cameraFeedNode.style.setProperty('--image-height', `${height}px`);
+    } else {
+      this.cameraFeedNode.style.setProperty('--image-width', `${width}px`);
+      this.cameraFeedNode.style.setProperty('--image-height', `${naturalHeight / naturalWidth * width}px`);
+    }
+  }
+
+  getUrl() {
+    try {
+      const url = new URL(this.url);
+
+      if (this.fps > 0) {
+        url.searchParams.set('fps', this.fps);
+      }
+
+      if (this.width >= 0 && this.height >= 0) {
+        url.searchParams.set('resolution', `${this.width}x${this.height}`);
+      }
+
+      if (this.compression >= 0) {
+        url.searchParams.set('compression', this.compression);
+      }
+      return url.toString();
+    } catch(e) {
+      return '';
+    }
   }
 
   render() {
     return html`
-      <img part="camera-feed" .src="${this.url}" />
+      <img part="camera-feed" .src="${this.getUrl()}" />
     `;
   }
 }
