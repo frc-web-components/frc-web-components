@@ -25,6 +25,7 @@ class Camera extends Webbit {
       }
 
       [part=camera-feed] {
+        display: var(--image-display, block);
         width: var(--image-width, 100%);
         height: var(--image-height, 100%);
         max-width: 100%;
@@ -52,6 +53,10 @@ class Camera extends Webbit {
         width: 0px;
         height: var(--image-height, 100%);
       }
+
+      p {
+        position: absolute;
+      }
     `;
   }
 
@@ -65,6 +70,8 @@ class Camera extends Webbit {
       crosshairColor: { type: String, inputType: 'ColorPicker' },
       crosshairWidth: { type: Number },
       streams: { type: Array, inputType: 'StringArray' },
+      waitMessage: { type: String },
+      waitImage: { type: String },
       connected: { type: Boolean },
       url: { type: String, reflect: false, attribute: false },
     };
@@ -84,6 +91,7 @@ class Camera extends Webbit {
     this.hideCrosshair = false;
     this.crosshairColor = '#ffffff';
     this.crosshairWidth = 2;
+    this.waitMessage = 'No image found';
   }
 
   getStreams() {
@@ -136,6 +144,7 @@ class Camera extends Webbit {
   }
 
   loadStream(url) {
+
     const streamId = nextStreamId;
     nextStreamId++;
     this.streamsLoadingIds.push(streamId);
@@ -184,6 +193,7 @@ class Camera extends Webbit {
     const crosshairWidth = Math.max(0, parseInt(this.crosshairWidth));
     this.style.setProperty('--crosshair-width', `${crosshairWidth}px`);
     this.style.setProperty('--crosshair-color', this.crosshairColor);
+    this.style.setProperty('--image-display', this.url ? 'block' : 'none');
   }
 
   resized() {
@@ -228,10 +238,14 @@ class Camera extends Webbit {
   render() {
     return html`
       <img part="camera-feed" .src="${this.getUrl()}" />
-      ${!this.hideCrosshair ? html`
-        <div part="x-crosshair"></div>
-        <div part="y-crosshair"></div>
-      ` : ''}
+      ${this.url ? html`
+        ${!this.hideCrosshair ? html`
+          <div part="x-crosshair"></div>
+          <div part="y-crosshair"></div>
+        ` : ''}
+      ` : html`
+        <p>${this.waitMessage}</p>
+      `}
     `;
   }
 }

@@ -104,8 +104,6 @@ class SourcesTool extends LitElement {
           value: name,
           label: properties[name].attribute.replace(/-/g, ' ')
         }));
-
-      console.log('fromPropertiesInput:', this.fromPropertiesInput);
     }
   }
 

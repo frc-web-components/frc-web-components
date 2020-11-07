@@ -62,6 +62,10 @@ export default class NetworkTablesProvider extends SourceProvider {
       NetworkTables.addRobotConnectionListener(connected => {
         if (!connected) {
           this.clearSources();
+        } else {
+          for (let key of NetworkTables.getKeys()) {
+            this.updateSource(key, NetworkTables.getValue(key));
+          }
         }
       }, true);
   
