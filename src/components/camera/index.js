@@ -53,10 +53,6 @@ class Camera extends Webbit {
         width: 0px;
         height: var(--image-height, 100%);
       }
-
-      p {
-        position: absolute;
-      }
     `;
   }
 
@@ -70,7 +66,6 @@ class Camera extends Webbit {
       crosshairColor: { type: String, inputType: 'ColorPicker' },
       crosshairWidth: { type: Number },
       streams: { type: Array, inputType: 'StringArray' },
-      waitMessage: { type: String },
       waitImage: { type: String },
       connected: { type: Boolean },
       url: { type: String, reflect: false, attribute: false },
@@ -91,7 +86,6 @@ class Camera extends Webbit {
     this.hideCrosshair = false;
     this.crosshairColor = '#ffffff';
     this.crosshairWidth = 2;
-    this.waitMessage = 'No image found';
   }
 
   getStreams() {
@@ -193,7 +187,7 @@ class Camera extends Webbit {
     const crosshairWidth = Math.max(0, parseInt(this.crosshairWidth));
     this.style.setProperty('--crosshair-width', `${crosshairWidth}px`);
     this.style.setProperty('--crosshair-color', this.crosshairColor);
-    this.style.setProperty('--image-display', this.url ? 'block' : 'none');
+    this.style.setProperty('--image-display', this.url || this.waitImage ? 'block' : 'none');
   }
 
   resized() {
@@ -215,6 +209,11 @@ class Camera extends Webbit {
   }
 
   getUrl() {
+
+    if (!this.isStreaming()) {
+      return this.waitImage;
+    }
+
     try {
       const url = new URL(this.url);
 
@@ -238,14 +237,10 @@ class Camera extends Webbit {
   render() {
     return html`
       <img part="camera-feed" .src="${this.getUrl()}" />
-      ${this.url ? html`
-        ${!this.hideCrosshair ? html`
-          <div part="x-crosshair"></div>
-          <div part="y-crosshair"></div>
-        ` : ''}
-      ` : html`
-        <p>${this.waitMessage}</p>
-      `}
+      ${this.url && !this.hideCrosshair ? html`
+        <div part="x-crosshair"></div>
+        <div part="y-crosshair"></div>
+      ` : ''}
     `;
   }
 }

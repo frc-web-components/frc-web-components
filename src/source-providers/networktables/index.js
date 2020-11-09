@@ -68,6 +68,16 @@ export default class NetworkTablesProvider extends SourceProvider {
           }
         }
       }, true);
+
+      NetworkTables.addWsConnectionListener(connected => {
+        if (!connected) {
+          this.clearSources();
+        } else {
+          for (let key of NetworkTables.getKeys()) {
+            this.updateSource(key, NetworkTables.getValue(key));
+          }
+        }
+      }, true);
   
       NetworkTables.addGlobalListener((key, value) => {
         this.updateSource(key, value);
