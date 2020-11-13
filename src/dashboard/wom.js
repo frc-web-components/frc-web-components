@@ -1,25 +1,102 @@
 import WomNode from './wom-node';
-import { isElementInViewport } from './utils';
 import { addInteraction, removeInteraction } from './interact';
+
+class WomLayout {
+
+  constructor() {
+    this.openedLayoutName = null;
+  }
+
+  getSavedLayouts() {
+    try {
+      return  JSON.parse(window.localStorage.savedWomLayouts) || {};
+    } catch(e) {
+      return {};
+    }
+  }
+
+  getOpenedLayoutName() {
+    return this.openedLayoutName;
+  }
+
+  generateLayoutName() {
+    const layoutNames = this.getSavedLayoutNames();
+
+    for (let i = 0; i < layoutNames.length + 1; i++) {
+      const name = i === 0 ? `Untitled Layout` : `Untitled Layout ${i + 1}`;
+      if (layoutNames.indexOf(name) === -1) {
+        return name;
+      }
+    }
+
+    return null;
+  }
+
+  saveLayout(name, html) {
+    const savedLayouts = this.getSavedLayouts();
+    savedLayouts[name] = { html, lastModified: Date.now() };
+  }
+
+  openSavedLayout(name) {
+    this.openedLayoutName = name;
+    const savedLayouts = this.getSavedLayouts();
+    savedLayouts[name] = savedLayouts[name] || { html: '' };
+    savedLayouts[name].lastModified = Date.now();
+    window.localStorage.savedWomLayouts = JSON.stringify(savedLayouts);
+    return savedLayouts[name].html;
+  }
+
+  getSavedLayoutNames() {
+    const layouts = this.getSavedLayouts();
+    return Object.keys(this.getSavedLayouts()).sort((layout1Name, layout2Name) => {
+      return layouts[layout1Name].lastModified - layouts[layout2Name].lastModified;
+    });
+  }
+}
 
 class WomHistory {
 
-  constructor() {
+  constructor(layoutName = null, layoutHtml = null) {
     this.history = [];
     this.position = -1;
+    this.layoutName = layoutName;
+    this.layoutHtml = layoutHtml; 
+
+    if (layoutHtml === null) {
+      if ('savedWomLayouts' in window.localStorage) {
+        try {
+          const layouts = JSON.stringify(window.localStorage.savedWomLayouts);
+          if (layoutId in layouts) {
+            const layout = layouts[layoutId];
+            this.layoutName = layout.name;
+            this.layoutHtml = layout.html;
+            layouts[layoutId].lastOpened = Date.now();
+            window.localStorage.savedWomLayouts = JSON.stringify(layouts);
+          }
+        } catch(e) {}
+      }
+    } else {
+      let layouts = {};
+      try {
+        layouts = JSON.stringify(window.localStorage.savedWomLayouts) || {};
+      } catch(e) {}
+
+      layouts[this.layoutId] = {
+        name: layoutName,
+        html: layoutHtml,
+        lastOpened: Date.now(),
+      };
+
+      window.localStorage.savedWomLayouts = JSON.stringify(layouts);
+    }
   }
 
-  storeLayout() {
+  saveLayout() {
     window.localStorage['savedWomLayout'] = this.getCurrentLayout();
   }
 
   getStoredLayout() {
-    if ('savedWomLayout' in window.localStorage) {
-      try {
-        return window.localStorage['savedWomLayout'];
-      } catch(e) {}
-    }
-    return null;
+    return this.layoutHtml;
   }
 
   getCurrentPosition() {
