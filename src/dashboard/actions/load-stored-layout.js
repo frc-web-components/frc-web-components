@@ -1,10 +1,19 @@
 import Action from '../action';
-import { loadLayout } from './utils';
 
 export default class LoadStoredLayout extends Action {
 
   execute({ wom }) {
-    const layoutHtml = wom.history.getStoredLayout();
+    
+    let layoutName = wom.layout.getLayoutNameFromUrl();
+
+    if (layoutName === null) {
+      const [recentLayout] = wom.layout.getSavedLayoutNames();
+      layoutName = typeof recentLayout === 'undefined' ? wom.layout.generateLayoutName() : recentLayout;
+    }
+
+    const layoutHtml = wom.layout.openSavedLayout(layoutName);
+    wom.layout.setTitleFromLayoutName();
+
     if (layoutHtml !== null) {
       wom.history.push(layoutHtml);
       wom.setHtml(layoutHtml);

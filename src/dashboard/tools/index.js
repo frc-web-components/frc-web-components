@@ -159,7 +159,12 @@ class WomTools extends LitElement {
           { component: this.getMenuItemWithShortcut('New Layout', isMac ? '&#8984;N' : 'Ctrl+N'), action: 'newLayout' },
           { component: 'hr' },
           { component: this.getMenuItemWithShortcut('Open Layout', isMac ? '&#8984;O' : 'Ctrl+O'), action: 'loadLayout' },
-          { text: 'Open Recent Layout', disabled: true },
+          { 
+            text: 'Open Recent Layout', 
+            disabled: this.wom.layout.getSavedLayoutNames().length === 0,
+            children: this.wom.layout.getSavedLayoutNames()
+              .map(layoutName => ({ text: layoutName, action: () => alert(layoutName) }))
+          },
           { text: 'Open Robot Layout', disabled: true },
           { component: 'hr' },
           { component: this.getMenuItemWithShortcut('Save Layout', isMac ? '&#8984;S' : 'Ctrl+S'), action: 'saveLayout' },

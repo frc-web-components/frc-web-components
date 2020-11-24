@@ -7,6 +7,15 @@ class WomLayout {
     this.openedLayoutName = null;
   }
 
+  getLayoutNameFromUrl() {
+    const url = new URL(window.location.href);
+    return url.searchParams.get('layout');
+  }
+
+  setTitleFromLayoutName(newChanges) {
+    window.document.title = `${this.openedLayoutName}${newChanges ? '*' : ''} - FWC Dashboard`;
+  }
+
   getSavedLayouts() {
     try {
       return  JSON.parse(window.localStorage.savedWomLayouts) || {};
@@ -35,6 +44,7 @@ class WomLayout {
   saveLayout(name, html) {
     const savedLayouts = this.getSavedLayouts();
     savedLayouts[name] = { html, lastModified: Date.now() };
+    window.localStorage.savedWomLayouts = JSON.stringify(savedLayouts);
   }
 
   openSavedLayout(name) {
@@ -43,60 +53,29 @@ class WomLayout {
     savedLayouts[name] = savedLayouts[name] || { html: '' };
     savedLayouts[name].lastModified = Date.now();
     window.localStorage.savedWomLayouts = JSON.stringify(savedLayouts);
+    this.setTitleFromLayoutName();
     return savedLayouts[name].html;
   }
 
   getSavedLayoutNames() {
     const layouts = this.getSavedLayouts();
     return Object.keys(this.getSavedLayouts()).sort((layout1Name, layout2Name) => {
-      return layouts[layout1Name].lastModified - layouts[layout2Name].lastModified;
+      return layouts[layout2Name].lastModified - layouts[layout1Name].lastModified;
     });
   }
 }
 
 class WomHistory {
 
-  constructor(layoutName = null, layoutHtml = null) {
+  constructor(womLayout) {
     this.history = [];
     this.position = -1;
-    this.layoutName = layoutName;
-    this.layoutHtml = layoutHtml; 
-
-    if (layoutHtml === null) {
-      if ('savedWomLayouts' in window.localStorage) {
-        try {
-          const layouts = JSON.stringify(window.localStorage.savedWomLayouts);
-          if (layoutId in layouts) {
-            const layout = layouts[layoutId];
-            this.layoutName = layout.name;
-            this.layoutHtml = layout.html;
-            layouts[layoutId].lastOpened = Date.now();
-            window.localStorage.savedWomLayouts = JSON.stringify(layouts);
-          }
-        } catch(e) {}
-      }
-    } else {
-      let layouts = {};
-      try {
-        layouts = JSON.stringify(window.localStorage.savedWomLayouts) || {};
-      } catch(e) {}
-
-      layouts[this.layoutId] = {
-        name: layoutName,
-        html: layoutHtml,
-        lastOpened: Date.now(),
-      };
-
-      window.localStorage.savedWomLayouts = JSON.stringify(layouts);
-    }
+    this.womLayout = womLayout;
   }
 
-  saveLayout() {
-    window.localStorage['savedWomLayout'] = this.getCurrentLayout();
-  }
-
-  getStoredLayout() {
-    return this.layoutHtml;
+  clear() {
+    this.history = [];
+    this.position = -1;
   }
 
   getCurrentPosition() {
@@ -143,12 +122,15 @@ class WomHistory {
       return;
     }
 
+    if (this.getHistoryLength() > 0) { 
+      this.womLayout.setTitleFromLayoutName(true);
+    }
+
     this.history = this.history
       .slice(0, this.position + 1)
       .concat(layout);
 
     this.position = this.getHistoryLength() - 1;
-    this.storeLayout();
   }
 }
 
@@ -166,7 +148,8 @@ class Wom {
     this.actions = {};
     this.mode = 'live';
     this.observeMutations();
-    this.history = new WomHistory();
+    this.layout = new WomLayout();
+    this.history = new WomHistory(this.layout);
     this.selectionEnabled = true;
     this.editingNodeHtml = false;
     this.clipboardNode = null;

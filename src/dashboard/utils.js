@@ -141,9 +141,9 @@ export const loadHtml = () => {
 
       reader.onload = (e) => { 
         try {
-          const result = e.target.result;
+          const html = e.target.result;
           resolve({
-            result,
+            result: { html, name: files.item(0).name.replace(/\.html$/, '') },
             cancelled: false,
             error: false,
           });

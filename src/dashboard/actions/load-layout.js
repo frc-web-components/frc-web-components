@@ -6,17 +6,22 @@ export default class LoadLayout extends Action {
 
   execute({ wom }) {
     loadHtml().then(({ result, error }) => {
+      console.log('result:', result);
       if (error) {
         alert('error loading layout!');
         return;
       }
-      if (!hasLayoutChanged(wom, result)) {
+      if (!hasLayoutChanged(wom, result.html) && result.name === wom.layout.getOpenedLayoutName()) {
         return;
       }
       wom.addListenerOnce('womChange', async () => {
         wom.history.push(await wom.getHtml());
       });
-      wom.setHtml(result);
+      wom.history.clear();
+      wom.layout.saveLayout(result.name, result.html);
+      wom.layout.openSavedLayout(result.name);
+
+      wom.setHtml(result.html);
     });
   };
 }
