@@ -158,17 +158,19 @@ class WomTools extends LitElement {
         children: [
           { component: this.getMenuItemWithShortcut('New Layout', isMac ? '&#8984;N' : 'Ctrl+N'), action: 'newLayout' },
           { component: 'hr' },
+          { component: this.getMenuItemWithShortcut('Upload Layout', isMac ? '&#8984;U' : 'Ctrl+U'), action: 'uploadLayout' },
           { component: this.getMenuItemWithShortcut('Open Layout', isMac ? '&#8984;O' : 'Ctrl+O'), action: 'loadLayout' },
           { 
             text: 'Open Recent Layout', 
             disabled: this.wom.layout.getSavedLayoutNames().length === 0,
-            children: this.wom.layout.getSavedLayoutNames()
+            children: this.wom.layout.getSavedLayoutNames().slice(0, 10)
               .map(layoutName => ({ text: layoutName, action: () => this.loadRecentLayout(layoutName) }))
           },
           { text: 'Open Robot Layout', disabled: true },
           { component: 'hr' },
           { component: this.getMenuItemWithShortcut('Save Layout', isMac ? '&#8984;S' : 'Ctrl+S'), action: 'saveLayout' },
-          { text: 'Save Robot Layout', disabled: true },
+          { component: this.getMenuItemWithShortcut('Save Layout As', isMac ? '&#8679;&#8984;S' : 'Ctrl+Shift+S'), action: 'saveLayout' },
+          { component: this.getMenuItemWithShortcut('Download Layout', isMac ? '&#8984;D' : 'Ctrl+D'), action: 'saveLayout' },
           { component: 'hr' },
           { text: 'Load Extension', action: this.onLoadExtension, disabled: true },
         ]
@@ -295,6 +297,14 @@ class WomTools extends LitElement {
       }
       ev.preventDefault();
       this.wom.executeAction('newLayout');
+    });
+
+    hotkeys('command+u,ctrl+u', 'dashboard', ev => {
+      if (document.activeElement !== document.body) {
+        return;
+      }
+      ev.preventDefault();
+      this.wom.executeAction('uploadLayout');
     });
 
     hotkeys('command+o,ctrl+o', 'dashboard', ev => {

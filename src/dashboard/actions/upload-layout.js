@@ -2,12 +2,12 @@ import Action from '../action';
 import { loadHtml } from '../utils';
 import { hasLayoutChanged } from './utils';
 
-export default class LoadLayout extends Action {
+export default class UploadLayout extends Action {
 
   execute({ wom }) {
     loadHtml().then(({ result, error }) => {
       if (error) {
-        alert('error loading layout!');
+        alert('error uploading layout!');
         return;
       }
       if (!hasLayoutChanged(wom, result.html) && result.name === wom.layout.getOpenedLayoutName()) {

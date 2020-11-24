@@ -6,7 +6,7 @@ import SetSource from './actions/set-source';
 import SetProperties from './actions/set-properties';
 import SaveLayout from './actions/save-layout';
 import NewLayout from './actions/new-layout';
-import LoadLayout from './actions/load-layout';
+import UploadLayout from './actions/upload-layout';
 import Undo from './actions/undo';
 import Redo from './actions/redo';
 import CopyNode from './actions/copy-node';
@@ -72,7 +72,7 @@ class WebbitDashboard extends LitElement {
     this.wom.addAction('setProperties', new SetProperties());
     this.wom.addAction('saveLayout', new SaveLayout());
     this.wom.addAction('newLayout', new NewLayout());
-    this.wom.addAction('loadLayout', new LoadLayout());
+    this.wom.addAction('uploadLayout', new UploadLayout());
     this.wom.addAction('undo', new Undo());
     this.wom.addAction('redo', new Redo());
     this.wom.addAction('loadStoredLayout', new LoadStoredLayout());
