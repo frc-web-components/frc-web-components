@@ -13,6 +13,7 @@ import CopyNode from './actions/copy-node';
 import CutNode from './actions/cut-node';
 import PasteNode from './actions/paste-node';
 import LoadStoredLayout from './actions/load-stored-layout';
+import LoadRecentLayout from './actions/load-recent-layout';
 import './builder/index';
 import './tools';
 
@@ -75,6 +76,7 @@ class WebbitDashboard extends LitElement {
     this.wom.addAction('undo', new Undo());
     this.wom.addAction('redo', new Redo());
     this.wom.addAction('loadStoredLayout', new LoadStoredLayout());
+    this.wom.addAction('loadRecentLayout', new LoadRecentLayout());
     this.wom.addAction('copyNode', new CopyNode());
     this.wom.addAction('cutNode', new CutNode());
     this.wom.addAction('pasteNode', new PasteNode());

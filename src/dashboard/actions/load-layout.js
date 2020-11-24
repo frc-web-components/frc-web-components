@@ -6,7 +6,6 @@ export default class LoadLayout extends Action {
 
   execute({ wom }) {
     loadHtml().then(({ result, error }) => {
-      console.log('result:', result);
       if (error) {
         alert('error loading layout!');
         return;

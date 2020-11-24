@@ -14,10 +14,8 @@ export default class LoadStoredLayout extends Action {
     const layoutHtml = wom.layout.openSavedLayout(layoutName);
     wom.layout.setTitleFromLayoutName();
 
-    if (layoutHtml !== null) {
-      wom.history.push(layoutHtml);
-      wom.setHtml(layoutHtml);
-      wom.deselectNode();
-    }
+    wom.history.push(layoutHtml);
+    wom.setHtml(layoutHtml);
+    wom.deselectNode();
   };
 }

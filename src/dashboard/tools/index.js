@@ -163,7 +163,7 @@ class WomTools extends LitElement {
             text: 'Open Recent Layout', 
             disabled: this.wom.layout.getSavedLayoutNames().length === 0,
             children: this.wom.layout.getSavedLayoutNames()
-              .map(layoutName => ({ text: layoutName, action: () => alert(layoutName) }))
+              .map(layoutName => ({ text: layoutName, action: () => this.loadRecentLayout(layoutName) }))
           },
           { text: 'Open Robot Layout', disabled: true },
           { component: 'hr' },
@@ -549,6 +549,10 @@ class WomTools extends LitElement {
     } else if (typeof item.action === 'function') {
       item.action.bind(this)();
     }
+  }
+
+  loadRecentLayout(layoutName) {
+    this.wom.executeAction('loadRecentLayout', { layoutName });
   }
 
   render() {
