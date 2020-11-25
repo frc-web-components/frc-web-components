@@ -159,7 +159,7 @@ class WomTools extends LitElement {
           { component: this.getMenuItemWithShortcut('New Layout', isMac ? '&#8984;N' : 'Ctrl+N'), action: 'newLayout' },
           { component: 'hr' },
           { component: this.getMenuItemWithShortcut('Upload Layout', isMac ? '&#8984;U' : 'Ctrl+U'), action: 'uploadLayout' },
-          { component: this.getMenuItemWithShortcut('Open Layout', isMac ? '&#8984;O' : 'Ctrl+O'), action: 'loadLayout' },
+          { component: this.getMenuItemWithShortcut('Open Layout', isMac ? '&#8984;O' : 'Ctrl+O'), action: this.openOpenLayoutDialog },
           { 
             text: 'Open Recent Layout', 
             disabled: this.wom.layout.getSavedLayoutNames().length === 0,
@@ -312,7 +312,7 @@ class WomTools extends LitElement {
         return;
       }
       ev.preventDefault();
-      this.wom.executeAction('loadLayout');
+      this.openOpenLayoutDialog();
     });
 
     hotkeys('command+s,ctrl+s', 'dashboard', ev => {
@@ -368,21 +368,8 @@ class WomTools extends LitElement {
     super.disconnectedCallback();
     hotkeys.deleteScope('dashboard');
   }
-  
-  firstUpdated() {
-    this.addShortcuts();
-    const halsimProvider = getSourceProvider('HALSim');
 
-    this.toolsTopElement = this.shadowRoot.querySelector('[part="tools-top"]');
-
-    const observer = new MutationObserver(() => {
-      const nodeHtmlEditor = this.shadowRoot.querySelector('juicy-ace-editor');
-      nodeHtmlEditor.editor.setValue(this.nodeHtmlEditorContent);
-    });
-    observer.observe(this.shadowRoot, {
-      childList: true
-    });
-
+  initAboutDialog() {
     const aboutDialog = this.shadowRoot.querySelector('[part=about-dialog]');
     
     aboutDialog.renderer = function(root, dialog) {
@@ -414,7 +401,11 @@ class WomTools extends LitElement {
       });
       root.appendChild(div);
     }
+  }
 
+  initPreferencesDialog() {
+
+    const halsimProvider = getSourceProvider('HALSim');
     const preferencesDialog = this.shadowRoot.querySelector('[part=preferences-dialog]');
     
     preferencesDialog.renderer = function(root, dialog) {
@@ -475,7 +466,105 @@ class WomTools extends LitElement {
       const serverInput = root.querySelector('.preferences-dialog-content vaadin-text-field');
       serverInput.value = localStorage.robotAddress;
     }
+  }
 
+  initOpenLayoutDialog() {
+    const openLayoutDialog = this.shadowRoot.querySelector('[part=open-layout-dialog]');
+    const wom = this.wom;
+    
+    openLayoutDialog.renderer = function(root, dialog) {
+
+      if (!root.firstElementChild) {
+
+
+        const div = window.document.createElement('div');
+        div.innerHTML = `
+          <style>
+            .open-layout-dialog-content {
+              width: 350px;
+            }
+
+            .open-layout-dialog-content p {
+              font-size: 20px;
+              font-weight: bold;
+              margin: 0 0 5px;
+            }
+
+            .list-box-container {
+              max-height: 300px;
+              overflow: auto;
+            }
+
+            .open-layout-dialog-content vaadin-list-box {
+              width: 100%;
+              margin-bottom: 10px;
+            }
+
+            .open-layout-dialog-buttons {
+              display: flex;
+              justify-content: flex-end;
+              margin-top: 10px;
+            }
+
+            .open-layout-dialog-buttons vaadin-button {
+              margin-left: 5px;
+            }
+          </style>
+          <div class="open-layout-dialog-content">
+            <p>Open Layout</p>
+            <div class="list-box-container">
+              <vaadin-list-box selected="0"></vaadin-list-box>
+            </div>
+            <div class="open-layout-dialog-buttons">
+              <vaadin-button part="confirm-button" theme="success primary small">Open</vaadin-button>
+              <vaadin-button part="close-button" theme="small">Cancel</vaadin-button>
+            </div>
+          </div>
+        `;
+        const closeButton = div.querySelector('[part=close-button]');
+        closeButton.addEventListener('click', function() {
+          openLayoutDialog.opened = false;
+        });
+
+        const listBox = div.querySelector('vaadin-list-box');
+        const confirmButton = div.querySelector('[part=confirm-button]');
+        confirmButton.addEventListener('click', function() {
+          const item = listBox.children.item(listBox.selected);
+          const layoutName = item.innerText;
+          wom.executeAction('openLayout', { layoutName });
+          openLayoutDialog.opened = false;
+        });
+        root.appendChild(div);
+      }
+
+      const listBox = root.querySelector('.open-layout-dialog-content vaadin-list-box');
+      listBox.innerHTML = '';
+      wom.layout.getSavedLayoutNames().sort().forEach(layoutName => {
+        const item = window.document.createElement('vaadin-item');
+        item.innerText = layoutName;
+        listBox.appendChild(item);
+      });
+      listBox.selected = 0;
+    }
+  }
+  
+  firstUpdated() {
+    this.addShortcuts();
+
+    this.toolsTopElement = this.shadowRoot.querySelector('[part="tools-top"]');
+
+    const observer = new MutationObserver(() => {
+      const nodeHtmlEditor = this.shadowRoot.querySelector('juicy-ace-editor');
+      nodeHtmlEditor.editor.setValue(this.nodeHtmlEditorContent);
+    });
+    observer.observe(this.shadowRoot, {
+      childList: true
+    });
+
+    this.initAboutDialog();
+    this.initPreferencesDialog();
+    this.initOpenLayoutDialog();
+    
     window.addEventListener('beforeinstallprompt', () => {
       this.setMenuItems();
       this.requestUpdate();
@@ -552,6 +641,11 @@ class WomTools extends LitElement {
     aboutDialog.opened = true;
   }
 
+  openOpenLayoutDialog() {
+    const openLayoutDialog = this.shadowRoot.querySelector('[part=open-layout-dialog]');
+    openLayoutDialog.opened = true;
+  }
+
   menuItemSelected(ev) {
     const item = ev.detail.value;
     if (typeof item.action === 'string') {
@@ -604,6 +698,7 @@ class WomTools extends LitElement {
       <div part="tools">
         <vaadin-dialog part="about-dialog"></vaadin-dialog>
         <vaadin-dialog part="preferences-dialog"></vaadin-dialog>
+        <vaadin-dialog part="open-layout-dialog"></vaadin-dialog>
         <div part="top-menu">
 
           <vaadin-button 

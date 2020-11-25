@@ -12,6 +12,7 @@ import Redo from './actions/redo';
 import CopyNode from './actions/copy-node';
 import CutNode from './actions/cut-node';
 import PasteNode from './actions/paste-node';
+import OpenLayout from './actions/open-layout';
 import LoadStoredLayout from './actions/load-stored-layout';
 import LoadRecentLayout from './actions/load-recent-layout';
 import './builder/index';
@@ -75,6 +76,7 @@ class WebbitDashboard extends LitElement {
     this.wom.addAction('uploadLayout', new UploadLayout());
     this.wom.addAction('undo', new Undo());
     this.wom.addAction('redo', new Redo());
+    this.wom.addAction('openLayout', new OpenLayout());
     this.wom.addAction('loadStoredLayout', new LoadStoredLayout());
     this.wom.addAction('loadRecentLayout', new LoadRecentLayout());
     this.wom.addAction('copyNode', new CopyNode());
