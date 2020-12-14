@@ -9,7 +9,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=.
 set BUILDDIR=_build
-set SPHINXPROJ=shuffleboard2js
+set SPHINXPROJ=frc_web_components
 
 if "%1" == "" goto help
 

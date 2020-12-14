@@ -4,7 +4,7 @@
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
-SPHINXPROJ    = shuffleboard2js
+SPHINXPROJ    = frc_web_components
 SOURCEDIR     = .
 BUILDDIR      = _build
 
