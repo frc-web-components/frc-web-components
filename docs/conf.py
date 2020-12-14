@@ -20,8 +20,8 @@ import os
 
 # -- Project information -----------------------------------------------------
 
-project = 'shuffleboard2js'
-copyright = '2019, Amory Galili'
+project = 'frc-web-components'
+copyright = '2020, Amory Galili'
 author = 'Amory Galili'
 
 # The short X.Y version
@@ -113,7 +113,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'shuffleboard2jsdoc'
+htmlhelp_basename = 'frc_web_componentsdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -140,7 +140,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'shuffleboard2js.tex', 'shuffleboard2js Documentation',
+    (master_doc, 'frc_web_components.tex', 'frc-web-components Documentation',
      'Amory Galili', 'manual'),
 ]
 
@@ -150,7 +150,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'shuffleboard2js', 'shuffleboard2js Documentation',
+    (master_doc, 'frc_web_components', 'frc-web-components Documentation',
      [author], 1)
 ]
 
@@ -161,8 +161,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'shuffleboard2js', 'shuffleboard2js Documentation',
-     author, 'shuffleboard2js', 'One line description of project.',
+    (master_doc, 'frc_web_components', 'frc-web-components Documentation',
+     author, 'Amory Galili', 'One line description of project.',
      'Miscellaneous'),
 ]
 
