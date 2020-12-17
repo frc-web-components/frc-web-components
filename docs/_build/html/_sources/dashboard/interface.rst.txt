@@ -1,5 +1,5 @@
-Interface
-=========
+Dashbord Interface
+==================
 
 
 Dashboard and Dashboard Editor

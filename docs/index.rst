@@ -6,8 +6,6 @@
 FRC Web Components
 ==================
 
-.. _introduction:
-
 .. toctree::
   :maxdepth: 3
   :caption: Dashboard
@@ -15,6 +13,26 @@ FRC Web Components
   dashboard/installation
   dashboard/running
   dashboard/interface
+
+.. toctree::
+  :maxdepth: 3
+  :caption: Creating Extensions
+
+  extensions/what-are-extensions
+  extensions/custom-components
+
+.. toctree::
+  :maxdepth: 3
+  :caption: Local Development
+
+  local-development/installation
+
+.. toctree::
+  :maxdepth: 3
+  :caption: Chart & Graph Components
+
+  chart-graph-components/gauge
+  chart-graph-components/line-chart
 
 
 Indices and tables
