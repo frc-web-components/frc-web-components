@@ -1,0 +1,41 @@
+Dashbord Interface
+==================
+
+
+Dashboard and Dashboard Editor
+------------------------------
+
+
+Adding, selecting and removing components
+-----------------------------------------
+
+
+Moving and resizing components
+------------------------------
+
+Copying, cutting and pasting components
+---------------------------------------
+
+
+Changing component properties
+-----------------------------
+
+
+Connecting components to NetworkTables and other sources
+--------------------------------------------------------
+
+
+Editing node HTML
+-----------------
+
+Styling components
+------------------
+
+Undoing and redoing actions
+---------------------------
+
+Saving, opening and creating new layouts
+----------------------------------------
+
+Loading extensions and custom components
+----------------------------------------
