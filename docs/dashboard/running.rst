@@ -100,9 +100,20 @@ To launch multiple dashboard windows, right click the dashboard icon in the task
 Firefox Dashboard App
 ---------------------
 
+First open firefox. The dashboard can then be launched from the firefox hamburger menu:
+
+.. image:: ../images/install-firefox-mac8.png
+
+Click on the "Sites in App Mode" menu item and you should see "FWC Dashboard" listed:
+
+.. image:: ../images/install-firefox-mac9.png
+
+Click on this and the dashboard will launch. The dashboard can be launched multiple times using the same method.
 
 Safari Dashboard App
 --------------------
+
+PWAs currently can’t be installed using Safari on desktop computers.
 
 
 .. _pynetworktables2js:
