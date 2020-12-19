@@ -25,7 +25,7 @@ or by searching for it using the `Launchpad <https://support.apple.com/en-us/HT2
 
 .. image:: ../images/install-chrome-mac6.png
 
-Clicking on the dashboard icon should launch it:
+Clicking/double clicking on the dashboard icon should launch it:
 
 .. image:: ../images/running-chrome-mac.png
 
@@ -45,12 +45,57 @@ You can also create a shortcut of the app and launch it from your desktop:
 
 .. image:: ../images/install-chrome-windows3.png
 
-Clicking on the dashboard icon should launch it:
+Clicking/double clicking on the dashboard icon should launch it:
 
+.. image:: ../images/running-chrome-windows.png
+
+To launch multiple dashboard windows, right click the dashboard icon in the taskbar and click **FWC Dashboard**:
+
+.. image:: ../images/running-chrome-windows2.png
 
 Edge Dashboard App
 ------------------
 
+On macs the app should be installed in the home directory under **Applications** -> **Edge Apps**:
+
+.. image:: ../images/install-edge-mac4.png
+
+You can then launch it from the "Edge Apps" folder or by searching for "FWC Dashboard" using `Splotlight
+<https://www.macobserver.com/tips/high-sierra-check-flight-status-spotlight/>`_:
+
+.. image:: ../images/install-edge-mac5.png
+
+or by searching for it using the `Launchpad <https://support.apple.com/en-us/HT202635>`_:
+
+.. image:: ../images/install-edge-mac6.png
+
+Clicking/double clicking on the dashboard icon should launch it:
+
+.. image:: ../images/running-edge-mac.png
+
+To launch multiple dashboard windows, go to the **File** menu and click **New Window**:
+
+.. image:: ../images/running-edge-mac2.png
+
+On windows the app should be installed in the "Programs" folder:
+
+.. image:: ../images/install-edge-windows.png
+
+You can then launch it from the "Programs" folder or by searching for "FWC Dashboard" in the searchbar:
+
+.. image:: ../images/install-edge-windows2.png
+
+You can also create a shortcut of the app and launch it from your desktop:
+
+.. image:: ../images/install-edge-windows3.png
+
+Clicking/double clicking on the dashboard icon should launch it:
+
+.. image:: ../images/running-edge-windows.png
+
+To launch multiple dashboard windows, right click the dashboard icon in the taskbar and click **FWC Dashboard**:
+
+.. image:: ../images/running-edge-windows2.png
 
 Firefox Dashboard App
 ---------------------
