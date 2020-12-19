@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Interface" href="interface.html" />
+    <link rel="next" title="Dashbord Interface" href="interface.html" />
     <link rel="prev" title="Installation" href="installation.html" /> 
 
   
@@ -82,15 +82,29 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Running the Dashboard</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#chrome-pwa">Chrome PWA</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#edge-pwa">Edge PWA</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#firefox-pwa">Firefox PWA</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#safari-pwa">Safari PWA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#chrome-dashboard-app">Chrome Dashboard App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#edge-dashboard-app">Edge Dashboard App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#firefox-dashboard-app">Firefox Dashboard App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#safari-dashboard-app">Safari Dashboard App</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#pynetworktables2js">pynetworktables2js</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#halsim-websocket">HALSim Websocket</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="interface.html">Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interface.html">Dashbord Interface</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Creating Extensions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../extensions/what-are-extensions.html">What are Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extensions/custom-components.html">Custom Components</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Local Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../local-development/installation.html">Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Chart &amp; Graph Components</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../chart-graph-components/gauge.html">Gauge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../chart-graph-components/line-chart.html">Line Chart</a></li>
 </ul>
 
             
@@ -157,23 +171,30 @@
             
   <div class="section" id="running-the-dashboard">
 <h1>Running the Dashboard<a class="headerlink" href="#running-the-dashboard" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="chrome-pwa">
-<h2>Chrome PWA<a class="headerlink" href="#chrome-pwa" title="Permalink to this headline">¶</a></h2>
+<p>These are the steps you need to perform to run the dashboard:</p>
+<ol class="arabic simple">
+<li>To run the dashboard you must launch the app that was installed using a browser such as chrome, edge or firefox. Steps for each browser can be found below.</li>
+<li>Most components use NetworkTables to communicate information between the dashboard and the robot. Communicating over NetworkTables between a webpage and the robot requires a python package called <strong>pynetworktables2js</strong> be installed and run. To learn more follow the steps here: <a class="reference internal" href="#pynetworktables2js"><span class="std std-ref">pynetworktables2js</span></a></li>
+<li>(optional) If you want to simulate your robot code using the FWC Dashboard as a front-end, follow the steps here: <a class="reference internal" href="#halsim-websocket"><span class="std std-ref">HALSim Websocket</span></a></li>
+</ol>
+<p>To run the dashboard you must launch the PWA that was installed using a browser such as chrome, edge or firefox. Most components generally use NetworkTables to communicate information between the dashboard and the robot. To</p>
+<div class="section" id="chrome-dashboard-app">
+<h2>Chrome Dashboard App<a class="headerlink" href="#chrome-dashboard-app" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="edge-pwa">
-<h2>Edge PWA<a class="headerlink" href="#edge-pwa" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="edge-dashboard-app">
+<h2>Edge Dashboard App<a class="headerlink" href="#edge-dashboard-app" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="firefox-pwa">
-<h2>Firefox PWA<a class="headerlink" href="#firefox-pwa" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="firefox-dashboard-app">
+<h2>Firefox Dashboard App<a class="headerlink" href="#firefox-dashboard-app" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="safari-pwa">
-<h2>Safari PWA<a class="headerlink" href="#safari-pwa" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="safari-dashboard-app">
+<h2>Safari Dashboard App<a class="headerlink" href="#safari-dashboard-app" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="pynetworktables2js">
-<h2>pynetworktables2js<a class="headerlink" href="#pynetworktables2js" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2>pynetworktables2js<a class="headerlink" href="#pynetworktables2js" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="halsim-websocket">
-<h2>HALSim Websocket<a class="headerlink" href="#halsim-websocket" title="Permalink to this headline">¶</a></h2>
+<span id="id2"></span><h2>HALSim Websocket<a class="headerlink" href="#halsim-websocket" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -185,7 +206,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="interface.html" class="btn btn-neutral float-right" title="Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="interface.html" class="btn btn-neutral float-right" title="Dashbord Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="installation.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
