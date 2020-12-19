@@ -134,3 +134,5 @@ Click on this and the dashboard will launch.
 
 Safari
 ------
+
+PWAs currently can't be installed using Safari on desktop computers.
