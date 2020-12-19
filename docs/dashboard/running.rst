@@ -12,6 +12,41 @@ To run the dashboard you must launch the PWA that was installed using a browser 
 Chrome Dashboard App
 --------------------
 
+On macs the app should be installed in the home directory under **Applications** -> **Chrome Apps**:
+
+.. image:: ../images/install-chrome-mac4.png
+
+You can then launch it from the "Chrome Apps" folder or by searching for "FWC Dashboard" using `Splotlight
+<https://www.macobserver.com/tips/high-sierra-check-flight-status-spotlight/>`_:
+
+.. image:: ../images/install-chrome-mac5.png
+
+or by searching for it using the `Launchpad <https://support.apple.com/en-us/HT202635>`_:
+
+.. image:: ../images/install-chrome-mac6.png
+
+Clicking on the dashboard icon should launch it:
+
+.. image:: ../images/running-chrome-mac.png
+
+To launch multiple dashboard windows, go to the **File** menu and click **New Window**:
+
+.. image:: ../images/running-chrome-mac2.png
+
+On windows the app should be installed in the "Chrome Apps" folder as well:
+
+.. image:: ../images/install-chrome-windows.png
+
+You can then launch it from the "Chrome Apps" folder or by searching for "FWC Dashboard" in the searchbar:
+
+.. image:: ../images/install-chrome-windows2.png
+
+You can also create a shortcut of the app and launch it from your desktop:
+
+.. image:: ../images/install-chrome-windows3.png
+
+Clicking on the dashboard icon should launch it:
+
 
 Edge Dashboard App
 ------------------
