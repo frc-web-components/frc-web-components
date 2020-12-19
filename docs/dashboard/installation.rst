@@ -76,11 +76,11 @@ or by searching for it using the `Launchpad <https://support.apple.com/en-us/HT2
 
 .. image:: ../images/install-edge-mac6.png
 
-On windows the app should be installed in the "Edge Apps" folder as well:
+On windows the app should be installed in the "Programs" folder:
 
 .. image:: ../images/install-edge-windows.png
 
-You can then launch it from the "Edge Apps" folder or by searching for "FWC Dashboard" in the searchbar:
+You can then launch it from the "Programs" folder or by searching for "FWC Dashboard" in the searchbar:
 
 .. image:: ../images/install-edge-windows2.png
 
@@ -92,6 +92,45 @@ You can also create a shortcut of the app and launch it from your desktop:
 Firefox
 -------
 
+Installing PWAs must be enabled before installing the dashboard using firefox.
+
+To enable, first go to about:config in the address bar:
+
+.. image:: ../images/install-firefox-mac.png
+
+Click the "Accept the Risk and Continue" button. You should be presented with a search bar to search preferences:
+
+.. image:: ../images/install-firefox-mac2.png
+
+Enter **browser.ssb.enabled** into the search bar. You should now see this:
+
+.. image:: ../images/install-firefox-mac3.png
+
+Click the toggle button on the right and the value should now read **true**:
+
+.. image:: ../images/install-firefox-mac4.png
+
+Restart firefox and visit the dashboard page here: https://frc-web-components.github.io/dashboard/. You should now see something that looks like this:
+
+.. image:: ../images/install-firefox-mac5.png
+
+In the address bar, click on the "page actions" button (the icon with three dots). Click on the "Use This Site in App Mode" menu item:
+
+.. image:: ../images/install-firefox-mac6.png
+
+The dashboard should now be launched in its own window:
+
+.. image:: ../images/install-firefox-mac7.png
+
+The dashboard can now be accessed offline from the firefox hamburger menu:
+
+.. image:: ../images/install-firefox-mac8.png
+
+Click on the "Sites in App Mode" menu item and you should see "FWC Dashboard" listed:
+
+.. image:: ../images/install-firefox-mac9.png
+
+Click on this and the dashboard will launch.
 
 Safari
 ------
