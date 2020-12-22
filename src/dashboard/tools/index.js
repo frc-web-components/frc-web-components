@@ -133,19 +133,10 @@ class WomTools extends LitElement {
     );
 
     const dashboardMenuItems = [
-      ...[
-        { text: 'About', action: this.openAboutDialog },
-        { text: 'Documentation', action: () => window.open('https://frc-web-components.github.io/', '_blank') },
-      ],
-      ...(
-        'pwaHelper' in window && window.pwaHelper.deferredPrompt
-          ? [{ text: 'Install', action: () => window.pwaHelper.deferredPrompt.prompt() }]
-          : []
-      ),
-      ...[
-        { component: 'hr' },
-        { text: 'Preferences', action: this.openPreferencesDialog },
-      ]
+      { text: 'About', action: this.openAboutDialog },
+      { text: 'Documentation', action: () => window.open('https://frc-web-components.github.io/', '_blank') },
+      { component: 'hr' },
+      { text: 'Preferences', action: this.openPreferencesDialog },
     ];
 
     this.menuItems = [
@@ -194,14 +185,7 @@ class WomTools extends LitElement {
         children: [
           { text: 'Scroll to Node', disabled: !isNonRootSelected, action: this.onScrollToNode },
         ]
-      },
-      { 
-        text: 'Recording',
-        children: [
-          { text: 'Start Recording', disabled: true },
-          { text: 'Load Playback', disabled: true },
-        ]
-      },
+      }
     ];
   }
   
