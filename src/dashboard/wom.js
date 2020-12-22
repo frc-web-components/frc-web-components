@@ -97,7 +97,6 @@ class WomHistory {
   goBack() {
     if (!this.atBeginning()) {
       this.position--;
-      this.storeLayout();
     }
   }
 
@@ -112,7 +111,6 @@ class WomHistory {
   goForward() {
     if (!this.atEnd()) {
       this.position++;
-      this.storeLayout();
     }
   }
 

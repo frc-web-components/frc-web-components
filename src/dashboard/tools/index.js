@@ -161,7 +161,7 @@ class WomTools extends LitElement {
           { component: 'hr' },
           { component: this.getMenuItemWithShortcut('Save Layout', isMac ? '&#8984;S' : 'Ctrl+S'), action: 'saveLayout' },
           { component: this.getMenuItemWithShortcut('Save Layout As', isMac ? '&#8679;&#8984;S' : 'Ctrl+Shift+S'), action: 'saveLayout' },
-          { component: this.getMenuItemWithShortcut('Download Layout', isMac ? '&#8984;D' : 'Ctrl+D'), action: 'saveLayout' },
+          { component: this.getMenuItemWithShortcut('Download Layout', isMac ? '&#8984;D' : 'Ctrl+D'), action: 'downloadLayout' },
           { component: 'hr' },
           { text: 'Load Extension', action: this.onLoadExtension, disabled: true },
         ]
@@ -306,6 +306,16 @@ class WomTools extends LitElement {
       ev.preventDefault();
       this.wom.executeAction('saveLayout');
     });
+
+    hotkeys('command+d,ctrl+d', 'dashboard', ev => {
+      if (document.activeElement !== document.body) {
+        return;
+      }
+      ev.preventDefault();
+      this.wom.executeAction('downloadLayout');
+    });
+
+    
 
     hotkeys('command+c,ctrl+c', 'dashboard', ev => {
       if (document.activeElement !== document.body) {

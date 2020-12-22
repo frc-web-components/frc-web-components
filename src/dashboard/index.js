@@ -15,6 +15,7 @@ import PasteNode from './actions/paste-node';
 import OpenLayout from './actions/open-layout';
 import LoadStoredLayout from './actions/load-stored-layout';
 import LoadRecentLayout from './actions/load-recent-layout';
+import DownloadLayout from './actions/download-layout';
 import './builder/index';
 import './tools';
 
@@ -82,6 +83,7 @@ class WebbitDashboard extends LitElement {
     this.wom.addAction('copyNode', new CopyNode());
     this.wom.addAction('cutNode', new CutNode());
     this.wom.addAction('pasteNode', new PasteNode());
+    this.wom.addAction('downloadLayout', new DownloadLayout());
   }
 
   firstUpdated() {
