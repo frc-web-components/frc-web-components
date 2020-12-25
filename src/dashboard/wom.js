@@ -12,6 +12,10 @@ class WomLayout {
     };
   }
 
+  hasNewChanges() {
+    return this.newChanges;
+  }
+
   getLayoutNameFromUrl() {
     const url = new URL(window.location.href);
     return url.searchParams.get('layout');

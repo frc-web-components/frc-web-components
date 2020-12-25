@@ -147,9 +147,9 @@ class WomTools extends LitElement {
       {
         text: 'File',
         children: [
-          { component: this.getMenuItemWithShortcut('New Layout', isMac ? '&#8984;N' : 'Ctrl+N'), action: 'newLayout' },
+          { component: this.getMenuItemWithShortcut('New Layout', isMac ? '&#8984;N' : 'Ctrl+N'), action: this.newLayout },
           { component: 'hr' },
-          { component: this.getMenuItemWithShortcut('Upload Layout', isMac ? '&#8984;U' : 'Ctrl+U'), action: 'uploadLayout' },
+          { component: this.getMenuItemWithShortcut('Upload Layout', isMac ? '&#8984;U' : 'Ctrl+U'), action: this.uploadLayout },
           { component: this.getMenuItemWithShortcut('Open Layout', isMac ? '&#8984;O' : 'Ctrl+O'), action: this.openOpenLayoutDialog },
           { 
             text: 'Open Recent Layout', 
@@ -280,7 +280,7 @@ class WomTools extends LitElement {
         return;
       }
       ev.preventDefault();
-      this.wom.executeAction('newLayout');
+      this.newLayout();
     });
 
     hotkeys('command+u,ctrl+u', 'dashboard', ev => {
@@ -288,7 +288,7 @@ class WomTools extends LitElement {
         return;
       }
       ev.preventDefault();
-      this.wom.executeAction('uploadLayout');
+      this.uploadLayout();
     });
 
     hotkeys('command+o,ctrl+o', 'dashboard', ev => {
@@ -714,6 +714,12 @@ class WomTools extends LitElement {
 
 
   openOpenLayoutDialog() {
+    if (
+      this.wom.layout.hasNewChanges()
+      && !confirm(`You have unsaved changes. Are you sure you want to open a layout?`)
+    ) {
+      return;
+    }
     const openLayoutDialog = this.shadowRoot.querySelector('[part=open-layout-dialog]');
     openLayoutDialog.opened = true;
   }
@@ -728,7 +734,34 @@ class WomTools extends LitElement {
   }
 
   loadRecentLayout(layoutName) {
+    if (
+      this.wom.layout.hasNewChanges()
+      && !confirm(`You have unsaved changes. Are you sure you want to open a layout?`)
+    ) {
+      return;
+    }
+    
     this.wom.executeAction('loadRecentLayout', { layoutName });
+  }
+
+  newLayout() {
+    if (this.wom.layout.hasNewChanges()) {
+      if (confirm(`You have unsaved changes. Are you sure you want to create a new layout?`)) {
+        this.wom.executeAction('newLayout');
+      }
+    } else {
+      this.wom.executeAction('newLayout');
+    }
+  }
+
+  uploadLayout() {
+    if (this.wom.layout.hasNewChanges()) {
+      if (confirm(`You have unsaved changes. Are you sure you want to upload a layout?`)) {
+        this.wom.executeAction('uploadLayout');
+      }
+    } else {
+      this.wom.executeAction('uploadLayout');
+    }
   }
 
   render() {
