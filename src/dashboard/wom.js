@@ -41,6 +41,19 @@ class WomLayout {
     return null;
   }
 
+  renameOpenedLayout(newName) {
+    const oldName = this.getOpenedLayoutName();
+    const savedLayouts = this.getSavedLayouts();
+    savedLayouts[newName] = { 
+      html: savedLayouts[oldName].html,
+      lastModified: Date.now(), 
+    };
+    delete savedLayouts[oldName];
+    window.localStorage.savedWomLayouts = JSON.stringify(savedLayouts);
+    this.openedLayoutName = newName;
+    this.setTitleFromLayoutName();
+  }
+
   saveLayout(name, html) {
     const savedLayouts = this.getSavedLayouts();
     savedLayouts[name] = { html, lastModified: Date.now() };
