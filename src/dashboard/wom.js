@@ -5,6 +5,11 @@ class WomLayout {
 
   constructor() {
     this.openedLayoutName = null;
+    this.newChanges = false;
+
+    window.onbeforeunload = () => {
+      return this.newChanges;
+    };
   }
 
   getLayoutNameFromUrl() {
@@ -14,6 +19,7 @@ class WomLayout {
 
   setTitleFromLayoutName(newChanges) {
     window.document.title = `${this.openedLayoutName}${newChanges ? '*' : ''} - FWC Dashboard`;
+    this.newChanges = newChanges;
   }
 
   getSavedLayouts() {

@@ -315,6 +315,13 @@ class WomTools extends LitElement {
       this.wom.executeAction('downloadLayout');
     });
 
+    hotkeys('command+r,ctrl+r', 'dashboard', ev => {
+      if (document.activeElement !== document.body) {
+        return;
+      }
+      ev.preventDefault();
+      this.openRenameDialog();
+    });
     
 
     hotkeys('command+c,ctrl+c', 'dashboard', ev => {
