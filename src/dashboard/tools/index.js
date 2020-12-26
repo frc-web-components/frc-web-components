@@ -6,6 +6,7 @@ import './open-layout-dialog';
 import './about-dialog';
 import './preferences-dialog';
 import './rename-dialog';
+import './delete-layout-dialog';
 
 const beautify_html = require('js-beautify').html;
 const isMac = navigator.userAgent.indexOf('Mac OS X') != -1;
@@ -164,8 +165,10 @@ class WomTools extends LitElement {
           // { text: 'Open Robot Layout', disabled: true },
           { component: 'hr' },
           { component: this.getMenuItemWithShortcut('Save Layout', isMac ? '&#8984;S' : 'Ctrl+S'), action: 'saveLayout' },
-          { component: this.getMenuItemWithShortcut('Rename Layout', isMac ? '&#8679;&#8984;R' : 'Ctrl+Shift+R'), action: this.openRenameDialog },
           { component: this.getMenuItemWithShortcut('Download Layout', isMac ? '&#8984;D' : 'Ctrl+D'), action: 'downloadLayout' },
+          { component: 'hr' },
+          { component: this.getMenuItemWithShortcut('Rename Layout', isMac ? '&#8679;&#8984;R' : 'Ctrl+Shift+R'), action: this.openRenameDialog },
+          { text: 'Delete Layouts', action: this.openDeleteLayoutsDialog },
           { component: 'hr' },
           { text: 'Load Extension', action: this.onLoadExtension, disabled: true },
         ]
@@ -475,6 +478,11 @@ class WomTools extends LitElement {
     openLayoutDialog.open();
   }
 
+  openDeleteLayoutsDialog() {
+    const dialog = this.shadowRoot.querySelector('dashboard-delete-layout-dialog');
+    dialog.open();
+  }
+
   menuItemSelected(ev) {
     const item = ev.detail.value;
     if (typeof item.action === 'string') {
@@ -556,6 +564,7 @@ class WomTools extends LitElement {
         <dashboard-about-dialog></dashboard-about-dialog>
         <dashboard-preferences-dialog></dashboard-preferences-dialog>
         <dashboard-rename-dialog .wom="${this.wom}"></dashboard-rename-dialog>
+        <dashboard-delete-layout-dialog .wom="${this.wom}"></dashboard-delete-layout-dialog>
 
         <div part="top-menu">
 
