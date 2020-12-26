@@ -1,8 +1,12 @@
 import { LitElement, html, css } from 'lit-element';
-import { getSourceProvider } from '@webbitjs/store';
 import hotkeys from 'hotkeys-js';
 import './tools-bottom';
 import './wom-viewer';
+import './open-layout-dialog';
+import './about-dialog';
+import './preferences-dialog';
+import './rename-dialog';
+
 const beautify_html = require('js-beautify').html;
 const isMac = navigator.userAgent.indexOf('Mac OS X') != -1;
 
@@ -370,248 +374,6 @@ class WomTools extends LitElement {
     hotkeys.deleteScope('dashboard');
   }
 
-  initAboutDialog() {
-    const aboutDialog = this.shadowRoot.querySelector('[part=about-dialog]');
-    
-    aboutDialog.renderer = function(root, dialog) {
-
-      if (root.firstElementChild) {
-        return;
-      }
-
-      const div = window.document.createElement('div');
-      div.innerHTML = `
-        <style>
-          .about-dialog-content {
-            text-align: center;
-          }
-
-          .about-dialog-content p {
-            font-size: 20px;
-            font-weight: bold;
-          }
-        </style>
-        <div class="about-dialog-content">
-          <p>FWC Dashboard</p>
-          <vaadin-button>Close</vaadin-button>
-        </div>
-      `;
-      const closeButton = div.querySelector('vaadin-button');
-      closeButton.addEventListener('click', function() {
-        aboutDialog.opened = false;
-      });
-      root.appendChild(div);
-    }
-  }
-
-  initPreferencesDialog() {
-
-    const halsimProvider = getSourceProvider('HALSim');
-    const preferencesDialog = this.shadowRoot.querySelector('[part=preferences-dialog]');
-    
-    preferencesDialog.renderer = function(root, dialog) {
-
-      if (!root.firstElementChild) {
-
-
-        const div = window.document.createElement('div');
-        div.innerHTML = `
-          <style>
-            .preferences-dialog-content {
-              width: 250px;
-            }
-
-            .preferences-dialog-content p {
-              font-size: 20px;
-              font-weight: bold;
-              margin: 0 0 5px;
-            }
-
-            .preferences-dialog-content vaadin-text-field {
-              width: 100%;
-            }
-
-            .preferences-dialog-buttons {
-              display: flex;
-              justify-content: flex-end;
-              margin-top: 10px;
-            }
-
-            .preferences-dialog-buttons vaadin-button {
-              margin-left: 5px;
-            }
-          </style>
-          <div class="preferences-dialog-content">
-            <p>Connection Settings</p>
-            <vaadin-text-field label="Server" theme="small"></vaadin-text-field>
-            <div class="preferences-dialog-buttons">
-              <vaadin-button part="confirm-button" theme="success primary small">Confirm</vaadin-button>
-              <vaadin-button part="close-button" theme="small">Close</vaadin-button>
-            </div>
-          </div>
-        `;
-        const closeButton = div.querySelector('[part=close-button]');
-        closeButton.addEventListener('click', function() {
-          preferencesDialog.opened = false;
-        });
-
-        const serverInput = div.querySelector('vaadin-text-field');
-        const confirmButton = div.querySelector('[part=confirm-button]');
-        confirmButton.addEventListener('click', function() {
-          localStorage.robotAddress = serverInput.value;
-          halsimProvider.setAddress(localStorage.robotAddress);
-        });
-        root.appendChild(div);
-      }
-
-      const serverInput = root.querySelector('.preferences-dialog-content vaadin-text-field');
-      serverInput.value = localStorage.robotAddress;
-    }
-  }
-
-  initRenameDialog() {
-
-    const wom = this.wom;
-    const renameDialog = this.shadowRoot.querySelector('[part=rename-dialog]');
-    
-    renameDialog.renderer = function(root, dialog) {
-
-      if (!root.firstElementChild) {
-
-
-        const div = window.document.createElement('div');
-        div.innerHTML = `
-          <style>
-            .rename-dialog-content {
-              width: 250px;
-            }
-
-            .rename-dialog-content p {
-              font-size: 20px;
-              font-weight: bold;
-              margin: 0 0 5px;
-            }
-
-            .rename-dialog-content vaadin-text-field {
-              width: 100%;
-            }
-
-            .rename-dialog-buttons {
-              display: flex;
-              justify-content: flex-end;
-              margin-top: 10px;
-            }
-
-            .rename-dialog-buttons vaadin-button {
-              margin-left: 5px;
-            }
-          </style>
-          <div class="rename-dialog-content">
-            <p>Rename Layout</p>
-            <vaadin-text-field label="Name" theme="small"></vaadin-text-field>
-            <div class="rename-dialog-buttons">
-              <vaadin-button part="confirm-button" theme="success primary small">Confirm</vaadin-button>
-              <vaadin-button part="close-button" theme="small">Close</vaadin-button>
-            </div>
-          </div>
-        `;
-        const closeButton = div.querySelector('[part=close-button]');
-        closeButton.addEventListener('click', function() {
-          renameDialog.opened = false;
-        });
-
-        const nameInput = div.querySelector('vaadin-text-field');
-        const confirmButton = div.querySelector('[part=confirm-button]');
-        confirmButton.addEventListener('click', function() {
-          wom.executeAction('renameLayout', { name: nameInput.value });
-        });
-        root.appendChild(div);
-      }
-
-      const nameInput = root.querySelector('.rename-dialog-content vaadin-text-field');
-      nameInput.value = wom.layout.getOpenedLayoutName();
-    }
-  }
-
-  initOpenLayoutDialog() {
-    const openLayoutDialog = this.shadowRoot.querySelector('[part=open-layout-dialog]');
-    const wom = this.wom;
-    
-    openLayoutDialog.renderer = function(root, dialog) {
-
-      if (!root.firstElementChild) {
-
-
-        const div = window.document.createElement('div');
-        div.innerHTML = `
-          <style>
-            .open-layout-dialog-content {
-              width: 350px;
-            }
-
-            .open-layout-dialog-content p {
-              font-size: 20px;
-              font-weight: bold;
-              margin: 0 0 5px;
-            }
-
-            .list-box-container {
-              max-height: 300px;
-              overflow: auto;
-            }
-
-            .open-layout-dialog-content vaadin-list-box {
-              width: 100%;
-              margin-bottom: 10px;
-            }
-
-            .open-layout-dialog-buttons {
-              display: flex;
-              justify-content: flex-end;
-              margin-top: 10px;
-            }
-
-            .open-layout-dialog-buttons vaadin-button {
-              margin-left: 5px;
-            }
-          </style>
-          <div class="open-layout-dialog-content">
-            <p>Open Layout</p>
-            <div class="list-box-container">
-              <vaadin-list-box selected="0"></vaadin-list-box>
-            </div>
-            <div class="open-layout-dialog-buttons">
-              <vaadin-button part="confirm-button" theme="success primary small">Open</vaadin-button>
-              <vaadin-button part="close-button" theme="small">Cancel</vaadin-button>
-            </div>
-          </div>
-        `;
-        const closeButton = div.querySelector('[part=close-button]');
-        closeButton.addEventListener('click', function() {
-          openLayoutDialog.opened = false;
-        });
-
-        const listBox = div.querySelector('vaadin-list-box');
-        const confirmButton = div.querySelector('[part=confirm-button]');
-        confirmButton.addEventListener('click', function() {
-          const item = listBox.children.item(listBox.selected);
-          const layoutName = item.innerText;
-          wom.executeAction('openLayout', { layoutName });
-          openLayoutDialog.opened = false;
-        });
-        root.appendChild(div);
-      }
-
-      const listBox = root.querySelector('.open-layout-dialog-content vaadin-list-box');
-      listBox.innerHTML = '';
-      wom.layout.getSavedLayoutNames().sort().forEach(layoutName => {
-        const item = window.document.createElement('vaadin-item');
-        item.innerText = layoutName;
-        listBox.appendChild(item);
-      });
-      listBox.selected = 0;
-    }
-  }
   
   firstUpdated() {
     this.addShortcuts();
@@ -625,11 +387,6 @@ class WomTools extends LitElement {
     observer.observe(this.shadowRoot, {
       childList: true
     });
-
-    this.initAboutDialog();
-    this.initPreferencesDialog();
-    this.initRenameDialog();
-    this.initOpenLayoutDialog();
     
     window.addEventListener('beforeinstallprompt', () => {
       this.setMenuItems();
@@ -698,30 +455,24 @@ class WomTools extends LitElement {
   }
 
   openAboutDialog() {
-    const aboutDialog = this.shadowRoot.querySelector('[part=about-dialog]');
-    aboutDialog.opened = true;
+    const aboutDialog = this.shadowRoot.querySelector('dashboard-about-dialog');
+    aboutDialog.open();
   }
 
   openPreferencesDialog() {
-    const aboutDialog = this.shadowRoot.querySelector('[part=preferences-dialog]');
-    aboutDialog.opened = true;
+    const dialog = this.shadowRoot.querySelector('dashboard-preferences-dialog');
+    dialog.open();
   }
 
   openRenameDialog() {
-    const renameDialog = this.shadowRoot.querySelector('[part=rename-dialog]');
-    renameDialog.opened = true;
+    const dialog = this.shadowRoot.querySelector('dashboard-rename-dialog');
+    dialog.open();
   }
 
 
   openOpenLayoutDialog() {
-    if (
-      this.wom.layout.hasNewChanges()
-      && !confirm(`You have unsaved changes. Are you sure you want to open a layout?`)
-    ) {
-      return;
-    }
-    const openLayoutDialog = this.shadowRoot.querySelector('[part=open-layout-dialog]');
-    openLayoutDialog.opened = true;
+    const openLayoutDialog = this.shadowRoot.querySelector('dashboard-open-layout-dialog');
+    openLayoutDialog.open();
   }
 
   menuItemSelected(ev) {
@@ -740,7 +491,7 @@ class WomTools extends LitElement {
     ) {
       return;
     }
-    
+
     this.wom.executeAction('loadRecentLayout', { layoutName });
   }
 
@@ -801,10 +552,11 @@ class WomTools extends LitElement {
 
     return html`
       <div part="tools">
-        <vaadin-dialog part="about-dialog"></vaadin-dialog>
-        <vaadin-dialog part="preferences-dialog"></vaadin-dialog>
-        <vaadin-dialog part="rename-dialog"></vaadin-dialog>
-        <vaadin-dialog part="open-layout-dialog"></vaadin-dialog>
+        <dashboard-open-layout-dialog .wom="${this.wom}"></dashboard-open-layout-dialog>
+        <dashboard-about-dialog></dashboard-about-dialog>
+        <dashboard-preferences-dialog></dashboard-preferences-dialog>
+        <dashboard-rename-dialog .wom="${this.wom}"></dashboard-rename-dialog>
+
         <div part="top-menu">
 
           <vaadin-button 
