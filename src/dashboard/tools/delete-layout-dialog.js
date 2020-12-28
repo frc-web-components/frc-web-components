@@ -75,9 +75,8 @@ class DeleteLayoutDialog extends LitElement {
         const checkboxGroup = div.querySelector('vaadin-checkbox-group');
         const confirmButton = div.querySelector('[part=confirm-button]');
         confirmButton.addEventListener('click', function() {
-          // const item = listBox.children.item(listBox.selected);
-          // const layoutName = item.innerText;
-          // wom.executeAction('openLayout', { layoutName });
+          const layouts = checkboxGroup.value;
+          wom.executeAction('deleteLayouts', { layouts });
           deleteLayoutDialog.opened = false;
         });
         root.appendChild(div);

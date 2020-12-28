@@ -51,6 +51,16 @@ class WomLayout {
     return null;
   }
 
+  deleteLayout(layout) {
+    const savedLayouts = this.getSavedLayouts();
+    delete savedLayouts[layout];
+    window.localStorage.savedWomLayouts = JSON.stringify(savedLayouts);
+
+    if (layout === this.getOpenedLayoutName()) {
+      this.setTitleFromLayoutName(true);
+    }
+  }
+
   renameOpenedLayout(newName) {
     const oldName = this.getOpenedLayoutName();
     const savedLayouts = this.getSavedLayouts();

@@ -17,6 +17,7 @@ import LoadStoredLayout from './actions/load-stored-layout';
 import LoadRecentLayout from './actions/load-recent-layout';
 import DownloadLayout from './actions/download-layout';
 import RenameLayout from './actions/rename-layout';
+import DeleteLayouts from './actions/delete-layouts';
 import './builder/index';
 import './tools';
 
@@ -86,6 +87,7 @@ class WebbitDashboard extends LitElement {
     this.wom.addAction('pasteNode', new PasteNode());
     this.wom.addAction('downloadLayout', new DownloadLayout());
     this.wom.addAction('renameLayout', new RenameLayout());
+    this.wom.addAction('deleteLayouts', new DeleteLayouts());
   }
 
   firstUpdated() {
