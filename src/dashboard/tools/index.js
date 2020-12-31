@@ -7,6 +7,7 @@ import './about-dialog';
 import './preferences-dialog';
 import './rename-dialog';
 import './delete-layout-dialog';
+import './manage-extensions-dialog';
 
 const beautify_html = require('js-beautify').html;
 const isMac = navigator.userAgent.indexOf('Mac OS X') != -1;
@@ -170,7 +171,7 @@ class WomTools extends LitElement {
           { component: this.getMenuItemWithShortcut('Rename Layout', isMac ? '&#8679;&#8984;R' : 'Ctrl+Shift+R'), action: this.openRenameDialog },
           { text: 'Delete Layouts', action: this.openDeleteLayoutsDialog },
           { component: 'hr' },
-          { text: 'Load Extension', action: this.onLoadExtension, disabled: true },
+          { text: 'Manage Extensions', action: this.openManageExtensionsDialog },
         ]
       },
       { 
@@ -418,10 +419,6 @@ class WomTools extends LitElement {
     this.wom.getSelectedNode().getNode().scrollIntoView();
   }
 
-  onLoadExtension() {
-    alert(`Loading Extensions hasn't been implemented yet!`);
-  }
-
   async editNodeHtml() {
     this.wom.setEditingNodeHtml(true);
   }
@@ -480,6 +477,11 @@ class WomTools extends LitElement {
 
   openDeleteLayoutsDialog() {
     const dialog = this.shadowRoot.querySelector('dashboard-delete-layout-dialog');
+    dialog.open();
+  }
+
+  openManageExtensionsDialog() {
+    const dialog = this.shadowRoot.querySelector('dashboard-manage-extensions-dialog');
     dialog.open();
   }
 
@@ -565,6 +567,7 @@ class WomTools extends LitElement {
         <dashboard-preferences-dialog></dashboard-preferences-dialog>
         <dashboard-rename-dialog .wom="${this.wom}"></dashboard-rename-dialog>
         <dashboard-delete-layout-dialog .wom="${this.wom}"></dashboard-delete-layout-dialog>
+        <dashboard-manage-extensions-dialog .wom="${this.wom}"></dashboard-manage-extensions-dialog>
 
         <div part="top-menu">
 
