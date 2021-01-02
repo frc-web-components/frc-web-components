@@ -57,6 +57,7 @@ class AddExtensionDialog extends LitElement {
 
             .extension-form {
               display: flex;
+              flex-direction: column;
             }
 
             .extension-form-row {
