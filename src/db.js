@@ -33,8 +33,7 @@ const dbPromise = new Promise((resolve, reject) => {
 
 });
 
-
-window.addExtension = async (name, version, extensionFn) => {
+window.addExtension = async ({ name, version, description, extensionFn, enabled }) => {
   try {
     const db = await dbPromise;
 
@@ -42,8 +41,14 @@ window.addExtension = async (name, version, extensionFn) => {
       // Start a database transaction and get the notes object store
       let tx = db.transaction(['extensions'], 'readwrite');
       let store = tx.objectStore('extensions');
-      // Put the sticky note into the object store
-      let extension = { name, version, extensionFn };
+
+      let extension = { 
+        name, 
+        version, 
+        description,
+        extensionFn: extensionFn.toString(), 
+        enabled
+      };
       store.add(extension);
       // Wait for the database transaction to complete
       tx.oncomplete = function() { resolve() };
