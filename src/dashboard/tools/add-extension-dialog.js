@@ -86,7 +86,7 @@ class AddExtensionDialog extends LitElement {
                   <input type="file" accept="application/javascript" id="myFile">
                 </div>
                 <div class="file-from-url">
-                  <vaadin-text-field theme="small" label="URL" placeholder="Enter extension URL">
+                  <vaadin-text-field id="url" theme="small" label="URL" placeholder="Enter extension URL">
                     <vaadin-button id="go" theme="primary contrast" slot="suffix">Go</vaadin-button>
                   </vaadin-text-field>
                 </div>
@@ -111,6 +111,7 @@ class AddExtensionDialog extends LitElement {
         const descField = div.querySelector('#description');
         const fileInput = div.querySelector('#myFile');
         const goButton = div.querySelector('#go');
+        const urlField = div.querySelector('#url');
 
         closeButton.addEventListener('click', function() {
           addExtensionDialog.opened = false;
@@ -131,7 +132,6 @@ class AddExtensionDialog extends LitElement {
               const javascript = e.target.result;
               const getExtension = new Function(`${javascript}; return extension;`);
               const { name, version, description, code } = getExtension();
-              console.log(name, version, description);
               nameField.value = name;
               versionField.value = version;
               descField.value = description;
@@ -139,7 +139,6 @@ class AddExtensionDialog extends LitElement {
               const entire = code.toString();
               var body = entire.substring(entire.indexOf("{") + 1, entire.lastIndexOf("}"));
               console.log('body:', body);
-
             }
             catch(e) {
               console.error(e);
@@ -150,6 +149,25 @@ class AddExtensionDialog extends LitElement {
         };
 
         goButton.onclick = () => {
+          const Http = new XMLHttpRequest();
+          const url = urlField.value;
+          Http.open("GET", url);
+          Http.send();
+
+          Http.onreadystatechange = (e) => {
+            try {
+              const javascript = Http.responseText;
+              const getExtension = new Function(`${javascript}; return extension;`);
+              const { name, version, description, code } = getExtension();
+              nameField.value = name;
+              versionField.value = version;
+              descField.value = description;
+
+              const entire = code.toString();
+              var body = entire.substring(entire.indexOf("{") + 1, entire.lastIndexOf("}"));
+              console.log('body:', body);
+            } catch(e) {}
+          }
           alert('go');
         };
 
