@@ -1,4 +1,5 @@
 import { LitElement, html } from 'lit-element';
+import { loadJavascript } from '../utils';
 
 
 class AddExtensionDialog extends LitElement {
@@ -55,13 +56,22 @@ class AddExtensionDialog extends LitElement {
               margin-top: 5px;
             }
 
-            .extension-form {
-              display: flex;
-              flex-direction: column;
+            .file-from-url vaadin-text-field {
+              width: 100%;
+              padding-bottom: 0;
+              margin-bottom: 0;
             }
 
-            .extension-form-row {
-              display: flex;
+            .file-from-url vaadin-text-field::part(input-field) {
+              border-top-right-radius: 0;
+              border-bottom-right-radius: 0;
+              padding-right: 0;
+            }
+
+            .file-from-url vaadin-button {
+              border-radius: 0;
+              margin: 0;
+              color: white;
             }
           </style>
           <div class="add-extension-dialog-content">
@@ -73,20 +83,19 @@ class AddExtensionDialog extends LitElement {
               </vaadin-tabs>
               <div data-tab="">
                 <div class="upload-file">
-                  <input type="file" id="myFile" name="filename">
+                  <input type="file" accept="application/javascript" id="myFile">
                 </div>
                 <div class="file-from-url">
-                  <vaadin-text-field theme="small" label="URL" placeholder="Enter extension URL"></vaadin-text-field>
+                  <vaadin-text-field theme="small" label="URL" placeholder="Enter extension URL">
+                    <vaadin-button id="go" theme="primary contrast" slot="suffix">Go</vaadin-button>
+                  </vaadin-text-field>
                 </div>
               </div>
-              <div class="extension-form">
-                <div class="extension-form-row">
-                  <vaadin-text-field theme="small" label="Name"></vaadin-text-field>
-                  <vaadin-number-field theme="small" label="Version" value="1.0"></vaadin-number-field>
-                </div>
-                <vaadin-checkbox>Enabled</vaadin-checkbox>
-                <vaadin-text-area theme="small" label="Description"  value="Just another extension"></vaadin-text-area>
-              </div>
+              <vaadin-form-layout>
+                <vaadin-text-field id="name" theme="small" label="Name" colspan="1"></vaadin-text-field>
+                <vaadin-number-field id="version" theme="small" label="Version" value="1.0" colspan="1"></vaadin-number-field>
+                <vaadin-text-area id="description" theme="small" label="Description" colspan="2" value="Just another extension"></vaadin-text-area>
+              </vaadin-form-layout>
             </div>
             <div class="add-extension-dialog-buttons">
               <vaadin-button part="confirm-button" theme="success primary small">Confirm</vaadin-button>
@@ -95,9 +104,54 @@ class AddExtensionDialog extends LitElement {
           </div>
         `;
         const closeButton = div.querySelector('[part=close-button]');
+        const tabContent = div.querySelector('[data-tab]');
+        const tabs = div.querySelector('vaadin-tabs');
+        const nameField = div.querySelector('#name');
+        const versionField = div.querySelector('#version');
+        const descField = div.querySelector('#description');
+        const fileInput = div.querySelector('#myFile');
+        const goButton = div.querySelector('#go');
+
         closeButton.addEventListener('click', function() {
           addExtensionDialog.opened = false;
         });
+
+        tabs.addEventListener('selected-changed', () => {
+          tabContent.setAttribute('data-tab', tabs.selected.toString());
+        });
+
+        fileInput.onchange = () => {
+
+          const { files } = fileInput;
+    
+          const reader = new FileReader();
+    
+          reader.onload = (e) => { 
+            try {
+              const javascript = e.target.result;
+              const getExtension = new Function(`${javascript}; return extension;`);
+              const { name, version, description, code } = getExtension();
+              console.log(name, version, description);
+              nameField.value = name;
+              versionField.value = version;
+              descField.value = description;
+
+              const entire = code.toString();
+              var body = entire.substring(entire.indexOf("{") + 1, entire.lastIndexOf("}"));
+              console.log('body:', body);
+
+            }
+            catch(e) {
+              console.error(e);
+            }
+          }
+    
+          reader.readAsText(files.item(0));
+        };
+
+        goButton.onclick = () => {
+          alert('go');
+        };
 
         // const listBox = div.querySelector('vaadin-list-box');
         // const confirmButton = div.querySelector('[part=confirm-button]');

@@ -169,3 +169,52 @@ export const loadHtml = () => {
   });
 };
 
+export const loadJavascript = () => {
+  return new Promise(resolve => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'application/javascript';
+
+    fileInput.onchange = () => {
+      const { files } = fileInput;
+
+      if (files.length < 1) {
+        resolve({
+          result: {},
+          cancelled: true,
+          error: false,
+        });
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = (e) => { 
+        try {
+          const javascript = e.target.result;
+          resolve({
+            result: { javascript, name: files.item(0).name.replace(/\.js$/, '') },
+            cancelled: false,
+            error: false,
+          });
+        }
+        catch(e) {
+          resolve({
+            result: '',
+            cancelled: false,
+            error: true,
+          });
+        }
+      }
+
+      reader.readAsText(files.item(0));
+    };
+
+    const evt = new MouseEvent("click", {
+      bubbles: true,
+      cancelable: true,
+      view: window
+    });
+    fileInput.dispatchEvent(evt);
+  });
+};
+
