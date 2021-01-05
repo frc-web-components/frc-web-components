@@ -5,6 +5,7 @@ const extension = {
     version: 1,
     description: "Just some extension",
     code() {
-        console.log('Example extension enabled');
+        const a=   1; if (n > 5) 
+        console.log('Example extension enabled')
     }
 }

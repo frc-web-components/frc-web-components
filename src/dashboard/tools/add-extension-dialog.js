@@ -1,6 +1,14 @@
 import { LitElement, html } from 'lit-element';
 import { loadJavascript } from '../utils';
+const beautify = require('js-beautify').js;
 
+function beautifyCode(code) {
+  try {
+    return beautify(code, { indent_with_tabs: true, space_in_empty_paren: true });
+  } catch(e) {
+    return code;
+  }
+}
 
 class AddExtensionDialog extends LitElement {
 
@@ -52,8 +60,12 @@ class AddExtensionDialog extends LitElement {
               display: none;
             }
 
-            .upload-file, .file-from-url {
+            .file-from-url {
               margin-top: 5px;
+            }
+
+            .upload-file {
+              margin: 15px 0 5px;
             }
 
             .file-from-url vaadin-text-field {
@@ -73,6 +85,23 @@ class AddExtensionDialog extends LitElement {
               margin: 0;
               color: white;
             }
+
+            label {
+              color: var(--lumo-secondary-text-color);
+              font-size: var(--lumo-font-size-xs);
+              font-family: var(--lumo-font-family);
+              font-weight: 500;
+              margin-top: var(--lumo-space-m);
+              margin-left: calc(var(--lumo-border-radius) / 4);
+              margin-bottom: var(--lumo-space-xs);
+              transition: color 0.4s;
+              line-height: 1.333;
+            }
+
+            juicy-ace-editor {
+              height: 200px;
+            }
+
           </style>
           <div class="add-extension-dialog-content">
             <p>Add Extension</p>
@@ -96,6 +125,12 @@ class AddExtensionDialog extends LitElement {
                 <vaadin-number-field id="version" theme="small" label="Version" value="1.0" colspan="1"></vaadin-number-field>
                 <vaadin-text-area id="description" theme="small" label="Description" colspan="2" value="Just another extension"></vaadin-text-area>
               </vaadin-form-layout>
+              <label slot="label" for="code">Code</label>
+              <juicy-ace-editor
+                id="code"
+                mode="ace/mode/javascript"
+                theme="ace/theme/monokai"
+              ></juicy-ace-editor>
             </div>
             <div class="add-extension-dialog-buttons">
               <vaadin-button part="confirm-button" theme="success primary small">Confirm</vaadin-button>
@@ -112,6 +147,7 @@ class AddExtensionDialog extends LitElement {
         const fileInput = div.querySelector('#myFile');
         const goButton = div.querySelector('#go');
         const urlField = div.querySelector('#url');
+        const codeField = div.querySelector('#code');
 
         closeButton.addEventListener('click', function() {
           addExtensionDialog.opened = false;
@@ -138,7 +174,7 @@ class AddExtensionDialog extends LitElement {
 
               const entire = code.toString();
               var body = entire.substring(entire.indexOf("{") + 1, entire.lastIndexOf("}"));
-              console.log('body:', body);
+              codeField.value = beautifyCode(body);
             }
             catch(e) {
               console.error(e);
@@ -165,10 +201,10 @@ class AddExtensionDialog extends LitElement {
 
               const entire = code.toString();
               var body = entire.substring(entire.indexOf("{") + 1, entire.lastIndexOf("}"));
-              console.log('body:', body);
+              codeField.value = beautifyCode(body);
+
             } catch(e) {}
           }
-          alert('go');
         };
 
         // const listBox = div.querySelector('vaadin-list-box');
@@ -181,6 +217,20 @@ class AddExtensionDialog extends LitElement {
         // });
         root.appendChild(div);
       }
+
+      const nameField = root.querySelector('#name');
+      const versionField = root.querySelector('#version');
+      const descField = root.querySelector('#description');
+      const fileInput = root.querySelector('#myFile');
+      const urlField = root.querySelector('#url');
+      const codeField = root.querySelector('#code');
+
+      nameField.value = '';
+      versionField.value = '';
+      descField.value = '';
+      fileInput.value = '';
+      urlField.value = '';
+      codeField.value = '';
 
       // const listBox = root.querySelector('.open-layout-dialog-content vaadin-list-box');
       // listBox.innerHTML = '';
