@@ -1,6 +1,6 @@
 import { LitElement, html } from 'lit-element';
-import { loadJavascript } from '../utils';
 const beautify = require('js-beautify').js;
+import { addExtension } from '../../db';
 
 function beautifyCode(code) {
   try {
@@ -121,8 +121,8 @@ class AddExtensionDialog extends LitElement {
                 </div>
               </div>
               <vaadin-form-layout>
-                <vaadin-text-field id="name" theme="small" label="Name" colspan="1"></vaadin-text-field>
-                <vaadin-number-field id="version" theme="small" label="Version" value="1.0" colspan="1"></vaadin-number-field>
+                <vaadin-text-field required error-message="Please enter a name" id="name" theme="small" label="Name" colspan="1"></vaadin-text-field>
+                <vaadin-number-field required error-message="Please enter a version number" id="version" theme="small" label="Version" value="1.0" colspan="1"></vaadin-number-field>
                 <vaadin-text-area id="description" theme="small" label="Description" colspan="2" value="Just another extension"></vaadin-text-area>
               </vaadin-form-layout>
               <label slot="label" for="code">Code</label>
@@ -148,6 +148,7 @@ class AddExtensionDialog extends LitElement {
         const goButton = div.querySelector('#go');
         const urlField = div.querySelector('#url');
         const codeField = div.querySelector('#code');
+        const confirmButton = div.querySelector('[part=confirm-button]');
 
         closeButton.addEventListener('click', function() {
           addExtensionDialog.opened = false;
@@ -204,6 +205,18 @@ class AddExtensionDialog extends LitElement {
               codeField.value = beautifyCode(body);
 
             } catch(e) {}
+          }
+        };
+
+        confirmButton.onclick = () => {
+          if (nameField.validate() && versionField.validate()) {
+            addExtension({
+              name: nameField.value,
+              version: parseFloat(versionField.value),
+              description: descField.value,
+              code: codeField.value
+            });
+            addExtensionDialog.opened = false;
           }
         };
 

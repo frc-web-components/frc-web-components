@@ -33,7 +33,7 @@ const dbPromise = new Promise((resolve, reject) => {
 
 });
 
-window.addExtension = async ({ name, version, description, extensionFn, enabled }) => {
+export const addExtension = async ({ name, version, description, code }) => {
   try {
     const db = await dbPromise;
 
@@ -46,8 +46,8 @@ window.addExtension = async ({ name, version, description, extensionFn, enabled 
         name, 
         version, 
         description,
-        extensionFn: extensionFn.toString(), 
-        enabled
+        code, 
+        enabled: true
       };
       store.add(extension);
       // Wait for the database transaction to complete
