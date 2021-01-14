@@ -33,7 +33,7 @@ const dbPromise = new Promise((resolve, reject) => {
 
 });
 
-export const addExtension = async ({ name, version, description, code }) => {
+export const addExtension = async ({ name, version, description, code }, enabled = true) => {
   try {
     const db = await dbPromise;
 
@@ -44,12 +44,12 @@ export const addExtension = async ({ name, version, description, code }) => {
 
       let extension = { 
         name, 
-        version, 
+        version: parseFloat(version), 
         description,
         code, 
-        enabled: true
+        enabled,
       };
-      store.add(extension);
+      store.put(extension);
       // Wait for the database transaction to complete
       tx.oncomplete = function() { resolve() };
       tx.onerror = function(event) {
@@ -90,6 +90,52 @@ export const getExtensions = async () => {
       req.onerror = function(event) {
         reject(new Error(event.target.errorCode));
       }
+    });
+
+  } catch(e) {
+    return new Promise.reject(new Error(e.message));
+  }
+};
+
+export const getExtension = async (name, version) => {
+  try {
+    const db = await dbPromise;
+
+    return new Promise((resolve) => {
+      let tx = db.transaction(['extensions'], 'readonly');
+      let store = tx.objectStore('extensions');
+
+      var request = store.get([name, version]);
+      request.onerror = function(event) {
+        resolve(null);
+        // Handle errors!
+      };
+      request.onsuccess = function(event) {
+        resolve(request.result || null);
+      };
+
+    });
+
+  } catch(e) {
+    return new Promise.reject(new Error(e.message));
+  }
+};
+
+export const removeExtension = async (name, version) => {
+  try {
+    const db = await dbPromise;
+
+    return new Promise((resolve) => {
+      let tx = db.transaction(['extensions'], 'readwrite');
+      let store = tx.objectStore('extensions');
+
+      var request = store.delete([name, parseFloat(version)]);
+      request.onerror = function(event) {
+        resolve();
+      };
+      request.onsuccess = function(event) {
+        resolve();
+      };
     });
 
   } catch(e) {

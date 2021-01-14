@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
-import { getExtensions } from '../../db';
+import { getExtensions, addExtension, removeExtension } from '../../db';
 import './add-extension-dialog';
 
 
@@ -14,7 +14,7 @@ class ManageExtensionsTable extends LitElement {
       }
 
       [part=details] {
-        width: 220px;
+        width: 250px;
         margin-left: 0px;
         border: 1px solid #ddd;
         border-left: none;
@@ -63,8 +63,7 @@ class ManageExtensionsTable extends LitElement {
     this.selectedItem = null;
   }
 
-
-  async firstUpdated() {
+  async setGridItems() {
     try {
       this.extensions = await getExtensions();
       const grid = this.shadowRoot.querySelector('vaadin-grid');
@@ -77,12 +76,55 @@ class ManageExtensionsTable extends LitElement {
 
       grid.items = this.extensions.map(extension => ({
         ...extension,
-        version: extension.version.toFixed(1)
+        version: parseFloat(extension.version).toFixed(1)
       }));
-      console.log('extensions:', this.extensions);
     } catch(e) {
       console.error(e.message);
     }
+  }
+
+
+  firstUpdated() {
+    this.setGridItems();  
+  }
+
+  onEdit() {
+    this.dispatchEvent(new CustomEvent("editItem", {
+      detail: this.selectedItem
+    }));
+  }
+
+  async onDisable() {
+    const { name, version } = this.selectedItem;
+    await addExtension(this.selectedItem, false);
+    await this.setGridItems();
+    const grid = this.shadowRoot.querySelector('vaadin-grid');
+    this.selectedItem = grid.items.find(item => {
+      return item.name === name && item.version === version;
+    });
+  }
+
+  async onEnable() {
+    const { name, version } = this.selectedItem;
+    await addExtension(this.selectedItem, true);
+    await this.setGridItems();
+    this.setSelectedItem(name, version);
+  }
+
+  setSelectedItem(name, version) {
+    const grid = this.shadowRoot.querySelector('vaadin-grid');
+
+    this.selectedItem = grid.items.find(item => {
+      return item.name === name && item.version.toString() === version.toString();
+    });
+  }
+
+  async onRemove() {
+    const { name, version } = this.selectedItem;
+    console.log(name, version);
+    await removeExtension(name, version);
+    await this.setGridItems();
+    this.selectedItem = null;
   }
 
   render() {
@@ -103,11 +145,12 @@ class ManageExtensionsTable extends LitElement {
           <p>${this.selectedItem.description}</p>
           <div part="details-buttons">
             ${this.selectedItem.enabled ? html`
-              <vaadin-button theme="error small">Disable</vaadin-button>
+              <vaadin-button theme="error small" @click="${this.onDisable}">Disable</vaadin-button>
             ` : html`
-              <vaadin-button theme="success small">Enable</vaadin-button>
+              <vaadin-button theme="success small" @click="${this.onEnable}">Enable</vaadin-button>
             `}
-            <vaadin-button theme="error small">Remove</vaadin-button>
+            <vaadin-button theme="contrast small" @click="${this.onEdit}">Edit</vaadin-button>
+            <vaadin-button theme="error small" @click="${this.onRemove}">Remove</vaadin-button>
           </div>
         ` : html`
           <p>Select an extension to view details</p>
@@ -126,13 +169,25 @@ class ManageExtensionsDialog extends LitElement {
     dialog.opened = true;
   }
 
-  openAddExtensionDialog() {
+  async openAddExtensionDialog(name, version, description, code) {
+    let dialogContainer = this.shadowRoot.querySelector('[part=add-extension-dialog-container]');
+    dialogContainer.innerHTML = `<dashboard-add-extension-dialog></dashboard-add-extension-dialog>`;
     const dialog = this.shadowRoot.querySelector('dashboard-add-extension-dialog');
+    await dialog.updateComplete;
+    if (name) {
+      dialog.name = name;
+      dialog.version = version;
+      dialog.description = description;
+      dialog.code = code; 
+    }
     dialog.open();
   }
 
   firstUpdated() {
+
+    const that = this;
     const manageExtensionsDialog = this.shadowRoot.querySelector('[part=manage-extensions-dialog]');
+
     const openAddExtensionDialog = this.openAddExtensionDialog.bind(this);
 
     manageExtensionsDialog.renderer = function(root, dialog) {
@@ -144,7 +199,7 @@ class ManageExtensionsDialog extends LitElement {
         div.innerHTML = `
           <style>
             .manage-extensions-dialog-content {
-              width: 700px;
+              width: 730px;
             }
 
             .manage-extensions-dialog-content p {
@@ -191,13 +246,25 @@ class ManageExtensionsDialog extends LitElement {
 
       const tableContainer = root.querySelector('.manage-extensions-dialog-content .table-container');
       tableContainer.innerHTML = '<dashboard-manage-extensions-table></dashboard-manage-extensions-table>';
+      const extensionsTable = tableContainer.querySelector('dashboard-manage-extensions-table');
+      that.extensionsTable = extensionsTable;
+      extensionsTable.addEventListener('editItem', (ev) => {
+        const { name, version, description, code } = ev.detail;
+        openAddExtensionDialog(name, version, description, code);
+      });
     }
+  }
+
+  async onAddExtension(ev) {
+    const { name, version } = ev.detail;
+    await this.extensionsTable.setGridItems();
+    this.extensionsTable.setSelectedItem(name, parseFloat(version));
   }
 
   render() {
     return html`
       <vaadin-dialog part="manage-extensions-dialog"></vaadin-dialog>
-      <dashboard-add-extension-dialog></dashboard-add-extension-dialog>
+      <div part="add-extension-dialog-container" @addExtension="${this.onAddExtension}"></div>
     `;
   }
 }

@@ -11,6 +11,23 @@ function beautifyCode(code) {
 }
 
 class AddExtensionDialog extends LitElement {
+  
+  static get properties() {
+    return {
+      name: { type: String, attribute: 'name' },
+      version: { type: Number, attribute: 'version' },
+      description: { type: String, attribute: 'description' },
+      code: { type: String, attribute: 'code' },
+    };
+  }
+
+  constructor() {
+    super();
+    this.name = '';
+    this.version = '';
+    this.description = '';
+    this.code = '';
+  }
 
   open() {
     const dialog = this.shadowRoot.querySelector('[part=add-extension-dialog]');
@@ -19,8 +36,11 @@ class AddExtensionDialog extends LitElement {
 
   firstUpdated() {
     const addExtensionDialog = this.shadowRoot.querySelector('[part=add-extension-dialog]');
+    const that = this;
     
     addExtensionDialog.renderer = function(root, dialog) {
+
+      const { name, version, description, code } = that;
 
       if (!root.firstElementChild) {
 
@@ -122,8 +142,8 @@ class AddExtensionDialog extends LitElement {
               </div>
               <vaadin-form-layout>
                 <vaadin-text-field required error-message="Please enter a name" id="name" theme="small" label="Name" colspan="1"></vaadin-text-field>
-                <vaadin-number-field required error-message="Please enter a version number" id="version" theme="small" label="Version" value="1.0" colspan="1"></vaadin-number-field>
-                <vaadin-text-area id="description" theme="small" label="Description" colspan="2" value="Just another extension"></vaadin-text-area>
+                <vaadin-number-field required error-message="Please enter a version number" id="version" theme="small" label="Version" colspan="1"></vaadin-number-field>
+                <vaadin-text-area id="description" theme="small" label="Description" colspan="2"></vaadin-text-area>
               </vaadin-form-layout>
               <label slot="label" for="code">Code</label>
               <juicy-ace-editor
@@ -208,51 +228,38 @@ class AddExtensionDialog extends LitElement {
           }
         };
 
-        confirmButton.onclick = () => {
+        confirmButton.onclick = async () => {
           if (nameField.validate() && versionField.validate()) {
-            addExtension({
+            await addExtension({
               name: nameField.value,
               version: parseFloat(versionField.value),
               description: descField.value,
               code: codeField.value
             });
+            that.dispatchEvent(new CustomEvent("addExtension", {
+              bubbles: true, 
+              composed: true,
+              detail: {
+                name: nameField.value,
+                version: parseFloat(versionField.value),
+              }
+            }));
             addExtensionDialog.opened = false;
           }
         };
 
-        // const listBox = div.querySelector('vaadin-list-box');
-        // const confirmButton = div.querySelector('[part=confirm-button]');
-        // confirmButton.addEventListener('click', function() {
-        //   const item = listBox.children.item(listBox.selected);
-        //   const layoutName = item.innerText;
-        //   wom.executeAction('openLayout', { layoutName });
-        //   openLayoutDialog.opened = false;
-        // });
         root.appendChild(div);
       }
 
       const nameField = root.querySelector('#name');
       const versionField = root.querySelector('#version');
       const descField = root.querySelector('#description');
-      const fileInput = root.querySelector('#myFile');
-      const urlField = root.querySelector('#url');
       const codeField = root.querySelector('#code');
 
-      nameField.value = '';
-      versionField.value = '';
-      descField.value = '';
-      fileInput.value = '';
-      urlField.value = '';
-      codeField.value = '';
-
-      // const listBox = root.querySelector('.open-layout-dialog-content vaadin-list-box');
-      // listBox.innerHTML = '';
-      // wom.layout.getSavedLayoutNames().sort().forEach(layoutName => {
-      //   const item = window.document.createElement('vaadin-item');
-      //   item.innerText = layoutName;
-      //   listBox.appendChild(item);
-      // });
-      // listBox.selected = 0;
+      nameField.value = name;
+      versionField.value = version;
+      descField.value = description;
+      codeField.value = code;
     }
   }
 
