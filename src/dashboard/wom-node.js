@@ -91,6 +91,23 @@ export default class WomNode {
 
   setHtml(html) {
     this.node.innerHTML = html;
+
+    if (this.getLevel() !== 0) {
+      return;
+    }
+
+    if (
+      this.node.childNodes.length === 1 && 
+      this.node.childNodes[0].nodeName === 'FRC-ABSOLUTE-LAYOUT'
+    ) {
+      return;
+    }
+
+    this.node.innerHTML = `
+      <frc-absolute-layout>
+        ${this.node.innerHTML}
+      </frc-absolute-layout>
+    `;
   }
 
   getParent() {

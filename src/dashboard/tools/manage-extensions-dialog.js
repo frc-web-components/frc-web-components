@@ -76,7 +76,7 @@ class ManageExtensionsTable extends LitElement {
 
       grid.items = this.extensions.map(extension => ({
         ...extension,
-        version: parseFloat(extension.version).toFixed(1)
+        version: parseFloat(extension.version)
       }));
     } catch(e) {
       console.error(e.message);
@@ -121,7 +121,6 @@ class ManageExtensionsTable extends LitElement {
 
   async onRemove() {
     const { name, version } = this.selectedItem;
-    console.log(name, version);
     await removeExtension(name, version);
     await this.setGridItems();
     this.selectedItem = null;

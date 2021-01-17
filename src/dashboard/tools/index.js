@@ -129,7 +129,7 @@ class WomTools extends LitElement {
     }
 
     const isNodeSelected = this.wom.getSelectedNode();
-    const isNonRootSelected = this.wom.getSelectedNode() && this.wom.getSelectedNode() !== this.wom.getRootNode();
+    const isNonRootSelected = this.wom.getSelectedNode() && this.wom.getSelectedNode().getLevel() > 1;
     const isClipboardSet = this.wom.getClipboard() !== null;
     
     const canSelectedContainClipboardNode = (
@@ -230,7 +230,8 @@ class WomTools extends LitElement {
     this.wom.addListener('womEditingNodeHtmlChange', async ev => {
       if (ev.detail.editing) {
         const selectedNode = this.wom.getSelectedNode();
-        const isRootNode = selectedNode === this.wom.getRootNode();
+        const isRootNode = selectedNode.getLevel() <= 1;
+        console.log('isRootNode:', isRootNode);
         const html = await selectedNode.getHtml(!isRootNode);
         this.nodeHtmlEditorContent = '\n' + beautify_html(html, {
           'wrap-attributes': 'force-expand-multiline'
@@ -277,7 +278,7 @@ class WomTools extends LitElement {
       }
 
       ev.preventDefault();
-      const isNonRootSelected = this.wom.getSelectedNode() && this.wom.getSelectedNode() !== this.wom.getRootNode();
+      const isNonRootSelected = this.wom.getSelectedNode() && this.wom.getSelectedNode().getLevel() > 1;
       if (isNonRootSelected) {
         this.wom.executeAction('removeNode');
       }
@@ -337,7 +338,7 @@ class WomTools extends LitElement {
         return;
       }
       ev.preventDefault();
-      const isNonRootSelected = this.wom.getSelectedNode() && this.wom.getSelectedNode() !== this.wom.getRootNode();
+      const isNonRootSelected = this.wom.getSelectedNode() && this.wom.getSelectedNode().getLevel() > 1;
       if (isNonRootSelected) {
         this.wom.executeAction('copyNode');
       }
@@ -348,7 +349,7 @@ class WomTools extends LitElement {
         return;
       }
       ev.preventDefault();
-      const isNonRootSelected = this.wom.getSelectedNode() && this.wom.getSelectedNode() !== this.wom.getRootNode();
+      const isNonRootSelected = this.wom.getSelectedNode() && this.wom.getSelectedNode().getLevel() > 1;
       if (isNonRootSelected) {
         this.wom.executeAction('cutNode');
       }
@@ -429,7 +430,7 @@ class WomTools extends LitElement {
 
   async onConfirmEditHtml() {
     const selectedNode = this.wom.getSelectedNode();
-    const isRootNode = selectedNode === this.wom.getRootNode();
+    const isRootNode = selectedNode.getLevel() <= 1;
     const editorNode = this.shadowRoot.querySelector('juicy-ace-editor');
     const domNode = selectedNode.getNode();
 
@@ -590,10 +591,10 @@ class WomTools extends LitElement {
         <vaadin-split-layout part="tools-splitter" theme="small" orientation="vertical">
           <div part="tools-top" style="height: 40%">
             <div part="wom">
-              ${this.wom ? html`
+              ${this.wom && this.wom.getRootNode().hasChildren() ? html`
                 <wom-viewer
                   .wom="${this.wom}"
-                  .node="${this.wom.getRootNode()}"
+                  .node="${this.wom.getRootNode().getChildren()[0]}"
                   .selectedNode="${this.wom ? this.wom.getSelectedNode() : null}"
                   .container="${this.toolsTopElement}"
                   level="0"

@@ -146,7 +146,10 @@ class WebbitDashboard extends LitElement {
 
   onKeyDown(ev) {
     // Toggle edit mode
-    if (ev.shiftKey && ev.code === 'KeyE') {
+    if (document.activeElement !== document.body) {
+      return;
+    }
+    if (ev.shiftKey && ev.code === 'KeyE' && document.activeElement === document.body) {
       this.editMode = !this.editMode;
     }
 
