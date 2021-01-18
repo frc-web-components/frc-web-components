@@ -90,7 +90,7 @@ export default class Pwms extends Webbit {
       return html`<p>Start HALSim back-end to show PWMs.</p>`;
     }
 
-    const initializedPwms = getRange(8)
+    const initializedPwms = getRange(20)
       .map(index => {
         const initialized = source[index] && source[index].init;
         return {
