@@ -97,8 +97,8 @@ export default class WomNode {
     }
 
     if (
-      this.node.childNodes.length === 1 && 
-      this.node.childNodes[0].nodeName === 'FRC-ABSOLUTE-LAYOUT'
+      this.node.children.length === 1 && 
+      this.node.children[0].nodeName === 'FRC-ABSOLUTE-LAYOUT'
     ) {
       return;
     }
