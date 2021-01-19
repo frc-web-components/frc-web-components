@@ -121,8 +121,44 @@ PWAs currently can’t be installed using Safari on desktop computers.
 pynetworktables2js
 ------------------
 
+To install, follow the pynetworktables2js documentation here: https://robotpy.readthedocs.io/projects/pynetworktables2js/en/stable/#installation
+
+**Note:** 
+
+FRC Web Components requires the latest version of pynetworktables2js to be installed. If you are running pynetworktables2js with the windows executable, make sure you have installed the executable with the latest release: https://github.com/robotpy/pynetworktables2js/releases/latest
+
+If you are running pynetworktables2js using the python package make sure to upgrade to the latest version. On windows you can upgrade using the following command::
+
+    py -3 -m pip install pynetworktables2js --upgrade
+    
+And on Linux/OSX you can execute::
+
+    pip install pynetworktables2js --upgrade
+
+
+To run, follow the pynetworktables2js documentation here: https://robotpy.readthedocs.io/projects/pynetworktables2js/en/stable/#usage
 
 .. _HALSim Websocket:
 
 HALSim Websocket
 ----------------
+
+To simulate robot code using the FWC Dashboard, first read the official documentation here: https://docs.wpilib.org/en/stable/docs/software/wpilib-tools/robot-simulation/introduction.html
+
+To simulate robot code using the HALSim Websocket requires an addition to the robot project's **build.gradle** file:
+
+.. image:: ../images/running-halsim.png
+
+Add the following line at the end of the dependencies in the build.gradle file::
+
+  simulation "edu.wpi.first.halsim:halsim_ws_server:${wpi.wpilibVersion}:${wpi.platforms.desktop}@zip"
+
+Next, run the simulation using VS Code’s command palette:
+
+.. image:: ../images/running-halsim2.png
+
+Next, check the **limhalsim_ws_server.dylib** extension to run:
+
+.. image:: ../images/running-halsim3.png
+
+Your dashboard should now be able to connect to the HALSim Websocket.
