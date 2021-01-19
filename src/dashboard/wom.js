@@ -5,6 +5,15 @@ class WomLayout {
 
   constructor() {
     this.openedLayoutName = null;
+    this.newChanges = false;
+
+    window.onbeforeunload = () => {
+      return this.newChanges;
+    };
+  }
+
+  hasNewChanges() {
+    return this.newChanges;
   }
 
   getLayoutNameFromUrl() {
@@ -14,6 +23,7 @@ class WomLayout {
 
   setTitleFromLayoutName(newChanges) {
     window.document.title = `${this.openedLayoutName}${newChanges ? '*' : ''} - FWC Dashboard`;
+    this.newChanges = newChanges;
   }
 
   getSavedLayouts() {
@@ -39,6 +49,29 @@ class WomLayout {
     }
 
     return null;
+  }
+
+  deleteLayout(layout) {
+    const savedLayouts = this.getSavedLayouts();
+    delete savedLayouts[layout];
+    window.localStorage.savedWomLayouts = JSON.stringify(savedLayouts);
+
+    if (layout === this.getOpenedLayoutName()) {
+      this.setTitleFromLayoutName(true);
+    }
+  }
+
+  renameOpenedLayout(newName) {
+    const oldName = this.getOpenedLayoutName();
+    const savedLayouts = this.getSavedLayouts();
+    savedLayouts[newName] = { 
+      html: savedLayouts[oldName].html,
+      lastModified: Date.now(), 
+    };
+    delete savedLayouts[oldName];
+    window.localStorage.savedWomLayouts = JSON.stringify(savedLayouts);
+    this.openedLayoutName = newName;
+    this.setTitleFromLayoutName();
   }
 
   saveLayout(name, html) {
@@ -97,7 +130,6 @@ class WomHistory {
   goBack() {
     if (!this.atBeginning()) {
       this.position--;
-      this.storeLayout();
     }
   }
 
@@ -112,7 +144,6 @@ class WomHistory {
   goForward() {
     if (!this.atEnd()) {
       this.position++;
-      this.storeLayout();
     }
   }
 
@@ -218,7 +249,7 @@ class Wom {
   selectNode(node) {
     this.deselectNode();
     this.selectedNode = node;
-    if (node.getNode() !== this.rootNode && node.getParent().getLayout() === 'absolute') {
+    if (node.getLevel() > 1 && node.getParent().getLayout() === 'absolute') {
       addInteraction(this, node);
       node.getNode().classList.add("draggable");
     }

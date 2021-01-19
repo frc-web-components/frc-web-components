@@ -205,7 +205,6 @@ class SourcesTool extends LitElement {
   onSetFromPropertiesInputChange() {
     const inputElement = this.shadowRoot.querySelector('[part=set-from-properties-dropdown]');
     this.fromPropertiesInput = inputElement.selectedItems;
-    console.log('this.fromPropertiesInput:', this.fromPropertiesInput);
   }
 
   renderWebbit() {

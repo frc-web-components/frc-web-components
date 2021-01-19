@@ -15,6 +15,9 @@ import PasteNode from './actions/paste-node';
 import OpenLayout from './actions/open-layout';
 import LoadStoredLayout from './actions/load-stored-layout';
 import LoadRecentLayout from './actions/load-recent-layout';
+import DownloadLayout from './actions/download-layout';
+import RenameLayout from './actions/rename-layout';
+import DeleteLayouts from './actions/delete-layouts';
 import './builder/index';
 import './tools';
 
@@ -82,6 +85,9 @@ class WebbitDashboard extends LitElement {
     this.wom.addAction('copyNode', new CopyNode());
     this.wom.addAction('cutNode', new CutNode());
     this.wom.addAction('pasteNode', new PasteNode());
+    this.wom.addAction('downloadLayout', new DownloadLayout());
+    this.wom.addAction('renameLayout', new RenameLayout());
+    this.wom.addAction('deleteLayouts', new DeleteLayouts());
   }
 
   firstUpdated() {
@@ -140,7 +146,10 @@ class WebbitDashboard extends LitElement {
 
   onKeyDown(ev) {
     // Toggle edit mode
-    if (ev.shiftKey && ev.code === 'KeyE') {
+    if (document.activeElement !== document.body) {
+      return;
+    }
+    if (ev.shiftKey && ev.code === 'KeyE' && document.activeElement === document.body) {
       this.editMode = !this.editMode;
     }
 

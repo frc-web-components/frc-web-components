@@ -55,7 +55,7 @@ class DashboardBuilder extends LitElement {
       ${repeat(nodes, (descendent) => descendent, (descendent, index) => {
         const selectedNode = this.wom.getSelectedNode();
         const isSelected = selectedNode && selectedNode.getNode() === descendent.getNode();
-        const border = (isSelected && descendent !== this.wom.getRootNode())
+        const border = (isSelected && selectedNode.getLevel() > 1)
           ? '2px dashed green'
           : 'none';
         return html`
