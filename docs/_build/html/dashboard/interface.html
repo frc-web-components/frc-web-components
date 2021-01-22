@@ -83,14 +83,16 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="running.html">Running the Dashboard</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Dashbord Interface</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#adding-selecting-and-removing-components">Adding, selecting and removing components</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#moving-and-resizing-components">Moving and resizing components</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#copying-cutting-and-pasting-components">Copying, cutting and pasting components</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#changing-component-properties">Changing component properties</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#connecting-components-to-networktables-and-other-sources">Connecting components to NetworkTables and other sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#selecting-nodes">Selecting nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#removing-nodes">Removing Nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-nodes">Adding nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#moving-and-resizing-nodes">Moving and resizing nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#copying-cutting-and-pasting-nodes">Copying, cutting and pasting nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#changing-node-properties">Changing node properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connecting-nodes-to-networktables-and-other-sources">Connecting nodes to NetworkTables and other sources</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#editing-node-html">Editing node HTML</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#styling-components">Styling components</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#undoing-and-redoing-actions">Undoing and redoing actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#styling-nodes">Styling nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#undoing-and-redoing">Undoing and redoing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#saving-opening-and-creating-new-layouts">Saving, opening and creating new layouts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#loading-extensions-and-custom-components">Loading extensions and custom components</a></li>
 </ul>
@@ -186,29 +188,43 @@
 <img alt="../_images/interface2.png" src="../_images/interface2.png" />
 <p>The border that separates the <strong>dashboard area</strong> and <strong>dashboard editor</strong> can be dragged to change the size of the areas. This is useful if you want to increase the editor size or if you want to hide it to reveal components that might be hidden behind it:</p>
 <img alt="../_images/interface4.gif" src="../_images/interface4.gif" />
-<div class="section" id="adding-selecting-and-removing-components">
-<h2>Adding, selecting and removing components<a class="headerlink" href="#adding-selecting-and-removing-components" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="selecting-nodes">
+<h2>Selecting nodes<a class="headerlink" href="#selecting-nodes" title="Permalink to this headline">¶</a></h2>
+<img alt="../_images/interface5.gif" src="../_images/interface5.gif" />
+<p>In order to add, edit or remove nodes, they must be selected in <strong>Edit Mode</strong>. Nodes can be selected by either clicking on them in the dashboard or the <strong>node tree</strong>. The <strong>node tree</strong> is at the top of dashboard editor below the menu:</p>
+<img alt="../_images/interface6.png" src="../_images/interface6.png" />
+<p>Each row in the <strong>node tree</strong> represents a different node added to the dashboard. A node is the parent of the node indented below it (the children). A node’s children can be expanded and collapsed by clicking on the arrow on the left side of the node tree:</p>
+<img alt="../_images/interface7.png" src="../_images/interface7.png" />
 </div>
-<div class="section" id="moving-and-resizing-components">
-<h2>Moving and resizing components<a class="headerlink" href="#moving-and-resizing-components" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="removing-nodes">
+<h2>Removing Nodes<a class="headerlink" href="#removing-nodes" title="Permalink to this headline">¶</a></h2>
+<p>Selected nodes can be removed by pressing the delete/backspace key or by clicking the <strong>Delete Node</strong> menu item in the <strong>Edit</strong> menu:</p>
+<img alt="../_images/interface8.png" src="../_images/interface8.png" />
+<p>Note that removing a node will also remove its children.</p>
 </div>
-<div class="section" id="copying-cutting-and-pasting-components">
-<h2>Copying, cutting and pasting components<a class="headerlink" href="#copying-cutting-and-pasting-components" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="adding-nodes">
+<h2>Adding nodes<a class="headerlink" href="#adding-nodes" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="changing-component-properties">
-<h2>Changing component properties<a class="headerlink" href="#changing-component-properties" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="moving-and-resizing-nodes">
+<h2>Moving and resizing nodes<a class="headerlink" href="#moving-and-resizing-nodes" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="connecting-components-to-networktables-and-other-sources">
-<h2>Connecting components to NetworkTables and other sources<a class="headerlink" href="#connecting-components-to-networktables-and-other-sources" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="copying-cutting-and-pasting-nodes">
+<h2>Copying, cutting and pasting nodes<a class="headerlink" href="#copying-cutting-and-pasting-nodes" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="changing-node-properties">
+<h2>Changing node properties<a class="headerlink" href="#changing-node-properties" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="connecting-nodes-to-networktables-and-other-sources">
+<h2>Connecting nodes to NetworkTables and other sources<a class="headerlink" href="#connecting-nodes-to-networktables-and-other-sources" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="editing-node-html">
 <h2>Editing node HTML<a class="headerlink" href="#editing-node-html" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="styling-components">
-<h2>Styling components<a class="headerlink" href="#styling-components" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="styling-nodes">
+<h2>Styling nodes<a class="headerlink" href="#styling-nodes" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="undoing-and-redoing-actions">
-<h2>Undoing and redoing actions<a class="headerlink" href="#undoing-and-redoing-actions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="undoing-and-redoing">
+<h2>Undoing and redoing<a class="headerlink" href="#undoing-and-redoing" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="saving-opening-and-creating-new-layouts">
 <h2>Saving, opening and creating new layouts<a class="headerlink" href="#saving-opening-and-creating-new-layouts" title="Permalink to this headline">¶</a></h2>
