@@ -83,15 +83,15 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="running.html">Running the Dashboard</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Dashbord Interface</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#selecting-nodes">Selecting nodes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#removing-nodes">Removing Nodes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#adding-nodes">Adding nodes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#moving-and-resizing-nodes">Moving and resizing nodes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#copying-cutting-and-pasting-nodes">Copying, cutting and pasting nodes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#changing-node-properties">Changing node properties</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#connecting-nodes-to-networktables-and-other-sources">Connecting nodes to NetworkTables and other sources</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#editing-node-html">Editing node HTML</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#styling-nodes">Styling nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#selecting-elements">Selecting elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#removing-elements">Removing elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-elements">Adding elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#moving-and-resizing-elements">Moving and resizing elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#copying-cutting-and-pasting-elements">Copying, cutting and pasting elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#changing-element-properties">Changing element properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connecting-elements-to-networktables-and-other-sources">Connecting elements to NetworkTables and other sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#editing-element-html">Editing element HTML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#styling-elements">Styling elements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#undoing-and-redoing">Undoing and redoing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#saving-opening-and-creating-new-layouts">Saving, opening and creating new layouts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#loading-extensions-and-custom-components">Loading extensions and custom components</a></li>
@@ -188,40 +188,55 @@
 <img alt="../_images/interface2.png" src="../_images/interface2.png" />
 <p>The border that separates the <strong>dashboard area</strong> and <strong>dashboard editor</strong> can be dragged to change the size of the areas. This is useful if you want to increase the editor size or if you want to hide it to reveal components that might be hidden behind it:</p>
 <img alt="../_images/interface4.gif" src="../_images/interface4.gif" />
-<div class="section" id="selecting-nodes">
-<h2>Selecting nodes<a class="headerlink" href="#selecting-nodes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="selecting-elements">
+<h2>Selecting elements<a class="headerlink" href="#selecting-elements" title="Permalink to this headline">¶</a></h2>
 <img alt="../_images/interface5.gif" src="../_images/interface5.gif" />
-<p>In order to add, edit or remove nodes, they must be selected in <strong>Edit Mode</strong>. Nodes can be selected by either clicking on them in the dashboard or the <strong>node tree</strong>. The <strong>node tree</strong> is at the top of dashboard editor below the menu:</p>
+<p>In order to add, edit or remove elements, they must be selected in <strong>Edit Mode</strong>. elements can be selected by either clicking on them in the dashboard or the <strong>element tree</strong>. The <strong>element tree</strong> is at the top of dashboard editor below the menu:</p>
 <img alt="../_images/interface6.png" src="../_images/interface6.png" />
-<p>Each row in the <strong>node tree</strong> represents a different node added to the dashboard. A node is the parent of the node indented below it (the children). A node’s children can be expanded and collapsed by clicking on the arrow on the left side of the node tree:</p>
+<p>Each row in the <strong>element tree</strong> represents a different element added to the dashboard. A element is the parent of the element indented below it (the children). A element’s children can be expanded and collapsed by clicking on the arrow on the left side of the element tree:</p>
 <img alt="../_images/interface7.png" src="../_images/interface7.png" />
+<p>Sometimes while interacting with element you may want to prevent other elements from being selected. This can be done by toggling the <strong>selection tool</strong> in the <strong>dashboard editor’s</strong> menu:</p>
+<img alt="../_images/interface9.png" src="../_images/interface9.png" />
+<img alt="../_images/interface10.gif" src="../_images/interface10.gif" />
 </div>
-<div class="section" id="removing-nodes">
-<h2>Removing Nodes<a class="headerlink" href="#removing-nodes" title="Permalink to this headline">¶</a></h2>
-<p>Selected nodes can be removed by pressing the delete/backspace key or by clicking the <strong>Delete Node</strong> menu item in the <strong>Edit</strong> menu:</p>
+<div class="section" id="removing-elements">
+<h2>Removing elements<a class="headerlink" href="#removing-elements" title="Permalink to this headline">¶</a></h2>
+<p>Selected elements can be removed by pressing the delete/backspace key or by clicking the <strong>Delete element</strong> menu item in the <strong>Edit</strong> menu:</p>
 <img alt="../_images/interface8.png" src="../_images/interface8.png" />
-<p>Note that removing a node will also remove its children.</p>
+<p>Note that removing a element will also remove its children.</p>
 </div>
-<div class="section" id="adding-nodes">
-<h2>Adding nodes<a class="headerlink" href="#adding-nodes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="adding-elements">
+<h2>Adding elements<a class="headerlink" href="#adding-elements" title="Permalink to this headline">¶</a></h2>
+<p>All elements in a dashboard are direct children or ancestors of the root element. The root element is the topmost element in the element tree:</p>
+<img alt="../_images/interface11.png" src="../_images/interface11.png" />
+<p>To add a element you must first select an element and then click on the <strong>Add Elements</strong> tab in the <strong>element editor</strong>:</p>
+<img alt="../_images/interface12.gif" src="../_images/interface12.gif" />
+<p>Then select a component from the <strong>component dropdown</strong> input field. There are many different categories of components to choose from. When you choose a component you can add it by clicking on the <strong>Prepend Element</strong> or <strong>Append Element</strong> buttons:</p>
+<img alt="../_images/interface13.gif" src="../_images/interface13.gif" />
+<p>The components shown in the <strong>component dropdown</strong> is not the full list of components available. Only the components that can be added to the selected element are revealed. Some elements like the Gauge we added above can’t contain other elements and will say as such:</p>
+<img alt="../_images/interface14.png" src="../_images/interface14.png" />
+<p>Other components can only be added to certain elements. For example, only charts can contain chart data components:</p>
+<img alt="../_images/interface15.gif" src="../_images/interface15.gif" />
+<p>Some components have multiple distinct parts that can contain children. For example, the <strong>line chart</strong> component can contain both <strong>chart data</strong> and <strong>chart axis</strong> elements. These distinct parts are called <strong>slots</strong>. Most components have a single slot, but for components like the line chart, you can change what slot you want to add an element to by changing the <strong>Slot</strong> input field:</p>
+<img alt="../_images/interface16.gif" src="../_images/interface16.gif" />
 </div>
-<div class="section" id="moving-and-resizing-nodes">
-<h2>Moving and resizing nodes<a class="headerlink" href="#moving-and-resizing-nodes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="moving-and-resizing-elements">
+<h2>Moving and resizing elements<a class="headerlink" href="#moving-and-resizing-elements" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="copying-cutting-and-pasting-nodes">
-<h2>Copying, cutting and pasting nodes<a class="headerlink" href="#copying-cutting-and-pasting-nodes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="copying-cutting-and-pasting-elements">
+<h2>Copying, cutting and pasting elements<a class="headerlink" href="#copying-cutting-and-pasting-elements" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="changing-node-properties">
-<h2>Changing node properties<a class="headerlink" href="#changing-node-properties" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="changing-element-properties">
+<h2>Changing element properties<a class="headerlink" href="#changing-element-properties" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="connecting-nodes-to-networktables-and-other-sources">
-<h2>Connecting nodes to NetworkTables and other sources<a class="headerlink" href="#connecting-nodes-to-networktables-and-other-sources" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="connecting-elements-to-networktables-and-other-sources">
+<h2>Connecting elements to NetworkTables and other sources<a class="headerlink" href="#connecting-elements-to-networktables-and-other-sources" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="editing-node-html">
-<h2>Editing node HTML<a class="headerlink" href="#editing-node-html" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="editing-element-html">
+<h2>Editing element HTML<a class="headerlink" href="#editing-element-html" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="styling-nodes">
-<h2>Styling nodes<a class="headerlink" href="#styling-nodes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="styling-elements">
+<h2>Styling elements<a class="headerlink" href="#styling-elements" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="undoing-and-redoing">
 <h2>Undoing and redoing<a class="headerlink" href="#undoing-and-redoing" title="Permalink to this headline">¶</a></h2>
