@@ -180,12 +180,12 @@ class WomTools extends LitElement {
           { component: this.getMenuItemWithShortcut('Undo', isMac ? '&#8984;Z' : 'Ctrl+Z'), disabled: this.wom.history.atBeginning(), action: 'undo' },
           { component: this.getMenuItemWithShortcut('Redo', isMac ? '&#8679;&#8984;Z' : 'Ctrl+Y'), disabled: this.wom.history.atEnd(), action: 'redo' },
           { component: 'hr' },
-          { component: this.getMenuItemWithShortcut('Cut Node', isMac ? '&#8984;X' : 'Ctrl+X'), disabled: !isNonRootSelected, action: 'cutNode' },
-          { component: this.getMenuItemWithShortcut('Copy Node', isMac ? '&#8984;C' : 'Ctrl+C'), disabled: !isNonRootSelected, action: 'copyNode' },
-          { component: this.getMenuItemWithShortcut('Paste Node', isMac ? '&#8984;V' : 'Ctrl+V'), disabled: !canSelectedContainClipboardNode, action: 'pasteNode' },
-          { text: 'Delete Node', disabled: !isNonRootSelected, action: 'removeNode' },
+          { component: this.getMenuItemWithShortcut('Cut Element', isMac ? '&#8984;X' : 'Ctrl+X'), disabled: !isNonRootSelected, action: 'cutNode' },
+          { component: this.getMenuItemWithShortcut('Copy Element', isMac ? '&#8984;C' : 'Ctrl+C'), disabled: !isNonRootSelected, action: 'copyNode' },
+          { component: this.getMenuItemWithShortcut('Paste Element', isMac ? '&#8984;V' : 'Ctrl+V'), disabled: !canSelectedContainClipboardNode, action: 'pasteNode' },
+          { text: 'Delete Element', disabled: !isNonRootSelected, action: 'removeNode' },
           { component: 'hr' },
-          { text: 'Edit Node HTML', disabled: !isNodeSelected, action: this.editNodeHtml },
+          { text: 'Edit Element HTML', disabled: !isNodeSelected, action: this.editNodeHtml },
         ]
       },
       { 

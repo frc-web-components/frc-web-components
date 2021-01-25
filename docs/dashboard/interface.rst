@@ -76,9 +76,32 @@ Some components have multiple distinct parts that can contain children. For exam
 Moving and resizing elements
 ----------------------------
 
+A selected element can be moved by hovering over it and dragging it to another position:
+
+.. image:: ../images/interface/interface17.gif
+
+Note that the ability to move an element depends on its parent. For example, a checkbox group element can be moved, but individual checkbox elements inside the group can't.
+
+A selected element can be resized by hovering over one of its corners or edges and dragging it:
+
+.. image:: ../images/interface/interface18.gif
+
+Note that some components can't be resized, or resizing is restriced to the vertical or horizontal axis:
+
+.. image:: ../images/interface/interface19.gif
+
 Copying, cutting and pasting elements
 -------------------------------------
 
+A selected element can be copied or cut using the **Cut Element** and **Copy Element** menu items in the **Edit** menu:
+
+.. image:: ../images/interface/interface20.png
+
+A selected element can also be cut using its keyboard shortcut (Ctrl+X on Windows and Command+X on Mac) and copied using its keyboard shortcut (Ctrl+C on Windows and Command+C on Mac).
+
+When an element is copied or cut to the clipboard, its parent will become selected. Pasting an element will add it as a child of the selected element if possible (a copied checkbox can't be pasted into a line chart for example). You can paste an element in the clipboard using the **Paste Element** menu item in the **Edit** menu or using its keyboard shortcut (Ctrl+P on Windows and Command+P on Mac).
+
+Note that when elements are copied/cut their children, grandchildren, etc. will be moved to the clipboard as well.
 
 Changing element properties
 ---------------------------
