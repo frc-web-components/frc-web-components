@@ -544,7 +544,7 @@ class WomTools extends LitElement {
                 aria-label="Confirm"
                 @click="${this.onConfirmEditHtml}"
               >
-                Set Node HTML
+                Set Element HTML
               </vaadin-button>
 
               <vaadin-button 

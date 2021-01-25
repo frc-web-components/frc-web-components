@@ -114,11 +114,40 @@ Connecting elements to NetworkTables and other sources
 Editing element HTML
 --------------------
 
+You can edit a selected element's raw HTML by using the **Edit Element HTML** menu items in the **Edit** menu:
+
+.. image:: ../images/interface/interface21.png
+
+If you click on this menu item you should see a view like this:
+
+.. image:: ../images/interface/interface22.png
+
+After editing the raw HTML you can confirm the change with the **Set Element HTML** button.
+
+Note: this feature is only recommended for users that know how to write HTML. If you'd like to learn how to write HTML you should start with a tutorial such as this one: https://www.w3schools.com/html/default.asp
+
 Styling elements
 ----------------
 
+Features for styling and theming will be implemented in the future, but currently the only way to add custom styling is by using the **Edit Element HTML** feature. By editing the raw HTML of the root element you can add **style** elements with custom css and **class** attributes to elements.
+
+.. image:: ../images/interface/interface23.png
+
+Style elements added will show up in the **element tree**:
+
+.. image:: ../images/interface/interface24.png
+
+You can edit the raw HTML of individual style elements or elements you want to style by adding the class attribute to them.
+
 Undoing and redoing
 -------------------
+
+You can undo or redo any change to the dashboard using the **Undo** or **Redo** menu items under the **Edit** menu:
+
+.. image:: ../images/interface/interface25.png
+
+You can also undo using its keyboard shortcut (Ctrl+Z on Windows and Command+Z on Mac) and redo using its keyboard shortcut (Ctrl+Y on Windows and Shift+Command+C on Mac).
+
 
 Saving, opening and creating new layouts
 ----------------------------------------
