@@ -89,7 +89,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#moving-and-resizing-elements">Moving and resizing elements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#copying-cutting-and-pasting-elements">Copying, cutting and pasting elements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#changing-element-properties">Changing element properties</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#connecting-elements-to-networktables-and-other-sources">Connecting elements to NetworkTables and other sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connecting-element-properties-to-networktables-and-other-sources">Connecting element properties to NetworkTables and other sources</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#editing-element-html">Editing element HTML</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#styling-elements">Styling elements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#undoing-and-redoing">Undoing and redoing</a></li>
@@ -240,9 +240,55 @@
 </div>
 <div class="section" id="changing-element-properties">
 <h2>Changing element properties<a class="headerlink" href="#changing-element-properties" title="Permalink to this headline">¶</a></h2>
+<p>Element properties can be changed by clicking on the <strong>Properties</strong> tab in the <strong>element editor</strong>:</p>
+<img alt="../_images/interface26.gif" src="../_images/interface26.gif" />
+<p>Every element property can be set with input fields on the <strong>Properties</strong> tab. For example, the number slider component has 4 properties:</p>
+<ol class="arabic simple">
+<li>Value (The number value of the slider)</li>
+<li>Min (The lower bound of the slider)</li>
+<li>Max (The upper bound of the slider)</li>
+<li>Block Increment (Slider value can only move by increments of this number)</li>
+</ol>
+<p>All of these properties can be changed with number input fields:</p>
+<img alt="../_images/interface27.png" src="../_images/interface27.png" />
+<p>Note the other two input fields above the properties list:</p>
+<img alt="../_images/interface28.png" src="../_images/interface28.png" />
+<p>The <strong>Webbit ID</strong> value is a unique ID for the selected element. Every element must have one, and they can be changed by the user to help identify its purpose in the component tree:</p>
+<img alt="../_images/interface29.gif" src="../_images/interface29.gif" />
+<p>The <strong>Component Name</strong> input field simply shows the element’s component name which can’t be changed.</p>
+<p>To confirm the changes to the property values click the green <strong>Confirm</strong> button at the bottom:</p>
+<img alt="../_images/interface30.png" src="../_images/interface30.png" />
+<p>The red <strong>Cancel</strong> button to the right of the <strong>Confirm</strong> button will change the property input fields back to their current values. Note that these buttons will be disabled if all the current property fields and <strong>Webbit ID</strong> input field show their current values.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If a property is connected to a source, its current value won’t change by setting its input field in the properties tab, and the value shown in the input field might not match its current value. However, if an element loses its source value (this might happen if your connection to your robot is lost for example) or a source has not been set yet (such as when you first launch your dashboard) the property’s value will change to the value last set in its input field in the properties tab.</p>
 </div>
-<div class="section" id="connecting-elements-to-networktables-and-other-sources">
-<h2>Connecting elements to NetworkTables and other sources<a class="headerlink" href="#connecting-elements-to-networktables-and-other-sources" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="connecting-element-properties-to-networktables-and-other-sources">
+<h2>Connecting element properties to NetworkTables and other sources<a class="headerlink" href="#connecting-element-properties-to-networktables-and-other-sources" title="Permalink to this headline">¶</a></h2>
+<p>An element’s properties can be externally controlled by setting its <strong>source</strong>. When a source’s value is updated, any elements with properties controlled by that source will be updated as well.</p>
+<p>To change a selected element’s source click on the <strong>Sources</strong> tab in the <strong>element editor</strong>:</p>
+<img alt="../_images/interface31.gif" src="../_images/interface31.gif" />
+<p>You can change the element’s <strong>source</strong> by setting its <strong>source key</strong>. This can be done in a few ways. One is by typing the source key manually in the <strong>Source Key</strong> input field. Suggestions will appear allowing you to choose an existing source key without typing it out manually:</p>
+<img alt="../_images/interface32.gif" src="../_images/interface32.gif" />
+<p>You can also set the source key using the source tree below:</p>
+<img alt="../_images/interface33.gif" src="../_images/interface33.gif" />
+<p>To confirm the change or cancel, click the green <strong>Confirm</strong> or red <strong>Cancel</strong> buttons:</p>
+<img alt="../_images/interface34.png" src="../_images/interface34.png" />
+<p>Notice how sources can have child sources as well as values:</p>
+<img alt="../_images/interface35.png" src="../_images/interface35.png" />
+<p>Above we can see that NetworkTables has <strong>three</strong> sources:</p>
+<ul class="simple">
+<li><strong>/slider</strong></li>
+<li><strong>/slider/value</strong></li>
+<li><strong>/slider/max</strong></li>
+</ul>
+<p><strong>/slider/value</strong> and <strong>/slider/max</strong> are both child sources of <strong>/slider</strong>. When a source is assigned to an element, it tries to assign its child sources to the element’s properties. For example, if a number slider element’s source is <strong>/slider</strong>, its <strong>value</strong> property will be controlled by <strong>/slider/value</strong> and its <strong>max</strong> property will be controlled by <strong>/slider/max</strong>:</p>
+<img alt="../_images/interface36.gif" src="../_images/interface36.gif" />
+<p>Notice in the gif above how the slider’s current value and max value changed to match its source. The slider will continue updating whenever the sources assigned to its properties change:</p>
+<img alt="../_images/interface37.gif" src="../_images/interface37.gif" />
+<p>Interacting with an element on the dashboard can also modify the sources assigned to its properties:</p>
+<img alt="../_images/interface38.gif" src="../_images/interface38.gif" />
 </div>
 <div class="section" id="editing-element-html">
 <h2>Editing element HTML<a class="headerlink" href="#editing-element-html" title="Permalink to this headline">¶</a></h2>

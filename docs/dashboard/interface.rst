@@ -106,10 +106,81 @@ Note that when elements are copied/cut their children, grandchildren, etc. will 
 Changing element properties
 ---------------------------
 
+Element properties can be changed by clicking on the **Properties** tab in the **element editor**:
 
-Connecting elements to NetworkTables and other sources
-------------------------------------------------------
+.. image:: ../images/interface/interface26.gif
 
+Every element property can be set with input fields on the **Properties** tab. For example, the number slider component has 4 properties:
+
+#. Value (The number value of the slider)
+#. Min (The lower bound of the slider)
+#. Max (The upper bound of the slider)
+#. Block Increment (Slider value can only move by increments of this number)
+
+All of these properties can be changed with number input fields:
+
+.. image:: ../images/interface/interface27.png
+
+Note the other two input fields above the properties list:
+
+.. image:: ../images/interface/interface28.png
+
+The **Webbit ID** value is a unique ID for the selected element. Every element must have one, and they can be changed by the user to help identify its purpose in the component tree:
+
+.. image:: ../images/interface/interface29.gif
+
+The **Component Name** input field simply shows the element's component name which can't be changed.
+
+To confirm the changes to the property values click the green **Confirm** button at the bottom:
+
+.. image:: ../images/interface/interface30.png
+
+The red **Cancel** button to the right of the **Confirm** button will change the property input fields back to their current values. Note that these buttons will be disabled if all the current property fields and **Webbit ID** input field show their current values.
+
+.. note:: If a property is connected to a source, its current value won't change by setting its input field in the properties tab, and the value shown in the input field might not match its current value. However, if an element loses its source value (this might happen if your connection to your robot is lost for example) or a source has not been set yet (such as when you first launch your dashboard) the property's value will change to the value last set in its input field in the properties tab.
+
+Connecting element properties to NetworkTables and other sources
+----------------------------------------------------------------
+
+An element's properties can be externally controlled by setting its **source**. When a source's value is updated, any elements with properties controlled by that source will be updated as well.
+
+To change a selected element's source click on the **Sources** tab in the **element editor**:
+
+.. image:: ../images/interface/interface31.gif
+
+You can change the element's **source** by setting its **source key**. This can be done in a few ways. One is by typing the source key manually in the **Source Key** input field. Suggestions will appear allowing you to choose an existing source key without typing it out manually:
+
+.. image:: ../images/interface/interface32.gif
+
+You can also set the source key using the source tree below:
+
+.. image:: ../images/interface/interface33.gif
+
+To confirm the change or cancel, click the green **Confirm** or red **Cancel** buttons:
+
+.. image:: ../images/interface/interface34.png
+
+Notice how sources can have child sources as well as values:
+
+.. image:: ../images/interface/interface35.png
+
+Above we can see that NetworkTables has **three** sources:
+
+- **/slider**
+- **/slider/value**
+- **/slider/max**
+
+**/slider/value** and **/slider/max** are both child sources of **/slider**. When a source is assigned to an element, it tries to assign its child sources to the element's properties. For example, if a number slider element's source is **/slider**, its **value** property will be controlled by **/slider/value** and its **max** property will be controlled by **/slider/max**:
+
+.. image:: ../images/interface/interface36.gif
+
+Notice in the gif above how the slider's current value and max value changed to match its source. The slider will continue updating whenever the sources assigned to its properties change:
+
+.. image:: ../images/interface/interface37.gif
+
+Interacting with an element on the dashboard can also modify the sources assigned to its properties:
+
+.. image:: ../images/interface/interface38.gif
 
 Editing element HTML
 --------------------
