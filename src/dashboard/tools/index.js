@@ -168,7 +168,7 @@ class WomTools extends LitElement {
           { component: this.getMenuItemWithShortcut('Save Layout', isMac ? '&#8984;S' : 'Ctrl+S'), action: 'saveLayout' },
           { component: this.getMenuItemWithShortcut('Download Layout', isMac ? '&#8984;D' : 'Ctrl+D'), action: 'downloadLayout' },
           { component: 'hr' },
-          { component: this.getMenuItemWithShortcut('Rename Layout', isMac ? '&#8679;&#8984;R' : 'Ctrl+Shift+R'), action: this.openRenameDialog },
+          { component: this.getMenuItemWithShortcut('Rename Layout', isMac ? '&#8984;R' : 'Ctrl+R'), action: this.openRenameDialog },
           { text: 'Delete Layouts', action: this.openDeleteLayoutsDialog },
           { component: 'hr' },
           { text: 'Manage Extensions', action: this.openManageExtensionsDialog },

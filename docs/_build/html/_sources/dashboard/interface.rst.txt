@@ -182,6 +182,12 @@ Interacting with an element on the dashboard can also modify the sources assigne
 
 .. image:: ../images/interface/interface38.gif
 
+A source without children can also be assigned to an element:
+
+.. image:: ../images/interface/interface39.gif
+
+Although **/slider** does not match any of the **number slider** element's properties, it controls the value of the **value** property because **value** is the **primary** property of the **number slider** component. When an element's source is set to a source without children, its value is paired with that element's **primary** property.
+
 Editing element HTML
 --------------------
 
@@ -220,8 +226,50 @@ You can undo or redo any change to the dashboard using the **Undo** or **Redo** 
 You can also undo using its keyboard shortcut (Ctrl+Z on Windows and Command+Z on Mac) and redo using its keyboard shortcut (Ctrl+Y on Windows and Shift+Command+C on Mac).
 
 
-Saving, opening and creating new layouts
-----------------------------------------
+Saving and renaming layouts
+---------------------------
+
+The name of your dashboard appears in the title at the top of the dashboard app:
+
+.. image:: ../images/interface/interface40.png
+
+The name is the first part of the title before the dash:
+
+.. image:: ../images/interface/interface41.png
+
+The dashboard's name in this case is **Untitled Layout**. The asterisk at the end is not part of the name, but indicates that there are unsaved changes. You can save changes to the dashboard using the **Save Layout** menu item under the **File** menu:
+
+.. image:: ../images/interface/interface42.png
+
+You can also save using its keyboard shortcut (Ctrl+S on Windows and Command+S on Mac).
+
+After saving the asterisk should disappear in the title:
+
+.. image:: ../images/interface/interface43.png
+
+You can rename the dashboard using the **Rename Layout** menu item under the **File** menu:
+
+.. image:: ../images/interface/interface44.png
+
+You can also rename the layout using its keyboard shortcut (Ctrl+R on Windows and Command+R on Mac).
+
+Renaming the layout will open up a dialog allowing you to set the new name of the layout in an input field:
+
+.. image:: ../images/interface/interface45.png
+
+Click on the green **Confirm** button to change the layout name, and the new name should appear in the title at the top of the app. Click the **Close** button in the dialog to go back to editing your layout.
+
+Downloading layouts
+-------------------
+
+
+Opening layouts
+---------------
+
+
+Creating new layouts
+--------------------
+
 
 Loading extensions and custom components
 ----------------------------------------
