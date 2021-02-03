@@ -247,7 +247,7 @@ After saving the asterisk should disappear in the title:
 
 .. image:: ../images/interface/interface43.png
 
-You can rename the dashboard using the **Rename Layout** menu item under the **File** menu:
+You can rename the layout using the **Rename Layout** menu item under the **File** menu:
 
 .. image:: ../images/interface/interface44.png
 
@@ -259,13 +259,47 @@ Renaming the layout will open up a dialog allowing you to set the new name of th
 
 Click on the green **Confirm** button to change the layout name, and the new name should appear in the title at the top of the app. Click the **Close** button in the dialog to go back to editing your layout.
 
-Downloading layouts
--------------------
+Downloading and uploading layouts
+---------------------------------
 
+You can download the current layout using the **Download Layout** menu item under the **File** menu:
+
+.. image:: ../images/interface/interface46.png
+
+You can also download the layout using its keyboard shortcut (Ctrl+D on Windows and Command+D on Mac).
+
+The downloaded layout will be an html file named after the current layout's name:
+
+.. image:: ../images/interface/interface47.png
+
+A downloaded layout can be uploaded into the dashboard using the **Upload Layout** menu item under the **File** menu:
+
+.. image:: ../images/interface/interface48.png
+
+This will open a file dialog you can use to pick a saved layout. The uploaded layout will be named after the file without the extension (for example, a layout will be named **layout** if the uploaded file's name was **layout.html**).
+
+You can also upload the layout using its keyboard shortcut (Ctrl+U on Windows and Command+U on Mac).
 
 Opening layouts
 ---------------
 
+You can open layouts you've saved using the **Open Layout** menu item under the **File** menu:
+
+.. image:: ../images/interface/interface49.png
+
+You can also open layouts using its keyboard shortcut (Ctrl+O on Windows and Command+O on Mac).
+
+Opening a layout brings up a dialog with a list of layouts that have been saved in the dashboard app:
+
+.. image:: ../images/interface/interface50.png
+
+Clicking on another layout name and pressing the green **Open** button will open that layout. You can click the **Cancel** button to close the dialog without opening another layout.
+
+You can also open a layout from the **Open Recent Layout** dropdown in the **File** menu:
+
+.. image:: ../images/interface/interface51.png
+
+The dropdown will list the most recently opened layouts in order of when they were most recently modified.
 
 Creating new layouts
 --------------------
