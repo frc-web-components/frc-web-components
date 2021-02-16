@@ -304,6 +304,11 @@ The dropdown will list the most recently opened layouts in order of when they we
 Creating new layouts
 --------------------
 
+You can create a new layout using the **New Layout** menu item under the **File** menu:
+
+.. image:: ../images/interface/interface52.png
+
+You can also create new layouts using its keyboard shortcut (Ctrl+N on Windows and Command+N on Mac).
 
 Loading extensions and custom components
 ----------------------------------------

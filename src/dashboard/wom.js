@@ -28,7 +28,7 @@ class WomLayout {
 
   getSavedLayouts() {
     try {
-      return  JSON.parse(window.localStorage.savedWomLayouts) || {};
+      return JSON.parse(window.localStorage.savedWomLayouts) || {};
     } catch(e) {
       return {};
     }
@@ -67,6 +67,7 @@ class WomLayout {
     savedLayouts[newName] = { 
       html: savedLayouts[oldName].html,
       lastModified: Date.now(), 
+      extensions: savedLayouts[name]?.extensions || [],
     };
     delete savedLayouts[oldName];
     window.localStorage.savedWomLayouts = JSON.stringify(savedLayouts);
@@ -76,14 +77,18 @@ class WomLayout {
 
   saveLayout(name, html) {
     const savedLayouts = this.getSavedLayouts();
-    savedLayouts[name] = { html, lastModified: Date.now() };
+    savedLayouts[name] = { 
+      html, 
+      lastModified: Date.now(),
+      extensions: savedLayouts[name]?.extensions || [],
+    };
     window.localStorage.savedWomLayouts = JSON.stringify(savedLayouts);
   }
 
   openSavedLayout(name) {
     this.openedLayoutName = name;
     const savedLayouts = this.getSavedLayouts();
-    savedLayouts[name] = savedLayouts[name] || { html: '' };
+    savedLayouts[name] = savedLayouts[name] || { html: '', extensions: [] };
     savedLayouts[name].lastModified = Date.now();
     window.localStorage.savedWomLayouts = JSON.stringify(savedLayouts);
     this.setTitleFromLayoutName();
@@ -95,6 +100,40 @@ class WomLayout {
     return Object.keys(this.getSavedLayouts()).sort((layout1Name, layout2Name) => {
       return layouts[layout2Name].lastModified - layouts[layout1Name].lastModified;
     });
+  }
+  
+  hasExtension(name, version) {
+    const layouts = this.getSavedLayouts();
+    const extensions = layouts[name]?.extensions || [];
+    return !!extensions.find(extension => {
+      return extension.name === name && extension.version == version;
+    });
+  }
+
+  getExtensions() {
+    const layouts = this.getSavedLayouts();
+    return layouts[name]?.extensions || [];
+  }
+
+  addExtension(name, version) {
+    if (!this.hasExtension(name, version)) {
+      const layouts = this.getSavedLayouts();
+      layouts[this.openedLayoutName].extensions.push({ name, version });
+      window.localStorage.savedWomLayouts = JSON.stringify(layouts);
+    }
+  }
+
+  removeExtension(name, version) {
+    const layouts = this.getSavedLayouts();
+    const extensions = layouts[this.openedLayoutName].extensions;
+    const extensionIndex = extensions.findIndex(extension => {
+      return extension.name === name && extension.version == version;
+    });
+
+    if (extensionIndex >= 0) {
+      layouts[this.openedLayoutName].extensions.splice(index, 1);
+      window.localStorage.savedWomLayouts = JSON.stringify(layouts);
+    }
   }
 }
 
