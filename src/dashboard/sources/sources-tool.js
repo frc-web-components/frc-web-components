@@ -65,7 +65,6 @@ class SourcesTool extends LitElement {
       selectedNode: { type: Object, attribute: false },
       sourceKeyInput: { type: String, attribute: false },
       sourceProviderInput: { type: String, attribute: false },
-      fromPropertiesInput: { type: Array, attribute: false }
     };
   }
 
@@ -75,7 +74,6 @@ class SourcesTool extends LitElement {
     this.selectedNode = null;
     this.sourceKeyInput = '';
     this.sourceProviderInput = '';
-    this.fromPropertiesInput = [];
   }
 
   getSourceKey() {
@@ -88,22 +86,10 @@ class SourcesTool extends LitElement {
     return sourceProvider;
   }
 
-  getFromProperties() {
-    const fromProperties = this.selectedNode.getNode().fromProperties;
-    return fromProperties;
-  }
-
   updated(changedProperties) {
     if (changedProperties.has('selectedNode') && this.selectedNode) {
       this.sourceKeyInput = this.getSourceKey();
       this.sourceProviderInput = this.getSourceProvider();
-      const properties = this.selectedNode.getNode().constructor.properties;
-      this.fromPropertiesInput = this.getFromProperties()
-        .filter(name => name in properties && properties[name].canConnectToSources)
-        .map(name => ({
-          value: name,
-          label: properties[name].attribute.replace(/-/g, ' ')
-        }));
     }
   }
 
@@ -123,28 +109,8 @@ class SourcesTool extends LitElement {
     return this.getSourceProvider() !== this.sourceProviderInput;
   }
 
-  isFromPropertiesInputModified() {
-    if (!this.selectedNode) {
-      return false;
-    }
-
-    const fromProperties = this.getFromProperties();
-
-    if (fromProperties.length !== this.fromPropertiesInput.length) {
-      return true;
-    }
-
-    for (let property of this.fromPropertiesInput) {
-      if (!fromProperties.includes(property.value)) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
   isInputModified() {
-    return this.isSourceKeyInputModified() || this.isSourceProviderInputModified() || this.isFromPropertiesInputModified();
+    return this.isSourceKeyInputModified() || this.isSourceProviderInputModified();
   }
 
   onSourceKeyInputChange(ev) {
@@ -166,7 +132,6 @@ class SourcesTool extends LitElement {
     this.wom.executeAction('setSource', {
       sourceProvider: this.sourceProviderInput,
       sourceKey: this.sourceKeyInput,
-      fromProperties: this.fromPropertiesInput.map(item => item.value),
     });
     this.requestUpdate();
   }
@@ -202,11 +167,6 @@ class SourcesTool extends LitElement {
       });
   }
 
-  onSetFromPropertiesInputChange() {
-    const inputElement = this.shadowRoot.querySelector('[part=set-from-properties-dropdown]');
-    this.fromPropertiesInput = inputElement.selectedItems;
-  }
-
   renderWebbit() {
     return html`
       <p>Source for <span>${this.selectedNode.getWebbitName() || this.selectedNode.getDisplayName()}</span></p>
@@ -233,24 +193,6 @@ class SourcesTool extends LitElement {
             @change="${this.onSourceProviderInputChange}"
             theme="small"
           ></vaadin-combo-box>
-        </vaadin-form-item>
-        <vaadin-form-item>
-          <label 
-            slot="label" 
-            title="Each property listed will have its source's initial value be set to the property's value."
-          >Set Source Defaults from Properties</label>
-          <multiselect-combo-box
-            part="set-from-properties-dropdown"
-            clear-button-visible 
-            .selectedItems="${this.fromPropertiesInput || []}"
-            .items="${this.getProperties()}"
-            @change="${this.onSetFromPropertiesInputChange}"
-            theme="small"
-            item-label-path="label" 
-            item-value-path="value"
-            item-id-path="value"
-          >
-          </multiselect-combo-box>
         </vaadin-form-item>
       </vaadin-form-layout>
 

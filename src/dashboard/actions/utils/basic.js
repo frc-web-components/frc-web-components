@@ -34,10 +34,9 @@ export const setWebbitName = (node, name) => {
   node.setDefaultValue('name', name);
 };
 
-export const setWebbitSource = (node, sourceProvider, sourceKey, fromProperties) => {
+export const setWebbitSource = (node, sourceProvider, sourceKey) => {
   node.sourceProvider = sourceProvider;
   node.sourceKey = sourceKey;
-  node.fromProperties = fromProperties;
 };
 
 export const hasLayoutChanged = (wom, html) => {
