@@ -17,9 +17,4 @@ export const containerStyles = css`
     font-size: inherit;
     font-weight: inherit;
   }
-
-  :host(.draggable) * {
-    touch-action: none;
-    user-select: none;
-  }
 `;

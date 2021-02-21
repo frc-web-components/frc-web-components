@@ -290,7 +290,6 @@ class Wom {
     this.selectedNode = node;
     if (node.getLevel() > 1 && node.getParent().getLayout() === 'absolute') {
       addInteraction(this, node);
-      node.getNode().classList.add("draggable");
     }
     this.dispatchEvent('womNodeSelect', { node });
   }
@@ -299,7 +298,6 @@ class Wom {
     if (this.getSelectedNode()) {
       removeInteraction(this.getSelectedNode());
       this.setEditingNodeHtml(false);
-      this.getSelectedNode().getNode().classList.remove("draggable");
       const deselectedNode = this.selectedNode;
       this.selectedNode = null;
       this.dispatchEvent('womNodeDeselect', { node: deselectedNode });

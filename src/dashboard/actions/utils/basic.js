@@ -10,7 +10,9 @@ export const createElement = (componentType, slot) => {
   }
 
   const newElement = parentNode.querySelector(componentType);
-  newElement.setAttribute('slot', slot === 'default' ? '' : slot);
+  if (slot !== 'default') {
+    newElement.setAttribute('slot', slot);
+  }
   return newElement;
 };
 

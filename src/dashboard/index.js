@@ -97,11 +97,6 @@ class WebbitDashboard extends LitElement {
       body { 
         margin: 0; 
       }
-
-      .draggable {
-        touch-action: none;
-        user-select: none;
-      }
     `;
 
     if (css.styleSheet) css.styleSheet.cssText = styles;
