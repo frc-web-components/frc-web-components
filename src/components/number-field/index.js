@@ -18,11 +18,25 @@ class NumberField extends TextField {
   static get properties() {
     return {
       ...super.properties,
-      value: { type: Number, primary: true },
+      value: { 
+        type: Number, 
+        primary: true,
+        get() {
+          return typeof this._value === 'number' 
+            ? this._value.toFixed(this.precision)
+            : this._value;
+        }
+      },
       hasControls: { type: Boolean, attribute: 'has-controls' }, 
       min: { type: Number },
       max: { type: Number },
-      step: { type: Number }
+      step: { type: Number },
+      precision: { 
+        type: Number,
+        get() {
+          return Math.max(0, this._precision);
+        }
+      },
     }
   }
 
@@ -37,6 +51,7 @@ class NumberField extends TextField {
     this.min = -9999999999999;
     this.max = 9999999999999;
     this.step = '';
+    this.precision = 2;
   }
 
   onChange(ev) {
