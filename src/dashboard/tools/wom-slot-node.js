@@ -87,7 +87,7 @@ class WomSlotNode extends LitElement {
       <div class="node">
         <header @click="${this.onSelect}">
           <span class="key">
-            <label>${this.slot}</label>
+            <label>${this.slot.replace(/-/g, ' ')}</label>
           </span>
         </header>
       </div>

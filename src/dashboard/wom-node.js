@@ -51,8 +51,8 @@ export default class WomNode {
       }
     } else if (typeof allowedChildren === 'object') {
       if (
-        typeof allowedChildren[slot] === 'undefined' 
-        || allowedChildren[slot].indexOf(componentType) < 0
+        typeof allowedChildren[slot] !== 'undefined' 
+        && allowedChildren[slot].indexOf(componentType) < 0
       ) {
         return false;
       }
@@ -98,15 +98,15 @@ export default class WomNode {
 
     if (
       this.node.children.length === 1 && 
-      this.node.children[0].nodeName === 'FRC-ABSOLUTE-LAYOUT'
+      this.node.children[0].nodeName === 'FRC-ROOT-LAYOUT'
     ) {
       return;
     }
 
     this.node.innerHTML = `
-      <frc-absolute-layout>
+      <frc-root-layout>
         ${this.node.innerHTML}
-      </frc-absolute-layout>
+      </frc-root-layout>
     `;
   }
 
