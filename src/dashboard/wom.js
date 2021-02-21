@@ -378,6 +378,7 @@ class Wom {
   observeMutations() {
     const observer = new MutationObserver((mutations) => { 
       this.build();
+      this.womNode.executeScripts();
     });
     observer.observe(this.rootNode, {
       childList: true,

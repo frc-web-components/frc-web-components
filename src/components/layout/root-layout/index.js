@@ -7,9 +7,9 @@ export default class RootLayout extends Webbit {
       displayName: 'Root Layout',
       allowedParents: [],
       // slots: ['default', 'scripts', 'styles', 'source-defaults'],
-      slots: ['default', 'source-defaults'],
+      slots: ['default', 'scripts', 'source-defaults'],
       allowedChildren: {
-        // scripts: ['script'],
+        scripts: ['script'],
         // styles: ['style'],
         'source-defaults': []
       },

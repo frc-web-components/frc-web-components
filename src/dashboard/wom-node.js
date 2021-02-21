@@ -110,6 +110,28 @@ export default class WomNode {
     `;
   }
 
+  executeScripts() {
+
+    if (this.getLevel() !== 0) {
+      return;
+    }
+
+    // replace script tags with executable ones
+    this.node.querySelectorAll('script').forEach(script => {
+      if (!script.wasExecuted) {
+        script.remove();
+        const executableScript = document.createElement('script');
+        executableScript.text = script.text;
+        executableScript.wasExecuted = true;
+        if (script.hasAttribute('src')) {
+          executableScript.setAttribute('src', script.getAttribute('src'));
+        }
+        executableScript.setAttribute('slot', 'scripts');
+        this.node.querySelector('frc-root-layout').appendChild(executableScript);
+      }
+    });
+  }
+
   getParent() {
     const parentNode = this.ancestors[this.ancestors.length - 1];
     return parentNode || null;
