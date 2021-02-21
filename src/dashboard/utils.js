@@ -124,7 +124,7 @@ export const loadHtml = () => {
   return new Promise(resolve => {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
-    fileInput.accept = 'application/HTML';
+    fileInput.accept = '.html,.fwc';
 
     fileInput.onchange = () => {
       const { files } = fileInput;
@@ -143,7 +143,7 @@ export const loadHtml = () => {
         try {
           const html = e.target.result;
           resolve({
-            result: { html, name: files.item(0).name.replace(/\.html$/, '') },
+            result: { html, name: files.item(0).name.replace(/\.(html|fwc)$/, '') },
             cancelled: false,
             error: false,
           });
