@@ -33,8 +33,23 @@ class NumberLabel extends Webbit {
 
   static get properties() {
     return {
-      value: { type: Number, primary: true },
-      precision: { type: Number }
+      value: { 
+        type: Number, 
+        primary: true,
+        get() {
+          const value = typeof this._value === 'number' 
+            ? this._value.toFixed(this.precision)
+            : this._value;
+
+          return isNaN(value) ? '' : value;
+        }
+      },
+      precision: { 
+        type: Number,
+        get() {
+          return Math.max(0, this._precision);
+        }
+      },
     };
   }
 
@@ -45,7 +60,7 @@ class NumberLabel extends Webbit {
   }
 
   render() {
-    return html`${this.value.toFixed(Math.max(0, this.precision))}`;
+    return html`${this.value}`;
   }
 }
 
