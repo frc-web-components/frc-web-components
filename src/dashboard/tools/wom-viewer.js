@@ -184,8 +184,8 @@ class WomViewer extends LitElement {
   }
 
   renderAttributes() {
-
-    const properties = Object.entries(this.node.getNode().constructor.properties);
+    
+    const properties = Object.entries(this.node.getNode().constructor.properties || {});
 
     const attributes = properties.filter(([name, property]) => {
       const value = this.node.getNode()[name];
