@@ -10,6 +10,7 @@ import './encoder';
 import './gauge';
 import './gyro';
 import './label';
+import './number-label';
 import './mecanum-drivebase';
 import './number-bar';
 import './number-slider';
