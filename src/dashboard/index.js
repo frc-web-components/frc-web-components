@@ -106,7 +106,7 @@ class WebbitDashboard extends LitElement {
 
     if (css.styleSheet) css.styleSheet.cssText = styles;
     else css.appendChild(document.createTextNode(styles));
-    
+
     document.getElementsByTagName('head')[0].appendChild(css);
 
     document.body.addEventListener('keydown', ev => {
@@ -119,7 +119,7 @@ class WebbitDashboard extends LitElement {
 
   addWomListeners() {
     [
-      'womNodeSelect', 'womNodeDeselect','womActionExecute',
+      'womNodeSelect', 'womNodeDeselect', 'womActionExecute',
       , 'womNodeAdd', 'womNodeRemove',
       'womChange', 'womNodePreview', 'womNodePreviewRemove'
     ].forEach(eventName => {
@@ -153,7 +153,7 @@ class WebbitDashboard extends LitElement {
       this.editMode = !this.editMode;
     }
 
-    if(ev.key === "Escape") {
+    if (ev.key === "Escape") {
       this.wom.deselectNode();
     }
   }

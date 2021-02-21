@@ -1,5 +1,5 @@
 import Action from '../action';
-import { setProperties, setWebbitId } from './utils';
+import { setProperties, setWebbitName } from './utils';
 
 export default class SetProperties extends Action {
 
@@ -8,10 +8,10 @@ export default class SetProperties extends Action {
   }
 
   execute({ wom, selectedNode, context }) {
-    const { propertyValueMap, webbitId } = context;
+    const { propertyValueMap, webbitName } = context;
 
     setProperties(selectedNode.getNode(), propertyValueMap);
-    setWebbitId(selectedNode.getNode(), webbitId);
+    setWebbitName(selectedNode.getNode(), webbitName);
 
     setTimeout(async () => {
       wom.history.push(await wom.getHtml());

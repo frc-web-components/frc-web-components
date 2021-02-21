@@ -27,6 +27,11 @@ export const setWebbitId = (node, webbitId) => {
   node.webbitId = webbitId;
 };
 
+export const setWebbitName = (node, name) => {
+  node.name = name;
+  node.setDefaultValue('name', name);
+};
+
 export const setWebbitSource = (node, sourceProvider, sourceKey, fromProperties) => {
   node.sourceProvider = sourceProvider;
   node.sourceKey = sourceKey;

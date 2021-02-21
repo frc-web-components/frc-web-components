@@ -145,6 +145,9 @@ class WomViewer extends LitElement {
       `${16 * this.level + 5}px`
     );
 
+    this.wom.addListener('womActionExecute', () => {
+      this.requestUpdate();
+    });
   }
 
   onSelect(ev) {
@@ -181,14 +184,21 @@ class WomViewer extends LitElement {
   }
 
   renderAttributes() {
-    const webbitId = this.node.getWebbitId();
 
-    if (!webbitId) {
-      return '';
-    }
+    const properties = Object.entries(this.node.getNode().constructor.properties);
+
+    const attributes = properties.filter(([name, property]) => {
+      const value = this.node.getNode()[name];
+      return (
+        property.showInEditor 
+        && (value || value === 0)
+      );
+    });
 
     return html`
-      <wom-viewer-attribute attribute="id">${webbitId}</wom-viewer-attribute>
+      ${attributes.map(([name]) => html`
+        <wom-viewer-attribute attribute="${name}">${this.node.getNode()[name]}</wom-viewer-attribute>
+      `)}
     `;
   }
 

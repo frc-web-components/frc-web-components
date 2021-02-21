@@ -47,7 +47,7 @@ class PropertiesTool extends LitElement {
     return {
       wom: { type: Object },
       selectedNode: { type: Object, attribute: false },
-      webbitIdInput: { type: String, attribute: false },
+      webbitNameInput: { type: String, attribute: false },
     };
   }
 
@@ -55,7 +55,7 @@ class PropertiesTool extends LitElement {
     super();
     this.wom = null;
     this.selectedNode = null;
-    this.webbitIdInput = '';
+    this.webbitNameInput = '';
   }
 
   getComponentName() {
@@ -64,47 +64,38 @@ class PropertiesTool extends LitElement {
 
   updated(changedProperties) {
     if (changedProperties.has('selectedNode') && this.selectedNode) {
-      this.webbitIdInput = this.getWebbitId();
+      this.webbitNameInput = this.getWebbitName();
     }
   }
 
-  getWebbitId() {
-    return this.selectedNode.getWebbitId();
+  getWebbitName() {
+    return this.selectedNode.getWebbitName();
   }
 
-  isWebbitIdInputModified() {
+  isWebbitNameInputModified() {
     if (!this.selectedNode) {
       return false;
     }
 
-    return this.getWebbitId() !== this.webbitIdInput || this.webbitIdInput === null;
+    return this.getWebbitName() !== this.webbitNameInput || this.webbitNameInput === null;
   }
 
   isInputModified() {
     const propertiesViewElement = this.shadowRoot.querySelector('[part="properties-view"]');
     return (
-      this.isWebbitIdInputModified() || 
+      this.isWebbitNameInputModified() || 
       (propertiesViewElement ? propertiesViewElement.isInputModified() : false)
     );
   }
 
-  checkWebbitIdValidity() {
-
-    if (this.value === this.webbitId) {
-      return true;
-    }
-
-    return !webbitRegistry.hasWebbit(this.value)
-  }
-
-  onWebbitIdInputChange(ev) {
+  onWebbitNameInputChange(ev) {
     const input = ev.target || ev.path[0];
-    this.webbitIdInput = input.value;
+    this.webbitNameInput = input.value;
   }
 
   onCancel() {
     const propertiesViewElement = this.shadowRoot.querySelector('[part="properties-view"]');
-    this.webbitIdInput = this.getWebbitId();
+    this.webbitNameInput = this.getWebbitName();
     propertiesViewElement.cancel();
     this.requestUpdate();
   }
@@ -112,12 +103,12 @@ class PropertiesTool extends LitElement {
   onConfirm() {
 
     const propertiesViewElement = this.shadowRoot.querySelector('[part="properties-view"]');
-    const webbitIdNode = this.shadowRoot.querySelector('[part="webbit-id"]');
+    const webbitNameNode = this.shadowRoot.querySelector('[part="webbit-name"]');
 
-    if (!webbitIdNode.invalid && propertiesViewElement.isValid()) {
+    if (!webbitNameNode.invalid && propertiesViewElement.isValid()) {
       this.wom.executeAction('setProperties', { 
         propertyValueMap: propertiesViewElement.getPropertyValueMap(), 
-        webbitId: this.webbitIdInput
+        webbitName: this.webbitNameInput
       });
       this.requestUpdate();
     }
@@ -129,21 +120,19 @@ class PropertiesTool extends LitElement {
 
   renderWebbit() {
     return html`
-      <p>Properties for <span>${this.selectedNode.getWebbitId()}</span></p>
+      <p>Properties for <span>${this.selectedNode.getWebbitName() || this.selectedNode.getDisplayName()}</span></p>
       <div part="main-fields">
         <vaadin-text-field
-          label="Webbit ID"
-          part="webbit-id"
+          label="Element Name"
+          part="webbit-name"
           clear-button-visible
-          .webbitId="${this.getWebbitId()}" 
-          value="${this.webbitIdInput || ''}"
-          @change="${this.onWebbitIdInputChange}"
-          .checkValidity="${this.checkWebbitIdValidity}"
-          error-message="The ID entered is in use"
+          value="${this.webbitNameInput || ''}"
+          @input="${this.onWebbitNameInputChange}"
+          @change="${this.onWebbitNameInputChange}"
           theme="small"
         ></vaadin-text-field>
         <vaadin-text-field
-          label="Component Name"
+          label="Component Type"
           readonly
           value="${this.getComponentName()}"
           theme="small"

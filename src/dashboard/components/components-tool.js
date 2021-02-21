@@ -342,7 +342,7 @@ class ComponentsTool extends LitElement {
     }
 
     return html`
-      <p>Add elements to <span>${this.selectedNode.getWebbitId()}</span></p>
+      <p>Add elements to <span>${this.selectedNode.getWebbitName()  || this.selectedNode.getDisplayName()}</span></p>
       <div part="fields">
         <div part="components" style="position: relative">
           <vaadin-text-field

@@ -80,6 +80,8 @@ export default class WomNode {
         Object.entries(originalWebbit.defaultProps).forEach(([prop, value]) => {
           node[prop] = value;
         });
+
+        node.removeAttribute('webbit-id');
       });
       window.webbitRegistry.setCloning(false);
       clonedNode.remove();
@@ -237,6 +239,10 @@ export default class WomNode {
 
   getWebbitId() {
     return this.node.webbitId;
+  }
+
+  getWebbitName() {
+    return this.node.name;
   }
 
   getSourceProvider() {
