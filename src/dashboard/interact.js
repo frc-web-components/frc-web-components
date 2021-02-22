@@ -55,11 +55,17 @@ export function removeInteraction(womNode) {
 
 export function addInteraction(wom, womNode) {
 
+  const layout = womNode.getParent().getLayout();
+
+  if (layout === 'none') {
+    return;
+  }
+
   const dashboardConfig = womNode.getDashboardConfig() || {};
   const resizable = dashboardConfig.resizable || { 
     left: true, right: true, bottom: true, top: true
   };
-  const movable = 'movable' in dashboardConfig ? dashboardConfig.movable : true;
+  const movable = layout === 'absolute' && ('movable' in dashboardConfig ? dashboardConfig.movable : true);
   const minSize = dashboardConfig.minSize || { width: 20, height: 20 };
 
 

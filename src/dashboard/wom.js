@@ -288,7 +288,7 @@ class Wom {
   selectNode(node) {
     this.deselectNode();
     this.selectedNode = node;
-    if (node.getLevel() > 1 && node.getParent().getLayout() === 'absolute') {
+    if (node.getLevel() > 1) {
       addInteraction(this, node);
     }
     this.dispatchEvent('womNodeSelect', { node });
