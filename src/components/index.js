@@ -29,6 +29,7 @@ import './code-editor';
 
 // Sources
 import './source';
+import './source-defaults';
 
 // General
 import './logger';

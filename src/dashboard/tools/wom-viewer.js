@@ -191,14 +191,22 @@ class WomViewer extends LitElement {
       const value = this.node.getNode()[name];
       return (
         property.showInEditor 
-        && (value || value === 0)
+        && (value || value === 0 || value === false)
       );
     });
 
     return html`
-      ${attributes.map(([name]) => html`
-        <wom-viewer-attribute attribute="${name}">${this.node.getNode()[name]}</wom-viewer-attribute>
-      `)}
+      ${attributes.map(([name]) => {
+
+        const value = this.node.getNode()[name];
+        const valueString = value instanceof Array
+          ? `[${value.toString()}]`
+          : value.toString();
+
+        return html`
+          <wom-viewer-attribute attribute="${name}">${valueString}</wom-viewer-attribute>
+        `
+      })}
     `;
   }
 

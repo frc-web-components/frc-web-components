@@ -11,7 +11,14 @@ export default class RootLayout extends Webbit {
       allowedChildren: {
         scripts: ['script'],
         // styles: ['style'],
-        'source-defaults': []
+        'source-defaults': [
+          'frc-nt-boolean-default',
+          'frc-nt-number-default',
+          'frc-nt-string-default',
+          'frc-nt-boolean-array-default',
+          'frc-nt-number-array-default',
+          'frc-nt-string-array-default',
+        ]
       },
     };
   }
