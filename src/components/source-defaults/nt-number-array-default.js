@@ -24,7 +24,8 @@ class NtNumberArrayDefault extends NtEntryDefault {
       allowedParents: ['frc-root-layout'],
       movable: false,
       resizable: { left: false, right: false, top: false, bottom: false },
-      editorTabs: ['properties']
+      editorTabs: ['properties'],
+      previewable: false,
     };
   }
 

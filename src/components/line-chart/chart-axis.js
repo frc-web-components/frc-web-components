@@ -10,9 +10,11 @@ class ChartAxis extends Webbit {
       description: '.',
       documentationLink: 'https://frc-web-components.github.io/components/line-chart/',
       slots: [],
+      editorTabs: ['properties', 'sources'],
       allowedParents: ['frc-line-chart'],
       movable: false,
-      resizable: { left: false, right: false, top: false, bottom: false }
+      resizable: { left: false, right: false, top: false, bottom: false },
+      previewable: false,
     };
   }
 

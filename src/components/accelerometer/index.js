@@ -9,6 +9,7 @@ class Accelerometer extends NumberBar {
       description: 'Component for displaying data from a single axis accelerometer.',
       documentationLink: 'https://frc-web-components.github.io/components/accelerometer/',
       slots: [],
+      editorTabs: ['properties', 'sources'],
       resizable: { left: true, right: true },
       minSize: { width: 80, height: 10 }
     };

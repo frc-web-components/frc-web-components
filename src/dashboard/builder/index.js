@@ -51,6 +51,8 @@ class DashboardBuilder extends LitElement {
       nodes = [this.wom.getSelectedNode()];
     }
 
+    nodes = nodes.filter(node => node.isPreviewable());
+
     return html`
       ${repeat(nodes, (descendent) => descendent, (descendent, index) => {
         const selectedNode = this.wom.getSelectedNode();
