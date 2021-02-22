@@ -34,6 +34,7 @@ class DashboardToolsBottom extends LitElement {
     return {
       wom: { type: Object },
       selectedTab: { type: Number, attribute: false },
+      selectedTabName: { type: String, attribute: false },
       selectedNode: { type: Object, attribute: false },
     };
   }
@@ -42,6 +43,7 @@ class DashboardToolsBottom extends LitElement {
     super();
     this.wom = null;
     this.selectedTab = 0;
+    this.selectedTabName = '';
     this.selectedNode = null;
   }
 
@@ -55,13 +57,22 @@ class DashboardToolsBottom extends LitElement {
     }
 
     if (changedProps.has('selectedNode')) {
-      this.selectedTab = 0;
+
+      const editorTabs = this.getEditorTabs();
+
+      const tabIndex = editorTabs.indexOf(this.selectedTabName);
+      this.selectedTab = Math.max(0, tabIndex);
+      this.selectedTabName = editorTabs[this.selectedTab];
     }
   }
 
   onTabChange(ev) {
     const target = ev.target || ev.path[0];
     this.selectedTab = target.selected;
+
+    const editorTabs = this.getEditorTabs();
+
+    this.selectedTabName = editorTabs[this.selectedTab]; 
 
     const event = new CustomEvent('dashboardToolsTabChange', {
       bubbles: true,
@@ -70,10 +81,14 @@ class DashboardToolsBottom extends LitElement {
     this.dispatchEvent(event);
   }
 
-  renderSelectedTab() {
-    const editorTabs = this.selectedNode 
+  getEditorTabs() {
+    return this.selectedNode 
       ? this.selectedNode.getDashboardConfig().editorTabs
       : ['addElements', 'properties', 'sources'];
+  }
+
+  renderSelectedTab() {
+    const editorTabs = this.getEditorTabs();
 
     const tabName = editorTabs[this.selectedTab];
 
@@ -105,9 +120,7 @@ class DashboardToolsBottom extends LitElement {
 
   render() {
 
-    const editorTabs = this.selectedNode 
-      ? this.selectedNode.getDashboardConfig().editorTabs
-      : ['addElements', 'properties', 'sources'];
+    const editorTabs = this.getEditorTabs();
 
     return html`
       <vaadin-tabs 
