@@ -10,6 +10,7 @@ class CodeEditor extends Webbit {
       description: 'Component for writing code',
       // documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
       slots: [],
+      editorTabs: ['properties', 'sources'],
     };
   }
 

@@ -8,6 +8,7 @@ class RobotState extends Webbit {
       displayName: 'Robot State',
       category: 'Simulation',
       slots: [],
+      editorTabs: ['properties', 'sources'],
       //description: 'Component for displaying data from a 3-axis accelerometer.',
       // documentationLink: 'https://frc-web-components.github.io/components/relay/'
       resizable: {},

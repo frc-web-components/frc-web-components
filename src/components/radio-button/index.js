@@ -9,6 +9,7 @@ class RadioButton extends Webbit {
       // description: 'A group of checkboxes',
       // documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
       slots: [],
+      editorTabs: ['properties', 'sources'],
       resizable: {}
     };
   }

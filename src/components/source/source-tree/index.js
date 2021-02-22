@@ -18,6 +18,7 @@ class SourceTree extends Webbit {
       description: 'Component used to display NetworkTable values.',
       documentationLink: 'https://frc-web-components.github.io/components/networktable-tree/',
       slots: [],
+      editorTabs: ['properties', 'sources'],
     };
   }
 

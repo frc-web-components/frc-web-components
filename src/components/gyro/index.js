@@ -14,6 +14,7 @@ class Gyro extends Webbit {
       description: 'Component for displaying data from a gyro.',
       documentationLink: 'https://frc-web-components.github.io/components/gyro/',
       slots: [],
+      editorTabs: ['properties', 'sources'],
     };
   }
 

@@ -30,6 +30,7 @@ export default class Gamepad extends Webbit {
       displayName: 'Gamepad',
       category: false,
       slots: [],
+      editorTabs: ['properties', 'sources'],
       // description: 'Component for displaying data from a 3-axis accelerometer.',
       // documentationLink: 'https://frc-web-components.github.io/components/number-bar/'
       resizable: { left: true, right: true },

@@ -10,6 +10,7 @@ class Checkbox extends Webbit {
       description: 'A checkbox',
       documentationLink: 'https://frc-web-components.github.io/components/checkbox/',
       slots: [],
+      editorTabs: ['properties', 'sources'],
       resizable: {}
     };
   }

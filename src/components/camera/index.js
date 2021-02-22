@@ -11,6 +11,7 @@ class Camera extends Webbit {
       // description: `A box that's shown as one color if true and another color if false.`,
       // documentationLink: 'https://frc-web-components.github.io/components/boolean-box/',
       slots: [],
+      editorTabs: ['properties', 'sources'],
     };
   }
 

@@ -15,6 +15,7 @@ class GitpodInfo extends Webbit {
       // description: 'Used to show a single data point on a line chart.',
       // documentationLink: 'https://frc-web-components.github.io/components/line-chart/',
       slots: [],
+      editorTabs: ['properties', 'sources'],
       resizable: { left: true, right: true },
       minSize: { width: 380 }
     };

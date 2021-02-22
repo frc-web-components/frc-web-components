@@ -68,6 +68,7 @@ class DifferentialDrivebase extends Webbit {
       description: 'Component used to display wheel speeds and robot trajectory information for differential drivebases.',
       documentationLink: 'https://frc-web-components.github.io/components/differential-drivebase/',
       slots: [],
+      editorTabs: ['properties', 'sources'],
       minSize: { width: 220, height: 100 },
     };
   }

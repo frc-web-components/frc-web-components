@@ -11,6 +11,7 @@ class FieldTrajectory extends FieldObject {
       // description: 'Component for displaying information about an encoder',
       // documentationLink: 'https://frc-web-components.github.io/components/encoder/',
       slots: [],
+      editorTabs: ['properties', 'sources'],
       allowedParents: ['frc-field'],
     };
   }

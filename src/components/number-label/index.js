@@ -10,6 +10,7 @@ class NumberLabel extends Webbit {
       description: 'A label for numbers',
       // documentationLink: 'https://frc-web-components.github.io/components/label/',
       slots: [],
+      editorTabs: ['properties', 'sources'],
       resizable: { left: true, right: true, top: false, bottom: false }
     };
   }

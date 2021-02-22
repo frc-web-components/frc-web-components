@@ -9,7 +9,8 @@ class Logger extends Webbit {
       category: 'General',
       description: 'A component used for logging.',
 			// documentationLink: 'https://frc-web-components.github.io/components/line-chart/',
-			slots: [],
+      slots: [],
+      editorTabs: ['properties', 'sources'],
     };
   }
 

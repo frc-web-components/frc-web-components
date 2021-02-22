@@ -16,6 +16,7 @@ export default class AnalogInputs extends Webbit {
       displayName: 'Analog Inputs',
       category: 'Simulation',
       slots: [],
+      editorTabs: ['properties', 'sources'],
       // description: 'Component for displaying data from a 3-axis accelerometer.',
       // documentationLink: 'https://frc-web-components.github.io/components/number-bar/'
       resizable: { left: true, right: true },

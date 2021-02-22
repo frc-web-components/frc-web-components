@@ -14,6 +14,7 @@ export default class NumberBar extends Webbit {
       description: 'Component for display a numerical value in a bar with a min and max range.',
       documentationLink: 'https://frc-web-components.github.io/components/number-bar/',
       slots: [],
+      editorTabs: ['properties', 'sources'],
       resizable: { left: true, right: true },
       minSize: { width: 80, height: 10 },
     };

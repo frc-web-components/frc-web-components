@@ -10,6 +10,7 @@ class ComboBox extends Webbit {
       description: 'An input field with a dropdown used to select different options.',
       documentationLink: 'https://frc-web-components.github.io/components/combo-box/',
       slots: [],
+      editorTabs: ['properties', 'sources'],
       resizable: { left: true, right: true },
       minSize: { width: 50, height: 10 },
       dashboardHtml: `
