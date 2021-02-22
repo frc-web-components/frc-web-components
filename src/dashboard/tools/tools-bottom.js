@@ -53,6 +53,10 @@ class DashboardToolsBottom extends LitElement {
       this.wom.addListener('womNodeSelect', callback);
       this.wom.addListener('womNodeDeselect', callback);
     }
+
+    if (changedProps.has('selectedNode')) {
+      this.selectedTab = 0;
+    }
   }
 
   onTabChange(ev) {
@@ -66,38 +70,65 @@ class DashboardToolsBottom extends LitElement {
     this.dispatchEvent(event);
   }
 
+  renderSelectedTab() {
+    const editorTabs = this.selectedNode 
+      ? this.selectedNode.getDashboardConfig().editorTabs
+      : ['addElements', 'properties', 'sources'];
+
+    const tabName = editorTabs[this.selectedTab];
+
+    if (tabName === 'addElements') {
+      return html`
+        <dashboard-components-tool
+          .selectedNode="${this.selectedNode}"
+          .wom="${this.wom}"
+        ></dashboard-components-tool>
+      `;
+    } else if (tabName === 'properties') {
+      return html`
+        <dashboard-properties-tool 
+          .selectedNode="${this.selectedNode}"
+          .wom="${this.wom}"
+        ></dashboard-properties-tool>
+      `;
+    } else if (tabName === 'sources') {
+      return html`
+        <dashboard-sources-tool 
+          .selectedNode="${this.selectedNode}"
+          .wom="${this.wom}"
+        ></dashboard-sources-tool>
+      `;
+    } else {
+      return null;
+    }
+  }
+
   render() {
+
+    const editorTabs = this.selectedNode 
+      ? this.selectedNode.getDashboardConfig().editorTabs
+      : ['addElements', 'properties', 'sources'];
+
     return html`
       <vaadin-tabs 
         theme="small" 
         selected="${this.selectedTab}" 
         @selected-changed="${this.onTabChange}"
       >
-        <vaadin-tab>Add Elements</vaadin-tab>
-        <vaadin-tab>Properties</vaadin-tab>
-        <vaadin-tab>Sources</vaadin-tab>
+        ${editorTabs.map(tabName => {
+          if (tabName === 'addElements') {
+            return html`<vaadin-tab>Add Elements</vaadin-tab>`;
+          } else if (tabName === 'properties') {
+            return html`<vaadin-tab>Properties</vaadin-tab>`;
+          } else if (tabName === 'sources') {
+            return html`<vaadin-tab>Sources</vaadin-tab>`;
+          } else {
+            return null;
+          }
+        })}
       </vaadin-tabs>
       <div part="tab-content">
-        ${this.selectedTab === 0 ? html`
-        <dashboard-components-tool
-          .selectedNode="${this.selectedNode}"
-          .wom="${this.wom}"
-        ></dashboard-components-tool>
-        ` : ''}
-
-        ${this.selectedTab === 1 ? html`
-        <dashboard-properties-tool 
-          .selectedNode="${this.selectedNode}"
-          .wom="${this.wom}"
-        ></dashboard-properties-tool>
-        ` : ''}
-
-        ${this.selectedTab === 2 ? html`
-          <dashboard-sources-tool 
-            .selectedNode="${this.selectedNode}"
-            .wom="${this.wom}"
-          ></dashboard-sources-tool>
-        ` : ''}
+        ${this.renderSelectedTab()}
       </div>
     `;
   }

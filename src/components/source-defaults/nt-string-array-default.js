@@ -23,7 +23,8 @@ class NtStringArrayDefault extends NtEntryDefault {
       slots: [],
       allowedParents: ['frc-root-layout'],
       movable: false,
-      resizable: { left: false, right: false, top: false, bottom: false }
+      resizable: { left: false, right: false, top: false, bottom: false },
+      editorTabs: ['properties']
     };
   }
 

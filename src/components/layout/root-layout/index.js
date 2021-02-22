@@ -20,6 +20,7 @@ export default class RootLayout extends Webbit {
           'frc-nt-string-array-default',
         ]
       },
+      editorTabs: ['addElements'],
     };
   }
 

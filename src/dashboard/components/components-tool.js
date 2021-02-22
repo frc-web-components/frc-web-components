@@ -169,6 +169,10 @@ class ComponentsTool extends LitElement {
   getComponentCategories() {
     const categories = {};
 
+    if (!this.selectedNode) {
+      return [];
+    }
+
     this.getComponents().forEach(name => {
       const { displayName, category } = this.getComponentDashboardConfig(name);
       if (!this.selectedNode.canContainComponent(name, this.selectedSlot) || !category) {
