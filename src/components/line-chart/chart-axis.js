@@ -3,7 +3,7 @@ import { Webbit, html, css } from '@webbitjs/webbit';
 
 class ChartAxis extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Chart Axis',
       category: 'Charts & Graphs',

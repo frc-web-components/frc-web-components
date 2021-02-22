@@ -3,7 +3,7 @@ import { containerStyles } from '../../styles';
 
 export default class Relay extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Relay',
       category: 'Simulation',

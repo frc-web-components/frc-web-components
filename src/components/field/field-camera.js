@@ -3,7 +3,7 @@ import { objectWithout } from './utils';
 
 class FieldCamera extends FieldObject {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Field Camera',
       category: 'Field',

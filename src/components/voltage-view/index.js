@@ -3,7 +3,7 @@ import NumberBar from '../number-bar';
 
 class VoltageView extends NumberBar {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Voltage View',
       category: 'Robot & Field Info',

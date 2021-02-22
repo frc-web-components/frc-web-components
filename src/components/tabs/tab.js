@@ -3,7 +3,7 @@ import { Webbit, html, css } from '@webbitjs/webbit';
 
 class Tab extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Tab',
       category: 'Tabs',

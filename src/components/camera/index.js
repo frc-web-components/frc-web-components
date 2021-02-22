@@ -4,7 +4,7 @@ let nextStreamId = 0;
 
 class Camera extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Camera',
       category: 'Robot & Field Info',

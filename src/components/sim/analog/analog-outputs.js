@@ -11,7 +11,7 @@ function getRange(length) {
 
 export default class AnalogOutputs extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Analog Outputs',
       category: 'Simulation',

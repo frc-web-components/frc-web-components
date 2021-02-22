@@ -11,7 +11,7 @@ function getRange(length) {
 
 export default class DigitalIOs extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'DIOs',
       category: 'Simulation',

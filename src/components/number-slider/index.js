@@ -2,7 +2,7 @@ import { Webbit, html, css } from '@webbitjs/webbit';
 
 class NumberSlider extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Number Slider',
       category: 'General',

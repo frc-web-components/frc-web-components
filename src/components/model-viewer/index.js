@@ -9,7 +9,7 @@ const rad = Math.PI / 180;
 
 class ModelViewer extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Model Viewer',
       category: '3D Models',

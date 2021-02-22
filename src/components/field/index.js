@@ -25,7 +25,7 @@ const fieldConfig = [
 
 class Field extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Field',
       category: 'Field',

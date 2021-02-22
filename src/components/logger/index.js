@@ -3,7 +3,7 @@ import HtmlLogger from './html-logger';
 
 class Logger extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Logger',
       category: 'General',

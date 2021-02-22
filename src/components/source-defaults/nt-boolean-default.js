@@ -2,7 +2,7 @@ import NtEntryDefault from './nt-entry-default';
 
 class NtBooleanDefault extends NtEntryDefault {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'NT Boolean Default',
       category: 'Sources',

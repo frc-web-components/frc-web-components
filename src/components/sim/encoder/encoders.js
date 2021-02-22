@@ -11,7 +11,7 @@ function getRange(length) {
 
 export default class Encoders extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Encoders',
       category: 'Simulation',

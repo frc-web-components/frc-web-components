@@ -7,7 +7,7 @@ function clamp(value, min, max) {
 
 class Gyro extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Gyro',
       category: 'Robot & Field Info',

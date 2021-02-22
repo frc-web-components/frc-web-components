@@ -61,7 +61,7 @@ function generateX(width) {
 
 class DifferentialDrivebase extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Differential Drivebase',
       category: 'Robot & Field Info',

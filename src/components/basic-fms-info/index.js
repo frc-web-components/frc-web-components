@@ -11,7 +11,7 @@ const MATCH_TYPES = ['Unknown', 'Practice', 'Qualification', 'Elimination'];
 
 class BasicFmsInfo extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Basic FMS Info',
       category: 'Robot & Field Info',

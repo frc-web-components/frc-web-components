@@ -2,7 +2,7 @@ import { Webbit, html, css, FlowLayout } from '@webbitjs/webbit';
 
 export default class FlowLayoutElement extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Flow Layout',
       category: 'Layout',

@@ -2,7 +2,7 @@ import { Webbit, html, css } from '@webbitjs/webbit';
 
 export default class TextField extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Text Field',
       category: 'Forms & Inputs',

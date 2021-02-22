@@ -2,7 +2,7 @@ import { Webbit, html, css } from '@webbitjs/webbit';
 
 class Relay extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Relay',
       category: 'Robot & Field Info',

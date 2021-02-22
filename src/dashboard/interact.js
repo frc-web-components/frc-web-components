@@ -55,12 +55,12 @@ export function removeInteraction(womNode) {
 
 export function addInteraction(wom, womNode) {
 
-  const metadata = womNode.getMetadata() || {};
-  const resizable = metadata.resizable || { 
+  const dashboardConfig = womNode.getDashboardConfig() || {};
+  const resizable = dashboardConfig.resizable || { 
     left: true, right: true, bottom: true, top: true
   };
-  const movable = 'movable' in metadata ? metadata.movable : true;
-  const minSize = metadata.minSize || { width: 20, height: 20 };
+  const movable = 'movable' in dashboardConfig ? dashboardConfig.movable : true;
+  const minSize = dashboardConfig.minSize || { width: 20, height: 20 };
 
 
   setTimeout(() => {

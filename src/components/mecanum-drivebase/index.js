@@ -58,7 +58,7 @@ function generateX(width) {
 
 class MecanumDrivebase extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Mecanum Drivebase',
       category: 'Robot & Field Info',

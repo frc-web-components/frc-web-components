@@ -11,7 +11,7 @@ function getRange(length) {
 
 export default class Relays extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Relays',
       category: 'Simulation',

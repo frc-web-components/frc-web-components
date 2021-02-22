@@ -3,7 +3,7 @@ import TextField from '../text-field';
 
 export default class TextArea extends TextField {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Textarea',
       category: 'Forms & Inputs',

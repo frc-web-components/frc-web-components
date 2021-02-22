@@ -3,7 +3,7 @@ import { objectWithout } from './utils';
 
 class FieldRobot extends FieldObject {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Field Robot',
       category: 'Field',

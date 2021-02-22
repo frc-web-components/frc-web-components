@@ -3,7 +3,7 @@ import { containerStyles } from '../styles';
 
 class NumberLabel extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Number Label',
       category: 'General',

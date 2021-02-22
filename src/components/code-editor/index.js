@@ -3,7 +3,7 @@ import './editor';
 
 class CodeEditor extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Code Editor',
       category: 'General',

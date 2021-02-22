@@ -9,7 +9,7 @@ const RAD2DEG = 1 / DEG2RAD;
 
 class UrdfViewer extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'URDF Viewer',
       category: '3D Models',

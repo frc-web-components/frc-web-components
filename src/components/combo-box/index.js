@@ -3,7 +3,7 @@ import { containerStyles } from '../styles';
 
 class ComboBox extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Combo Box',
       category: 'Forms & Inputs',

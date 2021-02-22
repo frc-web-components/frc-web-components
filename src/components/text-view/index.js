@@ -2,7 +2,7 @@ import { Webbit, html, css } from '@webbitjs/webbit';
 
 class TextView extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Text View',
       category: 'Forms & Inputs',

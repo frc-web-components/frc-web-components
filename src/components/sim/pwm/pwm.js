@@ -3,7 +3,7 @@ import { containerStyles } from '../../styles';
 
 export default class Pwm extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'PWM',
       category: 'Simulation',

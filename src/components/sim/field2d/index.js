@@ -3,7 +3,7 @@ import { containerStyles } from '../../styles';
 
 export default class Field2d extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Field2D',
       category: 'Simulation',

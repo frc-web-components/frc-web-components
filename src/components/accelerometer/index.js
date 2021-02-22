@@ -2,7 +2,7 @@ import NumberBar from '../number-bar';
 
 class Accelerometer extends NumberBar {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Accelerometer',
       category: 'Robot & Field Info',

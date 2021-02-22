@@ -3,7 +3,7 @@ import { containerStyles } from '../../styles';
 
 export default class AnalogOutput extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Analog Output',
       category: 'Simulation',

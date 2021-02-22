@@ -118,16 +118,16 @@ class ComponentsTool extends LitElement {
     return window.webbitRegistry.getRegisteredNames();
   }
 
-  getMetadata(componentName) {
-    return window.webbitRegistry.getMetadata(componentName);
+  getDashboardConfig(componentName) {
+    return window.webbitRegistry.getDashboardConfig(componentName);
   }
 
   getComponentName(componentName) {
-    return this.getMetadata(componentName).displayName;
+    return this.getDashboardConfig(componentName).displayName;
   }
 
-  getComponentMetadata(componentName) {
-    return window.webbitRegistry.getMetadata(componentName);
+  getComponentDashboardConfig(componentName) {
+    return window.webbitRegistry.getDashboardConfig(componentName);
   }
 
   sortAlphabetically(array, property) {
@@ -170,7 +170,7 @@ class ComponentsTool extends LitElement {
     const categories = {};
 
     this.getComponents().forEach(name => {
-      const { displayName, category } = this.getComponentMetadata(name);
+      const { displayName, category } = this.getComponentDashboardConfig(name);
       if (!this.selectedNode.canContainComponent(name, this.selectedSlot) || !category) {
         return;
       }
@@ -231,9 +231,9 @@ class ComponentsTool extends LitElement {
       `;
     }
 
-    const metadata = this.getComponentMetadata(this.selectedComponent);
+    const dashboardConfig = this.getComponentDashboardConfig(this.selectedComponent);
 
-    if (!metadata) {
+    if (!dashboardConfig) {
       return html`
         <div part="selected-component-details">
           <p>Component <span>${this.selectedComponent}</span> does not exist.</p>
@@ -251,12 +251,12 @@ class ComponentsTool extends LitElement {
 
     return html`
       <div part="selected-component-details">
-        <header><span>${metadata.displayName}</span> component</header>
+        <header><span>${dashboardConfig.displayName}</span> component</header>
         <p>
-          ${metadata.description}
+          ${dashboardConfig.description}
           ${' '}
-          ${metadata.documentationLink ? html`
-            Examples and documentation can be found <a href="${metadata.documentationLink}" target="_blank">here</a>.
+          ${dashboardConfig.documentationLink ? html`
+            Examples and documentation can be found <a href="${dashboardConfig.documentationLink}" target="_blank">here</a>.
           ` : ''}
         </p>
       </div>
@@ -285,14 +285,14 @@ class ComponentsTool extends LitElement {
 
   renderComponentList() {
 
-    const metadata = this.getMetadata(this.selectedComponent) || {};
+    const dashboardConfig = this.getDashboardConfig(this.selectedComponent) || {};
     const canContain = this.selectedNode.canContainComponent(this.selectedComponent, this.selectedSlot);
-    const accordionOpenIndex = (metadata && canContain)
+    const accordionOpenIndex = (dashboardConfig && canContain)
       ? this.componentCategories.findIndex(category => {
-        if (typeof metadata.category !== 'string') {
+        if (typeof dashboardConfig.category !== 'string') {
           return false;
         }
-        return category.name === metadata.category.toLowerCase();
+        return category.name === dashboardConfig.category.toLowerCase();
       })
       : null;
 

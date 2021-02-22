@@ -25,7 +25,7 @@ const hasArrayChanged = (newVal, oldVal) => {
 
 export default class Gamepad extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Gamepad',
       category: false,

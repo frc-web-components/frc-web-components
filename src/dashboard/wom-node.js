@@ -24,7 +24,7 @@ export default class WomNode {
     this.wom = wom;
     this.ancestors = ancestors;
     this.childNodes = [];
-    this.slots = isWebbit(node) ? this.getMetadata().slots : ['default'];
+    this.slots = isWebbit(node) ? this.getDashboardConfig().slots : ['default'];
     this.childBySlotNodes = this.slots.map(() => {
       return [];
     });
@@ -42,8 +42,8 @@ export default class WomNode {
       return false;
     }
 
-    const { allowedParents } = webbitRegistry.getMetadata(componentType) || {};
-    const { allowedChildren } = this.getMetadata() || {};
+    const { allowedParents } = webbitRegistry.getDashboardConfig(componentType) || {};
+    const { allowedChildren } = this.getDashboardConfig() || {};
     
     if (allowedChildren instanceof Array) {
       if (allowedChildren.indexOf(componentType) < 0) {
@@ -228,13 +228,13 @@ export default class WomNode {
   }
 
   getDisplayName() {
-    const metadata = this.getMetadata();
-    return metadata ? metadata.displayName : this.getName();
+    const dashboardConfig = this.getDashboardConfig();
+    return dashboardConfig ? dashboardConfig.displayName : this.getName();
   }
 
   getLayout() {
-    const metadata = this.getMetadata();
-    return metadata ? metadata.layout : 'absolute';
+    const dashboardConfig = this.getDashboardConfig();
+    return dashboardConfig ? dashboardConfig.layout : 'absolute';
   }
 
   getWebbitId() {
@@ -257,8 +257,8 @@ export default class WomNode {
     return isWebbit(this.node) ? this.node.defaultProps : {};
   }
 
-  getMetadata() {
-    return webbitRegistry.getMetadata(this.getName());
+  getDashboardConfig() {
+    return webbitRegistry.getDashboardConfig(this.getName());
   }
 
   isRoot() {

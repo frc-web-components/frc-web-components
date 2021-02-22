@@ -8,7 +8,7 @@ import {
 
 class GitpodInfo extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Gitpod Info',
       category: 'Simulation',

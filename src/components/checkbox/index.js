@@ -3,7 +3,7 @@ import { containerStyles } from '../styles';
 
 class Checkbox extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Checkbox',
       category: 'Forms & Inputs',

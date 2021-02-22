@@ -11,7 +11,7 @@ import {
 
 class SourceTree extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Source Tree',
       category: 'Sources',

@@ -3,7 +3,7 @@ import { containerStyles } from '../styles';
 
 class If extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'If',
       // category: 'Layout',

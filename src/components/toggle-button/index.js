@@ -3,7 +3,7 @@ import { containerStyles } from '../styles';
 
 class ToggleButton extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Toggle Button',
       category: 'General',

@@ -15,7 +15,7 @@ function clamp(value, min, max) {
 
 class Pdp extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Power Distribution Panel',
       category: 'Robot & Field Info',

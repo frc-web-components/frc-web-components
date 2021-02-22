@@ -47,7 +47,7 @@ class RotationAnimator {
 
 class ControlPanel extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Control Panel',
       category: 'Robot & Field Info',

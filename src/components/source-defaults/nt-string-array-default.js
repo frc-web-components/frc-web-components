@@ -14,7 +14,7 @@ function isStringArray(value) {
 
 class NtStringArrayDefault extends NtEntryDefault {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'NT String Array Default',
       category: 'Sources',

@@ -3,7 +3,7 @@ import { containerStyles } from '../../styles';
 
 class RobotState extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Robot State',
       category: 'Simulation',

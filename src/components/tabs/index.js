@@ -5,7 +5,7 @@ import './tabs-content';
 
 class Tabs extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Tabs',
       category: 'Tabs',

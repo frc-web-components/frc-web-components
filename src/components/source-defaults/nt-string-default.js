@@ -2,7 +2,7 @@ import NtEntryDefault from './nt-entry-default';
 
 class NtStringDefault extends NtEntryDefault {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'NT String Default',
       category: 'Sources',

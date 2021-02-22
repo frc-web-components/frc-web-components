@@ -3,7 +3,7 @@ import { containerStyles } from '../../styles';
 
 export default class Joystick extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Joystick',
       category: 'Simulation',

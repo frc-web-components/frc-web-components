@@ -6,7 +6,7 @@ function clamp(value, min, max) {
 
 class ThreeAxisAccelerometer extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: '3-Axis Accelerometer',
       category: 'Robot & Field Info',

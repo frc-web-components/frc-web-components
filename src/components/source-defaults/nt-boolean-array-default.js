@@ -14,7 +14,7 @@ function isBooleanArray(value) {
 
 class NtBooleanArrayDefault extends NtEntryDefault {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'NT Boolean Array Default',
       category: 'Sources',

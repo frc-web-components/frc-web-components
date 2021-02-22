@@ -7,7 +7,7 @@ function clamp(value, min, max) {
 
 export default class NumberBar extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Number Bar',
       category: 'General',

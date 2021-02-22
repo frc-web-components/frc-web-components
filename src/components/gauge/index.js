@@ -4,7 +4,7 @@ import Gauge from 'svg-gauge';
 
 class GaugeWebbit extends Webbit {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Gauge',
       category: 'Charts & Graphs',

@@ -4,7 +4,7 @@ import TextField from '../text-field';
 
 class NumberField extends TextField {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Number Field',
       category: 'Forms & Inputs',

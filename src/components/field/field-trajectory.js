@@ -4,7 +4,7 @@ import { objectWithout } from './utils';
 
 class FieldTrajectory extends FieldObject {
 
-  static get metadata() {
+  static get dashboardConfig() {
     return {
       displayName: 'Field Trajectory',
       category: 'Field',

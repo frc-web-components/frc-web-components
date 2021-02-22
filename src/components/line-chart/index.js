@@ -155,7 +155,7 @@ class LineChartData {
 
 class LineChart extends Webbit {
 
-	static get metadata() {
+	static get dashboardConfig() {
     return {
       displayName: 'Line Chart',
       category: 'Charts & Graphs',

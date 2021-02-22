@@ -1,7 +1,7 @@
 
 export const createElement = (componentType, slot) => {
   const parentNode = document.createElement('div');
-  const { dashboardHtml } = window.webbitRegistry.getMetadata(componentType) || {};
+  const { dashboardHtml } = window.webbitRegistry.getDashboardConfig(componentType) || {};
  
   if (dashboardHtml) {
     parentNode.innerHTML = dashboardHtml;
