@@ -82,7 +82,7 @@ class DashboardToolsBottom extends LitElement {
   }
 
   getEditorTabs() {
-    return this.selectedNode 
+    return this.selectedNode && this.selectedNode.getDashboardConfig()
       ? this.selectedNode.getDashboardConfig().editorTabs
       : ['addElements', 'properties', 'sources'];
   }
