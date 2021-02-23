@@ -10,3 +10,4 @@ build/sw.js.map
 build/workbox*.js
 build/icon.png
 build/manifest.webmanifest
+docs
