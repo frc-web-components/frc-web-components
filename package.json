@@ -1,6 +1,6 @@
 {
   "name": "@frc-web-components/frc-web-components",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "",
   "main": "src/index.js",
   "scripts": {
@@ -25,7 +25,7 @@
     "@kor-ui/grid": "^1.0.9",
     "@vaadin/vaadin": "^17.0.7",
     "@webbitjs/store": "^1.1.8",
-    "@webbitjs/webbit": "^1.5.3",
+    "@webbitjs/webbit": "^1.5.5",
     "chart.js": "^2.8.0",
     "d3": "^5.15.0",
     "hotkeys-js": "^3.8.1",
@@ -36,7 +36,8 @@
     "quaternion": "^1.1.0",
     "svg-gauge": "^1.0.6",
     "three": "^0.116.1",
-    "urdf-loader": "^0.8.2"
+    "urdf-loader": "^0.8.2",
+    "resize-observer-polyfill": "^1.5.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -47,7 +48,6 @@
     "@babel/preset-env": "^7.8.4",
     "babel-loader": "^8.0.4",
     "css-loader": "^0.28.11",
-    "resize-observer-polyfill": "^1.5.1",
     "sass-loader": "^7.0.3",
     "style-loader": "^0.21.0",
     "webpack": "^4.41.5",
