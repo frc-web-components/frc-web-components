@@ -44,7 +44,7 @@ class TableAxis extends LitElement {
     this.unit = '';
   }
 
-  setAxis() {
+  setAxis(changedProps) {
     let size = this.vertical ? this.clientHeight : this.clientWidth;
     let tickSpacing = size / Math.max(1, this.ticks - 1);
     const width = this.range ? 30 : 10;
@@ -56,7 +56,13 @@ class TableAxis extends LitElement {
     let textEnd = -Infinity;
 
     // Prevent update if nothing has changed
-    if (this.prevSize === size && this.prevTicks === this.ticks && this.prevMin === min && this.prevMax === max) {
+    if (
+      this.prevSize === size 
+      && this.prevTicks === this.ticks 
+      && this.prevMin === min 
+      && this.prevMax === max
+      && !changedProps.has('unit')
+    ) {
       return;
     }
     else {
@@ -151,8 +157,8 @@ class TableAxis extends LitElement {
     resizeObserver.observe(this);
   }
 
-  updated() {
-    this.setAxis();
+  updated(changedProps) {
+    this.setAxis(changedProps);
   }
 
   render() {

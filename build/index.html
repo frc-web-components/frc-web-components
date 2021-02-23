@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <link rel="manifest" href="/manifest.webmanifest">
+    <!-- <link rel="manifest" href="/manifest.webmanifest"> -->
   </head>
   <body>
 
@@ -28,15 +28,15 @@
     <script src="./frc-web-components.js"></script>
 
     <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').then(registration => {
-            console.log('SW registered: ', registration);
-          }).catch(registrationError => {
-            console.log('SW registration failed: ', registrationError);
-          });
-        });
-      }
+      // if ('serviceWorker' in navigator) {
+      //   window.addEventListener('load', () => {
+      //     navigator.serviceWorker.register('/sw.js').then(registration => {
+      //       console.log('SW registered: ', registration);
+      //     }).catch(registrationError => {
+      //       console.log('SW registration failed: ', registrationError);
+      //     });
+      //   });
+      // }
     </script>
 
   </body>
