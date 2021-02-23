@@ -33,7 +33,7 @@ class AboutDialog extends LitElement {
           .about-dialog-content p {
             font-size: 16px;
             margin-top: 5px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
           }
 
           .about-dialog-content p span {
