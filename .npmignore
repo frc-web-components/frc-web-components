@@ -5,3 +5,8 @@ models
 field-images
 build/*.html
 build/my-component*.js
+build/sw.js
+build/sw.js.map
+build/workbox*.js
+build/icon.png
+build/manifest.webmanifest
