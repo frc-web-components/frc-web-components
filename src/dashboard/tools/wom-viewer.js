@@ -145,8 +145,10 @@ class WomViewer extends LitElement {
       `${16 * this.level + 5}px`
     );
 
-    this.wom.addListener('womActionExecute', () => {
-      this.requestUpdate();
+    ['womActionExecute', 'womChange'].forEach(eventName => {
+      this.wom.addListener(eventName, () => {
+        this.requestUpdate();
+      });
     });
   }
 

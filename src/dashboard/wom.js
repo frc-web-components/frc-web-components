@@ -1,5 +1,6 @@
 import WomNode from './wom-node';
 import { addInteraction, removeInteraction } from './interact';
+import { loadJavascript } from './utils';
 
 class WomLayout {
 
@@ -204,6 +205,65 @@ class WomHistory {
   }
 }
 
+
+class ScriptHandler {
+
+  constructor() {
+    this.addedScripts = [];
+    this.scriptsToLoad = [];
+    this.loading = false;
+
+    setInterval(async () => {
+      if (!this.loading && this.scriptsToLoad.length > 0) {
+        this.loading = true;
+        const { src, text } = this.scriptsToLoad.shift();
+        await this.loadScript(src, text);
+        this.loading = false;
+      }
+    }, 200);
+  }
+
+  loadScript(src, text) {
+    return new Promise(resolve => {
+      let ready = false;
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.async = true;
+      if (text) {
+        script.text = text;
+      }
+      if (src) {
+        script.src = src;
+      }
+      document.body.appendChild(script);
+      if (src) {
+        script.onerror = function(err) {
+          resolve();
+        };
+        script.onload = script.onreadystatechange = function() {
+          if (!ready && (!this.readyState || this.readyState == 'complete')) {
+            ready = true;
+            resolve();
+          }
+        };
+      } else {
+        resolve();
+      }
+    });
+  }
+
+  addScript(src, text) {
+    const script = this.addedScripts.find(added => {
+      return added.src === src && added.text === text;
+    });
+    if (!script) {
+      this.addedScripts.push({ src, text });
+      this.scriptsToLoad.push({ src, text });
+    }
+  }
+}
+
+
 /**
  * Webbit Object Model (WOM)
  */
@@ -223,6 +283,7 @@ class Wom {
     this.selectionEnabled = true;
     this.editingNodeHtml = false;
     this.clipboardNode = null;
+    this.scriptHandler = new ScriptHandler();
   }
 
   async setClipboard(node) {
@@ -415,6 +476,10 @@ class Wom {
 
   isSelectionEnabled() {
     return this.selectionEnabled;
+  }
+
+  addScript(src, text) {
+    this.scriptHandler.addScript(src, text);
   }
 }
 
