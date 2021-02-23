@@ -7,7 +7,6 @@ import './about-dialog';
 import './preferences-dialog';
 import './rename-dialog';
 import './delete-layout-dialog';
-import './manage-extensions-dialog';
 
 const beautify_html = require('js-beautify').html;
 const isMac = navigator.userAgent.indexOf('Mac OS X') != -1;
@@ -479,11 +478,6 @@ class WomTools extends LitElement {
     dialog.open();
   }
 
-  openManageExtensionsDialog() {
-    const dialog = this.shadowRoot.querySelector('dashboard-manage-extensions-dialog');
-    dialog.open();
-  }
-
   menuItemSelected(ev) {
     const item = ev.detail.value;
     if (typeof item.action === 'string') {
@@ -566,7 +560,6 @@ class WomTools extends LitElement {
         <dashboard-preferences-dialog></dashboard-preferences-dialog>
         <dashboard-rename-dialog .wom="${this.wom}"></dashboard-rename-dialog>
         <dashboard-delete-layout-dialog .wom="${this.wom}"></dashboard-delete-layout-dialog>
-        <dashboard-manage-extensions-dialog .wom="${this.wom}"></dashboard-manage-extensions-dialog>
 
         <div part="top-menu">
 

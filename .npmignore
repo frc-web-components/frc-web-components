@@ -8,6 +8,10 @@ build/my-component*.js
 build/sw.js
 build/sw.js.map
 build/workbox*.js
+build/workbox*.js.map
 build/icon.png
 build/manifest.webmanifest
 docs
+webpack.config.js
+extensions
+.readthedocs.yml
