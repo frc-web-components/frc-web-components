@@ -3,17 +3,24 @@ import { html } from 'lit-element';
 
 class StringDropdownPropertyView extends PropertyView {
 
+  allowCustomValues() { 
+    return 'allowCustomValues' in this.property
+      ? this.property.allowCustomValues
+      : true;
+  }
+
   renderInputField() {
+
     return html`
       <vaadin-combo-box 
         part="input"
         .items="${this.property.getOptions.bind(this.selectedNode.getNode())()}" 
         value="${this.inputValue || ''}"
-        @input="${this.onInputChange}"
         @change="${this.onInputChange}"
         theme="small"
         ?clear-button-visible="${this.clearButtonVisible}"
-        allow-custom-value
+        ?disabled="${this.isDisabled()}"
+        ?allow-custom-value="${this.allowCustomValues()}"
       >
       </vaadin-combo-box>
     `;

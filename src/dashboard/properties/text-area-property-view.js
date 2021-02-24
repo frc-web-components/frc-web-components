@@ -11,6 +11,7 @@ class TextAreaPropertyView extends PropertyView {
         @input="${this.onInputChange}"
         @change="${this.onInputChange}"
         theme="small"
+        ?disabled="${this.isDisabled()}"
       ></vaadin-text-area>
     `;
   }

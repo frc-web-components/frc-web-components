@@ -10,6 +10,7 @@ class ColorPickerPropertyView extends PropertyView {
         type="color"
         .value="${this.inputValue || ''}"
         @change="${this.onInputChange}"
+        ?disabled="${this.isDisabled()}"
         theme="small"
       />
     `;

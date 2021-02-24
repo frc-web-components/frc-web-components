@@ -14,7 +14,27 @@ export const toBaseConversions = {
   in: .0254
 };
 
+export const unitAliases = {
+  km: 'km',
+  m: 'm',
+  meters: 'm',
+  cm: 'cm',
+  centimeters: 'cm',
+  mm: 'mm',
+  // imperial
+  mi: 'mi',
+  miles: 'mi',
+  yd: 'yd',
+  yards: 'yards',
+  ft: 'ft',
+  feet: 'ft',
+  in: 'in',
+  inches: 'in',
+}
+
 export const convert = (value, from, to) => {
+  from = unitAliases[from];
+  to = unitAliases[to];
   if (typeof toBaseConversions[from] === 'undefined') {
     from = baseUnit;
   }

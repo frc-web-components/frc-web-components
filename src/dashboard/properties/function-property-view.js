@@ -49,6 +49,7 @@ class FunctionPropertyView extends PropertyView {
         @change="${this.onInputChange}"
         mode="ace/mode/javascript"
         theme="ace/theme/monokai"
+        ?disabled="${this.isDisabled()}"
       ></juicy-ace-editor>
     `;
   }

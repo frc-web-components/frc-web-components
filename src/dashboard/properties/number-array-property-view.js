@@ -73,6 +73,7 @@ class NumberArrayPropertyView extends PropertyView {
         item-label-path="autocomplete" 
         item-value-path="value"
         item-id-path="value"
+        ?disabled="${this.isDisabled()}"
       >
         <template>
           [[item.display]]

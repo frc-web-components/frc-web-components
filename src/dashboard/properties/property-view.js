@@ -39,6 +39,7 @@ export default class PropertyView extends LitElement {
       propertyName: { type: String, attribute: false },
       property: { type: Object, attribute: false },
       inputValue: { type: Object },
+      propertyValueMap: { type: Object },
     };
   }
 
@@ -49,10 +50,21 @@ export default class PropertyView extends LitElement {
     this.property = null;
     this.inputValue = null;
     this.inputElement = null;
+    this.propertyValueMap = null;
   }
 
   getValue() {
     return this.selectedNode.getDefaultProps()[this.propertyName];
+  }
+
+  isDisabled() {
+    if (!this.propertyValueMap) {
+      return false;
+    }
+
+    return 'isDisabled' in this.property
+      ? this.property.isDisabled(this.propertyValueMap)
+      : false;
   }
 
   isInputModified() {

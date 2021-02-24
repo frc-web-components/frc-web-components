@@ -1,26 +1,49 @@
 import { Webbit, html, svg, css } from '@webbitjs/webbit';
-import { baseUnit, toBaseConversions, convert } from './units';
+import { baseUnit, toBaseConversions, convert, unitAliases } from './units';
 import './field-object';
 import './field-trajectory';
 import './field-camera';
 import './field-robot';
 
+// const fieldConfig = [
+//   {
+//     label: '2018 Field',
+//     image: 'https://rawcdn.githack.com/frc-web-components/frc-web-components/c33169e74cc12943d310f18c05d0d2495bed54df/field-images/2018-field.jpg',
+//     size: { width: 54, height: 27, unit: 'ft' },
+//   },
+//   {
+//     label: '2019 Field',
+//     image: 'https://rawcdn.githack.com/frc-web-components/frc-web-components/c33169e74cc12943d310f18c05d0d2495bed54df/field-images/2019-field.jpg',
+//     size: { width: 54, height: 27, unit: 'ft' },
+//   },
+//   {
+//     label: '2020 Field',
+//     image: 'https://rawcdn.githack.com/frc-web-components/frc-web-components/c33169e74cc12943d310f18c05d0d2495bed54df/field-images/2020-field.png',
+//     size: { width: 52.4375, height: 26.9375, unit: 'ft' },
+//   },
+// ]
+
 const fieldConfig = [
   {
-    label: '2018 Field',
-    image: 'https://rawcdn.githack.com/frc-web-components/frc-web-components/c33169e74cc12943d310f18c05d0d2495bed54df/field-images/2018-field.jpg',
-    size: { width: 54, height: 27, unit: 'ft' },
+    "game" : "Infinite Recharge",
+    "field-image" : "https://rawcdn.githack.com/wpilibsuite/PathWeaver/036ca81bfc58eeeba047ec469edc54f33831a4c4/src/main/resources/edu/wpi/first/pathweaver/2020-Field.png",
+    "field-corners": {
+        "top-left" : [96, 25],
+        "bottom-right" : [1040, 514]
+    },
+    "field-size" : [52.4375, 26.9375],
+    "field-unit" : "foot"
   },
   {
-    label: '2019 Field',
-    image: 'https://rawcdn.githack.com/frc-web-components/frc-web-components/c33169e74cc12943d310f18c05d0d2495bed54df/field-images/2019-field.jpg',
-    size: { width: 54, height: 27, unit: 'ft' },
-  },
-  {
-    label: '2020 Field',
-    image: 'https://rawcdn.githack.com/frc-web-components/frc-web-components/c33169e74cc12943d310f18c05d0d2495bed54df/field-images/2020-field.png',
-    size: { width: 52.4375, height: 26.9375, unit: 'ft' },
-  },
+    "game": "FIRST Power Up",
+    "field-image": "https://rawcdn.githack.com/frc-web-components/frc-web-components/c33169e74cc12943d310f18c05d0d2495bed54df/field-images/2018-field.jpg",
+    "field-corners": {
+      "top-left": [125, 20],
+      "bottom-right": [827, 370]
+    },
+    "field-size": [54, 27],
+    "field-unit": "feet"
+  }
 ]
 
 class Field extends Webbit {
@@ -86,18 +109,38 @@ class Field extends Webbit {
 
   static get properties() {
     return {
+      game: {
+        type: String,
+        inputType: 'StringDropdown',
+        allowCustomValues: false,
+        getOptions() {
+          return fieldConfig.map(field => field.game).concat('Custom');
+        },
+      },
       width: { 
         type: Number,
         get() {
-          const config = fieldConfig.find(field => field.label === this._image);
-          return config && this._useFieldConfig ? config.size.width : this._width;
+          if (this._game === 'Custom') {
+            return this._width;
+          } 
+          const config = fieldConfig.find(field => field.game === this._game);
+          return config ? config['field-size'][0] : this._width;
+        },
+        isDisabled({ game }) {
+          return game !== 'Custom';
         }
       },
       height: { 
         type: Number,
         get() {
-          const config = fieldConfig.find(field => field.label === this._image);
-          return config && this._useFieldConfig ? config.size.height : this._height;
+          if (this._game === 'Custom') {
+            return this._height;
+          } 
+          const config = fieldConfig.find(field => field.game === this._game);
+          return config ? config['field-size'][1] : this._height;
+        },
+        isDisabled({ game }) {
+          return game !== 'Custom';
         }
       },
       unit: { 
@@ -106,44 +149,105 @@ class Field extends Webbit {
         getOptions() {
           return Object.keys(toBaseConversions);
         },
+        allowCustomValues: false,
         get() {
-          const config = fieldConfig.find(field => field.label === this._image);
-          return config && this._useFieldConfig ? config.size.unit : this._unit;
+          if (this._game === 'Custom') {
+            return unitAliases[this._unit];
+          } 
+          const config = fieldConfig.find(field => field.game === this._game);
+          return config ? config['field-unit'] : unitAliases[this._unit];
+        },
+        isDisabled({ game }) {
+          return game !== 'Custom';
         }
       },
       image: { 
         type: String,
         inputType: 'StringDropdown',
         getOptions() {
-          return fieldConfig.map(field => field.label);
+          return fieldConfig.map(field => field['field-image']);
         },
         get() {
-          const config = fieldConfig.find(field => field.label === this._image);
-          return config ? config.image : this._image;
+          if (this._game === 'Custom') {
+            return this._image;
+          } 
+          const config = fieldConfig.find(field => field.game === this._game);
+          return config ? config['field-image'] : this._image;
         },
-        set(image) {
-          const config = fieldConfig.find(field => field.image === image);
-          return config ? config.label : image;
+        isDisabled({ game }) {
+          return game !== 'Custom';
+        },
+      },
+      topLeftFieldCornerX: {
+        type: Number,
+        get() {
+          if (this._game === 'Custom') {
+            return this._topLeftFieldCornerX;
+          } 
+          const config = fieldConfig.find(field => field.game === this._game);
+          return config ? config['field-corners']['top-left'][0] : this._topLeftFieldCornerX;
+        },
+        isDisabled({ game }) {
+          return game !== 'Custom';
         }
       },
-      useFieldConfig: { type: Boolean },
+      topLeftFieldCornerY: {
+        type: Number,
+        get() {
+          if (this._game === 'Custom') {
+            return this._topLeftFieldCornerY;
+          } 
+          const config = fieldConfig.find(field => field.game === this._game);
+          return config ? config['field-corners']['top-left'][1] : this._topLeftFieldCornerY;
+        },
+        isDisabled({ game }) {
+          return game !== 'Custom';
+        }
+      },
+      bottomRightFieldCornerX: {
+        type: Number,
+        get() {
+          if (this._game === 'Custom') {
+            return this._bottomRightFieldCornerX;
+          } 
+          const config = fieldConfig.find(field => field.game === this._game);
+          return config ? config['field-corners']['bottom-right'][0] : this._bottomRightFieldCornerX;
+        },
+        isDisabled({ game }) {
+          return game !== 'Custom';
+        }
+      },
+      bottomRightFieldCornerY: {
+        type: Number,
+        get() {
+          if (this._game === 'Custom') {
+            return this._bottomRightFieldCornerY;
+          } 
+          const config = fieldConfig.find(field => field.game === this._game);
+          return config ? config['field-corners']['bottom-right'][1] : this._bottomRightFieldCornerY;
+        },
+        isDisabled({ game }) {
+          return game !== 'Custom';
+        }
+      },
       gridSize: { type: Number },
-      hideGrid: { type: Boolean },
+      showGrid: { type: Boolean },
       swapAxes: { type: Boolean },
     };
   }
 
   constructor() {
     super();
+    this.game = 'FIRST Power Up';
     this.width = 54;
     this.height = 27;
     this.image = '';
-    this.useFieldConfig = false;
     this.gridSize = 1;
-    this.hideGrid = false;
+    this.showGrid = false;
     this.swapAxes = false;
     this.objectElements = [];
     this.unit = baseUnit;
+    this.imageObjects = {};
   }
 
   updated(changedProperties) {
@@ -153,9 +257,26 @@ class Field extends Webbit {
 
     }
 
-    if (changedProperties.has('image') || changedProperties.has('useFieldConfig')) {
+    if (changedProperties.has('image') || changedProperties.has('game')) {
       const fieldElement = this.shadowRoot.querySelector('[part=field]');
       fieldElement.style.setProperty('--field-image', `url(${this.image}`);
+      if (typeof this.imageObjects[this.image] === 'undefined') {
+        const image = new Image();
+        const imageObject = {
+          src: this.image,
+          width: 0,
+          height: 0,
+          loaded: false,
+        };
+        image.onload = () => {
+          imageObject.loaded = true;
+          imageObject.width = image.width;
+          imageObject.height = image.height; 
+          this.requestUpdate();
+        };
+        this.imageObjects[this.image] = imageObject;
+        image.src = this.image;
+      }
       this.resizeField();
       this.requestUpdate();
     }
@@ -176,9 +297,11 @@ class Field extends Webbit {
     };
 
     // set child poses relative to parent
-    this.childNodes.forEach(childNode => {
-      this.setObjectPose(childNode, fieldInfo, elementInfo);
-      this.setDrawingPose(childNode, fieldInfo, elementInfo);
+    [...this.children].forEach(child => {
+      if (child.constructor.__IS_FIELD_OBJECT__) {
+        this.setObjectPose(child, fieldInfo, elementInfo);
+        this.setDrawingPose(child, fieldInfo, elementInfo);
+      }
     });
   }
 
@@ -232,9 +355,11 @@ class Field extends Webbit {
     };
 
     // set child poses relative to parent
-    element.childNodes.forEach(childNode => {
-      this.setObjectPose(childNode, fieldInfo, elementInfo);
-      this.setDrawingPose(childNode, fieldInfo, elementInfo);
+    [...element.children].forEach(child => {
+      if (child.__IS_FIELD_OBJECT__) {
+        this.setObjectPose(child, fieldInfo, elementInfo);
+        this.setDrawingPose(child, fieldInfo, elementInfo);
+      }
     });
   }
 
@@ -367,7 +492,7 @@ class Field extends Webbit {
 
     return html`   
       <div part="field">
-        ${!this.hideGrid && this.gridSize > 0 ? html`
+        ${this.showGrid && this.gridSize > 0 ? html`
           <div part="grid">
             ${svg`
               <svg width="100%" height="100%">

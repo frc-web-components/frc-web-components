@@ -3,6 +3,10 @@ import { toBaseConversions } from './units';
 
 export default class FieldObject extends Webbit {
 
+  static get __IS_FIELD_OBJECT__() {
+    return true;
+  }
+
   static get dashboardConfig() {
     return {
       displayName: 'Field Object',

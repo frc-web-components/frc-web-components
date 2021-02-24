@@ -81,6 +81,10 @@ class PropertiesView extends LitElement {
     }
   }
 
+  onPropertiesChange() {
+    this.requestUpdate();
+  }
+
   renderProperties(properties) {
 
     return html`
@@ -92,6 +96,8 @@ class PropertiesView extends LitElement {
               .selectedNode="${this.selectedNode}"
               .propertyName="${name}"
               .property="${property}"
+              .propertyValueMap="${this.getPropertyValueMap()}"
+              @dashboardToolsViewPropertyChange="${this.onPropertiesChange}"
             ></dashboard-string-property-view>
           ` : ''}
 
@@ -101,6 +107,8 @@ class PropertiesView extends LitElement {
               .selectedNode="${this.selectedNode}"
               .propertyName="${name}"
               .property="${property}"
+              .propertyValueMap="${this.getPropertyValueMap()}"
+              @dashboardToolsViewPropertyChange="${this.onPropertiesChange}"
             ></dashboard-number-property-view>
           ` : ''}
 
@@ -110,6 +118,8 @@ class PropertiesView extends LitElement {
               .selectedNode="${this.selectedNode}"
               .propertyName="${name}"
               .property="${property}"
+              .propertyValueMap="${this.getPropertyValueMap()}"
+              @dashboardToolsViewPropertyChange="${this.onPropertiesChange}"
             ></dashboard-boolean-property-view>
           ` : ''}
 
@@ -119,6 +129,8 @@ class PropertiesView extends LitElement {
               .selectedNode="${this.selectedNode}"
               .propertyName="${name}"
               .property="${property}"
+              .propertyValueMap="${this.getPropertyValueMap()}"
+              @dashboardToolsViewPropertyChange="${this.onPropertiesChange}"
             ></dashboard-array-property-view>
           ` : ''}
 
@@ -128,6 +140,8 @@ class PropertiesView extends LitElement {
               .selectedNode="${this.selectedNode}"
               .propertyName="${name}"
               .property="${property}"
+              .propertyValueMap="${this.getPropertyValueMap()}"
+              @dashboardToolsViewPropertyChange="${this.onPropertiesChange}"
             ></dashboard-boolean-array-property-view>
           ` : ''}
 
@@ -137,6 +151,8 @@ class PropertiesView extends LitElement {
               .selectedNode="${this.selectedNode}"
               .propertyName="${name}"
               .property="${property}"
+              .propertyValueMap="${this.getPropertyValueMap()}"
+              @dashboardToolsViewPropertyChange="${this.onPropertiesChange}"
             ></dashboard-string-array-property-view>
           ` : ''}
 
@@ -146,6 +162,8 @@ class PropertiesView extends LitElement {
               .selectedNode="${this.selectedNode}"
               .propertyName="${name}"
               .property="${property}"
+              .propertyValueMap="${this.getPropertyValueMap()}"
+              @dashboardToolsViewPropertyChange="${this.onPropertiesChange}"
             ></dashboard-number-array-property-view>
           ` : ''}
 
@@ -155,6 +173,8 @@ class PropertiesView extends LitElement {
               .selectedNode="${this.selectedNode}"
               .propertyName="${name}"
               .property="${property}"
+              .propertyValueMap="${this.getPropertyValueMap()}"
+              @dashboardToolsViewPropertyChange="${this.onPropertiesChange}"
             ></dashboard-text-area-property-view>
           ` : ''}
 
@@ -164,6 +184,8 @@ class PropertiesView extends LitElement {
               .selectedNode="${this.selectedNode}"
               .propertyName="${name}"
               .property="${property}"
+              .propertyValueMap="${this.getPropertyValueMap()}"
+              @dashboardToolsViewPropertyChange="${this.onPropertiesChange}"
             ></dashboard-string-dropdown-property-view>
           ` : ''}
 
@@ -173,6 +195,8 @@ class PropertiesView extends LitElement {
               .selectedNode="${this.selectedNode}"
               .propertyName="${name}"
               .property="${property}"
+              .propertyValueMap="${this.getPropertyValueMap()}"
+              @dashboardToolsViewPropertyChange="${this.onPropertiesChange}"
             ></dashboard-color-picker-property-view>
           ` : ''}
 
@@ -182,6 +206,8 @@ class PropertiesView extends LitElement {
               .selectedNode="${this.selectedNode}"
               .propertyName="${name}"
               .property="${property}"
+              .propertyValueMap="${this.getPropertyValueMap()}"
+              @dashboardToolsViewPropertyChange="${this.onPropertiesChange}"
             ></dashboard-function-property-view>
           ` : ''}
         `)}

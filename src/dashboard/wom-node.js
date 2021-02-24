@@ -224,6 +224,11 @@ export default class WomNode {
     return dashboardConfig ? dashboardConfig.previewable : true;
   }
 
+  getProperties() {
+    const dashboardConfig = this.getDashboardConfig();
+    return dashboardConfig ? dashboardConfig.properties : {};
+  }
+
   getDisplayName() {
     const dashboardConfig = this.getDashboardConfig();
     return dashboardConfig ? dashboardConfig.displayName : this.getName();

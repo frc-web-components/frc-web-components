@@ -14,6 +14,7 @@ class BooleanPropertyView extends PropertyView {
         part="input"
         ?checked="${this.inputValue}"
         @change="${this.onInputChange}"
+        ?disabled="${this.isDisabled()}"
         theme="small"
       ></vaadin-checkbox>
     `;

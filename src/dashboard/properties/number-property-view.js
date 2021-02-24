@@ -15,6 +15,7 @@ class NumberPropertyView extends PropertyView {
         value="${typeof this.inputValue === 'number' ? this.inputValue : ''}"
         @input="${this.onInputChange}"
         @change="${this.onInputChange}"
+        ?disabled="${this.isDisabled()}"
         theme="small"
         has-controls
       ></vaadin-number-field>

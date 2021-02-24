@@ -11,6 +11,7 @@ class StringPropertyView extends PropertyView {
         @input="${this.onInputChange}"
         @change="${this.onInputChange}"
         theme="small"
+        ?disabled="${this.isDisabled()}"
       ></vaadin-text-field>
     `;
   }

@@ -53,6 +53,7 @@ class ArrayPropertyView extends PropertyView {
         @custom-values-set="${this.onCustomValueSet}"
         .items="${this.getAllValues()}"
         .selectedItems="${this.inputValue || []}"
+        ?disabled="${this.isDisabled()}"
       >
       </multiselect-combo-box>
     `;
