@@ -87,6 +87,7 @@ class Camera extends Webbit {
     this.hideCrosshair = false;
     this.crosshairColor = '#ffffff';
     this.crosshairWidth = 2;
+    this.waitImage = 'https://i.ytimg.com/vi/w6geNk3QnBQ/maxresdefault.jpg';
   }
 
   getStreams() {
