@@ -4,6 +4,7 @@ import './frc-dashboard';
 import './frc-dashboard-builder';
 import './dashboard';
 import './components';
+import { ManageExistingComponents } from './existing-components';
 
 window.dashboard = {
   addComponent: window.webbitRegistry.define,
