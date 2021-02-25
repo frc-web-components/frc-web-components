@@ -76,6 +76,16 @@ class Field extends Webbit {
         background-size: cover;
       }
 
+      [part=playing-field-area] {
+        position: absolute;
+        left: var(--playing-field-left, 0);
+        top: var(--playing-field-top, 0);
+        width: var(--playing-field-width, 100%);
+        height: var(--playing-field-height, 100%);
+        border: 2px solid yellow;
+        box-sizing: border-box;
+      }
+
       [part=grid] {
         position: absolute;
         top: 0;
@@ -248,6 +258,7 @@ class Field extends Webbit {
     this.objectElements = [];
     this.unit = baseUnit;
     this.imageObjects = {};
+    this.fullFieldImageSize = null;
   }
 
   updated(changedProperties) {
@@ -271,7 +282,8 @@ class Field extends Webbit {
         image.onload = () => {
           imageObject.loaded = true;
           imageObject.width = image.width;
-          imageObject.height = image.height; 
+          imageObject.height = image.height;
+          this.resizeField();
           this.requestUpdate();
         };
         this.imageObjects[this.image] = imageObject;
@@ -327,7 +339,13 @@ class Field extends Webbit {
       ? (x - width / 2)
       : (x - width / 2 + parentInfo.width / 2);
 
-    element.style.transform = `translate(${toPx(translateX)}px, ${toPx(translateY)}px) rotate(${-rotation + (parentInfo.isField ? 90 : 0)}deg)`;
+    const translateXPx = `${toPx(translateX) + (parentInfo.isField ? fieldInfo.xOffset : 0)}px`;
+    const translateYPx = `${toPx(translateY) + (parentInfo.isField ? fieldInfo.yOffset : 0)}px`;
+    // const translateYPx = `${toPx(parentInfo.height - y - height / 2 )}px`;
+    const rotate = `rotate(${-rotation + (parentInfo.isField ? 90 : 0)}deg)`;
+    // const rotate =  `rotate(0deg)`;
+
+    element.style.transform = `translate(${translateXPx}, ${translateYPx}) ${rotate}`;
 
     // construct parent info for children
     let transformations = parentInfo.transformations;
@@ -375,6 +393,10 @@ class Field extends Webbit {
     // set element pose
     ctx.save();
     bottomCtx.save();
+
+    ctx.translate(fieldInfo.xOffset * 2, fieldInfo.yOffset * 2);
+    bottomCtx.translate(fieldInfo.xOffset * 2, fieldInfo.yOffset * 2);
+
 
     const scale = rect.width * 2 / this.width;
     ctx.scale(scale, scale);
@@ -448,16 +470,28 @@ class Field extends Webbit {
       ctx.beginPath();
       bottomCtx.clearRect(0, 0, bottomCanvas.width, bottomCanvas.height);
       bottomCtx.beginPath();
-
       const rect = field.getBoundingClientRect();
+
+
+      const playingFieldImageRect = this.getPlayingFieldImageRect();
+      const xOffset = playingFieldImageRect.left;
+      const yOffset = playingFieldImageRect.top;
+
+      field.style.setProperty('--playing-field-width', `${playingFieldImageRect.width}px`);
+      field.style.setProperty('--playing-field-height', `${playingFieldImageRect.height}px`);
+      field.style.setProperty('--playing-field-left', `${playingFieldImageRect.left - 1}px`);
+      field.style.setProperty('--playing-field-top', `${playingFieldImageRect.top - 1}px`);
+
       this.setFieldPose({
         canvas,
         ctx,
         bottomCanvas,
         bottomCtx,
-        rect,
-        toPx: (length) => length * rect.width / this.width,
-        toLength: (px) => px * this.width / rect.width,
+        rect: playingFieldImageRect,
+        toPx: (length) => length * playingFieldImageRect.width / this.width,
+        toLength: (px) => px * this.width / playingFieldImageRect.width,
+        xOffset,
+        yOffset,
       });
       window.requestAnimationFrame(updateObjectsAndDrawings);
     };
@@ -465,19 +499,80 @@ class Field extends Webbit {
     window.requestAnimationFrame(updateObjectsAndDrawings);
   }
 
-  resizeField() {
-      const { width, height } = this.getBoundingClientRect();
-      const fieldElement = this.shadowRoot.querySelector('[part=field]');
-      const fieldHeight = !this.width ? 0 : (this.height / this.width) * width;
+  getImageObject(src) {
+    return this.imageObjects[src] || {
+      src,
+      width: 0,
+      height: 0,
+      loaded: false,
+    };
+  }
 
-      if (fieldHeight <= height) {
-        fieldElement.style.setProperty('--field-width', `${width}px`);
-        fieldElement.style.setProperty('--field-height', `${fieldHeight}px`);
-      } else {
-        const fieldWidth = !this.height ? 0 : (this.width / this.height) * height;
-        fieldElement.style.setProperty('--field-width', `${fieldWidth}px`);
-        fieldElement.style.setProperty('--field-height', `${height}px`);
-      }
+  getPlayingFieldDimensions() {
+    const imageObject = this.getImageObject(this.image);
+    const dimensions = { x1: 0, y1: 0, x2: 0, y2: 0 };
+
+    if (!imageObject.loaded) {
+      dimensions.x1 = this.topLeftFieldCornerX || 0;
+      dimensions.y1 = this.topLeftFieldCornerY || 0;
+      dimensions.x2 = this.bottomRightFieldCornerX || this.width;
+      dimensions.y2 = dimensions.y1 + (dimensions.x2 - dimensions.x1) * this.height / this.width;
+    } else {
+      dimensions.x1 = this.topLeftFieldCornerX || 0;
+      dimensions.y1 = this.topLeftFieldCornerY || 0;
+      dimensions.x2 = Math.min(this.bottomRightFieldCornerX || imageObject.width, imageObject.width);
+      dimensions.y2 = Math.min(this.bottomRightFieldCornerY || imageObject.height, imageObject.height);
+    }
+
+    return dimensions;
+  }
+
+  getPlayingFieldImageRect() {
+
+    if (!this.fullFieldImageSize) {
+      return { left: 0, right: 0, top: 0, bottom: 0, width: 0, height: 0 };
+    }
+
+    const imageObject = this.getImageObject(this.image);
+    const fieldDimensions = this.getPlayingFieldDimensions();
+    const imageSize = { 
+      width: imageObject.loaded ? imageObject.width : fieldDimensions.x2, 
+      height: imageObject.loaded ? imageObject.height : fieldDimensions.y2
+    };
+
+    const multiplier =  this.fullFieldImageSize.width / imageSize.width;
+    const left = fieldDimensions.x1 * multiplier;
+    const right = fieldDimensions.x2 * multiplier;
+    const top = fieldDimensions.y1 * multiplier;
+    const bottom = fieldDimensions.y2 * multiplier;
+    const width = right - left;
+    const height = bottom - top;
+
+    return { left, right, top, bottom, width, height };
+  }
+
+  resizeField() {
+    const fieldElement = this.shadowRoot.querySelector('[part=field]');
+    const imageObject = this.getImageObject(this.image);
+    const elementSize = this.getBoundingClientRect();
+    const fieldDimensions = this.getPlayingFieldDimensions();
+
+    let imageSize = { 
+      width: imageObject.loaded ? imageObject.width : fieldDimensions.x2, 
+      height: imageObject.loaded ? imageObject.height : fieldDimensions.y2
+    };
+
+    const fieldHeight = !imageSize.width ? 0 : (imageSize.height / imageSize.width) * elementSize.width;
+
+    if (fieldHeight <= elementSize.height) {
+      this.fullFieldImageSize = { width: elementSize.width, height: fieldHeight };
+    } else {
+      const fieldWidth = !imageSize.height ? 0 : (imageSize.width / imageSize.height) * elementSize.height;
+      this.fullFieldImageSize = { width: fieldWidth, height: elementSize.height };
+    }
+
+    fieldElement.style.setProperty('--field-width', `${this.fullFieldImageSize.width}px`);
+    fieldElement.style.setProperty('--field-height', `${this.fullFieldImageSize.height}px`);
   }
 
   resized() {
@@ -492,6 +587,7 @@ class Field extends Webbit {
 
     return html`   
       <div part="field">
+        <div part="playing-field-area"></div>
         ${this.showGrid && this.gridSize > 0 ? html`
           <div part="grid">
             ${svg`

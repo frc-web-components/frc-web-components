@@ -1,5 +1,6 @@
 import FieldObject from './field-object';
 import { objectWithout } from './utils';
+import { convert } from './units';
 
 class FieldRobot extends FieldObject {
 
@@ -17,7 +18,8 @@ class FieldRobot extends FieldObject {
   static get properties() {
     return {
       ...objectWithout(super.properties, ['draw']),
-      color: { type: String, inputType: 'ColorPicker' }
+      color: { type: String, inputType: 'ColorPicker' },
+      pose: { type: Array, inputType: 'hidden', primary: true },
     };  
   }
 
@@ -26,6 +28,19 @@ class FieldRobot extends FieldObject {
     this.color = '#0000ff';
     this.width = 2;
     this.height = 3;
+    this.sourceKey = '/SmartDashboard/Field/Robot';
+    this.sourceProvider = 'NetworkTables';
+  }
+
+  updated(changedProps) {
+    super.updated(changedProps);
+
+    if (changedProps.has('pose') && this.pose instanceof Array && this.pose.length === 3) {
+      const [x, y, angle] = this.pose;
+      this.x = convert(x, 'm', this.unit);
+      this.y = convert(y, 'm', this.unit);
+      this.rot = angle;
+    }
   }
 
   renderDrawing({ bottomCtx, scalingFactor }) {
