@@ -59,6 +59,8 @@ export default class Joystick extends Webbit {
   constructor() {
     super();
     this.gamepad = 0;
+    this.sourceKey = 'joystick/0';
+    this.sourceProvider = 'HALSim';
   }
 
   onButtonPressChange(ev) {

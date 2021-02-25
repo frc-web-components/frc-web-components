@@ -5,23 +5,6 @@ import './field-trajectory';
 import './field-camera';
 import './field-robot';
 
-// const fieldConfig = [
-//   {
-//     label: '2018 Field',
-//     image: 'https://rawcdn.githack.com/frc-web-components/frc-web-components/c33169e74cc12943d310f18c05d0d2495bed54df/field-images/2018-field.jpg',
-//     size: { width: 54, height: 27, unit: 'ft' },
-//   },
-//   {
-//     label: '2019 Field',
-//     image: 'https://rawcdn.githack.com/frc-web-components/frc-web-components/c33169e74cc12943d310f18c05d0d2495bed54df/field-images/2019-field.jpg',
-//     size: { width: 54, height: 27, unit: 'ft' },
-//   },
-//   {
-//     label: '2020 Field',
-//     image: 'https://rawcdn.githack.com/frc-web-components/frc-web-components/c33169e74cc12943d310f18c05d0d2495bed54df/field-images/2020-field.png',
-//     size: { width: 52.4375, height: 26.9375, unit: 'ft' },
-//   },
-// ]
 
 const fieldConfig = [
   {
@@ -35,13 +18,73 @@ const fieldConfig = [
     "field-unit" : "foot"
   },
   {
+    "game" : "Destination: Deep Space",
+    "field-image" : "https://rawcdn.githack.com/wpilibsuite/PathWeaver/036ca81bfc58eeeba047ec469edc54f33831a4c4/src/main/resources/edu/wpi/first/pathweaver/2019-field.jpg",
+    "field-corners": {
+      "top-left" : [217, 40],
+      "bottom-right" : [1372, 615]
+    },
+    "field-size" : [54, 27],
+    "field-unit" : "foot"
+  },
+  {
     "game": "FIRST Power Up",
-    "field-image": "https://rawcdn.githack.com/frc-web-components/frc-web-components/c33169e74cc12943d310f18c05d0d2495bed54df/field-images/2018-field.jpg",
+    "field-image": "https://rawcdn.githack.com/wpilibsuite/PathWeaver/036ca81bfc58eeeba047ec469edc54f33831a4c4/src/main/resources/edu/wpi/first/pathweaver/2018-field.jpg",
     "field-corners": {
       "top-left": [125, 20],
       "bottom-right": [827, 370]
     },
     "field-size": [54, 27],
+    "field-unit": "feet"
+  },
+  {
+    "game": "Barrel Racing Path",
+    "field-image": "https://rawcdn.githack.com/wpilibsuite/PathWeaver/036ca81bfc58eeeba047ec469edc54f33831a4c4/src/main/resources/edu/wpi/first/pathweaver/2021-barrel.png",
+    "field-corners": {
+      "top-left": [20, 20],
+      "bottom-right": [780, 400]
+    },
+    "field-size": [30, 15],
+    "field-unit": "feet"
+  },
+  {
+    "game": "Bounce Path",
+    "field-image": "https://rawcdn.githack.com/wpilibsuite/PathWeaver/036ca81bfc58eeeba047ec469edc54f33831a4c4/src/main/resources/edu/wpi/first/pathweaver/2021-bounce.png",
+    "field-corners": {
+      "top-left": [20, 20],
+      "bottom-right": [780, 400]
+    },
+    "field-size": [30, 15],
+    "field-unit": "feet"
+  },
+  {
+    "game": "Galactic Search A",
+    "field-image": "https://rawcdn.githack.com/wpilibsuite/PathWeaver/036ca81bfc58eeeba047ec469edc54f33831a4c4/src/main/resources/edu/wpi/first/pathweaver/2021-galacticsearcha.png",
+    "field-corners": {
+      "top-left": [20, 20],
+      "bottom-right": [780, 400]
+    },
+    "field-size": [30, 15],
+    "field-unit": "feet"
+  },
+  {
+    "game": "Galactic Search B",
+    "field-image": "https://rawcdn.githack.com/wpilibsuite/PathWeaver/036ca81bfc58eeeba047ec469edc54f33831a4c4/src/main/resources/edu/wpi/first/pathweaver/2021-galacticsearchb.png",
+    "field-corners": {
+      "top-left": [20, 20],
+      "bottom-right": [780, 400]
+    },
+    "field-size": [30, 15],
+    "field-unit": "feet"
+  },
+  {
+    "game": "Slalom Path",
+    "field-image": "https://rawcdn.githack.com/wpilibsuite/PathWeaver/036ca81bfc58eeeba047ec469edc54f33831a4c4/src/main/resources/edu/wpi/first/pathweaver/2021-slalom.png",
+    "field-corners": {
+      "top-left": [20, 20],
+      "bottom-right": [780, 400]
+    },
+    "field-size": [30, 15],
     "field-unit": "feet"
   }
 ]

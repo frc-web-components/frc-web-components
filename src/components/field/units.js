@@ -28,6 +28,7 @@ export const unitAliases = {
   yards: 'yards',
   ft: 'ft',
   feet: 'ft',
+  foot: 'ft',
   in: 'in',
   inches: 'in',
 }
