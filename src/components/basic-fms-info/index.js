@@ -70,6 +70,8 @@ class BasicFmsInfo extends Webbit {
     this.matchNumber = 0;
     this.eventName = '';
     this.fmsControlData = 0;
+    this.sourceKey = '/fmsInfo';
+    this.sourceProvider = 'NetworkTables';
   }
 
   getRobotState() {
