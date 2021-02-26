@@ -98,7 +98,11 @@ class Field extends Webbit {
       // description: 'Component for displaying information about an encoder',
       // documentationLink: 'https://frc-web-components.github.io/components/encoder/',
       allowedChildren: ['frc-field-object', 'frc-field-camera', 'frc-field-trajectory', 'frc-field-robot'],
-
+      dashboardHtml: `
+        <frc-field game="Infinite Recharge">
+          <frc-field-robot></frc-field-robot>
+        </frc-field>
+      `
     };
   }
 
