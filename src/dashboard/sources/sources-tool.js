@@ -153,7 +153,7 @@ class SourcesTool extends LitElement {
   }
 
   getProperties() {
-    const properties = Object.entries(this.selectedNode.getNode().constructor.properties);
+    const properties = Object.entries(this.selectedNode.getProperties());
 
     return properties
       .filter(([name, property]) => {

@@ -181,7 +181,7 @@ class PropertiesTool extends LitElement {
       return html`<p>The properties for the root node cannot be changed.</p>`;
     }
 
-    if (this.selectedNode && !this.selectedNode.isWebbit()) {
+    if (this.selectedNode && !this.selectedNode.isRegistered()) {
       return html`<p>This element does not contain any properties.</p>`;
     }
 

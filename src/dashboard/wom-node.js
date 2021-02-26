@@ -7,15 +7,6 @@ const isWebbit = (domNode) => {
 
   return domNode.constructor.__WEBBIT_CLASSNAME__ === 'Webbit';
 };
-
-const getChildWebbits = (domNode) => {
-  return [...domNode.children].filter(node => {
-    return !node.hasAttribute('is-preview');
-    return true;
-    //return isWebbit(node);
-  });
-};
-
 export default class WomNode {
 
   constructor(node, wom, ancestors = []) {
@@ -24,7 +15,7 @@ export default class WomNode {
     this.wom = wom;
     this.ancestors = ancestors;
     this.childNodes = [];
-    this.slots = isWebbit(node) ? this.getDashboardConfig().slots : ['default'];
+    this.slots = this.isRegistered() ? this.getDashboardConfig().slots : ['default'];
     this.childBySlotNodes = this.slots.map(() => {
       return [];
     });
@@ -166,7 +157,7 @@ export default class WomNode {
   }
 
   build() {
-    this.childNodes = getChildWebbits(this.node).map(node => {
+    this.childNodes = [...this.node.children].map(node => {
       const womNode = new WomNode(node, this.wom, this.ancestors.concat(this));
       const slot = womNode.getSlot();
       const indexOfSlot = this.slots.indexOf(slot);
@@ -261,6 +252,10 @@ export default class WomNode {
 
   getDashboardConfig() {
     return webbitRegistry.getDashboardConfig(this.getName());
+  }
+  
+  isRegistered() {
+    return !!webbitRegistry.get(this.getName());
   }
 
   isRoot() {

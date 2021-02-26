@@ -14,6 +14,11 @@ const {
 addExisting('a', {
   displayName: 'Link',
   category: 'HTML Elements',
+  description: 'description',
+  // slots: ['default', 'b'],
+  properties: {
+    href: { type: String },
+  }
 });
 
 export class ManageExistingComponents {
@@ -92,12 +97,87 @@ export class ManageExistingComponents {
   }
 
   addElement(element) {
+
+    element.webbitPropertyValues = {
+
+    };
+
     this.elements.set(element, { a : 1 });
     console.log('elements:', this.elements);
 
     // check to see if there's a config for this element and it's not a webbit
 
     // observe changes to this element so it can be updated
+  }
+
+  getName(node) {
+    return node.nodeName.toLowerCase();
+  }
+
+  getDashboardConfig(node) {
+    return getDashboardConfig(this.getName(node));
+  }
+
+  getAttributePropertyName(node, attribute) {
+    const dashboardConfig = this.getDashboardConfig(node);
+    const propertyConfig = dashboardConfig.properties;
+    for (let prop in propertyConfig) {
+      if (propertyConfig[prop].attribute === attribute) {
+        return prop;
+      }
+    }
+    return null;
+  }
+
+  attributeToPropertyValue(node, attribute) {
+    const dashboardConfig = this.getDashboardConfig(node);
+    const propertyConfig = dashboardConfig.properties;
+    const propName = this.getAttributePropertyName(node, attribute);
+    const property = propertyConfig[propName];
+
+    if (property.type === String) {
+      return node.hasAttribute(attribute) ? node.getAttribute(attribute) : property.defaultValue;
+    } else if (property.type === Boolean) {
+      return node.hasAttribute(attribute);
+    } else if (property.type === Number) {
+      return node.hasAttribute(attribute) ? parseFloat(node.getAttribute(attribute)) : property.defaultValue;
+    } else if (property.type === Array) {
+      return node.hasAttribute(attribute) ? JSON.parse(node.getAttribute(attribute)) : property.defaultValue;
+    }
+
+    return node.hasAttribute(attribute) ? node.getAttribute(attribute) : property.defaultValue;
+  }
+
+  setAttributeFromProperty(node, propertyName) {
+    const dashboardConfig = this.getDashboardConfig(node);
+    const propertyConfig = dashboardConfig.properties;
+    const property = propertyConfig[propertyName];
+
+    if (!property) {
+      return null;
+    }
+
+    const attribute = property.attribute;
+    const propertyValue = node.webbitPropertyValues[propertyName];
+    
+    if (property.type === Boolean) {
+      if (propertyValue) {
+        node.setAttribute(attribute, '');
+      } else {
+        node.removeAttribute(attribute);
+      }
+    } else if (property.type === Array) {
+      if (propertyValue instanceof Array) {
+        node.setAttribute(attribute, JSON.stringify(propertyValue));
+      }
+    }
+    
+    if (propertyValue === null || propertyValue === undefined || propertyValue.toString === undefined) {
+      node.removeAttribute(attribute);
+    } else {
+      node.setAttribute(attribute, propertyValue.toString());
+    }
+
   }
 
   removeElement(element) {

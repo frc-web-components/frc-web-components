@@ -217,7 +217,7 @@ class PropertiesView extends LitElement {
 
   render() {
 
-    const properties = Object.entries(this.selectedNode.getNode().constructor.properties);
+    const properties = Object.entries(this.selectedNode.getProperties());
 
     const propertiesForSources = properties.filter(([name, property]) => {
       return property.canConnectToSources;
