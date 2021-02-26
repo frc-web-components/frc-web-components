@@ -11,15 +11,15 @@ const {
 } = window.webbitRegistry;
 
 
-addExisting('a', {
-  displayName: 'Link',
-  category: 'HTML Elements',
-  description: 'description',
-  // slots: ['default', 'b'],
-  properties: {
-    href: { type: String },
-  }
-});
+// addExisting('a', {
+//   displayName: 'Link',
+//   category: 'HTML Elements',
+//   description: 'description',
+//   // slots: ['default', 'b'],
+//   properties: {
+//     href: { type: String, defaultValue: '' },
+//   }
+// });
 
 export class ManageExistingComponents {
 
@@ -80,9 +80,6 @@ export class ManageExistingComponents {
       childList: true,
       subtree: true,
     });
-
-    
-
   }
 
   isElementType(name) {
@@ -98,16 +95,47 @@ export class ManageExistingComponents {
 
   addElement(element) {
 
-    element.webbitPropertyValues = {
+    element.webbitPropertyDefaultValues = {};
+    element.webbitPropertyValues = {};
 
-    };
+    const dashboardConfig = this.getDashboardConfig(element);
+    const propertyConfig = dashboardConfig.properties;
 
-    this.elements.set(element, { a : 1 });
-    console.log('elements:', this.elements);
+    for (let propName in propertyConfig) {
+      const property = propertyConfig[propName];
+      element.webbitPropertyDefaultValues[propName] = property.defaultValue;
+      element.webbitPropertyValues[propName] = this.attributeToPropertyValue(element, property.attribute);
+    }
 
-    // check to see if there's a config for this element and it's not a webbit
+    const observer = new MutationObserver(mutations => {
+      for (let mutation of mutations) {
+        if (mutation.type === 'attributes') {
+          const attribute = mutation.attributeName;
+          const propertyName = this.getAttributePropertyName(element, attribute);
+
+          if (propertyName !== null) {
+            const value = this.attributeToPropertyValue(element, attribute);
+            element.webbitPropertyValues[propertyName] = value;
+          }
+        }
+      }
+    });
+
+    observer.observe(element, {
+      attributes: true,
+      attributesFilter: ['source-provider', 'source-key'].concat(Object.keys(propertyConfig))
+    });
+
+    this.elements.set(element, { observer });
+
+    this.setSources(element);
+
 
     // observe changes to this element so it can be updated
+  }
+
+  setSources(element) {
+
   }
 
   getName(node) {
@@ -133,6 +161,11 @@ export class ManageExistingComponents {
     const dashboardConfig = this.getDashboardConfig(node);
     const propertyConfig = dashboardConfig.properties;
     const propName = this.getAttributePropertyName(node, attribute);
+
+    if (propName === null) {
+      return null;
+    }
+
     const property = propertyConfig[propName];
 
     if (property.type === String) {
@@ -171,7 +204,7 @@ export class ManageExistingComponents {
         node.setAttribute(attribute, JSON.stringify(propertyValue));
       }
     }
-    
+
     if (propertyValue === null || propertyValue === undefined || propertyValue.toString === undefined) {
       node.removeAttribute(attribute);
     } else {
@@ -192,20 +225,12 @@ export class ManageExistingComponents {
   unsubscribe(element) {
 
   }
-
-  mapAttributeToProp(element, attribute, value) {
-
-  }
-
-  mapPropToAttribute(element, prop, value) {
-
-  }
 }
 
-const manageExistingComponents = new ManageExistingComponents();
+// const manageExistingComponents = new ManageExistingComponents();
 
 
-addExisting('img', {
-  displayName: 'Image',
-  category: 'HTML Elements',
-});
+// addExisting('img', {
+//   displayName: 'Image',
+//   category: 'HTML Elements',
+// });
