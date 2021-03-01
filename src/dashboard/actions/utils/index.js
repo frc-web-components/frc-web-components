@@ -5,5 +5,4 @@ export  {
   setWebbitSource,
   hasLayoutChanged,
   isLayoutEmpty,
-  setWebbitName,
 } from './basic';
