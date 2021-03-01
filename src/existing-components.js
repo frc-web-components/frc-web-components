@@ -39,7 +39,7 @@ addExisting('a', {
   category: 'HTML Elements',
   description: 'description',
   properties: {
-    href: { type: String, defaultValue: '', showInEditor: true },
+    href: { type: String, defaultValue: '', showInEditor: true, primary: true },
   },
   dashboardHtml: `
     <a href="#"><frc-label text="Label"></frc-label></a>
@@ -172,12 +172,16 @@ export class ManageExistingComponents {
     this.subscribe(element);
   }
 
-  getElement(element) {
-    return this.elements.get(element);
+  setDefaultAttributeValue(element, attribute, value) {
+    const elementObject = this.getElement(element);
+
+    if (elementObject) {
+      elementObject.defaultAttributeValues[attribute] = value;
+    }
   }
 
-  setSources(element) {
-
+  getElement(element) {
+    return this.elements.get(element);
   }
 
   getName(node) {
@@ -206,71 +210,14 @@ export class ManageExistingComponents {
     return null;
   }
 
-  getAttributePropertyName(node, attribute) {
+  getProperty(node, propertyName) {
     const dashboardConfig = this.getDashboardConfig(node);
-    const propertyConfig = dashboardConfig.properties;
-    for (let prop in propertyConfig) {
-      if (propertyConfig[prop].attribute === attribute) {
-        return prop;
-      }
-    }
-    return null;
-  }
 
-  attributeToPropertyValue(node, attribute) {
-    const dashboardConfig = this.getDashboardConfig(node);
-    const propertyConfig = dashboardConfig.properties;
-    const propName = this.getAttributePropertyName(node, attribute);
-
-    if (propName === null) {
-      return null;
+    if (!dashboardConfig) {
+      return;
     }
 
-    const property = propertyConfig[propName];
-
-    if (property.type === String) {
-      return node.hasAttribute(attribute) ? node.getAttribute(attribute) : property.defaultValue;
-    } else if (property.type === Boolean) {
-      return node.hasAttribute(attribute);
-    } else if (property.type === Number) {
-      return node.hasAttribute(attribute) ? parseFloat(node.getAttribute(attribute)) : property.defaultValue;
-    } else if (property.type === Array) {
-      return node.hasAttribute(attribute) ? JSON.parse(node.getAttribute(attribute)) : property.defaultValue;
-    }
-
-    return node.hasAttribute(attribute) ? node.getAttribute(attribute) : property.defaultValue;
-  }
-
-  setAttributeFromProperty(node, propertyName) {
-    const dashboardConfig = this.getDashboardConfig(node);
-    const propertyConfig = dashboardConfig.properties;
-    const property = propertyConfig[propertyName];
-
-    if (!property) {
-      return null;
-    }
-
-    const attribute = property.attribute;
-    const propertyValue = node.webbitPropertyValues[propertyName];
-    
-    if (property.type === Boolean) {
-      if (propertyValue) {
-        node.setAttribute(attribute, '');
-      } else {
-        node.removeAttribute(attribute);
-      }
-    } else if (property.type === Array) {
-      if (propertyValue instanceof Array) {
-        node.setAttribute(attribute, JSON.stringify(propertyValue));
-      }
-    }
-
-    if (propertyValue === null || propertyValue === undefined || propertyValue.toString === undefined) {
-      node.removeAttribute(attribute);
-    } else {
-      node.setAttribute(attribute, propertyValue.toString());
-    }
-
+    return dashboardConfig.properties[propertyName];
   }
 
   removeElement(element) {
@@ -309,6 +256,13 @@ export class ManageExistingComponents {
             this.setAttributeFromSourceValue(element, attribute, value);
           }
         });
+      } else {
+        const primaryPropertyName = this.getPrimaryPropertyName(element);
+
+        if (primaryPropertyName) {
+          const primaryProperty = this.getProperty(element, primaryPropertyName);
+        this.setAttributeFromSourceValue(element, primaryProperty.attribute, source);
+        }
       }
     }, true);
   }
