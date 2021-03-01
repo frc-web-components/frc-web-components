@@ -34,19 +34,19 @@ const isSourceObject = (value) => {
   );
 }
 
-// addExisting('a', {
-//   displayName: 'Link',
-//   category: 'HTML Elements',
-//   description: 'description',
-//   properties: {
-//     href: { type: String, defaultValue: '', showInEditor: true },
-//   },
-//   dashboardHtml: `
-//     <a href="#"><frc-label text="Label"></frc-label></a>
-//   `,
-//   resizable: { left: true, right: true },
-//   layout: 'none',
-// });
+addExisting('a', {
+  displayName: 'Link',
+  category: 'HTML Elements',
+  description: 'description',
+  properties: {
+    href: { type: String, defaultValue: '', showInEditor: true },
+  },
+  dashboardHtml: `
+    <a href="#"><frc-label text="Label"></frc-label></a>
+  `,
+  resizable: { left: true, right: true },
+  layout: 'none',
+});
 
 export class ManageExistingComponents {
 
@@ -140,6 +140,8 @@ export class ManageExistingComponents {
             }
 
             this.subscribe(element);
+          } else {
+            this.setSourceValueFromAttribute(element, attribute);
           }
         }
       }
@@ -153,7 +155,9 @@ export class ManageExistingComponents {
     const defaultAttributeValues = {};
 
     element.getAttributeNames().forEach(attribute => {
-      defaultAttributeValues[attribute] = element.getAttribute(attribute);
+      if (['source-provider', 'source-key'].indexOf(attribute) < 0) {
+        defaultAttributeValues[attribute] = element.getAttribute(attribute);
+      }
     }); 
 
     this.elements.set(element, { 
@@ -363,14 +367,14 @@ export class ManageExistingComponents {
 
     if (typeof sourceValue === 'string') {
       newSourceValue = element.getAttribute(attribute);
-    } else if (typeof value === 'number') {
+    } else if (typeof sourceValue === 'number') {
       const newValue = parseFloat(element.getAttribute(attribute));
       if (!isNaN(newValue)) {
         newSourceValue = newValue;
       }
-    } else if (typeof value === 'boolean') {
+    } else if (typeof sourceValue === 'boolean') {
       newSourceValue = element.hasAttribute(attribute);
-    } else if (value instanceof Array) {
+    } else if (sourceValue instanceof Array) {
       try {
         const array = JSON.parse(element.getAttribute(attribute));
         if (array instanceof Array) {
@@ -382,7 +386,11 @@ export class ManageExistingComponents {
     if (newSourceValue !== null) {
       const sourceProvider = getSourceProvider(elementObject.sourceProvider);
       if (sourceProvider) {
-        sourceProvider.userUpdate(sourceKey, newSourceValue);
+        const rawSource = sourceProvider.getRawSource(sourceKey);
+
+        if (rawSource && rawSource.__key__) {
+          sourceProvider.userUpdate(rawSource.__key__, newSourceValue);
+        }
       }
     }
   }
@@ -398,10 +406,10 @@ export class ManageExistingComponents {
   }
 }
 
-// window.manageExistingComponents = new ManageExistingComponents();
+window.manageExistingComponents = new ManageExistingComponents();
 
 
-// addExisting('img', {
-//   displayName: 'Image',
-//   category: 'HTML Elements',
-// });
+addExisting('img', {
+  displayName: 'Image',
+  category: 'HTML Elements',
+});
