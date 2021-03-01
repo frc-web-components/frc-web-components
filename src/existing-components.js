@@ -180,6 +180,39 @@ export class ManageExistingComponents {
     }
   }
 
+  setSourceProvider(element, sourceProvider) {
+    const elementObject = this.getElement(element);
+
+    if (elementObject) {
+      element.setAttribute('source-provider', sourceProvider);
+    }
+  }
+
+  setSourceKey(element, sourceKey) {
+    const elementObject = this.getElement(element);
+
+    if (elementObject) {
+      element.setAttribute('source-key', sourceKey);
+    }
+  }
+
+  getDefaultAttributeValue(element, attribute) {
+    const elementObject = this.getElement(element);
+    return elementObject 
+      ? elementObject.defaultAttributeValues[attribute]
+      : null;
+  }
+
+  getSourceProvider(element) {
+    const elementObject = this.getElement(element);
+    return elementObject ? elementObject.sourceProvider : null;
+  }
+
+  getSourceKey(element) {
+    const elementObject = this.getElement(element);
+    return elementObject ? elementObject.sourceKey : null;
+  }
+
   getElement(element) {
     return this.elements.get(element);
   }
