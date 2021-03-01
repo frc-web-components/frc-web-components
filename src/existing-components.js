@@ -34,19 +34,19 @@ const isSourceObject = (value) => {
   );
 }
 
-addExisting('a', {
-  displayName: 'Link',
-  category: 'HTML Elements',
-  description: 'description',
-  properties: {
-    href: { type: String, defaultValue: '', showInEditor: true },
-  },
-  dashboardHtml: `
-    <a href="#"><frc-label text="Label"></frc-label></a>
-  `,
-  resizable: { left: true, right: true },
-  layout: 'none',
-});
+// addExisting('a', {
+//   displayName: 'Link',
+//   category: 'HTML Elements',
+//   description: 'description',
+//   properties: {
+//     href: { type: String, defaultValue: '', showInEditor: true },
+//   },
+//   dashboardHtml: `
+//     <a href="#"><frc-label text="Label"></frc-label></a>
+//   `,
+//   resizable: { left: true, right: true },
+//   layout: 'none',
+// });
 
 export class ManageExistingComponents {
 
@@ -398,10 +398,10 @@ export class ManageExistingComponents {
   }
 }
 
-window.manageExistingComponents = new ManageExistingComponents();
+// window.manageExistingComponents = new ManageExistingComponents();
 
 
-addExisting('img', {
-  displayName: 'Image',
-  category: 'HTML Elements',
-});
+// addExisting('img', {
+//   displayName: 'Image',
+//   category: 'HTML Elements',
+// });

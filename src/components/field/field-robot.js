@@ -26,10 +26,11 @@ class FieldRobot extends FieldObject {
   constructor() {
     super();
     this.color = '#0000ff';
-    this.width = 2;
-    this.height = 3;
+    this.width = .6;
+    this.height = .9;
     this.sourceKey = '/SmartDashboard/Field/Robot';
     this.sourceProvider = 'NetworkTables';
+    this.unit = 'm';
   }
 
   updated(changedProps) {
@@ -37,8 +38,8 @@ class FieldRobot extends FieldObject {
 
     if (changedProps.has('pose') && this.pose instanceof Array && this.pose.length === 3) {
       const [x, y, angle] = this.pose;
-      this.x = convert(x, 'm', this.unit);
-      this.y = convert(y, 'm', this.unit);
+      this.x = x;
+      this.y = y;
       this.rot = angle;
     }
   }
