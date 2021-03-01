@@ -23,6 +23,11 @@ class PropertiesView extends LitElement {
       [part=category-name] {
         text-transform: capitalize;
       }
+
+      vaadin-form-item, vaadin-text-field {
+        width: 100%;
+      }
+      
     `;
   }
 
@@ -89,6 +94,14 @@ class PropertiesView extends LitElement {
 
     return html`
       <vaadin-form-layout>
+        <vaadin-form-item>
+          <label slot="label">Component Type</label>
+          <vaadin-text-field
+            readonly
+            value="${this.selectedNode.getName()}"
+            theme="small"
+          ></vaadin-text-field>
+        </vaadin-form-item>
         ${properties.map(([name, property]) => html`
           ${property.inputType === 'String' ? html`
             <dashboard-string-property-view
@@ -219,12 +232,8 @@ class PropertiesView extends LitElement {
 
     const properties = Object.entries(this.selectedNode.getProperties());
 
-    const propertiesForSources = properties.filter(([name, property]) => {
-      return property.canConnectToSources;
-    });
-
     return html`
-      ${this.renderProperties(propertiesForSources)}
+      ${this.renderProperties(properties)}
     `;
   }
 }

@@ -10,18 +10,7 @@ class PropertiesTool extends LitElement {
         padding: 15px 10px;
         font-family: sans-serif;
       }
-
-      [part=main-fields] {
-        display: flex;
-      }
-
-      [part=main-fields] vaadin-text-field {
-        flex: 1;
-        margin-right: 7px;
-        min-width: 120px;
-        padding-top: 0;
-      }
-
+      
       [part=buttons] {
         display: flex;
         justify-content: flex-end;
@@ -47,7 +36,6 @@ class PropertiesTool extends LitElement {
     return {
       wom: { type: Object },
       selectedNode: { type: Object, attribute: false },
-      webbitNameInput: { type: String, attribute: false },
     };
   }
 
@@ -55,47 +43,17 @@ class PropertiesTool extends LitElement {
     super();
     this.wom = null;
     this.selectedNode = null;
-    this.webbitNameInput = '';
-  }
-
-  getComponentName() {
-    return this.selectedNode.getName();
-  }
-
-  updated(changedProperties) {
-    if (changedProperties.has('selectedNode') && this.selectedNode) {
-      this.webbitNameInput = this.getWebbitName();
-    }
-  }
-
-  getWebbitName() {
-    return this.selectedNode.getWebbitName();
-  }
-
-  isWebbitNameInputModified() {
-    if (!this.selectedNode) {
-      return false;
-    }
-
-    return this.getWebbitName() !== this.webbitNameInput || this.webbitNameInput === null;
   }
 
   isInputModified() {
     const propertiesViewElement = this.shadowRoot.querySelector('[part="properties-view"]');
     return (
-      this.isWebbitNameInputModified() || 
       (propertiesViewElement ? propertiesViewElement.isInputModified() : false)
     );
   }
 
-  onWebbitNameInputChange(ev) {
-    const input = ev.target || ev.path[0];
-    this.webbitNameInput = input.value;
-  }
-
   onCancel() {
     const propertiesViewElement = this.shadowRoot.querySelector('[part="properties-view"]');
-    this.webbitNameInput = this.getWebbitName();
     propertiesViewElement.cancel();
     this.requestUpdate();
   }
@@ -103,12 +61,10 @@ class PropertiesTool extends LitElement {
   onConfirm() {
 
     const propertiesViewElement = this.shadowRoot.querySelector('[part="properties-view"]');
-    const webbitNameNode = this.shadowRoot.querySelector('[part="webbit-name"]');
 
-    if (!webbitNameNode.invalid && propertiesViewElement.isValid()) {
+    if (propertiesViewElement.isValid()) {
       this.wom.executeAction('setProperties', { 
         propertyValueMap: propertiesViewElement.getPropertyValueMap(), 
-        webbitName: this.webbitNameInput
       });
       this.requestUpdate();
     }
@@ -120,25 +76,7 @@ class PropertiesTool extends LitElement {
 
   renderWebbit() {
     return html`
-      <p>Properties for <span>${this.selectedNode.getWebbitName() || this.selectedNode.getDisplayName()}</span></p>
-      <div part="main-fields">
-        <vaadin-text-field
-          label="Element Name"
-          part="webbit-name"
-          clear-button-visible
-          value="${this.webbitNameInput || ''}"
-          @input="${this.onWebbitNameInputChange}"
-          @change="${this.onWebbitNameInputChange}"
-          theme="small"
-        ></vaadin-text-field>
-        <vaadin-text-field
-          label="Component Type"
-          readonly
-          value="${this.getComponentName()}"
-          theme="small"
-        ></vaadin-text-field>
-      </div>
-
+      <p>Properties for <span>${this.selectedNode.getWebbitName() || this.selectedNode.getName()}</span></p>
       <dashboard-properties-view
         part="properties-view"
         .wom="${this.wom}"

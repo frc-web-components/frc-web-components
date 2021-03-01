@@ -1,4 +1,3 @@
-import { FlowLayout } from '@webbitjs/webbit';
 
 const isWebbit = (domNode) => {
   if (!(domNode instanceof Object)) {
@@ -217,7 +216,22 @@ export default class WomNode {
 
   getProperties() {
     const dashboardConfig = this.getDashboardConfig();
-    return dashboardConfig ? dashboardConfig.properties : {};
+    const props = dashboardConfig ? dashboardConfig.properties : {};
+    const properties = {};
+    for (let propName in props) {
+      const property = props[propName];
+      if (property.canConnectToSources) {
+        properties[propName] = property;
+      }
+    }
+    return properties;
+  }
+
+  getPropertyValueMap() {
+    const properties = this.getProperties();
+    const object = isWebbit(this.node) ? this.node : this.node.webbitPropertyValues;
+    const propertyValueMap = {};
+    Object.keys(properties)
   }
 
   getDisplayName() {
@@ -239,15 +253,21 @@ export default class WomNode {
   }
 
   getSourceProvider() {
-    return isWebbit(this.node) ? this.node.sourceProvider : null;
+    return this.isRegistered() ? this.node.sourceProvider : null;
   }
 
   getSourceKey() {
-    return isWebbit(this.node) ? this.node.sourceKey : null;
+    return this.isRegistered() ? this.node.sourceKey : null;
   }
 
   getDefaultProps() {
-    return isWebbit(this.node) ? this.node.defaultProps : {};
+    if (isWebbit(this.node)) {
+      return this.node.defaultProps;
+    } else if (this.isRegistered()) {
+      return this.node.webbitPropertyDefaultValues;
+    } else {
+      return {};
+    }
   }
 
   getDashboardConfig() {

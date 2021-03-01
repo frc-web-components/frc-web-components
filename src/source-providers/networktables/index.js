@@ -88,9 +88,9 @@ export default class NetworkTablesProvider extends SourceProvider {
   setAddress(address) {
     if (address === 'gitpod') {
       const addressPart = window.location.href.substring(12, window.location.href.length - 1);
-      NetworkTables.connect(`8888${addressPart}`);
+      NetworkTables.connectToWs(`8888${addressPart}`);
     } else {
-      NetworkTables.connect(`${address}:8888`);
+      NetworkTables.connectToWs(`${address}:8888`);
     }
   }
 
