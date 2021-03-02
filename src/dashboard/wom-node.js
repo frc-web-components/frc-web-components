@@ -85,27 +85,27 @@ export default class WomNode {
     return new Promise(resolve => {
       window.webbitRegistry.setCloning(true);
       const clonedNode = this.node.cloneNode(true);
-      clonedNode.isClone = true;
-      clonedNode.removeAttribute('webbit-id');
+      clonedNode.style.display = 'none';
       document.body.append(clonedNode);
       [...clonedNode.querySelectorAll('[source-key]'), clonedNode].forEach(node => {
-        if (!isWebbit(node)) {
-          return;
+        if (isWebbit(node)) {
+          node.isClone = true;
+          const position = getElementPosition(node, clonedNode);
+          const originalWebbit = getElementFromPosition(position, this.node);
+
+          Object.entries(originalWebbit.defaultProps).forEach(([prop, value]) => {
+            if (node.tagName.toLowerCase() === 'frc-field-robot') {
+            }
+            node[prop] = value;
+          });
+          node.removeAttribute('webbit-id');
         }
-
-        node.isClone = true;
-        node.removeAttribute('webbit-id');
-        const position = getElementPosition(node, clonedNode);
-        const originalWebbit = getElementFromPosition(position, this.node);
-
-        Object.entries(originalWebbit.defaultProps).forEach(([prop, value]) => {
-          node[prop] = value;
-        });
       });
-      window.webbitRegistry.setCloning(false);
-      clonedNode.remove();
       setTimeout(() => {
-        resolve(outer ? clonedNode.outerHTML : clonedNode.innerHTML);
+        const html = outer ? clonedNode.outerHTML : clonedNode.innerHTML;
+        window.webbitRegistry.setCloning(false);
+        clonedNode.remove();
+        resolve(html);
       });
     });
   }
