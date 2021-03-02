@@ -25,10 +25,6 @@ export const setProperties = (node, propertyValueMap) => {
   });
 };
 
-export const setWebbitId = (node, webbitId) => {
-  node.webbitId = webbitId;
-};
-
 export const setWebbitSource = (node, sourceProvider, sourceKey) => {
   node.sourceProvider = sourceProvider;
   node.sourceKey = sourceKey;

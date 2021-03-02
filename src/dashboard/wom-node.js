@@ -6,6 +6,36 @@ const isWebbit = (domNode) => {
 
   return domNode.constructor.__WEBBIT_CLASSNAME__ === 'Webbit';
 };
+
+
+const getElementPosition = (element, rootElement = document.body) => {
+  let position = [];
+  let child = element;
+
+  while (child !== rootElement && child !== document.body) {
+    const parent = child.parentElement;
+    if (!parent) {
+      return position;
+    }
+    const index = [...parent.children].indexOf(child);
+    position = [index, ...position];
+    child = parent;
+  }
+
+  return position;
+};
+
+const getElementFromPosition = (position, rootElement = document.body) => {
+  let element = rootElement;
+  for (let index of position) {
+    element = element.children[index];
+    if (!element) {
+      return null;
+    }
+  }
+  return element;
+};
+
 export default class WomNode {
 
   constructor(node, wom, ancestors = []) {
@@ -18,10 +48,6 @@ export default class WomNode {
     this.childBySlotNodes = this.slots.map(() => {
       return [];
     });
-
-    if (!this.node.webbitId) {
-      this.node.webbitId = webbitRegistry._generateWebbitId(this.node);
-    }
 
     this.selectionBox = null;
   }
@@ -59,19 +85,22 @@ export default class WomNode {
     return new Promise(resolve => {
       window.webbitRegistry.setCloning(true);
       const clonedNode = this.node.cloneNode(true);
+      clonedNode.isClone = true;
+      clonedNode.removeAttribute('webbit-id');
       document.body.append(clonedNode);
-      [...clonedNode.querySelectorAll('[webbit-id]'), clonedNode].forEach(node => {
+      [...clonedNode.querySelectorAll('[source-key]'), clonedNode].forEach(node => {
         if (!isWebbit(node)) {
           return;
         }
+
         node.isClone = true;
-        const originalWebbit = window.webbitRegistry.getWebbit(node.webbitId);
+        node.removeAttribute('webbit-id');
+        const position = getElementPosition(node, clonedNode);
+        const originalWebbit = getElementFromPosition(position, this.node);
 
         Object.entries(originalWebbit.defaultProps).forEach(([prop, value]) => {
           node[prop] = value;
         });
-
-        node.removeAttribute('webbit-id');
       });
       window.webbitRegistry.setCloning(false);
       clonedNode.remove();
@@ -242,10 +271,6 @@ export default class WomNode {
   getLayout() {
     const dashboardConfig = this.getDashboardConfig();
     return dashboardConfig ? dashboardConfig.layout : 'absolute';
-  }
-
-  getWebbitId() {
-    return this.node.webbitId;
   }
 
   getWebbitName() {

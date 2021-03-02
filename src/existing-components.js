@@ -1,10 +1,9 @@
 
-const { 
-  isInstanceOfWebbit, 
-  whenAnyDefined, 
-  getDashboardConfig, 
-  getWebbit, 
-  _generateWebbitId, 
+const {
+  isInstanceOfWebbit,
+  whenAnyDefined,
+  getDashboardConfig,
+  getWebbit,
   addExisting,
   getRegisteredNames,
   get,
@@ -123,7 +122,7 @@ export class ManageExistingComponents {
     }
 
     const dashboardConfig = this.getDashboardConfig(element);
-    
+
     const observer = new MutationObserver(mutations => {
       for (let mutation of mutations) {
         if (mutation.type === 'attributes') {
@@ -158,15 +157,14 @@ export class ManageExistingComponents {
       if (['source-provider', 'source-key'].indexOf(attribute) < 0) {
         defaultAttributeValues[attribute] = element.getAttribute(attribute);
       }
-    }); 
+    });
 
-    this.elements.set(element, { 
+    this.elements.set(element, {
       observer,
-      webbitId: '',
       defaultAttributeValues,
       sourceProvider: null,
       sourceKey: null,
-      unsubscribe: () => {},
+      unsubscribe: () => { },
     });
 
     this.subscribe(element);
@@ -198,7 +196,7 @@ export class ManageExistingComponents {
 
   getDefaultAttributeValue(element, attribute) {
     const elementObject = this.getElement(element);
-    return elementObject 
+    return elementObject
       ? elementObject.defaultAttributeValues[attribute]
       : null;
   }
@@ -261,9 +259,9 @@ export class ManageExistingComponents {
   }
 
   subscribe(element) {
-    
+
     const elementObject = this.elements.get(element);
-    
+
     if (!elementObject) {
       return;
     }
@@ -294,7 +292,7 @@ export class ManageExistingComponents {
 
         if (primaryPropertyName) {
           const primaryProperty = this.getProperty(element, primaryPropertyName);
-        this.setAttributeFromSourceValue(element, primaryProperty.attribute, source);
+          this.setAttributeFromSourceValue(element, primaryProperty.attribute, source);
         }
       }
     }, true);
@@ -367,7 +365,7 @@ export class ManageExistingComponents {
         if (array instanceof Array) {
           newSourceValue = array;
         }
-      } catch(e) {}
+      } catch (e) { }
     }
 
     if (newSourceValue !== null) {
@@ -384,7 +382,7 @@ export class ManageExistingComponents {
 
   unsubscribe(element) {
     const elementObject = this.elements.get(element);
-  
+
     if (elementObject) {
       elementObject.sourceProvider = null;
       elementObject.sourceKey = null;

@@ -25,7 +25,6 @@ class StylesTool extends LitElement {
     return {
       wom: { type: Object },
       selectedNode: { type: Object, attribute: false },
-      webbitIdInput: { type: String, attribute: false },
     };
   }
 
@@ -33,12 +32,11 @@ class StylesTool extends LitElement {
     super();
     this.wom = null;
     this.selectedNode = null;
-    this.webbitIdInput = '';
   }
 
   renderWebbit() {
     return html`
-      <p>Styles for <span>${this.selectedNode.getWebbitId()}</span></p>
+      <p>Styles for <span>${this.selectedNode.getName()}</span></p>
     `;
   }
 

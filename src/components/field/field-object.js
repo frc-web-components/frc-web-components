@@ -103,7 +103,7 @@ export default class FieldObject extends Webbit {
         unit: this.unit,
       })();
     } catch(e) {
-      console.error(`Error drawing element ${this.webbitId}:`, e);
+      console.error(`Error drawing element:`, e);
     }
   }
 }

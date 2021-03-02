@@ -1,7 +1,6 @@
 export  { 
   createElement, 
   setProperties, 
-  setWebbitId, 
   setWebbitSource,
   hasLayoutChanged,
   isLayoutEmpty,
