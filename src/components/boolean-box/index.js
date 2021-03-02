@@ -1,6 +1,6 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { Webbit, html, css, LitElement } from '@webbitjs/webbit';
 
-class BooleanBox extends Webbit {
+class BooleanBox extends LitElement {
 
   static get dashboardConfig() {
     return {
@@ -38,9 +38,9 @@ class BooleanBox extends Webbit {
   static get properties() {
     return {
       value: { type: Boolean, primary: true },
-      defaultColor: { type: String },
-      trueColor: { type: String },
-      falseColor: { type: String },
+      defaultColor: { type: String, attribute: 'default-color' },
+      trueColor: { type: String, attribute: 'true-color' },
+      falseColor: { type: String, attribute: 'false-color' },
       label: { type: String },
     };
   }
@@ -81,4 +81,4 @@ class BooleanBox extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-boolean-box', BooleanBox);
+customElements.define('frc-boolean-box', BooleanBox);

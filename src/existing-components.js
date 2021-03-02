@@ -253,7 +253,9 @@ export class ManageExistingComponents {
 
   removeElement(element) {
     if (this.elements.has(element)) {
-      this.elements.get(element).observer.disconnect();
+      const elementObject = this.elements.get(element);
+      elementObject.observer.disconnect();
+      elementObject.unsubscribe();
       this.elements.delete(element);
     }
   }
@@ -278,16 +280,73 @@ export class ManageExistingComponents {
     elementObject.sourceProvider = sourceProvider;
     elementObject.sourceKey = sourceKey;
 
-    elementObject.unsubscribe = subscribe(sourceProvider, sourceKey, source => {
-      if (isSourceObject(source)) {
-        Object.getOwnPropertyNames(source).forEach(prop => {
-          const value = source[prop];
-          const attribute = camelToKebab(prop);
+    elementObject.unsubscribe = subscribe(sourceProvider, sourceKey, (source, parentKey, key) => {
+      
+      if (typeof source === 'undefined') { // source has been removed, so set attributes to defaults
+
+        console.log('source removed');
+
+        const defaultAttributeValues = elementObject.defaultAttributeValues;
+        const currentAttributes = element.getAttributeNames().filter(attribute => {
+          return ['source-provider', 'source-key', 'webbit-id'].indexOf(attribute) < 0;
+        });
+        Object.entries(defaultAttributeValues).forEach(([attribute, value]) => {
+          element.setAttribute(attribute, value);
+        });
+
+        currentAttributes.forEach(attribute => {
+          if (typeof defaultAttributeValues[attribute] === 'undefined') {
+            element.removeAttribute(attribute);
+          }
+        });
+
+      } else if (isSourceObject(source)) { // If its a source object set attributes from props
+
+
+        // if parentKey and key are equal, map all props to attributes
+        if (parentKey === key) {
+          Object.getOwnPropertyNames(source).forEach(prop => {
+            const value = source[prop];
+            const attribute = camelToKebab(prop);
+            if (['source-provider', 'source-key', 'webbit-id'].indexOf(attribute) < 0) {
+              this.setAttributeFromSourceValue(element, attribute, value);
+            }
+          }); 
+        }
+
+        const prop = key.replace(parentKey + '/', '');
+
+        // If prop contains a / that means a direct child of the source hasn't change, so don't update
+        if (prop.indexOf('/') > -1) {
+          return;
+        }
+
+        const value = source[prop];
+        const attribute = camelToKebab(prop);
+
+        // Don't allow source to modify one of these attributes
+        if (['source-provider', 'source-key', 'webbit-id'].indexOf(attribute) > -1) {
+          return;
+        }
+
+        // source has been removed, so set attribute to its default value
+        if (typeof value === 'undefined') {
+
+          const defaultAttributeValues = elementObject.defaultAttributeValues;
+
+          if (attribute in defaultAttributeValues) {
+            element.setAttribute(attribute, defaultAttributeValues[attribute]);
+          } else {
+            element.removeAttribute(attribute);
+          }
+        } else {
           if (['source-provider', 'source-key', 'webbit-id'].indexOf(attribute) < 0) {
             this.setAttributeFromSourceValue(element, attribute, value);
           }
-        });
-      } else {
+        }
+
+      } else { // See if a primary attribute exists. If it does set primary attribute to the source value
+
         const primaryPropertyName = this.getPrimaryPropertyName(element);
 
         if (primaryPropertyName) {
