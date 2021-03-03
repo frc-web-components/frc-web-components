@@ -339,10 +339,22 @@ export default class WomNode {
       if (window.manageExistingComponents.hasElement(this.node)) {
         Object.entries(propertyValueMap).forEach(([propName, value]) => {
           if (propName in properties) {
-            window.manageExistingComponents.setDefaultAttributeValue(
-              properties[propName].attribute,
-              value
+            const isConnectedToSource = window.manageExistingComponents.isAttributeConnectedToSource(
+              this.node,
+              properties[propName].attribute
             );
+            if (isConnectedToSource) {
+              window.manageExistingComponents.setDefaultAttributeValue(
+                properties[propName].attribute,
+                value
+              );
+            } else {
+              setAttributeFromSourceValue(
+                this.node,
+                properties[propName].attribute,
+                value
+              );
+            }
           }
         });
       } else {

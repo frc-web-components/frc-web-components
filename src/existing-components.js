@@ -1,12 +1,8 @@
 
 const {
   isInstanceOfWebbit,
-  whenAnyDefined,
   getDashboardConfig,
-  getWebbit,
   addExisting,
-  getRegisteredNames,
-  get,
 } = window.webbitRegistry;
 
 
@@ -240,6 +236,26 @@ export class ManageExistingComponents {
 
   hasElement(element) {
     return this.elements.has(element);
+  }
+
+  isAttributeConnectedToSource(element, attribute) {
+    const elementObject = this.getElement(element);
+    if (!elementObject) {
+      return false;
+    }
+    const source = getSource(elementObject.sourceProvider, elementObject.sourceKey);
+    if (isSourceObject(source)) {
+      for (let property of Object.getOwnPropertyNames(source)) {
+        if (camelToKebab(property) === attribute) {
+          return true;
+        }
+      }
+      return false;
+    }
+    
+    const primaryPropertyName = this.getPrimaryPropertyName(element);
+    const primaryProperty = this.getProperty(element, primaryPropertyName);
+    return primaryProperty.attribute === attribute;
   }
 
   getName(node) {
