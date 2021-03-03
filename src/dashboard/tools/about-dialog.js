@@ -42,7 +42,7 @@ class AboutDialog extends LitElement {
         </style>
         <div class="about-dialog-content">
           <h1>FWC Dashboard</h1>
-          <p>Version <span>3.0.8</span></p>
+          <p>Version <span>3.0.9</span></p>
           <vaadin-button>Close</vaadin-button>
         </div>
       `;
