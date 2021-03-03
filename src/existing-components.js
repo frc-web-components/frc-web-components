@@ -47,6 +47,24 @@ addExisting('a', {
   layout: 'none',
 });
 
+
+export const setAttributeFromSourceValue = (element, attribute, value) => {
+  if (typeof value === 'string') {
+    element.setAttribute(attribute, value);
+  } else if (typeof value === 'number') {
+    element.setAttribute(attribute, value);
+  } else if (typeof value === 'boolean') {
+    if (value) {
+      element.setAttribute(attribute, '');
+    } else {
+      element.removeAttribute(attribute);
+    }
+  } else if (value instanceof Array) {
+    element.setAttribute(attribute, JSON.stringify(value));
+  }
+}
+
+
 export class ManageExistingComponents {
 
 
@@ -154,7 +172,7 @@ export class ManageExistingComponents {
     const defaultAttributeValues = {};
 
     element.getAttributeNames().forEach(attribute => {
-      if (['source-provider', 'source-key'].indexOf(attribute) < 0) {
+      if (['source-provider', 'source-key', 'webbit-id'].indexOf(attribute) < 0) {
         defaultAttributeValues[attribute] = element.getAttribute(attribute);
       }
     });
@@ -201,6 +219,11 @@ export class ManageExistingComponents {
       : null;
   }
 
+  getDefaultAttributeValues(element) {
+    const elementObject = this.getElement(element);
+    return elementObject ? elementObject.defaultAttributeValues : {};
+  }
+
   getSourceProvider(element) {
     const elementObject = this.getElement(element);
     return elementObject ? elementObject.sourceProvider : null;
@@ -213,6 +236,10 @@ export class ManageExistingComponents {
 
   getElement(element) {
     return this.elements.get(element);
+  }
+
+  hasElement(element) {
+    return this.elements.has(element);
   }
 
   getName(node) {
@@ -255,7 +282,7 @@ export class ManageExistingComponents {
     if (this.elements.has(element)) {
       const elementObject = this.elements.get(element);
       elementObject.observer.disconnect();
-      elementObject.unsubscribe();
+      this.unsubscribe(element);
       this.elements.delete(element);
     }
   }
@@ -284,8 +311,6 @@ export class ManageExistingComponents {
       
       if (typeof source === 'undefined') { // source has been removed, so set attributes to defaults
 
-        console.log('source removed');
-
         const defaultAttributeValues = elementObject.defaultAttributeValues;
         const currentAttributes = element.getAttributeNames().filter(attribute => {
           return ['source-provider', 'source-key', 'webbit-id'].indexOf(attribute) < 0;
@@ -309,7 +334,7 @@ export class ManageExistingComponents {
             const value = source[prop];
             const attribute = camelToKebab(prop);
             if (['source-provider', 'source-key', 'webbit-id'].indexOf(attribute) < 0) {
-              this.setAttributeFromSourceValue(element, attribute, value);
+              setAttributeFromSourceValue(element, attribute, value);
             }
           }); 
         }
@@ -341,7 +366,7 @@ export class ManageExistingComponents {
           }
         } else {
           if (['source-provider', 'source-key', 'webbit-id'].indexOf(attribute) < 0) {
-            this.setAttributeFromSourceValue(element, attribute, value);
+            setAttributeFromSourceValue(element, attribute, value);
           }
         }
 
@@ -351,26 +376,10 @@ export class ManageExistingComponents {
 
         if (primaryPropertyName) {
           const primaryProperty = this.getProperty(element, primaryPropertyName);
-          this.setAttributeFromSourceValue(element, primaryProperty.attribute, source);
+          setAttributeFromSourceValue(element, primaryProperty.attribute, source);
         }
       }
     }, true);
-  }
-
-  setAttributeFromSourceValue(element, attribute, value) {
-    if (typeof value === 'string') {
-      element.setAttribute(attribute, value);
-    } else if (typeof value === 'number') {
-      element.setAttribute(attribute, value);
-    } else if (typeof value === 'boolean') {
-      if (value) {
-        element.setAttribute(attribute, '');
-      } else {
-        element.removeAttribute(attribute);
-      }
-    } else if (value instanceof Array) {
-      element.setAttribute(attribute, JSON.stringify(value));
-    }
   }
 
   setSourceValueFromAttribute(element, attribute) {
@@ -443,6 +452,19 @@ export class ManageExistingComponents {
     const elementObject = this.elements.get(element);
 
     if (elementObject) {
+      const defaultAttributeValues = elementObject.defaultAttributeValues;
+      const currentAttributes = element.getAttributeNames().filter(attribute => {
+        return ['source-provider', 'source-key', 'webbit-id'].indexOf(attribute) < 0;
+      });
+      Object.entries(defaultAttributeValues).forEach(([attribute, value]) => {
+        element.setAttribute(attribute, value);
+      });
+
+      currentAttributes.forEach(attribute => {
+        if (typeof defaultAttributeValues[attribute] === 'undefined') {
+          element.removeAttribute(attribute);
+        }
+      });
       elementObject.sourceProvider = null;
       elementObject.sourceKey = null;
       elementObject.unsubscribe();

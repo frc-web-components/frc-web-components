@@ -1,5 +1,4 @@
 import Action from '../action';
-import { setProperties } from './utils';
 
 export default class SetProperties extends Action {
 
@@ -10,7 +9,7 @@ export default class SetProperties extends Action {
   execute({ wom, selectedNode, context }) {
     const { propertyValueMap } = context;
 
-    setProperties(selectedNode.getNode(), propertyValueMap);
+    selectedNode.setProperties(propertyValueMap);
 
     setTimeout(async () => {
       wom.history.push(await wom.getHtml());

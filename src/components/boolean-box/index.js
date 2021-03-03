@@ -1,17 +1,6 @@
-import { Webbit, html, css, LitElement } from '@webbitjs/webbit';
+import { html, css, LitElement } from '@webbitjs/webbit';
 
 class BooleanBox extends LitElement {
-
-  static get dashboardConfig() {
-    return {
-      displayName: 'Boolean Box',
-      category: 'General',
-      description: `A box that's shown as one color if true and another color if false.`,
-      documentationLink: 'https://frc-web-components.github.io/components/boolean-box/',
-      slots: [],
-      editorTabs: ['properties', 'sources'],
-    };
-  }
 
   static get styles() {
     return css`
@@ -37,48 +26,50 @@ class BooleanBox extends LitElement {
 
   static get properties() {
     return {
-      value: { type: Boolean, primary: true },
-      defaultColor: { type: String, attribute: 'default-color' },
-      trueColor: { type: String, attribute: 'true-color' },
-      falseColor: { type: String, attribute: 'false-color' },
-      label: { type: String },
+      value: { type: Boolean, primary: true, reflect: true },
+      trueColor: { type: String, attribute: 'true-color', reflect: true },
+      falseColor: { type: String, attribute: 'false-color', reflect: true },
+      label: { type: String, reflect: true },
     };
   }
 
   constructor() {
     super();
-    this.defaultColor = 'black'
-    this.trueColor = 'green';
-    this.falseColor = 'red';
-    this.label = '';
+    this.value = false;
   }
 
   updated() {
     const backgroundNode = this.shadowRoot.querySelector('[part=box]');
-    let backgroundColor = this.defaultColor;
 
-    if (this.value === true) {
-      backgroundColor = this.trueColor;
-    }
-    else if (this.value === false) {
-      backgroundColor = this.falseColor;
-    }
+    const backgroundColor = this.value 
+      ? (this.trueColor || 'green')
+      : (this.falseColor || 'red');
+
     backgroundNode.style.setProperty('--box-color', backgroundColor);
-  }
-
-  firstUpdated() {
-    super.firstUpdated();
-    const backgroundNode = this.shadowRoot.querySelector('[part=box]');
-    backgroundNode.style.setProperty('--box-color', this.defaultColor);
   }
 
   render() {
     return html`
       <div part="box">
-        ${this.label}
+        ${this.label || ''}
       </div>
     `;
   }
 }
 
 customElements.define('frc-boolean-box', BooleanBox);
+
+webbitRegistry.addExisting('frc-boolean-box', {
+  displayName: 'Boolean Box',
+  category: 'General',
+  description: `A box that's shown as one color if true and another color if false.`,
+  documentationLink: 'https://frc-web-components.github.io/components/boolean-box/',
+  slots: [],
+  editorTabs: ['properties', 'sources'],
+  properties: {
+    value: { type: Boolean, primary: true, defaultValue: false },
+    trueColor: { type: String, attribute: 'true-color', defaultValue: 'green' },
+    falseColor: { type: String, attribute: 'false-color', defaultValue: 'red' },
+    label: { type: String, defaultValue: '' },
+  }
+});

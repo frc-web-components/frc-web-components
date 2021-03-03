@@ -1,3 +1,4 @@
+import { setAttributeFromSourceValue } from '../existing-components';
 
 const isWebbit = (domNode) => {
   if (!(domNode instanceof Object)) {
@@ -278,20 +279,83 @@ export default class WomNode {
   }
 
   getSourceProvider() {
-    return this.isRegistered() ? this.node.sourceProvider : null;
+    if (isWebbit(this.node)) {
+      return this.node.sourceProvider;
+    } else {
+      return window.manageExistingComponents.getSourceProvider(this.node);
+    }
   }
 
   getSourceKey() {
-    return this.isRegistered() ? this.node.sourceKey : null;
+    if (isWebbit(this.node)) {
+      return this.node.sourceKey;
+    } else {
+      return window.manageExistingComponents.getSourceKey(this.node);
+    }
   }
 
   getDefaultProps() {
     if (isWebbit(this.node)) {
       return this.node.defaultProps;
-    } else if (this.isRegistered()) {
-      return this.node.webbitPropertyDefaultValues;
+    }
+
+    let defaultAttributeValues = {};
+    
+    if (window.manageExistingComponents.hasElement(this.node)) {
+      defaultAttributeValues = window.manageExistingComponents.getDefaultAttributeValues(this.node);
     } else {
-      return {};
+      this.node.getAttributeNames().forEach(attribute => {
+        if (['source-provider', 'source-key', 'webbit-id'].indexOf(attribute) < 0) {
+          defaultAttributeValues[attribute] = this.node.getAttribute(attribute);
+        }
+      });
+    }
+    
+    const dashboardConfig = this.getDashboardConfig() || {};
+    const properties = dashboardConfig.properties || {};
+    const defaultProps = {};
+
+    Object.entries(properties).forEach(([propName, config]) => {
+      if (config.attribute in defaultAttributeValues) {
+        defaultProps[propName] = defaultAttributeValues[config.attribute];
+      } else {
+        defaultProps[propName] = config.defaultValue;
+      }
+    });
+
+    return defaultProps;
+  }
+
+  setProperties(propertyValueMap) {
+    if (this.isWebbit()) {
+      Object.entries(propertyValueMap).forEach(([property, value]) => {
+        if (!this.node.isPropertyConnectedToSource(property)) {
+          node[property] = value;
+        }
+        this.node.setDefaultValue(property, value);
+      });
+    } else {
+      const properties = this.getProperties();
+      if (window.manageExistingComponents.hasElement(this.node)) {
+        Object.entries(propertyValueMap).forEach(([propName, value]) => {
+          if (propName in properties) {
+            window.manageExistingComponents.setDefaultAttributeValue(
+              properties[propName].attribute,
+              value
+            );
+          }
+        });
+      } else {
+        Object.entries(propertyValueMap).forEach(([propName, value]) => {
+          if (propName in properties) {
+            setAttributeFromSourceValue(
+              this.node,
+              properties[propName].attribute,
+              value
+            );
+          }
+        });
+      }
     }
   }
 
