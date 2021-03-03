@@ -190,7 +190,7 @@ class WomViewer extends LitElement {
     const properties = Object.entries(this.node.getProperties());
 
     const attributes = properties.filter(([name, property]) => {
-      const value = this.node.getNode()[name];
+      const value = this.node.getPropertyValue(name);
       return (
         property.showInEditor 
         && (value || value === 0 || value === false)
@@ -200,7 +200,7 @@ class WomViewer extends LitElement {
     return html`
       ${attributes.map(([name]) => {
 
-        const value = this.node.getNode()[name];
+        const value = this.node.getPropertyValue(name);
         const valueString = value instanceof Array
           ? `[${value.toString()}]`
           : value.toString();

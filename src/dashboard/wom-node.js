@@ -257,6 +257,20 @@ export default class WomNode {
     return properties;
   }
 
+  getPropertyValue(property) {
+    if (this.isWebbit()) {
+      return this.node[property];
+    } else {
+      const properties = this.getProperties();
+      const propertyConfig = properties[property];
+      if (!propertyConfig) {
+        return null;
+      } else {
+        return this.node.getAttribute(propertyConfig.attribute);
+      }
+    }
+  }
+
   getPropertyValueMap() {
     const properties = this.getProperties();
     const object = isWebbit(this.node) ? this.node : this.node.webbitPropertyValues;
@@ -340,7 +354,7 @@ export default class WomNode {
     if (this.isWebbit()) {
       Object.entries(propertyValueMap).forEach(([property, value]) => {
         if (!this.node.isPropertyConnectedToSource(property)) {
-          node[property] = value;
+          this.node[property] = value;
         }
         this.node.setDefaultValue(property, value);
       });
