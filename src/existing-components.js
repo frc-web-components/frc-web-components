@@ -69,6 +69,14 @@ export class ManageExistingComponents {
     // map from html element to config
     this.elements = new Map();
 
+    defaultSourceProviderSet(sourceProvider => {
+      this.elements.forEach((elementObject, element) => {
+        if (elementObject.sourceProvider === null) {
+          this.setSourceProvider(element, sourceProvider);
+        }
+      });
+    });
+
     document.body.querySelectorAll('[source-key]').forEach(childNode => {
       if (!this.isInstanceOfWebbit(childNode)) {
         this.addElement(childNode);
