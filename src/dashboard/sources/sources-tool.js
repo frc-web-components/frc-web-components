@@ -77,13 +77,11 @@ class SourcesTool extends LitElement {
   }
 
   getSourceKey() {
-    const sourceKey = this.selectedNode.getNode().sourceKey;
-    return sourceKey;
+    return this.selectedNode.getSourceKey();
   }
 
   getSourceProvider() {
-    const sourceProvider = this.selectedNode.getNode().sourceProvider;
-    return sourceProvider;
+    return this.selectedNode.getSourceProvider();
   }
 
   updated(changedProperties) {
@@ -152,24 +150,9 @@ class SourcesTool extends LitElement {
     return keys;
   }
 
-  getProperties() {
-    const properties = Object.entries(this.selectedNode.getProperties());
-
-    return properties
-      .filter(([name, property]) => {
-        return property.canConnectToSources;
-      })
-      .map(([name, property]) => {
-        return {
-          value: name,
-          label: property.attribute.replace(/-/g, ' ')
-        };
-      });
-  }
-
   renderWebbit() {
     return html`
-      <p>Source for <span>${this.selectedNode.getWebbitName() || this.selectedNode.getDisplayName()}</span></p>
+      <p>Source for <span>${this.selectedNode.getWebbitName() || this.selectedNode.getName()}</span></p>
       <vaadin-form-layout>
         <vaadin-form-item>
           <label slot="label">Source Key</label>
@@ -230,8 +213,8 @@ class SourcesTool extends LitElement {
       return html`<p>The source for the root node cannot be changed.</p>`;
     }
 
-    if (this.selectedNode && !this.selectedNode.isWebbit()) {
-      return html`<p>Sources cannot be applied to this element.</p>`;
+    if (this.selectedNode && !this.selectedNode.isRegistered()) {
+      return html`<p>Sources cannot be applied to this element..</p>`;
     }
 
     return this.renderWebbit();

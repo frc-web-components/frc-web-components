@@ -294,6 +294,16 @@ export default class WomNode {
     }
   }
 
+  setSource(sourceProvider, sourceKey) {
+    if (this.isWebbit()) {
+      this.node.sourceProvider = sourceProvider;
+      this.node.sourceKey = sourceKey;
+    } else {
+      this.node.setAttribute('source-provider', sourceProvider);
+      this.node.setAttribute('source-key', sourceKey);
+    }
+  }
+
   getDefaultProps() {
     if (isWebbit(this.node)) {
       return this.node.defaultProps;
@@ -343,12 +353,12 @@ export default class WomNode {
               this.node,
               properties[propName].attribute
             );
-            if (isConnectedToSource) {
-              window.manageExistingComponents.setDefaultAttributeValue(
-                properties[propName].attribute,
-                value
-              );
-            } else {
+            window.manageExistingComponents.setDefaultAttributeValue(
+              this.node,
+              properties[propName].attribute,
+              value
+            );
+            if (!isConnectedToSource) {
               setAttributeFromSourceValue(
                 this.node,
                 properties[propName].attribute,
