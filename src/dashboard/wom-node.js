@@ -86,6 +86,7 @@ export default class WomNode {
     return new Promise(resolve => {
       window.webbitRegistry.setCloning(true);
       const clonedNode = this.node.cloneNode(true);
+      const clonedNodeStyleAttributeValue = clonedNode.getAttribute('style');
       clonedNode.style.display = 'none';
       document.body.append(clonedNode);
       [...clonedNode.querySelectorAll('[source-key]'), clonedNode].forEach(node => {
@@ -100,12 +101,50 @@ export default class WomNode {
             node[prop] = value;
           });
           node.removeAttribute('webbit-id');
+        } else {
+          const position = getElementPosition(node, clonedNode);
+          const originalWebbit = getElementFromPosition(position, this.node);
+          
+          let defaultAttributeValues = {};
+    
+          if (window.manageExistingComponents.hasElement(originalWebbit)) {
+            defaultAttributeValues = window.manageExistingComponents.getDefaultAttributeValues(originalWebbit);
+          } else {
+            originalWebbit.getAttributeNames().forEach(attribute => {
+              if (['source-provider', 'source-key', 'webbit-id'].indexOf(attribute) < 0) {
+                defaultAttributeValues[attribute] = originalWebbit.getAttribute(attribute);
+              }
+            });
+          }
+
+          node.getAttributeNames().forEach(attribute => {
+            if (['source-provider', 'source-key', 'webbit-id'].indexOf(attribute) < 0) {
+              if (node !== clonedNode || attribute !== 'style') {
+                node.removeAttribute(attribute);
+              }
+            }
+          });
+          for (let attribute in defaultAttributeValues) {
+            node.setAttribute(attribute, defaultAttributeValues[attribute]);
+          }
         }
       });
       setTimeout(() => {
+        clonedNode.remove();
+        let nodeDefaultStyleAttribute = null;
+        if (window.manageExistingComponents.hasElement(this.node)) {
+          nodeDefaultStyleAttribute = window.manageExistingComponents.getDefaultAttributeValue(this.node, 'style');
+        } else {
+          nodeDefaultStyleAttribute = clonedNodeStyleAttributeValue;
+        }
+
+        if (nodeDefaultStyleAttribute) {
+          clonedNode.setAttribute('style', nodeDefaultStyleAttribute);
+        } else {
+          clonedNode.removeAttribute('style');
+        }
         const html = outer ? clonedNode.outerHTML : clonedNode.innerHTML;
         window.webbitRegistry.setCloning(false);
-        clonedNode.remove();
         resolve(html);
       });
     });
