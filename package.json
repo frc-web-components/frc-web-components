@@ -9,7 +9,7 @@
     "build": "webpack -d --config webpack.config.js --devtool none",
     "build:prod": "webpack -p --config webpack.config.js --devtool none --output-filename frc-web-components.min.js",
     "build:docs": "cd ./docs; make html",
-    "build:docs:component": "wca analyze src/components/*.component.js --outDir docs/components"
+    "build:docs:component": "wca analyze src/components/**/*.component.js --outDir docs/components"
   },
   "repository": {
     "type": "git",
