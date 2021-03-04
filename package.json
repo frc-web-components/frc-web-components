@@ -8,7 +8,8 @@
     "start": "webpack-dev-server -d --inline --config webpack.config.js",
     "build": "webpack -d --config webpack.config.js --devtool none",
     "build:prod": "webpack -p --config webpack.config.js --devtool none --output-filename frc-web-components.min.js",
-    "build:docs": "cd ./docs; make html"
+    "build:docs": "cd ./docs; make html",
+    "build:docs:component": "wca analyze src/components/*.component.js --outDir docs/components"
   },
   "repository": {
     "type": "git",
@@ -50,6 +51,7 @@
     "css-loader": "^0.28.11",
     "sass-loader": "^7.0.3",
     "style-loader": "^0.21.0",
+    "web-component-analyzer": "^1.1.6",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.2",

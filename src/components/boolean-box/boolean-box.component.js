@@ -1,5 +1,15 @@
-import { html, css, LitElement } from '@webbitjs/webbit';
+import { html, css, LitElement } from 'lit-element';
 
+/**
+ * A box that's shown as one color if true and another color if false.
+ *
+ * @attr {Boolean} value - If true then the boolean box's color will be the true color. If false the color will be the false color.
+ * @attr {String} true-color - The color that is displayed if value is true.
+ * @attr {String} false-color - The color that is displayed if value is false.
+ * @attr {String} label - A text label that is shown in the center of the boolean box.
+ * @csspart box - The box element
+ *
+ */
 class BooleanBox extends LitElement {
 
   static get styles() {
@@ -36,6 +46,9 @@ class BooleanBox extends LitElement {
   constructor() {
     super();
     this.value = false;
+    this.trueColor = 'green';
+    this.falseColor = 'red';
+    this.label = '';
   }
 
   updated() {

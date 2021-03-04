@@ -4,7 +4,7 @@ import './3-axis-accelerometer';
 import './accelerometer';
 import './basic-fms-info';
 import './basic-subsystem';
-import './boolean-box';
+import './boolean-box/boolean-box.component';
 import './differential-drivebase';
 import './encoder';
 import './gauge';
