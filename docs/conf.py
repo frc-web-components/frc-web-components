@@ -14,7 +14,8 @@
 #
 import os
 from recommonmark.parser import CommonMarkParser
-from recommonmark.transform import AutoStructify
+from sphinx_markdown_parser.parser import MarkdownParser
+
 
 
 # import sys
@@ -42,7 +43,7 @@ release = ''
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['recommonmark']
+extensions = ['recommonmark', 'sphinx_markdown_parser']
 
 
 # Add any paths that contain templates here, relative to this directory.
@@ -51,7 +52,7 @@ templates_path = ['_templates']
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-source_parsers = {'.md': CommonMarkParser}
+source_parsers = {'.md': MarkdownParser}
 
 source_suffix = ['.rst', '.md']
 # sourcse_suffix = '.rst'
@@ -169,11 +170,3 @@ texinfo_documents = [
      author, 'frc-web-components', 'One line description of project.',
      'Miscellaneous'),
 ]
-
-# At the bottom of conf.py
-def setup(app):
-    app.add_config_value('recommonmark_config', {
-            'url_resolver': lambda url: github_doc_root + url,
-            'auto_toc_tree_section': 'Contents',
-            }, True)
-    app.add_transform(AutoStructify)
