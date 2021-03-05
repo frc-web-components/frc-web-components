@@ -31,10 +31,14 @@ FRC Web Components
   :maxdepth: 3
   :caption: Components
 
-  chart-graph-components/line-chart
-  chart-graph-components/frc-boolean-box.md
-  chart-graph-components/frc-boolean-box2
   chart-graph-components/gauge
+  chart-graph-components/line-chart
+
+
+.. toctree::
+   :glob:
+
+   markdown
 
 
 Indices and tables
