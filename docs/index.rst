@@ -33,12 +33,7 @@ FRC Web Components
 
   chart-graph-components/gauge
   chart-graph-components/line-chart
-
-
-.. toctree::
-   :glob:
-
-   markdown
+  components/frc-boolean-box
 
 
 Indices and tables
