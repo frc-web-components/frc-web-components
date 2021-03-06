@@ -31,6 +31,7 @@ FRC Web Components
   :maxdepth: 3
   :caption: Components
 
+  components/frc-3-axis-accelerometer
   components/frc-boolean-box
 
 
