@@ -2,7 +2,7 @@
 frc-boolean-box
 ===============
 
-A box that's shown as one color if true and another color if false. oiwejriower
+A box that's shown as one color if true and another color if false.
 
 Properties
 ----------
