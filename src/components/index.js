@@ -3,7 +3,7 @@ import './table-axis';
 import './3-axis-accelerometer/3-axis-accelerometer.component';
 import './accelerometer/accelerometer.component';
 import './basic-fms-info/basic-fms-info.component';
-import './basic-subsystem';
+import './basic-subsystem/basic-subsystem.component';
 import './boolean-box/boolean-box.component';
 import './differential-drivebase';
 import './encoder';
