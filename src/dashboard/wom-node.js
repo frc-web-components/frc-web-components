@@ -126,8 +126,6 @@ export default class WomNode {
           });
           for (let attribute in defaultAttributeValues) {
             node.setAttribute(attribute, defaultAttributeValues[attribute]);
-            console.log('node:', attribute, defaultAttributeValues[attribute]);
-
           }
         }
       });

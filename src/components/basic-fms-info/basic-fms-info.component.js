@@ -1,4 +1,4 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { LitElement, html, css } from 'lit-element';
 
 const ENABLED_FLAG = 0x01;
 const AUTO_FLAG = 0x02;
@@ -9,17 +9,15 @@ const DS_ATTACHED_FLAG = 0x20;
 
 const MATCH_TYPES = ['Unknown', 'Practice', 'Qualification', 'Elimination'];
 
-class BasicFmsInfo extends Webbit {
-
-  static get dashboardConfig() {
-    return {
-      displayName: 'Basic FMS Info',
-      category: 'Robot & Field Info',
-      description: 'Component for displaying data from the FMS',
-      documentationLink: 'https://frc-web-components.github.io/components/basic-fms-info/',
-      slots: []
-    };
-  }
+ /**
+ * Component for displaying data from the FMS
+ *
+ * @attr {Number} match-type - The match type encoded as a number. 0 = Unknown, 1 = Practice, 2 = Qualification, 3 = Elimination
+ * @attr {Number} match-number - The competition match number
+ * @attr {String} event-name - The name of the event
+ * @attr {Number} fms-control-data - A number used to encode control data from the FMS, such as the robot state, if the robot is emergency stopped, and if the FMS and DS are attached.
+ */
+class BasicFmsInfo extends LitElement {
 
   static get styles() {
     return css`
@@ -57,11 +55,21 @@ class BasicFmsInfo extends Webbit {
 
   static get properties() {
     return {
-      matchType: { type: Number, attribute: 'match-type' },
-      matchNumber: { type: Number, attribute: 'match-number' },
-      eventName: { type: String, attribute: 'event-name' },
-      fmsControlData: { type: Number, attribute: 'fms-control-data' }
+      matchType: { type: Number, attribute: 'match-type', reflect: true },
+      matchNumber: { type: Number, attribute: 'match-number', reflect: true },
+      eventName: { type: String, attribute: 'event-name', reflect: true },
+      fmsControlData: { type: Number, attribute: 'fms-control-data', reflect: true },
     };
+  }
+
+  get fmsControlData() {
+    return this._fmsControlData || 0;
+  }
+
+  set fmsControlData(value) {
+    const oldValue = this._fmsControlData;
+    this._fmsControlData = value;
+    this.requestUpdate('fmsControlData', oldValue);
   }
 
   constructor() {
@@ -119,9 +127,9 @@ class BasicFmsInfo extends Webbit {
     return html`
       <p>
         <strong>
-          <span>${this.eventName}</span>
-          <span>${MATCH_TYPES[this.matchType]}</span>
-          <span>match ${this.matchNumber}</span>
+          <span>${this.eventName || ''}</span>
+          <span>${MATCH_TYPES[this.matchType || 0]}</span>
+          <span>match ${this.matchNumber || 0}</span>
         </strong>
       </p>
       
@@ -161,4 +169,20 @@ class BasicFmsInfo extends Webbit {
   }
 }
 
-window.webbitRegistry.define('frc-basic-fms-info', BasicFmsInfo);
+customElements.define('frc-basic-fms-info', BasicFmsInfo);
+
+webbitRegistry.addExisting('frc-basic-fms-info', {
+  displayName: 'Basic FMS Info',
+  category: 'Robot & Field Info',
+  description: 'Component for displaying data from the FMS',
+  documentationLink: 'https://frc-web-components.github.io/components/basic-fms-info/',
+  slots: [],
+  defaultSourceKey: '/fmsInfo',
+  defaultSourceProvider: 'NetworkTables',
+  properties: {
+    matchType: { type: Number, defaultValue: 0 },
+    matchNumber: { type: Number, defaultValue: 0 },
+    eventName: { type: String, defaultValue: '' },
+    fmsControlData: { type: Number, defaultValue: 0 },
+  }
+});
