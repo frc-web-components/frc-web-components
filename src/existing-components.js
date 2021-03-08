@@ -3,6 +3,7 @@ const {
   isInstanceOfWebbit,
   getDashboardConfig,
   addExisting,
+  getRegisteredNames,
 } = window.webbitRegistry;
 
 
@@ -60,6 +61,14 @@ export const setAttributeFromSourceValue = (element, attribute, value) => {
   }
 }
 
+const getDefaultSource = (elementName) => {
+  const dashboardConfig = getDashboardConfig(elementName) || {};
+  return { 
+    sourceKey: dashboardConfig.defaultSourceKey,
+    sourceProvider: dashboardConfig.defaultSourceProvider,
+  };
+};
+
 
 export class ManageExistingComponents {
 
@@ -83,20 +92,45 @@ export class ManageExistingComponents {
       }
     });
 
+    getRegisteredNames().forEach(name => {
+      const { sourceKey } = getDefaultSource(name);
+      if (sourceKey) {
+        document.body.querySelectorAll(name).forEach(childNode => {
+          if (!this.isInstanceOfWebbit(childNode)) {
+            this.addElement(childNode);
+          }
+        });
+      }
+    });
+
     const observer = new MutationObserver(mutations => {
       for (let mutation of mutations) {
         if (mutation.type === 'childList' || mutation.type === 'subtree') {
           const addedNodes = mutation.addedNodes || [];
           const removedNodes = mutation.removedNodes || [];
           addedNodes.forEach(node => {
-            if ('querySelectorAll' in node) {
-              if (node.hasAttribute('source-key') && !this.isInstanceOfWebbit(node)) {
+            if ('querySelectorAll' in node) {              
+              if (
+                (node.hasAttribute('source-key') || getDefaultSource(node.nodeName.toLowerCase()).sourceKey)
+                && !this.isInstanceOfWebbit(node)
+              ) {
                 this.addElement(node);
               }
 
               node.querySelectorAll('[source-key]').forEach(childNode => {
                 if (!this.isInstanceOfWebbit(childNode)) {
                   this.addElement(childNode);
+                }
+              });
+
+              getRegisteredNames().forEach(name => {
+                const { sourceKey } = getDefaultSource(name);
+                if (sourceKey) {
+                  node.querySelectorAll(name).forEach(childNode => {
+                    if (!this.isInstanceOfWebbit(childNode)) {
+                      this.addElement(childNode);
+                    }
+                  });
                 }
               });
             }
@@ -139,11 +173,18 @@ export class ManageExistingComponents {
       return;
     }
 
-    if (!element.hasAttribute('source-provider') && getDefaultSourceProvider()) {
-      element.setAttribute('source-provider', getDefaultSourceProvider());
+    const dashboardConfig = this.getDashboardConfig(element) || {};
+
+    if (!element.hasAttribute('source-provider')) {
+      const sourceProvider =  dashboardConfig.defaultSourceProvider || getDefaultSourceProvider();
+      if (sourceProvider) {
+        element.setAttribute('source-provider', sourceProvider);
+      }
     }
 
-    const dashboardConfig = this.getDashboardConfig(element);
+    if (!element.hasAttribute('source-key') && dashboardConfig.defaultSourceKey) {
+      element.setAttribute('source-key', dashboardConfig.defaultSourceKey);
+    }
 
     const observer = new MutationObserver(mutations => {
       for (let mutation of mutations) {
