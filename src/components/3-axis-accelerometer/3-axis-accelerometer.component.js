@@ -191,15 +191,15 @@ webbitRegistry.addExisting('frc-3-axis-accelerometer', {
   resizable: { left: true, right: true },
   minSize: { width: 100, height: 10 },
   properties: {
-    x: { type: Number },
-    y: { type: Number },
-    z: { type: Number },
-    min: { type: Number },
-    max: { type: Number },
-    center: { type: Number },
-    precision: { type: Number },
-    hideText: { type: Boolean },
-    numTickMarks: { type: Number },
-    unit: { type: String }
+    x: { type: Number, defaultValue: 0 },
+    y: { type: Number, defaultValue: 0 },
+    z: { type: Number, defaultValue: 0 },
+    min: { type: Number, defaultValue: -16 },
+    max: { type: Number, defaultValue: 16 },
+    center: { type: Number, defaultValue: 0 },
+    precision: { type: Number, defaultValue: 2 },
+    hideText: { type: Boolean, defaultValue: false },
+    numTickMarks: { type: Number, defaultValue: 3 },
+    unit: { type: String, defaultValue: 'g' }
   }
 });

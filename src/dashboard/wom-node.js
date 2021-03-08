@@ -385,7 +385,21 @@ export default class WomNode {
 
     Object.entries(properties).forEach(([propName, config]) => {
       if (config.attribute in defaultAttributeValues) {
-        defaultProps[propName] = defaultAttributeValues[config.attribute];
+        const type = config.type;
+        if (type === String) {
+          defaultProps[propName] = defaultAttributeValues[config.attribute];
+        } else if (type === Number) {
+          defaultProps[propName] = parseFloat(defaultAttributeValues[config.attribute]);
+        } else if (type === Boolean) {
+          defaultProps[propName] = !!defaultAttributeValues[config.attribute];
+        } else if (type === Array) {
+          try {
+            const value = JSON.parse(defaultAttributeValues[config.attribute]);
+            defaultProp[propName] = value instanceof Array ? value : [];
+          } catch(e) {
+            defaultProps[propName] = [];
+          }
+        }
       } else {
         defaultProps[propName] = config.defaultValue;
       }

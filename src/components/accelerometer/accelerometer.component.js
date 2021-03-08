@@ -1,4 +1,4 @@
-import NumberBar from '../number-bar';
+import NumberBar from '../number-bar/number-bar.component';
 
 /**
  * Component for displaying data from a single axis accelerometer.
@@ -6,9 +6,9 @@ import NumberBar from '../number-bar';
  * @attr {Number} value - The acceleration
  * @attr {Number} min - The minimum displayed acceleration
  * @attr {Number} max - The maximum displayed acceleration
- * @attr {Number} center - The point at which the number bar starts. If the x, y and z values are less than the center, the bar be to the left of the center, and to the right otherwise.
- * @attr {Number} precision - The number of decimal places shown in the x, y and z values.
- * @attr {Boolean} hide-text - If true then the x, y and z values displayed in the bars are hidden.
+ * @attr {Number} center - The point at which the number bar starts. If the value is less than the center, the bar be to the left of the center, and to the right otherwise.
+ * @attr {Number} precision - The number of decimal places shown in value.
+ * @attr {Boolean} hide-text - If true then the value displayed in the bar is hidden.
  * @attr {Number} num-tick-marks - Controls the number of tick marks shown in the axis at the bottom of the component. If 0 the axis is hidden.
  * @attr {String} unit - Displays a unit for the values shown in the axes.
  * @csspart bar - The number bar
@@ -47,13 +47,13 @@ webbitRegistry.addExisting('frc-accelerometer', {
   resizable: { left: true, right: true },
   minSize: { width: 80, height: 10 },
   properties: {
-    value: { type: Number, primary: true },
-    min: { type: Number },
-    max: { type: Number },
-    center: { type: Number },
-    precision: { type: Number },
-    hideText: { type: Boolean },
-    numTickMarks: { type: Number },
-    unit: { type: String }
+    value: { type: Number, primary: true, defaultValue: 0 },
+    min: { type: Number, defaultValue: -1 },
+    max: { type: Number, defaultValue: 1 },
+    center: { type: Number, defaultValue: 0 },
+    precision: { type: Number, defaultValue: 2 },
+    hideText: { type: Boolean, defaultValue: false },
+    numTickMarks: { type: Number, defaultValue: 3 },
+    unit: { type: String, defaultValue: 'g' }
   }
 });

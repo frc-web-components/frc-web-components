@@ -1,20 +1,8 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { LitElement, html, css } from '@webbitjs/webbit';
 import { containerStyles } from '../styles';
 
-class Label extends Webbit {
-
-  static get dashboardConfig() {
-    return {
-      displayName: 'Label',
-      category: 'General',
-      description: 'A label',
-      documentationLink: 'https://frc-web-components.github.io/components/label/',
-      slots: [],
-      editorTabs: ['properties', 'sources'],
-      resizable: { left: true, right: true, top: false, bottom: false }
-    };
-  }
-
+class Label extends LitElement {
+ 
   static get styles() {
     return [
       containerStyles,
@@ -34,8 +22,7 @@ class Label extends Webbit {
 
   static get properties() {
     return {
-      ...super.properties,
-      text: { type: String, primary: true },
+      text: { type: String, reflect: true },
     };
   }
 
@@ -49,4 +36,17 @@ class Label extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-label', Label);
+customElements.define('frc-label', Label);
+
+webbitRegistry.addExisting('frc-label', {
+  displayName: 'Label',
+  category: 'General',
+  description: 'A label',
+  documentationLink: 'https://frc-web-components.github.io/components/label/',
+  slots: [],
+  editorTabs: ['properties', 'sources'],
+  resizable: { left: true, right: true, top: false, bottom: false },
+  properties: {
+    text: { type: String, primary: true },
+  }
+})
