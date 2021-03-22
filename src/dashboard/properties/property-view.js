@@ -54,6 +54,7 @@ export default class PropertyView extends LitElement {
   }
 
   getValue() {
+    console.log('default props:', this.selectedNode.getDefaultProps());
     return this.selectedNode.getDefaultProps()[this.propertyName];
   }
 

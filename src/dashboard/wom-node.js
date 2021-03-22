@@ -125,7 +125,7 @@ export default class WomNode {
             }
           });
           for (let attribute in defaultAttributeValues) {
-            node.setAttribute(attribute, defaultAttributeValues[attribute]);
+            setAttributeFromSourceValue(node, attribute, defaultAttributeValues[attribute]);
           }
         }
       });
@@ -389,11 +389,15 @@ export default class WomNode {
         } else if (type === Number) {
           defaultProps[propName] = parseFloat(defaultAttributeValues[config.attribute]);
         } else if (type === Boolean) {
-          defaultProps[propName] = !!defaultAttributeValues[config.attribute];
+          defaultProps[propName] = defaultAttributeValues[config.attribute] === '' || !!defaultAttributeValues[config.attribute];
         } else if (type === Array) {
           try {
-            const value = JSON.parse(defaultAttributeValues[config.attribute]);
-            defaultProp[propName] = value instanceof Array ? value : [];
+            if (defaultAttributeValues[config.attribute] instanceof Array) {
+              defaultProp[propName] = defaultAttributeValues[config.attribute];
+            } else {
+              const value = JSON.parse(defaultAttributeValues[config.attribute]);
+              defaultProp[propName] = value instanceof Array ? value : [];
+            }
           } catch(e) {
             defaultProps[propName] = [];
           }

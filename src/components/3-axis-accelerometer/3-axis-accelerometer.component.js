@@ -1,12 +1,9 @@
-import { LitElement, html, css } from 'lit-element';
+import { html, css } from '@webbitjs/webbit';
+import { Webbit, define } from '../../webbit';
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(value, min));
 }
-
-const isNumber = (value) => {
-  return typeof value === 'number' && !isNaN(value);
-};
 
 /**
  * Component for displaying data from a 3-axis accelerometer.
@@ -27,67 +24,58 @@ const isNumber = (value) => {
  * @csspart y - The number bar display the Y axis value
  * @csspart z - The number bar display the Z axis value
  */
-class ThreeAxisAccelerometer extends LitElement {
+class ThreeAxisAccelerometer extends Webbit {
 
-  static get properties() {
+  static get dashboardConfig() {
     return {
-      x: { type: Number, reflect: true },
-      y: { type: Number, reflect: true },
-      z: { type: Number, reflect: true },
-      min: { type: Number, reflect: true },
-      max: { type: Number, reflect: true },
-      center: { type: Number, reflect: true },
-      precision: { type: Number, reflect: true },
-      hideText: { type: Boolean, attribute: 'hide-text', reflect: true, },
-      numTickMarks: { type: Number, attribute: 'num-tick-marks', reflect: true },
-      unit: { type: String, reflect: true }
+      displayName: '3-Axis Accelerometer',
+      category: 'Robot & Field Info',
+      description: 'Component for displaying data from a 3-axis accelerometer.',
+      documentationLink: 'https://frc-web-components.github.io/components/3-axis-accelerometer/',
+      slots: [],
+      editorTabs: ['properties', 'sources'],
+      resizable: { left: true, right: true },
+      minSize: { width: 100, height: 10 }
     };
   }
 
-  get min() {
-    const min = isNumber(this._min) ? this._min : -16;
-    const max = isNumber(this._max) ? this._max : 16;
-    return Math.min(min, max);
-  }
-
-  set min(value) {
-    const oldValue = this._min;
-    this._min = value;
-    this.requestUpdate('min', oldValue);
-  }
-
-  get max() {
-    const min = isNumber(this._min) ? this._min : -16;
-    const max = isNumber(this._max) ? this._max : 16;
-    return Math.max(min, max);
-  }
-
-  set max(value) {
-    const oldValue = this._max;
-    this._max = value;
-    this.requestUpdate('max', oldValue);
-  }
-
-  get precision() {
-    const precision = isNumber(this._precision) ? this._precision : 2;
-    return clamp(precision, 0, 100);
-  }
-
-  set precision(value) {
-    const oldValue = this._precision;
-    this._precision = value;
-    this.requestUpdate('precision', oldValue);
-  }
-  
-  get numTickMarks() {
-    const numTickMarks = isNumber(this._numTickMarks) ? this._numTickMarks : 3;
-    return Math.max(0, numTickMarks);
-  }
-
-  set numTickMarks(value) {
-    const oldValue = this._numTickMarks;
-    this._numTickMarks = value;
-    this.requestUpdate('numTickMarks', oldValue);
+  static get properties() {
+    return {
+      x: { type: Number, defaultValue: 0 },
+      y: { type: Number, defaultValue: 0 },
+      z: { type: Number, defaultValue: 0 },
+      min: { 
+        type: Number,
+        defaultValue: -16,
+        get() {
+          return Math.min(this._min, this._max);
+        }
+      },
+      max: { 
+        type: Number,
+        defaultValue: 16,
+        get() {
+          return Math.max(this._min, this._max);
+        }
+      },
+      center: { type: Number, defaultValue: 0 },
+      precision: { 
+        type: Number,
+        defaultValue: 2,
+        get() {
+          return clamp(this._precision, 0, 100);
+        }
+      },
+      hideText: { type: Boolean },
+      numTickMarks: { 
+        type: Number,
+        defaultValue: 3,
+        get() {
+          return Math.max(0, this._numTickMarks);
+        }
+      },
+      unit: { type: String, defaultValue: 'g' }
+    };
   }
 
   static get styles() {
@@ -134,37 +122,20 @@ class ThreeAxisAccelerometer extends LitElement {
     `;
   }
 
-  constructor() {
-    super();
-    this.x = 0;
-    this.y = 0;
-    this.z = 0;
-    this.min = -16;
-    this.max = 16;
-    this.center = 0;
-    this.precision = 2;
-    this.hideText = false;
-    this.numTickMarks = 3;
-    this.unit = 'g';
-  }
-
-  /**
-   * @protected
-   */
   renderAccelerometer(part, numTickMarks) {
     return html`
       <div part="accelerometer">
         <label part="label">${part}</label>
         <frc-accelerometer
           part="${part}"
-          value="${this[part] || 0}"
+          value="${this[part]}"
           min="${this.min}"
           max="${this.max}"
-          center="${this.center || 0}"
+          center="${this.center}"
           precision="${this.precision}"
           ?hide-text="${this.hideText}"
           num-tick-marks="${numTickMarks}"
-          unit="${typeof this.unit === 'string' ? this.unit : 'g'}"
+          unit="${this.unit}"
         ></frc-accelerometer>
       </div>
     `;
@@ -179,27 +150,4 @@ class ThreeAxisAccelerometer extends LitElement {
   }
 }
 
-customElements.define('frc-3-axis-accelerometer', ThreeAxisAccelerometer);
-
-webbitRegistry.addExisting('frc-3-axis-accelerometer', {
-  displayName: '3-Axis Accelerometer',
-  category: 'Robot & Field Info',
-  description: 'Component for displaying data from a 3-axis accelerometer.',
-  documentationLink: 'https://frc-web-components.github.io/components/3-axis-accelerometer/',
-  slots: [],
-  editorTabs: ['properties', 'sources'],
-  resizable: { left: true, right: true },
-  minSize: { width: 100, height: 10 },
-  properties: {
-    x: { type: Number, defaultValue: 0 },
-    y: { type: Number, defaultValue: 0 },
-    z: { type: Number, defaultValue: 0 },
-    min: { type: Number, defaultValue: -16 },
-    max: { type: Number, defaultValue: 16 },
-    center: { type: Number, defaultValue: 0 },
-    precision: { type: Number, defaultValue: 2 },
-    hideText: { type: Boolean, defaultValue: false },
-    numTickMarks: { type: Number, defaultValue: 3 },
-    unit: { type: String, defaultValue: 'g' }
-  }
-});
+define('frc-3-axis-accelerometer', ThreeAxisAccelerometer);

@@ -49,7 +49,11 @@ export const setAttributeFromSourceValue = (element, attribute, value) => {
   if (typeof value === 'string') {
     element.setAttribute(attribute, value);
   } else if (typeof value === 'number') {
-    element.setAttribute(attribute, value);
+    if (isNaN(value)) {
+      element.removeAttribute(attribute);
+    } else {
+      element.setAttribute(attribute, value);
+    }
   } else if (typeof value === 'boolean') {
     if (value) {
       element.setAttribute(attribute, '');
@@ -271,7 +275,7 @@ export class ManageExistingComponents {
 
   getSourceProvider(element) {
     const elementObject = this.getElement(element);
-    return elementObject ? elementObject.sourceProvider : null;
+    return elementObject ? elementObject.sourceProvider : getDefaultSourceProvider();
   }
 
   getSourceKey(element) {
