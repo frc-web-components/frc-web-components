@@ -1,4 +1,5 @@
-import { LitElement, html, css } from 'lit-element';
+import { html, css } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 
 const ENABLED_FLAG = 0x01;
 const AUTO_FLAG = 0x02;
@@ -9,30 +10,31 @@ const DS_ATTACHED_FLAG = 0x20;
 
 const MATCH_TYPES = ['Unknown', 'Practice', 'Qualification', 'Elimination'];
 
- /**
- * Component for displaying data from the FMS
- *
- * @attr {Number} match-type - The match type encoded as a number. 0 = Unknown, 1 = Practice, 2 = Qualification, 3 = Elimination
- * @attr {Number} match-number - The competition match number
- * @attr {String} event-name - The name of the event
- * @attr {Number} fms-control-data - A number used to encode control data from the FMS, such as the robot state, if the robot is emergency stopped, and if the FMS and DS are attached.
- */
-class BasicFmsInfo extends LitElement {
+class BasicFmsInfo extends Webbit {
+
+  static get dashboardConfig() {
+    return {
+      displayName: 'Basic FMS Info',
+      category: 'Robot & Field Info',
+      description: 'Component for displaying data from the FMS',
+      documentationLink: 'https://frc-web-components.github.io/components/basic-fms-info/',
+      slots: [],
+      defaultSourceKey: '/fmsInfo',
+      defaultSourceProvider: 'NetworkTables',
+    };
+  }
 
   static get styles() {
     return css`
       p {
         margin: 5px 0;
       }
-
       p:first-child {
         margin-top: 0;
       }
-
       p:last-child {
         margin-bottom: 0;
       }
-
       :host {
         text-align: center;
         font-size: 15px;
@@ -42,11 +44,9 @@ class BasicFmsInfo extends LitElement {
         justify-content: center;
         font-family: sans-serif;
       }
-
       [icon="vaadin:check"] {
         color: green;
       }
-
       [icon="vaadin:close-small"] {
         color: red;
       }
@@ -55,31 +55,11 @@ class BasicFmsInfo extends LitElement {
 
   static get properties() {
     return {
-      matchType: { type: Number, attribute: 'match-type', reflect: true },
-      matchNumber: { type: Number, attribute: 'match-number', reflect: true },
-      eventName: { type: String, attribute: 'event-name', reflect: true },
-      fmsControlData: { type: Number, attribute: 'fms-control-data', reflect: true },
+      matchType: { type: Number, defaultValue: 0 },
+      matchNumber: { type: Number, defaultValue: 0 },
+      eventName: { type: String, defaultValue: '' },
+      fmsControlData: { type: Number, defaultValue: 0 }
     };
-  }
-
-  get fmsControlData() {
-    return this._fmsControlData || 0;
-  }
-
-  set fmsControlData(value) {
-    const oldValue = this._fmsControlData;
-    this._fmsControlData = value;
-    this.requestUpdate('fmsControlData', oldValue);
-  }
-
-  constructor() {
-    super();
-    this.matchType = 0;
-    this.matchNumber = 0;
-    this.eventName = '';
-    this.fmsControlData = 0;
-    this.sourceKey = '/fmsInfo';
-    this.sourceProvider = 'NetworkTables';
   }
 
   getRobotState() {
@@ -127,9 +107,9 @@ class BasicFmsInfo extends LitElement {
     return html`
       <p>
         <strong>
-          <span>${this.eventName || ''}</span>
-          <span>${MATCH_TYPES[this.matchType || 0]}</span>
-          <span>match ${this.matchNumber || 0}</span>
+          <span>${this.eventName}</span>
+          <span>${MATCH_TYPES[this.matchType]}</span>
+          <span>match ${this.matchNumber}</span>
         </strong>
       </p>
       
@@ -161,7 +141,6 @@ class BasicFmsInfo extends LitElement {
           `}
         </span>
       </p>
-
       <p style="font-weight: normal">
         Robot state: ${this.getRobotState()}
       </p>
@@ -169,20 +148,4 @@ class BasicFmsInfo extends LitElement {
   }
 }
 
-customElements.define('frc-basic-fms-info', BasicFmsInfo);
-
-webbitRegistry.addExisting('frc-basic-fms-info', {
-  displayName: 'Basic FMS Info',
-  category: 'Robot & Field Info',
-  description: 'Component for displaying data from the FMS',
-  documentationLink: 'https://frc-web-components.github.io/components/basic-fms-info/',
-  slots: [],
-  defaultSourceKey: '/fmsInfo',
-  defaultSourceProvider: 'NetworkTables',
-  properties: {
-    matchType: { type: Number, defaultValue: 0 },
-    matchNumber: { type: Number, defaultValue: 0 },
-    eventName: { type: String, defaultValue: '' },
-    fmsControlData: { type: Number, defaultValue: 0 },
-  }
-});
+define('frc-basic-fms-info', BasicFmsInfo);

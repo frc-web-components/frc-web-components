@@ -96,7 +96,6 @@ export default class NetworkTablesProvider extends SourceProvider {
 
   userUpdate(key, value) {
     if (this.isNtReady) {
-      console.log('nt:', key, value);
       NetworkTables.putValue(key, value);
     } else {
       const currentValue = this.getSource(key);

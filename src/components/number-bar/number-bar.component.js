@@ -1,13 +1,10 @@
-import { LitElement, html, css } from 'lit-element';
+import { html, css } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 import { containerStyles } from '../styles';
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(value, min));
 }
-
-const isNumber = (value) => {
-  return typeof value === 'number' && !isNaN(value);
-};
 
  /**
  * Component for display a numerical value in a bar with a min and max range.
@@ -23,65 +20,56 @@ const isNumber = (value) => {
  * @csspart bar - The number bar
  * @csspart axis - The axis below the number bar
  */
-export default class NumberBar extends LitElement {
+export default class NumberBar extends Webbit {
 
-  static get properties() {
+  static get dashboardConfig() {
     return {
-      value: { type: Number, reflect: true },
-      min: { type: Number, reflect: true },
-      max: { type: Number, reflect: true },
-      center: { type: Number, reflect: true },
-      precision: { type: Number, reflect: true },
-      hideText: { type: Boolean, attribute: 'hide-text', reflect: true, },
-      numTickMarks: { type: Number, attribute: 'num-tick-marks', reflect: true },
-      unit: { type: String, reflect: true }
+      displayName: 'Number Bar',
+      category: 'General',
+      description: 'Component for display a numerical value in a bar with a min and max range.',
+      documentationLink: 'https://frc-web-components.github.io/components/number-bar/',
+      slots: [],
+      editorTabs: ['properties', 'sources'],
+      resizable: { left: true, right: true },
+      minSize: { width: 80, height: 10 },
     };
   }
 
-  get min() {
-    const min = isNumber(this._min) ? this._min : -16;
-    const max = isNumber(this._max) ? this._max : 16;
-    return Math.min(min, max);
-  }
-
-  set min(value) {
-    const oldValue = this._min;
-    this._min = value;
-    this.requestUpdate('min', oldValue);
-  }
-
-  get max() {
-    const min = isNumber(this._min) ? this._min : -16;
-    const max = isNumber(this._max) ? this._max : 16;
-    return Math.max(min, max);
-  }
-
-  set max(value) {
-    const oldValue = this._max;
-    this._max = value;
-    this.requestUpdate('max', oldValue);
-  }
-
-  get precision() {
-    const precision = isNumber(this._precision) ? this._precision : 2;
-    return clamp(precision, 0, 100);
-  }
-
-  set precision(value) {
-    const oldValue = this._precision;
-    this._precision = value;
-    this.requestUpdate('precision', oldValue);
-  }
-  
-  get numTickMarks() {
-    const numTickMarks = isNumber(this._numTickMarks) ? this._numTickMarks : 3;
-    return Math.max(0, numTickMarks);
-  }
-
-  set numTickMarks(value) {
-    const oldValue = this._numTickMarks;
-    this._numTickMarks = value;
-    this.requestUpdate('numTickMarks', oldValue);
+  static get properties() {
+    return {
+      value: { type: Number, primary: true, defaultValue: 0 },
+      min: { 
+        type: Number,
+        defaultValue: -1, 
+        get() {
+          return Math.min(this._min, this._max);
+        }
+      },
+      max: { 
+        type: Number, 
+        defaultValue: 1,
+        get() {
+          return Math.max(this._min, this._max);
+        }
+      },
+      center: { type: Number, defaultValue: 0 },
+      precision: { 
+        type: Number,
+        defaultValue: 2,
+        get() {
+          return clamp(this._precision, 0, 100);
+        }
+      },
+      hideText: { type: Boolean },
+      numTickMarks: { 
+        type: Number,
+        defaultValue: 3,
+        get() {
+          return Math.max(0, this._numTickMarks);
+        }
+      },
+      unit: { type: String, defaultValue: '' }
+    };
   }
 
   static get styles() {
@@ -117,30 +105,18 @@ export default class NumberBar extends LitElement {
     ];
   }
 
-  constructor() {
-    super();
-    this.value = 0;
-    this.min = -1;
-    this.max = 1;
-    this.center = 0;
-    this.precision = 2;
-    this.hideText = false;
-    this.numTickMarks = 3;
-    this.unit = '';
-  }
-
   render() {
     return html`
       <frc-bar 
-        value="${this.value || 0}"
+        value="${this.value}"
         min="${this.min}"
         max="${this.max}"
-        center="${this.center || 0}"
+        center="${this.center}"
         part="bar"
       >
         ${!this.hideText ? html`
           ${this.value.toFixed(this.precision)}
-          ${this.unit || ''}
+          ${this.unit}
         ` : ''}
       </frc-bar>
       ${this.numTickMarks > 0 ? html`
@@ -148,32 +124,11 @@ export default class NumberBar extends LitElement {
           part="axis"
           ticks="${this.numTickMarks}"
           .range="${[this.min, this.max]}"
-          unit="${this.unit || ''}"
+          unit="${this.unit}"
         ></table-axis>
       ` : ''}
     `;
   }
 }
 
-customElements.define('frc-number-bar', NumberBar);
-
-webbitRegistry.addExisting('frc-number-bar', {
-  displayName: 'Number Bar',
-  category: 'General',
-  description: 'Component for display a numerical value in a bar with a min and max range.',
-  documentationLink: 'https://frc-web-components.github.io/components/number-bar/',
-  slots: [],
-  editorTabs: ['properties', 'sources'],
-  resizable: { left: true, right: true },
-  minSize: { width: 80, height: 10 },
-  properties: {
-    value: { type: Number, primary: true, defaultValue: 0 },
-    min: { type: Number, defaultValue: -1 },
-    max: { type: Number, defaultValue: 1 },
-    center: { type: Number, defaultValue: 0 },
-    precision: { type: Number, defaultValue: 2 },
-    hideText: { type: Boolean, defaultValue: false },
-    numTickMarks: { type: Number, defaultValue: 3 },
-    unit: { type: String, defaultValue: '' }
-  }
-});
+define('frc-number-bar', NumberBar);

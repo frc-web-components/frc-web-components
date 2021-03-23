@@ -1,5 +1,5 @@
 import NumberBar from '../number-bar/number-bar.component';
-
+import { define } from '../../webbit';
 /**
  * Component for displaying data from a single axis accelerometer.
  *
@@ -16,44 +16,25 @@ import NumberBar from '../number-bar/number-bar.component';
  */
 class Accelerometer extends NumberBar {
 
-  constructor() {
-    super();
-    this.value = 0;
-    this.min = -1;
-    this.max = 1;
-    this.center = 0;
-    this.precision = 2;
-    /**
-     * @attr hide-text
-     */
-    this.hideText = false;
-    /**
-     * @attr num-tick-marks
-     */
-    this.numTickMarks = 3;
-    this.unit = 'g';
+  static get dashboardConfig() {
+    return {
+      displayName: 'Accelerometer',
+      category: 'Robot & Field Info',
+      description: 'Component for displaying data from a single axis accelerometer.',
+      documentationLink: 'https://frc-web-components.github.io/components/accelerometer/',
+      slots: [],
+      editorTabs: ['properties', 'sources'],
+      resizable: { left: true, right: true },
+      minSize: { width: 80, height: 10 },
+    };
+  }
+
+  static get properties() {
+    return {
+      ...super.properties,
+      unit: { type: String, defaultValue: 'g' },
+    }
   }
 }
 
-customElements.define('frc-accelerometer', Accelerometer);
-
-webbitRegistry.addExisting('frc-accelerometer', {
-  displayName: 'Accelerometer',
-  category: 'Robot & Field Info',
-  description: 'Component for displaying data from a single axis accelerometer.',
-  documentationLink: 'https://frc-web-components.github.io/components/accelerometer/',
-  slots: [],
-  editorTabs: ['properties', 'sources'],
-  resizable: { left: true, right: true },
-  minSize: { width: 80, height: 10 },
-  properties: {
-    value: { type: Number, primary: true, defaultValue: 0 },
-    min: { type: Number, defaultValue: -1 },
-    max: { type: Number, defaultValue: 1 },
-    center: { type: Number, defaultValue: 0 },
-    precision: { type: Number, defaultValue: 2 },
-    hideText: { type: Boolean, defaultValue: false },
-    numTickMarks: { type: Number, defaultValue: 3 },
-    unit: { type: String, defaultValue: 'g' }
-  }
-});
+define('frc-accelerometer', Accelerometer);

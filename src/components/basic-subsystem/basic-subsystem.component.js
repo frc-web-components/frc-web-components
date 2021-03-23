@@ -1,4 +1,5 @@
-import { LitElement, html, css } from 'lit-element';
+import { html, css } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 
  /**
  * Component for displaying the state of a command based subsystem.
@@ -6,7 +7,7 @@ import { LitElement, html, css } from 'lit-element';
  * @attr {String} default - The default command for the subsystem.
  * @attr {String} command - The current command for the subsystem.
  */
-class BasicSubsystem extends LitElement {
+class BasicSubsystem extends Webbit {
 
   static get dashboardConfig() {
     return {
@@ -26,7 +27,6 @@ class BasicSubsystem extends LitElement {
         text-align: left;
         font-weight: normal;
         display: inline-block;
-        font-family: sans-serif;
       }
 
       p {
@@ -41,37 +41,17 @@ class BasicSubsystem extends LitElement {
 
   static get properties() {
     return {
-      default: { type: String, reflect: true },
-      command: { type: String, reflect: true }
+      default: { type: String, defaultValue: 'None' },
+      command: { type: String, defaultValue: 'None' }
     };
-  }
-
-  constructor() {
-    super();
-    this.default = 'None';
-    this.command = 'None';
   }
 
   render() {
     return html`
-      <p>Default command: ${this.default || 'None'}</p>
-      <p>Current command: ${this.command || 'None'}</p>
+      <p>Default command: ${this.default}</p>
+      <p>Current command: ${this.command}</p>
     `;
   }
 }
 
-customElements.define('frc-basic-subsystem', BasicSubsystem);
-
-webbitRegistry.addExisting('frc-basic-subsystem', {
-  displayName: 'Basic Subsystem',
-  category: 'Robot & Field Info',
-  description: 'Component for displaying the state of a command based subsystem.',
-  documentationLink: 'https://frc-web-components.github.io/components/basic-subsystem/',
-  slots: [],
-  resizable: { left: true, right: true },
-  minSize: { width: 50, height: 10 },
-  properties: {
-    default: { type: String, defaultValue: 'None' },
-    command: { type: String, defaultValue: 'None' }
-  }
-});
+define('frc-basic-subsystem', BasicSubsystem);

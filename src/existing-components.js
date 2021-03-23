@@ -297,6 +297,11 @@ export class ManageExistingComponents {
       return false;
     }
     const source = getSource(elementObject.sourceProvider, elementObject.sourceKey);
+
+    if (typeof source === 'undefined') {
+      return false;
+    }
+
     if (isSourceObject(source)) {
       for (let property of Object.getOwnPropertyNames(source)) {
         if (camelToKebab(property) === attribute) {
@@ -307,6 +312,11 @@ export class ManageExistingComponents {
     }
     
     const primaryPropertyName = this.getPrimaryPropertyName(element);
+
+    if (primaryPropertyName === null) {
+      return false;
+    }
+    
     const primaryProperty = this.getProperty(element, primaryPropertyName);
     return primaryProperty.attribute === attribute;
   }
@@ -323,7 +333,7 @@ export class ManageExistingComponents {
     const dashboardConfig = this.getDashboardConfig(node);
 
     if (!dashboardConfig) {
-      return;
+      return null;
     }
 
     const properties = dashboardConfig.properties;

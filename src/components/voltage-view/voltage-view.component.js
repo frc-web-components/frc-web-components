@@ -1,5 +1,7 @@
 import { css } from 'lit-element';
 import NumberBar from '../number-bar/number-bar.component';
+import { define } from '../../webbit';
+
 
  /**
  * Component for displaying the voltage of a device.
@@ -17,6 +19,46 @@ import NumberBar from '../number-bar/number-bar.component';
  */
 class VoltageView extends NumberBar {
 
+  static get dashboardConfig() {
+    return {
+      displayName: 'Voltage View',
+      category: 'Robot & Field Info',
+      description: 'Component for displaying the voltage of a device.',
+      documentationLink: 'https://frc-web-components.github.io/components/voltage-view/',
+      slots: [],
+      resizable: { left: true, right: true },
+      minSize: { width: 80, height: 10 },
+    };
+  }
+
+  static get properties() {
+    return {
+      ...super.properties,
+      min: { 
+        type: Number,
+        defaultValue: 0, 
+        get() {
+          return Math.min(this._min, this._max);
+        }
+      },
+      max: { 
+        type: Number, 
+        defaultValue: 5,
+        get() {
+          return Math.max(this._min, this._max);
+        }
+      },
+      numTickMarks: { 
+        type: Number,
+        defaultValue: 6,
+        get() {
+          return Math.max(0, this._numTickMarks);
+        }
+      },
+      unit: { type: String, defaultValue: 'V' },
+    }
+  }
+
   static get styles() {
     return [
       super.styles,
@@ -27,44 +69,6 @@ class VoltageView extends NumberBar {
       `
     ];
   }
- 
-  constructor() {
-    super();
-    this.value = 0;
-    this.min = 0;
-    this.max = 5;
-    this.center = 0;
-    this.precision = 2;
-    /**
-     * @attr hide-text
-     */
-    this.hideText = false;
-    /**
-     * @attr num-tick-marks
-     */
-    this.numTickMarks = 6;
-    this.unit = 'V';
-  }
 }
 
-customElements.define('frc-voltage-view', VoltageView);
-
-webbitRegistry.addExisting('frc-voltage-view', {
-  displayName: 'Voltage View',
-  category: 'Robot & Field Info',
-  description: 'Component for displaying the voltage of a device.',
-  documentationLink: 'https://frc-web-components.github.io/components/voltage-view/',
-  slots: [],
-  resizable: { left: true, right: true },
-  minSize: { width: 80, height: 10 },
-  properties: {
-    value: { type: Number, primary: true, defaultValue: 0 },
-    min: { type: Number, defaultValue: -1 },
-    max: { type: Number, defaultValue: 1 },
-    center: { type: Number, defaultValue: 0 },
-    precision: { type: Number, defaultValue: 2 },
-    hideText: { type: Boolean, defaultValue: false },
-    numTickMarks: { type: Number, defaultValue: 3 },
-    unit: { type: String, defaultValue: 'V' }
-  }
-});
+define('frc-voltage-view', VoltageView);
