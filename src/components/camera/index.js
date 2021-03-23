@@ -1,12 +1,9 @@
-import { LitElement, html, css } from 'lit-element';
-
-const isNumber = (value) => {
-  return typeof value === 'number' && !isNaN(value);
-};
+import { html, css } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 
 let nextStreamId = 0;
 
-class Camera extends LitElement {
+class Camera extends Webbit {
 
   static get dashboardConfig() {
     return {
@@ -63,110 +60,29 @@ class Camera extends LitElement {
 
   static get properties() {
     return {
-      fps: { type: Number },
-      width: { type: Number },
-      height: { type: Number },
-      compression: { type: Number },
-      hideCrosshair: { type: Boolean },
-      crosshairColor: { type: String, inputType: 'ColorPicker' },
-      crosshairWidth: { type: Number },
-      streams: { type: Array, inputType: 'StringArray' },
-      waitImage: { type: String },
-      connected: { type: Boolean },
+      fps: { type: Number, defaultValue: -1 },
+      width: { type: Number, defaultValue: -1 },
+      height: { type: Number, defaultValue: -1, },
+      compression: { type: Number, defaultValue: -1 },
+      hideCrosshair: { type: Boolean, defaultValue: false },
+      crosshairColor: { type: String, inputType: 'ColorPicker', defaultValue: '#ffffff' },
+      crosshairWidth: { type: Number, defaultValue: 2 },
+      streams: { type: Array, inputType: 'StringArray', defaultValue: [] },
+      waitImage: { type: String, defaultValue: 'https://i.ytimg.com/vi/w6geNk3QnBQ/maxresdefault.jpg' },
+      connected: { type: Boolean, defaultValue: false },
       url: { type: String, reflect: false, attribute: false },
     };
   }
 
-  get url() {
-    return this._url || '';
-  }
-
-  set url(value) {
-    const oldValue = this._url;
-    this._url = value;
-    this.requestUpdate('url', oldValue);
-  }
-
-  set fps(value) {
-    const oldValue = this._fps;
-    this._fps = value;
-    this.requestUpdate('fps', oldValue);
-  }
-
-  get fps() {
-    return isNumber(this._fps) ? this._fps : -1;
-  }
-
-  set width(value) {
-    const oldValue = this._width;
-    this._width = value;
-    this.requestUpdate('width', oldValue);
-  }
-
-  get width() {
-    return isNumber(this._width) ? this._width : -1;
-  }
-
-  set height(value) {
-    const oldValue = this._height;
-    this._height = value;
-    this.requestUpdate('height', oldValue);
-  }
-
-  get height() {
-    return isNumber(this._height) ? this._height : -1;
-  }
-
-  set compression(value) {
-    const oldValue = this._compression;
-    this._compression = value;
-    this.requestUpdate('compression', oldValue);
-  }
-
-  get compression() {
-    return isNumber(this._compression) ? this._compression : -1;
-  }
-
-  set crosshairWidth(value) {
-    const oldValue = this._crosshairWidth;
-    this._crosshairWidth = value;
-    this.requestUpdate('crosshairWidth', oldValue);
-  }
-
-  get crosshairWidth() {
-    return isNumber(this._crosshairWidth) ? this._crosshairWidth : 2;
-  }
-
-  set waitImage(value) {
-    const oldValue = this._waitImage;
-    this._waitImage = value;
-    this.requestUpdate('waitImage', oldValue);
-  }
-
-  get waitImage() {
-    return typeof this._waitImage === 'string' ? this._waitImage : 'https://i.ytimg.com/vi/w6geNk3QnBQ/maxresdefault.jpg';
-  }
-
   constructor() {
     super();
-    this.streams = [];
-    this.connected = false;
     this.url = '';
-    this.fps = -1;
-    this.width = -1;
-    this.height = -1;
-    this.compression = -1;
-    this.hideCrosshair = false;
-    this.crosshairColor = '#ffffff';
-    this.crosshairWidth = 2;
-    this.waitImage = 'https://i.ytimg.com/vi/w6geNk3QnBQ/maxresdefault.jpg';
-
     this.loaded = false;
     this.streamsLoadingIds = [];
   }
 
   getStreams() {
-    let uniqueStreams = [...new Set(this.streams || [])].map(stream => {
+    let uniqueStreams = [...new Set(this.streams)].map(stream => {
       return stream.replace('mjpg:', ''); 
     });
 
@@ -263,7 +179,7 @@ class Camera extends LitElement {
     this.setImageSize();
     const crosshairWidth = Math.max(0, parseInt(this.crosshairWidth));
     this.style.setProperty('--crosshair-width', `${crosshairWidth}px`);
-    this.style.setProperty('--crosshair-color', this.crosshairColor || '#ffffff');
+    this.style.setProperty('--crosshair-color', this.crosshairColor);
     this.style.setProperty('--image-display', this.url || this.waitImage ? 'block' : 'none');
   }
 
@@ -322,4 +238,4 @@ class Camera extends LitElement {
   }
 }
 
-webbitRegistry.define('frc-camera', Camera);
+define('frc-camera', Camera);

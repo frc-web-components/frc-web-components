@@ -292,7 +292,7 @@ export default class WomNode {
     const properties = {};
     for (let propName in props) {
       const property = props[propName];
-      if (property.canConnectToSources) {
+      if (property.canConnectToSources && property.attribute) {
         properties[propName] = property;
       }
     }
@@ -311,13 +311,6 @@ export default class WomNode {
         return this.node.getAttribute(propertyConfig.attribute);
       }
     }
-  }
-
-  getPropertyValueMap() {
-    const properties = this.getProperties();
-    const object = isWebbit(this.node) ? this.node : this.node.webbitPropertyValues;
-    const propertyValueMap = {};
-    Object.keys(properties)
   }
 
   getDisplayName() {
