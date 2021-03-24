@@ -65,6 +65,19 @@ export const setAttributeFromSourceValue = (element, attribute, value) => {
   }
 }
 
+export const getValueType = (value) => {
+  if (typeof value === 'string') {
+    return String;
+  } else if (typeof value === 'number') {
+    return Number;
+  } else if (typeof value === 'boolean') {
+    return Boolean;
+  } else if (value instanceof Array) {
+    return Array;
+  } 
+  return null;
+}
+
 const getDefaultSource = (elementName) => {
   const dashboardConfig = getDashboardConfig(elementName) || {};
   return { 
@@ -351,10 +364,27 @@ export class ManageExistingComponents {
     const dashboardConfig = this.getDashboardConfig(node);
 
     if (!dashboardConfig) {
-      return;
+      return null;
     }
 
     return dashboardConfig.properties[propertyName];
+  }
+
+  getPropertyByAttribute(node, attribute) {
+    const dashboardConfig = this.getDashboardConfig(node);
+
+    if (!dashboardConfig) {
+      return null;
+    }
+
+    for (let propName in dashboardConfig.properties) {
+      const property = dashboardConfig.properties[propName];
+      if (property.attribute === attribute) {
+        return propName;
+      }
+    }
+
+    return null;
   }
 
   removeElement(element) {
@@ -470,7 +500,8 @@ export class ManageExistingComponents {
 
     let source = getSource(elementObject.sourceProvider, elementObject.sourceKey);
     let sourceKey = null;
-    let sourceValue = null;
+    let sourceType = null;
+    let addSource = false;
 
     if (isSourceObject(source)) {
 
@@ -480,33 +511,42 @@ export class ManageExistingComponents {
 
       if (property) {
         sourceKey = `${elementObject.sourceKey}/${property}`;
-        sourceValue = source[property];
+        sourceType = getValueType(source[property]);
+      } else {
+        const propName = this.getPropertyByAttribute(element, attribute);
+        const propConfig = this.getProperty(element, propName);
+        if (propConfig && propConfig.addSource) {
+          sourceKey = elementObject.sourceKey;
+          sourceType = propConfig.type;
+          addSource = true;
+        }
       }
     } else {
       const primaryPropertyName = this.getPrimaryPropertyName(element);
 
       if (primaryPropertyName && attribute === camelToKebab(primaryPropertyName)) {
         sourceKey = elementObject.sourceKey;
-        sourceValue = source;
+        sourceType = getValueType(source);
       }
     }
 
-    if (sourceKey === null) {
+
+    if (sourceKey === null || sourceType === null) {
       return;
     }
 
     let newSourceValue = null;
 
-    if (typeof sourceValue === 'string') {
+    if (sourceType === String) {
       newSourceValue = element.getAttribute(attribute);
-    } else if (typeof sourceValue === 'number') {
+    } else if (sourceType === Number) {
       const newValue = parseFloat(element.getAttribute(attribute));
       if (!isNaN(newValue)) {
         newSourceValue = newValue;
       }
-    } else if (typeof sourceValue === 'boolean') {
+    } else if (sourceType === Boolean) {
       newSourceValue = element.hasAttribute(attribute);
-    } else if (sourceValue instanceof Array) {
+    } else if (sourceType === Array) {
       try {
         const array = JSON.parse(element.getAttribute(attribute));
         if (array instanceof Array) {
@@ -521,7 +561,12 @@ export class ManageExistingComponents {
         const rawSource = sourceProvider.getRawSource(sourceKey);
 
         if (rawSource && rawSource.__key__) {
-          sourceProvider.userUpdate(rawSource.__key__, newSourceValue);
+          if (!addSource) {
+            sourceProvider.userUpdate(rawSource.__key__, newSourceValue);
+          } else {
+            const propName = this.getPropertyByAttribute(element, attribute);
+            sourceProvider.userUpdate(`${rawSource.__key__}/${propName}`, newSourceValue); 
+          }
         }
       }
     }

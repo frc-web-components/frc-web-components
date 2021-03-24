@@ -1,4 +1,5 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { html, css } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 import { containerStyles } from '../styles';
 
 class ComboBox extends Webbit {
@@ -41,35 +42,19 @@ class ComboBox extends Webbit {
   static get properties() {
     return {
       ...super.properties,
-      name: { type: String },
-      selected: { type: String, primary: true },
-      default: { type: String },
-      options: { type: Array },
-      placeholder: { type: String },
-      disabled: { type: Boolean },
-      readonly: { type: Boolean },
-      clearButtonVisible: { type: Boolean, attribute: 'clear-button-visible' },
-      theme: { type: String },
-      required: { type: Boolean },
-      errorMessage: { type: String, attribute: 'error-message' },
-      allowCustomValue: { type: Boolean, attribute: 'allow-custom-value' }
+      name: { type: String, defaultValue: '' },
+      selected: { type: String, defaultValue: '', addSource: true, primary: true },
+      default: { type: String, defaultValue: '' },
+      options: { type: Array, defaultValue: [] },
+      placeholder: { type: String, defaultValue: '' },
+      disabled: { type: Boolean, defaultValue: false },
+      readonly: { type: Boolean, defaultValue: false },
+      clearButtonVisible: { type: Boolean, defaultValue: false },
+      theme: { type: String, defaultValue: '' },
+      required: { type: Boolean, defaultValue: false },
+      errorMessage: { type: String, defaultValue: '' },
+      allowCustomValue: { type: Boolean, defaultValue: false }
     };
-  }
-
-  constructor() {
-    super();
-    this.options = [];
-    this.selected = '';
-    this.name = '';
-    this.default = '';
-    this.placeholder = '';
-    this.disabled = false;
-    this.readonly = false;
-    this.clearButtonVisible = false;
-    this.theme = '';
-    this.required = false;
-    this.errorMessage = '';
-    this.allowCustomValue = false;
   }
 
   firstUpdated() {
@@ -96,6 +81,16 @@ class ComboBox extends Webbit {
     observer.observe(input, {
       attributes: true
     });
+  }
+
+  updated(changedProps) {
+    if (changedProps.has('options')) {
+      if (!this.allowCustomValue && this.options.length > 0 && this.options.indexOf(this.selected) < 0) {        
+        setTimeout(() => {
+          this.selected = this.options[0];
+        });
+      }
+    }
   }
 
   onChange(ev) {
@@ -130,4 +125,4 @@ class ComboBox extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-combo-box', ComboBox);
+define('frc-combo-box', ComboBox);
