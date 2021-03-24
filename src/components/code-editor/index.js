@@ -1,4 +1,5 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { html, css } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 import './editor';
 
 class CodeEditor extends Webbit {
@@ -35,11 +36,13 @@ class CodeEditor extends Webbit {
     return {
       content: { 
         type: String, 
+        defaultValue: '',
         inputType: 'Textarea',
         primary: true 
       },
       mode: { 
         type: String,
+        defaultValue: 'javascript',
         inputType: 'StringDropdown',
         getOptions() {
           return ['javascript', 'json', 'html', 'xml', 'css'];
@@ -47,34 +50,24 @@ class CodeEditor extends Webbit {
       },
       theme: { 
         type: String,
+        defaultValue: 'monokai',
         inputType: 'StringDropdown',
         getOptions() {
           return ['monokai', 'plain'];
         }
       },
-      fontsize: { type: String },
-      softtab: { type: Boolean },
-      tabsize: { type: Number },
-      readonly: { type: Boolean },
-      wrapmode: { type: Boolean },
-      maxLines: { type: Number },
-      minLines: { type: Number },
+      fontsize: { type: String, defaultValue: '12px' },
+      softtab: { type: Boolean, defaultValue: false },
+      tabsize: { type: Number, defaultValue: 4 },
+      readonly: { type: Boolean, defaultValue: false },
+      wrapmode: { type: Boolean, defaultValue: false },
+      maxLines: { type: Number, defaultValue: Infinity },
+      minLines: { type: Number, defaultValue: 0 },
     };
   }
 
   constructor() {
     super();
-    this.content = '';
-    this.mode = 'javascript';
-    this.theme = 'monokai';
-    this.fontsize = '12px';
-    this.softtabs = false;
-    this.tabsize = 4;
-    this.readonly = false;
-    this.wrapmode = false;
-    this.maxLines = Infinity;
-    this.minLines = 0;
-
     this.onEditTimeoutId = null;
   }
 
@@ -118,4 +111,4 @@ class CodeEditor extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-code-editor', CodeEditor);
+define('frc-code-editor', CodeEditor);

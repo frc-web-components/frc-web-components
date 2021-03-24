@@ -1,4 +1,5 @@
-import { Webbit, html } from '@webbitjs/webbit';
+import { html } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 import { containerStyles } from '../styles';
 
 class Checkbox extends Webbit {
@@ -24,19 +25,11 @@ class Checkbox extends Webbit {
   static get properties() {
     return {
       ...super.properties,
-      checked: { type: Boolean, primary: true },
-      value: { type: String },
-      disabled: { type: Boolean },
-      label: { type: String },
+      checked: { type: Boolean, defaultValue: false, primary: true },
+      value: { type: String, defaultValue: '' },
+      disabled: { type: Boolean, defaultValue: false },
+      label: { type: String, defaultValue: 'label' },
     };
-  }
-
-  constructor() {
-    super();
-    this.checked = false;
-    this.value = '';
-    this.disabled = false;
-    this.label = 'label';
   }
 
   firstUpdated() {
@@ -86,4 +79,4 @@ class Checkbox extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-checkbox', Checkbox);
+define('frc-checkbox', Checkbox);

@@ -1,4 +1,5 @@
-import { Webbit, html } from '@webbitjs/webbit';
+import { html } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 import { containerStyles } from '../styles';
 
 class CheckboxGroup extends Webbit {
@@ -30,24 +31,14 @@ class CheckboxGroup extends Webbit {
   static get properties() {
     return {
       ...super.properties,
-      value: { type: Array, primary: true },
-      label: { type: String },
-      theme: { type: String },
-      disabled: { type: Boolean },
-      required: { type: Boolean },
-      errorMessage: { type: String, attribute: 'error-message' },
+      value: { type: Array, defaultValue: [], primary: true },
+      label: { type: String, defaultValue: '' },
+      theme: { type: String, defaultValue: 'vertical' },
+      disabled: { type: Boolean, defaultValue: false },
+      required: { type: Boolean, defaultValue: false },
+      errorMessage: { type: String, defaultValue: '' },
       
     };
-  }
-
-  constructor() {
-    super();
-    this.value = [];
-    this.label = '';
-    this.theme = 'vertical';
-    this.disabled = false;
-    this.required = false;
-    this.errorMessage = '';
   }
 
   firstUpdated() {
@@ -117,4 +108,4 @@ class CheckboxGroup extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-checkbox-group', CheckboxGroup);
+define('frc-checkbox-group', CheckboxGroup);

@@ -106,14 +106,16 @@ class SourceTree extends Webbit {
         <span class="key">Key</span>
         <span class="value">Value</span>
       </header>
-      ${Object.entries(this.sources.__sources__).map(([name, source]) => html`
-        <source-view 
-          label="${this.getLabel(source.__key__)}" 
-          provider-name="${this.providerName}"
-          .source="${{...source}}"
-        >
-        </source-view>
-      `)}
+      ${this.sources ? (
+        Object.entries(this.sources.__sources__).map(([name, source]) => html`
+          <source-view 
+            label="${this.getLabel(source.__key__)}" 
+            provider-name="${this.providerName}"
+            .source="${{...source}}"
+          >
+          </source-view>
+        `)
+      ) : html``}
     `;
   }
 
