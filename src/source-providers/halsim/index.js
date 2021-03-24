@@ -25,7 +25,7 @@ export default class HalSimProvider extends SourceProvider {
 
     addConnectionListener(connected => {
       if (!connected) {
-        this.clearSources();
+        this.clearSourcesWithTimeout(2000);
       }
     });
 

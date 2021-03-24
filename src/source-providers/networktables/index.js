@@ -61,7 +61,7 @@ export default class NetworkTablesProvider extends SourceProvider {
   
       NetworkTables.addRobotConnectionListener(connected => {
         if (!connected) {
-          this.clearSources();
+          this.clearSourcesWithTimeout(2000);
         } else {
           for (let key of NetworkTables.getKeys()) {
             this.updateSource(key, NetworkTables.getValue(key));
@@ -71,7 +71,7 @@ export default class NetworkTablesProvider extends SourceProvider {
 
       NetworkTables.addWsConnectionListener(connected => {
         if (!connected) {
-          this.clearSources();
+          this.clearSourcesWithTimeout(2000);
         } else {
           for (let key of NetworkTables.getKeys()) {
             this.updateSource(key, NetworkTables.getValue(key));
