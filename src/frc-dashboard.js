@@ -1,5 +1,6 @@
 import { addSourceProvider, setDefaultSourceProvider } from '@webbitjs/store';
 import { LitElement, html } from 'lit-element';
+import './dashboard/tools/networktables-dialog';
 
 class FrcDashboard extends LitElement {
 
@@ -40,10 +41,19 @@ class FrcDashboard extends LitElement {
         clearInterval(interval);
       }
     }, 500);
+
+    const networktablesDialog = this.shadowRoot.querySelector('dashboard-networktables-dialog');
+
+    document.body.addEventListener('keydown', ev => {
+      if (ev.shiftKey && ev.code === 'KeyN' && document.activeElement === document.body) {
+        networktablesDialog.open();
+      }
+    });
   }
   
   render() {
     return html`
+      <dashboard-networktables-dialog></dashboard-networktables-dialog>
       <slot></slot>
     `;
   }

@@ -63,6 +63,7 @@ export default class NetworkTablesProvider extends SourceProvider {
         if (!connected) {
           this.clearSourcesWithTimeout(2000);
         } else {
+          this.clearSources();
           for (let key of NetworkTables.getKeys()) {
             this.updateSource(key, NetworkTables.getValue(key));
           }
@@ -73,9 +74,11 @@ export default class NetworkTablesProvider extends SourceProvider {
         if (!connected) {
           this.clearSourcesWithTimeout(2000);
         } else {
+          this.clearSources();
           for (let key of NetworkTables.getKeys()) {
             this.updateSource(key, NetworkTables.getValue(key));
           }
+          this.connect();
         }
       }, true);
   
@@ -91,6 +94,16 @@ export default class NetworkTablesProvider extends SourceProvider {
       NetworkTables.connectToWs(`8888${addressPart}`);
     } else {
       NetworkTables.connectToWs(`${address}:8888`);
+    }
+  }
+
+  connect(address) {
+    if (address) {
+      localStorage.networkTablesAddress = address === 'localhost' ? '127.0.0.1' : address;
+    }
+
+    if (localStorage.networkTablesAddress) {
+      NetworkTables.connect(localStorage.networkTablesAddress);
     }
   }
 

@@ -155,6 +155,7 @@ class WebbitDashboard extends LitElement {
 
   render() {
     return html`
+      <dashboard-networktables-dialog></dashboard-networktables-dialog>
       ${this.editMode ? html`
         <vaadin-split-layout part="editor" theme="small">
           <wom-dashboard-builder part="dashboard" .wom="${this.wom}">

@@ -64,3 +64,9 @@ import './if';
 
 // camera
 import './camera';
+
+// connection
+import './connection';
+
+// command based robot
+import './command-based-robot';

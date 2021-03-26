@@ -1,5 +1,6 @@
 import { addSourceProvider, setDefaultSourceProvider } from '@webbitjs/store';
 import WebbitDashboard from './dashboard';
+import './dashboard/tools/networktables-dialog';
 
 class FrcDashboardBuilder extends WebbitDashboard {
 
@@ -40,6 +41,14 @@ class FrcDashboardBuilder extends WebbitDashboard {
         clearInterval(interval);
       }
     }, 500);
+
+    const networktablesDialog = this.shadowRoot.querySelector('dashboard-networktables-dialog');
+
+    document.body.addEventListener('keydown', ev => {
+      if (ev.shiftKey && ev.code === 'KeyN' && document.activeElement === document.body) {
+        networktablesDialog.open();
+      }
+    });
   }
 }
 

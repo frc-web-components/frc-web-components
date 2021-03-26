@@ -1,5 +1,6 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
 import { containerStyles } from '../styles';
+import { html, css } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 
 class ToggleButton extends Webbit {
 
@@ -33,15 +34,9 @@ class ToggleButton extends Webbit {
 
   static get properties() {
     return {
-      toggled: { type: Boolean, primary: true },
-      label: { type: String }
+      toggled: { type: Boolean, defaultValue: false, primary: true },
+      label: { type: String, defaultValue: 'Button' }
     }
-  }
-
-  constructor() {
-    super();
-    this.toggled = false;
-    this.label = 'Button';
   }
 
   onClick() {
@@ -61,4 +56,4 @@ class ToggleButton extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-toggle-button', ToggleButton);
+define('frc-toggle-button', ToggleButton);
