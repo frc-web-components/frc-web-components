@@ -69,3 +69,6 @@ import './connection';
 
 // command based robot
 import './command-based-robot';
+
+// api viewer
+import './api-viewer';

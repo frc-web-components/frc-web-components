@@ -27,6 +27,7 @@
     "@vaadin/vaadin": "^17.0.7",
     "@webbitjs/store": "^1.2.0",
     "@webbitjs/webbit": "^1.5.14",
+    "api-viewer-element": "^0.4.4",
     "chart.js": "^2.8.0",
     "d3": "^5.15.0",
     "hotkeys-js": "^3.8.1",
@@ -35,10 +36,10 @@
     "juicy-ace-editor": "^2.0.5",
     "multiselect-combo-box": "^2.4.2",
     "quaternion": "^1.1.0",
+    "resize-observer-polyfill": "^1.5.1",
     "svg-gauge": "^1.0.6",
     "three": "^0.116.1",
-    "urdf-loader": "^0.8.2",
-    "resize-observer-polyfill": "^1.5.1"
+    "urdf-loader": "^0.8.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
