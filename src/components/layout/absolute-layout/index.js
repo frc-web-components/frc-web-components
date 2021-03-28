@@ -1,4 +1,5 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { html, css } from 'lit-element';
+import { Webbit, define } from '../../../webbit';
 
 export default class AbsoluteLayout extends Webbit {
 
@@ -27,10 +28,6 @@ export default class AbsoluteLayout extends Webbit {
     `;
   }
 
-  constructor() {
-    super();
-  }
-
   render() {
     return html`
       <slot></slot>
@@ -38,4 +35,4 @@ export default class AbsoluteLayout extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-absolute-layout', AbsoluteLayout);
+define('frc-absolute-layout', AbsoluteLayout);

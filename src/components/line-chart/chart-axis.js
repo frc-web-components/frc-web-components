@@ -1,5 +1,5 @@
-
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { css } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 
 class ChartAxis extends Webbit {
 
@@ -31,17 +31,19 @@ class ChartAxis extends Webbit {
       axisId: { type: String },
       scaleType: { 
         type: String,
+        defaultValue: 'linear',
         inputType: 'StringDropdown',
         getOptions() {
           return ['linear', 'logarithmic'];
         }
       },
-      min: { type: Number },
-      max: { type: Number },
-      label: { type: String },
+      min: { type: Number, defaultValue: -1 },
+      max: { type: Number, defaultValue: 1 },
+      label: { type: String, defaultValue: 'Value' },
       tickValues: { type: Array, inputType: 'NumberArray' },
       position: { 
         type: String,
+        defaultValue: 'left',
         inputType: 'StringDropdown',
         getOptions() {
           return ['left', 'right'];
@@ -50,18 +52,6 @@ class ChartAxis extends Webbit {
       hideGridLines: { type: Boolean }
     };
   }
-
-  constructor() {
-    super();
-    this.axisId = '';
-    this.scaleType = 'linear';
-    this.min = -1;
-    this.max = 1;
-    this.label = 'Value';
-    this.tickValues = [];
-    this.position = 'left';
-    this.hideGridLines = false;
-  }
 }
 
-webbitRegistry.define('frc-chart-axis', ChartAxis);
+define('frc-chart-axis', ChartAxis);

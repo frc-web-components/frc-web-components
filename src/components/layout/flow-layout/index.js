@@ -1,4 +1,6 @@
-import { Webbit, html, css, FlowLayout } from '@webbitjs/webbit';
+import { FlowLayout } from '@webbitjs/webbit';
+import { html, css } from 'lit-element';
+import { Webbit, define } from '../../../webbit';
 
 export default class FlowLayoutElement extends Webbit {
 
@@ -12,13 +14,13 @@ export default class FlowLayoutElement extends Webbit {
 
   static get properties() {
     return {
-      width: { type: String },
-      height: { type: String },
-      direction: { type: String },
-      wrap: { type: String },
-      justifyContent: { type: String },
-      alignItems: { type: String },
-      alignContent: { type: String },
+      width: { type: String, defaultValue: '400px' },
+      height: { type: String, defaultValue: '400px' },
+      direction: { type: String, defaultValue: 'row' },
+      wrap: { type: String, defaultValue: 'wrap' },
+      justifyContent: { type: String, defaultValue: 'flex-start' },
+      alignItems: { type: String, defaultValue: 'flex-start' },
+      alignContent: { type: String, defaultValue: 'flex-start' },
     }
   }
 
@@ -35,17 +37,6 @@ export default class FlowLayoutElement extends Webbit {
         align-content: var(--layout-align-content);
       }
     `;
-  }
-
-  constructor() {
-    super();
-    this.width = '400px';
-    this.height = '400px';
-    this.direction = 'row';
-    this.wrap = 'wrap';
-    this.justifyContent = 'flex-start';
-    this.alignItems = 'flex-start';
-    this.alignContent = 'flex-start';
   }
 
   placeLayoutElement(element, context) {
@@ -68,4 +59,4 @@ export default class FlowLayoutElement extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-flow-layout', FlowLayoutElement);
+define('frc-flow-layout', FlowLayoutElement);

@@ -1,5 +1,6 @@
 
-import { Webbit, css } from '@webbitjs/webbit';
+import { css } from 'lit-element';
+import { Webbit, define } from '../webbit';
 
 class ChartData extends Webbit {
 
@@ -42,13 +43,6 @@ class ChartData extends Webbit {
     };
   }
 
-  constructor() {
-    super();
-    this.value = 0;
-    this.axisId = '';
-    this.label = '';
-    this.color = '';
-  }
 }
 
-webbitRegistry.define('frc-chart-data', ChartData);
+define('frc-chart-data', ChartData);

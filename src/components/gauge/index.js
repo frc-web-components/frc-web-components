@@ -1,4 +1,5 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { html, css } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 import { containerStyles } from '../styles';
 import Gauge from 'svg-gauge';
 
@@ -56,7 +57,6 @@ class GaugeWebbit extends Webbit {
 
   static get properties() {
     return {
-      ...super.properties,
       min: { 
         type: Number, 
         get() {
@@ -65,6 +65,7 @@ class GaugeWebbit extends Webbit {
       },
       max: { 
         type: Number, 
+        defaultValue: 100,
         get() {
           return Math.max(this._min, this._max);
         }
@@ -104,7 +105,6 @@ class GaugeWebbit extends Webbit {
 };
 
   firstUpdated() {
-    super.firstUpdated();
     this.gaugeInit();
   }
 
@@ -128,4 +128,4 @@ class GaugeWebbit extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-gauge', GaugeWebbit);
+define('frc-gauge', GaugeWebbit);

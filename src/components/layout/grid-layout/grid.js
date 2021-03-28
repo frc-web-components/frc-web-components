@@ -1,5 +1,6 @@
-import { html, css, Webbit } from '@webbitjs/webbit';
 import { containerStyles } from '../../styles';
+import { html, css } from 'lit-element';
+import { Webbit, define } from '../../../webbit';
 
 class GridLayout extends Webbit {
 
@@ -29,6 +30,7 @@ class GridLayout extends Webbit {
         :host {
           width: 300px;
           height: 300px;
+          display: block;
         }
 
         kor-grid {
@@ -42,30 +44,17 @@ class GridLayout extends Webbit {
 
   static get properties() {
     return {
-      rows: { type: Number },
-      columns: { type: Number },
-      spacing: { type: Number }
+      rows: { type: Number, defaultValue: 12 },
+      columns: { type: Number, defaultValue: 12 },
+      spacing: { type: Number, defaultValue: 8 }
     }
   }
 
-  constructor() {
-    super();
-    this.display = 'block';
-    this.width = '100%';
-    this.height = '100%';
-    this.rows = 12;
-    this.columns = 12;
-    this.spacing = 8;
-  }
-
   firstUpdated() {
-    super.firstUpdated();
     this.gridNode = this.shadowRoot.querySelector('[part=grid]');
   }
 
   updated(changedProps) {
-    super.updated(changedProps);
-
     if (changedProps.has('spacing')) {
       this.gridNode.style.setProperty('--grid-gap', `${this.spacing}px`);
     }
@@ -80,4 +69,4 @@ class GridLayout extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-grid-layout', GridLayout);
+define('frc-grid-layout', GridLayout);

@@ -1,7 +1,23 @@
-import { LitElement, html, css } from '@webbitjs/webbit';
 import { containerStyles } from '../styles';
+import { html, css } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 
-class Label extends LitElement {
+class Label extends Webbit {
+
+  static get dashboardConfig() {
+    return {
+      displayName: 'Label',
+      category: 'General',
+      description: 'A label',
+      documentationLink: 'https://frc-web-components.github.io/components/label/',
+      slots: [],
+      editorTabs: ['properties', 'sources'],
+      resizable: { left: true, right: true, top: false, bottom: false },
+      dashboardHtml: `
+        <frc-label text="label"></frc-label>
+      `
+    };
+  }
  
   static get styles() {
     return [
@@ -17,18 +33,13 @@ class Label extends LitElement {
           padding: 0;
         }
       `
-    ]
+    ];
   }
 
   static get properties() {
     return {
-      text: { type: String, reflect: true },
+      text: { type: String, primary: true },
     };
-  }
-
-  constructor() {
-    super();
-    this.text = 'label';
   }
 
   render() {
@@ -36,17 +47,4 @@ class Label extends LitElement {
   }
 }
 
-customElements.define('frc-label', Label);
-
-webbitRegistry.addExisting('frc-label', {
-  displayName: 'Label',
-  category: 'General',
-  description: 'A label',
-  documentationLink: 'https://frc-web-components.github.io/components/label/',
-  slots: [],
-  editorTabs: ['properties', 'sources'],
-  resizable: { left: true, right: true, top: false, bottom: false },
-  properties: {
-    text: { type: String, primary: true },
-  }
-})
+define('frc-label', Label);

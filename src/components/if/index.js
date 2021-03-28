@@ -1,5 +1,6 @@
-import { html, Webbit } from '@webbitjs/webbit';
 import { containerStyles } from '../styles';
+import { html } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 
 class If extends Webbit {
 
@@ -21,7 +22,6 @@ class If extends Webbit {
 
   static get properties() {
     return {
-      ...super.properties,
       value: { type: Boolean },
     };
   }
@@ -44,4 +44,4 @@ class If extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-if', If);
+define('frc-if', If);

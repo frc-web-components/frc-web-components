@@ -1,161 +1,162 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { css, html } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 import defaultOptions, { yAxisDefaults } from './line-chart-options';
 import { colors, shuffle } from '../chart-utils';
 import './chart-axis';
 
 class LineChartData {
 
-	constructor(valueCount, chart) {
-		this.valueCount = valueCount;
-		this.data = [];
-		this.dataIds = [];
-		this.dataLabels = [];
-		this.dataColors = [];
-		this.chart = chart;
+  constructor(valueCount, chart) {
+    this.valueCount = valueCount;
+    this.data = [];
+    this.dataIds = [];
+    this.dataLabels = [];
+    this.dataColors = [];
+    this.chart = chart;
 
 
 
-		for (let i = 0; i < valueCount; i++) {
-			this.dataIds.push('');
-			this.dataLabels.push('');
-			this.dataColors.push('');
-		}
+    for (let i = 0; i < valueCount; i++) {
+      this.dataIds.push('');
+      this.dataLabels.push('');
+      this.dataColors.push('');
+    }
 
-		this.currentTime = 0;
-		this.trackedTime = 30;
-		this.timeStep = .1;
+    this.currentTime = 0;
+    this.trackedTime = 30;
+    this.timeStep = .1;
 
-		this.initData();
-	}
+    this.initData();
+  }
 
-	initData() {
-		this.data = [];
+  initData() {
+    this.data = [];
 
-		let dataLength = this.trackedTime / this.timeStep;
+    let dataLength = this.trackedTime / this.timeStep;
 
-		let values = [];
+    let values = [];
 
-		for (let i = 0; i < this.valueCount; i++) {
-			values.push(NaN);
-		}
+    for (let i = 0; i < this.valueCount; i++) {
+      values.push(NaN);
+    }
 
-		for (let i = 0; i < dataLength; i++) {
-			this.data.push({
-				time: this.currentTime + i * this.timeStep - this.trackedTime,
-				values
-			})
-		}
-	}
+    for (let i = 0; i < dataLength; i++) {
+      this.data.push({
+        time: this.currentTime + i * this.timeStep - this.trackedTime,
+        values
+      })
+    }
+  }
 
-	updateChart(chart) {
+  updateChart(chart) {
 
-		chart.chart.data.labels = this.data.map(point => point.time.toFixed(1));
+    chart.chart.data.labels = this.data.map(point => point.time.toFixed(1));
 
-		// https://stackoverflow.com/a/41878442
-		const hiddenValues = chart.chart.data.datasets.map(dataset => {
-			const isHiddenMeta = dataset._meta[Object.keys(dataset._meta)[0]].hidden;
-			if (typeof isHiddenMeta === 'boolean') {
-				return isHiddenMeta;
-			}
-			return dataset.hidden;
-		});
+    // https://stackoverflow.com/a/41878442
+    const hiddenValues = chart.chart.data.datasets.map(dataset => {
+      const isHiddenMeta = dataset._meta[Object.keys(dataset._meta)[0]].hidden;
+      if (typeof isHiddenMeta === 'boolean') {
+        return isHiddenMeta;
+      }
+      return dataset.hidden;
+    });
 
-		const yAxisIds = chart.chart.options.scales.yAxes.map(axis => axis.id);
+    const yAxisIds = chart.chart.options.scales.yAxes.map(axis => axis.id);
 
-		chart.chart.data.datasets.splice(0, chart.chart.data.datasets.length);
-		this.dataLabels.forEach((label, index) => {
-			if (yAxisIds.includes(this.dataIds[index])) {
-				chart.chart.data.datasets.push({
-					yAxisID: this.dataIds[index],
-					label: label,
-					data: this.data.map(point => point.values[index]),
-					fill: false,
-					pointRadius: 0,
-					borderColor: this.dataColors[index],
-					borderWidth: 2,
-					hidden: hiddenValues[index]
-				});
-			}
-		});
+    chart.chart.data.datasets.splice(0, chart.chart.data.datasets.length);
+    this.dataLabels.forEach((label, index) => {
+      if (yAxisIds.includes(this.dataIds[index])) {
+        chart.chart.data.datasets.push({
+          yAxisID: this.dataIds[index],
+          label: label,
+          data: this.data.map(point => point.values[index]),
+          fill: false,
+          pointRadius: 0,
+          borderColor: this.dataColors[index],
+          borderWidth: 2,
+          hidden: hiddenValues[index]
+        });
+      }
+    });
 
-		chart.updateChart();
-	}
+    chart.updateChart();
+  }
 
-	addData(values) {
-		this.currentTime += this.timeStep;
-		this.data.push({
-			time: this.currentTime,
-			values
-		});
-		this.data.shift();
-	}
+  addData(values) {
+    this.currentTime += this.timeStep;
+    this.data.push({
+      time: this.currentTime,
+      values
+    });
+    this.data.shift();
+  }
 
-	setTrackedTime(time) {
+  setTrackedTime(time) {
 
-		if (time === this.trackedTime) {
-			return;
-		}
+    if (time === this.trackedTime) {
+      return;
+    }
 
-		const oldTrackedTime = this.trackedTime;
-		const oldData = this.data;
+    const oldTrackedTime = this.trackedTime;
+    const oldData = this.data;
 
-		this.trackedTime = time;
-		this.initData();
+    this.trackedTime = time;
+    this.initData();
 
-		if (oldData.length >= this.data.length) {
-			// get end of old data and set it equal to the new data
-			this.data = oldData.slice(oldData.length - this.data.length);
-		} else {
-			this.data = this.data.slice(0, this.data.length - oldData.length).concat(oldData);
-		}
-	}
+    if (oldData.length >= this.data.length) {
+      // get end of old data and set it equal to the new data
+      this.data = oldData.slice(oldData.length - this.data.length);
+    } else {
+      this.data = this.data.slice(0, this.data.length - oldData.length).concat(oldData);
+    }
+  }
 
-	setTimeStep(step) {
+  setTimeStep(step) {
 
-		if (step === this.timeStep) {
-			return;
-		}
+    if (step === this.timeStep) {
+      return;
+    }
 
-		const oldData = this.data;
+    const oldData = this.data;
 
-		if (step < .01) {
-			this.timeStep = .01;
-		} else {
-			this.timeStep = step;
-		}
+    if (step < .01) {
+      this.timeStep = .01;
+    } else {
+      this.timeStep = step;
+    }
 
-		const newData = [];
+    const newData = [];
 
-		// scale previous data to fit new time step.
-		const newDataLength = this.trackedTime / this.timeStep;
-		for (let i = 0; i < newDataLength; i++) {
-			const oldDataIndex = Math.round(((oldData.length - 1) / newDataLength) * i);
-			newData.push({
-				time: i * this.timeStep,
-				values: oldData[oldDataIndex].values
-			});
-		}
+    // scale previous data to fit new time step.
+    const newDataLength = this.trackedTime / this.timeStep;
+    for (let i = 0; i < newDataLength; i++) {
+      const oldDataIndex = Math.round(((oldData.length - 1) / newDataLength) * i);
+      newData.push({
+        time: i * this.timeStep,
+        values: oldData[oldDataIndex].values
+      });
+    }
 
-		this.data = newData;
-	}
+    this.data = newData;
+  }
 
-	setId(index, id) {
-		this.dataIds[index] = id;
-	}
+  setId(index, id) {
+    this.dataIds[index] = id;
+  }
 
-	setColor(index, color) {
-		this.dataColors[index] = color;
-	}
+  setColor(index, color) {
+    this.dataColors[index] = color;
+  }
 
-	setLabel(index, label) {
-		this.dataLabels[index] = label;
-	}
+  setLabel(index, label) {
+    this.dataLabels[index] = label;
+  }
 }
 
 
 class LineChart extends Webbit {
 
-	static get dashboardConfig() {
+  static get dashboardConfig() {
     return {
       displayName: 'Line Chart',
       category: 'Charts & Graphs',
@@ -180,43 +181,40 @@ class LineChart extends Webbit {
     return css`
       :host { 
         display: inline-block;
-				width: 450px;
-				height: 400px;
+        width: 450px;
+        height: 400px;
       }
 
-			slot {
-				display: none;
-			}
+      slot {
+        display: none;
+      }
     `;
   }
 
   static get properties() {
     return {
       title: { type: String },
-			xAxisLabel: { type: String, attribute: 'x-axis-label' },
-			trackedTime: { type: Number, attribute: 'tracked-time' },
-			timeStep: { 
-				type: Number, 
-				attribute: 'time-step',
-				get() {
-					return Math.max(.01, this._timeStep);
-				}
-			}
+      xAxisLabel: { type: String, defaultValue: 'Time (seconds)' },
+      trackedTime: { type: Number, defaultValue: 30 },
+      timeStep: {
+        type: Number,
+        defaultValue: .1,
+        attribute: 'time-step',
+        get() {
+          return Math.max(.01, this._timeStep);
+        }
+      }
     };
   }
 
   constructor() {
     super();
-		this.title = '';
-		this.xAxisLabel = 'Time (seconds)';
     this.dataElements = [];
     this.axisElements = [];
-		this.trackedTime = 30;
-		this.timeStep = .1;
-		this.timeStepIntervalId = null;
+    this.timeStepIntervalId = null;
 
-		this.plugins = [{
-			beforeUpdate: (chart, options) => {
+    this.plugins = [{
+      beforeUpdate: (chart, options) => {
         chart.options.title.text = this.title;
         chart.options.scales.xAxes[0].scaleLabel.labelString = this.xAxisLabel;
 
@@ -234,23 +232,17 @@ class LineChart extends Webbit {
           currentAxes[i].scaleLabel.labelString = this.axisElements[i].label;
           currentAxes[i].ticks.min = this.axisElements[i].min;
           currentAxes[i].ticks.max = this.axisElements[i].max;
-          // currentAxes[i].ticks.userCallback  = (label, index) => {
-          //   if (this.axisElements[i].scaleType === 'linear') {
-          //     return label;
-          //   }
-          //   return index % 3 === 0 ? label: '';
-          // }
+
           if (this.axisElements[i].tickValues.length === 0) {
             currentAxes[i].afterBuildTicks = null;
           } else {
-          currentAxes[i].afterBuildTicks = (chartObj) => {
-            chartObj.ticks.splice(0, chartObj.ticks.length);
-            for (let tick of this.axisElements[i].tickValues) {
-              console.log('tick:', tick, typeof tick)
-              chartObj.ticks.push(tick);
+            currentAxes[i].afterBuildTicks = (chartObj) => {
+              chartObj.ticks.splice(0, chartObj.ticks.length);
+              for (let tick of this.axisElements[i].tickValues) {
+                chartObj.ticks.push(tick);
+              }
             }
           }
-        }
 
           currentAxes[i].gridLines.display = !this.axisElements[i].hideGridLines;
         }
@@ -258,27 +250,26 @@ class LineChart extends Webbit {
         for (let i = this.axisElements.length; i < currentAxes.length; i++) {
           currentAxes[i].display = false;
         }
-			}
+      }
     }]
 
-		this.randomizedColors = shuffle([...colors]);
-		this.chartData = null;
+    this.randomizedColors = shuffle([...colors]);
+    this.chartData = null;
   }
 
   firstUpdated() {
-		super.firstUpdated();
-		this.chartElement = this.shadowRoot.querySelector('#chart');
+    this.chartElement = this.shadowRoot.querySelector('#chart');
 
-		const slots = this.shadowRoot.querySelectorAll('slot');
+    const slots = this.shadowRoot.querySelectorAll('slot');
     slots.forEach(slot => {
       slot.addEventListener('slotchange', e => {
         let elements = [...slots].reduce((els, s) => {
           return els.concat([...s.assignedElements()]);
         }, []);
-        
+
         this.axisElements = elements.filter(element => element.tagName === 'FRC-CHART-AXIS');
         for (let i = 0; i < this.axisElements.length; i++) {
-          if (this.axisElements[i].defaultProps.axisId) {
+          if (this.axisElements[i].axisId) {
             continue;
           }
           const axisIds = this.axisElements.map(axis => axis.axisId);
@@ -286,7 +277,6 @@ class LineChart extends Webbit {
             const id = `Axis ${j + 1}`;
             if (!axisIds.includes(id)) {
               this.axisElements[i].axisId = id;
-              this.axisElements[i].setDefaultValue('axisId', id);
               break;
             }
           }
@@ -297,11 +287,10 @@ class LineChart extends Webbit {
           if (!element.color) {
             element.color = this.randomizedColors[i];
           }
-          if (!element.defaultProps.axisId) {
+          if (!element.axisId) {
             const axisId = this.axisElements.length > 0 ? this.axisElements[0].axisId : 'Axis 1';
             element.axisId = axisId;
-              element.setDefaultValue('axisId', axisId);
-            }
+          }
         });
         this.chartData = new LineChartData(this.dataElements.length);
         this.chartData.setTrackedTime(this.trackedTime);
@@ -310,39 +299,39 @@ class LineChart extends Webbit {
     });
   }
 
-	updateChart() {
-		if (this.chartData && this.chartElement.chart) {
-			this.dataElements.forEach((element, i) => {
-				this.chartData.setId(i, element.axisId);
-				this.chartData.setColor(i, element.color);
-				this.chartData.setLabel(i, element.label);
-			});
-			this.chartData.addData(this.dataElements.map(element => element.value));
-			this.chartData.updateChart(this.chartElement);
-		}
-	}
-
-	updateTimeStep() {
-		this.chartData.setTimeStep(this.timeStep);
-		clearInterval(this.timeStepIntervalId);
-		this.timeStepIntervalId = setInterval(
-			this.updateChart.bind(this), 
-			parseInt(this.timeStep * 1000)
-		);
+  updateChart() {
+    if (this.chartData && this.chartElement.chart) {
+      this.dataElements.forEach((element, i) => {
+        this.chartData.setId(i, element.axisId);
+        this.chartData.setColor(i, element.color);
+        this.chartData.setLabel(i, element.label);
+      });
+      this.chartData.addData(this.dataElements.map(element => element.value));
+      this.chartData.updateChart(this.chartElement);
+    }
   }
 
-	updated(changedProperties) {
-		if (!this.chartData) {
-			return;
-		}
+  updateTimeStep() {
+    this.chartData.setTimeStep(this.timeStep);
+    clearInterval(this.timeStepIntervalId);
+    this.timeStepIntervalId = setInterval(
+      this.updateChart.bind(this),
+      parseInt(this.timeStep * 1000)
+    );
+  }
 
-		if (changedProperties.has('trackedTime')) {
-			this.chartData.setTrackedTime(this.trackedTime);
-		}
+  updated(changedProperties) {
+    if (!this.chartData) {
+      return;
+    }
 
-		if (changedProperties.has('timeStep')) {
-			this.updateTimeStep();
-		}
+    if (changedProperties.has('trackedTime')) {
+      this.chartData.setTrackedTime(this.trackedTime);
+    }
+
+    if (changedProperties.has('timeStep')) {
+      this.updateTimeStep();
+    }
   }
 
   render() {
@@ -351,9 +340,9 @@ class LineChart extends Webbit {
         id="chart" 
         type="line" 
         .data="${{
-					labels: [],
-					datasets: []
-				}}" 
+        labels: [],
+        datasets: []
+      }}" 
         .options="${defaultOptions}"
 				.plugins="${this.plugins}"
       >
@@ -364,4 +353,4 @@ class LineChart extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-line-chart', LineChart);
+define('frc-line-chart', LineChart);
