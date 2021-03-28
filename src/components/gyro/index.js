@@ -1,5 +1,6 @@
-import { Webbit, css, svg } from '@webbitjs/webbit';
 import { containerStyles } from '../styles';
+import { svg, css } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(value, min));
@@ -102,11 +103,11 @@ class Gyro extends Webbit {
 
   static get properties() {
     return {
-      ...super.properties,
       value: { type: Number, primary: true },
-      hideLabel: { type: Boolean, attribute: 'hide-label' },
+      hideLabel: { type: Boolean },
       precision: { 
         type: Number,
+        defaultValue: 2,
         get() {
           return clamp(this._precision, 0, 100);
         }
@@ -116,9 +117,6 @@ class Gyro extends Webbit {
 
   constructor() {
     super();
-    this.value = 0;
-    this.hideLabel = false;
-    this.precision = 2;
 
     this.tickAngles = [];
 
@@ -134,7 +132,6 @@ class Gyro extends Webbit {
   }
 
   firstUpdated() {
-    super.firstUpdated();
     this.containerNode = this.shadowRoot.querySelector('.container');
   }
 
@@ -282,4 +279,4 @@ class Gyro extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-gyro', Gyro);
+define('frc-gyro', Gyro);

@@ -7,6 +7,7 @@ class ApiViewer extends LitElement {
   static get properties() {
     return {
       tags: { type: Array, attribute: false },
+      selected: { type: String, attribute: 'selected' },
       component: { type: String, attribute: 'component' }
     };
   }
@@ -15,6 +16,7 @@ class ApiViewer extends LitElement {
     super();
     this.tags = [];
     this.tagNames = [];
+    this.selected = '';
     this.component = '';
   }
 
@@ -34,7 +36,7 @@ class ApiViewer extends LitElement {
     for (let propName in dashboardConfig.properties) {
       const propConfig = dashboardConfig.properties[propName];
 
-      if (!propConfig.canConnectToSources || !propConfig.attribute) {
+      if (!propConfig.canConnectToSources || !propConfig.attribute || propConfig.editorOnly) {
         continue;
       }
 
@@ -43,7 +45,7 @@ class ApiViewer extends LitElement {
         description: '',
         type: propConfig.type.name.toLowerCase(),
         attribute: propConfig.attribute,
-        default: JSON.stringify(propConfig.defaultValue || ''),
+        default: JSON.stringify(propConfig.defaultValue) || '',
       });
     }
 
@@ -61,11 +63,11 @@ class ApiViewer extends LitElement {
 
   addTag(name) {
 
-    if (this.component && this.component !== name) {
+    if (this.component && name !== this.component) {
       return;
     }
 
-    if (this.hasTag(name)) {
+    if (this.hasTag(name) || !customElements.get(name)) {
       return;
     }
 
@@ -74,6 +76,10 @@ class ApiViewer extends LitElement {
     if (config) {
       this.tags.push(config);
       this.tagNames.push(name);
+
+      this.tags = this.tags.sort((tag1, tag2) => {
+        return tag1.name.localeCompare(tag2.name);
+      });
     }
   }
 
@@ -89,7 +95,7 @@ class ApiViewer extends LitElement {
   }
 
   render() {
-      return html`<api-viewer .elements="${this.tags}"></api-viewer>`;
+      return html`<api-viewer .elements="${this.tags}" selected="${this.selected}"></api-viewer>`;
   }
 }
 

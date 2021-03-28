@@ -1,5 +1,6 @@
 import FieldObject from './field-object';
 import { objectWithout } from './utils';
+import { define } from '../../webbit';
 
 class FieldCamera extends FieldObject {
 
@@ -18,26 +19,20 @@ class FieldCamera extends FieldObject {
   static get properties() {
     return {
       ...objectWithout(super.properties, ['width', 'height', 'draw']),
-      fov: { type: Number },
-      range: { type: Number },
+      fov: { type: Number, defaultValue: 60 },
+      range: { type: Number, defaultValue: 5 },
       seesTarget: { type: Boolean },
       targetDistance: { 
         type: Number,
+        defaultValue: -1,
         converter: (value) => {
           return parseFloat(value);
         },
         get() {
-          return isNaN(this._targetDistance) ? this.range : this._targetDistance;
+          return targetDistance < 0 ? this.range : this._targetDistance;
         }
       }
     };
-  }
-
-  constructor() {
-    super();
-    this.fov = 60;
-    this.range = 5;
-    this.seesTarget = false;
   }
 
   renderDrawing({ ctx, scalingFactor, parentWidth, parentHeight }) {
@@ -70,4 +65,4 @@ class FieldCamera extends FieldObject {
   }
 }
 
-webbitRegistry.define('frc-field-camera', FieldCamera);
+define('frc-field-camera', FieldCamera);

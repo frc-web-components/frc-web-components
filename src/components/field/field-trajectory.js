@@ -1,6 +1,6 @@
 import FieldObject from './field-object';
 import { objectWithout } from './utils';
-
+import { define } from '../../webbit';
 
 class FieldTrajectory extends FieldObject {
 
@@ -24,14 +24,6 @@ class FieldTrajectory extends FieldObject {
       startRot: { type: Number },
       endRot: { type: Number }
     };
-  }
-
-  constructor() {
-    super();
-    this.xs = [];
-    this.ys = [];
-    this.startRot = 0;
-    this.endRot = 0;
   }
 
   renderDrawing({ bottomCtx, scalingFactor }) {
@@ -66,4 +58,4 @@ class FieldTrajectory extends FieldObject {
   }
 }
 
-webbitRegistry.define('frc-field-trajectory', FieldTrajectory);
+define('frc-field-trajectory', FieldTrajectory);

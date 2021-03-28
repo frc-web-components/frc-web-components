@@ -1,4 +1,5 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { html, css } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 import * as CurvedArrow from '../curved-arrow';
 
 /** 
@@ -154,25 +155,17 @@ class DifferentialDrivebase extends Webbit {
     return {
       leftMotorSpeed: { 
         type: Number, 
-        attribute: 'left-motor-speed',
         get() {
           return clamp(this._leftMotorSpeed, -1, 1);
         }
        },
       rightMotorSpeed: { 
         type: Number, 
-        attribute: 'right-motor-speed',
         get() {
           return clamp(this._rightMotorSpeed, -1, 1);
         }
        }
     };
-  }
-
-  constructor() {
-    super();
-    this.leftMotorSpeed = 0;
-    this.rightMotorSpeed = 0;
   }
 
   drawMotionVector(left, right) {
@@ -346,7 +339,6 @@ class DifferentialDrivebase extends Webbit {
   }
 
   firstUpdated() {
-    super.firstUpdated();
     let drawing = this.drawMotionVector(0, 0);
     this.shadowRoot.getElementById('drivetrain').innerHTML = this.drawDrivetrain();
     this.shadowRoot.getElementById('forceVector').innerHTML = drawing;
@@ -392,4 +384,4 @@ class DifferentialDrivebase extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-differential-drivebase', DifferentialDrivebase);
+define('frc-differential-drivebase', DifferentialDrivebase);

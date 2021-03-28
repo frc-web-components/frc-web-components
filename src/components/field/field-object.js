@@ -1,5 +1,6 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
 import { toBaseConversions } from './units';
+import { html, css } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 
 export default class FieldObject extends Webbit {
 
@@ -39,10 +40,11 @@ export default class FieldObject extends Webbit {
       x: { type: Number },
       y: { type: Number },
       rot: { type: Number },
-      width: { type: Number },
-      height: { type: Number },
+      width: { type: Number, defaultValue: 1 },
+      height: { type: Number, defaultValue: 1 },
       unit: { 
         type: String,
+        defaultValue: 'inherit',
         inputType: 'StringDropdown',
         getOptions() {
           return ['inherit', ...Object.keys(toBaseConversions)];
@@ -55,14 +57,6 @@ export default class FieldObject extends Webbit {
 
   constructor() {
     super();
-    this.x = 0;
-    this.y = 0;
-    this.rot = 0;
-    this.width = 1;
-    this.height = 1;
-    this.image = '';
-    this.unit = 'inherit';
-    this.draw = '';
     this.drawFunction = new Function();
   }
 
@@ -108,4 +102,4 @@ export default class FieldObject extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-field-object', FieldObject);
+define('frc-field-object', FieldObject);

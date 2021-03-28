@@ -1,4 +1,5 @@
-import { Webbit, html, svg, css } from '@webbitjs/webbit';
+import { html, css, svg } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 import { baseUnit, toBaseConversions, convert, unitAliases } from './units';
 import './field-object';
 import './field-trajectory';
@@ -168,6 +169,7 @@ class Field extends Webbit {
     return {
       game: {
         type: String,
+        defaultValue: 'FIRST Power Up',
         inputType: 'StringDropdown',
         allowCustomValues: false,
         getOptions() {
@@ -176,6 +178,7 @@ class Field extends Webbit {
       },
       width: { 
         type: Number,
+        defaultValue: 54,
         get() {
           if (this._game === 'Custom') {
             return this._width;
@@ -189,6 +192,7 @@ class Field extends Webbit {
       },
       height: { 
         type: Number,
+        defaultValue: 27,
         get() {
           if (this._game === 'Custom') {
             return this._height;
@@ -202,6 +206,7 @@ class Field extends Webbit {
       },
       unit: { 
         type: String,
+        defaultValue: baseUnit,
         inputType: 'StringDropdown',
         getOptions() {
           return Object.keys(toBaseConversions);
@@ -287,7 +292,7 @@ class Field extends Webbit {
           return game !== 'Custom';
         }
       },
-      gridSize: { type: Number },
+      gridSize: { type: Number, defaultValue: 1 },
       showGrid: { type: Boolean },
       swapAxes: { type: Boolean },
     };
@@ -295,15 +300,7 @@ class Field extends Webbit {
 
   constructor() {
     super();
-    this.game = 'FIRST Power Up';
-    this.width = 54;
-    this.height = 27;
-    this.image = '';
-    this.gridSize = 1;
-    this.showGrid = false;
-    this.swapAxes = false;
     this.objectElements = [];
-    this.unit = baseUnit;
     this.imageObjects = {};
     this.fullFieldImageSize = null;
   }
@@ -339,6 +336,13 @@ class Field extends Webbit {
       this.resizeField();
       this.requestUpdate();
     }
+
+    console.log('...');
+    const playingFieldImageRect = this.getPlayingFieldImageRect();
+    this.field.style.setProperty('--playing-field-width', `${playingFieldImageRect.width}px`);
+    this.field.style.setProperty('--playing-field-height', `${playingFieldImageRect.height}px`);
+    this.field.style.setProperty('--playing-field-left', `${playingFieldImageRect.left - 1}px`);
+    this.field.style.setProperty('--playing-field-top', `${playingFieldImageRect.top - 1}px`);
   }
 
   setFieldPose(fieldInfo) {
@@ -493,7 +497,6 @@ class Field extends Webbit {
       bottomCanvas,
       bottomCtx,
       scalingFactor: unitScale * scale / 2, 
-      source: element.getSource() || {}
     });
     
     ctx.restore();
@@ -501,7 +504,6 @@ class Field extends Webbit {
   }
 
   firstUpdated() {
-    super.firstUpdated();
 
     this.field = this.shadowRoot.querySelector('[part=field]');;
     const field = this.field;
@@ -523,11 +525,6 @@ class Field extends Webbit {
       const playingFieldImageRect = this.getPlayingFieldImageRect();
       const xOffset = playingFieldImageRect.left;
       const yOffset = playingFieldImageRect.top;
-
-      field.style.setProperty('--playing-field-width', `${playingFieldImageRect.width}px`);
-      field.style.setProperty('--playing-field-height', `${playingFieldImageRect.height}px`);
-      field.style.setProperty('--playing-field-left', `${playingFieldImageRect.left - 1}px`);
-      field.style.setProperty('--playing-field-top', `${playingFieldImageRect.top - 1}px`);
 
       this.setFieldPose({
         canvas,
@@ -663,4 +660,4 @@ class Field extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-field', Field);
+define('frc-field', Field);

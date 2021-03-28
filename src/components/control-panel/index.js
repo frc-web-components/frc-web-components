@@ -1,5 +1,6 @@
 
-import { Webbit, html, css, svg } from '@webbitjs/webbit';
+import { html, css, svg } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 
 const easeOut = t => t * (2 - t);
 
@@ -110,6 +111,7 @@ class ControlPanel extends Webbit {
       clockwise: { type: Boolean },
       duration : { 
         type: Number,
+        defaultValue: 1,
         get() {
           return Math.max(0, this._duration);
         }
@@ -120,12 +122,8 @@ class ControlPanel extends Webbit {
   constructor() {
     super();
     this.colors = ['red','yellow','blue','green','red','yellow','blue','green'];
-    this.desiredColor = '';
-    this.currentColor = '';
-    this.clockwise = false;
     this.positionIndex = 3;
     this.animator = null;
-    this.duration = 1;
   }
 
   getRotation() {
@@ -171,7 +169,6 @@ class ControlPanel extends Webbit {
   }
 
   firstUpdated() {
-    super.firstUpdated();
     this.svg = this.shadowRoot.querySelector('svg');
     this.animator = new RotationAnimator(
       this.shadowRoot.querySelector('svg'),
@@ -215,5 +212,5 @@ class ControlPanel extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-control-panel', ControlPanel);
+define('frc-control-panel', ControlPanel);
 

@@ -50,6 +50,7 @@ export const define = (name, constructor, options) => {
           defaultValue: '',
           attribute: 'name',
           showInEditor: true,
+          editorOnly: true,
           canConnectToSources: true,
           property: 'name',
           event: 'nameChange'

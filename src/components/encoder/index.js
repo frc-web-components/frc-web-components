@@ -1,4 +1,5 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { html, css } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 
 class Encoder extends Webbit {
 
@@ -44,12 +45,6 @@ class Encoder extends Webbit {
     };
   }
 
-  constructor() {
-    super();
-    this.distance = 0;
-    this.speed = 0;
-  }
-
   render() {
     return html`   
         <label part="distance-label">Distance</label>
@@ -68,4 +63,4 @@ class Encoder extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-encoder', Encoder);
+define('frc-encoder', Encoder);

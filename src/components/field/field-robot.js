@@ -1,6 +1,7 @@
 import FieldObject from './field-object';
 import { objectWithout } from './utils';
-import { convert } from './units';
+import { toBaseConversions } from './units';
+import { define } from '../../webbit';
 
 class FieldRobot extends FieldObject {
 
@@ -11,26 +12,28 @@ class FieldRobot extends FieldObject {
       // description: 'Component for displaying information about an encoder',
       // documentationLink: 'https://frc-web-components.github.io/components/encoder/',
       allowedParents: ['frc-field'],
-      allowedChildren: ['frc-field-camera', 'frc-field-object']
+      allowedChildren: ['frc-field-camera', 'frc-field-object'],
+      defaultSourceProvider: 'NetworkTables',
+      defaultSourceKey: '/SmartDashboard/Field/Robot'
     };
   }
 
   static get properties() {
     return {
       ...objectWithout(super.properties, ['draw']),
-      color: { type: String, inputType: 'ColorPicker' },
+      color: { type: String, defaultValue: '#0000ff', inputType: 'ColorPicker' },
       pose: { type: Array, inputType: 'hidden', primary: true },
+      width: { type: Number, defaultValue: .6 },
+      height: { type: Number, defaultValue: .9 },
+      unit: { 
+        type: String,
+        defaultValue: 'm',
+        inputType: 'StringDropdown',
+        getOptions() {
+          return ['inherit', ...Object.keys(toBaseConversions)];
+        }
+      },
     };  
-  }
-
-  constructor() {
-    super();
-    this.color = '#0000ff';
-    this.width = .6;
-    this.height = .9;
-    this.sourceKey = '/SmartDashboard/Field/Robot';
-    this.sourceProvider = 'NetworkTables';
-    this.unit = 'm';
   }
 
   updated(changedProps) {
@@ -101,4 +104,4 @@ class FieldRobot extends FieldObject {
   }
 }
 
-webbitRegistry.define('frc-field-robot', FieldRobot);
+define('frc-field-robot', FieldRobot);

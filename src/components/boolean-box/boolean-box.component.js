@@ -1,16 +1,18 @@
-import { html, css, LitElement } from 'lit-element';
+import { html, css } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 
-/**
- * A box that's shown as one color if true and another color if false.
- *
- * @attr {Boolean} value - If true then the boolean box's color will be the true color. If false the color will be the false color.
- * @attr {String} true-color - The color that is displayed if value is true.
- * @attr {String} false-color - The color that is displayed if value is false.
- * @attr {String} label - A text label that is shown in the center of the boolean box.
- * @csspart box - The box element
- *
- */
-class BooleanBox extends LitElement {
+class BooleanBox extends Webbit {
+
+  static get dashboardConfig() {
+    return {
+      displayName: 'Boolean Box',
+      category: 'General',
+      description: `A box that's shown as one color if true and another color if false.`,
+      documentationLink: 'https://frc-web-components.github.io/components/boolean-box/',
+      slots: [],
+      editorTabs: ['properties', 'sources'],
+    };
+  }
 
   static get styles() {
     return css`
@@ -36,19 +38,11 @@ class BooleanBox extends LitElement {
 
   static get properties() {
     return {
-      value: { type: Boolean, primary: true, reflect: true },
-      trueColor: { type: String, attribute: 'true-color', reflect: true },
-      falseColor: { type: String, attribute: 'false-color', reflect: true },
-      label: { type: String, reflect: true },
+      value: { type: Boolean, primary: true },
+      trueColor: { type: String, defaultValue: 'green' },
+      falseColor: { type: String, defaultValue: 'red' },
+      label: { type: String },
     };
-  }
-
-  constructor() {
-    super();
-    this.value = false;
-    this.trueColor = 'green';
-    this.falseColor = 'red';
-    this.label = '';
   }
 
   updated() {
@@ -70,19 +64,4 @@ class BooleanBox extends LitElement {
   }
 }
 
-customElements.define('frc-boolean-box', BooleanBox);
-
-webbitRegistry.addExisting('frc-boolean-box', {
-  displayName: 'Boolean Box',
-  category: 'General',
-  description: `A box that's shown as one color if true and another color if false.`,
-  documentationLink: 'https://frc-web-components.github.io/components/boolean-box/',
-  slots: [],
-  editorTabs: ['properties', 'sources'],
-  properties: {
-    value: { type: Boolean, primary: true, defaultValue: false },
-    trueColor: { type: String, attribute: 'true-color', defaultValue: 'green' },
-    falseColor: { type: String, attribute: 'false-color', defaultValue: 'red' },
-    label: { type: String, defaultValue: '' },
-  }
-});
+define('frc-boolean-box', BooleanBox);
