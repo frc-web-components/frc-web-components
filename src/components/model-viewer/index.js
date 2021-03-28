@@ -1,5 +1,7 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { css, html } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 import './model-element/index';
+
 
 // https://bl.ocks.org/duhaime/8c2be958e71ea1814e8c11f95592a3a4
 // use this example
@@ -44,24 +46,14 @@ class ModelViewer extends Webbit {
       pitchOffset: { type: Number },
       rollOffset: { type: Number },
       yawOffset: { type: Number },
-      pitchAxis: { type: String, get() { return this._pitchAxis.toLowerCase(); } },
-      rollAxis: { type: String, get() { return this._rollAxis.toLowerCase(); } },
-      yawAxis: { type: String, get() { return this._yawAxis.toLowerCase(); } },
+      pitchAxis: { type: String, defaultValue: 'x', get() { return this._pitchAxis.toLowerCase(); } },
+      rollAxis: { type: String, defaultValue: 'y', get() { return this._rollAxis.toLowerCase(); } },
+      yawAxis: { type: String, defaultValue: 'z', get() { return this._yawAxis.toLowerCase(); } },
     };
   }
 
   constructor() {
     super();
-    this.src = '';
-    this.pitch = 0;
-    this.roll = 0;
-    this.yaw = 0;
-    this.pitchOffset = 0;
-    this.rollOffset = 0;
-    this.yawOffset = 0;
-    this.pitchAxis = 'x';
-    this.rollAxis = 'y';
-    this.yawAxis = 'z';
     this.model = null;
     this.shouldAnimate = false;
   }
@@ -86,7 +78,6 @@ class ModelViewer extends Webbit {
   }
 
   firstUpdated() {
-    super.firstUpdated();
     this.model = this.shadowRoot.querySelector('x-model');
 
     const animate = () => {
@@ -114,4 +105,4 @@ class ModelViewer extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-model-viewer', ModelViewer);
+define('frc-model-viewer', ModelViewer);

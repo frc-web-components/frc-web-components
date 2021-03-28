@@ -9,8 +9,6 @@ export default class SetProperties extends Action {
   execute({ wom, selectedNode, context }) {
     const { propertyValueMap } = context;
 
-    console.log('set properties', propertyValueMap);
-
     selectedNode.setProperties(propertyValueMap);
 
     setTimeout(async () => {

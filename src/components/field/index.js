@@ -337,7 +337,6 @@ class Field extends Webbit {
       this.requestUpdate();
     }
 
-    console.log('...');
     const playingFieldImageRect = this.getPlayingFieldImageRect();
     this.field.style.setProperty('--playing-field-width', `${playingFieldImageRect.width}px`);
     this.field.style.setProperty('--playing-field-height', `${playingFieldImageRect.height}px`);

@@ -1,5 +1,6 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
 import { containerStyles } from '../styles';
+import { html, css } from 'lit-element';
+import { define, Webbit } from '../../webbit';
 
 function getRange(start, end) {
   const range = [];
@@ -8,10 +9,6 @@ function getRange(start, end) {
   }
   return range;
 };
-
-function clamp(value, min, max) {
-  return Math.min(max, Math.max(value, min));
-}
 
 class Pdp extends Webbit {
 
@@ -37,10 +34,9 @@ class Pdp extends Webbit {
     }
 
     return {
-      ...super.properties,
       ...props,
       voltage: { type: Number },
-      totalCurrent: { type: Number, attribute: 'total-current' }      
+      totalCurrent: { type: Number }      
     };
   }
 
@@ -90,15 +86,6 @@ class Pdp extends Webbit {
         }
       `
     ];
-  }
-
-  constructor() {
-    super();
-    for (let i = 0; i < 16; i++) {
-      this[`chan${i}`] = 0;
-    }
-    this.voltage = 0;
-    this.totalCurrent = 0;
   }
 
   renderChannel(number) {
@@ -173,4 +160,4 @@ class Pdp extends Webbit {
   }
 }
 
-window.webbitRegistry.define('frc-pdp', Pdp);
+define('frc-pdp', Pdp);

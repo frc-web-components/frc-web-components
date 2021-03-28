@@ -1,4 +1,5 @@
-import { html, css } from '@webbitjs/webbit';
+import { html } from 'lit-element';
+import { define } from '../../webbit';
 import TextField from '../text-field';
 
 export default class TextArea extends TextField {
@@ -42,4 +43,4 @@ export default class TextArea extends TextField {
   }
 }
 
-webbitRegistry.define('frc-text-area', TextArea);
+define('frc-text-area', TextArea);

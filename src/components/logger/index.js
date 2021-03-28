@@ -1,4 +1,5 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { css, html } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 import HtmlLogger from './html-logger';
 
 class Logger extends Webbit {
@@ -33,9 +34,10 @@ class Logger extends Webbit {
 
   static get properties() {
     return {
-      title: { type: String },
+      title: { type: String, defaultValue: 'Robot Logger' },
       maxLogCount: { 
         type: Number,
+        defaultValue: 1000,
         get() {
           return Math.max(0, this._maxLogCount);
         }
@@ -52,21 +54,11 @@ class Logger extends Webbit {
 
   constructor() {
     super();
-    this.title = "Robot Logger";
-    this.maxLogCount = 1000;
-    this.info = '';
-    this.debug = '';
-    this.warning = '';
-    this.success = '';
-    this.error = '';
     this.levels = ['info', 'debug', 'warning', 'success', 'error'];
-    this.level = 0;
-    this.disabled = false;
     this.logger = null;
   }
 
   firstUpdated() {
-    super.firstUpdated();
     const loggerElement = this.shadowRoot.querySelector('[part=logger]');
     this.logger = new HtmlLogger(
       {
@@ -109,4 +101,4 @@ class Logger extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-logger', Logger);
+define('frc-logger', Logger);

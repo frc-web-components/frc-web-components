@@ -1,4 +1,5 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { css, html } from 'lit-element';
+import { Webbit, define } from '../../webbit';
 
 export default class TextField extends Webbit {
 
@@ -39,33 +40,20 @@ export default class TextField extends Webbit {
       disabled: { type: Boolean },
       readonly: { type: Boolean },
       autoselect: { type: Boolean },
-      clearButtonVisible: { type: Boolean, attribute: 'clear-button-visible' },
+      clearButtonVisible: { type: Boolean },
       required: { type: Boolean },
       minlength: { type: Number },
       maxlength: { type: Number },
-      errorMessage: { type: String, attribute: 'error-message' },
+      errorMessage: { type: String },
       pattern: { type: String },
-      preventInvalidInput: { type: Boolean, attribute: 'prevent-invalid-input' },
+      preventInvalidInput: { type: Boolean },
       theme: { type: String }
     };
   }
 
   constructor() {
     super();
-    this.value = '';
-    this.label = '';
-    this.placeholder = '';
-    this.disabled = false;
-    this.readonly = false;
-    this.autoselect = false;
-    this.clearButtonVisible = false;
-    this.required = false;
-    this.minlength = 0;
     this.maxlength = Infinity;
-    this.errorMessage = '';
-    this.pattern = '';
-    this.preventInvalidInput = false;
-    this.theme = '';
   }
 
   firstUpdated() {
@@ -127,4 +115,4 @@ export default class TextField extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-text-field', TextField);
+define('frc-text-field', TextField);

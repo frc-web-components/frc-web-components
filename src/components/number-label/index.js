@@ -1,5 +1,6 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
 import { containerStyles } from '../styles';
+import { html, css } from 'lit-element';
+import { define, Webbit } from '../../webbit';
 
 class NumberLabel extends Webbit {
 
@@ -35,7 +36,8 @@ class NumberLabel extends Webbit {
   static get properties() {
     return {
       value: { 
-        type: Number, 
+        type: Number,
+        defaultValue: null,
         primary: true,
         get() {
           const value = typeof this._value === 'number' 
@@ -47,6 +49,7 @@ class NumberLabel extends Webbit {
       },
       precision: { 
         type: Number,
+        defaultValue: 2,
         get() {
           return Math.max(0, this._precision);
         }
@@ -54,15 +57,9 @@ class NumberLabel extends Webbit {
     };
   }
 
-  constructor() {
-    super();
-    this.value = 0;
-    this.precision = 2;
-  }
-
   render() {
     return html`${this.value}`;
   }
 }
 
-webbitRegistry.define('frc-number-label', NumberLabel);
+define('frc-number-label', NumberLabel);

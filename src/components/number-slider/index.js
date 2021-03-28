@@ -1,4 +1,5 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { html, css } from 'lit-element';
+import { define, Webbit } from '../../webbit';
 
 class NumberSlider extends Webbit {
 
@@ -27,17 +28,19 @@ class NumberSlider extends Webbit {
       },
       min: { 
         type: Number,
+        defaultValue: -1,
         get() {
           return Math.min(this._min, this._max);
         }
       },
       max: { 
         type: Number,
+        defaultValue: 1,
         get() {
           return Math.max(this._min, this._max);
         }
       },
-      blockIncrement: { type: Number, attribute: 'block-increment' }
+      blockIncrement: { type: Number, defaultValue: .05 }
     };
   }
 
@@ -71,14 +74,6 @@ class NumberSlider extends Webbit {
     `;
   }
 
-  constructor() {
-    super();
-    this.value = 0;
-    this.min = -1;
-    this.max = 1;
-    this.blockIncrement = .05;
-  }
-
   onChange(ev) {
     this.value = parseFloat(ev.target.value);
   }
@@ -105,4 +100,4 @@ class NumberSlider extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-number-slider', NumberSlider);
+define('frc-number-slider', NumberSlider);
