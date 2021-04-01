@@ -119,29 +119,32 @@ export default class WomNode {
 
           node.getAttributeNames().forEach(attribute => {
             if (['source-provider', 'source-key', 'webbit-id'].indexOf(attribute) < 0) {
-              if (node !== clonedNode || attribute !== 'style') {
+              if (node !== clonedNode) {
                 node.removeAttribute(attribute);
               }
             }
           });
           for (let attribute in defaultAttributeValues) {
-            setAttributeFromSourceValue(node, attribute, defaultAttributeValues[attribute]);
+            if (attribute) {
+              setAttributeFromSourceValue(node, attribute, defaultAttributeValues[attribute]);
+            }
+          }
+
+          if (originalWebbit !== this.node) {
+            if (originalWebbit.getAttribute('style')) {
+              node.setAttribute('style', originalWebbit.getAttribute('style'));
+            } else {
+              node.removeAttribute('style');
+            }
           }
         }
       });
       setTimeout(() => {
 
-        let nodeDefaultStyleAttribute = null;
-        if (window.manageExistingComponents.hasElement(this.node)) {
-          nodeDefaultStyleAttribute = window.manageExistingComponents.getDefaultAttributeValue(this.node, 'style');
-        } else {
-          nodeDefaultStyleAttribute = clonedNodeStyleAttributeValue;
-        }
-
         clonedNode.remove();
 
-        if (nodeDefaultStyleAttribute) {
-          clonedNode.setAttribute('style', nodeDefaultStyleAttribute);
+        if (clonedNodeStyleAttributeValue) {
+          clonedNode.setAttribute('style', clonedNodeStyleAttributeValue);
         } else {
           clonedNode.removeAttribute('style');
         }
