@@ -1,4 +1,5 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { html, css } from 'lit-element';
+import { define, Webbit } from '../../webbit';
 
 class RadioGroup extends Webbit {
 
@@ -32,28 +33,16 @@ class RadioGroup extends Webbit {
     return {
       value: { type: String, primary: true },
       label: { type: String },
-      theme: { type: String },
+      theme: { type: String, defaultValue: 'vertical' },
       disabled: { type: Boolean },
       readonly: { type: Boolean },
       required: { type: Boolean },
-      errorMessage: { type: String, attribute: 'error-message' },
+      errorMessage: { type: String },
       
     };
   }
 
-  constructor() {
-    super();
-    this.value = '';
-    this.label = '';
-    this.theme = 'vertical';
-    this.disabled = false;
-    this.readonly = false;
-    this.required = false;
-    this.errorMessage = '';
-  }
-
   firstUpdated() {
-    super.firstUpdated();
     const styleAttributes = ['focused', 'has-label', 'has-value', 'invalid'];
     const radioGroup = this.shadowRoot.querySelector('[part=radio-group-container]');
 
@@ -116,4 +105,4 @@ class RadioGroup extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-radio-group', RadioGroup);
+define('frc-radio-group', RadioGroup);

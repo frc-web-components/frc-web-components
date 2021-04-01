@@ -1,4 +1,5 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { html, css } from 'lit-element';
+import { define, Webbit } from '../../webbit';
 
 class ToggleSwitch extends Webbit {
 
@@ -82,11 +83,6 @@ class ToggleSwitch extends Webbit {
     }
   }
 
-  constructor() {
-    super();
-    this.toggled = false;
-  }
-
   resized() {
     this.rect = this.getBoundingClientRect();
     const { width, height } = this.rect;
@@ -125,4 +121,4 @@ class ToggleSwitch extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-toggle-switch', ToggleSwitch);
+define('frc-toggle-switch', ToggleSwitch);

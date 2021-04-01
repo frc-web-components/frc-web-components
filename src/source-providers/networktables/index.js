@@ -61,23 +61,17 @@ export default class NetworkTablesProvider extends SourceProvider {
   
       NetworkTables.addRobotConnectionListener(connected => {
         if (!connected) {
-          this.clearSourcesWithTimeout(2000);
+          this.clearSourcesWithTimeout(2000, this.updateAll.bind(this));
         } else {
-          this.clearSources();
-          for (let key of NetworkTables.getKeys()) {
-            this.updateSource(key, NetworkTables.getValue(key));
-          }
+          this.clearSources(this.updateAll.bind(this));
         }
       }, true);
 
       NetworkTables.addWsConnectionListener(connected => {
         if (!connected) {
-          this.clearSourcesWithTimeout(2000);
+          this.clearSourcesWithTimeout(2000, this.updateAll.bind(this));
         } else {
-          this.clearSources();
-          for (let key of NetworkTables.getKeys()) {
-            this.updateSource(key, NetworkTables.getValue(key));
-          }
+          this.clearSources(this.updateAll.bind(this));
           this.connect();
         }
       }, true);
@@ -86,6 +80,12 @@ export default class NetworkTablesProvider extends SourceProvider {
         this.updateSource(key, value);
       }, true);
     });
+  }
+
+  updateAll() {
+    for (let key of NetworkTables.getKeys()) {
+      this.updateSource(key, NetworkTables.getValue(key));
+    }
   }
 
   setAddress(address) {

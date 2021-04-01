@@ -15,7 +15,6 @@ import './number-bar/number-bar.component';
 import './number-slider';
 import './pdp';
 import './relay';
-import './text-view';
 import './toggle-button';
 import './toggle-switch';
 import './voltage-view/voltage-view.component';

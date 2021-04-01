@@ -1,5 +1,5 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
-
+import { html, css } from 'lit-element';
+import { define, Webbit } from '../../webbit';
 
 class TabContent extends Webbit {
 
@@ -39,11 +39,6 @@ class TabContent extends Webbit {
     };
   }
 
-  constructor() {
-    super();
-    this.selected = false;
-  }
-
   dispatchChangeEvent() {
     this.dispatchEvent(new CustomEvent('change'));
   }
@@ -60,4 +55,4 @@ class TabContent extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-tab-content', TabContent);
+define('frc-tab-content', TabContent);

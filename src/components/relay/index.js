@@ -1,4 +1,5 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { html, css } from 'lit-element';
+import { define, Webbit } from '../../webbit';
 
 class Relay extends Webbit {
 
@@ -35,14 +36,13 @@ class Relay extends Webbit {
 
   static get properties() {
     return {
-      value: { type: String, primary: true }
+      value: { type: String, defaultValue: 'Off', primary: true }
     };
   }
 
   constructor() {
     super();
     this.buttons = ['Off', 'On', 'Forward', 'Reverse'];
-    this.value = 'Off';
   }
 
   setValue(value) {
@@ -64,4 +64,4 @@ class Relay extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-relay', Relay);
+define('frc-relay', Relay);

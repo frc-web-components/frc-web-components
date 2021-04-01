@@ -1,5 +1,5 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
-
+import { html, css } from 'lit-element';
+import { define, Webbit } from '../../webbit';
 
 class Tab extends Webbit {
 
@@ -12,7 +12,10 @@ class Tab extends Webbit {
       slots: [],
       allowedParents: ['frc-tabs'],
       resizable: {},
-      movable: false
+      movable: false,
+      dashboardHtml: `
+        <frc-tab label="Tab"></frc-tab>
+      `
     };
   }
 
@@ -32,16 +35,7 @@ class Tab extends Webbit {
     };
   }
 
-  constructor() {
-    super();
-    this.selected = false;
-    this.disabled = false;
-    this.label = 'Tab';
-  }
-
-  firstUpdated() {
-    super.firstUpdated();
- 
+  firstUpdated() { 
     const observer = new MutationObserver(() => {
       this.dispatchChangeEvent();    
     });
@@ -50,7 +44,6 @@ class Tab extends Webbit {
       childList: true,
       characterData: true,
       subtree: true
-
     });
   }
   
@@ -78,4 +71,4 @@ class Tab extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-tab', Tab);
+define('frc-tab', Tab);

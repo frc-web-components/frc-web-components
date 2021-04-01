@@ -53,12 +53,13 @@ class Subsystem extends Webbit {
 
   static get properties() {
     return {
-      default: { type: String, defaultValue: '' },
-      command: { type: String, defaultValue: '' },
-      hasCommand: { type: Boolean, defaultValue: false },
-      hasDefault: { type: Boolean, defaultValue: false },
-      name: { type: String, defaultValue: '' },
-      hideName: { type: Boolean, defaultValue: false }
+      default: { type: String },
+      command: { type: String },
+      hasCommand: { type: Boolean },
+      hasDefault: { type: Boolean },
+      label: { type: String },
+      name: { type: String },
+      hideName: { type: Boolean }
     };
   }
 
@@ -73,7 +74,7 @@ class Subsystem extends Webbit {
   render() {
     return html`
       ${!this.hideName ? html`
-        <header>${this.name}</header>
+        <header>${this.label || this.name}</header>
       ` : ''}
       <div class="subsystem">
         <p>Default command: ${this.renderValue(this.default, this.hasDefault)}</p>

@@ -19,7 +19,6 @@ class Command extends Webbit {
       containerStyles,
       css`
         :host {
-          width: 100px;
           height: 50px;
         }
 
@@ -35,9 +34,10 @@ class Command extends Webbit {
   static get properties() {
     return {
       name: { type: String, defaultValue: 'Command' },
-      running: { type: Boolean, defaultValue: false },
-      controllable: { type: Boolean, defaultValue: false },
-      isParented: { type: Boolean, defaultValue: false }
+      running: { type: Boolean },
+      controllable: { type: Boolean },
+      isParented: { type: Boolean },
+      label: { type: String }
     };
   }
 
@@ -54,7 +54,7 @@ class Command extends Webbit {
         part="button"
         @click="${this.onClick}"
       >
-        ${this.name}
+        ${this.label || this.name}
       </vaadin-button>
     `;
   }

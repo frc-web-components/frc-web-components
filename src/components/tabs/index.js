@@ -1,4 +1,5 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { html, css } from 'lit-element';
+import { define, Webbit } from '../../webbit';
 import './tab';
 import './tab-content';
 import './tabs-content';
@@ -34,16 +35,13 @@ class Tabs extends Webbit {
   static get properties() {
     return {
       selected: { type: Number, primary: true },
-      orientation: { type: String },
+      orientation: { type: String, defaultValue: 'horizontal' },
       theme: { type: String }
     };
   }
 
   constructor() {
     super();
-    this.selected = 0;
-    this.orientation = 'horizontal';
-    this.theme = '';
     this.tabs = [];
     this.tabChangeEvents = new WeakMap();
   }
@@ -91,7 +89,6 @@ class Tabs extends Webbit {
   }
 
   firstUpdated() {
-    super.firstUpdated();
     const observer = new MutationObserver(() => {
       this.updateTabs();
     });
@@ -131,4 +128,4 @@ class Tabs extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-tabs', Tabs);
+define('frc-tabs', Tabs);

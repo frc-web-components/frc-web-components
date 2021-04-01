@@ -1,5 +1,5 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
-
+import { html, css } from 'lit-element';
+import { define, Webbit } from '../../webbit';
 
 class TabsContent extends Webbit {
 
@@ -42,7 +42,6 @@ class TabsContent extends Webbit {
 
   constructor() {
     super();
-    this.selected = 0;
     this.contents = [];
     this.contentChangeEvents = new WeakMap();
     this.slotElement = null;
@@ -78,7 +77,6 @@ class TabsContent extends Webbit {
   }
 
   firstUpdated() {
-    super.firstUpdated();
     this.slotElement = this.shadowRoot.querySelector('slot'); 
     this.slotElement.addEventListener('slotchange', () => {
       this.updateContents();
@@ -105,4 +103,4 @@ class TabsContent extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-tabs-content', TabsContent);
+define('frc-tabs-content', TabsContent);

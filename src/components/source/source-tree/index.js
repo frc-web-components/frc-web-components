@@ -68,9 +68,12 @@ class SourceTree extends Webbit {
 
   setSources() {
     this.unsubscribe();
-    if (this.sourceKey) {
-      this.unsubscribe = subscribe(this.sourceProvider, this.sourceKey, value => {
-        this.sources = getRawSource(this.sourceProvider, this.sourceKey) || { __sources__: {} };
+
+    const key = (this.sourceProvider === 'NetworkTables' && !this.sourceKey) ? ' ' : this.sourceKey;
+
+    if (key) {
+      this.unsubscribe = subscribe(this.sourceProvider, key, value => {
+        this.sources = getRawSource(this.sourceProvider, key) || { __sources__: {} };
         this.requestUpdate();
       }, true);
     } else {

@@ -69,7 +69,6 @@ class Camera extends Webbit {
       crosshairWidth: { type: Number, defaultValue: 2 },
       streams: { type: Array, inputType: 'StringArray', defaultValue: [] },
       waitImage: { type: String, defaultValue: 'https://i.ytimg.com/vi/w6geNk3QnBQ/maxresdefault.jpg' },
-      connected: { type: Boolean, defaultValue: false },
       url: { type: String, reflect: false, attribute: false },
     };
   }
@@ -95,7 +94,7 @@ class Camera extends Webbit {
   }
 
   isStreaming() {
-    return this.connected && this.url;
+    return this.url;
   }
 
 
@@ -138,6 +137,8 @@ class Camera extends Webbit {
 
     let img = new Image();
     img.src = url;
+    
+    console.log('load stream:', url);
 
     const timeoutId = setTimeout(() => {
       img.onload = () => {};
@@ -155,6 +156,7 @@ class Camera extends Webbit {
     }, 10000);
 
     img.onload = () => {
+      console.log('load:', url);
       clearTimeout(timeoutId);
 
       img.onload = () => {};
@@ -171,7 +173,7 @@ class Camera extends Webbit {
   }
 
   updated(changedProps) {
-    if (changedProps.has('streams') || changedProps.has('connected')) {
+    if (changedProps.has('streams')) {
       this.url = '';
       this.streamsLoadingIds = [];
     }

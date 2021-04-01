@@ -1,7 +1,8 @@
 import './urdf-manipulator-element';
 import './urdf-viewer-element';
-import { Webbit, html, css } from '@webbitjs/webbit';
-import { subscribe, getSourceProvider } from '@webbitjs/store';
+import { html, css } from 'lit-element';
+import { define, Webbit } from '../../webbit';
+import { subscribe, getSourceProvider, getSource } from '@webbitjs/store';
 import loadMesh from './load-mesh';
 
 const DEG2RAD = Math.PI / 180;
@@ -58,43 +59,38 @@ class UrdfViewer extends Webbit {
       urdf: { type: String },
       urdfContent: { type: String },
       controllable: { type: Boolean },
-      up: { type: String },
+      up: { type: String, defaultValue: 'Z+' },
       displayShadow: { type: Boolean },
-      ambientColor: { type: String },
-      minDistance: { type: Number },
-      maxDistance: { type: Number },
+      ambientColor: { type: String, defaultValue: 'black' },
+      minDistance: { type: Number, defaultValue: .25 },
+      maxDistance: { type: Number, defaultValue: 5 },
       robotX: { type: Number },
       robotY: { type: Number },
       robotZ: { type: Number },
       cameraX: { type: Number },
       cameraY: { type: Number },
-      cameraZ: { type: Number },
+      cameraZ: { type: Number, defaultValue: -10 },
       autoRotate: { type: Boolean },
-      autoRotateSpeed: { type: Number },
+      autoRotateSpeed: { type: Number, defaultValue: 2 },
     };
+  }
+
+  get sourceKey() {
+    return this.getAttribute('source-key');
+  }
+
+  get sourceProvider() {
+    return this.getAttribute('source-provider');
   }
 
   constructor() {
     super();
-    this.urdf = '';
-    this.urdfContent = '';
-    this.controllable = false;
-    this.up = 'Z+';
-    this.displayShadow = false;
-    this.ambientColor = 'black';
     this.unsubscribe = () => {};
-    this.minDistance = .25;
-    this.maxDistance = 5;
-    this.robotX = 0;
-    this.robotY = 0;
-    this.robotZ = 0;
-    this.cameraX = 0;
-    this.cameraY = 0;
-    this.cameraZ = -10;
-    this.autoRotate = false;
-    this.autoRotateSpeed = 2;
-
     this.jointManipulated = null;
+  }
+
+  getSource() {
+    return getSource(this.sourceProvider, this.sourceKey);
   }
 
 
@@ -118,13 +114,15 @@ class UrdfViewer extends Webbit {
     }
   }
 
-  async updated(changedProperties) {
+  firstUpdated() {
+    const observer = new MutationObserver(() => {
+      this.setSources();
+    });
 
-    if (changedProperties.has('sourceKey') || changedProperties.has('sourceProvider')) {
-      if (this.sourceProvider) {
-        this.setSources();
-      }
-    }
+    observer.observe(this, {
+      attributes: true,
+      attributeFilter: ['source-key', 'source-provider']
+    });
   }
 
   onCameraChange(ev) {
@@ -203,5 +201,5 @@ class UrdfViewer extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-urdf-viewer', UrdfViewer);
+define('frc-urdf-viewer', UrdfViewer);
 

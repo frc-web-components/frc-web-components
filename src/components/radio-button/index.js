@@ -1,4 +1,5 @@
-import { Webbit, html, css } from '@webbitjs/webbit';
+import { html, css } from 'lit-element';
+import { define, Webbit } from '../../webbit';
 
 class RadioButton extends Webbit {
 
@@ -10,7 +11,10 @@ class RadioButton extends Webbit {
       // documentationLink: 'https://frc-web-components.github.io/components/checkbox-group/',
       slots: [],
       editorTabs: ['properties', 'sources'],
-      resizable: {}
+      resizable: {},
+      dashboardHtml: `
+        <frc-radio-button label="label"></frc-radio-button>
+      `
     };
   }
 
@@ -33,16 +37,7 @@ class RadioButton extends Webbit {
     };
   }
 
-  constructor() {
-    super();
-    this.checked = false;
-    this.value = '';
-    this.disabled = false;
-    this.label = 'label';
-  }
-
   firstUpdated() {
-    super.firstUpdated();
     const styleAttributes = ['focus-ring', 'focused', 'empty'];
     const input = this.shadowRoot.querySelector('[part=radio-button-container]');
 
@@ -88,4 +83,4 @@ class RadioButton extends Webbit {
   }
 }
 
-webbitRegistry.define('frc-radio-button', RadioButton);
+define('frc-radio-button', RadioButton);
