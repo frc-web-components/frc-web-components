@@ -337,11 +337,17 @@ class Field extends Webbit {
       this.requestUpdate();
     }
 
-    const playingFieldImageRect = this.getPlayingFieldImageRect();
-    this.field.style.setProperty('--playing-field-width', `${playingFieldImageRect.width}px`);
-    this.field.style.setProperty('--playing-field-height', `${playingFieldImageRect.height}px`);
-    this.field.style.setProperty('--playing-field-left', `${playingFieldImageRect.left - 1}px`);
-    this.field.style.setProperty('--playing-field-top', `${playingFieldImageRect.top - 1}px`);
+    this.setPlayingFieldWidthStyles();
+  }
+
+  setPlayingFieldWidthStyles() {
+    if (this.field) {
+      const playingFieldImageRect = this.getPlayingFieldImageRect();
+      this.field.style.setProperty('--playing-field-width', `${playingFieldImageRect.width}px`);
+      this.field.style.setProperty('--playing-field-height', `${playingFieldImageRect.height}px`);
+      this.field.style.setProperty('--playing-field-left', `${playingFieldImageRect.left - 1}px`);
+      this.field.style.setProperty('--playing-field-top', `${playingFieldImageRect.top - 1}px`);
+    }
   }
 
   setFieldPose(fieldInfo) {
@@ -625,32 +631,37 @@ class Field extends Webbit {
 
   render() {
     
+    this.setPlayingFieldWidthStyles();
+    const playFieldWidth =  this.field ? parseFloat(this.field.style.getPropertyValue('--playing-field-width') || 0) : 0;
     const { width, height } = this.field ? this.field.getBoundingClientRect() : { width: 0, height: 0 };
-    const patternSize = (this.gridSize / this.width) * width;
+    const patternSize = (this.gridSize / this.width) * playFieldWidth;
+
+    console.log('playing field width:', playFieldWidth);
 
     return html`   
       <div part="field">
-        <div part="playing-field-area"></div>
-        ${this.showGrid && this.gridSize > 0 ? html`
-          <div part="grid">
-            ${svg`
-              <svg width="100%" height="100%">
-                <defs>
-                  <pattern 
-                    id="grid" 
-                    width="${patternSize}" 
-                    height="${patternSize}" 
-                    patternUnits="userSpaceOnUse"
-                  >
-                    <path d="M ${patternSize} 0 L 0 0 0 ${patternSize}" fill="none" />
-                  </pattern>
-                </defs>
+        <div part="playing-field-area">
+          ${this.showGrid && this.gridSize > 0 ? html`
+            <div part="grid">
+              ${svg`
+                <svg width="100%" height="100%">
+                  <defs>
+                    <pattern 
+                      id="grid" 
+                      width="${patternSize}" 
+                      height="${patternSize}" 
+                      patternUnits="userSpaceOnUse"
+                    >
+                      <path d="M ${patternSize} 0 L 0 0 0 ${patternSize}" fill="none" />
+                    </pattern>
+                  </defs>
 
-                <rect width="100%" height="100%" fill="url(#grid)" />
-              </svg>
-            `}
-          </div>
-        ` : ''}
+                  <rect width="100%" height="100%" fill="url(#grid)" />
+                </svg>
+              `}
+            </div>
+          ` : ''}
+        </div>
         <canvas part="bottom-canvas" width="${width * 2}" height="${height * 2}"></canvas>
         <slot></slot>
         <canvas part="top-canvas" width="${width * 2}" height="${height * 2}"></canvas>
