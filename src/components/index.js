@@ -47,6 +47,7 @@ import './checkbox-group';
 import './checkbox';
 import './radio-button';
 import './radio-group';
+import './mode-chooser';
 
 // charts and graphing
 import './base-chart';
