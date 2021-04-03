@@ -636,8 +636,6 @@ class Field extends Webbit {
     const { width, height } = this.field ? this.field.getBoundingClientRect() : { width: 0, height: 0 };
     const patternSize = (this.gridSize / this.width) * playFieldWidth;
 
-    console.log('playing field width:', playFieldWidth);
-
     return html`   
       <div part="field">
         <div part="playing-field-area">

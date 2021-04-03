@@ -22,13 +22,15 @@ class FieldTrajectory extends FieldObject {
       xs: { type: Array, inputType: 'NumberArray' },
       ys: { type: Array, inputType: 'NumberArray' },
       startRot: { type: Number },
-      endRot: { type: Number }
+      endRot: { type: Number },
+      color: { type: String, defaultValue: 'orange' }
     };
   }
 
   renderDrawing({ bottomCtx, scalingFactor }) {
     bottomCtx.lineWidth = 4 / scalingFactor;
-    bottomCtx.strokeStyle = "rgba(235, 164, 52, .5)";
+    bottomCtx.strokeStyle = this.color;
+    bottomCtx.globalAlpha = .5;
 
     for (let i = 0; i < this.xs.length - 1; i++) {
       bottomCtx.moveTo(-this.ys[i], this.xs[i]);
@@ -46,7 +48,7 @@ class FieldTrajectory extends FieldObject {
     ctx.save();
     ctx.translate(y, x);
     ctx.rotate(rotation * Math.PI / 180);
-    ctx.fillStyle = "rgba(255, 174, 72)";
+    ctx.fillStyle = this.color;
     ctx.moveTo(0, 0);
     ctx.lineTo(- 5 / scalingFactor, 0);
     ctx.lineTo(0, 10 / scalingFactor);
