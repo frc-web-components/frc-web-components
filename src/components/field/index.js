@@ -9,6 +9,16 @@ import './field-robot';
 
 const fieldConfig = [
   {
+    "game": "Rapid React",
+    "field-image": "https://rawcdn.githack.com/wpilibsuite/PathWeaver/ea9469371f7126941c6a91c215a674a2f2a4b4d6/src/main/resources/edu/wpi/first/pathweaver/2022-field.png",
+    "field-corners": {
+      "top-left" : [74, 50],
+      "bottom-right" : [1774, 900]
+    },
+    "field-size" : [54, 27],
+    "field-unit" : "foot"
+  },
+  {
     "game" : "Infinite Recharge",
     "field-image" : "https://rawcdn.githack.com/wpilibsuite/PathWeaver/036ca81bfc58eeeba047ec469edc54f33831a4c4/src/main/resources/edu/wpi/first/pathweaver/2020-Field.png",
     "field-corners": {
