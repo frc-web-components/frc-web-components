@@ -3,7 +3,7 @@ FRC Web Components
 
 A set of web components to build custom dashboards for the `FIRST Robotics Competition (FRC) <https://www.firstinspires.org/robotics/frc>`_. 
 
-FRC Web Components works with `pynetworktables2js <https://github.com/robotpy/pynetworktables2js>`_ to communicate with your robot over NetworkTables. To use, run **pynetworktables2js** where you're serving your HTML files, include the **frc-web-components.js** file as a script in your HTML page, and wrap your HTML in a **frc-dashboard** tag, and you're ready to go!
+FRC Web Components works with `pynetworktables2js <https://github.com/robotpy/pynetworktables2js>`_ to communicate with your robot over NetworkTables. To use, run **pynetworktables2js** where you're serving your HTML files, include the **frc-web-components.js** file as a script in your HTML page, and wrap your HTML in an **frc-dashboard** tag, and you're ready to go!
 
 .. code:: html
 
@@ -164,7 +164,7 @@ All of these will result in the same attribute being set. The attribute's value 
 Creating Your Own Component
 ===========================
 
-The list of FRC Web Components will continue being updated and expanded, but many teams will probably want to create their own for their custom dashboards. The **frc-web-components.js** file exposes a couple of modules for creating and registering components: **webbit** and **webbitRegistry**. The **webbit** module is used to define components and **webbitRegistry** is used to register them. Both these modules contain a number helper functions and classes used to create custom components, but these are the most commonly used ones:
+The list of FRC Web Components will continue being updated and expanded, but many teams will probably want to create their own for their custom dashboards. The **frc-web-components.js** file exposes a couple of modules for creating and registering components: **webbit** and **webbitRegistry**. The **webbit** module is used to define components and **webbitRegistry** is used to register them. Both modules contain a number helper functions and classes used to create custom components, but these are the most commonly used:
 
 .. code:: javascript
 
