@@ -172,7 +172,7 @@ export default class Dashboard {
     });
   }
 
-  addElements(elementConfigs?: Partial<WebbitConfig>[]): void {
+  addElements(elementConfigs?: Record<string, Partial<WebbitConfig>>): void {
     this.connector.addElementConfigs(elementConfigs);
   }
 

@@ -42,7 +42,7 @@ export default class FrcDashboard extends Dashboard {
     this.setStoreValue('previewedElement', element);
   }
 
-  addElements(elementConfigs?: Partial<WebbitConfig>[]): void {
+  addElements(elementConfigs?: Record<string, Partial<WebbitConfig>>): void {
     super.addElements(elementConfigs);
     const selectedElement = this.getSelectedElement();
     if (selectedElement) {
