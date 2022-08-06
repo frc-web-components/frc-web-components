@@ -1,0 +1,51 @@
+{
+  "name": "demo",
+  "private": true,
+  "version": "1.0.1",
+  "description": "",
+  "files": [
+    "dist",
+    "types"
+  ],
+  "main": "dist/plugins.es.js",
+  "exports": {
+    ".": "./dist/plugins.es.js"
+  },
+  "types": "types/index.d.ts",
+  "scripts": {
+    "dev": "vite",
+    "test": "",
+    "test:coverage": "npm test -- --coverage --watchAll=false",
+    "generate-docs": "jsdoc -c jsdoc.conf.json",
+    "build": "tsc && vite build",
+    "build:types": "tsc",
+    "lint": "eslint src/**/*",
+    "lint:format": "eslint src/**/* --fix",
+    "prepublishOnly": "npm test && npm run lint && npm run build",
+    "preversion": "npm run lint",
+    "version": "npm run lint && git add -A src",
+    "postversion": "git push && git push --tags"
+  },
+  "devDependencies": {
+    "@types/js-beautify": "^1.13.3",
+    "jsdoc": "^3.6.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frc-web-components/components.git"
+  },
+  "author": "Amory Galili",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/frc-web-components/components/issues"
+  },
+  "homepage": "https://github.com/frc-web-components/components#readme",
+  "dependencies": {
+    "@frc-web-components/dashboard": "^1.0.1",
+    "@frc-web-components/plugins": "^1.0.1",
+    "@webbitjs/store": "^5.0.6",
+    "@webbitjs/webbit": "^5.0.6",
+    "js-beautify": "^1.13.0",
+    "lit": "^2.0.0-rc.2"
+  }
+}

@@ -1,45 +1,47 @@
 {
-  "name": "@frc-web-components/frc-web-components",
-  "version": "3.2.5",
-  "description": "",
-  "main": "src/index.js",
+  "name": "frc-web-components",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server -d --inline --config webpack.config.js",
-    "build": "webpack -d --config webpack.config.js --devtool none",
-    "build:prod": "webpack -p --config webpack.config.js --devtool none --output-filename frc-web-components.min.js",
-    "build:docs": "cd ./docs; make html",
-    "build:docs:component": "wca analyze src/components/**/*.component.js --outDir docs/components"
+    "test": "",
+    "test:coverage": "npm test -- --coverage --watchAll=false",
+    "lint": "eslint packages",
+    "start": "npm start -w examples",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/frc-web-components/frc-web-components.git"
+    "url": "git+https://github.com/frc-web-components/components.git"
   },
-  "author": "",
+  "author": "Amory Galili",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/frc-web-components/frc-web-components/issues"
+    "url": "https://github.com/frc-web-components/components/issues"
   },
-  "homepage": "https://github.com/frc-web-components/frc-web-components#readme",
+  "homepage": "https://github.com/frc-web-components/components#readme",
   "dependencies": {
-    "@google/model-viewer": "^0.8.1",
-    "@kor-ui/grid": "^1.0.9",
-    "@vaadin/vaadin": "^17.0.7",
-    "@webbitjs/store": "^1.2.0",
-    "@webbitjs/webbit": "^1.5.16",
+    "@iconify-icons/mdi": "^1.2.0",
+    "@iconify/collections": "^1.0.61",
+    "@iconify/iconify": "^2.1.2",
+    "@lit-labs/context": "^0.1.1",
+    "@vaadin/vaadin": "^23.0.13",
     "api-viewer-element": "^0.4.4",
     "chart.js": "^2.8.0",
-    "d3": "^5.15.0",
-    "hotkeys-js": "^3.8.1",
-    "interactjs": "^1.10.0",
+    "codeflask": "^1.4.1",
+    "d3": "^7.0.0",
+    "hotkeys-js": "^3.9.3",
+    "interactjs": "^1.10.11",
     "js-beautify": "^1.13.0",
     "juicy-ace-editor": "^2.0.5",
+    "lit": "^2.0.0-rc.2",
     "multiselect-combo-box": "^2.4.2",
-    "quaternion": "^1.1.0",
-    "resize-observer-polyfill": "^1.5.1",
+    "roughjs": "4.4",
     "svg-gauge": "^1.0.6",
     "three": "^0.116.1",
-    "urdf-loader": "^0.8.2"
+    "urdf-loader": "^0.8.2",
+    "wired-elements": "^3.0.0-rc.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -47,15 +49,32 @@
     "@babel/node": "^7.8.4",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-proposal-decorators": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.15.8",
     "@babel/preset-env": "^7.8.4",
-    "babel-loader": "^8.0.4",
-    "css-loader": "^0.28.11",
-    "sass-loader": "^7.0.3",
-    "style-loader": "^0.21.0",
-    "web-component-analyzer": "^1.1.6",
-    "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.10.2",
-    "workbox-webpack-plugin": "^5.1.4"
+    "@babel/preset-typescript": "^7.16.0",
+    "@vaadin/vaadin-icons": "^20.0.0",
+    "@testing-library/dom": "^8.10.1",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/user-event": "^13.5.0",
+    "@typescript-eslint/eslint-plugin": "^4.26.0",
+    "@typescript-eslint/parser": "^4.26.0",
+    "babel-jest": "^25.5.1",
+    "eslint": "^7.27.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jest-dom": "^3.9.2",
+    "eslint-plugin-monorepo": "^0.3.2",
+    "eslint-plugin-testing-library": "^5.0.0",
+    "husky": "^7.0.4",
+    "jest": "^25.5.3",
+    "jsdoc": "^3.6.3",
+    "lerna": "^5.3.0",
+    "lint-staged": "^12.0.3",
+    "nx": "^14.5.1",
+    "typescript": "^4.4.4",
+    "vite": "^2.3.8"
+  },
+  "lint-staged": {
+    "*.{js,ts}": "eslint --fix"
   }
 }

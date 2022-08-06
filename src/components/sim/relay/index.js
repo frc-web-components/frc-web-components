@@ -1,2 +1,0 @@
-import './relay';
-import './relays';

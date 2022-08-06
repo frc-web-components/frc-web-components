@@ -1,2 +1,0 @@
-import './gamepad';
-import './joystick';
