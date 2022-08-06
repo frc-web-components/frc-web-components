@@ -7,8 +7,8 @@ import Layer from './layer';
 export default class FrcDashboard extends Dashboard {
   private layerElements = new Map<string, HTMLElement>();
 
-  constructor() {
-    super();
+  constructor(rootElement?: HTMLElement) {
+    super(rootElement);
     this.subscribe('storeValueChange', (val: unknown): void => {
       const { key, value } = val as { key: string, value: boolean };
       if (key === 'drawerOpened') {

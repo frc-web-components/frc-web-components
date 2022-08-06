@@ -26,7 +26,7 @@ type SubscriberCallback = (...args: unknown[]) => unknown;
 
 export default class Dashboard {
   private store: Store = new Store();
-  private connector = new WebbitConnector(document.createElement('div'), this.store);
+  private connector;
   private components = new Map<symbol, DashboardComponent>();
   private mountedElements = new Map<
     HTMLElement,
@@ -46,7 +46,8 @@ export default class Dashboard {
   private dashboardState = new Store();
   private provider = new SourceProvider();
 
-  constructor() {
+  constructor(rootElement?: HTMLElement) {
+    this.connector = new WebbitConnector(rootElement ?? document.createElement('div'), this.store);
     this.dashboardState.addSourceProvider('dashboardState', this.provider);
     this.dashboardState.subscribeAll('dashboardState', (value, key) => {
       this.publish('storeValueChange', { value, key });
