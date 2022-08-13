@@ -41,8 +41,8 @@
   "homepage": "https://github.com/frc-web-components/components#readme",
   "dependencies": {
     "@frc-web-components/dashboard": "^4.0.2-alpha.0",
-    "@webbitjs/store": "^5.0.6",
-    "@webbitjs/webbit": "^5.0.8",
+    "@webbitjs/store": "^5.1.0",
+    "@webbitjs/webbit": "^5.1.0",
     "js-beautify": "^1.13.0",
     "lit": "^2.0.0-rc.2"
   }
