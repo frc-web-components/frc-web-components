@@ -1,0 +1,42 @@
+{
+  "name": "@frc-web-components/cli",
+  "version": "1.0.0",
+  "description": "",
+  "bin": "dist/cli.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/cli.ts --minify",
+    "dev": "tsup src/cli.ts --watch",
+    "test": "",
+    "test:coverage": "npm test -- --coverage --watchAll=false",
+    "generate-docs": "jsdoc -c jsdoc.conf.json",
+    "lint": "eslint src/**/*",
+    "lint:format": "eslint src/**/* --fix",
+    "prepublishOnly": "npm test && npm run lint && npm run build",
+    "preversion": "npm run lint",
+    "version": "npm run lint && git add -A src",
+    "postversion": "git push && git push --tags"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frc-web-components/components.git"
+  },
+  "author": "Amory Galili",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/frc-web-components/components/issues"
+  },
+  "homepage": "https://github.com/frc-web-components/components#readme",
+  "dependencies": {
+    "@frc-web-components/dashboard": "^4.1.0-alpha.0",
+    "@frc-web-components/plugins": "^4.1.0-alpha.0",
+    "@webbitjs/store": "^5.1.0",
+    "@webbitjs/webbit": "^5.1.0",
+    "vite": "^2.3.8"
+  },
+  "devDependencies": {
+    "tsup": "^5.12.1"
+  }
+}

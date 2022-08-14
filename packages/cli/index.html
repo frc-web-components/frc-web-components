@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FRC Web Components</title>
+    <style>
+      body {
+        overflow: hidden;
+      }
+    </style>
+    
+    <script type="module">
+      import renderDashboard from '/src/index.ts';
+
+      document.addEventListener('DOMContentLoaded', () => {
+        window.API = renderDashboard(document.querySelector('#dash'));
+        });
+    </script>
+  </head>
+  <body>
+    <div id="dash"></div>
+  </body>
+</html>
