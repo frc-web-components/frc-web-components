@@ -4,10 +4,11 @@
   "description": "",
   "bin": "dist/cli.js",
   "files": [
-    "dist"
+    "dist",
+    "src/dashboard"
   ],
   "scripts": {
-    "build": "tsup src/cli.ts --minify",
+    "build": "tsup src/*.ts --minify",
     "dev": "tsup src/cli.ts --watch",
     "test": "",
     "test:coverage": "npm test -- --coverage --watchAll=false",
@@ -34,7 +35,8 @@
     "@frc-web-components/plugins": "^4.1.0-alpha.0",
     "@webbitjs/store": "^5.1.0",
     "@webbitjs/webbit": "^5.1.0",
-    "vite": "^2.3.8"
+    "vite": "^2.3.8",
+    "vite-plugin-html": "^3.2.0"
   },
   "devDependencies": {
     "tsup": "^5.12.1"
