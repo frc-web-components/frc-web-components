@@ -1,6 +1,6 @@
 {
   "name": "@frc-web-components/frc-web-components",
-  "version": "4.1.0-alpha.0",
+  "version": "4.1.0",
   "description": "",
   "files": [
     "dist",
@@ -40,8 +40,8 @@
   },
   "homepage": "https://github.com/frc-web-components/components#readme",
   "dependencies": {
-    "@frc-web-components/dashboard": "^4.1.0-alpha.0",
-    "@frc-web-components/plugins": "^4.1.0-alpha.0",
+    "@frc-web-components/dashboard": "^4.1.0",
+    "@frc-web-components/plugins": "^4.1.0",
     "@webbitjs/store": "^5.1.0",
     "@webbitjs/webbit": "^5.1.0",
     "js-beautify": "^1.13.0",
