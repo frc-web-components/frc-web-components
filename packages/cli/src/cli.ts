@@ -1,5 +1,4 @@
 #! /usr/bin/env node
-
 import { createServer } from 'vite';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import { program } from 'commander';
@@ -12,7 +11,6 @@ program
 program.parse(process.argv);
 
 const options = program.opts();
-
 const entry = process.cwd();
 
 (async () => {
@@ -39,12 +37,23 @@ const entry = process.cwd();
                 src: '/iife/dashboard.js',
               },
             },
+            {
+              injectTo: 'body',
+              tag: 'script',
+              children: options.plugin ? `
+                import plugin from '${options.plugin}';
+                plugin(window.dashboard);
+              ` : '',
+              attrs: {
+                type: 'module',
+              },
+            },
           ],
         },
       }),
     ],
   });
-  await server.listen();
 
+  await server.listen();
   server.printUrls();
 })();

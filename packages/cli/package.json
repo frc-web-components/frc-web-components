@@ -7,7 +7,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/cli.ts --minify && tsup src/dashboard.ts --minify --format iife --legacy-output",
+    "build": "tsup src/cli.ts --minify && tsup src/dashboard.ts --minify --format iife --legacy-output && tsup src/add-plugins.ts --format esm --legacy-output",
     "dev": "tsup src/cli.ts --watch",
     "test": "",
     "test:coverage": "npm test -- --coverage --watchAll=false",
