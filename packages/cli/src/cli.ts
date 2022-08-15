@@ -1,6 +1,17 @@
+#! /usr/bin/env node
+
 import { createServer } from 'vite';
-import { resolve } from 'path';
 import { createHtmlPlugin } from 'vite-plugin-html';
+import { program } from 'commander';
+import { resolve } from 'path';
+
+program
+  .option('--dashboard <dashboard root path>', 'relative dashboard root path', '')
+  .option('--plugin <plugin path>', 'relative plugin path');
+
+program.parse(process.argv);
+
+const options = program.opts();
 
 const entry = process.cwd();
 
@@ -8,11 +19,14 @@ const entry = process.cwd();
   const server = await createServer({
     // any valid user config options, plus `mode` and `configFile`
     configFile: false,
-    root: entry,
+    root: resolve(entry, options.dashboard),
     server: {
       open: '/',
     },
     publicDir: __dirname,
+    define: {
+      'process.env.PLUGIN_PATH': JSON.stringify(options.plugin),
+    },
     plugins: [
       createHtmlPlugin({
         inject: {
@@ -22,7 +36,7 @@ const entry = process.cwd();
               tag: 'script',
               attrs: {
                 type: 'module',
-                src: '/dashboard.js',
+                src: '/iife/dashboard.js',
               },
             },
           ],
