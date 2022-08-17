@@ -2,13 +2,13 @@
   "name": "@frc-web-components/cli",
   "version": "4.1.0",
   "description": "",
-  "bin": "dist/cli.js",
+  "bin": "dist/frc-web-components.js",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/cli.ts --minify && tsup src/dashboard.ts --minify --format iife --legacy-output && tsup src/add-plugins.ts --format esm --legacy-output",
-    "dev": "tsup src/cli.ts --watch",
+    "build": "tsup src/frc-web-components.ts --minify && tsup src/dashboard.ts --minify --format iife --legacy-output && tsup src/add-plugins.ts --format esm --legacy-output",
+    "dev": "tsup src/frc-web-components.ts --watch",
     "test": "",
     "test:coverage": "npm test -- --coverage --watchAll=false",
     "generate-docs": "jsdoc -c jsdoc.conf.json",

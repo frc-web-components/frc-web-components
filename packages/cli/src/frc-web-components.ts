@@ -30,7 +30,7 @@ const entry = process.cwd();
         inject: {
           tags: [
             {
-              injectTo: 'body',
+              injectTo: 'body-prepend',
               tag: 'script',
               attrs: {
                 type: 'module',
@@ -38,7 +38,7 @@ const entry = process.cwd();
               },
             },
             {
-              injectTo: 'body',
+              injectTo: 'body-prepend',
               tag: 'script',
               children: options.plugin ? `
                 import plugin from '${options.plugin}';
