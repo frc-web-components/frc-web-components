@@ -1,6 +1,6 @@
 {
   "name": "@frc-web-components/cli",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "",
   "bin": "dist/frc-web-components.js",
   "files": [
