@@ -12,10 +12,13 @@
     
     <script type="module">
       import renderDashboard from '/src/index.ts';
+      import addPlugins from '@frc-web-components/plugins';
 
       document.addEventListener('DOMContentLoaded', () => {
-        window.API = renderDashboard(document.querySelector('#dash'));
-        });
+        const dashboard = renderDashboard(document.querySelector('#dash'), 'dashboard-root');
+        addPlugins(dashboard);
+        window.API = dashboard;
+      });
     </script>
   </head>
   <body>
