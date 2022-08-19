@@ -29,6 +29,21 @@ export default class PropertyView extends LitElement {
       display: inline-block;
       width: 100%;
     }
+
+    .property-view {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 5px;
+    }
+
+    label {
+      width: 140px;
+    }
+
+    [part=input] {
+      flex: 1;
+    }
+
   `;
 
   static properties = {
@@ -42,6 +57,7 @@ export default class PropertyView extends LitElement {
     this.element = null;
     this.propertyHandler = null;
     this.propertyName = null;
+    console.log("!!!!!");
   }
 
   get inputElement() {
@@ -53,8 +69,8 @@ export default class PropertyView extends LitElement {
   }
 
   getValue() {
-    return this.propertyHandler.isConnected() 
-      ? this.propertyHandler.getStoredValue() 
+    return this.propertyHandler.isConnected()
+      ? this.propertyHandler.getStoredValue()
       : this.propertyHandler.value;
   }
 
@@ -103,12 +119,12 @@ export default class PropertyView extends LitElement {
 
   render() {
     return html`
-      <vaadin-form-item>
+      <div class="property-view">
         <label slot="label" title=${this.propertyName}>
           <span>${this.propertyName}</span>
         </label>
         ${this.renderInputField()}
-      </vaadin-form-item>
+      </div>
     `;
   }
 }
