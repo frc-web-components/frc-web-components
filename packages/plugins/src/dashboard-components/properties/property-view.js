@@ -43,7 +43,7 @@ export default class PropertyView extends LitElement {
     this.propertyHandler = null;
     this.propertyName = null;
   }
-  
+
   get inputElement() {
     return this.renderRoot.querySelector('[part="input"]');
   }
@@ -53,7 +53,9 @@ export default class PropertyView extends LitElement {
   }
 
   getValue() {
-    return this.propertyHandler.getStoredValue();
+    return this.propertyHandler.isConnected() 
+      ? this.propertyHandler.getStoredValue() 
+      : this.propertyHandler.value;
   }
 
   setValue(value) {
@@ -79,7 +81,7 @@ export default class PropertyView extends LitElement {
   }
 
   propertyChanged(value) {
-    
+
   }
 
   #dispatchChange() {
