@@ -22,7 +22,8 @@ class DashboardComponentRenderer extends LitElement {
 
   updated() {
     if (this.componentId && this.componentType && this.config && this.dashboard) {
-      this.renderedElement = 
+      this.renderedElement?.remove();
+      this.renderedElement =
         this.dashboard.create(this.componentType, this.componentId, this.config);
       this.appendChild(this.renderedElement);
     }
