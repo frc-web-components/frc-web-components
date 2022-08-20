@@ -34,6 +34,7 @@ export default class PropertyView extends LitElement {
       display: flex;
       gap: 10px;
       margin-bottom: 5px;
+      align-items: center;
     }
 
     label {
@@ -57,7 +58,6 @@ export default class PropertyView extends LitElement {
     this.element = null;
     this.propertyHandler = null;
     this.propertyName = null;
-    console.log("!!!!!");
   }
 
   get inputElement() {
