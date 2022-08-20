@@ -173,8 +173,8 @@ export default class Dashboard {
     });
   }
 
-  addElements(elementConfigs?: Record<string, Partial<WebbitConfig>>): void {
-    this.connector.addElementConfigs(elementConfigs);
+  addElements(elementConfigs?: Record<string, Partial<WebbitConfig>>, group = 'default'): void {
+    this.connector.addElementConfigs(elementConfigs, group);
   }
 
   getHtml(): string {

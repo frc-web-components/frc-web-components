@@ -42,8 +42,8 @@ export default class FrcDashboard extends Dashboard {
     this.setStoreValue('previewedElement', element);
   }
 
-  addElements(elementConfigs?: Record<string, Partial<WebbitConfig>>): void {
-    super.addElements(elementConfigs);
+  addElements(elementConfigs?: Record<string, Partial<WebbitConfig>>, group = 'default'): void {
+    super.addElements(elementConfigs, group);
     const selectedElement = this.getSelectedElement();
     if (selectedElement) {
       this.setStoreValue('allowedChildren', getAllowedChildren(selectedElement, this.getConnector()));

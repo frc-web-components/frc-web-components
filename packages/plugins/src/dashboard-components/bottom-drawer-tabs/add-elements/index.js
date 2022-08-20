@@ -224,33 +224,18 @@ class AddElements extends LitElement {
     this.#getDragAreaElement.removeEventListener('dragover', this.#onDragOverParent);
   }
 
-  #getCategories() {
-    const expression = /^(?<prefix>[a-z]+)(-[a-z0-9]+)+$/;
-    const allowedChildren = this.dashboard
-      .getAllowedChildren()
-      .find(({ slot }) => this._slot === slot)?.allowedChildren ?? [];
-    const categories = new Set();
-    allowedChildren.forEach(element => {
-      const match = element.match(expression);
-      if (match) {
-        categories.add(match.groups.prefix);
-      } else {
-        categories.add('default');
-      }
-    });
-    return [...categories];
-  }
+  #splitByGroup(elements) {
+    
+    const categories = {};
 
-  #splitByPrefix(elements) {
-    const expression = /^(?<prefix>[a-z]+)(-[a-z0-9]+)+$/;
-    const categories = Object.fromEntries(this.#getCategories().map(category => [
-      category, [],
-    ]));
-    elements.forEach(element => {
-      const match = element.match(expression);
-      const prefix = !match ? 'default' : match.groups.prefix;
-      categories[prefix].push(element);
+    elements.forEach(selector => {
+      const config = this.dashboard.getConnector().getElementConfig(selector);
+      if (typeof categories[config.group] === 'undefined') {
+        categories[config.group] = [];
+      }
+      categories[config.group].push(selector);
     });
+
     return Object.entries(categories).map(([category, elements]) => {
       return { category, elements: elements.sort() };
     });
@@ -292,7 +277,7 @@ class AddElements extends LitElement {
   }
 
   renderComponents(children) {
-    const categories = this.#splitByPrefix(children);
+    const categories = this.#splitByGroup(children);
     const selectedIndex = Math.max(0, categories.indexOf(this.selectedCategory));
     return html`
       <vaadin-accordion opened=${selectedIndex} @opened-changed=${ev => {
