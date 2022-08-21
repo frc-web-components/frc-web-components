@@ -45,6 +45,7 @@
     "@webbitjs/store": "^5.1.0",
     "@webbitjs/webbit": "^5.2.0",
     "js-beautify": "^1.13.0",
-    "lit": "^2.0.0-rc.2"
+    "lit": "^2.0.0-rc.2",
+    "multiselect-combo-box": "^3.0.0-alpha.2"
   }
 }

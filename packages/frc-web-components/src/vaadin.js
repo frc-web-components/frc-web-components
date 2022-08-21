@@ -51,4 +51,4 @@ import '@vaadin/vertical-layout';
 import '@vaadin/virtual-list';
 import '@vaadin/vaadin-menu-bar';
 
-// import 'multiselect-combo-box/multiselect-combo-box.js';
+import 'multiselect-combo-box/multiselect-combo-box.js';
