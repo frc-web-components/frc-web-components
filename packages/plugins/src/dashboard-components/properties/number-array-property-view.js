@@ -3,6 +3,10 @@ import { html } from 'lit';
 
 class NumberArrayPropertyView extends PropertyView {
 
+  getValue() {
+    return super.getValue() ?? [];
+  }
+
   update(changedProps) {
     super.update(changedProps);
     this.inputElement.selectedItems = this.getValue().map((value, index) => {

@@ -8,6 +8,10 @@ const items = [
 
 class BooleanArrayPropertyView extends PropertyView {
 
+  getValue() {
+    return super.getValue() ?? [];
+  }
+
   onInputChange() {
     this.setValue(this.inputElement.selectedItems.map(item => {
       return item.value.startsWith('true');
