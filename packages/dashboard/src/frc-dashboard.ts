@@ -38,7 +38,7 @@ export default class FrcDashboard extends Dashboard {
     this.setStoreValue('allowedChildren', getAllowedChildren(element, this.getConnector()));
   }
 
-  setPreviewedElement(element: HTMLElement): void {
+  setPreviewedElement(element: HTMLElement | null): void {
     this.setStoreValue('previewedElement', element);
   }
 

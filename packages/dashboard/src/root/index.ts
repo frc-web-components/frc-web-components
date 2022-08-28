@@ -1,13 +1,19 @@
-import { LitElement, html, css } from 'lit';
+import {
+  LitElement, html, css, TemplateResult,
+} from 'lit';
 import './dashboard-tab';
 import './navbar';
 import './drawer';
+import { WebbitConnector } from '@webbitjs/webbit';
+// eslint-disable-next-line import/extensions
+import { customElement, property, state } from 'lit/decorators.js';
 import { onRemoveKeyPress } from '../hotkeys';
 import { dashboardProvider } from '../context-providers';
+import FrcDashboard from '../frc-dashboard';
 
-function removeElement(element, connector) {
+function removeElement(element: HTMLElement, connector: WebbitConnector): HTMLElement | null {
   const parent = element.parentElement;
-  const siblings = [...parent.children];
+  const siblings = [...parent?.children ?? []];
   const elementIndex = siblings.indexOf(element);
   const nextElement = siblings[elementIndex + 1] ?? siblings[elementIndex - 1] ?? parent;
   element?.remove();
@@ -15,7 +21,7 @@ function removeElement(element, connector) {
     connector.getRootElement().contains(nextElement)
     && nextElement !== connector.getRootElement()
   );
-  return isInDashboard ? nextElement : null;
+  return isInDashboard ? (nextElement as HTMLElement) : null;
 }
 
 const styles = css`
@@ -80,15 +86,13 @@ const styles = css`
   }
 `;
 
-class DashboardRoot extends LitElement {
+@customElement('dashboard-root')
+export default class DashboardRoot extends LitElement {
+  @state() drawerOpened = true;
+  @state() ready = false;
+  @property({ type: Object, attribute: false }) dashboard?: FrcDashboard;
 
   static styles = styles;
-
-  static properties = {
-    dashboard: { type: Object, attribute: false },
-    drawerOpened: { state: true },
-    ready: { state: true }
-  };
 
   constructor() {
     super();
@@ -96,11 +100,15 @@ class DashboardRoot extends LitElement {
     document.body.style.margin = '0';
   }
 
-  get #selectedElement() {
-    return this.dashboard.getSelectedElement();
+  get #selectedElement(): HTMLElement | null {
+    return this.dashboard?.getSelectedElement() ?? null;
   }
 
-  async firstUpdated() {
+  async firstUpdated(): Promise<void> {
+    if (!this.dashboard) {
+      return;
+    }
+
     dashboardProvider.setProvider(this, this.dashboard);
 
     this.dashboard.addElements({
@@ -111,16 +119,19 @@ class DashboardRoot extends LitElement {
           layout: {
             type: 'absolute',
             movable: false,
-            resizable: false,
-          }
+            resizable: {
+              horizontal: false,
+              vertical: false,
+            },
+          },
         },
         properties: {
-          tabName: { type: 'String', attribute: 'tab-name', reflect: true }
+          tabName: { type: 'String', attribute: 'tab-name', reflect: true },
         },
         slots: [
           { name: '' },
         ],
-      }
+      },
     });
     const rootElement = this.dashboard.getRootElement();
     rootElement.setAttribute('slot', 'dashboard');
@@ -129,48 +140,54 @@ class DashboardRoot extends LitElement {
 
     onRemoveKeyPress(() => {
       if (this.#selectedElement) {
-        const nextElement = removeElement(this.#selectedElement, this.dashboard.getConnector());
-        this.dashboard.setSelectedElement(nextElement);
+        if (this.dashboard) {
+          const nextElement = removeElement(this.#selectedElement, this.dashboard.getConnector());
+          if (nextElement) {
+            this.dashboard.setSelectedElement(nextElement);
+          }
+        }
       }
     });
 
     this.dashboard.subscribe('elementSelect', () => this.requestUpdate());
     this.dashboard.showLayer('elementPreviewLayer');
     this.dashboard.showLayer('absolutePositionLayout');
-    this.append(
-      this.dashboard.getLayerElement('elementPreviewLayer')
-    );
-    this.append(
-      this.dashboard.getLayerElement('absolutePositionLayout')
-    );
+    const elementPreviewLayer = this.dashboard.getLayerElement('elementPreviewLayer');
+    const absolutePositionLayout = this.dashboard.getLayerElement('absolutePositionLayout');
+    if (elementPreviewLayer) {
+      this.append(elementPreviewLayer);
+    }
+    if (absolutePositionLayout) {
+      this.append(absolutePositionLayout);
+    }
     this.ready = true;
   }
 
-  updated(updatedProps) {
+  updated(updatedProps: Map<string, unknown>): void {
     if (updatedProps.has('drawerOpened')) {
       if (this.drawerOpened) {
-        this.dashboard.openDrawer();
+        this.dashboard?.openDrawer();
       } else {
-        this.dashboard.closeDrawer();
+        this.dashboard?.closeDrawer();
       }
     }
   }
 
-  #onDrawerToggle() {
+  #onDrawerToggle(): void {
     this.drawerOpened = !this.drawerOpened;
-    this.dashboard.setPreviewedElement(null);
-    const splitter = this.renderRoot.querySelector('vaadin-split-layout');
-    const drawer = this.renderRoot.querySelector('dashboard-drawer');
-    if (this.drawerOpened) {
+    this.dashboard?.setPreviewedElement(null);
+    const splitter = this.renderRoot.querySelector('vaadin-split-layout') as HTMLElement;
+    const drawer = this.renderRoot.querySelector('dashboard-drawer') as HTMLElement;
+    if (this.drawerOpened && splitter && drawer) {
       splitter.classList.remove('closed');
       drawer.style.width = '400px';
-      drawer.flex = 'auto';
+      drawer.style.flex = 'auto';
     } else {
       splitter.classList.add('closed');
     }
   }
 
-  render() {
+  render(): TemplateResult {
     if (!this.ready) {
       return html``;
     }
@@ -190,5 +207,3 @@ class DashboardRoot extends LitElement {
     `;
   }
 }
-
-customElements.define('dashboard-root', DashboardRoot);
