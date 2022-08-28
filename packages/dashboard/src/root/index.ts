@@ -53,6 +53,7 @@ const styles = css`
     flex-direction: column;
     overflow: auto;
     flex: 1;
+    height: 100vh;
   }
 
   .dashboard-elements {

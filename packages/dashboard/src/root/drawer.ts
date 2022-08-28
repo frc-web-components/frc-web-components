@@ -8,6 +8,7 @@ import { dashboardProvider } from '../context-providers';
 import './top-drawer-tabs';
 import './bottom-drawer-tabs';
 import FrcDashboard from '../frc-dashboard';
+import getElementHtml from './get-element-html';
 
 interface DashboardElement {
   selector: string;
@@ -19,7 +20,7 @@ export default class DashboardDrawer extends LitElement {
   @state() dashboard?: FrcDashboard;
   @state() element?: HTMLElement;
   @state() groups: string[] = [];
-  @state() selectedElement?: string;
+  @state() newElementSelector?: string;
   @state() selectedGroup = 'My Elements';
 
   static styles = css`
@@ -82,13 +83,6 @@ export default class DashboardDrawer extends LitElement {
       font-weight: bold;
     }
     
-    .displayed-element {
-      height: 100vh;
-      overflow: auto;
-      box-sizing: border-box;
-      flex: 1;
-    }
-    
     .group-selector {
       margin-bottom: 10px;
       padding: 3px 1px;
@@ -101,21 +95,38 @@ export default class DashboardDrawer extends LitElement {
     dashboardProvider.addConsumer(this);
   }
 
-  updateElement(): void {
-    if (!this.element || !this.dashboard || !this.selectedElement) {
-      return;
-    }
-    this.element.appendChild(this.dashboard.getRootElement());
-    this.dashboard?.getRootElement().childNodes.forEach(node => node.remove());
-    const element = document.createElement(this.selectedElement);
-    this.dashboard?.getRootElement().appendChild(element);
-    this.dashboard.setSelectedElement(element);
+  get #selectedElement(): HTMLElement | null {
+    return this.dashboard?.getSelectedElement() ?? null;
   }
 
-  setSelectedElement(): void {
-    setTimeout(() => {
-      this.selectedElement = this.getElements()[0].selector;
-    }, 500);
+  updateElement(): void {
+    const selector = this.newElementSelector;
+    if (!this.dashboard || !selector) {
+      return;
+    }
+    // if (!this.element || !this.dashboard || !this.newElementSelector) {
+    //   return;
+    // }
+    // this.element.appendChild(this.dashboard.getRootElement());
+    // this.dashboard?.getRootElement().childNodes.forEach(node => node.remove());
+    // const element = document.createElement(this.newElementSelector);
+    // this.dashboard?.getRootElement().appendChild(element);
+    // this.dashboard.setSelectedElement(element);
+    const container = document.createElement('div');
+    container.innerHTML = getElementHtml(this.dashboard.getConnector(), selector);
+    [...container.children].map(child => {
+      // if (!this._slot) {
+      //   child.removeAttribute('slot');
+      // } else {
+      //   child.setAttribute('slot', this._slot);
+      // }
+      this.#selectedElement?.append(child);
+      return child;
+    });
+  }
+
+  setNewElementSelector(): void {
+    this.newElementSelector = this.getElements()[0].selector;
   }
 
   updateOnDashboardChange(): void {
@@ -131,7 +142,7 @@ export default class DashboardDrawer extends LitElement {
   updateOnSelectedGroupChange(): void {
     const selectedElementGroup = this.getElementConfig()?.group ?? this.groups[0];
     if (selectedElementGroup !== this.selectedGroup) {
-      this.selectedElement = this.getElements()[0].selector;
+      this.newElementSelector = this.getElements()[0].selector;
     }
   }
 
@@ -159,15 +170,18 @@ export default class DashboardDrawer extends LitElement {
   firstUpdated(): void {
     if (this.dashboard) {
       this.updateOnDashboardChange();
+      this.dashboard.subscribe('elementSelect', () => {
+        this.requestUpdate();
+      });
     }
   }
 
   updated(changedProps: Map<string, unknown>): void {
-    if (changedProps.has('selectedElement')) {
+    if (changedProps.has('newElementSelector')) {
       this.updateElement();
     }
     if (changedProps.has('element')) {
-      this.setSelectedElement();
+      this.setNewElementSelector();
     }
     if (changedProps.has('dashboard')) {
       this.updateOnDashboardChange();
@@ -213,17 +227,17 @@ export default class DashboardDrawer extends LitElement {
     return html`
       <div class="dashboard">
         <div class="sidebar">
+          <header>Elements</header>
           <select class="group-selector" @change=${(ev: any) => {
-            this.selectedGroup = ev.target.value;
-          }}>
+        this.selectedGroup = ev.target.value;
+        }}>
             ${this.groups.map(group => html`
             <option value=${group} selected=${group === this.selectedGroup}>${group}</option>
             `)}
           </select>
-          <header>Elements</header>
           ${this.getElements().map(({ selector, name }) => html`
-          <p class=${this.selectedElement === selector ? 'selected' : ''} key=${selector} @click=${() => {
-            this.selectedElement = selector;
+          <p class=${this.newElementSelector === selector ? 'selected' : ''} key=${selector} @click=${() => {
+          this.newElementSelector = selector;
           }}
             >
             ${name}
@@ -239,9 +253,6 @@ export default class DashboardDrawer extends LitElement {
             <header>Sources</header>
             <dashboard-sources-editor .dashboard=${this.dashboard}></dashboard-sources-editor>
           </div>
-        </div>
-        <div class="displayed-element">
-          <slot></slot>
         </div>
       </div>
     `;
