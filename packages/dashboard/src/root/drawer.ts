@@ -18,10 +18,10 @@ interface DashboardElement {
 @customElement('dashboard-drawer')
 export default class DashboardDrawer extends LitElement {
   @state() dashboard?: FrcDashboard;
-  @state() element?: HTMLElement;
   @state() groups: string[] = [];
   @state() newElementSelector?: string;
   @state() selectedGroup = 'My Elements';
+  @state() selectedElement?: HTMLElement;
 
   static styles = css`
     :host {
@@ -95,8 +95,9 @@ export default class DashboardDrawer extends LitElement {
     dashboardProvider.addConsumer(this);
   }
 
-  get #selectedElement(): HTMLElement | null {
-    return this.dashboard?.getSelectedElement() ?? null;
+  get #allowedChildren(): string[] {
+    const allowedChildren = this.dashboard?.getAllowedChildren()?.[0]?.allowedChildren;
+    return allowedChildren ?? [];
   }
 
   updateElement(): void {
@@ -114,36 +115,14 @@ export default class DashboardDrawer extends LitElement {
     // this.dashboard.setSelectedElement(element);
     const container = document.createElement('div');
     container.innerHTML = getElementHtml(this.dashboard.getConnector(), selector);
-    [...container.children].map(child => {
+    [...container.children].forEach(child => {
       // if (!this._slot) {
       //   child.removeAttribute('slot');
       // } else {
       //   child.setAttribute('slot', this._slot);
       // }
-      this.#selectedElement?.append(child);
-      return child;
+      this.selectedElement?.append(child);
     });
-  }
-
-  setNewElementSelector(): void {
-    this.newElementSelector = this.getElements()[0].selector;
-  }
-
-  updateOnDashboardChange(): void {
-    this.groups = this.getGroups();
-  }
-
-  updateOnGroupsChange(): void {
-    if (!this.groups.includes(this.selectedGroup)) {
-      this.selectedGroup = this.groups[0] ?? '';
-    }
-  }
-
-  updateOnSelectedGroupChange(): void {
-    const selectedElementGroup = this.getElementConfig()?.group ?? this.groups[0];
-    if (selectedElementGroup !== this.selectedGroup) {
-      this.newElementSelector = this.getElements()[0].selector;
-    }
   }
 
   getGroups(): string[] {
@@ -151,12 +130,8 @@ export default class DashboardDrawer extends LitElement {
     if (!dashboard) {
       return [];
     }
-    const selectors = dashboard.getConnector().getElementConfigSelectors();
+    const selectors = this.#allowedChildren;
     const groups: string[] = selectors
-      .filter(selector => {
-        const config = dashboard.getConnector().getElementConfig(selector);
-        return config?.dashboard.topLevel;
-      })
       .map(selector => {
         const config = dashboard.getConnector().getElementConfig(selector);
         if (!config) {
@@ -169,33 +144,31 @@ export default class DashboardDrawer extends LitElement {
 
   firstUpdated(): void {
     if (this.dashboard) {
-      this.updateOnDashboardChange();
       this.dashboard.subscribe('elementSelect', () => {
-        this.requestUpdate();
+        this.selectedElement = this.dashboard?.getSelectedElement() ?? undefined;
       });
     }
   }
 
   updated(changedProps: Map<string, unknown>): void {
+    if (changedProps.has('selectedElement')) {
+      this.groups = this.getGroups();
+      this.selectedGroup = this.groups[0] ?? '';
+      this.newElementSelector = this.getElements()[0]?.selector;
+    }
     if (changedProps.has('newElementSelector')) {
       this.updateElement();
     }
-    if (changedProps.has('element')) {
-      this.setNewElementSelector();
-    }
-    if (changedProps.has('dashboard')) {
-      this.updateOnDashboardChange();
-    }
-    if (changedProps.has('groups')) {
-      this.updateOnGroupsChange();
-    }
     if (changedProps.has('selectedGroup')) {
-      this.updateOnSelectedGroupChange();
+      const selectedElementGroup = this.getElementConfig()?.group ?? this.groups[0];
+      if (selectedElementGroup !== this.selectedGroup) {
+        this.newElementSelector = this.getElements()[0]?.selector;
+      }
     }
   }
 
   getElementConfig(): WebbitConfig | undefined {
-    return this.dashboard?.getConnector().getMatchingElementConfig(this.element);
+    return this.dashboard?.getConnector().getMatchingElementConfig(this.selectedElement);
   }
 
   getElements(): DashboardElement[] {
@@ -203,14 +176,14 @@ export default class DashboardDrawer extends LitElement {
     if (!dashboard) {
       return [];
     }
-    const selectors = dashboard.getConnector().getElementConfigSelectors();
+    const selectors = this.#allowedChildren;
     return selectors
       .filter(selector => {
         const config = dashboard.getConnector().getElementConfig(selector);
         if (!config) {
           return false;
         }
-        return config.group === this.selectedGroup && config.dashboard.topLevel;
+        return config.group === this.selectedGroup;
       })
       .map(selector => ({
         selector,
@@ -229,15 +202,15 @@ export default class DashboardDrawer extends LitElement {
         <div class="sidebar">
           <header>Elements</header>
           <select class="group-selector" @change=${(ev: any) => {
-        this.selectedGroup = ev.target.value;
-        }}>
+            this.selectedGroup = ev.target.value;
+          }}>
             ${this.groups.map(group => html`
             <option value=${group} selected=${group === this.selectedGroup}>${group}</option>
             `)}
           </select>
           ${this.getElements().map(({ selector, name }) => html`
           <p class=${this.newElementSelector === selector ? 'selected' : ''} key=${selector} @click=${() => {
-          this.newElementSelector = selector;
+            this.newElementSelector = selector;
           }}
             >
             ${name}
@@ -245,13 +218,29 @@ export default class DashboardDrawer extends LitElement {
           `)}
         </div>
         <div class="editors">
+          ${this.selectedElement ? html`
+            <div>
+              <header>Element Tree</header>
+              <dashboard-element-tree-node
+                style="padding: 7px 10px 10px 0"
+                .element=${this.selectedElement}
+                .dashboard=${this.dashboard}
+              ></dashboard-element-tree-node>
+            </div>
+          ` : null}
           <div>
             <header>Properties</header>
-            <dashboard-properties-editor .dashboard=${this.dashboard}></dashboard-properties-editor>
+            <dashboard-properties-editor 
+              style="padding: 7px 10px 10px"
+              .dashboard=${this.dashboard}
+            ></dashboard-properties-editor>
           </div>
           <div>
             <header>Sources</header>
-            <dashboard-sources-editor .dashboard=${this.dashboard}></dashboard-sources-editor>
+            <dashboard-sources-editor 
+              .dashboard=${this.dashboard}
+              style="padding: 7px 10px 10px"
+            ></dashboard-sources-editor>
           </div>
         </div>
       </div>

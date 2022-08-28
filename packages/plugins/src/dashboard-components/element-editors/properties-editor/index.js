@@ -22,6 +22,10 @@ const styles = css`
   .properties-view {
     padding-bottom: 10px;
   }
+
+  .properties-view:last-child {
+    padding-bottom: 0;
+  }
 `;
 
 class PropertiesEditor extends LitElement {
