@@ -30,32 +30,29 @@ const styles = css`
     flex-direction: row;
     font-family: sans-serif;
     font-size: 16px;
-    width: 100%;
+    width: 100vw;
     overflow: hidden;
   }
 
-  vaadin-split-layout {
+  .layout {
     width: 100%;
     box-sizing: border-box;
+    display: flex;
   }
 
-  vaadin-split-layout.closed dashboard-drawer {
-    max-width: 0;
-  }
-
-  vaadin-split-layout.closed::part(splitter) {
+  .layout.closed dashboard-drawer {
     display: none;
   }
 
   dashboard-drawer {
-    width: 440px;
+    width: 590px;
   }
 
   .dashboard {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    oveflow: auto;
+    overflow: auto;
+    flex: 1;
   }
 
   .dashboard-elements {
@@ -176,14 +173,12 @@ export default class DashboardRoot extends LitElement {
   #onDrawerToggle(): void {
     this.drawerOpened = !this.drawerOpened;
     this.dashboard?.setPreviewedElement(null);
-    const splitter = this.renderRoot.querySelector('vaadin-split-layout') as HTMLElement;
+    const layout = this.renderRoot.querySelector('.layout') as HTMLElement;
     const drawer = this.renderRoot.querySelector('dashboard-drawer') as HTMLElement;
-    if (this.drawerOpened && splitter && drawer) {
-      splitter.classList.remove('closed');
-      drawer.style.width = '400px';
-      drawer.style.flex = 'auto';
+    if (this.drawerOpened && layout && drawer) {
+      layout.classList.remove('closed');
     } else {
-      splitter.classList.add('closed');
+      layout.classList.add('closed');
     }
   }
 
@@ -192,7 +187,7 @@ export default class DashboardRoot extends LitElement {
       return html``;
     }
     return html`
-      <vaadin-split-layout orientation="horizontal" theme="small" class="drawer-areas">
+      <div class="layout">
         <dashboard-drawer .interact="${null}"></dashboard-drawer>
         <div class="dashboard">
           <dashboard-navbar @drawerToggle=${this.#onDrawerToggle}></dashboard-navbar>
@@ -203,7 +198,7 @@ export default class DashboardRoot extends LitElement {
             </div>
           </div>
         </div>
-      </vaadin-split-layout>
+      </div>
     `;
   }
 }

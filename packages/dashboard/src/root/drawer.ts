@@ -83,7 +83,6 @@ export default class DashboardDrawer extends LitElement {
     }
     
     .displayed-element {
-      padding: 10px;
       height: 100vh;
       overflow: auto;
       box-sizing: border-box;
@@ -143,6 +142,10 @@ export default class DashboardDrawer extends LitElement {
     }
     const selectors = dashboard.getConnector().getElementConfigSelectors();
     const groups: string[] = selectors
+      .filter(selector => {
+        const config = dashboard.getConnector().getElementConfig(selector);
+        return config?.dashboard.topLevel;
+      })
       .map(selector => {
         const config = dashboard.getConnector().getElementConfig(selector);
         if (!config) {
@@ -219,7 +222,9 @@ export default class DashboardDrawer extends LitElement {
           </select>
           <header>Elements</header>
           ${this.getElements().map(({ selector, name }) => html`
-          <p class=${this.selectedElement === selector ? 'selected' : ''} key=${selector} @click=${() => { this.selectedElement = selector; }}
+          <p class=${this.selectedElement === selector ? 'selected' : ''} key=${selector} @click=${() => {
+            this.selectedElement = selector;
+          }}
             >
             ${name}
           </p>
@@ -228,11 +233,11 @@ export default class DashboardDrawer extends LitElement {
         <div class="editors">
           <div>
             <header>Properties</header>
-            <dashboard-properties-editor dashboard=${this.dashboard}></dashboard-properties-editor>
+            <dashboard-properties-editor .dashboard=${this.dashboard}></dashboard-properties-editor>
           </div>
           <div>
             <header>Sources</header>
-            <dashboard-sources-editor dashboard=${this.dashboard}></dashboard-sources-editor>
+            <dashboard-sources-editor .dashboard=${this.dashboard}></dashboard-sources-editor>
           </div>
         </div>
         <div class="displayed-element">
