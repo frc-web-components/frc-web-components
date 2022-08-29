@@ -34,7 +34,8 @@ export default class DashboardDrawer extends LitElement {
     
     .sidebar {
       font-family: sans-serif;
-      width: 220px;
+      font-size: 15px;
+      width: 200px;
       height: 100vh;
       background: #444;
       padding: 20px 15px;
@@ -74,7 +75,7 @@ export default class DashboardDrawer extends LitElement {
       width: 370px;
       gap: 10px;
       font-family: sans-serif;
-      padding: 15px 10px;
+      padding: 10px;
       background: rgb(240, 240, 240);
       box-sizing: border-box;
     }
@@ -87,6 +88,11 @@ export default class DashboardDrawer extends LitElement {
       margin-bottom: 10px;
       padding: 3px 1px;
       font-size: 16px;
+    }
+
+    .editors-header {
+      font-size: 18px;
+      color: purple;
     }
   `;
 
@@ -192,7 +198,6 @@ export default class DashboardDrawer extends LitElement {
       .sort((el1, el2) => el1.name.localeCompare(el2.name));
   }
 
-  // eslint-disable-next-line class-methods-use-this
   render(): TemplateResult {
     if (!this.dashboard) {
       return html``;
@@ -218,15 +223,23 @@ export default class DashboardDrawer extends LitElement {
           `)}
         </div>
         <div class="editors">
-          ${this.selectedElement ? html`
-            <div>
-              <header>Element Tree</header>
-              <dashboard-element-tree-node
-                style="padding: 7px 10px 10px 0"
-                .element=${this.selectedElement}
-                .dashboard=${this.dashboard}
-              ></dashboard-element-tree-node>
+          ${this.selectedElement ? html`  
+            <div style="margin: 5px 0 10px">
+              <header class="editors-header">
+                ${this.dashboard?.getElementDisplayName(this.selectedElement)}
+              </header>
+              ${this.renderBreadcrumbs()}
             </div>
+              ${this.selectedElement.childElementCount > 0 ? html` 
+              <div>
+                <header>Element Tree</header>
+                <dashboard-element-tree-node
+                  style="padding: 7px 10px 10px 0"
+                  .element=${this.selectedElement}
+                  .dashboard=${this.dashboard}
+                ></dashboard-element-tree-node>
+              </div>
+            ` : null}
           ` : null}
           <div>
             <header>Properties</header>
@@ -242,6 +255,55 @@ export default class DashboardDrawer extends LitElement {
               style="padding: 7px 10px 10px"
             ></dashboard-sources-editor>
           </div>
+        </div>
+      </div>
+    `;
+  }
+
+  private renderBreadcrumbs(): TemplateResult {
+    const { dashboard, selectedElement } = this;
+    if (!dashboard || !selectedElement) {
+      return html``;
+    }
+    const breadCrumbs: HTMLElement[] = [selectedElement];
+    let currentElement: HTMLElement | null = selectedElement;
+    while (currentElement && currentElement.tagName.toLowerCase() !== 'dashboard-tab') {
+      currentElement = currentElement.parentElement;
+      if (currentElement) {
+        breadCrumbs.push(currentElement);
+      }
+    }
+
+    if (breadCrumbs.length < 2) {
+      return html``;
+    }
+
+    return html`
+      <div style="width: 100%; overflow: auto;">
+        <div 
+          style="display: flex; margin: 5px 0 2px; color: #333; font-size: 14px; align-items: center;"
+        >
+          ${breadCrumbs.reverse().map((element, index) => {
+            const displayName = dashboard.getElementDisplayName(element);
+            if (index === breadCrumbs.length - 1) {
+              return html`
+                <span 
+                  class="breadcrumb-name"
+                  style="display: inline-block; white-space: nowrap; cursor: pointer;"
+                >${displayName}</span>
+              `;
+            }
+            return html`
+              <span 
+                class="breadcrumb-name"
+                style="display: inline-block; white-space: nowrap; cursor: pointer;"
+              >${displayName}</span>
+              <span 
+                class="breadcrumb-separator"
+                style="margin: 0 5px; font-size: 12px; color: #555;"
+              >></span>
+            `;
+          })}
         </div>
       </div>
     `;
