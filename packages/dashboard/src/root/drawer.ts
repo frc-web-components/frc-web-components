@@ -64,7 +64,6 @@ export default class DashboardDrawer extends LitElement {
     
     .sidebar p.selected {
       font-weight: bold;
-      text-decoration: underline;
       cursor: default;
     }
     
@@ -94,6 +93,19 @@ export default class DashboardDrawer extends LitElement {
       font-size: 18px;
       color: purple;
     }
+
+    .add-button {
+      border: 1px solid #aaa;
+      color: white;
+      background: none;
+      border-radius: 4px;
+      padding: 3px 5px;
+      cursor: pointer;
+    }
+
+    .no-children-warning span {
+      font-weight: bold;
+    }
   `;
 
   constructor() {
@@ -106,7 +118,7 @@ export default class DashboardDrawer extends LitElement {
     return allowedChildren ?? [];
   }
 
-  updateElement(): void {
+  #appendToDashboard(): void {
     const selector = this.newElementSelector;
     if (!this.dashboard || !selector) {
       return;
@@ -162,9 +174,6 @@ export default class DashboardDrawer extends LitElement {
       this.selectedGroup = this.groups[0] ?? '';
       this.newElementSelector = this.getElements()[0]?.selector;
     }
-    if (changedProps.has('newElementSelector')) {
-      this.updateElement();
-    }
     if (changedProps.has('selectedGroup')) {
       const selectedElementGroup = this.getElementConfig()?.group ?? this.groups[0];
       if (selectedElementGroup !== this.selectedGroup) {
@@ -198,6 +207,14 @@ export default class DashboardDrawer extends LitElement {
       .sort((el1, el2) => el1.name.localeCompare(el2.name));
   }
 
+  #getSelectedElementName(): string {
+    const { selectedElement } = this;
+    if (!selectedElement) {
+      return '';
+    }
+    return this.dashboard?.getElementDisplayName(selectedElement) ?? '';
+  }
+
   render(): TemplateResult {
     if (!this.dashboard) {
       return html``;
@@ -206,20 +223,34 @@ export default class DashboardDrawer extends LitElement {
       <div class="dashboard">
         <div class="sidebar">
           <header>Elements</header>
-          <select class="group-selector" @change=${(ev: any) => {
+          <select class="group-selector" ?disabled=${this.groups.length === 0} @change=${(ev: any) => {
             this.selectedGroup = ev.target.value;
           }}>
             ${this.groups.map(group => html`
-            <option value=${group} selected=${group === this.selectedGroup}>${group}</option>
+            <option value=${group} ?selected=${group === this.selectedGroup}>${group}</option>
             `)}
           </select>
+          ${this.getElements().length === 0 ? html`
+            <p class="no-children-warning">
+              No children can be added to element <span>${this.#getSelectedElementName()}</span>
+            </p>
+          ` : null}
           ${this.getElements().map(({ selector, name }) => html`
-          <p class=${this.newElementSelector === selector ? 'selected' : ''} key=${selector} @click=${() => {
-            this.newElementSelector = selector;
-          }}
-            >
-            ${name}
-          </p>
+            <p class=${this.newElementSelector === selector ? 'selected' : ''} key=${selector} @click=${() => {
+              this.newElementSelector = selector;
+            }}
+              >
+              ${name}
+            </p>
+            ${this.newElementSelector === selector ? html`
+              <div style="margin-bottom: 8px">
+                <button 
+                  class="add-button"
+                  @click=${this.#appendToDashboard}
+                >Prepend</button>
+                <button class="add-button" @click=${this.#appendToDashboard}>Append</button>
+              </div>
+            ` : null}
           `)}
         </div>
         <div class="editors">
@@ -237,6 +268,7 @@ export default class DashboardDrawer extends LitElement {
                   style="padding: 7px 10px 10px 0"
                   .element=${this.selectedElement}
                   .dashboard=${this.dashboard}
+                  expanded
                 ></dashboard-element-tree-node>
               </div>
             ` : null}
@@ -289,7 +321,7 @@ export default class DashboardDrawer extends LitElement {
               return html`
                 <span 
                   class="breadcrumb-name"
-                  style="display: inline-block; white-space: nowrap; cursor: pointer;"
+                  style="display: inline-block; white-space: nowrap;"
                 >${displayName}</span>
               `;
             }
@@ -297,6 +329,7 @@ export default class DashboardDrawer extends LitElement {
               <span 
                 class="breadcrumb-name"
                 style="display: inline-block; white-space: nowrap; cursor: pointer;"
+                @click=${() => dashboard.setSelectedElement(element)}
               >${displayName}</span>
               <span 
                 class="breadcrumb-separator"

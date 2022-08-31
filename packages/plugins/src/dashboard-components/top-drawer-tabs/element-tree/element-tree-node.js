@@ -116,6 +116,7 @@ class ElementTreeNode extends LitElement {
       droppable: { type: Boolean },
       isReordering: { state: true },
       dashboard: { attribute: false },
+      expanded: { type: Boolean },
     };
   }
 
@@ -194,6 +195,9 @@ class ElementTreeNode extends LitElement {
       }
       this.requestUpdate();
     });
+    if (this.expanded) {
+      this.detailsElement.open = true;
+    }
   }
 
   disconnectedCallback() {

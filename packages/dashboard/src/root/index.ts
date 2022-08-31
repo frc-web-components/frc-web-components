@@ -45,7 +45,7 @@ const styles = css`
   }
 
   dashboard-drawer {
-    width: 590px;
+    width: 570px;
   }
 
   .dashboard {
