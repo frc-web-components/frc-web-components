@@ -5,8 +5,6 @@ import {
 import { customElement, state } from 'lit/decorators.js';
 import { WebbitConfig } from '@webbitjs/webbit';
 import { dashboardProvider } from '../context-providers';
-import './top-drawer-tabs';
-import './bottom-drawer-tabs';
 import FrcDashboard from '../frc-dashboard';
 import getElementHtml from './get-element-html';
 
@@ -259,19 +257,11 @@ export default class DashboardDrawer extends LitElement {
               <header class="editors-header">
                 ${this.dashboard?.getElementDisplayName(this.selectedElement)}
               </header>
-              ${this.renderBreadcrumbs()}
             </div>
-              ${this.selectedElement.childElementCount > 0 ? html` 
               <div>
                 <header>Element Tree</header>
-                <dashboard-element-tree-node
-                  style="padding: 7px 10px 10px 0"
-                  .element=${this.selectedElement}
-                  .dashboard=${this.dashboard}
-                  expanded
-                ></dashboard-element-tree-node>
+                ${this.renderElementTree()}
               </div>
-            ` : null}
           ` : null}
           <div>
             <header>Properties</header>
@@ -292,53 +282,19 @@ export default class DashboardDrawer extends LitElement {
     `;
   }
 
-  private renderBreadcrumbs(): TemplateResult {
+  renderElementTree(): TemplateResult {
     const { dashboard, selectedElement } = this;
     if (!dashboard || !selectedElement) {
       return html``;
     }
-    const breadCrumbs: HTMLElement[] = [selectedElement];
-    let currentElement: HTMLElement | null = selectedElement;
-    while (currentElement && currentElement.tagName.toLowerCase() !== 'dashboard-tab') {
-      currentElement = currentElement.parentElement;
-      if (currentElement) {
-        breadCrumbs.push(currentElement);
-      }
-    }
-
-    if (breadCrumbs.length < 2) {
-      return html``;
-    }
-
+    const selectedTab = selectedElement.closest('dashboard-tab');
     return html`
-      <div style="width: 100%; overflow: auto;">
-        <div 
-          style="display: flex; margin: 5px 0 2px; color: #333; font-size: 14px; align-items: center;"
-        >
-          ${breadCrumbs.reverse().map((element, index) => {
-            const displayName = dashboard.getElementDisplayName(element);
-            if (index === breadCrumbs.length - 1) {
-              return html`
-                <span 
-                  class="breadcrumb-name"
-                  style="display: inline-block; white-space: nowrap;"
-                >${displayName}</span>
-              `;
-            }
-            return html`
-              <span 
-                class="breadcrumb-name"
-                style="display: inline-block; white-space: nowrap; cursor: pointer;"
-                @click=${() => dashboard.setSelectedElement(element)}
-              >${displayName}</span>
-              <span 
-                class="breadcrumb-separator"
-                style="margin: 0 5px; font-size: 12px; color: #555;"
-              >></span>
-            `;
-          })}
-        </div>
-      </div>
+      <dashboard-element-tree-node
+        style="padding: 7px 10px 10px 0"
+        .element=${selectedTab}
+        .dashboard=${this.dashboard}
+        expanded
+      ></dashboard-element-tree-node>
     `;
   }
 }

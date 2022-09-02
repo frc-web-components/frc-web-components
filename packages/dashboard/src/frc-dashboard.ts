@@ -168,34 +168,4 @@ export default class FrcDashboard extends Dashboard {
       },
     });
   }
-
-  addTopDrawerTab(id: string, elementName: string): void {
-    this.addComponent({
-      type: 'topDrawerTab',
-      id,
-      mount({ dashboard, element }) {
-        const tab = document.createElement(elementName);
-        (tab as any).dashboard = dashboard;
-        element.append(tab);
-        return () => {
-          tab.remove();
-        };
-      },
-    });
-  }
-
-  addBottomDrawerTab(id: string, elementName: string): void {
-    this.addComponent({
-      type: 'bottomDrawerTab',
-      id,
-      mount({ dashboard, element }) {
-        const tab = document.createElement(elementName);
-        (tab as any).dashboard = dashboard;
-        element.append(tab);
-        return () => {
-          tab.remove();
-        };
-      },
-    });
-  }
 }
