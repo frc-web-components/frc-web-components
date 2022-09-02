@@ -143,13 +143,19 @@ export default class AbsolutePositioningLayout extends Layer {
         // minimum size
         interact.modifiers.restrictSize({
           min: { width: minWidth, height: minHeight }
-        })
+        }),
+        interact.modifiers.snapSize({
+          targets: [
+            interact.snappers.grid({ width: 40, height: 40 }),
+          ],
+        }),
       ],
     });
   }
 
   #addDragInteraction() {
     this.#interactive.draggable({
+      origin: 'parent',
       listeners: {
         move: (event) => {
           if (!this.#layoutConfig.movable || !this.#selectedElement) {
@@ -167,12 +173,20 @@ export default class AbsolutePositioningLayout extends Layer {
         },
       },
       modifiers: [
+
         interact.modifiers.restrict({
           restriction: () => {
             return this.#layerElement.getBoundingClientRect();
           },
           elementRect: { left: 0, right: 1, top: 0, bottom: 1 },
-        })
+        }),
+        interact.modifiers.snap({
+          targets: [
+            interact.snappers.grid({ x: 40, y: 40 })
+          ],
+          range: Infinity,
+          relativePoints: [ { x: 0, y: 0 } ]
+        }),
       ],
     });
   }
@@ -180,6 +194,7 @@ export default class AbsolutePositioningLayout extends Layer {
   createSelectionBox() {
     const box = document.createElement('div');
     box.style.border = '2px dashed green';
+    box.style.boxSizing = 'border-box';
     box.style.display = 'none';
     box.style.position = 'absolute';
     box.style.pointerEvents = 'all';
