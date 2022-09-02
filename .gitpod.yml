@@ -1,0 +1,5 @@
+tasks:
+  - init: npx lerna bootstrap && npx lerna run build
+    command: npx lerna run dev
+
+
