@@ -10,9 +10,14 @@ export default class AbsolutePositioningLayout extends Layer {
   #interactive;
   #selectionBox = this.createSelectionBox();
 
+  snappingEnabled;
+  gridSize;
+
   mount(layerElement, dashboard) {
     this.#layerElement = layerElement;
     this.#dashboard = dashboard;
+    this.snappingEnabled = false;
+    this.gridSize = 40.0;
 
     new DashboardSelections(dashboard.getConnector(), element => {
       dashboard.setSelectedElement(element);
@@ -24,6 +29,21 @@ export default class AbsolutePositioningLayout extends Layer {
         this.#addDragInteraction();
       }
     });
+
+    window.addEventListener('keydown', (e) => {
+      if(e.key == 'Shift') {
+        this.#selectionBox.style.border = '2px solid blue'
+        this.snappingEnabled = true;
+      }
+    });
+
+    window.addEventListener('keyup', (e) => {
+      if(e.key == 'Shift') {
+
+        this.#selectionBox.style.border = '2px dashed green'
+        this.snappingEnabled = false;
+      }
+    })
 
     layerElement.appendChild(this.#selectionBox);
     this.#interactive = interact(this.#selectionBox);
@@ -103,6 +123,7 @@ export default class AbsolutePositioningLayout extends Layer {
     let startY = 0;
     let selectionWidth = 0;
     let selectionHeight = 0;
+    let gridSize = this.gridSize;
     
     this.#interactive.resizable({
       // // resize from all edges and corners
@@ -119,17 +140,17 @@ export default class AbsolutePositioningLayout extends Layer {
           startX = this.#translation.x;
           startY = this.#translation.y;
         },
-        move: (event) => {
-          let gridSize= 40.0;
-          
+        move: (event) => {         
           let deltaWidth = event.rect.width - selectionWidth;
           let deltaHeight = event.rect.height - selectionHeight;
-          if (event.shiftKey) {
-            deltaWidth = Math.floor(deltaWidth/gridSize + 0.5) * gridSize;
-            deltaHeight = Math.floor(deltaHeight/gridSize + 0.5) * gridSize;
+
+          let newWidth = width + deltaWidth;
+          let newHeight = height + deltaHeight;
+          if (this.snappingEnabled) {
+            newWidth = Math.floor(newWidth/gridSize + 0.5) * gridSize;
+            newHeight = Math.floor(newHeight/gridSize + 0.5) * gridSize;
           }
-          const newWidth = width + deltaWidth;
-          const newHeight = height + deltaHeight;
+          let newDeltaWidth = newWidth-width;
 
           // update the element's style
           if (resizableHorizontal) {
@@ -139,10 +160,9 @@ export default class AbsolutePositioningLayout extends Layer {
             this.#selectedElement.style.height = `${newHeight}px`;
           }
 
-          let deltaTranslationX = event.deltaRect.left;
           let x = startX;
           if(event.edges.left) {
-            x -= deltaWidth;
+            x -= newDeltaWidth;
           }
           let y = startY;
           if(event.edges.top) {
@@ -189,7 +209,7 @@ export default class AbsolutePositioningLayout extends Layer {
           let x = startX + deltaX;
           let y = startY + deltaY;
 
-          if (event.shiftKey) {
+          if (this.snappingEnabled) {
             x = Math.floor(x/gridSize + 0.5) * gridSize;
             y = Math.floor(y/gridSize + 0.5) * gridSize;
           }
