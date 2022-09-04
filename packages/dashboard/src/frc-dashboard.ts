@@ -4,8 +4,16 @@ import Dashboard from './dashboard';
 import getAllowedChildren from './get-allowed-children';
 import Layer from './layer';
 
+export interface Tutorial {
+  id: string;
+  name: string;
+  element?: string;
+  html: string
+}
+
 export default class FrcDashboard extends Dashboard {
   private layerElements = new Map<string, HTMLElement>();
+  private tutorials: Record<string, Tutorial> = {};
 
   constructor(rootElement?: HTMLElement) {
     super(rootElement);
@@ -167,5 +175,38 @@ export default class FrcDashboard extends Dashboard {
         };
       },
     });
+  }
+
+  addTutorial(tutorial: Tutorial): void {
+    this.tutorials[tutorial.id] = tutorial;
+  }
+
+  getTutorialIds(): string[] {
+    return Object.keys(this.tutorials);
+  }
+
+  getTutorial(id: string): Tutorial | undefined {
+    return this.tutorials[id];
+  }
+
+  getElementTutorials(selector: string): Tutorial[] {
+    const tutorials: Tutorial[] = [];
+    Object.entries(this.tutorials).forEach(([, tutorial]) => {
+      if (tutorial.element === selector) {
+        tutorials.push(tutorial);
+      }
+    });
+    return tutorials;
+  }
+
+  addTab(name: string, html?: string): HTMLElement {
+    const tab = document.createElement('dashboard-tab');
+    if (html) {
+      tab.innerHTML = html;
+    }
+    tab.setAttribute('tab-name', name);
+    tab.setAttribute('slot', 'tab');
+    this.getRootElement().append(tab);
+    return tab;
   }
 }
