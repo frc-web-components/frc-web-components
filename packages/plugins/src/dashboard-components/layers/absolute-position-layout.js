@@ -110,6 +110,11 @@ export default class AbsolutePositioningLayout extends Layer {
     };
   }
 
+  round(val, gridSize) {
+
+    return Math.floor(val/gridSize + 0.5) * gridSize;
+  }
+  
   #addResizeInteraction() {
     const {
       resizableHorizontal,
@@ -119,10 +124,12 @@ export default class AbsolutePositioningLayout extends Layer {
     } = this.#layoutConfig;
 
     const { width, height } = this.#selectedElement.getBoundingClientRect();
-    let startX = 0;
-    let startY = 0;
-    let selectionWidth = 0;
-    let selectionHeight = 0;
+    let selectionRect = {
+      left:0,
+      top:0,
+      right:0,
+      bottom:0
+    };
     let gridSize = this.gridSize;
     
     this.#interactive.resizable({
@@ -135,41 +142,37 @@ export default class AbsolutePositioningLayout extends Layer {
       },
       listeners: {
         start: (event) => {
-          selectionWidth = event.rect.width;
-          selectionHeight = event.rect.height;
-          startX = this.#translation.x;
-          startY = this.#translation.y;
+          selectionRect.left = event.rect.left;
+          selectionRect.right = event.rect.right;
+          selectionRect.top = event.rect.top;
+          selectionRect.bottom=event.rect.bottom;
         },
-        move: (event) => {         
-          let deltaWidth = event.rect.width - selectionWidth;
-          let deltaHeight = event.rect.height - selectionHeight;
+        move: (event) => {
+          // the client coordinates of top-left layer corner
+          const { left: containerLeft, top: containerTop } = this.#layerElement.getBoundingClientRect();
+          let newTop = event.rect.top - containerTop; // these are in client coordinates, so subtract the layer corner coords
+          let newBottom = event.rect.bottom - containerTop;
+          let newRight = event.rect.right - containerLeft;
+          let newLeft = event.rect.left - containerLeft;
 
-          let newWidth = width + deltaWidth;
-          let newHeight = height + deltaHeight;
+          // If snapping is enabled we snap only the edges marked as being changed
           if (this.snappingEnabled) {
-            newWidth = Math.floor(newWidth/gridSize + 0.5) * gridSize;
-            newHeight = Math.floor(newHeight/gridSize + 0.5) * gridSize;
+            newTop = event.edges.top ? this.round(newTop, gridSize) : newTop;
+            newBottom = event.edges.bottom ? this.round(newBottom, gridSize): newBottom;
+            newRight = event.edges.right ? this.round(newRight, gridSize): newRight;
+            newLeft = event.edges.left ? this.round(newLeft, gridSize): newLeft;
           }
-          let newDeltaWidth = newWidth-width;
 
           // update the element's style
           if (resizableHorizontal) {
-            this.#selectedElement.style.width = `${newWidth}px`;
+            this.#selectedElement.style.width = `${newRight-newLeft}px`;
           }
           if (resizableVertical) {
-            this.#selectedElement.style.height = `${newHeight}px`;
+            this.#selectedElement.style.height = `${newBottom-newTop}px`;
           }
 
-          let x = startX;
-          if(event.edges.left) {
-            x -= newDeltaWidth;
-          }
-          let y = startY;
-          if(event.edges.top) {
-            y -= deltaHeight;
-          }
           this.#selectedElement.style.webkitTransform = 
-          this.#selectedElement.style.transform= `translate(${x}px, ${y}px)`;
+          this.#selectedElement.style.transform= `translate(${newLeft}px, ${newTop}px)`;
         }
       },
       modifiers: [
