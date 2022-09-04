@@ -21,6 +21,7 @@ export default class AbsolutePositioningLayout extends Layer {
     dashboard.subscribe('elementSelect', () => {
       if (this.#selectedElement) {
         this.#addResizeInteraction();
+        this.#addDragInteraction();
       }
     });
 
@@ -31,6 +32,9 @@ export default class AbsolutePositioningLayout extends Layer {
       this.#addResizeInteraction();
     });
 
+    this.#interactive.on('dragend', () => {
+      this.#addDragInteraction();
+    });
     this.#setBounds();
     this.#addDragInteraction();
   }
@@ -95,9 +99,11 @@ export default class AbsolutePositioningLayout extends Layer {
     } = this.#layoutConfig;
 
     const { width, height } = this.#selectedElement.getBoundingClientRect();
+    let startX = 0;
+    let startY = 0;
     let selectionWidth = 0;
     let selectionHeight = 0;
-
+    
     this.#interactive.resizable({
       // // resize from all edges and corners
       edges: {
@@ -110,11 +116,18 @@ export default class AbsolutePositioningLayout extends Layer {
         start: (event) => {
           selectionWidth = event.rect.width;
           selectionHeight = event.rect.height;
+          startX = this.#translation.x;
+          startY = this.#translation.y;
         },
         move: (event) => {
-          let { x, y } = this.#translation;
-          const deltaWidth = event.rect.width - selectionWidth;
-          const deltaHeight = event.rect.height - selectionHeight;
+          let gridSize= 40.0;
+          
+          let deltaWidth = event.rect.width - selectionWidth;
+          let deltaHeight = event.rect.height - selectionHeight;
+          if (event.shiftKey) {
+            deltaWidth = Math.floor(deltaWidth/gridSize + 0.5) * gridSize;
+            deltaHeight = Math.floor(deltaHeight/gridSize + 0.5) * gridSize;
+          }
           const newWidth = width + deltaWidth;
           const newHeight = height + deltaHeight;
 
@@ -126,13 +139,18 @@ export default class AbsolutePositioningLayout extends Layer {
             this.#selectedElement.style.height = `${newHeight}px`;
           }
 
-          // translate when resizing from top or left edges
-          x += event.deltaRect.left;
-          y += event.deltaRect.top;
-
-          this.#selectedElement.style.webkitTransform = this.#selectedElement.style.transform =
-            `translate(${x}px, ${y}px)`;
-        },
+          let deltaTranslationX = event.deltaRect.left;
+          let x = startX;
+          if(event.edges.left) {
+            x -= deltaWidth;
+          }
+          let y = startY;
+          if(event.edges.top) {
+            y -= deltaHeight;
+          }
+          this.#selectedElement.style.webkitTransform = 
+          this.#selectedElement.style.transform= `translate(${x}px, ${y}px)`;
+        }
       },
       modifiers: [
         // keep the edges inside the parent
@@ -144,27 +162,37 @@ export default class AbsolutePositioningLayout extends Layer {
         interact.modifiers.restrictSize({
           min: { width: minWidth, height: minHeight }
         }),
-        interact.modifiers.snapSize({
-          targets: [
-            interact.snappers.grid({ width: 40, height: 40 }),
-          ],
-        }),
       ],
     });
   }
 
   #addDragInteraction() {
+    let deltaX = 0;
+    let deltaY = 0;
+    let startX = 0;
+    let startY = 0;
+    let gridSize= 40.0;
     this.#interactive.draggable({
       origin: 'parent',
       listeners: {
+        start: (event) => {
+          startX = this.#translation.x;
+          startY = this.#translation.y;
+        },
         move: (event) => {
           if (!this.#layoutConfig.movable || !this.#selectedElement) {
             return;
           }
+          deltaX += event.dx;
+          deltaY += event.dy;
 
-          let { x, y } = this.#translation;
-          x += event.dx;
-          y += event.dy;
+          let x = startX + deltaX;
+          let y = startY + deltaY;
+
+          if (event.shiftKey) {
+            x = Math.floor(x/gridSize + 0.5) * gridSize;
+            y = Math.floor(y/gridSize + 0.5) * gridSize;
+          }
 
           // translate the element
           this.#selectedElement.style.webkitTransform =
@@ -179,13 +207,6 @@ export default class AbsolutePositioningLayout extends Layer {
             return this.#layerElement.getBoundingClientRect();
           },
           elementRect: { left: 0, right: 1, top: 0, bottom: 1 },
-        }),
-        interact.modifiers.snap({
-          targets: [
-            interact.snappers.grid({ x: 40, y: 40 })
-          ],
-          range: Infinity,
-          relativePoints: [ { x: 0, y: 0 } ]
         }),
       ],
     });
