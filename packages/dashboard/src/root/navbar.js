@@ -179,7 +179,6 @@ class DashboardNavbar extends LitElement {
       let tabName = tabs[i].getAttribute("tab-name");
       if(tabName && tabName === name) {
         tab = tabs[i];
-        console.log(tab);
         if (i-1 >= 0) {
           newSelectedTab = tabs[i-1];
         }
@@ -195,10 +194,8 @@ class DashboardNavbar extends LitElement {
     if (tab === null) {
       return;
     }
-    console.log("newSelected", newSelectedTab);
     const nextElement = removeElement(tab, this.dashboard.getConnector());
     if (newSelectedTab !== null) {
-      console.log("newSelected", newSelectedTab);
       this.dashboard.setSelectedElement(newSelectedTab);
     } 
     this.#showSelectedTab();
