@@ -10,14 +10,14 @@ export default class AbsolutePositioningLayout extends Layer {
   #interactive;
   #selectionBox = this.createSelectionBox();
 
-  snappingEnabled;
-  gridSize;
+  #snappingEnabled;
+  #gridSize;
 
   mount(layerElement, dashboard) {
     this.#layerElement = layerElement;
     this.#dashboard = dashboard;
-    this.snappingEnabled = false;
-    this.gridSize = 40.0;
+    this.#snappingEnabled = false;
+    this.#gridSize = 40.0;
 
     new DashboardSelections(dashboard.getConnector(), element => {
       dashboard.setSelectedElement(element);
@@ -31,17 +31,17 @@ export default class AbsolutePositioningLayout extends Layer {
     });
 
     window.addEventListener('keydown', (e) => {
-      if(e.key == 'Shift') {
+      if(e.key === 'Ctrl') {
         this.#selectionBox.style.border = '2px solid blue'
-        this.snappingEnabled = true;
+        this.#snappingEnabled = true;
       }
     });
 
     window.addEventListener('keyup', (e) => {
-      if(e.key == 'Shift') {
+      if(e.key === 'Ctrl') {
 
-        this.#selectionBox.style.border = '2px dashed green'
-        this.snappingEnabled = false;
+        this.#selectionBox.style.border = '2px dashed green';
+        this.#snappingEnabled = false;
       }
     })
 
@@ -130,7 +130,7 @@ export default class AbsolutePositioningLayout extends Layer {
       right:0,
       bottom:0
     };
-    let gridSize = this.gridSize;
+    let gridSize = this.#gridSize;
     
     this.#interactive.resizable({
       // // resize from all edges and corners
@@ -156,7 +156,7 @@ export default class AbsolutePositioningLayout extends Layer {
           let newLeft = event.rect.left - containerLeft;
 
           // If snapping is enabled we snap only the edges marked as being changed
-          if (this.snappingEnabled) {
+          if (this.#snappingEnabled) {
             newTop = event.edges.top ? this.round(newTop, gridSize) : newTop;
             newBottom = event.edges.bottom ? this.round(newBottom, gridSize): newBottom;
             newRight = event.edges.right ? this.round(newRight, gridSize): newRight;
@@ -212,7 +212,7 @@ export default class AbsolutePositioningLayout extends Layer {
           let x = startX + deltaX;
           let y = startY + deltaY;
 
-          if (this.snappingEnabled) {
+          if (this.#snappingEnabled) {
             x = Math.floor(x/gridSize + 0.5) * gridSize;
             y = Math.floor(y/gridSize + 0.5) * gridSize;
           }
