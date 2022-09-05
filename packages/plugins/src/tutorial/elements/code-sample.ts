@@ -6,6 +6,17 @@ import { customElement, property } from 'lit/decorators.js';
 import escape from 'lodash.escape';
 import unescape from 'lodash.unescape';
 import hljs from 'highlight.js';
+import { WebbitConfig } from '@webbitjs/webbit';
+
+export const codeSampleConfig: Partial<WebbitConfig> = {
+  properties: {
+    title: { type: 'String' },
+    description: { type: 'String' },
+    code: {
+      type: 'String', input: { type: 'Textarea' }, property: 'innerHTML', attribute: false,
+    },
+  },
+};
 
 @customElement('fwc-code-sample')
 export default class CodeSample extends LitElement {
@@ -13,6 +24,10 @@ export default class CodeSample extends LitElement {
     :host {
       display: block;
       margin-bottom: 40px;
+      box-sizing: border-box;
+      padding: 10px 20px;
+      font-size: 13px;
+      width: 100%;
       box-sizing: border-box;
     }
 
@@ -89,8 +104,7 @@ export default class CodeSample extends LitElement {
       .map(line => line.replace('=&quot;&quot;', ''))
       .join('\n');
 
-    const titleComment = escape(`<!-- Code for "${this.title}" example -->`);
-    return titleComment + newHtml;
+    return newHtml;
   }
 
   firstUpdated(): void {

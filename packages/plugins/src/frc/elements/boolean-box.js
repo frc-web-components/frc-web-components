@@ -56,7 +56,7 @@ class BooleanBox extends LitElement {
   render() {
     return html`
       <div part="box">
-        ${this.label}
+        ${this.label || html`&nbsp;`}
       </div>
     `;
   }
