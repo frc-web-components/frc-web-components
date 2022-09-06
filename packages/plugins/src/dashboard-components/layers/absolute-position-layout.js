@@ -31,14 +31,14 @@ export default class AbsolutePositioningLayout extends Layer {
     });
 
     window.addEventListener('keydown', (e) => {
-      if(e.key === 'Ctrl') {
+      if(e.key === 'Control') {
         this.#selectionBox.style.border = '2px solid blue';
         this.#snappingEnabled = true;
       }
     });
 
     window.addEventListener('keyup', (e) => {
-      if(e.key === 'Ctrl') {
+      if(e.key === 'Control') {
 
         this.#selectionBox.style.border = '2px dashed green';
         this.#snappingEnabled = false;
