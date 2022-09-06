@@ -103,21 +103,8 @@ class DashboardNavbar extends LitElement {
   }
 
   #onAddTab() {
-    let tabCount;
+    const tabCount = this.#rootElement.querySelectorAll('dashboard-tab').length;
     const tab = document.createElement('dashboard-tab');
-    const tabs = this.#getTabs();
-    for (tabCount = 0; tabCount <= tabs.length; tabCount++) { // iterate over label number 0 - # of tabs (incl new one)
-      let foundLabel =false;
-      for (let j = 0; j < tabs.length; j++) { // iterate over tabs, look for one matching label #
-        if(tabs[j].label === `Tab ${tabCount+1}`) {
-          foundLabel = true;
-          break;
-        }
-      }
-      if(!foundLabel) {
-        break; 
-      }
-    }
     tab.setAttribute('tab-name', `Tab ${tabCount + 1}`);
     tab.setAttribute('slot', 'tab');
     this.#rootElement.append(tab);
@@ -158,7 +145,8 @@ class DashboardNavbar extends LitElement {
   #getTabs() {
     return [...this.#rootElement.querySelectorAll('dashboard-tab')].map(tab => {
       return {
-        label: tab.getAttribute('tab-name'),
+        element: tab,
+        label: tab.getAttribute('tab-name')
       };
     });
   }
@@ -171,33 +159,13 @@ class DashboardNavbar extends LitElement {
     this.dispatchEvent(event);
   }
 
-  deleteTab(name) {
-    const tabs = [...this.#rootElement.querySelectorAll('dashboard-tab')];
-    let tab;
-    let newSelectedTab;
-    for (let i = 0; i < tabs.length; i++) {
-      let tabName = tabs[i].getAttribute("tab-name");
-      if(tabName && tabName === name) {
-        tab = tabs[i];
-        if (i-1 >= 0) {
-          newSelectedTab = tabs[i-1];
-        }
-        else if (i+1 <= tabs.length) {
-          newSelectedTab = tabs[i+1];
-        }
-        else {
-          newSelectedTab = null;
-        }
-        break;
-      }
-    }
+  deleteTab(element) {
+    let tab = element;
     if (tab === null) {
       return;
     }
     const nextElement = removeElement(tab, this.dashboard.getConnector());
-    if (newSelectedTab !== null) {
-      this.dashboard.setSelectedElement(newSelectedTab);
-    } 
+      this.dashboard.setSelectedElement(nextElement);
     this.#showSelectedTab();
 
   }
@@ -210,11 +178,11 @@ class DashboardNavbar extends LitElement {
       <div class="navbar">
         <div class="tabs">
           <vaadin-tabs .selected=${this.selectedTabIndex} @selected-changed=${this.#onTabChange}>
-            ${tabs.map(({ label }, index) => html`
+            ${tabs.map(({ element, label }, index) => html`
             <vaadin-tab value=${index}>${label} 
-              <vaadin-button class="delete-tab-button" theme="icon tertiary" aria-label="Delete Tab" deletes=${label} @click=${()=>this.deleteTab(label)}
+              <vaadin-button class="delete-tab-button" theme="icon tertiary" aria-label="Delete Tab"  @click=${()=>this.deleteTab(element)}
               ?disabled=${!this.dashboard.isDrawerOpened()}>
-              <vaadin-icon icon="vaadin:close"></vaadin-icon>
+              <vaadin-icon icon="vaadin:close" style="width:20px;height:20px;cursor:pointer"></vaadin-icon>
             </vaadin-tab>
             `)}
           </vaadin-tabs>
