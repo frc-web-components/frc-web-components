@@ -105,7 +105,7 @@ class DashboardNavbar extends LitElement {
     const tabCount = this.#rootElement.querySelectorAll('dashboard-tab').length;
     const tab = this.dashboard.addTab(`Tab ${tabCount + 1}`);
     if (tabCount === 0) {
-      this.setSelectedElement(tab);
+      this.dashboard.setSelectedElement(tab);
     }
   }
 
