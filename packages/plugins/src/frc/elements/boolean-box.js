@@ -20,10 +20,11 @@ class BooleanBox extends LitElement {
 
   static styles = css`
     :host { 
-      display: inline-block; 
-      width: 100px;
-      height: 100px;
-      margin: 5px;
+      display: inline-block;
+      width: 80px;
+      height: 80px;
+      padding: 5px;
+      box-sizing: border-box;
     }
 
     [part=box] {

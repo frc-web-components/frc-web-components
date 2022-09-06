@@ -10,9 +10,14 @@ export default class AbsolutePositioningLayout extends Layer {
   #interactive;
   #selectionBox = this.createSelectionBox();
 
+  #snappingEnabled;
+  #gridSize;
+
   mount(layerElement, dashboard) {
     this.#layerElement = layerElement;
     this.#dashboard = dashboard;
+    this.#snappingEnabled = false;
+    this.#gridSize = 40.0;
 
     new DashboardSelections(dashboard.getConnector(), element => {
       dashboard.setSelectedElement(element);
@@ -21,8 +26,24 @@ export default class AbsolutePositioningLayout extends Layer {
     dashboard.subscribe('elementSelect', () => {
       if (this.#selectedElement) {
         this.#addResizeInteraction();
+        this.#addDragInteraction();
       }
     });
+
+    window.addEventListener('keydown', (e) => {
+      if(e.key === 'Ctrl') {
+        this.#selectionBox.style.border = '2px solid blue';
+        this.#snappingEnabled = true;
+      }
+    });
+
+    window.addEventListener('keyup', (e) => {
+      if(e.key === 'Ctrl') {
+
+        this.#selectionBox.style.border = '2px dashed green';
+        this.#snappingEnabled = false;
+      }
+    })
 
     layerElement.appendChild(this.#selectionBox);
     this.#interactive = interact(this.#selectionBox);
@@ -31,6 +52,9 @@ export default class AbsolutePositioningLayout extends Layer {
       this.#addResizeInteraction();
     });
 
+    this.#interactive.on('dragend', () => {
+      this.#addDragInteraction();
+    });
     this.#setBounds();
     this.#addDragInteraction();
   }
@@ -86,6 +110,11 @@ export default class AbsolutePositioningLayout extends Layer {
     };
   }
 
+  round(val, gridSize) {
+
+    return Math.floor(val/gridSize + 0.5) * gridSize;
+  }
+  
   #addResizeInteraction() {
     const {
       resizableHorizontal,
@@ -95,9 +124,14 @@ export default class AbsolutePositioningLayout extends Layer {
     } = this.#layoutConfig;
 
     const { width, height } = this.#selectedElement.getBoundingClientRect();
-    let selectionWidth = 0;
-    let selectionHeight = 0;
-
+    let selectionRect = {
+      left:0,
+      top:0,
+      right:0,
+      bottom:0
+    };
+    let gridSize = this.#gridSize;
+    
     this.#interactive.resizable({
       // // resize from all edges and corners
       edges: {
@@ -108,31 +142,38 @@ export default class AbsolutePositioningLayout extends Layer {
       },
       listeners: {
         start: (event) => {
-          selectionWidth = event.rect.width;
-          selectionHeight = event.rect.height;
+          selectionRect.left = event.rect.left;
+          selectionRect.right = event.rect.right;
+          selectionRect.top = event.rect.top;
+          selectionRect.bottom=event.rect.bottom;
         },
         move: (event) => {
-          let { x, y } = this.#translation;
-          const deltaWidth = event.rect.width - selectionWidth;
-          const deltaHeight = event.rect.height - selectionHeight;
-          const newWidth = width + deltaWidth;
-          const newHeight = height + deltaHeight;
+          // the client coordinates of top-left layer corner
+          const { left: containerLeft, top: containerTop } = this.#layerElement.getBoundingClientRect();
+          let newTop = event.rect.top - containerTop; // these are in client coordinates, so subtract the layer corner coords
+          let newBottom = event.rect.bottom - containerTop;
+          let newRight = event.rect.right - containerLeft;
+          let newLeft = event.rect.left - containerLeft;
+
+          // If snapping is enabled we snap only the edges marked as being changed
+          if (this.#snappingEnabled) {
+            newTop = event.edges.top ? this.round(newTop, gridSize) : newTop;
+            newBottom = event.edges.bottom ? this.round(newBottom, gridSize): newBottom;
+            newRight = event.edges.right ? this.round(newRight, gridSize): newRight;
+            newLeft = event.edges.left ? this.round(newLeft, gridSize): newLeft;
+          }
 
           // update the element's style
           if (resizableHorizontal) {
-            this.#selectedElement.style.width = `${newWidth}px`;
+            this.#selectedElement.style.width = `${newRight-newLeft}px`;
           }
           if (resizableVertical) {
-            this.#selectedElement.style.height = `${newHeight}px`;
+            this.#selectedElement.style.height = `${newBottom-newTop}px`;
           }
 
-          // translate when resizing from top or left edges
-          x += event.deltaRect.left;
-          y += event.deltaRect.top;
-
-          this.#selectedElement.style.webkitTransform = this.#selectedElement.style.transform =
-            `translate(${x}px, ${y}px)`;
-        },
+          this.#selectedElement.style.webkitTransform = 
+          this.#selectedElement.style.transform= `translate(${newLeft}px, ${newTop}px)`;
+        }
       },
       modifiers: [
         // keep the edges inside the parent
@@ -143,22 +184,38 @@ export default class AbsolutePositioningLayout extends Layer {
         // minimum size
         interact.modifiers.restrictSize({
           min: { width: minWidth, height: minHeight }
-        })
+        }),
       ],
     });
   }
 
   #addDragInteraction() {
+    let deltaX = 0;
+    let deltaY = 0;
+    let startX = 0;
+    let startY = 0;
+    let gridSize= 40.0;
     this.#interactive.draggable({
+      origin: 'parent',
       listeners: {
+        start: (event) => {
+          startX = this.#translation.x;
+          startY = this.#translation.y;
+        },
         move: (event) => {
           if (!this.#layoutConfig.movable || !this.#selectedElement) {
             return;
           }
+          deltaX += event.dx;
+          deltaY += event.dy;
 
-          let { x, y } = this.#translation;
-          x += event.dx;
-          y += event.dy;
+          let x = startX + deltaX;
+          let y = startY + deltaY;
+
+          if (this.#snappingEnabled) {
+            x = Math.floor(x/gridSize + 0.5) * gridSize;
+            y = Math.floor(y/gridSize + 0.5) * gridSize;
+          }
 
           // translate the element
           this.#selectedElement.style.webkitTransform =
@@ -167,12 +224,13 @@ export default class AbsolutePositioningLayout extends Layer {
         },
       },
       modifiers: [
+
         interact.modifiers.restrict({
           restriction: () => {
             return this.#layerElement.getBoundingClientRect();
           },
           elementRect: { left: 0, right: 1, top: 0, bottom: 1 },
-        })
+        }),
       ],
     });
   }
@@ -180,6 +238,7 @@ export default class AbsolutePositioningLayout extends Layer {
   createSelectionBox() {
     const box = document.createElement('div');
     box.style.border = '2px dashed green';
+    box.style.boxSizing = 'border-box';
     box.style.display = 'none';
     box.style.position = 'absolute';
     box.style.pointerEvents = 'all';
