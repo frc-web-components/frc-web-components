@@ -71,9 +71,12 @@ class PropertiesEditor extends LitElement {
     return html`
       <div class="properties-view">
         <vaadin-form-layout @change=${this.onValueChange}>
-          ${Object.entries(properties).map(([name]) => {
-            return this.renderPropertyView(name, webbit.getPropertyHandler(name));
-          })}
+          ${Object.entries(properties)
+            .filter(([, { type }]) => !['SourceProvider', 'Store'].includes(type))
+            .filter(([, { input }]) => input?.type !== 'None')
+            .map(([name]) => {
+              return this.renderPropertyView(name, webbit.getPropertyHandler(name));
+            })}
         </vaadin-form-layout>
       </div>
     `;

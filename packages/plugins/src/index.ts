@@ -5,6 +5,7 @@ import addFrcSimPlugin from './frc-sim';
 import addVaadinElementsPlugin from './vaadin-elements';
 import addWiredElementsPlugin from './wired-elements';
 import addTutorialPlugin from './tutorial';
+import addSourceElementsPlugin from './source-elements';
 
 export default function addPlugins(dashboard: FrcDashboard): void {
   addDashboardComponentsPlugin(dashboard);
@@ -13,6 +14,7 @@ export default function addPlugins(dashboard: FrcDashboard): void {
   addVaadinElementsPlugin(dashboard);
   addWiredElementsPlugin(dashboard);
   addTutorialPlugin(dashboard);
+  addSourceElementsPlugin(dashboard);
 }
 
 export const addDashboardComponents = addDashboardComponentsPlugin;
@@ -21,3 +23,4 @@ export const addFrcSim = addFrcSimPlugin;
 export const addVaadinElements = addVaadinElementsPlugin;
 export const addWiredElements = addWiredElementsPlugin;
 export const addTutorial = addTutorialPlugin;
+export const addSourceElements = addSourceElementsPlugin;
