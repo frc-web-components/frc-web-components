@@ -12,7 +12,8 @@
     "plugin:import/warnings",
     "plugin:import/typescript",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -36,7 +37,6 @@
       }
    ],
    "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/*.test.ts", "**/*.test.tsx"]}],
-   "indent": ["error", 2, { "ignoredNodes": ["TemplateLiteral *"], "SwitchCase": 1 }],
    "lines-between-class-members": 0,
    "arrow-parens": 0,
    "import/newline-after-import": 0,
