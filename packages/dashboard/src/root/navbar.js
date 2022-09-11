@@ -1,5 +1,6 @@
 import { LitElement, html, css } from "lit";
 import { dashboardProvider } from '../context-providers';
+import {removeElement} from './index';
 
 class DashboardNavbar extends LitElement {
 
@@ -144,7 +145,8 @@ class DashboardNavbar extends LitElement {
   #getTabs() {
     return [...this.#rootElement.querySelectorAll('dashboard-tab')].map(tab => {
       return {
-        label: tab.getAttribute('tab-name'),
+        element: tab,
+        label: tab.getAttribute('tab-name')
       };
     });
   }
@@ -157,6 +159,17 @@ class DashboardNavbar extends LitElement {
     this.dispatchEvent(event);
   }
 
+  deleteTab(element) {
+    let tab = element;
+    if (tab === null) {
+      return;
+    }
+    const nextElement = removeElement(tab, this.dashboard.getConnector());
+      this.dashboard.setSelectedElement(nextElement);
+    this.#showSelectedTab();
+
+  }
+
   render() {
     const tabs = this.#getTabs();
 
@@ -165,8 +178,12 @@ class DashboardNavbar extends LitElement {
       <div class="navbar">
         <div class="tabs">
           <vaadin-tabs .selected=${this.selectedTabIndex} @selected-changed=${this.#onTabChange}>
-            ${tabs.map(({ label }, index) => html`
-            <vaadin-tab value=${index}>${label}</vaadin-tab>
+            ${tabs.map(({ element, label }, index) => html`
+            <vaadin-tab value=${index}>${label} 
+              <vaadin-button class="delete-tab-button" theme="icon tertiary" aria-label="Delete Tab"  @click=${()=>this.deleteTab(element)}
+              ?disabled=${!this.dashboard.isDrawerOpened()}>
+              <vaadin-icon icon="vaadin:close" style="width:20px;height:20px;cursor:pointer"></vaadin-icon>
+            </vaadin-tab>
             `)}
           </vaadin-tabs>
           <vaadin-button class="add-tab-button" theme="icon tertiary" aria-label="Add Tab" @click=${this.#onAddTab}

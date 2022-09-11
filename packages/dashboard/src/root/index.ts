@@ -11,7 +11,8 @@ import { onRemoveKeyPress } from '../hotkeys';
 import { dashboardProvider } from '../context-providers';
 import FrcDashboard from '../frc-dashboard';
 
-function removeElement(element: HTMLElement, connector: WebbitConnector): HTMLElement | null {
+export function removeElement(element: HTMLElement, connector: WebbitConnector):
+  HTMLElement | null {
   const parent = element.parentElement;
   const siblings = [...parent?.children ?? []];
   const elementIndex = siblings.indexOf(element);
@@ -139,9 +140,11 @@ export default class DashboardRoot extends LitElement {
     onRemoveKeyPress(() => {
       if (this.#selectedElement) {
         if (this.dashboard) {
-          const nextElement = removeElement(this.#selectedElement, this.dashboard.getConnector());
-          if (nextElement) {
-            this.dashboard.setSelectedElement(nextElement);
+          if (this.#selectedElement.tagName !== 'DASHBOARD-TAB') {
+            const nextElement = removeElement(this.#selectedElement, this.dashboard.getConnector());
+            if (nextElement) {
+              this.dashboard.setSelectedElement(nextElement);
+            }
           }
         }
       }
