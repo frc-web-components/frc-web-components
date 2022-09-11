@@ -77,6 +77,6 @@
     "vite": "^2.3.8"
   },
   "lint-staged": {
-    "*.{js,ts}": "eslint --fix"
+    "**/*": "prettier --write --ignore-unknown"
   }
 }
