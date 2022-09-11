@@ -101,6 +101,16 @@ export default class DashboardDrawer extends LitElement {
       cursor: pointer;
     }
 
+    .demo-button {
+      color: rgb(187, 187, 255);
+      border: none;
+      background: none;
+      cursor: pointer;
+      text-align: left;
+      margin-bottom: 5px;
+      padding: 1px;
+    }
+
     .no-children-warning span {
       font-weight: bold;
     }
@@ -241,6 +251,7 @@ export default class DashboardDrawer extends LitElement {
               ${name}
             </p>
             ${this.newElementSelector === selector ? html`
+              ${this.renderDemo()}
               <div style="margin-bottom: 8px">
                 <button 
                   class="add-button"
@@ -295,6 +306,26 @@ export default class DashboardDrawer extends LitElement {
         .dashboard=${this.dashboard}
         expanded
       ></dashboard-element-tree-node>
+    `;
+  }
+
+  renderDemo(): TemplateResult {
+    const { dashboard, newElementSelector } = this;
+    if (!dashboard || !newElementSelector) {
+      return html``;
+    }
+    const tutorials = dashboard.getElementTutorials(newElementSelector);
+    if (tutorials.length === 0) {
+      return html``;
+    }
+    return html`
+      <button 
+        class="demo-button"
+        @click=${() => {
+          const tab = dashboard.addTab(tutorials[0].name, tutorials[0].html);
+          dashboard.setSelectedElement(tab);
+        }}
+      >Demo element</button>
     `;
   }
 }
