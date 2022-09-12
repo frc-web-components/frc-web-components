@@ -34,38 +34,9 @@ export default class DashboardDrawer extends LitElement {
       font-weight: bold;
     }
 
-    .group-selector {
-      margin-bottom: 10px;
-      padding: 3px 1px;
-      font-size: 16px;
-    }
-
     .editors-header {
       font-size: 18px;
       color: purple;
-    }
-
-    .add-button {
-      border: 1px solid #aaa;
-      color: white;
-      background: none;
-      border-radius: 4px;
-      padding: 3px 5px;
-      cursor: pointer;
-    }
-
-    .demo-button {
-      color: rgb(187, 187, 255);
-      border: none;
-      background: none;
-      cursor: pointer;
-      text-align: left;
-      margin-bottom: 5px;
-      padding: 1px;
-    }
-
-    .no-children-warning span {
-      font-weight: bold;
     }
   `;
 
