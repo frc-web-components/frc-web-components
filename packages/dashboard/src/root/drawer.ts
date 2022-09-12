@@ -25,7 +25,7 @@ export default class DashboardDrawer extends LitElement {
       width: 370px;
       gap: 10px;
       font-family: sans-serif;
-      padding: 10px;
+      padding: 10px 0;
       background: rgb(240, 240, 240);
       box-sizing: border-box;
     }
@@ -37,6 +37,14 @@ export default class DashboardDrawer extends LitElement {
     .editors-header {
       font-size: 18px;
       color: purple;
+      margin: 5px 0 10px;
+      padding: 0 10px;
+    }
+
+    .editor-components {
+      padding: 0 10px;
+      flex: 1;
+      overflow: auto;
     }
   `;
 
@@ -47,7 +55,7 @@ export default class DashboardDrawer extends LitElement {
 
   firstUpdated(): void {
     this.dashboard.subscribe('elementSelect', () => {
-      this.selectedElement = this.dashboard?.getSelectedElement() ?? undefined;
+      this.selectedElement = this.dashboard.getSelectedElement() ?? undefined;
     });
   }
 
@@ -60,32 +68,27 @@ export default class DashboardDrawer extends LitElement {
         <div class="editors">
           ${this.selectedElement
             ? html`
-                <div style="margin: 5px 0 10px">
-                  <header class="editors-header">
-                    ${this.dashboard?.getElementDisplayName(
-                      this.selectedElement
-                    )}
-                  </header>
-                </div>
-                <div>
-                  <header>Element Tree</header>
-                  ${this.renderElementTree()}
-                </div>
+                <header class="editors-header">
+                  ${this.dashboard?.getElementDisplayName(this.selectedElement)}
+                </header>
               `
             : null}
-          <div>
-            <header>Properties</header>
-            <dashboard-properties-editor
-              style="padding: 7px 10px 10px"
-              .dashboard=${this.dashboard}
-            ></dashboard-properties-editor>
-          </div>
-          <div>
-            <header>Sources</header>
-            <dashboard-sources-editor
-              .dashboard=${this.dashboard}
-              style="padding: 7px 10px 10px"
-            ></dashboard-sources-editor>
+          <div class="editor-components">
+            ${this.renderElementTree()}
+            <div>
+              <header>Properties</header>
+              <dashboard-properties-editor
+                style="padding: 7px 10px 10px"
+                .dashboard=${this.dashboard}
+              ></dashboard-properties-editor>
+            </div>
+            <div>
+              <header>Sources</header>
+              <dashboard-sources-editor
+                .dashboard=${this.dashboard}
+                style="padding: 7px 10px 10px"
+              ></dashboard-sources-editor>
+            </div>
           </div>
         </div>
       </div>
@@ -98,12 +101,15 @@ export default class DashboardDrawer extends LitElement {
     }
     const selectedTab = this.selectedElement.closest('dashboard-tab');
     return html`
-      <dashboard-element-tree-node
-        style="padding: 7px 10px 10px 0"
-        .element=${selectedTab}
-        .dashboard=${this.dashboard}
-        expanded
-      ></dashboard-element-tree-node>
+      <div>
+        <header>Element Tree</header>
+        <dashboard-element-tree-node
+          style="padding: 7px 10px 10px 0"
+          .element=${selectedTab}
+          .dashboard=${this.dashboard}
+          expanded
+        ></dashboard-element-tree-node>
+      </div>
     `;
   }
 }
