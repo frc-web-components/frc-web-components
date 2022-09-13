@@ -32,8 +32,29 @@ export default class DashboardDrawer extends LitElement {
       box-sizing: border-box;
     }
 
+    details .opened-cursor {
+      display: none;
+      width: 15px;
+      margin-right: 3px;
+    }
+
+    details .closed-cursor {
+      display: inline-block;
+      width: 15px;
+      margin-right: 3px;
+    }
+
     .editors summary {
       font-weight: bold;
+      list-style: none;
+    }
+
+    details[open] > summary .opened-cursor {
+      display: inline-block;
+    }
+
+    details[open] > summary .closed-cursor {
+      display: none;
     }
 
     .editors-header {
@@ -83,7 +104,14 @@ export default class DashboardDrawer extends LitElement {
       if (editor) {
         const container = document.createElement('details');
         container.setAttribute('open', '');
-        container.innerHTML = `<summary>${tag}</summary>`;
+        container.innerHTML = `
+          <summary>
+            <span class="caret">
+              <vaadin-icon icon="vaadin:angle-right" class="closed-cursor"></vaadin-icon>
+              <vaadin-icon icon="vaadin:angle-down" class="opened-cursor"></vaadin-icon>
+            </span>
+            ${tag}
+          </summary>`;
         container.appendChild(editor);
         editorComponents?.append(container);
         this.editors.push(container);
@@ -118,7 +146,19 @@ export default class DashboardDrawer extends LitElement {
     const selectedTab = this.selectedElement.closest('dashboard-tab');
     return html`
       <details open>
-        <summary>Element Tree</summary>
+        <summary>
+          <span class="caret">
+            <vaadin-icon
+              icon="vaadin:angle-right"
+              class="closed-cursor"
+            ></vaadin-icon>
+            <vaadin-icon
+              icon="vaadin:angle-down"
+              class="opened-cursor"
+            ></vaadin-icon>
+          </span>
+          Element Tree
+        </summary>
         <dashboard-element-tree-node
           style="padding: 7px 10px 10px 0"
           .element=${selectedTab}
