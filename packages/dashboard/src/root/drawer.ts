@@ -32,6 +32,10 @@ export default class DashboardDrawer extends LitElement {
       box-sizing: border-box;
     }
 
+    details summary + * {
+      padding-left: 5px;
+    }
+
     details .opened-cursor {
       display: none;
       width: 15px;
@@ -71,7 +75,7 @@ export default class DashboardDrawer extends LitElement {
     }
 
     .editor-components details {
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
   `;
 
@@ -160,7 +164,6 @@ export default class DashboardDrawer extends LitElement {
           Element Tree
         </summary>
         <dashboard-element-tree-node
-          style="padding: 7px 10px 10px 0"
           .element=${selectedTab}
           .dashboard=${this.dashboard}
           expanded

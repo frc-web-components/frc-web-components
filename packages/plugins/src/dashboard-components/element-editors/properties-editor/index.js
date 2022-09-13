@@ -4,7 +4,6 @@ import './dashboard-component-render';
 const styles = css`
   :host {
     display: block;
-    padding: 15px 10px;
     font-family: sans-serif;
     height: 100%;
     box-sizing: border-box;
@@ -29,9 +28,8 @@ const styles = css`
 `;
 
 class PropertiesEditor extends LitElement {
-
   static properties = {
-    dashboard: { attribute: false }
+    dashboard: { attribute: false },
   };
 
   static styles = styles;
@@ -72,10 +70,15 @@ class PropertiesEditor extends LitElement {
       <div class="properties-view">
         <vaadin-form-layout @change=${this.onValueChange}>
           ${Object.entries(properties)
-            .filter(([, { type }]) => !['SourceProvider', 'Store'].includes(type))
+            .filter(
+              ([, { type }]) => !['SourceProvider', 'Store'].includes(type)
+            )
             .filter(([, { input }]) => input?.type !== 'None')
             .map(([name]) => {
-              return this.renderPropertyView(name, webbit.getPropertyHandler(name));
+              return this.renderPropertyView(
+                name,
+                webbit.getPropertyHandler(name)
+              );
             })}
         </vaadin-form-layout>
       </div>
@@ -83,16 +86,19 @@ class PropertiesEditor extends LitElement {
   }
 
   renderPropertyView(name, propertyHandler) {
-
     const property = propertyHandler.getProperty();
 
-    const inputType = property.input?.type ?? property.type; 
-    
+    const inputType = property.input?.type ?? property.type;
+
     return html`
       <dashboard-component-renderer
         component-type="propertyInput"
         component-id=${inputType}
-        .config=${{ element: this.#element, propertyHandler, propertyName: name }}
+        .config=${{
+          element: this.#element,
+          propertyHandler,
+          propertyName: name,
+        }}
         .dashboard=${this.dashboard}
       ></dashboard-component-renderer>
     `;
