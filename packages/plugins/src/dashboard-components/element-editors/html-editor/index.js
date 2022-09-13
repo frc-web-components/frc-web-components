@@ -6,7 +6,7 @@ const styles = css`
     display: block;
     padding: 5px;
     font-family: sans-serif;
-    height: 400px;
+    height: 320px;
     box-sizing: border-box;
   }
 

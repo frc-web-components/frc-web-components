@@ -1,11 +1,10 @@
-import ElementPreviewLayer from "./layers/ElementPreviewLayer";
-import AbsolutePositioningLayout from "./layers/absolute-position-layout"; 
+import ElementPreviewLayer from './layers/ElementPreviewLayer';
+import AbsolutePositioningLayout from './layers/absolute-position-layout';
 import properties from './properties';
 import elementEditors from './element-editors';
 import './element-tree';
-import './add-elements';
 
-export default function(dashboard) {
+export default function (dashboard) {
   dashboard.addLayer('elementPreviewLayer', new ElementPreviewLayer());
   dashboard.addLayer('absolutePositionLayout', new AbsolutePositioningLayout());
   Object.entries(properties).map(([type, elementName]) => {

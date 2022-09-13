@@ -33,7 +33,8 @@ export default class DashboardDrawer extends LitElement {
     }
 
     details summary + * {
-      padding-left: 5px;
+      padding: 0 5px;
+      box-sizing: border-box;
     }
 
     details .opened-cursor {
