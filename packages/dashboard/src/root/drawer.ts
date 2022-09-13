@@ -10,6 +10,7 @@ export default class DashboardDrawer extends LitElement {
   @state() dashboard!: FrcDashboard;
   @state() selectedElement?: HTMLElement;
   @state() editors: HTMLElement[] = [];
+  @state() editorOpened: Record<string, boolean> = {};
 
   static styles = css`
     :host {
@@ -105,10 +106,20 @@ export default class DashboardDrawer extends LitElement {
     const editorComponents =
       this.renderRoot.querySelector('.editor-components');
     tags.forEach((tag) => {
+      const isOpened = this.editorOpened[tag] ?? true;
       const editor = this.dashboard.create('elementEditor', tag);
       if (editor) {
         const container = document.createElement('details');
-        container.setAttribute('open', '');
+        container.addEventListener('toggle', (ev) => {
+          const { open } = ev?.target as HTMLDetailsElement;
+          this.editorOpened = {
+            ...this.editorOpened,
+            [tag]: open,
+          };
+        });
+        if (isOpened) {
+          container.setAttribute('open', '');
+        }
         container.innerHTML = `
           <summary>
             <span class="caret">
