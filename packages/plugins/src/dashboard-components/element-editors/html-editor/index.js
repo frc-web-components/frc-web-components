@@ -6,7 +6,7 @@ const styles = css`
     display: block;
     padding: 5px;
     font-family: sans-serif;
-    height: 100%;
+    height: 320px;
     box-sizing: border-box;
   }
 
@@ -39,13 +39,15 @@ const styles = css`
     display: flex;
     justify-content: flex-end;
     gap: 5px;
+    margin-top: 5px;
   }
 
- 
+  textarea.codeflask__textarea {
+    border: 1px solid #ccc;
+  }
 `;
 
 class HtmlEditor extends LitElement {
-
   #flask;
 
   static properties = {
@@ -79,7 +81,6 @@ class HtmlEditor extends LitElement {
     this.#flask = new CodeFlask(this.#editor, {
       language: 'js',
       styleParent: this.renderRoot,
-      // lineNumbers: true
     });
     this.dashboard.subscribe('elementSelect', () => {
       this.#updateCode();
@@ -92,7 +93,8 @@ class HtmlEditor extends LitElement {
     const container = document.createElement('div');
     container.innerHTML = code;
     const updatedElement = container.firstElementChild;
-    const isValid = updatedElement && updatedElement.nodeName === this.#element.nodeName;
+    const isValid =
+      updatedElement && updatedElement.nodeName === this.#element.nodeName;
 
     if (!isValid) {
       return;
@@ -101,14 +103,17 @@ class HtmlEditor extends LitElement {
     const clonedElement = this.#element.cloneNode(true);
 
     // remove attributes
-    clonedElement.getAttributeNames().forEach(attribute => {
+    clonedElement.getAttributeNames().forEach((attribute) => {
       if (!updatedElement.hasAttribute(attribute)) {
         clonedElement.removeAttribute(attribute);
       }
     });
 
-    updatedElement.getAttributeNames().forEach(attribute => {
-      clonedElement.setAttribute(attribute, updatedElement.getAttribute(attribute));
+    updatedElement.getAttributeNames().forEach((attribute) => {
+      clonedElement.setAttribute(
+        attribute,
+        updatedElement.getAttribute(attribute)
+      );
     });
 
     if (clonedElement.tagName.toLowerCase() === 'dashboard-tab') {
@@ -119,7 +124,7 @@ class HtmlEditor extends LitElement {
       clonedElement.removeChild(clonedElement.lastChild);
     }
 
-    [...updatedElement.childNodes].forEach(node => {
+    [...updatedElement.childNodes].forEach((node) => {
       clonedElement.append(node);
     });
 
@@ -138,7 +143,9 @@ class HtmlEditor extends LitElement {
           <div id="editor"></div>
         </div>
         <div class="buttons">
-          <vaadin-button theme="small primary success" @click=${this.#onConfirm}>Confirm</vaadin-button>
+          <vaadin-button theme="small primary success" @click=${this.#onConfirm}
+            >Confirm</vaadin-button
+          >
         </div>
       </div>
     `;

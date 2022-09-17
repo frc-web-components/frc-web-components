@@ -1,25 +1,16 @@
-import {
-  LitElement, html, css, TemplateResult,
-} from 'lit';
-// eslint-disable-next-line import/extensions
+/* eslint-disable import/extensions */
+import { LitElement, html, css, TemplateResult } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import { WebbitConfig } from '@webbitjs/webbit';
 import { dashboardProvider } from '../context-providers';
 import FrcDashboard from '../frc-dashboard';
-import getElementHtml from './get-element-html';
-
-interface DashboardElement {
-  selector: string;
-  name: string;
-}
+import './drawer-sidebar';
 
 @customElement('dashboard-drawer')
 export default class DashboardDrawer extends LitElement {
-  @state() dashboard?: FrcDashboard;
-  @state() groups: string[] = [];
-  @state() newElementSelector?: string;
-  @state() selectedGroup = 'My Elements';
+  @state() dashboard!: FrcDashboard;
   @state() selectedElement?: HTMLElement;
+  @state() editors: HTMLElement[] = [];
+  @state() editorOpened: Record<string, boolean> = {};
 
   static styles = css`
     :host {
@@ -29,42 +20,7 @@ export default class DashboardDrawer extends LitElement {
     .dashboard {
       display: flex;
     }
-    
-    .sidebar {
-      font-family: sans-serif;
-      font-size: 15px;
-      width: 200px;
-      height: 100vh;
-      background: #444;
-      padding: 20px 15px;
-      display: flex;
-      flex-direction: column;
-      overflow: auto;
-      box-sizing: border-box;
-      color: white;
-    }
-    
-    .sidebar header {
-      text-transform: uppercase;
-      margin-bottom: 10px;
-      font-size: 18px;
-      color: lightblue;
-    }
-    
-    .sidebar p {
-      margin: 0 0 5px;
-      cursor: pointer;
-    }
-    
-    .sidebar p:hover {
-      font-weight: bold;
-    }
-    
-    .sidebar p.selected {
-      font-weight: bold;
-      cursor: default;
-    }
-    
+
     .editors {
       display: flex;
       flex-direction: column;
@@ -72,47 +28,56 @@ export default class DashboardDrawer extends LitElement {
       width: 370px;
       gap: 10px;
       font-family: sans-serif;
-      padding: 10px;
+      padding: 10px 0;
       background: rgb(240, 240, 240);
       box-sizing: border-box;
     }
-    
-    .editors header {
-      font-weight: bold;
+
+    details summary + * {
+      padding: 0 5px;
+      box-sizing: border-box;
     }
-    
-    .group-selector {
-      margin-bottom: 10px;
-      padding: 3px 1px;
-      font-size: 16px;
+
+    details .opened-cursor {
+      display: none;
+      width: 15px;
+      margin-right: 3px;
+    }
+
+    details .closed-cursor {
+      display: inline-block;
+      width: 15px;
+      margin-right: 3px;
+    }
+
+    .editors summary {
+      font-weight: bold;
+      list-style: none;
+    }
+
+    details[open] > summary .opened-cursor {
+      display: inline-block;
+    }
+
+    details[open] > summary .closed-cursor {
+      display: none;
     }
 
     .editors-header {
       font-size: 18px;
       color: purple;
+      margin: 5px 0 10px;
+      padding: 0 10px;
     }
 
-    .add-button {
-      border: 1px solid #aaa;
-      color: white;
-      background: none;
-      border-radius: 4px;
-      padding: 3px 5px;
-      cursor: pointer;
+    .editor-components {
+      padding: 0 10px;
+      flex: 1;
+      overflow: auto;
     }
 
-    .demo-button {
-      color: rgb(187, 187, 255);
-      border: none;
-      background: none;
-      cursor: pointer;
-      text-align: left;
-      margin-bottom: 5px;
-      padding: 1px;
-    }
-
-    .no-children-warning span {
-      font-weight: bold;
+    .editor-components details {
+      margin-bottom: 15px;
     }
   `;
 
@@ -121,211 +86,101 @@ export default class DashboardDrawer extends LitElement {
     dashboardProvider.addConsumer(this);
   }
 
-  get #allowedChildren(): string[] {
-    const allowedChildren = this.dashboard?.getAllowedChildren()?.[0]?.allowedChildren;
-    return allowedChildren ?? [];
-  }
-
-  #appendToDashboard(): void {
-    const selector = this.newElementSelector;
-    if (!this.dashboard || !selector) {
-      return;
-    }
-    // if (!this.element || !this.dashboard || !this.newElementSelector) {
-    //   return;
-    // }
-    // this.element.appendChild(this.dashboard.getRootElement());
-    // this.dashboard?.getRootElement().childNodes.forEach(node => node.remove());
-    // const element = document.createElement(this.newElementSelector);
-    // this.dashboard?.getRootElement().appendChild(element);
-    // this.dashboard.setSelectedElement(element);
-    const container = document.createElement('div');
-    container.innerHTML = getElementHtml(this.dashboard.getConnector(), selector);
-    [...container.children].forEach(child => {
-      // if (!this._slot) {
-      //   child.removeAttribute('slot');
-      // } else {
-      //   child.setAttribute('slot', this._slot);
-      // }
-      this.selectedElement?.append(child);
+  firstUpdated(): void {
+    this.dashboard.subscribe('elementSelect', () => {
+      this.selectedElement = this.dashboard.getSelectedElement() ?? undefined;
+      this.#updateEditors();
     });
   }
 
-  getGroups(): string[] {
-    const { dashboard } = this;
-    if (!dashboard) {
-      return [];
-    }
-    const selectors = this.#allowedChildren;
-    const groups: string[] = selectors
-      .map(selector => {
-        const config = dashboard.getConnector().getElementConfig(selector);
-        if (!config) {
-          return '';
+  #getEditorTags(): string[] {
+    return this.dashboard.getComponentIdsOfType('elementEditor');
+  }
+
+  #updateEditors(): void {
+    this.editors.forEach((editor) => {
+      editor.remove();
+      this.dashboard.unmount(editor);
+    });
+    const tags = this.#getEditorTags();
+    const editorComponents =
+      this.renderRoot.querySelector('.editor-components');
+    tags.forEach((tag) => {
+      const isOpened = this.editorOpened[tag] ?? true;
+      const editor = this.dashboard.create('elementEditor', tag);
+      if (editor) {
+        const container = document.createElement('details');
+        container.addEventListener('toggle', (ev) => {
+          const { open } = ev?.target as HTMLDetailsElement;
+          this.editorOpened = {
+            ...this.editorOpened,
+            [tag]: open,
+          };
+        });
+        if (isOpened) {
+          container.setAttribute('open', '');
         }
-        return config.group;
-      });
-    return [...new Set(groups)].filter(group => group !== '').sort();
-  }
-
-  firstUpdated(): void {
-    if (this.dashboard) {
-      this.dashboard.subscribe('elementSelect', () => {
-        this.selectedElement = this.dashboard?.getSelectedElement() ?? undefined;
-      });
-    }
-  }
-
-  updated(changedProps: Map<string, unknown>): void {
-    if (changedProps.has('selectedElement')) {
-      this.groups = this.getGroups();
-      this.selectedGroup = this.groups[0] ?? '';
-      this.newElementSelector = this.getElements()[0]?.selector;
-    }
-    if (changedProps.has('selectedGroup')) {
-      const selectedElementGroup = this.getElementConfig()?.group ?? this.groups[0];
-      if (selectedElementGroup !== this.selectedGroup) {
-        this.newElementSelector = this.getElements()[0]?.selector;
+        container.innerHTML = `
+          <summary>
+            <span class="caret">
+              <vaadin-icon icon="vaadin:angle-right" class="closed-cursor"></vaadin-icon>
+              <vaadin-icon icon="vaadin:angle-down" class="opened-cursor"></vaadin-icon>
+            </span>
+            ${tag}
+          </summary>`;
+        container.appendChild(editor);
+        editorComponents?.append(container);
+        this.editors.push(container);
       }
-    }
-  }
-
-  getElementConfig(): WebbitConfig | undefined {
-    return this.dashboard?.getConnector().getMatchingElementConfig(this.selectedElement);
-  }
-
-  getElements(): DashboardElement[] {
-    const { dashboard } = this;
-    if (!dashboard) {
-      return [];
-    }
-    const selectors = this.#allowedChildren;
-    return selectors
-      .filter(selector => {
-        const config = dashboard.getConnector().getElementConfig(selector);
-        if (!config) {
-          return false;
-        }
-        return config.group === this.selectedGroup;
-      })
-      .map(selector => ({
-        selector,
-        name: dashboard.getSelectorDisplayName(selector),
-      }))
-      .sort((el1, el2) => el1.name.localeCompare(el2.name));
-  }
-
-  #getSelectedElementName(): string {
-    const { selectedElement } = this;
-    if (!selectedElement) {
-      return '';
-    }
-    return this.dashboard?.getElementDisplayName(selectedElement) ?? '';
+    });
   }
 
   render(): TemplateResult {
-    if (!this.dashboard) {
-      return html``;
-    }
     return html`
       <div class="dashboard">
-        <div class="sidebar">
-          <header>Elements</header>
-          <select class="group-selector" ?disabled=${this.groups.length === 0} @change=${(ev: any) => {
-            this.selectedGroup = ev.target.value;
-          }}>
-            ${this.groups.map(group => html`
-            <option value=${group} ?selected=${group === this.selectedGroup}>${group}</option>
-            `)}
-          </select>
-          ${this.getElements().length === 0 ? html`
-            <p class="no-children-warning">
-              No children can be added to element <span>${this.#getSelectedElementName()}</span>
-            </p>
-          ` : null}
-          ${this.getElements().map(({ selector, name }) => html`
-            <p class=${this.newElementSelector === selector ? 'selected' : ''} key=${selector} @click=${() => {
-              this.newElementSelector = selector;
-            }}
-              >
-              ${name}
-            </p>
-            ${this.newElementSelector === selector ? html`
-              ${this.renderDemo()}
-              <div style="margin-bottom: 8px">
-                <button 
-                  class="add-button"
-                  @click=${this.#appendToDashboard}
-                >Prepend</button>
-                <button class="add-button" @click=${this.#appendToDashboard}>Append</button>
-              </div>
-            ` : null}
-          `)}
-        </div>
+        <dashboard-drawer-sidebar
+          .dashboard=${this.dashboard}
+        ></dashboard-drawer-sidebar>
         <div class="editors">
-          ${this.selectedElement ? html`  
-            <div style="margin: 5px 0 10px">
-              <header class="editors-header">
-                ${this.dashboard?.getElementDisplayName(this.selectedElement)}
-              </header>
-            </div>
-              <div>
-                <header>Element Tree</header>
-                ${this.renderElementTree()}
-              </div>
-          ` : null}
-          <div>
-            <header>Properties</header>
-            <dashboard-properties-editor 
-              style="padding: 7px 10px 10px"
-              .dashboard=${this.dashboard}
-            ></dashboard-properties-editor>
-          </div>
-          <div>
-            <header>Sources</header>
-            <dashboard-sources-editor 
-              .dashboard=${this.dashboard}
-              style="padding: 7px 10px 10px"
-            ></dashboard-sources-editor>
-          </div>
+          ${this.selectedElement
+            ? html`
+                <header class="editors-header">
+                  ${this.dashboard?.getElementDisplayName(this.selectedElement)}
+                </header>
+              `
+            : null}
+          <div class="editor-components">${this.renderElementTree()}</div>
         </div>
       </div>
     `;
   }
 
   renderElementTree(): TemplateResult {
-    const { dashboard, selectedElement } = this;
-    if (!dashboard || !selectedElement) {
+    if (!this.selectedElement) {
       return html``;
     }
-    const selectedTab = selectedElement.closest('dashboard-tab');
+    const selectedTab = this.selectedElement.closest('dashboard-tab');
     return html`
-      <dashboard-element-tree-node
-        style="padding: 7px 10px 10px 0"
-        .element=${selectedTab}
-        .dashboard=${this.dashboard}
-        expanded
-      ></dashboard-element-tree-node>
-    `;
-  }
-
-  renderDemo(): TemplateResult {
-    const { dashboard, newElementSelector } = this;
-    if (!dashboard || !newElementSelector) {
-      return html``;
-    }
-    const tutorials = dashboard.getElementTutorials(newElementSelector);
-    if (tutorials.length === 0) {
-      return html``;
-    }
-    return html`
-      <button 
-        class="demo-button"
-        @click=${() => {
-          const tab = dashboard.addTab(tutorials[0].name, tutorials[0].html);
-          dashboard.setSelectedElement(tab);
-        }}
-      >Demo element</button>
+      <details open>
+        <summary>
+          <span class="caret">
+            <vaadin-icon
+              icon="vaadin:angle-right"
+              class="closed-cursor"
+            ></vaadin-icon>
+            <vaadin-icon
+              icon="vaadin:angle-down"
+              class="opened-cursor"
+            ></vaadin-icon>
+          </span>
+          Element Tree
+        </summary>
+        <dashboard-element-tree-node
+          .element=${selectedTab}
+          .dashboard=${this.dashboard}
+          expanded
+        ></dashboard-element-tree-node>
+      </details>
     `;
   }
 }

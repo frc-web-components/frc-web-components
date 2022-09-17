@@ -11,10 +11,10 @@ function getFormattedHtml(html: string) {
 
 type ComponentRenderer = (params: {
   // eslint-disable-next-line no-use-before-define
-  dashboard: Dashboard,
-  element: HTMLElement,
-  config: Record<string, unknown>
-}) => (() => void) | undefined
+  dashboard: Dashboard;
+  element: HTMLElement;
+  config: Record<string, unknown>;
+}) => (() => void) | undefined;
 
 interface DashboardComponent {
   type: string;
@@ -31,13 +31,16 @@ export default class Dashboard {
   private mountedElements = new Map<
     HTMLElement,
     {
-      componentId: string,
-      componentType: string,
-      config: Record<string, unknown>, unmount:(((props: {
-        config: Record<string, unknown>,
-        dashboard: Dashboard,
-        element: HTMLElement,
-      }) => void) | undefined)
+      componentId: string;
+      componentType: string;
+      config: Record<string, unknown>;
+      unmount:
+        | ((props: {
+            config: Record<string, unknown>;
+            dashboard: Dashboard;
+            element: HTMLElement;
+          }) => void)
+        | undefined;
     }
   >();
 
@@ -47,14 +50,24 @@ export default class Dashboard {
   private provider = new SourceProvider();
 
   constructor(rootElement?: HTMLElement) {
-    this.connector = new WebbitConnector(rootElement ?? document.createElement('div'), this.store);
+    this.connector = new WebbitConnector(
+      rootElement ?? document.createElement('div'),
+      this.store
+    );
     this.dashboardState.addSourceProvider('dashboardState', this.provider);
-    this.dashboardState.subscribeAll('dashboardState', (value, key) => {
-      this.publish('storeValueChange', { value, key });
-    }, false);
+    this.dashboardState.subscribeAll(
+      'dashboardState',
+      (value, key) => {
+        this.publish('storeValueChange', { value, key });
+      },
+      false
+    );
   }
 
-  addSourceProvider(providerName: string, sourceProvider: SourceProvider): void {
+  addSourceProvider(
+    providerName: string,
+    sourceProvider: SourceProvider
+  ): void {
     this.store.addSourceProvider(providerName, sourceProvider);
   }
 
@@ -67,7 +80,9 @@ export default class Dashboard {
   }
 
   getStoreValue(key: string, defaultValue: unknown = undefined): unknown {
-    return this.dashboardState.getSourceValue('dashboardState', key) ?? defaultValue;
+    return (
+      this.dashboardState.getSourceValue('dashboardState', key) ?? defaultValue
+    );
   }
 
   getConnector(): WebbitConnector {
@@ -106,7 +121,7 @@ export default class Dashboard {
   create(
     componentType: string,
     componentId: string,
-    config: Record<string, unknown>,
+    config: Record<string, unknown> = {}
   ): HTMLElement | undefined {
     const element = document.createElement('div');
     const componentKey = this.componentKeys.getKey(componentType, componentId);
@@ -116,10 +131,15 @@ export default class Dashboard {
     const component = this.components.get(componentKey);
     if (component) {
       const unmount = component.mount({
-        dashboard: this, element, config,
+        dashboard: this,
+        element,
+        config,
       });
       this.mountedElements.set(element, {
-        componentId, componentType, config, unmount,
+        componentId,
+        componentType,
+        config,
+        unmount,
       });
       return element;
     }
@@ -136,7 +156,9 @@ export default class Dashboard {
       const { config, unmount } = mountedElement;
       if (unmount) {
         unmount({
-          dashboard: this, element, config,
+          dashboard: this,
+          element,
+          config,
         });
       }
       this.mountedElements.delete(element);
@@ -147,7 +169,10 @@ export default class Dashboard {
    *
    * @returns {() => void} A function to unsubscribe
    */
-  subscribe(subscriberId: string, subscriber: (...args: unknown[]) => unknown): () => void {
+  subscribe(
+    subscriberId: string,
+    subscriber: (...args: unknown[]) => unknown
+  ): () => void {
     if (!this.subscribers.has(subscriberId)) {
       this.subscribers.set(subscriberId, new Map());
     }
@@ -168,12 +193,15 @@ export default class Dashboard {
     if (!this.subscribers.has(subscriberId)) {
       return;
     }
-    this.subscribers.get(subscriberId)?.forEach(subscriber => {
+    this.subscribers.get(subscriberId)?.forEach((subscriber) => {
       subscriber(context);
     });
   }
 
-  addElements(elementConfigs?: Record<string, Partial<WebbitConfig>>, group = 'default'): void {
+  addElements(
+    elementConfigs?: Record<string, Partial<WebbitConfig>>,
+    group = 'default'
+  ): void {
     this.connector.addElementConfigs(elementConfigs, group);
   }
 
@@ -182,12 +210,15 @@ export default class Dashboard {
   }
 
   setHtml(html: string): void {
-    this.connector.getRootElement().querySelectorAll('dashboard-tab').forEach(tab => {
-      tab.remove();
-    });
+    this.connector
+      .getRootElement()
+      .querySelectorAll('dashboard-tab')
+      .forEach((tab) => {
+        tab.remove();
+      });
     const container = document.createElement('div');
     container.innerHTML = html;
-    container.querySelectorAll('dashboard-tab').forEach(tab => {
+    container.querySelectorAll('dashboard-tab').forEach((tab) => {
       tab.setAttribute('slot', 'tab');
       this.connector.getRootElement().append(tab);
     });
@@ -222,29 +253,39 @@ export default class Dashboard {
   getElementHtml(element: HTMLElement, inner = false): string {
     const clonedElement = element.cloneNode(true) as HTMLElement;
     this.setClonedElementPropAttributes(element, clonedElement);
-    return getFormattedHtml(inner ? clonedElement.innerHTML : clonedElement.outerHTML);
+    return getFormattedHtml(
+      inner ? clonedElement.innerHTML : clonedElement.outerHTML
+    );
   }
 
-  private setClonedElementPropAttributes(element: HTMLElement, clonedElement: HTMLElement): void {
+  private setClonedElementPropAttributes(
+    element: HTMLElement,
+    clonedElement: HTMLElement
+  ): void {
     const webbit = this.connector.getElementWebbit(element);
     if (webbit) {
       const { properties } = webbit.getConfig();
-      Object.entries(properties).forEach(([name, { attribute, defaultValue }]) => {
-        const handler = webbit.getPropertyHandler(name);
-        if (handler?.isAttribute() && attribute) {
-          const attributeValue = handler.getStoredAttribute();
-          if (attributeValue === null || handler.getStoredValue() === defaultValue) {
-            clonedElement.removeAttribute(attribute);
-          } else {
-            clonedElement.setAttribute(attribute, attributeValue);
+      Object.entries(properties).forEach(
+        ([name, { attribute, defaultValue }]) => {
+          const handler = webbit.getPropertyHandler(name);
+          if (handler?.isAttribute() && attribute) {
+            const attributeValue = handler.getStoredAttribute();
+            if (
+              attributeValue === null ||
+              handler.getStoredValue() === defaultValue
+            ) {
+              clonedElement.removeAttribute(attribute);
+            } else {
+              clonedElement.setAttribute(attribute, attributeValue);
+            }
           }
         }
-      });
+      );
     }
     for (let i = 0; i < element.children.length; i += 1) {
       this.setClonedElementPropAttributes(
         element.children[i] as HTMLElement,
-        clonedElement.children[i] as HTMLElement,
+        clonedElement.children[i] as HTMLElement
       );
     }
   }
