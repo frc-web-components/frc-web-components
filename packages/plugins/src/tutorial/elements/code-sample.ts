@@ -1,7 +1,5 @@
 /* eslint-disable import/extensions */
-import {
-  LitElement, html, css, TemplateResult,
-} from 'lit';
+import { LitElement, html, css, TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import escape from 'lodash.escape';
 import unescape from 'lodash.unescape';
@@ -13,7 +11,10 @@ export const codeSampleConfig: Partial<WebbitConfig> = {
     title: { type: 'String' },
     description: { type: 'String' },
     code: {
-      type: 'String', input: { type: 'Textarea' }, property: 'innerHTML', attribute: false,
+      type: 'String',
+      input: { type: 'Textarea' },
+      property: 'innerHTML',
+      attribute: false,
     },
   },
 };
@@ -23,9 +24,8 @@ export default class CodeSample extends LitElement {
   static styles = css`
     :host {
       display: block;
-      margin-bottom: 40px;
+      margin-bottom: 10px;
       box-sizing: border-box;
-      padding: 10px 20px;
       font-size: 13px;
       width: 100%;
       box-sizing: border-box;
@@ -74,7 +74,7 @@ export default class CodeSample extends LitElement {
   getCode(): string {
     const htmlContent: string = escape(this.innerHTML);
     const lines = htmlContent.split('\n');
-    const firstCodeLine = lines.findIndex(value => value.length > 0);
+    const firstCodeLine = lines.findIndex((value) => value.length > 0);
 
     if (firstCodeLine < 0) {
       return htmlContent;
@@ -87,11 +87,15 @@ export default class CodeSample extends LitElement {
     }
 
     const newHtml = lines
-      .map(line => line.replace(whiteSpaceToRemove, ''))
-      .map(line => {
+      .map((line) => line.replace(whiteSpaceToRemove, ''))
+      .map((line) => {
         let transformedLine = line;
-        const escapedArrays = [...transformedLine.matchAll(/(=&quot;\[)(&amp;quot;.*?&amp;quot;)(\]&quot;)/g)];
-        escapedArrays.forEach(match => {
+        const escapedArrays = [
+          ...transformedLine.matchAll(
+            /(=&quot;\[)(&amp;quot;.*?&amp;quot;)(\]&quot;)/g
+          ),
+        ];
+        escapedArrays.forEach((match) => {
           const [original, start, middle, end] = match;
           const newStart = unescape(start).replace('"', "'");
           const newMiddle = unescape(middle);
@@ -101,7 +105,7 @@ export default class CodeSample extends LitElement {
         });
         return transformedLine;
       })
-      .map(line => line.replace('=&quot;&quot;', ''))
+      .map((line) => line.replace('=&quot;&quot;', ''))
       .join('\n');
 
     return newHtml;
@@ -125,8 +129,11 @@ export default class CodeSample extends LitElement {
         <div class="preview">
           <slot></slot>
         </div>
-        <link rel="stylesheet" type="text/css"
-          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/default.min.css">
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/default.min.css"
+        />
         <pre><code class="html"></code></pre>
       </main>
     `;
