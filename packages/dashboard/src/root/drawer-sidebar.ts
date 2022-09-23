@@ -136,7 +136,9 @@ export default class DashboardDrawerSidebar extends LitElement {
   updated(changedProps: Map<string, unknown>): void {
     if (changedProps.has('selectedElement')) {
       this.groups = this.getGroups();
-      this.selectedGroup = this.groups[0] ?? '';
+      if (!this.groups.includes(this.selectedGroup)) {
+        this.selectedGroup = this.groups[0] ?? this.selectedGroup;
+      }
       this.newElementSelector = this.getElements()[0]?.selector;
     }
     if (changedProps.has('selectedGroup')) {
