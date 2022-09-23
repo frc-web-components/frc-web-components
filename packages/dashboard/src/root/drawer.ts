@@ -89,8 +89,14 @@ export default class DashboardDrawer extends LitElement {
   firstUpdated(): void {
     this.dashboard.subscribe('elementSelect', () => {
       this.selectedElement = this.dashboard.getSelectedElement() ?? undefined;
-      this.#updateEditors();
     });
+    this.selectedElement = this.dashboard.getSelectedElement() ?? undefined;
+  }
+
+  updated(updatedProps: Map<string, unknown>): void {
+    if (updatedProps.has('selectedElement')) {
+      this.#updateEditors();
+    }
   }
 
   #getEditorTags(): string[] {

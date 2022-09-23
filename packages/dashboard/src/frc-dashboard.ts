@@ -49,6 +49,9 @@ export default class FrcDashboard extends Dashboard {
   }
 
   setSelectedElement(element: HTMLElement): void {
+    if (this.getSelectedElement() === element) {
+      return;
+    }
     this.setStoreValue('selectedElement', element);
     this.setStoreValue(
       'allowedChildren',
@@ -57,7 +60,9 @@ export default class FrcDashboard extends Dashboard {
   }
 
   setPreviewedElement(element: HTMLElement | null): void {
-    this.setStoreValue('previewedElement', element);
+    if (this.getPreviewedElement() !== element) {
+      this.setStoreValue('previewedElement', element);
+    }
   }
 
   addElements(

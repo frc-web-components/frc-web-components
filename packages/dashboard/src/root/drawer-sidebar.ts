@@ -127,12 +127,10 @@ export default class DashboardDrawerSidebar extends LitElement {
   }
 
   firstUpdated(): void {
-    if (this.dashboard) {
-      this.dashboard.subscribe('elementSelect', () => {
-        this.selectedElement =
-          this.dashboard?.getSelectedElement() ?? undefined;
-      });
-    }
+    this.dashboard.subscribe('elementSelect', () => {
+      this.selectedElement = this.dashboard.getSelectedElement() ?? undefined;
+    });
+    this.selectedElement = this.dashboard.getSelectedElement() ?? undefined;
   }
 
   updated(changedProps: Map<string, unknown>): void {
