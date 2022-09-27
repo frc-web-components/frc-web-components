@@ -1,6 +1,5 @@
 import { LitElement } from 'lit';
 import { WebbitConfig } from '@webbitjs/webbit';
-import Store, { SourceProvider } from '@webbitjs/store';
 import Dashboard from './dashboard';
 import getAllowedChildren from './get-allowed-children';
 import Layer from './layer';
@@ -10,12 +9,6 @@ export interface Tutorial {
   name: string;
   element?: string;
   html: string;
-  getProvider?: () => SourceProvider;
-  manageSources?: (
-    store: Store,
-    provider: SourceProvider,
-    providerName: string
-  ) => unknown;
 }
 
 export default class FrcDashboard extends Dashboard {

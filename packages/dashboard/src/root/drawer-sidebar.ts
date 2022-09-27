@@ -43,6 +43,7 @@ export default class DashboardDrawerSidebar extends LitElement {
     p {
       margin: 0 0 5px;
       cursor: pointer;
+      line-height: 18px;
     }
 
     p:hover {
