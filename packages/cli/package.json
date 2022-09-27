@@ -1,6 +1,6 @@
 {
   "name": "@frc-web-components/cli",
-  "version": "4.2.8",
+  "version": "4.3.0-alpha.0",
   "description": "",
   "bin": {
     "frc-web-components": "dist/cli.js"
@@ -32,9 +32,9 @@
   },
   "homepage": "https://github.com/frc-web-components/components#readme",
   "dependencies": {
-    "@frc-web-components/dashboard": "^4.2.5",
-    "@frc-web-components/frc-web-components": "^4.2.8",
-    "@frc-web-components/plugins": "^4.2.7",
+    "@frc-web-components/dashboard": "^4.3.0-alpha.0",
+    "@frc-web-components/frc-web-components": "^4.3.0-alpha.0",
+    "@frc-web-components/plugins": "^4.3.0-alpha.0",
     "@webbitjs/store": "^5.5.0",
     "@webbitjs/webbit": "^5.5.0",
     "chalk": "^5.0.1",

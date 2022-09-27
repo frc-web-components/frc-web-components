@@ -1,6 +1,6 @@
 {
   "name": "@frc-web-components/plugins",
-  "version": "4.2.7",
+  "version": "4.3.0-alpha.0",
   "description": "",
   "files": [
     "dist",
@@ -43,7 +43,7 @@
   },
   "homepage": "https://github.com/frc-web-components/components#readme",
   "dependencies": {
-    "@frc-web-components/dashboard": "^4.2.5",
+    "@frc-web-components/dashboard": "^4.3.0-alpha.0",
     "@webbitjs/store": "^5.5.0",
     "@webbitjs/webbit": "^5.5.0",
     "highlight.js": "^11.6.0",
