@@ -1,13 +1,11 @@
 import { SourceProvider } from '@webbitjs/store';
 
 export default class GamepadProvider extends SourceProvider {
-
   constructor() {
-    super();
+    super({}, 1000 / 60);
     const update = () => {
       const gamepads = [...window.navigator.getGamepads()];
       gamepads.forEach((gamepad, index) => {
-        
         if (!gamepad) {
           this.removeSource(`/${index}/axes`);
           this.removeSource(`/${index}/connected`);
@@ -22,7 +20,7 @@ export default class GamepadProvider extends SourceProvider {
         }
 
         const { axes, buttons, connected, id, mapping, timestamp } = gamepad;
-        
+
         this.updateSource(`/${index}/axes`, axes);
         this.updateSource(`/${index}/connected`, connected);
         this.updateSource(`/${index}/id`, id);

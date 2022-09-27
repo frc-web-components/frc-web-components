@@ -43,6 +43,7 @@ export default class DashboardDrawerSidebar extends LitElement {
     p {
       margin: 0 0 5px;
       cursor: pointer;
+      line-height: 18px;
     }
 
     p:hover {
@@ -127,18 +128,18 @@ export default class DashboardDrawerSidebar extends LitElement {
   }
 
   firstUpdated(): void {
-    if (this.dashboard) {
-      this.dashboard.subscribe('elementSelect', () => {
-        this.selectedElement =
-          this.dashboard?.getSelectedElement() ?? undefined;
-      });
-    }
+    this.dashboard.subscribe('elementSelect', () => {
+      this.selectedElement = this.dashboard.getSelectedElement() ?? undefined;
+    });
+    this.selectedElement = this.dashboard.getSelectedElement() ?? undefined;
   }
 
   updated(changedProps: Map<string, unknown>): void {
     if (changedProps.has('selectedElement')) {
       this.groups = this.getGroups();
-      this.selectedGroup = this.groups[0] ?? '';
+      if (!this.groups.includes(this.selectedGroup)) {
+        this.selectedGroup = this.groups[0] ?? this.selectedGroup;
+      }
       this.newElementSelector = this.getElements()[0]?.selector;
     }
     if (changedProps.has('selectedGroup')) {

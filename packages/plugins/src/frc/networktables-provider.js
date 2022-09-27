@@ -17,13 +17,12 @@ const getType = (value) => {
 };
 
 export default class NetworkTablesProvider extends SourceProvider {
-
   constructor() {
-    super();
+    super({}, 1000 / 60);
     this.setAddress('localhost');
     this.updatedEntriesBeforeReady = [];
     this.isNtReady = false;
-    this.ntReady = new Promise(resolve => {
+    this.ntReady = new Promise((resolve) => {
       const interval = setInterval(() => {
         if (NetworkTables.isWsConnected()) {
           this.isNtReady = true;
@@ -32,15 +31,15 @@ export default class NetworkTablesProvider extends SourceProvider {
         }
       }, 500);
     });
-    
+
     this.ntReady.then(() => {
-      this.updatedEntriesBeforeReady.forEach(key => {
+      this.updatedEntriesBeforeReady.forEach((key) => {
         if (typeof NetworkTables.getValue(key) === 'undefined') {
           NetworkTables.putValue(key, this.getSource(key));
         }
       });
-  
-      NetworkTables.addRobotConnectionListener(connected => {
+
+      NetworkTables.addRobotConnectionListener((connected) => {
         if (!connected) {
           this.clearSourcesWithTimeout(2000, this.updateAll.bind(this));
         } else {
@@ -48,7 +47,7 @@ export default class NetworkTablesProvider extends SourceProvider {
         }
       }, true);
 
-      NetworkTables.addWsConnectionListener(connected => {
+      NetworkTables.addWsConnectionListener((connected) => {
         if (!connected) {
           this.clearSourcesWithTimeout(2000, this.updateAll.bind(this));
         } else {
@@ -75,7 +74,8 @@ export default class NetworkTablesProvider extends SourceProvider {
 
   connect(address) {
     if (address) {
-      localStorage.networkTablesAddress = address === 'localhost' ? '127.0.0.1' : address;
+      localStorage.networkTablesAddress =
+        address === 'localhost' ? '127.0.0.1' : address;
     }
 
     if (localStorage.networkTablesAddress) {
@@ -90,7 +90,7 @@ export default class NetworkTablesProvider extends SourceProvider {
       const currentValue = this.getSource(key);
       const currentType = getType(currentValue);
       const updatedType = getType(value);
-      
+
       // put in if it's new and it's valid
       if (!currentType && updatedType) {
         this.updateSource(key, value);
@@ -106,9 +106,9 @@ export default class NetworkTablesProvider extends SourceProvider {
 
       // make sure current value type matches value passed in
       if (
-        currentType === updatedType
-        || currentType.includes('Array') && updatedType === 'Array'
-        || currentType === 'Array' && updatedType.includes('Array')
+        currentType === updatedType ||
+        (currentType.includes('Array') && updatedType === 'Array') ||
+        (currentType === 'Array' && updatedType.includes('Array'))
       ) {
         this.updateSource(key, value);
         if (!this.updatedEntriesBeforeReady.includes(key)) {

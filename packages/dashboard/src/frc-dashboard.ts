@@ -8,7 +8,7 @@ export interface Tutorial {
   id: string;
   name: string;
   element?: string;
-  html: string
+  html: string;
 }
 
 export default class FrcDashboard extends Dashboard {
@@ -18,7 +18,7 @@ export default class FrcDashboard extends Dashboard {
   constructor(rootElement?: HTMLElement) {
     super(rootElement);
     this.subscribe('storeValueChange', (val: unknown): void => {
-      const { key, value } = val as { key: string, value: boolean };
+      const { key, value } = val as { key: string; value: boolean };
       if (key === 'drawerOpened') {
         this.publish('drawerToggle', { opened: value });
       } else if (key === 'selectedElement') {
@@ -42,25 +42,41 @@ export default class FrcDashboard extends Dashboard {
   }
 
   setSelectedElement(element: HTMLElement): void {
+    if (this.getSelectedElement() === element) {
+      return;
+    }
     this.setStoreValue('selectedElement', element);
-    this.setStoreValue('allowedChildren', getAllowedChildren(element, this.getConnector()));
+    this.setStoreValue(
+      'allowedChildren',
+      getAllowedChildren(element, this.getConnector())
+    );
   }
 
   setPreviewedElement(element: HTMLElement | null): void {
-    this.setStoreValue('previewedElement', element);
+    if (this.getPreviewedElement() !== element) {
+      this.setStoreValue('previewedElement', element);
+    }
   }
 
-  addElements(elementConfigs?: Record<string, Partial<WebbitConfig>>, group = 'default'): void {
+  addElements(
+    elementConfigs?: Record<string, Partial<WebbitConfig>>,
+    group = 'default'
+  ): void {
     super.addElements(elementConfigs, group);
     const selectedElement = this.getSelectedElement();
     if (selectedElement) {
-      this.setStoreValue('allowedChildren', getAllowedChildren(selectedElement, this.getConnector()));
+      this.setStoreValue(
+        'allowedChildren',
+        getAllowedChildren(selectedElement, this.getConnector())
+      );
     }
   }
 
   setHtml(html: string): void {
     super.setHtml(html);
-    const tab = this.getConnector().getRootElement().querySelector('dashboard-tab') as HTMLElement;
+    const tab = this.getConnector()
+      .getRootElement()
+      .querySelector('dashboard-tab') as HTMLElement;
     if (tab) {
       this.setSelectedElement(tab);
     }
@@ -85,8 +101,11 @@ export default class FrcDashboard extends Dashboard {
     return this.getStoreValue('previewedElement', null) as HTMLElement;
   }
 
-  getAllowedChildren(): { slot: string, allowedChildren: string[] }[] {
-    return this.getStoreValue('allowedChildren', []) as ({ slot: string, allowedChildren: string[] }[]);
+  getAllowedChildren(): { slot: string; allowedChildren: string[] }[] {
+    return this.getStoreValue('allowedChildren', []) as {
+      slot: string;
+      allowedChildren: string[];
+    }[];
   }
 
   addLayer(id: string, layer: Layer): void {
@@ -128,10 +147,10 @@ export default class FrcDashboard extends Dashboard {
   }
 
   /**
- *
- * @param {string} id
- * @param {string} elementName
- */
+   *
+   * @param {string} id
+   * @param {string} elementName
+   */
   addPropertyInput(id: string, elementName: string): void {
     this.addComponent({
       type: 'propertyInput',
@@ -149,9 +168,12 @@ export default class FrcDashboard extends Dashboard {
         };
         propertyView.addEventListener('change', elementChangeListener);
 
-        const propertyInputChangeUnsubscriber = dashboard.subscribe('propertyInputChange', () => {
-          (propertyView as LitElement)?.requestUpdate();
-        });
+        const propertyInputChangeUnsubscriber = dashboard.subscribe(
+          'propertyInputChange',
+          () => {
+            (propertyView as LitElement)?.requestUpdate();
+          }
+        );
 
         return () => {
           propertyView.removeEventListener('change', elementChangeListener);
