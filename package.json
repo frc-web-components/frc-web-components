@@ -29,7 +29,7 @@
     "@webbitjs/webbit": "^1.5.16",
     "api-viewer-element": "^0.4.4",
     "chart.js": "^2.8.0",
-    "d3": "^5.15.0",
+    "d3": "^7.6.1",
     "hotkeys-js": "^3.8.1",
     "interactjs": "^1.10.0",
     "js-beautify": "^1.13.0",
