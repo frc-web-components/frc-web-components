@@ -3,6 +3,7 @@ import booleanBoxTutorial from './boolean-box';
 import threeAxisAccelerometer from './3-axis-accelerometer';
 import accelerometer from './accelerometer';
 import basicFmsInfo from './basic-fms-info';
+import lineChart from './line-chart';
 
 export default function addTutorials(dashboard: FrcDashboard): void {
   dashboard.addTutorial({
@@ -28,5 +29,11 @@ export default function addTutorials(dashboard: FrcDashboard): void {
     name: 'Basic FMS Info',
     element: 'frc-basic-fms-info',
     html: basicFmsInfo,
+  });
+  dashboard.addTutorial({
+    id: 'frc-line-chart',
+    name: 'Line Chart',
+    element: 'frc-line-chart',
+    html: lineChart,
   });
 }
