@@ -4,7 +4,7 @@ let nextStreamId = 0;
 
 export const elementName = 'frc-camera';
 
-const DEFAULT_WAIT_IMAGE = '../static/no-camera-stream.jpg';
+const DEFAULT_WAIT_IMAGE = '/public/no-camera-stream.jpg';
 
 export const elementConfig = {
   dashboard: {
@@ -16,34 +16,42 @@ export const elementConfig = {
     height: { type: Number, defaultValue: -1 },
     compression: { type: Number, defaultValue: -1 },
     hideCrosshair: { type: Boolean, attribute: 'hide-crosshair' },
-    crosshairColor: { type: String, input: { type: 'ColorPicker' }, attribute: 'crosshair-color', defaultValue: '#ffffff' },
-    crosshairWidth: { type: Number, attribute: 'crosshair-width', defaultValue: 2 },
-    streams: { type: Array },
-    waitImage: { 
-      type: String, 
-      input: { type: 'Upload' },
-      attribute: 'wait-image', 
+    crosshairColor: {
+      type: String,
+      input: { type: 'ColorPicker' },
+      attribute: 'crosshair-color',
+      defaultValue: '#ffffff',
     },
-  }
+    crosshairWidth: {
+      type: Number,
+      attribute: 'crosshair-width',
+      defaultValue: 2,
+    },
+    streams: { type: Array },
+    waitImage: {
+      type: String,
+      input: { type: 'Upload' },
+      attribute: 'wait-image',
+    },
+  },
 };
 
 class Camera extends LitElement {
-
   static properties = {
     ...elementConfig.properties,
     url: { type: String, reflect: false, attribute: false },
   };
 
   static styles = css`
-    :host { 
-      display: inline-flex; 
+    :host {
+      display: inline-flex;
       width: 350px;
       height: 350px;
       justify-content: center;
       align-items: center;
     }
 
-    [part=camera-feed] {
+    [part='camera-feed'] {
       display: var(--image-display, block);
       width: var(--image-width, 100%);
       height: var(--image-height, 100%);
@@ -51,21 +59,22 @@ class Camera extends LitElement {
       max-height: 100%;
     }
 
-    [part=x-crosshair], [part=y-crosshair] {
+    [part='x-crosshair'],
+    [part='y-crosshair'] {
       position: absolute;
       box-sizing: border-box;
       border-style: dashed;
     }
 
-    [part=x-crosshair] {
+    [part='x-crosshair'] {
       border-top-width: var(--crosshair-width, 2px);
       border-bottom-width: 0px;
       border-color: var(--crosshair-color, white);
       width: var(--image-width, 100%);
       height: 0px;
-    } 
+    }
 
-    [part=y-crosshair] {
+    [part='y-crosshair'] {
       border-left-width: var(--crosshair-width, 2px);
       border-right-width: 0px;
       border-color: var(--crosshair-color, white);
@@ -92,13 +101,15 @@ class Camera extends LitElement {
   }
 
   getStreams() {
-    let uniqueStreams = [...new Set(this.streams)].map(stream => {
+    let uniqueStreams = [...new Set(this.streams)].map((stream) => {
       return stream.replace('mjpg:', '');
     });
 
-    [...uniqueStreams].forEach(stream => {
+    [...uniqueStreams].forEach((stream) => {
       const url = new URL(stream);
-      uniqueStreams.push(`${url.protocol}//127.0.0.1:${url.port}${url.pathname}${url.search}`);
+      uniqueStreams.push(
+        `${url.protocol}//127.0.0.1:${url.port}${url.pathname}${url.search}`
+      );
     });
 
     return [...new Set(uniqueStreams)];
@@ -108,26 +119,22 @@ class Camera extends LitElement {
     return this.url;
   }
 
-
-
   firstUpdated() {
     super.firstUpdated();
 
     this.cameraFeedNode = this.shadowRoot.querySelector('[part=camera-feed]');
 
     setInterval(() => {
-
       // If the element is not in the dom, don't try to load streams
       if (!this.isConnected) {
         return;
       }
 
       if (!this.isStreaming()) {
-        this.getStreams().forEach(stream => {
+        this.getStreams().forEach((stream) => {
           this.loadStream(stream);
         });
       }
-
     }, 1000);
 
     setInterval(() => {
@@ -147,7 +154,6 @@ class Camera extends LitElement {
   }
 
   loadStream(url) {
-
     const streamId = nextStreamId;
     nextStreamId++;
     this.streamsLoadingIds.push(streamId);
@@ -158,7 +164,7 @@ class Camera extends LitElement {
     console.log('load stream:', url);
 
     const timeoutId = setTimeout(() => {
-      img.onload = () => { };
+      img.onload = () => {};
 
       // If the current stream is no longer streaming, disconnect from it
       if (this.url === url && this.streamsLoadingIds.indexOf(streamId) >= 0) {
@@ -176,8 +182,11 @@ class Camera extends LitElement {
       console.log('load:', url);
       clearTimeout(timeoutId);
 
-      img.onload = () => { };
-      if (!this.isStreaming() && this.streamsLoadingIds.indexOf(streamId) >= 0) {
+      img.onload = () => {};
+      if (
+        !this.isStreaming() &&
+        this.streamsLoadingIds.indexOf(streamId) >= 0
+      ) {
         this.url = img.src;
         this.streamsLoadingIds = [];
 
@@ -199,7 +208,10 @@ class Camera extends LitElement {
     const crosshairWidth = Math.max(0, parseInt(this.crosshairWidth));
     this.style.setProperty('--crosshair-width', `${crosshairWidth}px`);
     this.style.setProperty('--crosshair-color', this.crosshairColor);
-    this.style.setProperty('--image-display', this.url || this.waitImage || DEFAULT_WAIT_IMAGE ? 'block' : 'none');
+    this.style.setProperty(
+      '--image-display',
+      this.url || this.waitImage || DEFAULT_WAIT_IMAGE ? 'block' : 'none'
+    );
   }
 
   resized() {
@@ -207,21 +219,25 @@ class Camera extends LitElement {
   }
 
   setImageSize() {
-
     const { naturalWidth, naturalHeight } = this.cameraFeedNode;
     const { width, height } = this.getBoundingClientRect();
 
-    if (height < (naturalHeight / naturalWidth * width)) {
-      this.style.setProperty('--image-width', `${naturalWidth / naturalHeight * height}px`);
+    if (height < (naturalHeight / naturalWidth) * width) {
+      this.style.setProperty(
+        '--image-width',
+        `${(naturalWidth / naturalHeight) * height}px`
+      );
       this.style.setProperty('--image-height', `${height}px`);
     } else {
       this.style.setProperty('--image-width', `${width}px`);
-      this.style.setProperty('--image-height', `${naturalHeight / naturalWidth * width}px`);
+      this.style.setProperty(
+        '--image-height',
+        `${(naturalHeight / naturalWidth) * width}px`
+      );
     }
   }
 
   getUrl() {
-
     if (!this.isStreaming()) {
       return this.waitImage || DEFAULT_WAIT_IMAGE;
     }
@@ -249,10 +265,12 @@ class Camera extends LitElement {
   render() {
     return html`
       <img part="camera-feed" .src="${this.getUrl()}" />
-      ${this.url && !this.hideCrosshair ? html`
-      <div part="x-crosshair"></div>
-      <div part="y-crosshair"></div>
-      ` : ''}
+      ${this.url && !this.hideCrosshair
+        ? html`
+            <div part="x-crosshair"></div>
+            <div part="y-crosshair"></div>
+          `
+        : ''}
     `;
   }
 }

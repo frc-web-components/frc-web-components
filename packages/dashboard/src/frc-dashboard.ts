@@ -211,6 +211,15 @@ export default class FrcDashboard extends Dashboard {
     return this.tutorials[id];
   }
 
+  showTutorial(id: string): void {
+    const tutorial = this.getTutorial(id);
+    if (tutorial) {
+      const tab = this.addTab(tutorial.name, tutorial.html);
+      tab.setAttribute('tutorial', '');
+      this.setSelectedElement(tab);
+    }
+  }
+
   getElementTutorials(selector: string): Tutorial[] {
     const tutorials: Tutorial[] = [];
     Object.entries(this.tutorials).forEach(([, tutorial]) => {
@@ -230,5 +239,17 @@ export default class FrcDashboard extends Dashboard {
     tab.setAttribute('slot', 'tab');
     this.getRootElement().append(tab);
     return tab;
+  }
+
+  isElementEditable(
+    element: HTMLElement | null = this.getSelectedElement()
+  ): boolean {
+    if (!element) {
+      return true;
+    }
+    return (
+      element.tagName.toLowerCase() !== 'dashboard-tab' ||
+      !element.hasAttribute('tutorial')
+    );
   }
 }

@@ -1,6 +1,4 @@
-import {
-  LitElement, html, css, TemplateResult,
-} from 'lit';
+import { LitElement, html, css, TemplateResult } from 'lit';
 import './dashboard-tab';
 import './navbar';
 import './drawer';
@@ -11,17 +9,19 @@ import { onRemoveKeyPress } from '../hotkeys';
 import { dashboardProvider } from '../context-providers';
 import FrcDashboard from '../frc-dashboard';
 
-export function removeElement(element: HTMLElement, connector: WebbitConnector):
-  HTMLElement | null {
+export function removeElement(
+  element: HTMLElement,
+  connector: WebbitConnector
+): HTMLElement | null {
   const parent = element.parentElement;
-  const siblings = [...parent?.children ?? []];
+  const siblings = [...(parent?.children ?? [])];
   const elementIndex = siblings.indexOf(element);
-  const nextElement = siblings[elementIndex + 1] ?? siblings[elementIndex - 1] ?? parent;
+  const nextElement =
+    siblings[elementIndex + 1] ?? siblings[elementIndex - 1] ?? parent;
   element?.remove();
-  const isInDashboard = (
-    connector.getRootElement().contains(nextElement)
-    && nextElement !== connector.getRootElement()
-  );
+  const isInDashboard =
+    connector.getRootElement().contains(nextElement) &&
+    nextElement !== connector.getRootElement();
   return isInDashboard ? (nextElement as HTMLElement) : null;
 }
 
@@ -45,10 +45,6 @@ const styles = css`
     display: none;
   }
 
-  dashboard-drawer {
-    width: 570px;
-  }
-
   .dashboard {
     display: flex;
     flex-direction: column;
@@ -70,12 +66,12 @@ const styles = css`
     box-sizing: border-box;
   }
 
-  ::slotted([slot=dashboard]) {
+  ::slotted([slot='dashboard']) {
     width: 100%;
     height: 100%;
   }
 
-  ::slotted([slot=layer]) {
+  ::slotted([slot='layer']) {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -114,7 +110,7 @@ export default class DashboardRoot extends LitElement {
       'dashboard-tab': {
         dashboard: {
           topLevel: false,
-          displayName: element => element.getAttribute('tab-name') || 'Tab',
+          displayName: (element) => element.getAttribute('tab-name') || 'Tab',
           layout: {
             type: 'absolute',
             movable: false,
@@ -127,9 +123,7 @@ export default class DashboardRoot extends LitElement {
         properties: {
           tabName: { type: 'String', attribute: 'tab-name', reflect: true },
         },
-        slots: [
-          { name: '' },
-        ],
+        slots: [{ name: '' }],
       },
     });
     const rootElement = this.dashboard.getRootElement();
@@ -141,7 +135,10 @@ export default class DashboardRoot extends LitElement {
       if (this.#selectedElement) {
         if (this.dashboard) {
           if (this.#selectedElement.tagName !== 'DASHBOARD-TAB') {
-            const nextElement = removeElement(this.#selectedElement, this.dashboard.getConnector());
+            const nextElement = removeElement(
+              this.#selectedElement,
+              this.dashboard.getConnector()
+            );
             if (nextElement) {
               this.dashboard.setSelectedElement(nextElement);
             }
@@ -153,8 +150,12 @@ export default class DashboardRoot extends LitElement {
     this.dashboard.subscribe('elementSelect', () => this.requestUpdate());
     this.dashboard.showLayer('elementPreviewLayer');
     this.dashboard.showLayer('absolutePositionLayout');
-    const elementPreviewLayer = this.dashboard.getLayerElement('elementPreviewLayer');
-    const absolutePositionLayout = this.dashboard.getLayerElement('absolutePositionLayout');
+    const elementPreviewLayer = this.dashboard.getLayerElement(
+      'elementPreviewLayer'
+    );
+    const absolutePositionLayout = this.dashboard.getLayerElement(
+      'absolutePositionLayout'
+    );
     if (elementPreviewLayer) {
       this.append(elementPreviewLayer);
     }
@@ -178,7 +179,9 @@ export default class DashboardRoot extends LitElement {
     this.drawerOpened = !this.drawerOpened;
     this.dashboard?.setPreviewedElement(null);
     const layout = this.renderRoot.querySelector('.layout') as HTMLElement;
-    const drawer = this.renderRoot.querySelector('dashboard-drawer') as HTMLElement;
+    const drawer = this.renderRoot.querySelector(
+      'dashboard-drawer'
+    ) as HTMLElement;
     if (this.drawerOpened && layout && drawer) {
       layout.classList.remove('closed');
     } else {
@@ -190,15 +193,18 @@ export default class DashboardRoot extends LitElement {
     if (!this.ready) {
       return html``;
     }
+    const isEditable = this.dashboard?.isElementEditable();
     return html`
       <div class="layout">
         <dashboard-drawer .interact="${null}"></dashboard-drawer>
         <div class="dashboard">
-          <dashboard-navbar @drawerToggle=${this.#onDrawerToggle}></dashboard-navbar>
+          <dashboard-navbar
+            @drawerToggle=${this.#onDrawerToggle}
+          ></dashboard-navbar>
           <div class="dashboard-elements">
             <div id="container">
               <slot name="dashboard"></slot>
-              <slot name="layer"></slot>
+              ${isEditable ? html` <slot name="layer"></slot> ` : ''}
             </div>
           </div>
         </div>

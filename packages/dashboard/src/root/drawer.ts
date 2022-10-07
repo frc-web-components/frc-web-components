@@ -33,6 +33,10 @@ export default class DashboardDrawer extends LitElement {
       box-sizing: border-box;
     }
 
+    .editors.uneditable {
+      display: none;
+    }
+
     details summary + * {
       padding: 0 5px;
       box-sizing: border-box;
@@ -142,12 +146,13 @@ export default class DashboardDrawer extends LitElement {
   }
 
   render(): TemplateResult {
+    const isEditable = this.dashboard.isElementEditable();
     return html`
       <div class="dashboard">
         <dashboard-drawer-sidebar
           .dashboard=${this.dashboard}
         ></dashboard-drawer-sidebar>
-        <div class="editors">
+        <div class="editors ${!isEditable ? 'uneditable' : ''}">
           ${this.selectedElement
             ? html`
                 <header class="editors-header">
