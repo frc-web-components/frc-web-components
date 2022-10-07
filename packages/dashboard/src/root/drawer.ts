@@ -145,16 +145,6 @@ export default class DashboardDrawer extends LitElement {
     });
   }
 
-  #isElementEditable(): boolean {
-    if (!this.selectedElement) {
-      return false;
-    }
-    return (
-      this.selectedElement.tagName.toLowerCase() !== 'dashboard-tab' ||
-      !this.selectedElement.hasAttribute('tutorial')
-    );
-  }
-
   render(): TemplateResult {
     const isEditable = this.dashboard.isElementEditable();
     return html`
