@@ -156,7 +156,7 @@ export default class DashboardDrawer extends LitElement {
   }
 
   render(): TemplateResult {
-    const isEditable = this.#isElementEditable();
+    const isEditable = this.dashboard.isElementEditable();
     return html`
       <div class="dashboard">
         <dashboard-drawer-sidebar

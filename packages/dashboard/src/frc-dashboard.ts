@@ -240,4 +240,16 @@ export default class FrcDashboard extends Dashboard {
     this.getRootElement().append(tab);
     return tab;
   }
+
+  isElementEditable(
+    element: HTMLElement | null = this.getSelectedElement()
+  ): boolean {
+    if (!element) {
+      return true;
+    }
+    return (
+      element.tagName.toLowerCase() !== 'dashboard-tab' ||
+      !element.hasAttribute('tutorial')
+    );
+  }
 }

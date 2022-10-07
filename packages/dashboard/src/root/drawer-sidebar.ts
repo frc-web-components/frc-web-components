@@ -186,18 +186,8 @@ export default class DashboardDrawerSidebar extends LitElement {
     return this.dashboard?.getElementDisplayName(selectedElement) ?? '';
   }
 
-  #isElementEditable(): boolean {
-    if (!this.selectedElement) {
-      return false;
-    }
-    return (
-      this.selectedElement.tagName.toLowerCase() !== 'dashboard-tab' ||
-      !this.selectedElement.hasAttribute('tutorial')
-    );
-  }
-
   render(): TemplateResult {
-    const isEditable = this.#isElementEditable();
+    const isEditable = this.dashboard.isElementEditable();
     return html`
       <header>Elements</header>
       <select
@@ -220,7 +210,7 @@ export default class DashboardDrawerSidebar extends LitElement {
   }
 
   #renderChildren(): TemplateResult {
-    const isEditable = this.#isElementEditable();
+    const isEditable = this.dashboard.isElementEditable();
     if (!isEditable) {
       return html`
         <p class="no-children-warning">

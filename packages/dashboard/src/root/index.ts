@@ -193,6 +193,7 @@ export default class DashboardRoot extends LitElement {
     if (!this.ready) {
       return html``;
     }
+    const isEditable = this.dashboard?.isElementEditable();
     return html`
       <div class="layout">
         <dashboard-drawer .interact="${null}"></dashboard-drawer>
@@ -203,7 +204,7 @@ export default class DashboardRoot extends LitElement {
           <div class="dashboard-elements">
             <div id="container">
               <slot name="dashboard"></slot>
-              <slot name="layer"></slot>
+              ${isEditable ? html` <slot name="layer"></slot> ` : ''}
             </div>
           </div>
         </div>
