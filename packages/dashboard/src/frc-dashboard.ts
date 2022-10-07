@@ -211,6 +211,15 @@ export default class FrcDashboard extends Dashboard {
     return this.tutorials[id];
   }
 
+  showTutorial(id: string): void {
+    const tutorial = this.getTutorial(id);
+    if (tutorial) {
+      const tab = this.addTab(tutorial.name, tutorial.html);
+      tab.setAttribute('tutorial', '');
+      this.setSelectedElement(tab);
+    }
+  }
+
   getElementTutorials(selector: string): Tutorial[] {
     const tutorials: Tutorial[] = [];
     Object.entries(this.tutorials).forEach(([, tutorial]) => {

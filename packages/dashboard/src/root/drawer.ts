@@ -33,6 +33,10 @@ export default class DashboardDrawer extends LitElement {
       box-sizing: border-box;
     }
 
+    .editors.uneditable {
+      display: none;
+    }
+
     details summary + * {
       padding: 0 5px;
       box-sizing: border-box;
@@ -141,13 +145,24 @@ export default class DashboardDrawer extends LitElement {
     });
   }
 
+  #isElementEditable(): boolean {
+    if (!this.selectedElement) {
+      return false;
+    }
+    return (
+      this.selectedElement.tagName.toLowerCase() !== 'dashboard-tab' ||
+      !this.selectedElement.hasAttribute('tutorial')
+    );
+  }
+
   render(): TemplateResult {
+    const isEditable = this.#isElementEditable();
     return html`
       <div class="dashboard">
         <dashboard-drawer-sidebar
           .dashboard=${this.dashboard}
         ></dashboard-drawer-sidebar>
-        <div class="editors">
+        <div class="editors ${!isEditable ? 'uneditable' : ''}">
           ${this.selectedElement
             ? html`
                 <header class="editors-header">

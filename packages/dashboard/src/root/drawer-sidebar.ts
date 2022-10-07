@@ -186,12 +186,23 @@ export default class DashboardDrawerSidebar extends LitElement {
     return this.dashboard?.getElementDisplayName(selectedElement) ?? '';
   }
 
+  #isElementEditable(): boolean {
+    if (!this.selectedElement) {
+      return false;
+    }
+    return (
+      this.selectedElement.tagName.toLowerCase() !== 'dashboard-tab' ||
+      !this.selectedElement.hasAttribute('tutorial')
+    );
+  }
+
   render(): TemplateResult {
+    const isEditable = this.#isElementEditable();
     return html`
       <header>Elements</header>
       <select
         class="group-selector"
-        ?disabled=${this.groups.length === 0}
+        ?disabled=${this.groups.length === 0 || !isEditable}
         @change=${(ev: any) => {
           this.selectedGroup = ev.target.value;
         }}
@@ -204,6 +215,20 @@ export default class DashboardDrawerSidebar extends LitElement {
           `
         )}
       </select>
+      ${this.#renderChildren()}
+    `;
+  }
+
+  #renderChildren(): TemplateResult {
+    const isEditable = this.#isElementEditable();
+    if (!isEditable) {
+      return html`
+        <p class="no-children-warning">
+          No children can be added to a tutorial
+        </p>
+      `;
+    }
+    return html`
       ${this.getElements().length === 0
         ? html`
             <p class="no-children-warning">
@@ -255,11 +280,7 @@ export default class DashboardDrawerSidebar extends LitElement {
       <button
         class="demo-button"
         @click=${() => {
-          const tab = this.dashboard.addTab(
-            tutorials[0].name,
-            tutorials[0].html
-          );
-          this.dashboard.setSelectedElement(tab);
+          this.dashboard.showTutorial(tutorials[0].id);
         }}
       >
         Demo element
