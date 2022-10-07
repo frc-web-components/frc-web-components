@@ -4,6 +4,9 @@ import threeAxisAccelerometer from './3-axis-accelerometer';
 import accelerometer from './accelerometer';
 import basicFmsInfo from './basic-fms-info';
 import lineChart from './line-chart';
+import gauge from './gauge';
+import differentialDrive from './differential-drive';
+import mecanumDrive from './mecanum-drive';
 
 export default function addTutorials(dashboard: FrcDashboard): void {
   dashboard.addTutorial({
@@ -35,5 +38,23 @@ export default function addTutorials(dashboard: FrcDashboard): void {
     name: 'Line Chart',
     element: 'frc-line-chart',
     html: lineChart,
+  });
+  dashboard.addTutorial({
+    id: 'frc-gauge',
+    name: 'Gauge',
+    element: 'frc-gauge',
+    html: gauge,
+  });
+  dashboard.addTutorial({
+    id: 'frc-differential-drivebase',
+    name: 'Differential Drivebasew',
+    element: 'frc-differential-drivebase',
+    html: differentialDrive,
+  });
+  dashboard.addTutorial({
+    id: 'frc-mecanum-drivebase',
+    name: 'Mecanum Drivebasew',
+    element: 'frc-mecanum-drivebase',
+    html: mecanumDrive,
   });
 }

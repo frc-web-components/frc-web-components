@@ -1,6 +1,15 @@
 const tutorial = `
 <div style="padding: 15px 20px; box-sizing: border-box" default-source-provider="Demo">
 
+  <style>
+    h1 {
+      margin: 0 0 10px;
+    }
+  </style>
+
+  <h1>Line Chart</h1>
+
+
   <fwc-code-sample title="With title and labels">
     <frc-line-chart title="Graph Title" x-axis-label="x-axis label" y-axis-label="y-axis label">
       <frc-chart-data label="Data label" class="random"></frc-chart-data>
