@@ -7,23 +7,28 @@ import lineChart from './line-chart';
 import gauge from './gauge';
 import differentialDrive from './differential-drive';
 import mecanumDrive from './mecanum-drive';
+import gyro from './gyro';
+import encoder from './encoder';
+import numberBar from './number-bar';
+import numberSlider from './number-slider';
+import pdp from './pdp';
 
 export default function addTutorials(dashboard: FrcDashboard): void {
   dashboard.addTutorial({
     id: 'frc-boolean-box',
-    name: 'Boolean Box Demo',
+    name: 'Boolean Box',
     element: 'frc-boolean-box',
     html: booleanBoxTutorial,
   });
   dashboard.addTutorial({
     id: 'frc-3-axis-accelerometer',
-    name: '3-Axis Accelerometer Demo',
+    name: '3-Axis Accelerometer',
     element: 'frc-3-axis-accelerometer',
     html: threeAxisAccelerometer,
   });
   dashboard.addTutorial({
     id: 'frc-accelerometer',
-    name: 'Accelerometer Demo',
+    name: 'Accelerometer',
     element: 'frc-accelerometer',
     html: accelerometer,
   });
@@ -56,5 +61,35 @@ export default function addTutorials(dashboard: FrcDashboard): void {
     name: 'Mecanum Drivebasew',
     element: 'frc-mecanum-drivebase',
     html: mecanumDrive,
+  });
+  dashboard.addTutorial({
+    id: 'frc-gyro',
+    name: 'Gyro',
+    element: 'frc-gyro',
+    html: gyro,
+  });
+  dashboard.addTutorial({
+    id: 'frc-encoder',
+    name: 'Encoder',
+    element: 'frc-encoder',
+    html: encoder,
+  });
+  dashboard.addTutorial({
+    id: 'frc-number-bar',
+    name: 'Number Bar',
+    element: 'frc-number-bar',
+    html: numberBar,
+  });
+  dashboard.addTutorial({
+    id: 'frc-number-slider',
+    name: 'Number Slider',
+    element: 'frc-number-slider',
+    html: numberSlider,
+  });
+  dashboard.addTutorial({
+    id: 'frc-pdp',
+    name: 'PDP',
+    element: 'frc-pdp',
+    html: pdp,
   });
 }

@@ -10,12 +10,15 @@ export const elementConfig = {
     value: { type: Number, primary: true, changeEvent: 'change' },
     min: { type: Number, defaultValue: -1 },
     max: { type: Number, defaultValue: 1 },
-    blockIncrement: { type: Number, attribute: 'block-increment', defaultValue: .05 }
-  }
+    blockIncrement: {
+      type: Number,
+      attribute: 'block-increment',
+      defaultValue: 0.05,
+    },
+  },
 };
 
 class NumberSlider extends LitElement {
-
   static properties = elementConfig.properties;
 
   static styles = css`
@@ -35,13 +38,13 @@ class NumberSlider extends LitElement {
     }
 
     input {
-        width: 100%;
+      width: 100%;
     }
 
     table-axis {
-        width: calc(85% - 14px);
-        max-width: calc(100% - 74px);
-        display: block;
+      width: calc(85% - 14px);
+      max-width: calc(100% - 74px);
+      display: block;
     }
   `;
 
@@ -50,7 +53,7 @@ class NumberSlider extends LitElement {
     this.value = 0;
     this.min = -1;
     this.max = 1;
-    this.blockIncrement = .05;
+    this.blockIncrement = 0.05;
   }
 
   onChange(ev) {
@@ -59,11 +62,20 @@ class NumberSlider extends LitElement {
   }
 
   #dispatchChange() {
-    this.dispatchEvent(new CustomEvent('change', {
-      detail: { value: this.value },
-      bubbles: true,
-      composed: true
-    }));
+    this.dispatchEvent(
+      new CustomEvent('change', {
+        detail: { value: this.value },
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+
+  firstUpdated() {
+    // The value is not initially being set for fractions for some reason
+    setTimeout(() => {
+      this.renderRoot.querySelector('#slider').value = this.value;
+    });
   }
 
   render() {
@@ -73,18 +85,18 @@ class NumberSlider extends LitElement {
 
     return html`
       <div class="slider-container">
-        <input 
+        <input
           id="slider"
-          type="range" 
+          type="range"
+          .value="${value.toString()}"
           min="${min}"
           max="${max}"
-          .value="${value.toString()}"
           step="${this.blockIncrement}"
           @change="${this.onChange}"
         />
 
-        <frc-table-axis 
-          ticks="5" 
+        <frc-table-axis
+          ticks="5"
           .range="${[this.min, this.max]}"
         ></frc-table-axis>
       </div>
