@@ -216,6 +216,12 @@ export default class FrcDashboard extends Dashboard {
     if (tutorial) {
       const tab = this.addTab(tutorial.name, tutorial.html);
       tab.setAttribute('tutorial', '');
+      tab.querySelectorAll('script').forEach((scriptElement) => {
+        const clonedElement = document
+          .createRange()
+          .createContextualFragment(scriptElement.outerHTML);
+        scriptElement.parentElement?.replaceChild(clonedElement, scriptElement);
+      });
       this.setSelectedElement(tab);
     }
   }
