@@ -161,6 +161,24 @@ export default class DashboardRoot extends LitElement {
     }
     if (absolutePositionLayout) {
       this.append(absolutePositionLayout);
+      absolutePositionLayout.addEventListener(
+        'dragover',
+        (ev) => {
+          console.log('dragover: ', ev);
+        },
+        true
+      );
+      absolutePositionLayout.addEventListener(
+        'drop',
+        (ev) => {
+          console.log('drop: ', ev);
+        },
+        true
+      );
+      // absolutePositionLayout.addEventListener('mouseenter', (ev) => {
+      //   console.log('move: ', ev);
+      // }, true);
+      // console.log('abso', absolutePositionLayout);
     }
     this.ready = true;
   }

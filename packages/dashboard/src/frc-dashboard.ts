@@ -113,9 +113,9 @@ export default class FrcDashboard extends Dashboard {
       type: 'layer',
       id,
       mount: ({ element }) => {
-        layer.mount(element, this);
+        layer.mount(element, this, id);
         return () => {
-          layer.unmount(element, this);
+          layer.unmount(element, this, id);
         };
       },
     });

@@ -42,7 +42,7 @@ export default class DashboardDrawerSidebar extends LitElement {
 
     p {
       margin: 0 0 5px;
-      cursor: pointer;
+      cursor: grab;
       line-height: 18px;
     }
 
@@ -230,8 +230,11 @@ export default class DashboardDrawerSidebar extends LitElement {
       ${this.getElements().map(
         ({ selector, name }) => html`
           <p
-            class=${this.newElementSelector === selector ? 'selected' : ''}
+            class="${this.newElementSelector === selector ? 'selected' : ''}"
             key=${selector}
+            draggable="true"
+            @dragstart=${() => console.log('start')}
+            @dragend=${(ev) => console.log('end:', ev)}
             @click=${() => {
               this.newElementSelector = selector;
             }}
