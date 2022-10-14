@@ -9,19 +9,10 @@
         overflow: hidden;
       }
     </style>
-    
-    <script type="module">
-      import renderDashboard from '/src/index.ts';
-      import addPlugins from '@frc-web-components/plugins';
 
-      document.addEventListener('DOMContentLoaded', () => {
-        const dashboard = renderDashboard(document.querySelector('#dash'), 'dashboard-root');
-        addPlugins(dashboard);
-        window.API = dashboard;
-      });
-    </script>
+    <script type="module" src="/src/index.ts"></script>
   </head>
   <body>
-    <div id="dash"></div>
+    <frc-dashboard-builder></frc-dashboard-builder>
   </body>
 </html>

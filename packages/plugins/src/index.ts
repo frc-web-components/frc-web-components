@@ -13,7 +13,7 @@ export default function addPlugins(dashboard: FrcDashboard): void {
   addFrcSimPlugin(dashboard);
   addVaadinElementsPlugin(dashboard);
   addWiredElementsPlugin(dashboard);
-  addTutorialPlugin(dashboard);
+  addTutorialPlugin();
   addSourceElementsPlugin(dashboard);
 }
 
