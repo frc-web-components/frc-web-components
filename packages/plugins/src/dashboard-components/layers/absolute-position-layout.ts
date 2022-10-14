@@ -1,30 +1,38 @@
-import Layer from './layer';
-import DashboardSelections from './dashboard-selections';
+import { FrcDashboard, Layer } from '@frc-web-components/dashboard';
 import interact from 'interactjs';
+import DashboardSelections from './dashboard-selections';
 import getTranslationFromStyles from './getTranslationFromStyles';
 
-export default class AbsolutePositioningLayout extends Layer {
-  #layerElement;
-  #dashboard;
-  #interactive;
-  #selectionBox = this.createSelectionBox();
+function round(val: number, gridSize: number): number {
+  return Math.floor(val / gridSize + 0.5) * gridSize;
+}
 
-  #snappingEnabled;
-  #gridSize;
+function createSelectionBox(): HTMLElement {
+  const box = document.createElement('div');
+  box.style.border = '2px dashed green';
+  box.style.boxSizing = 'border-box';
+  box.style.display = 'none';
+  box.style.position = 'absolute';
+  box.style.pointerEvents = 'all';
+  return box;
+}
 
-  mount(layerElement, dashboard) {
-    this.#layerElement = layerElement;
-    this.#dashboard = dashboard;
-    this.#snappingEnabled = false;
-    this.#gridSize = 40.0;
+class AbsolutePositioningLayout extends Layer {
+  #selectionBox = createSelectionBox();
+  #interactive = interact(this.#selectionBox);
 
-    new DashboardSelections(dashboard.getConnector(), (element) => {
-      if (dashboard.isElementEditable()) {
-        dashboard.setSelectedElement(element);
+  #snappingEnabled = false;
+  #gridSize = 40.0;
+
+  mount(): void {
+    // eslint-disable-next-line no-new
+    new DashboardSelections(this.dashboard.getConnector(), (element) => {
+      if (this.dashboard.isElementEditable()) {
+        this.dashboard.setSelectedElement(element);
       }
     });
 
-    dashboard.subscribe('elementSelect', () => {
+    this.dashboard.subscribe('elementSelect', () => {
       if (this.#selectedElement) {
         this.#addResizeInteraction();
         this.#addDragInteraction();
@@ -45,7 +53,7 @@ export default class AbsolutePositioningLayout extends Layer {
       }
     });
 
-    layerElement.appendChild(this.#selectionBox);
+    this.element.appendChild(this.#selectionBox);
     this.#interactive = interact(this.#selectionBox);
 
     this.#interactive.on('resizeend', () => {
@@ -59,21 +67,21 @@ export default class AbsolutePositioningLayout extends Layer {
     this.#addDragInteraction();
   }
 
-  #setBounds() {
-    const selectedElement = this.#dashboard?.getSelectedElement();
+  #setBounds(): void {
+    const selectedElement = this.dashboard.getSelectedElement();
     if (
-      this.#dashboard.isDrawerOpened() &&
+      this.dashboard.isDrawerOpened() &&
       selectedElement &&
       selectedElement.tagName.toLowerCase() !== 'dashboard-tab'
     ) {
       const { left, top, width, height } = Layer.getElementRect(
-        this.#layerElement,
+        this.element,
         selectedElement
       );
-      this.#selectionBox.style.left = left + 'px';
-      this.#selectionBox.style.top = top + 'px';
-      this.#selectionBox.style.width = width + 'px';
-      this.#selectionBox.style.height = height + 'px';
+      this.#selectionBox.style.left = `${left}px`;
+      this.#selectionBox.style.top = `${top}px`;
+      this.#selectionBox.style.width = `${width}px`;
+      this.#selectionBox.style.height = `${height}px`;
       this.#selectionBox.style.display = 'block';
     } else {
       this.#selectionBox.style.display = 'none';
@@ -85,13 +93,16 @@ export default class AbsolutePositioningLayout extends Layer {
   }
 
   #getLayout() {
-    return this.#dashboard
+    if (!this.#selectedElement) {
+      return undefined;
+    }
+    return this.dashboard
       .getConnector()
       .getMatchingElementConfig(this.#selectedElement)?.dashboard?.layout;
   }
 
-  get #selectedElement() {
-    return this.#dashboard?.getSelectedElement();
+  get #selectedElement(): HTMLElement | null {
+    return this.dashboard.getSelectedElement();
   }
 
   get #translation() {
@@ -101,36 +112,34 @@ export default class AbsolutePositioningLayout extends Layer {
     return getTranslationFromStyles(this.#selectedElement);
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   get #layoutConfig() {
     const layout = this.#getLayout();
     return {
       type: layout?.type,
-      resizableVertical:
-        layout?.resizable !== false && (layout?.resizable?.vertical ?? true),
-      resizableHorizontal:
-        layout?.resizable !== false && (layout?.resizable?.horizontal ?? true),
+      resizableVertical: layout?.resizable?.vertical ?? true,
+      resizableHorizontal: layout?.resizable?.horizontal ?? true,
       movable: layout?.movable ?? true,
       minWidth: layout?.size?.minWidth ?? 20,
       minHeight: layout?.size?.minHeight ?? 20,
     };
   }
 
-  round(val, gridSize) {
-    return Math.floor(val / gridSize + 0.5) * gridSize;
-  }
-
-  #addResizeInteraction() {
+  #addResizeInteraction(): void {
     const { resizableHorizontal, resizableVertical, minWidth, minHeight } =
       this.#layoutConfig;
 
+    if (!this.#selectedElement) {
+      return;
+    }
     const { width, height } = this.#selectedElement.getBoundingClientRect();
-    let selectionRect = {
+    const selectionRect = {
       left: 0,
       top: 0,
       right: 0,
       bottom: 0,
     };
-    let gridSize = this.#gridSize;
+    const gridSize = this.#gridSize;
 
     this.#interactive.resizable({
       // // resize from all edges and corners
@@ -141,16 +150,16 @@ export default class AbsolutePositioningLayout extends Layer {
         bottom: resizableVertical,
       },
       listeners: {
-        start: (event) => {
+        start: (event: any) => {
           selectionRect.left = event.rect.left;
           selectionRect.right = event.rect.right;
           selectionRect.top = event.rect.top;
           selectionRect.bottom = event.rect.bottom;
         },
-        move: (event) => {
+        move: (event: any) => {
           // the client coordinates of top-left layer corner
           const { left: containerLeft, top: containerTop } =
-            this.#layerElement.getBoundingClientRect();
+            this.element.getBoundingClientRect();
           let newTop = event.rect.top - containerTop; // these are in client coordinates, so subtract the layer corner coords
           let newBottom = event.rect.bottom - containerTop;
           let newRight = event.rect.right - containerLeft;
@@ -158,28 +167,26 @@ export default class AbsolutePositioningLayout extends Layer {
 
           // If snapping is enabled we snap only the edges marked as being changed
           if (this.#snappingEnabled) {
-            newTop = event.edges.top ? this.round(newTop, gridSize) : newTop;
+            newTop = event.edges.top ? round(newTop, gridSize) : newTop;
             newBottom = event.edges.bottom
-              ? this.round(newBottom, gridSize)
+              ? round(newBottom, gridSize)
               : newBottom;
-            newRight = event.edges.right
-              ? this.round(newRight, gridSize)
-              : newRight;
-            newLeft = event.edges.left
-              ? this.round(newLeft, gridSize)
-              : newLeft;
+            newRight = event.edges.right ? round(newRight, gridSize) : newRight;
+            newLeft = event.edges.left ? round(newLeft, gridSize) : newLeft;
           }
 
-          // update the element's style
-          if (resizableHorizontal) {
-            this.#selectedElement.style.width = `${newRight - newLeft}px`;
+          if (this.#selectedElement) {
+            // update the element's style
+            if (resizableHorizontal) {
+              this.#selectedElement.style.width = `${newRight - newLeft}px`;
+            }
+            if (resizableVertical) {
+              this.#selectedElement.style.height = `${newBottom - newTop}px`;
+            }
+            const translate = `translate(${newLeft}px, ${newTop}px)`;
+            this.#selectedElement.style.transform = translate;
+            this.#selectedElement.style.webkitTransform = translate;
           }
-          if (resizableVertical) {
-            this.#selectedElement.style.height = `${newBottom - newTop}px`;
-          }
-
-          this.#selectedElement.style.webkitTransform =
-            this.#selectedElement.style.transform = `translate(${newLeft}px, ${newTop}px)`;
         },
       },
       modifiers: [
@@ -196,20 +203,20 @@ export default class AbsolutePositioningLayout extends Layer {
     });
   }
 
-  #addDragInteraction() {
+  #addDragInteraction(): void {
     let deltaX = 0;
     let deltaY = 0;
     let startX = 0;
     let startY = 0;
-    let gridSize = 40.0;
+    const gridSize = 40.0;
     this.#interactive.draggable({
       origin: 'parent',
       listeners: {
-        start: (event) => {
-          startX = this.#translation.x;
-          startY = this.#translation.y;
+        start: (event: any) => {
+          startX = (this.#translation as any).x;
+          startY = (this.#translation as any).y;
         },
-        move: (event) => {
+        move: (event: any) => {
           if (!this.#layoutConfig.movable || !this.#selectedElement) {
             return;
           }
@@ -225,29 +232,22 @@ export default class AbsolutePositioningLayout extends Layer {
           }
 
           // translate the element
-          this.#selectedElement.style.webkitTransform =
-            this.#selectedElement.style.transform =
-              'translate(' + x + 'px, ' + y + 'px)';
+          const translate = `translate(${x}px, ${y}px)`;
+          this.#selectedElement.style.transform = translate;
+          this.#selectedElement.style.webkitTransform = translate;
         },
       },
       modifiers: [
         interact.modifiers.restrict({
-          restriction: () => {
-            return this.#layerElement.getBoundingClientRect();
-          },
+          restriction: () => this.element.getBoundingClientRect(),
           elementRect: { left: 0, right: 1, top: 0, bottom: 1 },
         }),
       ],
     });
   }
+}
 
-  createSelectionBox() {
-    const box = document.createElement('div');
-    box.style.border = '2px dashed green';
-    box.style.boxSizing = 'border-box';
-    box.style.display = 'none';
-    box.style.position = 'absolute';
-    box.style.pointerEvents = 'all';
-    return box;
-  }
+export function addAbsolutePositionLayout(dashboard: FrcDashboard): void {
+  // eslint-disable-next-line no-new
+  new AbsolutePositioningLayout('absolutePositioningLayout', dashboard);
 }

@@ -1,6 +1,12 @@
-import Dashboard from './dashboard';
+/* eslint-disable class-methods-use-this */
+/* eslint-disable @typescript-eslint/no-empty-function */
+import FrcDashboard from './frc-dashboard';
 
 export default abstract class Layer {
+  protected dashboard: FrcDashboard;
+  protected id: string;
+  protected element!: HTMLElement;
+
   static getElementRect(
     layerElement: HTMLElement,
     element: HTMLElement
@@ -21,10 +27,50 @@ export default abstract class Layer {
     };
   }
 
-  abstract mount(element: HTMLElement, dashboard: Dashboard, id: string): void;
-  abstract unmount(
-    element: HTMLElement,
-    dashboard: Dashboard,
-    id: string
-  ): void;
+  constructor(id: string, dashboard: FrcDashboard) {
+    this.id = id;
+    this.dashboard = dashboard;
+    dashboard.addComponent({
+      type: 'layer',
+      id,
+      mount: ({ element }) => {
+        this.element = element;
+        this.mount();
+        return () => {
+          this.unmount();
+        };
+      },
+    });
+    const layerElement = dashboard.create('layer', id, {});
+    if (layerElement) {
+      layerElement.setAttribute('slot', 'layer');
+      layerElement.setAttribute('layer-id', id);
+      layerElement.style.display = 'none';
+      layerElement.style.width = '100%';
+      layerElement.style.height = '100%';
+      layerElement.style.position = 'absolute';
+      layerElement.style.top = '0';
+      layerElement.style.boxSizing = 'border-box';
+      layerElement.style.pointerEvents = 'none';
+    }
+  }
+
+  show(): void {
+    this.element.style.display = 'block';
+  }
+
+  hide(): void {
+    this.element.style.display = 'none';
+  }
+
+  addPointerEvents(): void {
+    this.element.style.pointerEvents = 'all';
+  }
+
+  removePointerEvents(): void {
+    this.element.style.pointerEvents = 'none';
+  }
+
+  mount(): void {}
+  unmount(): void {}
 }

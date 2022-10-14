@@ -234,7 +234,7 @@ export default class DashboardDrawerSidebar extends LitElement {
             key=${selector}
             draggable="true"
             @dragstart=${() => console.log('start')}
-            @dragend=${(ev) => console.log('end:', ev)}
+            @dragend=${(ev: any) => console.log('end:', ev)}
             @click=${() => {
               this.newElementSelector = selector;
             }}

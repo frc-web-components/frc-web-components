@@ -2,7 +2,6 @@ import { LitElement } from 'lit';
 import { WebbitConfig } from '@webbitjs/webbit';
 import Dashboard from './dashboard';
 import getAllowedChildren from './get-allowed-children';
-import Layer from './layer';
 
 export interface Tutorial {
   id: string;
@@ -12,7 +11,6 @@ export interface Tutorial {
 }
 
 export default class FrcDashboard extends Dashboard {
-  private layerElements = new Map<string, HTMLElement>();
   private tutorials: Record<string, Tutorial> = {};
 
   constructor(rootElement?: HTMLElement) {
@@ -106,44 +104,6 @@ export default class FrcDashboard extends Dashboard {
       slot: string;
       allowedChildren: string[];
     }[];
-  }
-
-  addLayer(id: string, layer: Layer): void {
-    this.addComponent({
-      type: 'layer',
-      id,
-      mount: ({ element }) => {
-        layer.mount(element, this, id);
-        return () => {
-          layer.unmount(element, this, id);
-        };
-      },
-    });
-    const layerElement = this.create('layer', id, {});
-    if (layerElement) {
-      layerElement.setAttribute('slot', 'layer');
-      layerElement.setAttribute('layer-id', id);
-      layerElement.style.display = 'none';
-      this.layerElements.set(id, layerElement);
-    }
-  }
-
-  showLayer(id: string): void {
-    const layerElement = this.layerElements.get(id);
-    if (layerElement) {
-      layerElement.style.display = 'block';
-    }
-  }
-
-  hideLayer(id: string): void {
-    const layerElement = this.layerElements.get(id);
-    if (layerElement) {
-      layerElement.style.display = 'none';
-    }
-  }
-
-  getLayerElement(id: string): HTMLElement | undefined {
-    return this.layerElements.get(id);
   }
 
   /**
