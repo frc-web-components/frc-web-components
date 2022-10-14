@@ -212,7 +212,7 @@ class AbsolutePositioningLayout extends Layer {
     this.#interactive.draggable({
       origin: 'parent',
       listeners: {
-        start: (event: any) => {
+        start: () => {
           startX = (this.#translation as any).x;
           startY = (this.#translation as any).y;
         },
