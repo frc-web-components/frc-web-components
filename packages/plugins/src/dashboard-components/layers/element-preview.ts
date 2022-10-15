@@ -11,9 +11,11 @@ function createPreviewElement(): HTMLElement {
 }
 
 class ElementPreviewLayer extends Layer {
-  mount(): void {
+  constructor(id: string, dashboard: FrcDashboard) {
+    super(id, dashboard);
     const previewBox = createPreviewElement();
     this.element.appendChild(previewBox);
+    this.show();
     this.dashboard.subscribe('elementPreview', (value: any) => {
       const previewElement = value.element as HTMLElement;
       if (
@@ -38,6 +40,7 @@ class ElementPreviewLayer extends Layer {
     previewBox.style.width = `${width}px`;
     previewBox.style.height = `${height}px`;
     previewBox.style.display = 'block';
+    console.log('previee:', previewElement, previewBox);
   }
 }
 

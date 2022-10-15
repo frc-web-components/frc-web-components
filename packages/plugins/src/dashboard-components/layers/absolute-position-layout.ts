@@ -18,13 +18,14 @@ function createSelectionBox(): HTMLElement {
 }
 
 class AbsolutePositioningLayout extends Layer {
-  #selectionBox = createSelectionBox();
-  #interactive = interact(this.#selectionBox);
+  private selectionBox = createSelectionBox();
+  private interactive = interact(this.selectionBox);
 
-  #snappingEnabled = false;
-  #gridSize = 40.0;
+  private snappingEnabled = false;
+  private gridSize = 40.0;
 
-  mount(): void {
+  constructor(id: string, dashboard: FrcDashboard) {
+    super(id, dashboard);
     // eslint-disable-next-line no-new
     new DashboardSelections(this.dashboard.getConnector(), (element) => {
       if (this.dashboard.isElementEditable()) {
@@ -41,26 +42,27 @@ class AbsolutePositioningLayout extends Layer {
 
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Control') {
-        this.#selectionBox.style.border = '2px solid blue';
-        this.#snappingEnabled = true;
+        this.selectionBox.style.border = '2px solid blue';
+        this.snappingEnabled = true;
       }
     });
 
     window.addEventListener('keyup', (e) => {
       if (e.key === 'Control') {
-        this.#selectionBox.style.border = '2px dashed green';
-        this.#snappingEnabled = false;
+        this.selectionBox.style.border = '2px dashed green';
+        this.snappingEnabled = false;
       }
     });
+    console.log('element:', this.element, this.selectionBox);
 
-    this.element.appendChild(this.#selectionBox);
-    this.#interactive = interact(this.#selectionBox);
+    this.element.appendChild(this.selectionBox);
+    this.interactive = interact(this.selectionBox);
 
-    this.#interactive.on('resizeend', () => {
+    this.interactive.on('resizeend', () => {
       this.#addResizeInteraction();
     });
 
-    this.#interactive.on('dragend', () => {
+    this.interactive.on('dragend', () => {
       this.#addDragInteraction();
     });
     this.#setBounds();
@@ -78,13 +80,13 @@ class AbsolutePositioningLayout extends Layer {
         this.element,
         selectedElement
       );
-      this.#selectionBox.style.left = `${left}px`;
-      this.#selectionBox.style.top = `${top}px`;
-      this.#selectionBox.style.width = `${width}px`;
-      this.#selectionBox.style.height = `${height}px`;
-      this.#selectionBox.style.display = 'block';
+      this.selectionBox.style.left = `${left}px`;
+      this.selectionBox.style.top = `${top}px`;
+      this.selectionBox.style.width = `${width}px`;
+      this.selectionBox.style.height = `${height}px`;
+      this.selectionBox.style.display = 'block';
     } else {
-      this.#selectionBox.style.display = 'none';
+      this.selectionBox.style.display = 'none';
     }
 
     window.requestAnimationFrame(() => {
@@ -139,9 +141,9 @@ class AbsolutePositioningLayout extends Layer {
       right: 0,
       bottom: 0,
     };
-    const gridSize = this.#gridSize;
+    const { gridSize } = this;
 
-    this.#interactive.resizable({
+    this.interactive.resizable({
       // // resize from all edges and corners
       edges: {
         left: resizableHorizontal && width > 60,
@@ -166,7 +168,7 @@ class AbsolutePositioningLayout extends Layer {
           let newLeft = event.rect.left - containerLeft;
 
           // If snapping is enabled we snap only the edges marked as being changed
-          if (this.#snappingEnabled) {
+          if (this.snappingEnabled) {
             newTop = event.edges.top ? round(newTop, gridSize) : newTop;
             newBottom = event.edges.bottom
               ? round(newBottom, gridSize)
@@ -209,7 +211,7 @@ class AbsolutePositioningLayout extends Layer {
     let startX = 0;
     let startY = 0;
     const gridSize = 40.0;
-    this.#interactive.draggable({
+    this.interactive.draggable({
       origin: 'parent',
       listeners: {
         start: () => {
@@ -226,7 +228,7 @@ class AbsolutePositioningLayout extends Layer {
           let x = startX + deltaX;
           let y = startY + deltaY;
 
-          if (this.#snappingEnabled) {
+          if (this.snappingEnabled) {
             x = Math.floor(x / gridSize + 0.5) * gridSize;
             y = Math.floor(y / gridSize + 0.5) * gridSize;
           }

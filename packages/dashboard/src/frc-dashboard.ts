@@ -2,6 +2,7 @@ import { LitElement } from 'lit';
 import { WebbitConfig } from '@webbitjs/webbit';
 import Dashboard from './dashboard';
 import getAllowedChildren from './get-allowed-children';
+import { createLayerElement } from './layer';
 
 export interface Tutorial {
   id: string;
@@ -12,6 +13,7 @@ export interface Tutorial {
 
 export default class FrcDashboard extends Dashboard {
   private tutorials: Record<string, Tutorial> = {};
+  private layers: Record<string, HTMLElement> = {};
 
   constructor(rootElement?: HTMLElement) {
     super(rootElement);
@@ -217,5 +219,26 @@ export default class FrcDashboard extends Dashboard {
       element.tagName.toLowerCase() !== 'dashboard-tab' ||
       !element.hasAttribute('tutorial')
     );
+  }
+
+  addLayer(name: string): HTMLElement {
+    if (this.layers[name]) {
+      return this.layers[name];
+    }
+    this.layers[name] = createLayerElement(name);
+    this.publish('layerAdd', { layer: this.layers[name] });
+    return this.layers[name];
+  }
+
+  hasLayer(name: string): boolean {
+    return !!this.layers[name];
+  }
+
+  getLayer(name: string): HTMLElement | undefined {
+    return this.layers[name];
+  }
+
+  getLayers(): Record<string, HTMLElement> {
+    return this.layers;
   }
 }

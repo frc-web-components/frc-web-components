@@ -147,6 +147,14 @@ export default class DashboardRoot extends LitElement {
       }
     });
 
+    Object.entries(this.dashboard.getLayers()).forEach(([_, layerElement]) => {
+      this.appendChild(layerElement);
+    });
+
+    this.dashboard.subscribe('layerAdd', (value: any) => {
+      this.appendChild(value.layer);
+    });
+
     // this.dashboard.subscribe('elementSelect', () => this.requestUpdate());
     // this.dashboard.showLayer('elementPreviewLayer');
     // this.dashboard.showLayer('absolutePositionLayout');
