@@ -1,13 +1,13 @@
-const { defineConfig } = require('vite')
+const { defineConfig } = require('vite');
 
 module.exports = defineConfig({
   build: {
     lib: {
       entry: 'src/index.ts',
-      formats: ['es']
+      formats: ['es'],
     },
     rollupOptions: {
-      external: /^lit/
-    }
-  }
-})
+      external: /^lit|@frc-web-components\/dashboard/,
+    },
+  },
+});
