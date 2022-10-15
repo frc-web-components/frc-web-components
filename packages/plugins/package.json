@@ -43,7 +43,7 @@
   },
   "homepage": "https://github.com/frc-web-components/components#readme",
   "dependencies": {
-    "@frc-web-components/dashboard": "^4.3.0-alpha.0",
+    "@frc-web-components/dashboard": "*",
     "@webbitjs/store": "^5.5.0",
     "@webbitjs/webbit": "^5.5.0",
     "highlight.js": "^11.6.0",

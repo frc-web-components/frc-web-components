@@ -40,8 +40,8 @@
   },
   "homepage": "https://github.com/frc-web-components/components#readme",
   "dependencies": {
-    "@frc-web-components/dashboard": "^4.3.0-alpha.0",
-    "@frc-web-components/plugins": "^4.3.0-alpha.0",
+    "@frc-web-components/dashboard": "*",
+    "@frc-web-components/plugins": "*",
     "@webbitjs/store": "^5.5.0",
     "@webbitjs/webbit": "^5.5.0",
     "js-beautify": "^1.13.0",

@@ -3,6 +3,7 @@ import AbsolutePositioningLayout from './layers/absolute-position-layout';
 import properties from './properties';
 import elementEditors from './element-editors';
 import './element-tree';
+import { bleh } from '@frc-web-components/dashboard';
 
 export default function (dashboard) {
   dashboard.addLayer('elementPreviewLayer', new ElementPreviewLayer());
@@ -13,4 +14,5 @@ export default function (dashboard) {
   Object.entries(elementEditors).map(([name, elementName]) => {
     dashboard.addElementEditor(name, elementName);
   });
+  bleh();
 }

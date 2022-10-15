@@ -32,9 +32,9 @@
   },
   "homepage": "https://github.com/frc-web-components/components#readme",
   "dependencies": {
-    "@frc-web-components/dashboard": "^4.3.0-alpha.0",
-    "@frc-web-components/frc-web-components": "^4.3.0-alpha.0",
-    "@frc-web-components/plugins": "^4.3.0-alpha.0",
+    "@frc-web-components/dashboard": "*",
+    "@frc-web-components/frc-web-components": "*",
+    "@frc-web-components/plugins": "*",
     "@webbitjs/store": "^5.5.0",
     "@webbitjs/webbit": "^5.5.0",
     "chalk": "^5.0.1",
