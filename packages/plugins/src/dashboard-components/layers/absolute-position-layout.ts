@@ -1,4 +1,7 @@
-import { FrcDashboard, Layer } from '@frc-web-components/dashboard';
+import {
+  FrcDashboard,
+  getElementBoundingBox,
+} from '@frc-web-components/dashboard';
 import interact from 'interactjs';
 import DashboardSelections from './dashboard-selections';
 import getTranslationFromStyles from './getTranslationFromStyles';
@@ -17,15 +20,18 @@ function createSelectionBox(): HTMLElement {
   return box;
 }
 
-class AbsolutePositioningLayout extends Layer {
+class AbsolutePositioningLayout {
+  private dashboard: FrcDashboard;
+  private element: HTMLElement;
   private selectionBox = createSelectionBox();
   private interactive = interact(this.selectionBox);
 
   private snappingEnabled = false;
   private gridSize = 40.0;
 
-  constructor(id: string, dashboard: FrcDashboard) {
-    super(id, dashboard);
+  constructor(dashboard: FrcDashboard, layerElement: HTMLElement) {
+    this.dashboard = dashboard;
+    this.element = layerElement;
     // eslint-disable-next-line no-new
     new DashboardSelections(this.dashboard.getConnector(), (element) => {
       if (this.dashboard.isElementEditable()) {
@@ -53,7 +59,6 @@ class AbsolutePositioningLayout extends Layer {
         this.snappingEnabled = false;
       }
     });
-    console.log('element:', this.element, this.selectionBox);
 
     this.element.appendChild(this.selectionBox);
     this.interactive = interact(this.selectionBox);
@@ -76,7 +81,7 @@ class AbsolutePositioningLayout extends Layer {
       selectedElement &&
       selectedElement.tagName.toLowerCase() !== 'dashboard-tab'
     ) {
-      const { left, top, width, height } = Layer.getElementRect(
+      const { left, top, width, height } = getElementBoundingBox(
         this.element,
         selectedElement
       );
@@ -250,6 +255,8 @@ class AbsolutePositioningLayout extends Layer {
 }
 
 export function addAbsolutePositionLayout(dashboard: FrcDashboard): void {
+  const layerElement = dashboard.addLayer('absolutePositioningLayout');
+  layerElement.style.display = 'block';
   // eslint-disable-next-line no-new
-  new AbsolutePositioningLayout('absolutePositioningLayout', dashboard);
+  new AbsolutePositioningLayout(dashboard, layerElement);
 }

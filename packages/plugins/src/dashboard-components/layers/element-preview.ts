@@ -1,5 +1,8 @@
 /* eslint-disable no-param-reassign */
-import { FrcDashboard, Layer } from '@frc-web-components/dashboard';
+import {
+  FrcDashboard,
+  getElementBoundingBox,
+} from '@frc-web-components/dashboard';
 
 function createPreviewElement(): HTMLElement {
   const box = document.createElement('div');
@@ -10,41 +13,37 @@ function createPreviewElement(): HTMLElement {
   return box;
 }
 
-class ElementPreviewLayer extends Layer {
-  constructor(id: string, dashboard: FrcDashboard) {
-    super(id, dashboard);
-    const previewBox = createPreviewElement();
-    this.element.appendChild(previewBox);
-    this.show();
-    this.dashboard.subscribe('elementPreview', (value: any) => {
-      const previewElement = value.element as HTMLElement;
-      if (
-        previewElement &&
-        previewElement !== this.dashboard.getSelectedElement() &&
-        previewElement.tagName.toLowerCase() !== 'dashboard-tab'
-      ) {
-        this.#setBounds(previewElement, previewBox);
-      } else {
-        previewBox.style.display = 'none';
-      }
-    });
-  }
-
-  #setBounds(previewElement: HTMLElement, previewBox: HTMLElement) {
-    const { left, top, width, height } = Layer.getElementRect(
-      this.element,
-      previewElement
-    );
-    previewBox.style.left = `${left}px`;
-    previewBox.style.top = `${top}px`;
-    previewBox.style.width = `${width}px`;
-    previewBox.style.height = `${height}px`;
-    previewBox.style.display = 'block';
-    console.log('previee:', previewElement, previewBox);
-  }
+function setBounds(
+  layerElement: HTMLElement,
+  previewElement: HTMLElement,
+  previewBox: HTMLElement
+) {
+  const { left, top, width, height } = getElementBoundingBox(
+    layerElement,
+    previewElement
+  );
+  previewBox.style.left = `${left}px`;
+  previewBox.style.top = `${top}px`;
+  previewBox.style.width = `${width}px`;
+  previewBox.style.height = `${height}px`;
+  previewBox.style.display = 'block';
 }
 
 export function addElementPreview(dashboard: FrcDashboard): void {
-  // eslint-disable-next-line no-new
-  new ElementPreviewLayer('elementPreview', dashboard);
+  const layerElement = dashboard.addLayer('elementPreview');
+  const previewBox = createPreviewElement();
+  layerElement.appendChild(previewBox);
+  layerElement.style.display = 'block';
+  dashboard.subscribe('elementPreview', (value: any) => {
+    const previewElement = value.element as HTMLElement;
+    if (
+      previewElement &&
+      previewElement !== dashboard.getSelectedElement() &&
+      previewElement.tagName.toLowerCase() !== 'dashboard-tab'
+    ) {
+      setBounds(layerElement, previewElement, previewBox);
+    } else {
+      previewBox.style.display = 'none';
+    }
+  });
 }

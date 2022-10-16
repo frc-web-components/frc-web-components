@@ -1,15 +1,16 @@
-import { FrcDashboard, Layer } from '@frc-web-components/dashboard';
+import { FrcDashboard } from '@frc-web-components/dashboard';
 
-class DragAndDropLayer extends Layer {
-  mount(): void {
-    console.log(this);
-  }
-  unmount(): void {
-    console.log(this);
-  }
-}
+// class DragAndDropLayer extends Layer {
+//   mount(): void {
+//     console.log(this);
+//   }
+//   unmount(): void {
+//     console.log(this);
+//   }
+// }
 
 export function addDragAndDrop(dashboard: FrcDashboard): void {
   // eslint-disable-next-line no-new
-  new DragAndDropLayer('dragAndDrop', dashboard);
+  // new DragAndDropLayer('dragAndDrop', dashboard);
+  dashboard.addLayer('dragAndDrop');
 }
