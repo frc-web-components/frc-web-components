@@ -33,7 +33,6 @@ export function addElementPreview(dashboard: FrcDashboard): void {
   const layerElement = dashboard.addLayer('elementPreview');
   const previewBox = createPreviewElement();
   layerElement.appendChild(previewBox);
-  layerElement.style.display = 'block';
   dashboard.subscribe('elementPreview', (value: any) => {
     const previewElement = value.element as HTMLElement;
     if (

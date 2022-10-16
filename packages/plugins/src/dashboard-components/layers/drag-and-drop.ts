@@ -1,16 +1,73 @@
-import { FrcDashboard } from '@frc-web-components/dashboard';
+import {
+  FrcDashboard,
+  appendElementToDashboard,
+} from '@frc-web-components/dashboard';
+import DashboardDragEvents from './dashboard-drag-events';
 
-// class DragAndDropLayer extends Layer {
-//   mount(): void {
-//     console.log(this);
-//   }
-//   unmount(): void {
-//     console.log(this);
-//   }
-// }
+interface DragElement {
+  selector: string;
+  dragPosition?: { x: number; y: number };
+  dragParent?: HTMLElement;
+}
 
 export function addDragAndDrop(dashboard: FrcDashboard): void {
-  // eslint-disable-next-line no-new
-  // new DragAndDropLayer('dragAndDrop', dashboard);
-  dashboard.addLayer('dragAndDrop');
+  const layerElement = dashboard.addLayer('dragAndDrop');
+
+  let dragElement: DragElement | undefined;
+
+  const onDragover = (
+    element: HTMLElement,
+    position: { x: number; y: number }
+  ) => {
+    if (dragElement) {
+      console.log('element:', { element, position });
+      dragElement.dragParent = element;
+      dragElement.dragPosition = position;
+    }
+  };
+
+  const onDragleave = (element: HTMLElement) => {
+    // This is called right before the dragend event. We wait a bit otherwise
+    // dragParent and dragPosition will always be undefined
+    setTimeout(() => {
+      if (dragElement?.dragParent === element) {
+        dragElement.dragParent = undefined;
+        dragElement.dragPosition = undefined;
+      }
+    }, 50);
+  };
+
+  const dragEvents = new DashboardDragEvents(
+    dashboard.getConnector(),
+    onDragover,
+    onDragleave
+  );
+
+  dashboard.subscribe('dragNewElementStart', (value: any) => {
+    const selector = value.selector as string;
+    dragElement = { selector };
+    dragEvents.setDraggedElement(selector);
+  });
+
+  dashboard.subscribe('dragNewElementEnd', () => {
+    console.log('end drag:', dragElement);
+    if (dragElement?.dragParent) {
+      const elements = appendElementToDashboard(
+        dashboard.getConnector(),
+        dragElement.selector,
+        dragElement.dragParent
+      );
+      if (dragElement.dragPosition) {
+        const { x, y } = dragElement.dragPosition;
+        elements.forEach((element) => {
+          // eslint-disable-next-line no-param-reassign
+          element.style.transform = `translate(${x}px, ${y}px)`;
+        });
+      }
+
+      // transform: translate(114px, 185.333px);
+    }
+    dragElement = undefined;
+    dragEvents.endDrag();
+  });
 }

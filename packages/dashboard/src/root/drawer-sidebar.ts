@@ -3,7 +3,7 @@ import { LitElement, html, css, TemplateResult } from 'lit';
 import { customElement, state, property } from 'lit/decorators.js';
 import { WebbitConfig } from '@webbitjs/webbit';
 import FrcDashboard from '../frc-dashboard';
-import getElementHtml from './get-element-html';
+import { appendElementToDashboard } from './get-element-html';
 
 interface DashboardElement {
   selector: string;
@@ -92,23 +92,13 @@ export default class DashboardDrawerSidebar extends LitElement {
   }
 
   #appendToDashboard(): void {
-    const selector = this.newElementSelector;
-    if (!this.dashboard || !selector) {
-      return;
+    if (this.selectedElement && this.newElementSelector) {
+      appendElementToDashboard(
+        this.dashboard.getConnector(),
+        this.newElementSelector,
+        this.selectedElement
+      );
     }
-    const container = document.createElement('div');
-    container.innerHTML = getElementHtml(
-      this.dashboard.getConnector(),
-      selector
-    );
-    [...container.children].forEach((child) => {
-      // if (!this._slot) {
-      //   child.removeAttribute('slot');
-      // } else {
-      //   child.setAttribute('slot', this._slot);
-      // }
-      this.selectedElement?.append(child);
-    });
   }
 
   getGroups(): string[] {
@@ -233,8 +223,13 @@ export default class DashboardDrawerSidebar extends LitElement {
             class="${this.newElementSelector === selector ? 'selected' : ''}"
             key=${selector}
             draggable="true"
-            @dragstart=${() => console.log('start')}
-            @dragend=${(ev: any) => console.log('end:', ev)}
+            @dragstart=${(event: Event) =>
+              this.dashboard.publish('dragNewElementStart', {
+                selector,
+                event,
+              })}
+            @dragend=${(event: Event) =>
+              this.dashboard.publish('dragNewElementEnd', { event })}
             @click=${() => {
               this.newElementSelector = selector;
             }}

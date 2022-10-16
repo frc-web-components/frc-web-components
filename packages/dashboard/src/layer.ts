@@ -2,7 +2,6 @@ export function createLayerElement(name: string): HTMLElement {
   const layerElement = document.createElement('div');
   layerElement.setAttribute('slot', 'layer');
   layerElement.setAttribute('layer-id', name);
-  layerElement.style.display = 'none';
   layerElement.style.width = '100%';
   layerElement.style.height = '100%';
   layerElement.style.position = 'absolute';
@@ -30,4 +29,14 @@ export function getElementBoundingBox(
     width,
     height,
   };
+}
+
+export function addInteractions(layerElement: HTMLElement): void {
+  // eslint-disable-next-line no-param-reassign
+  layerElement.style.pointerEvents = 'all';
+}
+
+export function removeInteractions(layerElement: HTMLElement): void {
+  // eslint-disable-next-line no-param-reassign
+  layerElement.style.pointerEvents = 'none';
 }

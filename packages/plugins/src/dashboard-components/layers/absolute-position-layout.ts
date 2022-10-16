@@ -1,6 +1,8 @@
 import {
+  addInteractions,
   FrcDashboard,
   getElementBoundingBox,
+  removeInteractions,
 } from '@frc-web-components/dashboard';
 import interact from 'interactjs';
 import DashboardSelections from './dashboard-selections';
@@ -44,6 +46,14 @@ class AbsolutePositioningLayout {
         this.#addResizeInteraction();
         this.#addDragInteraction();
       }
+    });
+
+    this.dashboard.subscribe('dragNewElementStart', () => {
+      removeInteractions(this.selectionBox);
+    });
+
+    this.dashboard.subscribe('dragNewElementEnd', () => {
+      addInteractions(this.selectionBox);
     });
 
     window.addEventListener('keydown', (e) => {
@@ -256,7 +266,6 @@ class AbsolutePositioningLayout {
 
 export function addAbsolutePositionLayout(dashboard: FrcDashboard): void {
   const layerElement = dashboard.addLayer('absolutePositioningLayout');
-  layerElement.style.display = 'block';
   // eslint-disable-next-line no-new
   new AbsolutePositioningLayout(dashboard, layerElement);
 }

@@ -1,7 +1,7 @@
 export default [
   {
     game: 'Rapid React',
-    'field-image': '/public/field-images/2022-field.png',
+    'field-image': '/public/field-images/2022-field.jpg',
     'field-corners': {
       'top-left': [74, 50],
       'bottom-right': [1774, 900],
@@ -11,7 +11,7 @@ export default [
   },
   {
     game: 'Infinite Recharge',
-    'field-image': '/public/field-images/2020-field.png',
+    'field-image': '/public/field-images/2020-field.jpg',
     'field-corners': {
       'top-left': [96, 25],
       'bottom-right': [1040, 514],
