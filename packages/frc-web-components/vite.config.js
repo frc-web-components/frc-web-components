@@ -5,7 +5,7 @@ module.exports = defineConfig({
     lib: {
       name: 'frc-web-components',
       entry: 'src/index.ts',
-      formats: ['es', 'umd'],
+      formats: ['es'],
     },
   },
 });

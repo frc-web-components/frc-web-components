@@ -3,7 +3,7 @@ import { LitElement, html, css, TemplateResult } from 'lit';
 import { customElement, state, property } from 'lit/decorators.js';
 import { WebbitConfig } from '@webbitjs/webbit';
 import FrcDashboard from '../frc-dashboard';
-import getElementHtml from './get-element-html';
+import { appendElementToDashboard } from './get-element-html';
 
 interface DashboardElement {
   selector: string;
@@ -42,7 +42,7 @@ export default class DashboardDrawerSidebar extends LitElement {
 
     p {
       margin: 0 0 5px;
-      cursor: pointer;
+      cursor: grab;
       line-height: 18px;
     }
 
@@ -52,7 +52,6 @@ export default class DashboardDrawerSidebar extends LitElement {
 
     p.selected {
       font-weight: bold;
-      cursor: default;
     }
 
     .group-selector {
@@ -92,23 +91,13 @@ export default class DashboardDrawerSidebar extends LitElement {
   }
 
   #appendToDashboard(): void {
-    const selector = this.newElementSelector;
-    if (!this.dashboard || !selector) {
-      return;
+    if (this.selectedElement && this.newElementSelector) {
+      appendElementToDashboard(
+        this.dashboard.getConnector(),
+        this.newElementSelector,
+        this.selectedElement
+      );
     }
-    const container = document.createElement('div');
-    container.innerHTML = getElementHtml(
-      this.dashboard.getConnector(),
-      selector
-    );
-    [...container.children].forEach((child) => {
-      // if (!this._slot) {
-      //   child.removeAttribute('slot');
-      // } else {
-      //   child.setAttribute('slot', this._slot);
-      // }
-      this.selectedElement?.append(child);
-    });
   }
 
   getGroups(): string[] {
@@ -230,8 +219,21 @@ export default class DashboardDrawerSidebar extends LitElement {
       ${this.getElements().map(
         ({ selector, name }) => html`
           <p
-            class=${this.newElementSelector === selector ? 'selected' : ''}
+            class="${this.newElementSelector === selector ? 'selected' : ''}"
             key=${selector}
+            draggable="true"
+            @dragstart=${(event: DragEvent) => {
+              const img = document.createElement('img');
+              img.src =
+                'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+              event.dataTransfer?.setDragImage(img, 0, 0);
+              this.dashboard.publish('dragNewElementStart', {
+                selector,
+                event,
+              });
+            }}
+            @dragend=${(event: Event) =>
+              this.dashboard.publish('dragNewElementEnd', { event })}
             @click=${() => {
               this.newElementSelector = selector;
             }}

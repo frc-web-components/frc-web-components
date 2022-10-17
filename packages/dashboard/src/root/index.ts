@@ -147,21 +147,14 @@ export default class DashboardRoot extends LitElement {
       }
     });
 
-    this.dashboard.subscribe('elementSelect', () => this.requestUpdate());
-    this.dashboard.showLayer('elementPreviewLayer');
-    this.dashboard.showLayer('absolutePositionLayout');
-    const elementPreviewLayer = this.dashboard.getLayerElement(
-      'elementPreviewLayer'
-    );
-    const absolutePositionLayout = this.dashboard.getLayerElement(
-      'absolutePositionLayout'
-    );
-    if (elementPreviewLayer) {
-      this.append(elementPreviewLayer);
-    }
-    if (absolutePositionLayout) {
-      this.append(absolutePositionLayout);
-    }
+    Object.entries(this.dashboard.getLayers()).forEach(([_, layerElement]) => {
+      this.appendChild(layerElement);
+    });
+
+    this.dashboard.subscribe('layerAdd', (value: any) => {
+      this.appendChild(value.layer);
+    });
+
     this.ready = true;
   }
 

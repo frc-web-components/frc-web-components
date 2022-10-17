@@ -2,7 +2,7 @@ import { LitElement } from 'lit';
 import { WebbitConfig } from '@webbitjs/webbit';
 import Dashboard from './dashboard';
 import getAllowedChildren from './get-allowed-children';
-import Layer from './layer';
+import { createLayerElement } from './layer';
 
 export interface Tutorial {
   id: string;
@@ -12,8 +12,8 @@ export interface Tutorial {
 }
 
 export default class FrcDashboard extends Dashboard {
-  private layerElements = new Map<string, HTMLElement>();
   private tutorials: Record<string, Tutorial> = {};
+  private layers: Record<string, HTMLElement> = {};
 
   constructor(rootElement?: HTMLElement) {
     super(rootElement);
@@ -106,44 +106,6 @@ export default class FrcDashboard extends Dashboard {
       slot: string;
       allowedChildren: string[];
     }[];
-  }
-
-  addLayer(id: string, layer: Layer): void {
-    this.addComponent({
-      type: 'layer',
-      id,
-      mount: ({ element }) => {
-        layer.mount(element, this);
-        return () => {
-          layer.unmount(element, this);
-        };
-      },
-    });
-    const layerElement = this.create('layer', id, {});
-    if (layerElement) {
-      layerElement.setAttribute('slot', 'layer');
-      layerElement.setAttribute('layer-id', id);
-      layerElement.style.display = 'none';
-      this.layerElements.set(id, layerElement);
-    }
-  }
-
-  showLayer(id: string): void {
-    const layerElement = this.layerElements.get(id);
-    if (layerElement) {
-      layerElement.style.display = 'block';
-    }
-  }
-
-  hideLayer(id: string): void {
-    const layerElement = this.layerElements.get(id);
-    if (layerElement) {
-      layerElement.style.display = 'none';
-    }
-  }
-
-  getLayerElement(id: string): HTMLElement | undefined {
-    return this.layerElements.get(id);
   }
 
   /**
@@ -257,5 +219,26 @@ export default class FrcDashboard extends Dashboard {
       element.tagName.toLowerCase() !== 'dashboard-tab' ||
       !element.hasAttribute('tutorial')
     );
+  }
+
+  addLayer(name: string): HTMLElement {
+    if (this.layers[name]) {
+      return this.layers[name];
+    }
+    this.layers[name] = createLayerElement(name);
+    this.publish('layerAdd', { layer: this.layers[name] });
+    return this.layers[name];
+  }
+
+  hasLayer(name: string): boolean {
+    return !!this.layers[name];
+  }
+
+  getLayer(name: string): HTMLElement | undefined {
+    return this.layers[name];
+  }
+
+  getLayers(): Record<string, HTMLElement> {
+    return this.layers;
   }
 }
