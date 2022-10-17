@@ -52,7 +52,6 @@ export default class DashboardDrawerSidebar extends LitElement {
 
     p.selected {
       font-weight: bold;
-      cursor: default;
     }
 
     .group-selector {
@@ -223,11 +222,16 @@ export default class DashboardDrawerSidebar extends LitElement {
             class="${this.newElementSelector === selector ? 'selected' : ''}"
             key=${selector}
             draggable="true"
-            @dragstart=${(event: Event) =>
+            @dragstart=${(event: DragEvent) => {
+              const img = document.createElement('img');
+              img.src =
+                'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+              event.dataTransfer?.setDragImage(img, 0, 0);
               this.dashboard.publish('dragNewElementStart', {
                 selector,
                 event,
-              })}
+              });
+            }}
             @dragend=${(event: Event) =>
               this.dashboard.publish('dragNewElementEnd', { event })}
             @click=${() => {

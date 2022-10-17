@@ -10,7 +10,6 @@ export default class DashboardDragEvents {
     HTMLElement,
     { dragover: DragListener; dragleave: DragListener }
   > = new Map();
-  #droppableSelectors: { slot: string; selector: string }[] = [];
   #onDragover: (
     element: HTMLElement,
     position: { x: number; y: number }
@@ -77,7 +76,7 @@ export default class DashboardDragEvents {
   }
 
   #addEvents(droppableSelectors: { slot: string; selector: string }[]): void {
-    this.#droppableSelectors = droppableSelectors;
+    // this.#droppableSelectors = droppableSelectors;
     const selectors = droppableSelectors.map(({ selector }) => selector);
     const droppableElements: HTMLElement[] = [];
     this.#elements.forEach((element) => {
@@ -94,6 +93,7 @@ export default class DashboardDragEvents {
     droppableElements.forEach((element) => {
       const dragoverListener = (ev: DragEvent) => {
         ev.stopPropagation();
+        ev.preventDefault();
         this.#onDragover(element, { x: ev.offsetX, y: ev.offsetY });
       };
       const dragleaveListener = () => {

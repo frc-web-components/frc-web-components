@@ -11,7 +11,7 @@ interface DragElement {
 }
 
 export function addDragAndDrop(dashboard: FrcDashboard): void {
-  const layerElement = dashboard.addLayer('dragAndDrop');
+  dashboard.addLayer('dragAndDrop');
 
   let dragElement: DragElement | undefined;
 
@@ -20,7 +20,6 @@ export function addDragAndDrop(dashboard: FrcDashboard): void {
     position: { x: number; y: number }
   ) => {
     if (dragElement) {
-      console.log('element:', { element, position });
       dragElement.dragParent = element;
       dragElement.dragPosition = position;
     }
@@ -50,7 +49,6 @@ export function addDragAndDrop(dashboard: FrcDashboard): void {
   });
 
   dashboard.subscribe('dragNewElementEnd', () => {
-    console.log('end drag:', dragElement);
     if (dragElement?.dragParent) {
       const elements = appendElementToDashboard(
         dashboard.getConnector(),
@@ -64,8 +62,6 @@ export function addDragAndDrop(dashboard: FrcDashboard): void {
           element.style.transform = `translate(${x}px, ${y}px)`;
         });
       }
-
-      // transform: translate(114px, 185.333px);
     }
     dragElement = undefined;
     dragEvents.endDrag();
