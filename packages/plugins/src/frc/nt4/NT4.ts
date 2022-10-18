@@ -551,7 +551,7 @@ export class NT4_Client {
         (unpackedData: number[]) => {
           let topicID = unpackedData[0];
           let timestamp_us = unpackedData[1];
-          let typeIdx = unpackedData[2];
+          // let typeIdx = unpackedData[2];
           let value = unpackedData[3];
 
           if (topicID >= 0) {
