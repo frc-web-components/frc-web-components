@@ -2,53 +2,80 @@
 import { SourceProvider } from '@webbitjs/store';
 import { NT4_Client, NT4_Topic } from './NT4';
 
-type OnTopicAnnounce = (topic: NT4_Topic) => void;
-type OnTopicUnannounce = (topic: NT4_Topic) => void;
-type OnNewTopicData = (
-  topic: NT4_Topic,
-  timestamp_us: number,
-  value: unknown
-) => void;
-type OnConnect = () => void;
-type OnDisconnect = () => void;
-
 export default class Nt4Provider extends SourceProvider {
+  private client: NT4_Client;
+  private connected = false;
+  private topics: Record<string, NT4_Topic> = {};
+
   constructor() {
     super();
+    this.client = this.createClient('localhost');
+  }
 
-    const serverAddr = 'localhost';
+  connect(serverAddr: string): void {
+    this.client = this.createClient(serverAddr);
+  }
+
+  disconnect(): void {
+    this.client.disconnect();
+  }
+
+  isConnected(): boolean {
+    return this.connected;
+  }
+
+  userUpdate(key: string, value: unknown): void {
+    const topic = this.topics[key];
+    if (topic) {
+      const newTopic = this.client.publishNewTopic(key, topic.type);
+      console.log('toggle:', key, topic, value);
+      this.client.addSample(newTopic, value);
+    } else {
+      console.log('no toggle', key);
+    }
+  }
+
+  private onTopicAnnounce(topic: NT4_Topic): void {
+    this.topics[topic.name] = topic;
+  }
+  private onTopicUnannounce(topic: NT4_Topic): void {
+    delete this.topics[topic.name];
+    this.removeSource(topic.name);
+  }
+
+  private onNewTopicData(topic: NT4_Topic, _: number, value: unknown): void {
+    console.log('onNewTopicData:', topic, value);
+    this.updateSource(topic.name, value);
+  }
+
+  private onConnect() {
+    this.connected = true;
+  }
+
+  private onDisconnect() {
+    this.connected = false;
+  }
+
+  private createClient(serverAddr: string): NT4_Client {
+    if (this.client) {
+      this.client.disconnect();
+      this.topics = {};
+    }
+
     const appName = 'FRC Web Components';
-    const onTopicAnnounce: OnTopicAnnounce = (topic: NT4_Topic): void => {
-      console.log('onTopicAnnounce:', topic);
-    };
-    const onTopicUnannounce: OnTopicUnannounce = (topic: NT4_Topic): void => {
-      console.log('onTopicUnannounce:', topic);
-    };
-    const onNewTopicData: OnNewTopicData = (
-      topic: NT4_Topic,
-      timestamp_us: number,
-      value: unknown
-    ): void => {
-      console.log('onNewTopicData:', { topic, timestamp_us, value });
-    };
-    const onConnect: OnConnect = (): void => {
-      console.log('onConnect');
-    };
-    const onDisconnect: OnDisconnect = (): void => {
-      console.log('onDisconnect');
-    };
 
     const client = new NT4_Client(
       serverAddr,
       appName,
-      onTopicAnnounce,
-      onTopicUnannounce,
-      onNewTopicData,
-      onConnect,
-      onDisconnect
+      (...args) => this.onTopicAnnounce(...args),
+      (...args) => this.onTopicUnannounce(...args),
+      (...args) => this.onNewTopicData(...args),
+      () => this.onConnect(),
+      () => this.onDisconnect()
     );
 
     client.connect();
     client.subscribeAll(['/'], true);
+    return client;
   }
 }
