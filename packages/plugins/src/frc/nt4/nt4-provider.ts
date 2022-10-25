@@ -27,11 +27,9 @@ export default class Nt4Provider extends SourceProvider {
   userUpdate(key: string, value: unknown): void {
     const topic = this.topics[key];
     if (topic) {
-      const newTopic = this.client.publishNewTopic(key, topic.type);
-      console.log('toggle:', key, topic, value);
-      this.client.addSample(newTopic, value);
-    } else {
-      console.log('no toggle', key);
+      this.client.publishNewTopic(topic.name, topic.type);
+      this.client.addSample(topic.name, value);
+      this.updateSource(topic.name, value);
     }
   }
 
@@ -44,7 +42,6 @@ export default class Nt4Provider extends SourceProvider {
   }
 
   private onNewTopicData(topic: NT4_Topic, _: number, value: unknown): void {
-    console.log('onNewTopicData:', topic, value);
     this.updateSource(topic.name, value);
   }
 
