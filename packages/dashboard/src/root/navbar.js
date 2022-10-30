@@ -1,15 +1,13 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html, css } from 'lit';
 import { dashboardProvider } from '../context-providers';
-import {removeElement} from './index';
+import { removeElement } from './index';
 
 class DashboardNavbar extends LitElement {
-
   static styles = css`
-
     :host {
       display: flex;
       width: 100%;
-      background: rgb(250, 250, 250);
+      background: var(--dashboard-navbar-background, rgb(250, 250, 250));
       height: 44px;
     }
 
@@ -27,8 +25,8 @@ class DashboardNavbar extends LitElement {
     }
 
     .navbar {
-      display: flex; 
-      justify-content: space-between; 
+      display: flex;
+      justify-content: space-between;
       width: 100%;
       flex: 1;
     }
@@ -42,16 +40,17 @@ class DashboardNavbar extends LitElement {
       margin: 0;
       height: 100%;
     }
-  
+
     .nt-connection {
-      align-self: center; 
+      align-self: center;
       padding-right: 15px;
+      color: var(--lumo-contrast, black);
     }
-  
+
     .nt-connection span.connected {
       color: green;
     }
-  
+
     .nt-connection span.disconnected {
       color: red;
     }
@@ -61,7 +60,7 @@ class DashboardNavbar extends LitElement {
     ntConnected: { state: true },
     dashboard: { state: true },
     selectedTabIndex: { state: true },
-  }
+  };
 
   constructor() {
     super();
@@ -79,20 +78,26 @@ class DashboardNavbar extends LitElement {
   }
 
   #updateSelectedTab() {
-    const index = [...this.#rootElement.querySelectorAll('dashboard-tab')].findIndex(tab => {
-      return tab === this.#selectedElement || tab.contains(this.#selectedElement);
-    })
+    const index = [
+      ...this.#rootElement.querySelectorAll('dashboard-tab'),
+    ].findIndex((tab) => {
+      return (
+        tab === this.#selectedElement || tab.contains(this.#selectedElement)
+      );
+    });
     this.selectedTabIndex = index;
   }
 
   #showSelectedTab() {
-    [...this.#rootElement.querySelectorAll('dashboard-tab')].forEach((tab, index) => {
-      if (index === this.selectedTabIndex) {
-        tab.setAttribute('selected', '');
-      } else {
-        tab.removeAttribute('selected');
+    [...this.#rootElement.querySelectorAll('dashboard-tab')].forEach(
+      (tab, index) => {
+        if (index === this.selectedTabIndex) {
+          tab.setAttribute('selected', '');
+        } else {
+          tab.removeAttribute('selected');
+        }
       }
-    });
+    );
   }
 
   #onTabChange(ev) {
@@ -113,20 +118,27 @@ class DashboardNavbar extends LitElement {
   #updateIfTab(element) {
     if (element.tagName.toLowerCase() === 'dashboard-tab') {
       const connector = this.dashboard.getConnector();
-      connector.getElementWebbit(element)?.subscribe(() => this.requestUpdate());
+      connector
+        .getElementWebbit(element)
+        ?.subscribe(() => this.requestUpdate());
       this.requestUpdate();
     }
   }
 
   firstUpdated() {
-    NetworkTables.addRobotConnectionListener(connected => {
+    NetworkTables.addRobotConnectionListener((connected) => {
       this.ntConnected = connected;
     }, true);
     const connector = this.dashboard.getConnector();
-    [...this.#rootElement.querySelectorAll('dashboard-tab')]
-      .forEach(element => this.#updateIfTab(element));
-    connector.subscribeElementConnected(({ element }) => this.#updateIfTab(element));
-    connector.subscribeElementDisconnected(({ element }) => this.#updateIfTab(element));
+    [...this.#rootElement.querySelectorAll('dashboard-tab')].forEach(
+      (element) => this.#updateIfTab(element)
+    );
+    connector.subscribeElementConnected(({ element }) =>
+      this.#updateIfTab(element)
+    );
+    connector.subscribeElementDisconnected(({ element }) =>
+      this.#updateIfTab(element)
+    );
     this.dashboard.subscribe('drawerToggle', () => this.requestUpdate());
     this.dashboard.subscribe('elementSelect', () => {
       this.#updateSelectedTab();
@@ -140,12 +152,14 @@ class DashboardNavbar extends LitElement {
   }
 
   #getTabs() {
-    return [...this.#rootElement.querySelectorAll('dashboard-tab')].map(tab => {
-      return {
-        element: tab,
-        label: tab.getAttribute('tab-name')
-      };
-    });
+    return [...this.#rootElement.querySelectorAll('dashboard-tab')].map(
+      (tab) => {
+        return {
+          element: tab,
+          label: tab.getAttribute('tab-name'),
+        };
+      }
+    );
   }
 
   #onToggleClick() {
@@ -162,35 +176,47 @@ class DashboardNavbar extends LitElement {
       return;
     }
     const nextElement = removeElement(tab, this.dashboard.getConnector());
-      this.dashboard.setSelectedElement(nextElement);
+    this.dashboard.setSelectedElement(nextElement);
     this.#showSelectedTab();
-
   }
 
   render() {
     const tabs = this.#getTabs();
 
     return html`
-      <vaadin-drawer-toggle @click=${this.#onToggleClick}></vaadin-drawer-toggle>
+      <vaadin-drawer-toggle
+        @click=${this.#onToggleClick}
+      ></vaadin-drawer-toggle>
       <div class="navbar">
         <div class="tabs">
-          <vaadin-tabs .selected=${this.selectedTabIndex} @selected-changed=${this.#onTabChange}>
-            ${tabs.map(({ element, label }, index) => html`
+          <vaadin-tabs
+            .selected=${this.selectedTabIndex}
+            @selected-changed=${this.#onTabChange}
+          >
+            ${tabs.map(
+              ({ element, label }, index) => html`
             <vaadin-tab value=${index}>${label} 
-              <vaadin-button class="delete-tab-button" theme="icon tertiary" aria-label="Delete Tab"  @click=${()=>this.deleteTab(element)}
+              <vaadin-button class="delete-tab-button" theme="icon tertiary" aria-label="Delete Tab"  @click=${() =>
+                this.deleteTab(element)}
               ?disabled=${!this.dashboard.isDrawerOpened()}>
               <vaadin-icon icon="vaadin:close" style="width:20px;height:20px;cursor:pointer"></vaadin-icon>
             </vaadin-tab>
-            `)}
+            `
+            )}
           </vaadin-tabs>
-          <vaadin-button class="add-tab-button" theme="icon tertiary" aria-label="Add Tab" @click=${this.#onAddTab}
-            ?disabled=${!this.dashboard.isDrawerOpened()}>
+          <vaadin-button
+            class="add-tab-button"
+            theme="icon tertiary"
+            aria-label="Add Tab"
+            @click=${this.#onAddTab}
+            ?disabled=${!this.dashboard.isDrawerOpened()}
+          >
             <vaadin-icon icon="vaadin:plus"></vaadin-icon>
           </vaadin-button>
         </div>
         <div class="nt-connection">
           NetworkTables:
-          <span class=${this.ntConnected ? 'connected' : 'disconnected' }>
+          <span class=${this.ntConnected ? 'connected' : 'disconnected'}>
             ${this.ntConnected ? 'Connected' : 'Disconnected'}
           </span>
         </div>
