@@ -61,14 +61,15 @@ const styles = css`
 
   #container {
     position: relative;
-    width: calc(100vw - 16px);
     height: 100%;
+    width: 100vw;
     box-sizing: border-box;
   }
 
   ::slotted([slot='dashboard']) {
     width: 100%;
     height: 100%;
+    background: var(--dashboard-background, white);
   }
 
   ::slotted([slot='layer']) {
@@ -155,7 +156,22 @@ export default class DashboardRoot extends LitElement {
       this.appendChild(value.layer);
     });
 
+    const navbar = document.createElement('dashboard-navbar');
+    navbar.setAttribute('slot', 'navbar');
+    navbar.addEventListener('drawerToggle', () => {
+      this.#onDrawerToggle();
+    });
+    this.appendChild(navbar);
+
+    this.dashboard.subscribe('themeSet', () => this.#updateTheme());
+    this.#updateTheme();
+
     this.ready = true;
+  }
+
+  #updateTheme(): void {
+    const navbar = this.querySelector('dashboard-navbar');
+    navbar?.setAttribute('data-theme', this.dashboard?.getTheme() ?? '');
   }
 
   updated(updatedProps: Map<string, unknown>): void {
@@ -191,9 +207,7 @@ export default class DashboardRoot extends LitElement {
       <div class="layout">
         <dashboard-drawer .interact="${null}"></dashboard-drawer>
         <div class="dashboard">
-          <dashboard-navbar
-            @drawerToggle=${this.#onDrawerToggle}
-          ></dashboard-navbar>
+          <slot name="navbar"></slot>
           <div class="dashboard-elements">
             <div id="container">
               <slot name="dashboard"></slot>

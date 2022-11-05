@@ -3,6 +3,7 @@ import { WebbitConfig } from '@webbitjs/webbit';
 import Dashboard from './dashboard';
 import getAllowedChildren from './get-allowed-children';
 import { createLayerElement } from './layer';
+import { addCSSRule, createSheet } from './themes';
 
 export interface Tutorial {
   id: string;
@@ -14,6 +15,7 @@ export interface Tutorial {
 export default class FrcDashboard extends Dashboard {
   private tutorials: Record<string, Tutorial> = {};
   private layers: Record<string, HTMLElement> = {};
+  private themeSheets: Record<string, CSSStyleSheet> = {};
 
   constructor(rootElement?: HTMLElement) {
     super(rootElement);
@@ -240,5 +242,34 @@ export default class FrcDashboard extends Dashboard {
 
   getLayers(): Record<string, HTMLElement> {
     return this.layers;
+  }
+
+  addThemeRules(theme: string, cssVariables: Record<string, string>): void {
+    if (typeof this.themeSheets[theme] === 'undefined') {
+      this.themeSheets[theme] = createSheet();
+    }
+
+    const rules = Object.entries(cssVariables).map(
+      ([variableName, value]) => `${variableName}: ${value};`
+    );
+    addCSSRule(
+      this.themeSheets[theme],
+      `
+      [data-theme="${theme}"] {
+        ${rules.join('\n')}
+      }
+    `
+    );
+  }
+
+  setTheme(theme: string): void {
+    this.getRootElement().setAttribute('data-theme', theme);
+
+    this.setStoreValue('theme', theme);
+    this.publish('themeSet');
+  }
+
+  getTheme(): string {
+    return this.getStoreValue('theme', 'light') as string;
   }
 }
