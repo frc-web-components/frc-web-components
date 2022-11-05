@@ -1,25 +1,30 @@
-import { html, css, LitElement } from 'lit';
+/* eslint-disable import/extensions */
+import { html, css, LitElement, TemplateResult } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 
-export const elementName = 'frc-number-slider';
-
-export const elementConfig = {
+export const numberSliderConfig = {
   dashboard: {
     displayName: 'Number Slider',
   },
   properties: {
-    value: { type: Number, primary: true, changeEvent: 'change' },
-    min: { type: Number, defaultValue: -1 },
-    max: { type: Number, defaultValue: 1 },
+    value: { type: 'Number', primary: true, changeEvent: 'change' },
+    min: { type: 'Number', defaultValue: -1 },
+    max: { type: 'Number', defaultValue: 1 },
     blockIncrement: {
-      type: Number,
+      type: 'Number',
       attribute: 'block-increment',
       defaultValue: 0.05,
     },
   },
 };
 
-class NumberSlider extends LitElement {
-  static properties = elementConfig.properties;
+@customElement('frc-number-slider')
+export class NumberSlider extends LitElement {
+  @property({ type: Number }) value = 0;
+  @property({ type: Number }) min = -1;
+  @property({ type: Number }) max = 1;
+  @property({ type: Number, attribute: 'block-increment' })
+  blockIncrement = 0.05;
 
   static styles = css`
     :host {
@@ -48,20 +53,12 @@ class NumberSlider extends LitElement {
     }
   `;
 
-  constructor() {
-    super();
-    this.value = 0;
-    this.min = -1;
-    this.max = 1;
-    this.blockIncrement = 0.05;
-  }
-
-  onChange(ev) {
-    this.value = parseFloat(ev.target.value);
+  onChange(ev: Event): void {
+    this.value = parseFloat((ev as any).target.value);
     this.#dispatchChange();
   }
 
-  #dispatchChange() {
+  #dispatchChange(): void {
     this.dispatchEvent(
       new CustomEvent('change', {
         detail: { value: this.value },
@@ -71,14 +68,18 @@ class NumberSlider extends LitElement {
     );
   }
 
-  firstUpdated() {
+  firstUpdated(): void {
     // The value is not initially being set for fractions for some reason
     setTimeout(() => {
-      this.renderRoot.querySelector('#slider').value = this.value;
+      const slider: HTMLFormElement | null =
+        this.renderRoot.querySelector('#slider');
+      if (slider) {
+        slider.value = this.value;
+      }
     });
   }
 
-  render() {
+  render(): TemplateResult {
     const min = Math.min(this.min, this.max);
     const max = Math.max(this.min, this.max);
     const value = Math.max(min, Math.min(this.value, max));
@@ -103,5 +104,3 @@ class NumberSlider extends LitElement {
     `;
   }
 }
-
-customElements.define(elementName, NumberSlider);

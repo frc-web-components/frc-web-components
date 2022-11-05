@@ -1,4 +1,13 @@
+import { numberSliderConfig } from './number-slider';
+import { toggleButtonConfig } from './toggle-button';
+import { toggleSwitchConfig } from './toggle-switch';
+import { toggleGroupConfig } from './toggle-group';
+
 export default {
+  'frc-number-slider': numberSliderConfig,
+  'frc-toggle-button': toggleButtonConfig,
+  'frc-toggle-switch': toggleSwitchConfig,
+  'frc-toggle-group': toggleGroupConfig,
   'vaadin-checkbox-group': {
     dashboard: {
       displayName: 'Checkbox Group',
