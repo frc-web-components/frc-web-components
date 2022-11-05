@@ -1,11 +1,8 @@
 export default {
-  // "vaadin-button": {
-  //   properties: {
-  //     disabled: { type: "Boolean", reflect: true },
-  //   },
-  //   demos: [{ html: `<vaadin-button>Button Label</vaadin-button>` }],
-  // },
   'vaadin-checkbox-group': {
+    dashboard: {
+      displayName: 'Checkbox Group',
+    },
     properties: {
       disabled: { type: 'Boolean', reflect: true },
       errorMessage: { type: 'String', attribute: 'error-message' },
@@ -18,7 +15,7 @@ export default {
         input: {
           type: 'StringDropdown',
           allowCustomValues: false,
-          getOptions() {
+          getOptions(): string[] {
             return ['horizontal', 'vertical'];
           },
         },
@@ -49,6 +46,9 @@ export default {
     demos: [{ html: `<vaadin-checkbox>Checkbox</vaadin-checkbox>` }],
   },
   'vaadin-combo-box': {
+    dashboard: {
+      displayName: 'Combo Box',
+    },
     properties: {
       items: { type: 'Array' },
       value: {
@@ -68,44 +68,6 @@ export default {
     demos: [
       {
         html: `<vaadin-combo-box items='["Item 1", "Item 2"]' value="Item 1"></vaadin-combo-box>`,
-      },
-    ],
-  },
-  'vaadin-details': {
-    properties: {
-      disabled: { type: 'Boolean' },
-      opened: { type: 'Boolean' },
-    },
-    demos: [
-      {
-        html: `
-            <vaadin-details>
-              <div slot="summary">Robotics Team</div>
-              <vaadin-vertical-layout>
-                <span>Team Name</span>
-                <span>ABC High School</span>
-                <span>123 West Main St.</span>
-              </vaadin-vertical-layout>
-            </vaadin-details>
-          `,
-      },
-    ],
-  },
-  'vaadin-date-picker': {
-    properties: {
-      value: {
-        type: 'String',
-        primary: true,
-        reflect: true,
-        changeEvent: 'value-changed',
-      },
-      disabled: { type: 'Boolean' },
-      clearButtonVisible: { type: 'Boolean', defaultValue: false },
-      label: { type: 'String', defaultValue: '' },
-    },
-    demos: [
-      {
-        html: `<vaadin-date-picker label="Sample Date Picker"></vaadin-date-picker>`,
       },
     ],
   },
@@ -166,23 +128,11 @@ export default {
       },
     ],
   },
-  'vaadin-progress-bar': {
-    properties: {
-      max: { type: 'Number', defaultValue: 1 },
-      min: { type: 'Number', defaultValue: 0 },
-      value: { type: 'Number', primary: true, reflect: true },
-    },
-    demos: [
-      {
-        html: `<vaadin-progress-bar
-                    min=0
-                    max=1
-                    value=0.5></vaadin-progress-bar>`,
-      },
-    ],
-  },
   'vaadin-radio-button': {
-    topLevel: false,
+    dashboard: {
+      displayName: 'Radio Button',
+      topLevel: false,
+    },
     properties: {
       checked: {
         type: 'Boolean',
@@ -198,6 +148,9 @@ export default {
     ],
   },
   'vaadin-radio-group': {
+    dashboard: {
+      displayName: 'Radio Button Group',
+    },
     properties: {
       label: { type: 'String', defaultValue: '' },
       value: { type: 'String', primary: true, reflect: true },
