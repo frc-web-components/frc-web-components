@@ -2,7 +2,7 @@ import { FrcDashboard } from '@frc-web-components/dashboard';
 import addDashboardComponentsPlugin from './dashboard-components';
 import addFrcPlugin from './frc';
 import addFrcSimPlugin from './frc-sim';
-import addFormElementsPlugin from './form-elements';
+import addFormElementsPlugin from './form-and-input-elements';
 import addTutorialPlugin from './tutorial';
 import addSourceElementsPlugin from './source-elements';
 
