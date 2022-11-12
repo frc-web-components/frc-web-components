@@ -1,4 +1,5 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, render } from 'lit';
+import { guard } from 'lit/directives/guard.js';
 import './dashboard-component-render';
 
 const styles = css`
@@ -30,12 +31,14 @@ const styles = css`
 class PropertiesEditor extends LitElement {
   static properties = {
     dashboard: { attribute: false },
+    dialogOpened: { state: true },
   };
 
   static styles = styles;
 
   constructor() {
     super();
+    this.disalogOpened = false;
   }
 
   get #element() {
@@ -76,16 +79,6 @@ class PropertiesEditor extends LitElement {
 
   firstUpdated() {
     this.dashboard.subscribe('elementSelect', () => this.requestUpdate());
-    this.sourceDialog.renderer = (root, dialog) => {
-      const dialogBody = window.document.createElement('div');
-      dialogBody.innerHTML = '<p>Hello</p>';
-      root.appendChild(dialogBody);
-    };
-  }
-
-  openEditSourceDialog() {
-    this.sourceDialog.opened = true;
-    // alert('open');
   }
 
   render() {
@@ -101,7 +94,6 @@ class PropertiesEditor extends LitElement {
     const { properties } = webbit.getConfig();
 
     return html`
-      <vaadin-dialog></vaadin-dialog>
       <vaadin-text-field
         part="source-key-dropdown"
         label=${'Source' +
@@ -117,7 +109,7 @@ class PropertiesEditor extends LitElement {
           icon="vaadin:edit"
           style="cursor: pointer"
           title="edit"
-          @click=${this.openEditSourceDialog}
+          @click=${() => this.dashboard.publish('sourcesDialogOpen')}
         ></vaadin-icon>
       </vaadin-text-field>
       <div class="properties-view">
