@@ -50,8 +50,42 @@ class PropertiesEditor extends LitElement {
     return this.renderRoot.querySelector('[part=input]');
   }
 
+  get webbit() {
+    return this.#element && this.#connector?.getElementWebbit(this.#element);
+  }
+
+  get sourceKey() {
+    return this.webbit?.sourceKey ?? '';
+  }
+
+  get sourceProvider() {
+    return this.webbit?.sourceProvider ?? '';
+  }
+
+  get store() {
+    return this.dashboard.getStore();
+  }
+
+  get defaultSourceProvider() {
+    return this.store?.getDefaultSourceProvider();
+  }
+
+  get sourceDialog() {
+    return this.renderRoot.querySelector('vaadin-dialog');
+  }
+
   firstUpdated() {
     this.dashboard.subscribe('elementSelect', () => this.requestUpdate());
+    this.sourceDialog.renderer = (root, dialog) => {
+      const dialogBody = window.document.createElement('div');
+      dialogBody.innerHTML = '<p>Hello</p>';
+      root.appendChild(dialogBody);
+    };
+  }
+
+  openEditSourceDialog() {
+    this.sourceDialog.opened = true;
+    // alert('open');
   }
 
   render() {
@@ -67,6 +101,25 @@ class PropertiesEditor extends LitElement {
     const { properties } = webbit.getConfig();
 
     return html`
+      <vaadin-dialog></vaadin-dialog>
+      <vaadin-text-field
+        part="source-key-dropdown"
+        label=${'Source' +
+        (this.sourceProvider ? ` (${this.sourceProvider})` : '') +
+        ':'}
+        theme="small"
+        readonly
+        value=${this.sourceKey || 'Connect to a data source...'}
+        style="width: 100%; margin-bottom: 10px"
+      >
+        <vaadin-icon
+          slot="suffix"
+          icon="vaadin:edit"
+          style="cursor: pointer"
+          title="edit"
+          @click=${this.openEditSourceDialog}
+        ></vaadin-icon>
+      </vaadin-text-field>
       <div class="properties-view">
         <vaadin-form-layout @change=${this.onValueChange}>
           ${Object.entries(properties)
