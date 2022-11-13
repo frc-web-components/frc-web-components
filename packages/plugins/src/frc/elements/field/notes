@@ -1,9 +1,0 @@
-Field2d
--------
-
-- Field2d should look at /SmartDashboard/Field by default
-- Field2d should loop through /SmartDashboard/Field and render each entry as a field object
-- Each field object is an element
-- Add an option to hide children and show child properties in parent
-  - Properties are then named after element (e.g. "Field Object Properties")
-- Combine Sources into properties

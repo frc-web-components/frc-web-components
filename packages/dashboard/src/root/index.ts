@@ -218,9 +218,6 @@ export default class DashboardRoot extends LitElement {
           modeless
           resizable
           .opened=${this.drawerOpened && this.dialogOpened}
-          @opened-changed="${(ev: CustomEvent) => {
-            this.dialogOpened = ev.detail.value;
-          }}"
           .renderer=${guard([], () => (root: HTMLElement) => {
             render(
               html`
