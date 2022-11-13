@@ -9,6 +9,7 @@ import { guard } from 'lit/directives/guard.js';
 import { onRemoveKeyPress } from '../hotkeys';
 import { dashboardProvider } from '../context-providers';
 import FrcDashboard from '../frc-dashboard';
+import './source-picker-dialog';
 
 export function removeElement(
   element: HTMLElement,
@@ -216,48 +217,20 @@ export default class DashboardRoot extends LitElement {
           draggable
           modeless
           resizable
-          .opened=${this.dialogOpened}
+          .opened=${this.drawerOpened && this.dialogOpened}
           @opened-changed="${(ev: CustomEvent) => {
             this.dialogOpened = ev.detail.value;
           }}"
           .renderer=${guard([], () => (root: HTMLElement) => {
             render(
               html`
-                <vaadin-vertical-layout
-                  style="align-items: stretch; height: 100%; min-height: 300px; width: 100%;"
-                >
-                  <header
-                    class="draggable"
-                    style="border-bottom: 1px solid var(--lumo-contrast-10pct); padding: var(--lumo-space-m) var(--lumo-space-l); cursor: move"
-                  >
-                    <h2
-                      style="font-size: var(--lumo-font-size-xl); font-weight: 600; line-height: var(--lumo-line-height-xs); margin: 0;"
-                    >
-                      Connect to a Data Source
-                    </h2>
-                  </header>
-                  <vaadin-scroller
-                    scroll-direction="vertical"
-                    style="padding: 0 var(--lumo-space-l); flex: 1"
-                  >
-                    <dashboard-sources-editor
-                      .dashboard=${this.dashboard}
-                    ></dashboard-sources-editor>
-                  </vaadin-scroller>
-                  <footer
-                    style="background-color: var(--lumo-contrast-5pct); padding: var(--lumo-space-s) var(--lumo-space-m); text-align: right;"
-                  >
-                    <vaadin-button
-                      theme="tertiary"
-                      style="margin-inline-end: var(--lumo-space-m);"
-                      @click="${() => {
-                        this.dialogOpened = false;
-                      }}"
-                    >
-                      Close
-                    </vaadin-button>
-                  </footer>
-                </vaadin-vertical-layout>
+                <dashboard-source-picker-dialog
+                  .dashboard=${this.dashboard}
+                  .dialogOpened=${this.dialogOpened}
+                  @closeDialog=${() => {
+                    this.dialogOpened = false;
+                  }}
+                ></dashboard-source-picker-dialog>
               `,
               root
             );

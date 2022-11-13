@@ -1,5 +1,4 @@
-import { LitElement, html, css, render } from 'lit';
-import { guard } from 'lit/directives/guard.js';
+import { LitElement, html, css } from 'lit';
 import './dashboard-component-render';
 
 const styles = css`
@@ -39,6 +38,7 @@ class PropertiesEditor extends LitElement {
   constructor() {
     super();
     this.disalogOpened = false;
+    this.sourceChangeObserver = null;
   }
 
   get #element() {
@@ -77,8 +77,28 @@ class PropertiesEditor extends LitElement {
     return this.renderRoot.querySelector('vaadin-dialog');
   }
 
+  updateSourceChangedObserver() {
+    this.sourceChangeObserver?.disconnect();
+    if (this.#element) {
+      this.sourceChangeObserver = new MutationObserver(() => {
+        this.requestUpdate();
+      });
+      this.sourceChangeObserver.observe(this.#element, {
+        attributes: true,
+        attributeFilter: ['source-provider', 'source-key'],
+      });
+    }
+  }
+
   firstUpdated() {
-    this.dashboard.subscribe('elementSelect', () => this.requestUpdate());
+    this.dashboard.subscribe('elementSelect', () => {
+      this.requestUpdate();
+    });
+    this.updateSourceChangedObserver();
+  }
+
+  disconnectedCallback() {
+    this.sourceChangeObserver?.disconnect();
   }
 
   render() {
@@ -101,7 +121,7 @@ class PropertiesEditor extends LitElement {
         ':'}
         theme="small"
         readonly
-        value=${this.sourceKey || 'Connect to a data source...'}
+        .value=${this.sourceKey || 'Connect to a data source...'}
         style="width: 100%; margin-bottom: 10px"
       >
         <vaadin-icon
