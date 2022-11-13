@@ -29,6 +29,7 @@ export default class FrcDashboard extends Dashboard {
         this.publish('elementPreview', { element: this.getPreviewedElement() });
       }
     });
+    this.getRootElement().setAttribute('data-theme', this.getTheme());
   }
 
   openDrawer(): void {
@@ -260,16 +261,23 @@ export default class FrcDashboard extends Dashboard {
       }
     `
     );
+    this.publish('themeRulesAdd');
   }
 
   setTheme(theme: string): void {
     this.getRootElement().setAttribute('data-theme', theme);
-
+    localStorage.setItem('theme', theme);
     this.setStoreValue('theme', theme);
     this.publish('themeSet');
   }
 
   getTheme(): string {
-    return this.getStoreValue('theme', 'light') as string;
+    const storedTheme = localStorage.getItem('theme') ?? 'light';
+    return this.getStoreValue('theme', storedTheme) as string;
+  }
+
+  getThemes(): string[] {
+    const themes = ['light', ...Object.keys(this.themeSheets)];
+    return [...new Set(themes).values()];
   }
 }

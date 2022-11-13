@@ -5,7 +5,6 @@ import FrcDashboard from '../frc-dashboard';
 
 @customElement('dashboard-source-picker-dialog')
 export class SourcePickerDialog extends LitElement {
-  @property({ type: Boolean }) dialogOpened = false;
   @property({ type: Object, attribute: false }) dashboard!: FrcDashboard;
 
   static styles = css`
