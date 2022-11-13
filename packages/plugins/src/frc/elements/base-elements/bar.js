@@ -5,14 +5,14 @@ export const elementName = 'frc-bar';
 export const elementConfig = {
   dashboard: {
     topLevel: false,
-    displayName: 'Bar'
+    displayName: 'Bar',
   },
   properties: {
     value: { type: Number },
     min: { type: Number, defaultValue: -1 },
     max: { type: Number, defaultValue: 1 },
     center: { type: Number },
-  }
+  },
 };
 
 function clamp(value, min, max) {
@@ -20,7 +20,6 @@ function clamp(value, min, max) {
 }
 
 class Bar extends LitElement {
-
   static properties = elementConfig.properties;
 
   static styles = css`
@@ -29,24 +28,25 @@ class Bar extends LitElement {
       position: relative;
       width: 300px;
       height: 20px;
-      background: #DDD;
+      background: var(--frc-bar-background, #ddd);
+      color: var(--frc-bar-color, black);
       font-size: 15px;
       line-height: 18px;
       text-align: center;
     }
 
-    [part=dragger] {
+    [part='dragger'] {
       position: absolute;
       top: 0;
       height: 100%;
       width: 100%;
     }
 
-    [part=foreground] {
+    [part='foreground'] {
       position: absolute;
       top: 0;
       height: 100%;
-      background: lightblue;
+      background: var(--frc-bar-foreground, lightblue);
       border-radius: 3px;
       width: var(--foreground-width);
       left: var(--foreground-left);
@@ -96,40 +96,37 @@ class Bar extends LitElement {
 
     if (max < center) {
       foreground.style.setProperty(
-        '--foreground-width', 
-        Math.abs(val - max) / (max - min) * 100 + '%'
+        '--foreground-width',
+        (Math.abs(val - max) / (max - min)) * 100 + '%'
       );
       foreground.style.setProperty('--foreground-left', 'auto');
       foreground.style.setProperty('--foreground-right', '0');
-    }
-    else if (min > center) {
+    } else if (min > center) {
       foreground.style.setProperty(
-        '--foreground-width', 
-        Math.abs(val - min) / (max - min) * 100 + '%'
+        '--foreground-width',
+        (Math.abs(val - min) / (max - min)) * 100 + '%'
       );
       foreground.style.setProperty('--foreground-left', '0');
       foreground.style.setProperty('--foreground-right', 'auto');
-    }
-    else if (val > center) {
+    } else if (val > center) {
       foreground.style.setProperty(
-        '--foreground-width', 
-        Math.abs(val - center) / (max - min) * 100 + '%'
+        '--foreground-width',
+        (Math.abs(val - center) / (max - min)) * 100 + '%'
       );
       foreground.style.setProperty(
-        '--foreground-left', 
-        Math.abs(min - center) / (max - min) * 100 + '%'
+        '--foreground-left',
+        (Math.abs(min - center) / (max - min)) * 100 + '%'
       );
       foreground.style.setProperty('--foreground-right', 'auto');
-    }
-    else {
+    } else {
       foreground.style.setProperty(
-        '--foreground-width', 
-        Math.abs(val - center) / (max - min) * 100 + '%'
+        '--foreground-width',
+        (Math.abs(val - center) / (max - min)) * 100 + '%'
       );
       foreground.style.setProperty('--foreground-left', 'auto');
       foreground.style.setProperty(
-        '--foreground-right', 
-        Math.abs(max - center) / (max - min) * 100 + '%'
+        '--foreground-right',
+        (Math.abs(max - center) / (max - min)) * 100 + '%'
       );
     }
   }
@@ -151,7 +148,7 @@ class Bar extends LitElement {
     const event = new CustomEvent('barDrag', {
       bubbles: true,
       composed: true,
-      detail: { value }
+      detail: { value },
     });
 
     this.dispatchEvent(event);
@@ -160,16 +157,15 @@ class Bar extends LitElement {
   firstUpdated() {
     this.setAttribute('draggable', 'false');
 
-    window.addEventListener('mousemove', ev => {
-
+    window.addEventListener('mousemove', (ev) => {
       if (!this.dragging) {
         return;
       }
 
-     this.setDragPosition(ev);
+      this.setDragPosition(ev);
     });
 
-    window.addEventListener('mouseup', ev => {
+    window.addEventListener('mouseup', (ev) => {
       this.dragging = false;
     });
   }
@@ -181,14 +177,11 @@ class Bar extends LitElement {
 
   render() {
     return html`
-        <div part="foreground" draggble="false"></div>
-        <div class="content" draggable="false">
-          <slot></slot>
-        </div>
-        <div 
-          part="dragger" 
-          @mousedown="${this.onMouseDown}"
-        ></div>
+      <div part="foreground" draggble="false"></div>
+      <div class="content" draggable="false">
+        <slot></slot>
+      </div>
+      <div part="dragger" @mousedown="${this.onMouseDown}"></div>
     `;
   }
 }

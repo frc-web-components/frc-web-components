@@ -73,5 +73,16 @@ export default function addTheme(dashboard: FrcDashboard): void {
     /* Dashboard */
     '--dashboard-background': 'hsl(214, 35%, 21%)',
     '--dashboard-navbar-background': '#222',
+
+    /* frc-bar */
+    '--frc-bar-background': '#444',
+    '--frc-bar-foreground': 'steelblue',
+    '--frc-bar-color': '#fff',
+
+    /* frc-table-axis */
+    '--frc-tab-axis-text-color': '#fff',
+
+    /* frc-3-axis-accelerometer */
+    '--frc-3-axis-accelerometer-label-color': '#fff',
   });
 }
