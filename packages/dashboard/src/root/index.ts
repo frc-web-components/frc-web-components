@@ -3,29 +3,13 @@ import { LitElement, html, css, TemplateResult, render } from 'lit';
 import './dashboard-tab';
 import './navbar';
 import './drawer';
-import { WebbitConnector } from '@webbitjs/webbit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { guard } from 'lit/directives/guard.js';
 import { onRemoveKeyPress } from '../hotkeys';
 import { dashboardProvider } from '../context-providers';
 import FrcDashboard from '../frc-dashboard';
 import './source-picker-dialog';
-
-export function removeElement(
-  element: HTMLElement,
-  connector: WebbitConnector
-): HTMLElement | null {
-  const parent = element.parentElement;
-  const siblings = [...(parent?.children ?? [])];
-  const elementIndex = siblings.indexOf(element);
-  const nextElement =
-    siblings[elementIndex + 1] ?? siblings[elementIndex - 1] ?? parent;
-  element?.remove();
-  const isInDashboard =
-    connector.getRootElement().contains(nextElement) &&
-    nextElement !== connector.getRootElement();
-  return isInDashboard ? (nextElement as HTMLElement) : null;
-}
+import removeElement from './remove-element';
 
 const styles = css`
   :host {
@@ -160,6 +144,7 @@ export default class DashboardRoot extends LitElement {
     });
 
     const navbar = document.createElement('dashboard-navbar');
+    (navbar as any).dashboard = this.dashboard;
     navbar.setAttribute('slot', 'navbar');
     navbar.addEventListener('drawerToggle', () => {
       this.#onDrawerToggle();

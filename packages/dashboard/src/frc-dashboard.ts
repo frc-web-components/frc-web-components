@@ -272,4 +272,9 @@ export default class FrcDashboard extends Dashboard {
   getTheme(): string {
     return this.getStoreValue('theme', 'light') as string;
   }
+
+  getThemes(): string[] {
+    const themes = ['light', ...Object.keys(this.themeSheets)];
+    return [...new Set(themes).values()];
+  }
 }

@@ -1,8 +1,18 @@
-import { LitElement, html, css } from 'lit';
-import { dashboardProvider } from '../context-providers';
-import { removeElement } from './index';
+/* eslint-disable import/extensions */
+import { LitElement, html, css, TemplateResult, render } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
+import { guard } from 'lit/directives/guard.js';
+import FrcDashboard from '../frc-dashboard';
+import removeElement from './remove-element';
+import './settings-dialog';
 
-class DashboardNavbar extends LitElement {
+@customElement('dashboard-navbar')
+export class DashboardNavbar extends LitElement {
+  @state() ntConnected = false;
+  @state() selectedTabIndex = 0;
+  @state() settingsDialogOpened = false;
+  @property({ type: Object }) dashboard!: FrcDashboard;
+
   static styles = css`
     :host {
       display: flex;
@@ -41,9 +51,24 @@ class DashboardNavbar extends LitElement {
       height: 100%;
     }
 
+    .info {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: center;
+      padding-right: 15px;
+      align-items: end;
+      gap: 2px;
+    }
+
+    .settings {
+      color: var(--lumo-primary-text-color, blue);
+      cursor: pointer;
+      font-size: 14px;
+    }
+
     .nt-connection {
       align-self: center;
-      padding-right: 15px;
       color: var(--lumo-contrast, black);
     }
 
@@ -56,39 +81,25 @@ class DashboardNavbar extends LitElement {
     }
   `;
 
-  static properties = {
-    ntConnected: { state: true },
-    dashboard: { state: true },
-    selectedTabIndex: { state: true },
-  };
-
-  constructor() {
-    super();
-    this.ntConnected = false;
-    this.selectedTabIndex = 0;
-    dashboardProvider.addConsumer(this);
-  }
-
-  get #selectedElement() {
+  get #selectedElement(): HTMLElement | null {
     return this.dashboard.getSelectedElement();
   }
 
-  get #rootElement() {
+  get #rootElement(): HTMLElement {
     return this.dashboard.getConnector().getRootElement();
   }
 
-  #updateSelectedTab() {
+  #updateSelectedTab(): void {
     const index = [
       ...this.#rootElement.querySelectorAll('dashboard-tab'),
-    ].findIndex((tab) => {
-      return (
+    ].findIndex(
+      (tab) =>
         tab === this.#selectedElement || tab.contains(this.#selectedElement)
-      );
-    });
+    );
     this.selectedTabIndex = index;
   }
 
-  #showSelectedTab() {
+  #showSelectedTab(): void {
     [...this.#rootElement.querySelectorAll('dashboard-tab')].forEach(
       (tab, index) => {
         if (index === this.selectedTabIndex) {
@@ -100,14 +111,14 @@ class DashboardNavbar extends LitElement {
     );
   }
 
-  #onTabChange(ev) {
+  #onTabChange(ev: CustomEvent): void {
     const tab = [...this.#rootElement.children][ev.detail.value];
     if (tab && !tab.contains(this.#selectedElement)) {
-      this.dashboard.setSelectedElement(tab);
+      this.dashboard.setSelectedElement(tab as HTMLElement);
     }
   }
 
-  #onAddTab() {
+  #onAddTab(): void {
     const tabCount = this.#rootElement.querySelectorAll('dashboard-tab').length;
     const tab = this.dashboard.addTab(`Tab ${tabCount + 1}`);
     if (tabCount === 0) {
@@ -115,7 +126,7 @@ class DashboardNavbar extends LitElement {
     }
   }
 
-  #updateIfTab(element) {
+  #updateIfTab(element: HTMLElement): void {
     if (element.tagName.toLowerCase() === 'dashboard-tab') {
       const connector = this.dashboard.getConnector();
       connector
@@ -125,19 +136,20 @@ class DashboardNavbar extends LitElement {
     }
   }
 
-  firstUpdated() {
-    NetworkTables.addRobotConnectionListener((connected) => {
+  firstUpdated(): void {
+    const { NetworkTables } = window as any;
+    NetworkTables.addRobotConnectionListener((connected: any) => {
       this.ntConnected = connected;
     }, true);
     const connector = this.dashboard.getConnector();
     [...this.#rootElement.querySelectorAll('dashboard-tab')].forEach(
-      (element) => this.#updateIfTab(element)
+      (element) => this.#updateIfTab(element as HTMLElement)
     );
-    connector.subscribeElementConnected(({ element }) =>
-      this.#updateIfTab(element)
+    connector.subscribeElementConnected((value: any) =>
+      this.#updateIfTab(value.element)
     );
-    connector.subscribeElementDisconnected(({ element }) =>
-      this.#updateIfTab(element)
+    connector.subscribeElementDisconnected((value: any) =>
+      this.#updateIfTab(value.element)
     );
     this.dashboard.subscribe('drawerToggle', () => this.requestUpdate());
     this.dashboard.subscribe('elementSelect', () => {
@@ -145,24 +157,22 @@ class DashboardNavbar extends LitElement {
     });
   }
 
-  updated(changedProps) {
+  updated(changedProps: Map<string, unknown>): void {
     if (changedProps.has('selectedTabIndex')) {
       this.#showSelectedTab();
     }
   }
 
-  #getTabs() {
+  #getTabs(): { element: HTMLElement; label: string | null }[] {
     return [...this.#rootElement.querySelectorAll('dashboard-tab')].map(
-      (tab) => {
-        return {
-          element: tab,
-          label: tab.getAttribute('tab-name'),
-        };
-      }
+      (tab) => ({
+        element: tab as HTMLElement,
+        label: tab.getAttribute('tab-name'),
+      })
     );
   }
 
-  #onToggleClick() {
+  #onToggleClick(): void {
     const event = new CustomEvent('drawerToggle', {
       bubbles: true,
       composed: true,
@@ -170,20 +180,43 @@ class DashboardNavbar extends LitElement {
     this.dispatchEvent(event);
   }
 
-  deleteTab(element) {
-    let tab = element;
+  deleteTab(element: HTMLElement): void {
+    const tab: HTMLElement = element;
     if (tab === null) {
       return;
     }
     const nextElement = removeElement(tab, this.dashboard.getConnector());
-    this.dashboard.setSelectedElement(nextElement);
+    if (nextElement) {
+      this.dashboard.setSelectedElement(nextElement);
+    }
     this.#showSelectedTab();
   }
 
-  render() {
+  render(): TemplateResult {
     const tabs = this.#getTabs();
 
     return html`
+      <vaadin-dialog
+        theme="no-padding"
+        @opened-changed=${(e: CustomEvent) => {
+          this.settingsDialogOpened = e.detail.value;
+        }}
+        .opened=${this.settingsDialogOpened}
+        .renderer=${guard([], () => (root: HTMLElement) => {
+          render(
+            html`
+              <dashboard-settings-dialog
+                .dashboard=${this.dashboard}
+                .dialogOpened=${this.settingsDialogOpened}
+                @closeDialog=${() => {
+                  this.settingsDialogOpened = false;
+                }}
+              ></dashboard-settings-dialog>
+            `,
+            root
+          );
+        })}
+      ></vaadin-dialog>
       <vaadin-drawer-toggle
         @click=${this.#onToggleClick}
       ></vaadin-drawer-toggle>
@@ -214,15 +247,23 @@ class DashboardNavbar extends LitElement {
             <vaadin-icon icon="vaadin:plus"></vaadin-icon>
           </vaadin-button>
         </div>
-        <div class="nt-connection">
-          NetworkTables:
-          <span class=${this.ntConnected ? 'connected' : 'disconnected'}>
-            ${this.ntConnected ? 'Connected' : 'Disconnected'}
-          </span>
+        <div class="info">
+          <div class="nt-connection">
+            NetworkTables:
+            <span class=${this.ntConnected ? 'connected' : 'disconnected'}>
+              ${this.ntConnected ? 'Connected' : 'Disconnected'}
+            </span>
+          </div>
+          <div
+            class="settings"
+            @click=${() => {
+              this.settingsDialogOpened = true;
+            }}
+          >
+            Settings
+          </div>
         </div>
       </div>
     `;
   }
 }
-
-customElements.define('dashboard-navbar', DashboardNavbar);
