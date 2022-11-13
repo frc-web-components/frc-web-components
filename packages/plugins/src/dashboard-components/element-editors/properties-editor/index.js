@@ -30,12 +30,15 @@ const styles = css`
 class PropertiesEditor extends LitElement {
   static properties = {
     dashboard: { attribute: false },
+    dialogOpened: { state: true },
   };
 
   static styles = styles;
 
   constructor() {
     super();
+    this.disalogOpened = false;
+    this.sourceChangeObserver = null;
   }
 
   get #element() {
@@ -50,8 +53,52 @@ class PropertiesEditor extends LitElement {
     return this.renderRoot.querySelector('[part=input]');
   }
 
+  get webbit() {
+    return this.#element && this.#connector?.getElementWebbit(this.#element);
+  }
+
+  get sourceKey() {
+    return this.webbit?.sourceKey ?? '';
+  }
+
+  get sourceProvider() {
+    return this.webbit?.sourceProvider ?? '';
+  }
+
+  get store() {
+    return this.dashboard.getStore();
+  }
+
+  get defaultSourceProvider() {
+    return this.store?.getDefaultSourceProvider();
+  }
+
+  get sourceDialog() {
+    return this.renderRoot.querySelector('vaadin-dialog');
+  }
+
+  updateSourceChangedObserver() {
+    this.sourceChangeObserver?.disconnect();
+    if (this.#element) {
+      this.sourceChangeObserver = new MutationObserver(() => {
+        this.requestUpdate();
+      });
+      this.sourceChangeObserver.observe(this.#element, {
+        attributes: true,
+        attributeFilter: ['source-provider', 'source-key'],
+      });
+    }
+  }
+
   firstUpdated() {
-    this.dashboard.subscribe('elementSelect', () => this.requestUpdate());
+    this.dashboard.subscribe('elementSelect', () => {
+      this.requestUpdate();
+    });
+    this.updateSourceChangedObserver();
+  }
+
+  disconnectedCallback() {
+    this.sourceChangeObserver?.disconnect();
   }
 
   render() {
@@ -67,6 +114,24 @@ class PropertiesEditor extends LitElement {
     const { properties } = webbit.getConfig();
 
     return html`
+      <vaadin-text-field
+        part="source-key-dropdown"
+        label=${'Source' +
+        (this.sourceProvider ? ` (${this.sourceProvider})` : '') +
+        ':'}
+        theme="small"
+        readonly
+        .value=${this.sourceKey || 'Connect to a data source...'}
+        style="width: 100%; margin-bottom: 10px"
+      >
+        <vaadin-icon
+          slot="suffix"
+          icon="vaadin:edit"
+          style="cursor: pointer"
+          title="edit"
+          @click=${() => this.dashboard.publish('sourcesDialogOpen')}
+        ></vaadin-icon>
+      </vaadin-text-field>
       <div class="properties-view">
         <vaadin-form-layout @change=${this.onValueChange}>
           ${Object.entries(properties)

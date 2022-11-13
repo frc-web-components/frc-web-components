@@ -177,33 +177,31 @@ class SourcesEditor extends LitElement {
     const disabled = !this.#element || !webbit;
 
     return html`
-      <vaadin-form-layout>
-        <vaadin-form-item>
-          <label slot="label">Source Key</label>
-          <vaadin-combo-box
-            part="source-key-dropdown"
-            clear-button-visible
-            value="${this.sourceKey}"
-            .items="${this.getSourceKeyItems()}"
-            @change="${this.onSourceKeyInputChange}"
-            theme="small"
-            allow-custom-value
-            ?disabled=${disabled}
-          >
-          </vaadin-combo-box>
-        </vaadin-form-item>
-        <vaadin-form-item>
-          <label slot="label">Source Provider</label>
-          <vaadin-combo-box
-            clear-button-visible
-            value="${this.sourceProvider}"
-            .items="${this.store?.getSourceProviderNames() ?? []}"
-            @change="${this.onSourceProviderInputChange}"
-            theme="small"
-            ?disabled=${disabled}
-          ></vaadin-combo-box>
-        </vaadin-form-item>
-      </vaadin-form-layout>
+      <div style="display: flex; gap: 10px">
+        <vaadin-combo-box
+          style="flex: 1"
+          label="Source Key"
+          part="source-key-dropdown"
+          clear-button-visible
+          value="${this.sourceKey}"
+          .items="${this.getSourceKeyItems()}"
+          @change="${this.onSourceKeyInputChange}"
+          theme="small"
+          allow-custom-value
+          ?disabled=${disabled}
+        >
+        </vaadin-combo-box>
+        <vaadin-combo-box
+          style="flex: 1"
+          label="Source Provider"
+          clear-button-visible
+          value="${this.sourceProvider}"
+          .items="${this.store?.getSourceProviderNames() ?? []}"
+          @change="${this.onSourceProviderInputChange}"
+          theme="small"
+          ?disabled=${disabled}
+        ></vaadin-combo-box>
+      </div>
       <dashboard-sources-view
         @sourceSelect="${this.onSourceSelect}"
         .sourceKey="${this.sourceKey}"
