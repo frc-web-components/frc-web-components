@@ -163,7 +163,8 @@ export default class DashboardRoot extends LitElement {
 
   #updateTheme(): void {
     const navbar = this.querySelector('dashboard-navbar');
-    navbar?.setAttribute('data-theme', this.dashboard?.getTheme() ?? '');
+    const theme = this.dashboard?.getTheme() ?? '';
+    navbar?.setAttribute('data-theme', theme);
   }
 
   updated(updatedProps: Map<string, unknown>): void {

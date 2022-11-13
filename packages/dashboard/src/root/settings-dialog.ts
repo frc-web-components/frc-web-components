@@ -7,6 +7,7 @@ import FrcDashboard from '../frc-dashboard';
 export class SettingsDialog extends LitElement {
   @property({ type: Object, attribute: false }) dashboard!: FrcDashboard;
   @state() theme = '';
+  @state() themes: string[] = [];
 
   static styles = css`
     :host {
@@ -49,9 +50,14 @@ export class SettingsDialog extends LitElement {
 
   firstUpdated(): void {
     this.theme = this.dashboard.getTheme();
+    this.themes = this.dashboard.getThemes();
 
     this.dashboard.subscribe('themeSet', () => {
       this.theme = this.dashboard.getTheme();
+    });
+
+    this.dashboard.subscribe('themeRulesAdd', () => {
+      this.themes = this.dashboard.getThemes();
     });
   }
 
