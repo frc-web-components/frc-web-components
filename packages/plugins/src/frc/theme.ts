@@ -119,5 +119,10 @@ export default function addTheme(dashboard: FrcDashboard): void {
 
     /* Line Chart */
     '--frc-line-chart-text-color': 'white',
+
+    /* frc-gauge */
+    '--frc-gauge-fill-color': 'rgb(90,150,200)',
+    '--frc-gauge-color': '#666',
+    '--frc-gauge-text-color': 'rgb(220, 220, 220)',
   });
 }
