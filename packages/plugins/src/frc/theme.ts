@@ -116,5 +116,8 @@ export default function addTheme(dashboard: FrcDashboard): void {
 
     /* frc-toggle-switch */
     '--frc-toggle-switch-color': '#999',
+
+    /* Line Chart */
+    '--frc-line-chart-text-color': 'white',
   });
 }
