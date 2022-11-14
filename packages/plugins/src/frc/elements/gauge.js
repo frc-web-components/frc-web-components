@@ -11,12 +11,11 @@ export const elementConfig = {
   properties: {
     min: { type: Number },
     max: { type: Number, defaultValue: 100 },
-    value: { type: Number, primary: true }
-  }
+    value: { type: Number, primary: true },
+  },
 };
 
 class Gauge extends LitElement {
-
   static properties = elementConfig.properties;
 
   static styles = [
@@ -38,23 +37,24 @@ class Gauge extends LitElement {
       .gauge-container {
         display: block;
       }
-      
+
       .gauge-container > .gauge > .dial {
         stroke: #ddd;
         stroke-width: 3;
-        fill: rgba(0,0,0,0);
+        fill: rgba(0, 0, 0, 0);
+        stroke: var(--frc-gauge-color, rgb(221, 221, 221));
       }
       .gauge-container > .gauge > .value {
-        stroke: rgb(47, 180, 200);
+        stroke: var(--frc-gauge-fill-color, rgb(47, 180, 200));
         stroke-width: 3;
-        fill: rgba(0,0,0,0);
+        fill: rgba(0, 0, 0, 0);
       }
-      .gauge-container > .gauge > .value-text {
-        fill: black;
+      .gauge-container > .gauge .value-text {
+        fill: var(--frc-gauge-text-color, rgb(100, 100, 100));
         font-family: sans-serif;
         font-size: 1em;
       }
-    `
+    `,
   ];
 
   constructor() {
@@ -82,11 +82,11 @@ class Gauge extends LitElement {
     this.gauge = SvgGauge(gaugeElement, {
       min: Math.min(this.min, this.max),
       max: Math.max(this.min, this.max),
-      value: 0
+      value: 0,
     });
 
     this.setSize();
-};
+  }
 
   firstUpdated() {
     this.gaugeInit();

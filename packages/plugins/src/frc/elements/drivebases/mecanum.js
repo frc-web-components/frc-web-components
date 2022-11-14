@@ -2,7 +2,7 @@ import { containerStyles } from '../../styles';
 import { html, css, LitElement } from 'lit';
 import * as CurvedArrow from './curved-arrow';
 
-/** 
+/**
  * Copyright (c) 2017-2018 FIRST
  * All rights reserved.
  *
@@ -19,8 +19,8 @@ import * as CurvedArrow from './curved-arrow';
  *
  * THIS SOFTWARE IS PROVIDED BY FIRST AND CONTRIBUTORS "AS IS" AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY NONINFRINGEMENT AND FITNESS FOR A PARTICULAR 
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL FIRST OR CONTRIBUTORS BE LIABLE FOR 
+ * WARRANTIES OF MERCHANTABILITY NONINFRINGEMENT AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL FIRST OR CONTRIBUTORS BE LIABLE FOR
  * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
  * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
@@ -59,15 +59,17 @@ export const elementConfig = {
     displayName: 'Mecanum Drivebase',
   },
   properties: {
-    frontLeftMotorSpeed: {  type: Number, attribute: 'front-left-motor-speed' },
-    frontRightMotorSpeed: { type: Number, attribute: 'front-right-motor-speed' },
+    frontLeftMotorSpeed: { type: Number, attribute: 'front-left-motor-speed' },
+    frontRightMotorSpeed: {
+      type: Number,
+      attribute: 'front-right-motor-speed',
+    },
     rearLeftMotorSpeed: { type: Number, attribute: 'rear-left-motor-speed' },
     rearRightMotorSpeed: { type: Number, attribute: 'rear-right-motor-speed' },
-  }
+  },
 };
 
 class MecanumDrivebase extends LitElement {
-
   static properties = elementConfig.properties;
 
   static styles = [
@@ -80,12 +82,12 @@ class MecanumDrivebase extends LitElement {
       }
 
       .diff-drive-container {
-          height: 100%;
-          width: 100%;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: center;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
       }
 
       svg {
@@ -95,33 +97,34 @@ class MecanumDrivebase extends LitElement {
       }
 
       svg .x {
-          stroke: rgb(50,50,255);
-          stroke-width: 2;
+        stroke: rgb(50, 50, 255);
+        stroke-width: 2;
       }
 
-      svg .arrow line, svg .arrow path {
-          stroke: rgb(50,50,255);
-          stroke-width: 2;
-          fill: none;
+      svg .arrow line,
+      svg .arrow path {
+        stroke: rgb(50, 50, 255);
+        stroke-width: 2;
+        fill: none;
       }
 
       svg .arrow polygon {
-          stroke: rgb(50,50,255);
-          fill: rgb(50,50,255);
+        stroke: rgb(50, 50, 255);
+        fill: rgb(50, 50, 255);
       }
 
       svg .drivetrain {
-          fill: none;
-          stroke: black;
+        fill: none;
+        stroke: var(--frc-mecanum-drivebase-drivetrain-color, #000);
       }
 
       .bar {
-          position: relative;
-          height: calc(100% - 30px);
-          width: 20px;
-          border-radius: 3px;
-          margin: 15px 0;
-          background: #DDD;
+        position: relative;
+        height: calc(100% - 30px);
+        width: 20px;
+        border-radius: 3px;
+        margin: 15px 0;
+        background: var(--frc-bar-background, #ddd);
       }
 
       .speed-pair {
@@ -132,26 +135,26 @@ class MecanumDrivebase extends LitElement {
       }
 
       .speed {
-          display: flex;
-          height: 48%;
-          flex-direction: row;
-          align-items: center;
-          margin-left: 30px;
+        display: flex;
+        height: 48%;
+        flex-direction: row;
+        align-items: center;
+        margin-left: 30px;
       }
 
       frc-table-axis {
-          width: 10px;
-          height: calc(100% - 35px);
+        width: 10px;
+        height: calc(100% - 35px);
       }
 
       .foreground {
-          position: absolute;
-          top: 0;
-          width: 20px;
-          background: lightblue;
-          border-radius: 3px;
+        position: absolute;
+        top: 0;
+        width: 20px;
+        background: var(--frc-bar-foreground, lightblue);
+        border-radius: 3px;
       }
-    `
+    `,
   ];
 
   constructor() {
@@ -172,11 +175,10 @@ class MecanumDrivebase extends LitElement {
   }
 
   drawMotionVector(fl, fr, rl, rr) {
-
     const svgNode = this.shadowRoot.getElementById('svg');
     const rect = svgNode.getBoundingClientRect();
 
-    const wheelWidth = rect.width * .13;
+    const wheelWidth = rect.width * 0.13;
     const padding = 20;
     const verticalPadding = 20;
 
@@ -185,8 +187,8 @@ class MecanumDrivebase extends LitElement {
 
     const vectorRadius = Math.min(FRAME_WIDTH, FRAME_HEIGHT) / 2 - 16;
     const direction = {
-        x: (fl - fr - rl + rr) / 4,
-        y: (fl + fr + rl + rr) / 4
+      x: (fl - fr - rl + rr) / 4,
+      y: (fl + fr + rl + rr) / 4,
     };
     const moment = (-fl + fr - rl + rr) / 4;
     const directionMagnitude = Math.hypot(direction.x, direction.y);
@@ -194,7 +196,7 @@ class MecanumDrivebase extends LitElement {
 
     // Barely moving, draw an X
     if (Math.abs(moment) <= 0.01 && directionMagnitude <= 0.01) {
-      return generateX(rect.width * .2);
+      return generateX(rect.width * 0.2);
     }
 
     let rightMomentArrow = '';
@@ -203,27 +205,43 @@ class MecanumDrivebase extends LitElement {
 
     if (Math.abs(moment) > 0.01) {
       // Only draw the moment vectors if the moment is significant enough
-      rightMomentArrow = CurvedArrow.createPolar(0, vectorRadius, -moment * Math.PI, 0, 8);
-      leftMomentArrow = CurvedArrow.createPolar(Math.PI, vectorRadius, -moment * Math.PI, 0, 8);
+      rightMomentArrow = CurvedArrow.createPolar(
+        0,
+        vectorRadius,
+        -moment * Math.PI,
+        0,
+        8
+      );
+      leftMomentArrow = CurvedArrow.createPolar(
+        Math.PI,
+        vectorRadius,
+        -moment * Math.PI,
+        0,
+        8
+      );
     }
     if (directionMagnitude > 0.01) {
-        // Only draw the direction vector if it'd be long enough
-        directionArrow = CurvedArrow.createStraight(directionMagnitude * vectorRadius, -directionAngle, 0, 8);
+      // Only draw the direction vector if it'd be long enough
+      directionArrow = CurvedArrow.createStraight(
+        directionMagnitude * vectorRadius,
+        -directionAngle,
+        0,
+        8
+      );
     }
 
     return `<g class="arrow">${rightMomentArrow} ${leftMomentArrow} ${directionArrow}</g>`;
   }
 
   drawDrivetrain() {
-
     const svgNode = this.shadowRoot.getElementById('svg');
     const rect = svgNode.getBoundingClientRect();
 
-    const wheelWidth = rect.width * .13;
-    const wheelRadius = Math.min(rect.width * .13, rect.height * .15);
+    const wheelWidth = rect.width * 0.13;
+    const wheelRadius = Math.min(rect.width * 0.13, rect.height * 0.15);
     const padding = 20;
     const verticalPadding = 20;
-    
+
     const base = `
       <rect 
         width="calc(100% - ${(wheelWidth + padding) * 2}px)" 
@@ -272,21 +290,21 @@ class MecanumDrivebase extends LitElement {
     return base + tlWheel + trWheel + blWheel + brWheel;
   }
 
-  getFlForegroundStyle(){
+  getFlForegroundStyle() {
     return this.getForegroundStyle(this.frontLeftMotorSpeed);
-  };
+  }
 
   getFrForegroundStyle() {
-      return this.getForegroundStyle(this.frontRightMotorSpeed);
-  };
+    return this.getForegroundStyle(this.frontRightMotorSpeed);
+  }
 
   getRlForegroundStyle() {
-      return this.getForegroundStyle(this.rearLeftMotorSpeed);
-  };
+    return this.getForegroundStyle(this.rearLeftMotorSpeed);
+  }
 
   getRrForegroundStyle() {
-      return this.getForegroundStyle(this.rearRightMotorSpeed);
-  };
+    return this.getForegroundStyle(this.rearRightMotorSpeed);
+  }
 
   getForegroundStyle(value) {
     const min = -1;
@@ -295,14 +313,13 @@ class MecanumDrivebase extends LitElement {
 
     if (val > 0) {
       return `
-        height: ${Math.abs(val) / (max - min) * 100}%;
+        height: ${(Math.abs(val) / (max - min)) * 100}%;
         top: auto;
         bottom: 50%;
       `;
-    }
-    else {
+    } else {
       return `
-        height: ${Math.abs(val) / (max - min) * 100}%;
+        height: ${(Math.abs(val) / (max - min)) * 100}%;
         top: 50%;
         bottom: auto;
       `;
@@ -311,13 +328,14 @@ class MecanumDrivebase extends LitElement {
 
   firstUpdated() {
     let drawing = this.drawMotionVector(0, 0, 0, 0);
-    this.shadowRoot.getElementById('drivetrain').innerHTML = this.drawDrivetrain();
+    this.shadowRoot.getElementById('drivetrain').innerHTML =
+      this.drawDrivetrain();
     this.shadowRoot.getElementById('forceVector').innerHTML = drawing;
   }
 
   resized() {
     let drawing = this.drawMotionVector(
-      this.#clamp(this.frontLeftMotorSpeed), 
+      this.#clamp(this.frontLeftMotorSpeed),
       this.#clamp(this.frontRightMotorSpeed),
       this.#clamp(this.rearLeftMotorSpeed),
       this.#clamp(this.rearRightMotorSpeed)
@@ -325,14 +343,19 @@ class MecanumDrivebase extends LitElement {
     this.shadowRoot.getElementById('forceVector').innerHTML = drawing;
     const svgNode = this.shadowRoot.getElementById('svg');
     const rect = svgNode.getBoundingClientRect();
-    this.shadowRoot.getElementById('forceVector').style.transform = `translate(${rect.width * .5}px, ${rect.height * .5}px)`;
-    this.shadowRoot.getElementById('drivetrain').innerHTML = this.drawDrivetrain();
+    this.shadowRoot.getElementById(
+      'forceVector'
+    ).style.transform = `translate(${rect.width * 0.5}px, ${
+      rect.height * 0.5
+    }px)`;
+    this.shadowRoot.getElementById('drivetrain').innerHTML =
+      this.drawDrivetrain();
   }
 
   updated(changedProps) {
     super.updated(changedProps);
     let drawing = this.drawMotionVector(
-      this.#clamp(this.frontLeftMotorSpeed), 
+      this.#clamp(this.frontLeftMotorSpeed),
       this.#clamp(this.frontRightMotorSpeed),
       this.#clamp(this.rearLeftMotorSpeed),
       this.#clamp(this.rearRightMotorSpeed)
@@ -345,15 +368,29 @@ class MecanumDrivebase extends LitElement {
       <div class="diff-drive-container">
         <div class="speed-pair">
           <div class="speed">
-            <frc-table-axis ticks="5" vertical .range="${[1, -1]}"></frc-table-axis>
+            <frc-table-axis
+              ticks="5"
+              vertical
+              .range="${[1, -1]}"
+            ></frc-table-axis>
             <div class="bar">
-              <div class="foreground" style="${this.getFlForegroundStyle()}"></div>
+              <div
+                class="foreground"
+                style="${this.getFlForegroundStyle()}"
+              ></div>
             </div>
           </div>
           <div class="speed">
-            <frc-table-axis ticks="5" vertical .range="${[1, -1]}"></frc-table-axis>
+            <frc-table-axis
+              ticks="5"
+              vertical
+              .range="${[1, -1]}"
+            ></frc-table-axis>
             <div class="bar">
-                <div class="foreground" style="${this.getRlForegroundStyle()}"></div>
+              <div
+                class="foreground"
+                style="${this.getRlForegroundStyle()}"
+              ></div>
             </div>
           </div>
         </div>
@@ -363,15 +400,29 @@ class MecanumDrivebase extends LitElement {
         </svg>
         <div class="speed-pair">
           <div class="speed">
-            <frc-table-axis ticks="5" vertical .range="${[1, -1]}"></frc-table-axis>
+            <frc-table-axis
+              ticks="5"
+              vertical
+              .range="${[1, -1]}"
+            ></frc-table-axis>
             <div class="bar">
-              <div class="foreground" style="${this.getFrForegroundStyle()}"></div>
+              <div
+                class="foreground"
+                style="${this.getFrForegroundStyle()}"
+              ></div>
             </div>
           </div>
           <div class="speed">
-            <frc-table-axis ticks="5" vertical .range="${[1, -1]}"></frc-table-axis>
+            <frc-table-axis
+              ticks="5"
+              vertical
+              .range="${[1, -1]}"
+            ></frc-table-axis>
             <div class="bar">
-              <div class="foreground" style="${this.getRrForegroundStyle()}"></div>
+              <div
+                class="foreground"
+                style="${this.getRrForegroundStyle()}"
+              ></div>
             </div>
           </div>
         </div>

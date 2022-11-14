@@ -73,5 +73,56 @@ export default function addTheme(dashboard: FrcDashboard): void {
     /* Dashboard */
     '--dashboard-background': 'hsl(214, 35%, 21%)',
     '--dashboard-navbar-background': '#222',
+
+    /* frc-bar */
+    '--frc-bar-background': '#444',
+    '--frc-bar-foreground': 'steelblue',
+    '--frc-bar-color': '#fff',
+
+    /* frc-table-axis */
+    '--frc-tab-axis-text-color': '#fff',
+
+    /* frc-3-axis-accelerometer */
+    '--frc-3-axis-accelerometer-label-color': '#fff',
+
+    /* --frc-basic-fms-info */
+    '--frc-basic-fms-info-text-color': '#fff',
+
+    /* frc-differential-drivebase */
+    '--frc-differential-drivebase-drivetrain-color': '#aaa',
+
+    /* frc-mecanum-drivebase */
+    '--frc-mecanum-drivebase-drivetrain-color': '#aaa',
+
+    /* frc-encoder */
+    '--frc-encoder-label-color': '#fff',
+
+    /* frc-gyro */
+    '--frc-gyro-big-tick-color': '#fff',
+    '--frc-gyro-tick-color': '#777',
+    '--frc-gyro-edge-color': '#fff',
+    '--frc-gyro-dial-circle-color': '#444',
+    '--frc-gyro-dial-circle-stroke-color': '#ccc',
+    '--frc-gyro-text-color': '#fff',
+
+    /* frc-if, frc-label, frc-number-label */
+    '--frc-label-text-color': '#fff',
+
+    /* frc-voltage-view */
+    '--frc-voltage-view-foreground-color': '#dd9b0d',
+
+    /* frc-robot-subsystem */
+    '--frc-robot-subsystem-header-color': '#A020F0',
+
+    /* frc-toggle-switch */
+    '--frc-toggle-switch-color': '#999',
+
+    /* Line Chart */
+    '--frc-line-chart-text-color': 'white',
+
+    /* frc-gauge */
+    '--frc-gauge-fill-color': 'rgb(90,150,200)',
+    '--frc-gauge-color': '#666',
+    '--frc-gauge-text-color': 'rgb(220, 220, 220)',
   });
 }

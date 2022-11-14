@@ -14,18 +14,17 @@ export const elementConfig = {
   properties: {
     value: { type: Number, primary: true },
     hideLabel: { type: Boolean, attribute: 'hide-label' },
-    precision: { type: Number, defaultValue: 2 }
-  }
+    precision: { type: Number, defaultValue: 2 },
+  },
 };
 
 class Gyro extends LitElement {
-
   static properties = elementConfig.properties;
 
   static styles = [
     containerStyles,
     css`
-      :host { 
+      :host {
         display: inline-flex;
         justify-content: center;
         align-items: center;
@@ -38,7 +37,6 @@ class Gyro extends LitElement {
         position: relative;
         width: var(--gyro-container-size);
         height: var(--gyro-container-size);
-
       }
 
       svg {
@@ -59,25 +57,24 @@ class Gyro extends LitElement {
 
       svg .edge {
         fill: none;
-        stroke: black;
+        stroke: var(--frc-gyro-edge-color, #000);
         stroke-width: 1px;
-        color: black;
         overflow: overlay;
       }
 
       .tick {
-        stroke: #bbb;
+        stroke: var(--frc-gyro-tick-color, #bbb);
         stroke-width: 1px;
       }
 
       .tick.big {
         stroke-width: 2px;
-        stroke: black;
+        stroke: var(--frc-gyro-big-tick-color, #000);
       }
 
       .dial-circle {
-        fill: #ddd;
-        stroke: white;
+        fill: var(--frc-gyro-dial-circle-color, #ddd);
+        stroke: var(--frc-gyro-dial-circle-stroke-color, #fff);
         stroke-width: 1%;
       }
 
@@ -88,18 +85,18 @@ class Gyro extends LitElement {
       }
 
       .degree-label {
-        fill: black;
+        fill: var(--frc-gyro-text-color, #000);
         text-anchor: middle;
         alignment-baseline: middle;
         font-size: var(--degree-label-font-size);
       }
 
       .angle-label {
-        fill: black;
+        fill: var(--frc-gyro-text-color, #000);
         text-anchor: middle;
         font-size: var(--angle-label-font-size);
       }
-    `
+    `,
   ];
 
   constructor() {
@@ -132,7 +129,10 @@ class Gyro extends LitElement {
 
   resized() {
     const { width, height } = this.getBoundingClientRect();
-    this.containerNode.style.setProperty('--gyro-container-size', `${Math.min(width, height)}px`);
+    this.containerNode.style.setProperty(
+      '--gyro-container-size',
+      `${Math.min(width, height)}px`
+    );
     this.requestUpdate();
   }
 
@@ -153,28 +153,28 @@ class Gyro extends LitElement {
     const outerRadius = width / 2 - width / 10;
 
     return svg`
-      ${this.tickAngles.map(angle => {
-      const radians = angle * Math.PI / 180;
-      const x1 = width / 2 + innerRadius * Math.cos(radians);
-      const y1 = width / 2 + innerRadius * Math.sin(radians);
-      const x2 = width / 2 + outerRadius * Math.cos(radians);
-      const y2 = width / 2 + outerRadius * Math.sin(radians);
-      const bigTick = angle % 45 === 0;
-      return svg`
+      ${this.tickAngles.map((angle) => {
+        const radians = (angle * Math.PI) / 180;
+        const x1 = width / 2 + innerRadius * Math.cos(radians);
+        const y1 = width / 2 + innerRadius * Math.sin(radians);
+        const x2 = width / 2 + outerRadius * Math.cos(radians);
+        const y2 = width / 2 + outerRadius * Math.sin(radians);
+        const bigTick = angle % 45 === 0;
+        return svg`
           <line
             class="tick ${bigTick ? 'big' : ''}"
             x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"
           />
         `;
-    })}
+      })}
     `;
   }
 
   renderEdge() {
     const width = this.getWidth();
-    const cx = width * .5;
-    const cy = width * .5;
-    const radius = width * .4;
+    const cx = width * 0.5;
+    const cy = width * 0.5;
+    const radius = width * 0.4;
 
     return svg`
       <circle class="edge" cx="${cx}" cy="${cy}" r="${radius}" />
@@ -186,7 +186,7 @@ class Gyro extends LitElement {
 
     const outerRadius = width / 2 - width / 20 - width / 40;
 
-    const radians = (this.value - 90) * Math.PI / 180;
+    const radians = ((this.value - 90) * Math.PI) / 180;
 
     const x1 = width / 2;
     const y1 = width / 2;
@@ -203,9 +203,9 @@ class Gyro extends LitElement {
 
   renderDialCircle() {
     const width = this.getWidth();
-    const cx = width * .5;
-    const cy = width * .5;
-    const radius = width * .04;
+    const cx = width * 0.5;
+    const cy = width * 0.5;
+    const radius = width * 0.04;
 
     return svg`
       <circle class="dial-circle" cx="${cx}" cy="${cy}" r="${radius}" />
@@ -219,24 +219,26 @@ class Gyro extends LitElement {
     const edgeElement = this.shadowRoot.querySelector('svg');
 
     if (edgeElement) {
-      edgeElement.style.setProperty('--degree-label-font-size', `${width * .055}px`);
+      edgeElement.style.setProperty(
+        '--degree-label-font-size',
+        `${width * 0.055}px`
+      );
     }
 
     return svg`
-      ${this.degreeLabelAngles.map(angle => {
-      const radians = (angle - 90) * Math.PI / 180;
-      const x = width / 2 + radius * Math.cos(radians);
-      const y = width / 2 + radius * Math.sin(radians);
+      ${this.degreeLabelAngles.map((angle) => {
+        const radians = ((angle - 90) * Math.PI) / 180;
+        const x = width / 2 + radius * Math.cos(radians);
+        const y = width / 2 + radius * Math.sin(radians);
 
-      return svg`
+        return svg`
           <text class="degree-label" x="${x}" y="${y}">${angle}</text>
         `;
-    })}
+      })}
     `;
   }
 
   renderAngleLabel() {
-
     if (this.hideLabel) {
       return null;
     }
@@ -246,11 +248,14 @@ class Gyro extends LitElement {
     const edgeElement = this.shadowRoot.querySelector('svg');
 
     if (edgeElement) {
-      edgeElement.style.setProperty('--angle-label-font-size', `${width * .08}px`);
+      edgeElement.style.setProperty(
+        '--angle-label-font-size',
+        `${width * 0.08}px`
+      );
     }
 
     const x = width / 2;
-    const y = width + width * .15;
+    const y = width + width * 0.15;
 
     return svg`
       <text class="angle-label" x="${x}" y="${y}">
@@ -258,7 +263,6 @@ class Gyro extends LitElement {
       </text>
     `;
   }
-
 
   render() {
     return svg`
