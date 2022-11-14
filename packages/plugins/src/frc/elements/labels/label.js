@@ -10,11 +10,10 @@ export const elementConfig = {
   properties: {
     text: { type: String, primary: true },
   },
-  demos: [{ html: '<frc-label text="label"></frc-label>' }]
+  demos: [{ html: '<frc-label text="label"></frc-label>' }],
 };
 
 class Label extends LitElement {
-
   static properties = elementConfig.properties;
 
   static styles = [
@@ -28,8 +27,9 @@ class Label extends LitElement {
         text-align: inherit;
         margin: 0;
         padding: 0;
+        color: var(--frc-label-text-color, black);
       }
-    `
+    `,
   ];
 
   constructor() {

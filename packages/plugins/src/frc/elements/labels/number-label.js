@@ -14,7 +14,6 @@ export const elementConfig = {
 };
 
 class NumberLabel extends LitElement {
-
   static properties = elementConfig.properties;
 
   static styles = [
@@ -28,8 +27,9 @@ class NumberLabel extends LitElement {
         text-align: inherit;
         margin: 0;
         padding: 0;
+        color: var(--frc-label-text-color, black);
       }
-    `
+    `,
   ];
 
   constructor() {

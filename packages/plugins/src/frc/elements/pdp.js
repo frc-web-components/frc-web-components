@@ -7,22 +7,21 @@ function getRange(start, end) {
     range.push(i);
   }
   return range;
-};
+}
 
 export const elementName = 'frc-pdp';
-
 
 const getProperties = () => {
   const props = {};
 
   for (let i = 0; i < 16; i++) {
-    props[`chan${i}`] = { type: Number }
+    props[`chan${i}`] = { type: Number };
   }
 
   return {
     ...props,
     voltage: { type: Number },
-    totalCurrent: { type: Number, attribute: 'total-current' }      
+    totalCurrent: { type: Number, attribute: 'total-current' },
   };
 };
 
@@ -34,7 +33,6 @@ export const elementConfig = {
 };
 
 class Pdp extends LitElement {
-
   static properties = elementConfig.properties;
 
   static styles = [
@@ -43,9 +41,10 @@ class Pdp extends LitElement {
       :host {
         width: 350px;
         margin: 5px;
+        color: var(--frc-label-text-color, black);
       }
 
-      [part=channels] {
+      [part='channels'] {
         display: grid;
         grid-auto-flow: column;
         grid-template-columns: min-content 1fr min-content 1fr;
@@ -55,17 +54,19 @@ class Pdp extends LitElement {
         align-items: center;
       }
 
-      .channel, .voltage, .total-current {
+      .channel,
+      .voltage,
+      .total-current {
         width: auto;
       }
 
-      [part=channel-label] {
+      [part='channel-label'] {
         padding-left: 5px;
         text-align: right;
         white-space: nowrap;
       }
 
-      [part=voltage-and-total-current] {
+      [part='voltage-and-total-current'] {
         margin-top: 5px;
         display: grid;
         grid-auto-flow: column;
@@ -77,10 +78,10 @@ class Pdp extends LitElement {
         align-items: center;
       }
 
-      [part=voltage-and-total-current] {
+      [part='voltage-and-total-current'] {
         white-space: nowrap;
       }
-    `
+    `,
   ];
 
   constructor() {
@@ -89,7 +90,7 @@ class Pdp extends LitElement {
       this[`chan${i}`] = 0;
     }
     this.voltage = 0;
-    this.totalCurrent = 0;  
+    this.totalCurrent = 0;
   }
 
   renderChannel(number) {
@@ -112,22 +113,24 @@ class Pdp extends LitElement {
   render() {
     return html`
       <div part="channels">
-        ${getRange(0, 8).map(number => html`
-          <label part="channel-label">
-            <slot name="${`channel-label${number}`}">Ch. ${number}</slot>
-          </label>
-        `)}
-        ${getRange(0, 8).map(number => html`
-          ${this.renderChannel(number)}
-        `)}
-        ${getRange(8, 16).map(number => html`
-          <label part="channel-label">
-            <slot name="${`channel-label${number}`}">Ch. ${number}</slot>
-          </label>
-        `)}
-        ${getRange(8, 16).map(number => html`
-          ${this.renderChannel(number)}
-        `)}
+        ${getRange(0, 8).map(
+          (number) => html`
+            <label part="channel-label">
+              <slot name="${`channel-label${number}`}">Ch. ${number}</slot>
+            </label>
+          `
+        )}
+        ${getRange(0, 8).map((number) => html` ${this.renderChannel(number)} `)}
+        ${getRange(8, 16).map(
+          (number) => html`
+            <label part="channel-label">
+              <slot name="${`channel-label${number}`}">Ch. ${number}</slot>
+            </label>
+          `
+        )}
+        ${getRange(8, 16).map(
+          (number) => html` ${this.renderChannel(number)} `
+        )}
       </div>
       <div part="voltage-and-total-current">
         <label part="voltage-label">

@@ -6,46 +6,41 @@ export const elementConfig = {
   properties: {
     value: { type: Boolean },
   },
-  slots: [
-    { name: 'true' },
-    { name: 'false' },
-  ],
+  slots: [{ name: 'true' }, { name: 'false' }],
   dashboard: {
     displayName: 'If',
     layout: {
-      type: 'absolute'
+      type: 'absolute',
     },
   },
-  demos: [{
-    html: `
+  demos: [
+    {
+      html: `
       <frc-if>
         <span slot="true">Visible if true</span>
         <span slot="false">Visible if false</span>
       </frc-if>
-    `
-  }]
+    `,
+    },
+  ],
 };
 
 class If extends LitElement {
-
   static properties = elementConfig.properties;
 
   static styles = css`
     :host {
       display: inline-block;
       position: absolute;
+      color: var(--frc-label-text-color, black);
     }
   `;
 
   render() {
     if (this.value) {
-      return html`
-        <slot name="true"></slot>
-      `;
+      return html` <slot name="true"></slot> `;
     }
-    return html`
-      <slot name="false"></slot>
-    `;
+    return html` <slot name="false"></slot> `;
   }
 }
 

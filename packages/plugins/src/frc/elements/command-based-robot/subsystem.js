@@ -13,12 +13,11 @@ export const elementConfig = {
     hasDefault: { type: Boolean, attribute: 'has-default' },
     label: { type: String },
     name: { type: String },
-    hideName: { type: Boolean, attribute: 'hide-name' }
-  }
+    hideName: { type: Boolean, attribute: 'hide-name' },
+  },
 };
 
 class Subsystem extends LitElement {
-
   static properties = elementConfig.properties;
 
   static styles = css`
@@ -27,6 +26,7 @@ class Subsystem extends LitElement {
       font-family: sans-serif;
       font-size: 16px;
       padding: 5px;
+      color: var(--frc-label-text-color, black);
     }
 
     .subsystem {
@@ -37,13 +37,13 @@ class Subsystem extends LitElement {
     p {
       margin: 0;
       margin-right: 10px;
-      margin-top: 5px; 
+      margin-top: 5px;
     }
 
     header {
       font-weight: bold;
       margin-bottom: 2px;
-      color: purple;
+      color: var(--frc-robot-subsystem-header-color, purple);
     }
 
     .has-value {
@@ -65,12 +65,16 @@ class Subsystem extends LitElement {
 
   render() {
     return html`
-      ${!this.hideName ? html`
-      <header>${this.label || this.name}</header>
-      ` : ''}
+      ${!this.hideName
+        ? html` <header>${this.label || this.name}</header> `
+        : ''}
       <div class="subsystem">
-        <p>Default command: ${this.renderValue(this.default, this.hasDefault)}</p>
-        <p>Current command: ${this.renderValue(this.command, this.hasCommand)}</p>
+        <p>
+          Default command: ${this.renderValue(this.default, this.hasDefault)}
+        </p>
+        <p>
+          Current command: ${this.renderValue(this.command, this.hasCommand)}
+        </p>
       </div>
     `;
   }

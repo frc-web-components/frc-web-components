@@ -19,12 +19,11 @@ export const elementConfig = {
     matchType: { type: Number, attribute: 'match-type' },
     matchNumber: { type: Number, attribute: 'match-number' },
     eventName: { type: String, attribute: 'event-name' },
-    fmsControlData: { type: Number, attribute: 'fms-control-data' }
-  }
+    fmsControlData: { type: Number, attribute: 'fms-control-data' },
+  },
 };
 
 class BasicFmsInfo extends LitElement {
-
   static properties = elementConfig.properties;
 
   static styles = css`
@@ -45,11 +44,12 @@ class BasicFmsInfo extends LitElement {
       flex-direction: column;
       justify-content: center;
       font-family: sans-serif;
+      color: var(--frc-basic-fms-info-text-color, #000);
     }
-    [icon="vaadin:check"] {
+    [icon='vaadin:check'] {
       color: green;
     }
-    [icon="vaadin:close-small"] {
+    [icon='vaadin:close-small'] {
       color: red;
     }
   `;
@@ -66,15 +66,12 @@ class BasicFmsInfo extends LitElement {
     if (this.isEnabled()) {
       if (this.isTest()) {
         return 'Test';
-      }
-      else if (this.isAuto()) {
+      } else if (this.isAuto()) {
         return 'Autonomous';
-      }
-      else {
+      } else {
         return 'Teleoperated';
       }
-    }
-    else {
+    } else {
       return 'Disabled';
     }
   }
@@ -112,38 +109,40 @@ class BasicFmsInfo extends LitElement {
           <span>match ${this.matchNumber}</span>
         </strong>
       </p>
-      
+
       <p style="margin-bottom: 7px; font-weight: normal">
         <span style="margin-right: 5px;">
-          ${this.isFmsAttached() ? html`
-          <span>
-            <vaadin-icon icon="vaadin:check"></vaadin-icon>
-            FMS connected
-          </span>
-          ` : html`
-          <span>
-            <vaadin-icon icon="vaadin:close-small"></vaadin-icon>
-            FMS disconnected
-          </span>
-          `}
+          ${this.isFmsAttached()
+            ? html`
+                <span>
+                  <vaadin-icon icon="vaadin:check"></vaadin-icon>
+                  FMS connected
+                </span>
+              `
+            : html`
+                <span>
+                  <vaadin-icon icon="vaadin:close-small"></vaadin-icon>
+                  FMS disconnected
+                </span>
+              `}
         </span>
         <span>
-          ${this.isDsAttached() ? html`
+          ${this.isDsAttached()
+            ? html`
           <span>
             <vaadin-vaadin icon="vaadin:check"></vaadin-icon>
             DriverStation connected
           </span>
-          ` : html`
-          <span>
-            <vaadin-icon icon="vaadin:close-small"></vaadin-icon>
-            DriverStation disconnected
-          </span>
-          `}
+          `
+            : html`
+                <span>
+                  <vaadin-icon icon="vaadin:close-small"></vaadin-icon>
+                  DriverStation disconnected
+                </span>
+              `}
         </span>
       </p>
-      <p style="font-weight: normal">
-        Robot state: ${this.getRobotState()}
-      </p>
+      <p style="font-weight: normal">Robot state: ${this.getRobotState()}</p>
     `;
   }
 }

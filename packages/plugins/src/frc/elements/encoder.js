@@ -8,12 +8,11 @@ export const elementConfig = {
   },
   properties: {
     distance: { type: Number },
-    speed: { type: Number }
-  }
+    speed: { type: Number },
+  },
 };
 
 class Encoder extends LitElement {
-
   static properties = elementConfig.properties;
 
   static styles = css`
@@ -25,12 +24,12 @@ class Encoder extends LitElement {
       align-items: center;
       width: 250px;
       font-family: sans-serif;
-      
     }
 
     label {
       font-weight: bold;
       text-align: right;
+      color: var(--frc-encoder-label-color, #000);
     }
 
     vaadin-number-field {
@@ -46,11 +45,19 @@ class Encoder extends LitElement {
   }
 
   render() {
-    return html`   
+    return html`
       <label part="distance-label">Distance</label>
-      <vaadin-number-field part="distance-input" value="${this.distance}" readonly></vaadin-number-field>
+      <vaadin-number-field
+        part="distance-input"
+        value="${this.distance}"
+        readonly
+      ></vaadin-number-field>
       <label part="speed-label">Speed</label>
-      <vaadin-number-field part="speed-input" value="${this.speed}" readonly></vaadin-number-field>
+      <vaadin-number-field
+        part="speed-input"
+        value="${this.speed}"
+        readonly
+      ></vaadin-number-field>
     `;
   }
 }

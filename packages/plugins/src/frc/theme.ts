@@ -84,5 +84,37 @@ export default function addTheme(dashboard: FrcDashboard): void {
 
     /* frc-3-axis-accelerometer */
     '--frc-3-axis-accelerometer-label-color': '#fff',
+
+    /* --frc-basic-fms-info */
+    '--frc-basic-fms-info-text-color': '#fff',
+
+    /* frc-differential-drivebase */
+    '--frc-differential-drivebase-drivetrain-color': '#aaa',
+
+    /* frc-mecanum-drivebase */
+    '--frc-mecanum-drivebase-drivetrain-color': '#aaa',
+
+    /* frc-encoder */
+    '--frc-encoder-label-color': '#fff',
+
+    /* frc-gyro */
+    '--frc-gyro-big-tick-color': '#fff',
+    '--frc-gyro-tick-color': '#777',
+    '--frc-gyro-edge-color': '#fff',
+    '--frc-gyro-dial-circle-color': '#444',
+    '--frc-gyro-dial-circle-stroke-color': '#ccc',
+    '--frc-gyro-text-color': '#fff',
+
+    /* frc-if, frc-label, frc-number-label */
+    '--frc-label-text-color': '#fff',
+
+    /* frc-voltage-view */
+    '--frc-voltage-view-foreground-color': '#dd9b0d',
+
+    /* frc-robot-subsystem */
+    '--frc-robot-subsystem-header-color': '#A020F0',
+
+    /* frc-toggle-switch */
+    '--frc-toggle-switch-color': '#999',
   });
 }
