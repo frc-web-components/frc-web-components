@@ -16,9 +16,9 @@ export const elementConfig = {
         type: 'StringDropdown',
         allowCustomValues: false,
         getOptions() {
-          return fieldConfig.map(field => field.game).concat('Custom');
+          return fieldConfig.map((field) => field.game).concat('Custom');
         },
-      }
+      },
     },
     width: {
       type: Number,
@@ -26,8 +26,8 @@ export const elementConfig = {
       input: {
         isDisabled({ game }) {
           return game !== 'Custom';
-        }
-      }
+        },
+      },
     },
     height: {
       type: Number,
@@ -35,8 +35,8 @@ export const elementConfig = {
       input: {
         isDisabled({ game }) {
           return game !== 'Custom';
-        }
-      }
+        },
+      },
     },
     unit: {
       type: String,
@@ -49,8 +49,8 @@ export const elementConfig = {
         allowCustomValues: false,
         isDisabled({ game }) {
           return game !== 'Custom';
-        }
-      }
+        },
+      },
     },
     image: {
       type: String,
@@ -59,12 +59,12 @@ export const elementConfig = {
         defaultValue: fieldConfig[0]['field-image'],
         enableUpload: true,
         getOptions() {
-          return fieldConfig.map(field => field['field-image']);
+          return fieldConfig.map((field) => field['field-image']);
         },
         isDisabled({ game }) {
           return game !== 'Custom';
         },
-      }
+      },
     },
     topLeftFieldCornerX: {
       type: Number,
@@ -72,8 +72,8 @@ export const elementConfig = {
       input: {
         isDisabled({ game }) {
           return game !== 'Custom';
-        }
-      }
+        },
+      },
     },
     topLeftFieldCornerY: {
       type: Number,
@@ -81,8 +81,8 @@ export const elementConfig = {
       input: {
         isDisabled({ game }) {
           return game !== 'Custom';
-        }
-      }
+        },
+      },
     },
     bottomRightFieldCornerX: {
       type: Number,
@@ -90,8 +90,8 @@ export const elementConfig = {
       input: {
         isDisabled({ game }) {
           return game !== 'Custom';
-        }
-      }
+        },
+      },
     },
     bottomRightFieldCornerY: {
       type: Number,
@@ -99,28 +99,37 @@ export const elementConfig = {
       input: {
         isDisabled({ game }) {
           return game !== 'Custom';
-        }
-      }
+        },
+      },
     },
     gridSize: { type: Number, attribute: 'grid-size', defaultValue: 1 },
     showGrid: { type: Boolean, attribute: 'show-grid' },
     swapAxes: { type: Boolean, attribute: 'swap-axes' },
   },
   slots: [
-    { name: '', allowedChildren: ['frc-field-camera', 'frc-field-robot', 'frc-field-trajectory', 'frc-field-object'] }
+    {
+      name: '',
+      allowedChildren: [
+        'frc-field-camera',
+        'frc-field-robot',
+        'frc-field-trajectory',
+        'frc-field-object',
+      ],
+    },
   ],
-  demos: [{
-    html: `
+  demos: [
+    {
+      html: `
       <frc-field>
         <frc-field-robot source-key="/SmartDashboard/Field/Robot"></frc-field-robot>
         <frc-field-trajectory source-key="/SmartDashboard/Field/traj"></frc-field-trajectory>
       </frc-field>
-    `
-  }]
+    `,
+    },
+  ],
 };
 
 class Field extends LitElement {
-
   static properties = elementConfig.properties;
 
   static styles = css`
@@ -132,7 +141,7 @@ class Field extends LitElement {
       overflow: hidden;
     }
 
-    [part=field] {
+    [part='field'] {
       position: relative;
       width: var(--field-width, 100%);
       height: var(--field-height, 400px);
@@ -140,13 +149,13 @@ class Field extends LitElement {
       background-size: cover;
     }
 
-    [part=field-image] {
+    [part='field-image'] {
       position: absolute;
       width: 100%;
       height: 100%;
     }
 
-    [part=playing-field-area] {
+    [part='playing-field-area'] {
       position: absolute;
       left: var(--playing-field-left, 0);
       top: var(--playing-field-top, 0);
@@ -156,7 +165,7 @@ class Field extends LitElement {
       box-sizing: border-box;
     }
 
-    [part=grid] {
+    [part='grid'] {
       position: absolute;
       top: 0;
       left: 0;
@@ -164,12 +173,13 @@ class Field extends LitElement {
       height: 100%;
     }
 
-    [part=grid] path {
+    [part='grid'] path {
       stroke: var(--frc-grid-line-color, gray);
       stroke-width: var(--frc-grid-line-width, 1);
     }
 
-    [part=top-canvas], [part=bottom-canvas] {
+    [part='top-canvas'],
+    [part='bottom-canvas'] {
       position: absolute;
       width: 100%;
       height: 100%;
@@ -211,7 +221,7 @@ class Field extends LitElement {
     if (this.game === 'Custom') {
       return this._width;
     }
-    const config = fieldConfig.find(field => field.game === this.game);
+    const config = fieldConfig.find((field) => field.game === this.game);
     return config ? config['field-size'][0] : this._width;
   }
 
@@ -225,7 +235,7 @@ class Field extends LitElement {
     if (this.game === 'Custom') {
       return this._height;
     }
-    const config = fieldConfig.find(field => field.game === this.game);
+    const config = fieldConfig.find((field) => field.game === this.game);
     return config ? config['field-size'][1] : this._height;
   }
 
@@ -239,7 +249,7 @@ class Field extends LitElement {
     if (this.game === 'Custom') {
       return unitAliases[this._unit];
     }
-    const config = fieldConfig.find(field => field.game === this.game);
+    const config = fieldConfig.find((field) => field.game === this.game);
     return config ? unitAliases[config['field-unit']] : unitAliases[this._unit];
   }
 
@@ -253,7 +263,7 @@ class Field extends LitElement {
     if (this.game === 'Custom') {
       return this._image;
     }
-    const config = fieldConfig.find(field => field.game === this.game);
+    const config = fieldConfig.find((field) => field.game === this.game);
     return config ? config['field-image'] : this._image;
   }
 
@@ -267,8 +277,10 @@ class Field extends LitElement {
     if (this.game === 'Custom') {
       return this._topLeftFieldCornerX;
     }
-    const config = fieldConfig.find(field => field.game === this.game);
-    return config ? config['field-corners']['top-left'][0] : this._topLeftFieldCornerX;
+    const config = fieldConfig.find((field) => field.game === this.game);
+    return config
+      ? config['field-corners']['top-left'][0]
+      : this._topLeftFieldCornerX;
   }
 
   set topLeftFieldCornerX(value) {
@@ -281,8 +293,10 @@ class Field extends LitElement {
     if (this.game === 'Custom') {
       return this._topLeftFieldCornerY;
     }
-    const config = fieldConfig.find(field => field.game === this.game);
-    return config ? config['field-corners']['top-left'][1] : this._topLeftFieldCornerY;
+    const config = fieldConfig.find((field) => field.game === this.game);
+    return config
+      ? config['field-corners']['top-left'][1]
+      : this._topLeftFieldCornerY;
   }
 
   set topLeftFieldCornerY(value) {
@@ -295,8 +309,10 @@ class Field extends LitElement {
     if (this.game === 'Custom') {
       return this._bottomRightFieldCornerX;
     }
-    const config = fieldConfig.find(field => field.game === this.game);
-    return config ? config['field-corners']['bottom-right'][0] : this._bottomRightFieldCornerX;
+    const config = fieldConfig.find((field) => field.game === this.game);
+    return config
+      ? config['field-corners']['bottom-right'][0]
+      : this._bottomRightFieldCornerX;
   }
 
   set bottomRightFieldCornerX(value) {
@@ -309,8 +325,10 @@ class Field extends LitElement {
     if (this.game === 'Custom') {
       return this._bottomRightFieldCornerY;
     }
-    const config = fieldConfig.find(field => field.game === this.game);
-    return config ? config['field-corners']['bottom-right'][1] : this._bottomRightFieldCornerY;
+    const config = fieldConfig.find((field) => field.game === this.game);
+    return config
+      ? config['field-corners']['bottom-right'][1]
+      : this._bottomRightFieldCornerY;
   }
 
   set bottomRightFieldCornerY(value) {
@@ -323,7 +341,6 @@ class Field extends LitElement {
     if (changedProperties.has('width') || changedProperties.has('height')) {
       this.resizeField();
       this.requestUpdate();
-
     }
 
     if (changedProperties.has('image') || changedProperties.has('game')) {
@@ -357,32 +374,30 @@ class Field extends LitElement {
   setPlayingFieldWidthStyles() {
     if (this.field) {
       const playingFieldImageRect = this.getPlayingFieldImageRect();
-      this.field.style.setProperty('--playing-field-width', `${playingFieldImageRect.width}px`);
-      this.field.style.setProperty('--playing-field-height', `${playingFieldImageRect.height}px`);
-      this.field.style.setProperty('--playing-field-left', `${playingFieldImageRect.left - 1}px`);
-      this.field.style.setProperty('--playing-field-top', `${playingFieldImageRect.top - 1}px`);
+      this.field.style.setProperty(
+        '--playing-field-width',
+        `${playingFieldImageRect.width}px`
+      );
+      this.field.style.setProperty(
+        '--playing-field-height',
+        `${playingFieldImageRect.height}px`
+      );
+      this.field.style.setProperty(
+        '--playing-field-left',
+        `${playingFieldImageRect.left - 1}px`
+      );
+      this.field.style.setProperty(
+        '--playing-field-top',
+        `${playingFieldImageRect.top - 1}px`
+      );
     }
   }
 
   setFieldPose(fieldInfo) {
-
-    // construct info for children
-    const elementInfo = {
-      transformations: [],
-      x: 0,
-      y: 0,
-      width: this.width,
-      height: this.height,
-      rotation: 0,
-      isField: true,
-      unit: this.unit,
-    };
-
-    // set child poses relative to parent
-    [...this.children].forEach(child => {
+    [...this.children].forEach((child) => {
       if (child.constructor.__IS_FIELD_OBJECT__) {
-        this.setObjectPose(child, fieldInfo, elementInfo);
-        this.setDrawingPose(child, fieldInfo, elementInfo);
+        this.setObjectPose(child, fieldInfo);
+        this.setDrawingPose(child, fieldInfo);
       }
     });
   }
@@ -391,7 +406,10 @@ class Field extends LitElement {
     const { toPx } = fieldInfo;
     // set element pose
     const rotation = element.rot;
-    const unit = typeof toBaseConversions[element.unit] !== 'undefined' ? element.unit : parentInfo.unit;
+    const unit =
+      typeof toBaseConversions[element.unit] !== 'undefined'
+        ? element.unit
+        : this.unit;
     const width = convert(element.width, unit, this.unit);
     const height = convert(element.height, unit, this.unit);
     const x = convert(element.x, unit, this.unit);
@@ -399,64 +417,26 @@ class Field extends LitElement {
 
     element.style.width = `${toPx(width)}px`;
     element.style.height = `${toPx(height)}px`;
-    // element.style.transformOrigin = parentInfo.isField ? 'center center' : 'auto auto';
 
-    const translateY = parentInfo.isField
-      ? (parentInfo.height - y - height / 2)
-      : (-y + parentInfo.height / 2 - height / 2);
+    const translateY = this.height - y - height / 2;
 
-    const translateX = parentInfo.isField
-      ? (x - width / 2)
-      : (x - width / 2 + parentInfo.width / 2);
+    const translateX = x - width / 2;
 
-    const translateXPx = `${toPx(translateX) + (parentInfo.isField ? fieldInfo.xOffset : 0)}px`;
-    const translateYPx = `${toPx(translateY) + (parentInfo.isField ? fieldInfo.yOffset : 0)}px`;
-    // const translateYPx = `${toPx(parentInfo.height - y - height / 2 )}px`;
-    const rotate = `rotate(${-rotation + (parentInfo.isField ? 90 : 0)}deg)`;
-    // const rotate =  `rotate(0deg)`;
+    const translateXPx = `${toPx(translateX) + fieldInfo.xOffset}px`;
+    const translateYPx = `${toPx(translateY) + fieldInfo.yOffset}px`;
+    const rotate = `rotate(${-rotation + 90}deg)`;
 
     element.style.transform = `translate(${translateXPx}, ${translateYPx}) ${rotate}`;
-
-    // construct parent info for children
-    let transformations = parentInfo.transformations;
-
-    if (parentInfo.isField) {
-      transformations = transformations.concat([
-        { type: 'translation', x: x, y: this.height - y },
-        { type: 'rotation', rotation: 90 - rotation },
-      ]);
-    } else {
-      transformations = transformations.concat([
-        { type: 'translation', x, y: -y },
-        { type: 'rotation', rotation: -rotation },
-      ]);
-    }
-
-    const elementInfo = {
-      transformations,
-      x,
-      y,
-      width,
-      height,
-      rotation,
-      unit
-    };
-
-    // set child poses relative to parent
-    [...element.children].forEach(child => {
-      if (child.constructor.__IS_FIELD_OBJECT__) {
-        this.setObjectPose(child, fieldInfo, elementInfo);
-        this.setDrawingPose(child, fieldInfo, elementInfo);
-      }
-    });
   }
 
-  setDrawingPose(element, fieldInfo, parentInfo) {
-
+  setDrawingPose(element, fieldInfo) {
     const { ctx, canvas, bottomCtx, bottomCanvas, rect } = fieldInfo;
 
     const rotation = element.rot;
-    const unit = typeof toBaseConversions[element.unit] !== 'undefined' ? element.unit : parentInfo.unit;
+    const unit =
+      typeof toBaseConversions[element.unit] !== 'undefined'
+        ? element.unit
+        : this.unit;
     const x = convert(element.x, unit, this.unit);
     const y = convert(element.y, unit, this.unit);
 
@@ -467,35 +447,15 @@ class Field extends LitElement {
     ctx.translate(fieldInfo.xOffset * 2, fieldInfo.yOffset * 2);
     bottomCtx.translate(fieldInfo.xOffset * 2, fieldInfo.yOffset * 2);
 
-
-    const scale = rect.width * 2 / this.width;
+    const scale = (rect.width * 2) / this.width;
     ctx.scale(scale, scale);
     bottomCtx.scale(scale, scale);
 
-    let transformations = [...parentInfo.transformations];
+    ctx.translate(x, this.height - y);
+    bottomCtx.translate(x, this.height - y);
 
-    // transform
-    if (transformations.length === 0) {
-      transformations = transformations.concat([
-        { type: 'translation', x, y: parentInfo.height - y },
-        { type: 'rotation', rotation: 90 - rotation }
-      ])
-    } else {
-      transformations = transformations.concat([
-        { type: 'translation', x, y: -y },
-        { type: 'rotation', rotation: -rotation },
-      ]);
-    }
-
-    transformations.forEach(({ type, x, y, rotation }) => {
-      if (type === 'translation') {
-        ctx.translate(x, y);
-        bottomCtx.translate(x, y);
-      } else {
-        ctx.rotate(rotation * Math.PI / 180);
-        bottomCtx.rotate(rotation * Math.PI / 180);
-      }
-    });
+    ctx.rotate(((90 - rotation) * Math.PI) / 180);
+    bottomCtx.rotate(((90 - rotation) * Math.PI) / 180);
 
     // flip y
     ctx.scale(1, -1);
@@ -515,7 +475,7 @@ class Field extends LitElement {
       ctx,
       bottomCanvas,
       bottomCtx,
-      scalingFactor: unitScale * scale / 2,
+      scalingFactor: (unitScale * scale) / 2,
     });
 
     ctx.restore();
@@ -523,14 +483,13 @@ class Field extends LitElement {
   }
 
   firstUpdated() {
-
-    this.field = this.shadowRoot.querySelector('[part=field]');;
+    this.field = this.shadowRoot.querySelector('[part=field]');
     const field = this.field;
     const canvas = this.shadowRoot.querySelector('[part=top-canvas]');
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
 
     const bottomCanvas = this.shadowRoot.querySelector('[part=bottom-canvas]');
-    const bottomCtx = bottomCanvas.getContext("2d");
+    const bottomCtx = bottomCanvas.getContext('2d');
 
     // update object positions and size
     const updateObjectsAndDrawings = () => {
@@ -539,7 +498,6 @@ class Field extends LitElement {
       bottomCtx.clearRect(0, 0, bottomCanvas.width, bottomCanvas.height);
       bottomCtx.beginPath();
       const rect = field.getBoundingClientRect();
-
 
       const playingFieldImageRect = this.getPlayingFieldImageRect();
       const xOffset = playingFieldImageRect.left;
@@ -551,8 +509,8 @@ class Field extends LitElement {
         bottomCanvas,
         bottomCtx,
         rect: playingFieldImageRect,
-        toPx: (length) => length * playingFieldImageRect.width / this.width,
-        toLength: (px) => px * this.width / playingFieldImageRect.width,
+        toPx: (length) => (length * playingFieldImageRect.width) / this.width,
+        toLength: (px) => (px * this.width) / playingFieldImageRect.width,
         xOffset,
         yOffset,
       });
@@ -561,18 +519,19 @@ class Field extends LitElement {
 
     window.requestAnimationFrame(updateObjectsAndDrawings);
 
-
     const resizeObserver = new ResizeObserver(() => this.resized());
     resizeObserver.observe(this);
   }
 
   getImageObject(src) {
-    return this.imageObjects[src] || {
-      src,
-      width: 0,
-      height: 0,
-      loaded: false,
-    };
+    return (
+      this.imageObjects[src] || {
+        src,
+        width: 0,
+        height: 0,
+        loaded: false,
+      }
+    );
   }
 
   getPlayingFieldDimensions() {
@@ -583,19 +542,26 @@ class Field extends LitElement {
       dimensions.x1 = this.topLeftFieldCornerX || 0;
       dimensions.y1 = this.topLeftFieldCornerY || 0;
       dimensions.x2 = this.bottomRightFieldCornerX || this.width;
-      dimensions.y2 = dimensions.y1 + (dimensions.x2 - dimensions.x1) * this.height / this.width;
+      dimensions.y2 =
+        dimensions.y1 +
+        ((dimensions.x2 - dimensions.x1) * this.height) / this.width;
     } else {
       dimensions.x1 = this.topLeftFieldCornerX || 0;
       dimensions.y1 = this.topLeftFieldCornerY || 0;
-      dimensions.x2 = Math.min(this.bottomRightFieldCornerX || imageObject.width, imageObject.width);
-      dimensions.y2 = Math.min(this.bottomRightFieldCornerY || imageObject.height, imageObject.height);
+      dimensions.x2 = Math.min(
+        this.bottomRightFieldCornerX || imageObject.width,
+        imageObject.width
+      );
+      dimensions.y2 = Math.min(
+        this.bottomRightFieldCornerY || imageObject.height,
+        imageObject.height
+      );
     }
 
     return dimensions;
   }
 
   getPlayingFieldImageRect() {
-
     if (!this.fullFieldImageSize) {
       return { left: 0, right: 0, top: 0, bottom: 0, width: 0, height: 0 };
     }
@@ -604,7 +570,7 @@ class Field extends LitElement {
     const fieldDimensions = this.getPlayingFieldDimensions();
     const imageSize = {
       width: imageObject.loaded ? imageObject.width : fieldDimensions.x2,
-      height: imageObject.loaded ? imageObject.height : fieldDimensions.y2
+      height: imageObject.loaded ? imageObject.height : fieldDimensions.y2,
     };
 
     const multiplier = this.fullFieldImageSize.width / imageSize.width;
@@ -626,20 +592,36 @@ class Field extends LitElement {
 
     let imageSize = {
       width: imageObject.loaded ? imageObject.width : fieldDimensions.x2,
-      height: imageObject.loaded ? imageObject.height : fieldDimensions.y2
+      height: imageObject.loaded ? imageObject.height : fieldDimensions.y2,
     };
 
-    const fieldHeight = !imageSize.width ? 0 : (imageSize.height / imageSize.width) * elementSize.width;
+    const fieldHeight = !imageSize.width
+      ? 0
+      : (imageSize.height / imageSize.width) * elementSize.width;
 
     if (fieldHeight <= elementSize.height) {
-      this.fullFieldImageSize = { width: elementSize.width, height: fieldHeight };
+      this.fullFieldImageSize = {
+        width: elementSize.width,
+        height: fieldHeight,
+      };
     } else {
-      const fieldWidth = !imageSize.height ? 0 : (imageSize.width / imageSize.height) * elementSize.height;
-      this.fullFieldImageSize = { width: fieldWidth, height: elementSize.height };
+      const fieldWidth = !imageSize.height
+        ? 0
+        : (imageSize.width / imageSize.height) * elementSize.height;
+      this.fullFieldImageSize = {
+        width: fieldWidth,
+        height: elementSize.height,
+      };
     }
 
-    fieldElement.style.setProperty('--field-width', `${this.fullFieldImageSize.width}px`);
-    fieldElement.style.setProperty('--field-height', `${this.fullFieldImageSize.height}px`);
+    fieldElement.style.setProperty(
+      '--field-width',
+      `${this.fullFieldImageSize.width}px`
+    );
+    fieldElement.style.setProperty(
+      '--field-height',
+      `${this.fullFieldImageSize.height}px`
+    );
   }
 
   resized() {
@@ -648,19 +630,25 @@ class Field extends LitElement {
   }
 
   render() {
-
     this.setPlayingFieldWidthStyles();
-    const playFieldWidth = this.field ? parseFloat(this.field.style.getPropertyValue('--playing-field-width') || 0) : 0;
-    const { width, height } = this.field ? this.field.getBoundingClientRect() : { width: 0, height: 0 };
+    const playFieldWidth = this.field
+      ? parseFloat(
+          this.field.style.getPropertyValue('--playing-field-width') || 0
+        )
+      : 0;
+    const { width, height } = this.field
+      ? this.field.getBoundingClientRect()
+      : { width: 0, height: 0 };
     const patternSize = (this.gridSize / this.width) * playFieldWidth;
 
-    return html`   
+    return html`
       <div part="field">
         <img part="field-image" />
         <div part="playing-field-area">
-          ${this.showGrid && this.gridSize > 0 ? html`
-          <div part="grid">
-            ${svg`
+          ${this.showGrid && this.gridSize > 0
+            ? html`
+                <div part="grid">
+                  ${svg`
             <svg width="100%" height="100%">
               <defs>
                 <pattern id="grid" width="${patternSize}" height="${patternSize}" patternUnits="userSpaceOnUse">
@@ -671,12 +659,21 @@ class Field extends LitElement {
               <rect width="100%" height="100%" fill="url(#grid)" />
             </svg>
             `}
-          </div>
-          ` : ''}
+                </div>
+              `
+            : ''}
         </div>
-        <canvas part="bottom-canvas" width="${width * 2}" height="${height * 2}"></canvas>
+        <canvas
+          part="bottom-canvas"
+          width="${width * 2}"
+          height="${height * 2}"
+        ></canvas>
         <slot></slot>
-        <canvas part="top-canvas" width="${width * 2}" height="${height * 2}"></canvas>
+        <canvas
+          part="top-canvas"
+          width="${width * 2}"
+          height="${height * 2}"
+        ></canvas>
       </div>
     `;
   }
