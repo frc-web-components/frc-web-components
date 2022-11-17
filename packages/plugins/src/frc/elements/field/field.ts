@@ -1,223 +1,54 @@
-import { html, css, svg, LitElement } from 'lit';
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable import/extensions */
+import { html, svg, LitElement, TemplateResult } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import Store, { SourceProvider } from '@webbitjs/store';
 import { baseUnit, toBaseConversions, convert, unitAliases } from './units';
 import fieldConfig from './field-config';
+import fieldElementStyles from './field-element-styles';
+import {
+  FieldDimensions,
+  FieldInfo,
+  FieldObjectElement,
+  ImageObject,
+  PlayingFieldImageRect,
+} from './field-interfaces';
+import FieldObjectManager from './field-object-manager';
 
-export const elementName = 'frc-field';
+@customElement('frc-field')
+export class Field extends LitElement {
+  @property({ type: Object, attribute: false }) provider?: SourceProvider;
+  @property({ type: Object, attribute: false }) store?: Store;
+  @property({ type: String, attribute: 'source-provider' }) sourceProvider = '';
+  @property({ type: String, attribute: 'source-key' }) sourceKey = '';
+  @property({ type: String }) game = 'Rapid React';
+  @property({ type: Number, attribute: 'grid-size' }) gridSize = 1;
+  @property({ type: Boolean, attribute: 'show-grid' }) showGrid = false;
+  @property({ type: Boolean, attribute: 'swap-axes' }) swapAxes = false;
 
-export const elementConfig = {
-  dashboard: {
-    displayName: 'Field',
-  },
-  properties: {
-    game: {
-      type: String,
-      defaultValue: 'Rapid React',
-      input: {
-        type: 'StringDropdown',
-        allowCustomValues: false,
-        getOptions() {
-          return fieldConfig.map((field) => field.game).concat('Custom');
-        },
-      },
-    },
-    width: {
-      type: Number,
-      defaultValue: 54,
-      input: {
-        isDisabled({ game }) {
-          return game !== 'Custom';
-        },
-      },
-    },
-    height: {
-      type: Number,
-      defaultValue: 27,
-      input: {
-        isDisabled({ game }) {
-          return game !== 'Custom';
-        },
-      },
-    },
-    unit: {
-      type: String,
-      defaultValue: baseUnit,
-      input: {
-        type: 'StringDropdown',
-        getOptions() {
-          return Object.keys(toBaseConversions);
-        },
-        allowCustomValues: false,
-        isDisabled({ game }) {
-          return game !== 'Custom';
-        },
-      },
-    },
-    image: {
-      type: String,
-      input: {
-        type: 'StringDropdown',
-        defaultValue: fieldConfig[0]['field-image'],
-        enableUpload: true,
-        getOptions() {
-          return fieldConfig.map((field) => field['field-image']);
-        },
-        isDisabled({ game }) {
-          return game !== 'Custom';
-        },
-      },
-    },
-    topLeftFieldCornerX: {
-      type: Number,
-      attribute: 'top-left-field-corner-x',
-      input: {
-        isDisabled({ game }) {
-          return game !== 'Custom';
-        },
-      },
-    },
-    topLeftFieldCornerY: {
-      type: Number,
-      attribute: 'top-left-field-corner-y',
-      input: {
-        isDisabled({ game }) {
-          return game !== 'Custom';
-        },
-      },
-    },
-    bottomRightFieldCornerX: {
-      type: Number,
-      attribute: 'bottom-right-field-corner-x',
-      input: {
-        isDisabled({ game }) {
-          return game !== 'Custom';
-        },
-      },
-    },
-    bottomRightFieldCornerY: {
-      type: Number,
-      attribute: 'bottom-right-field-corner-y',
-      input: {
-        isDisabled({ game }) {
-          return game !== 'Custom';
-        },
-      },
-    },
-    gridSize: { type: Number, attribute: 'grid-size', defaultValue: 1 },
-    showGrid: { type: Boolean, attribute: 'show-grid' },
-    swapAxes: { type: Boolean, attribute: 'swap-axes' },
-  },
-  slots: [
-    {
-      name: '',
-      allowedChildren: [
-        'frc-field-camera',
-        'frc-field-robot',
-        'frc-field-trajectory',
-        'frc-field-object',
-      ],
-    },
-  ],
-  demos: [
-    {
-      html: `
-      <frc-field>
-        <frc-field-robot source-key="/SmartDashboard/Field/Robot"></frc-field-robot>
-        <frc-field-trajectory source-key="/SmartDashboard/Field/traj"></frc-field-trajectory>
-      </frc-field>
-    `,
-    },
-  ],
-};
+  private _width = 54;
+  private _height = 27;
+  private _unit = baseUnit;
+  private _image = fieldConfig[0]['field-image'];
+  private _topLeftFieldCornerX = 0;
+  private _topLeftFieldCornerY = 0;
+  private _bottomRightFieldCornerX = 0;
+  private _bottomRightFieldCornerY = 0;
 
-class Field extends LitElement {
-  static properties = elementConfig.properties;
+  private imageObjects: Record<string, ImageObject> = {};
+  private fullFieldImageSize: { width: number; height: number } | null = null;
+  private field!: HTMLElement;
+  private fieldObjectManager!: FieldObjectManager;
 
-  static styles = css`
-    :host {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      width: 400px;
-      overflow: hidden;
-    }
-
-    [part='field'] {
-      position: relative;
-      width: var(--field-width, 100%);
-      height: var(--field-height, 400px);
-      background-image: var(--field-image);
-      background-size: cover;
-    }
-
-    [part='field-image'] {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-    }
-
-    [part='playing-field-area'] {
-      position: absolute;
-      left: var(--playing-field-left, 0);
-      top: var(--playing-field-top, 0);
-      width: var(--playing-field-width, 100%);
-      height: var(--playing-field-height, 100%);
-      border: 2px solid yellow;
-      box-sizing: border-box;
-    }
-
-    [part='grid'] {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    [part='grid'] path {
-      stroke: var(--frc-grid-line-color, gray);
-      stroke-width: var(--frc-grid-line-width, 1);
-    }
-
-    [part='top-canvas'],
-    [part='bottom-canvas'] {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-    }
-
-    ::slotted(frc-field-object) {
-      position: absolute;
-    }
-
-    /* [part=field] frc-field-object {
-      position: absolute;
-    } */
-  `;
-
-  constructor() {
-    super();
-    this.objectElements = [];
-    this.imageObjects = {};
-    this.fullFieldImageSize = null;
-
-    // default props
-    this.game = 'Rapid React';
-    this._width = 54;
-    this._height = 27;
-    this._unit = baseUnit;
-    this._image = fieldConfig[0]['field-image'];
-    this._topLeftFieldCornerX = 0;
-    this._topLeftFieldCornerY = 0;
-    this._bottomRightFieldCornerX = 0;
-    this._bottomRightFieldCornerY = 0;
-    this.gridSize = 1;
-    this.showGrid = false;
-    this.swapAxes = false;
+  set width(value: number) {
+    const oldValue = this._width;
+    this._width = value;
+    this.requestUpdate('width', oldValue);
   }
 
-  get width() {
+  @property()
+  get width(): number {
     if (this.game === 'Custom') {
       return this._width;
     }
@@ -225,13 +56,14 @@ class Field extends LitElement {
     return config ? config['field-size'][0] : this._width;
   }
 
-  set width(value) {
-    const oldValue = this._width;
-    this._width = value;
-    this.requestUpdate('width', oldValue);
+  set height(value: number) {
+    const oldValue = this._height;
+    this._height = value;
+    this.requestUpdate('height', oldValue);
   }
 
-  get height() {
+  @property()
+  get height(): number {
     if (this.game === 'Custom') {
       return this._height;
     }
@@ -239,27 +71,32 @@ class Field extends LitElement {
     return config ? config['field-size'][1] : this._height;
   }
 
-  set height(value) {
-    const oldValue = this._height;
-    this._height = value;
-    this.requestUpdate('height', oldValue);
-  }
-
-  get unit() {
-    if (this.game === 'Custom') {
-      return unitAliases[this._unit];
-    }
-    const config = fieldConfig.find((field) => field.game === this.game);
-    return config ? unitAliases[config['field-unit']] : unitAliases[this._unit];
-  }
-
-  set unit(value) {
+  set unit(value: string) {
     const oldValue = this._unit;
     this._unit = value;
     this.requestUpdate('unit', oldValue);
   }
 
-  get image() {
+  @property()
+  get unit(): string {
+    const unitAliasRecord = unitAliases as Record<string, string>;
+    if (this.game === 'Custom') {
+      return unitAliasRecord[this._unit];
+    }
+    const config = fieldConfig.find((field) => field.game === this.game);
+    return config
+      ? unitAliasRecord[config['field-unit']]
+      : unitAliasRecord[this._unit];
+  }
+
+  set image(value: string) {
+    const oldValue = this._image;
+    this._image = value;
+    this.requestUpdate('image', oldValue);
+  }
+
+  @property()
+  get image(): string {
     if (this.game === 'Custom') {
       return this._image;
     }
@@ -267,13 +104,14 @@ class Field extends LitElement {
     return config ? config['field-image'] : this._image;
   }
 
-  set image(value) {
-    const oldValue = this._image;
-    this._image = value;
-    this.requestUpdate('image', oldValue);
+  set topLeftFieldCornerX(value: number) {
+    const oldValue = this._topLeftFieldCornerX;
+    this._topLeftFieldCornerX = value;
+    this.requestUpdate('topLeftFieldCornerX', oldValue);
   }
 
-  get topLeftFieldCornerX() {
+  @property({ attribute: 'top-left-field-corner-x' })
+  get topLeftFieldCornerX(): number {
     if (this.game === 'Custom') {
       return this._topLeftFieldCornerX;
     }
@@ -283,13 +121,14 @@ class Field extends LitElement {
       : this._topLeftFieldCornerX;
   }
 
-  set topLeftFieldCornerX(value) {
-    const oldValue = this._topLeftFieldCornerX;
-    this._topLeftFieldCornerX = value;
-    this.requestUpdate('topLeftFieldCornerX', oldValue);
+  set topLeftFieldCornerY(value: number) {
+    const oldValue = this._topLeftFieldCornerY;
+    this._topLeftFieldCornerY = value;
+    this.requestUpdate('topLeftFieldCornerY', oldValue);
   }
 
-  get topLeftFieldCornerY() {
+  @property({ attribute: 'top-left-field-corner-y' })
+  get topLeftFieldCornerY(): number {
     if (this.game === 'Custom') {
       return this._topLeftFieldCornerY;
     }
@@ -299,13 +138,14 @@ class Field extends LitElement {
       : this._topLeftFieldCornerY;
   }
 
-  set topLeftFieldCornerY(value) {
-    const oldValue = this._topLeftFieldCornerY;
-    this._topLeftFieldCornerY = value;
-    this.requestUpdate('topLeftFieldCornerY', oldValue);
+  set bottomRightFieldCornerX(value: number) {
+    const oldValue = this._bottomRightFieldCornerX;
+    this._bottomRightFieldCornerX = value;
+    this.requestUpdate('bottomRightFieldCornerX', oldValue);
   }
 
-  get bottomRightFieldCornerX() {
+  @property({ attribute: 'bottom-right-field-corner-x' })
+  get bottomRightFieldCornerX(): number {
     if (this.game === 'Custom') {
       return this._bottomRightFieldCornerX;
     }
@@ -315,13 +155,14 @@ class Field extends LitElement {
       : this._bottomRightFieldCornerX;
   }
 
-  set bottomRightFieldCornerX(value) {
-    const oldValue = this._bottomRightFieldCornerX;
-    this._bottomRightFieldCornerX = value;
-    this.requestUpdate('bottomRightFieldCornerX', oldValue);
+  set bottomRightFieldCornerY(value: number) {
+    const oldValue = this._bottomRightFieldCornerY;
+    this._bottomRightFieldCornerY = value;
+    this.requestUpdate('bottomRightFieldCornerY', oldValue);
   }
 
-  get bottomRightFieldCornerY() {
+  @property({ attribute: 'bottom-right-field-corner-y' })
+  get bottomRightFieldCornerY(): number {
     if (this.game === 'Custom') {
       return this._bottomRightFieldCornerY;
     }
@@ -331,21 +172,17 @@ class Field extends LitElement {
       : this._bottomRightFieldCornerY;
   }
 
-  set bottomRightFieldCornerY(value) {
-    const oldValue = this._bottomRightFieldCornerY;
-    this._bottomRightFieldCornerY = value;
-    this.requestUpdate('bottomRightFieldCornerY', oldValue);
-  }
+  static styles = fieldElementStyles;
 
-  updated(changedProperties) {
+  updated(changedProperties: Map<string, unknown>): void {
     if (changedProperties.has('width') || changedProperties.has('height')) {
       this.resizeField();
       this.requestUpdate();
     }
 
     if (changedProperties.has('image') || changedProperties.has('game')) {
-      const fieldImage = this.shadowRoot.querySelector('[part=field-image]');
-      fieldImage.src = this.image;
+      const fieldImage = this.renderRoot.querySelector('[part=field-image]');
+      (fieldImage as any).src = this.image;
       if (typeof this.imageObjects[this.image] === 'undefined') {
         const image = new Image();
         const imageObject = {
@@ -368,10 +205,17 @@ class Field extends LitElement {
       this.requestUpdate();
     }
 
+    if (
+      changedProperties.has('sourceKey') ||
+      changedProperties.has('sourceProvider')
+    ) {
+      this.fieldObjectManager.setSource(this.sourceKey, this.sourceProvider);
+    }
+
     this.setPlayingFieldWidthStyles();
   }
 
-  setPlayingFieldWidthStyles() {
+  private setPlayingFieldWidthStyles(): void {
     if (this.field) {
       const playingFieldImageRect = this.getPlayingFieldImageRect();
       this.field.style.setProperty(
@@ -393,27 +237,26 @@ class Field extends LitElement {
     }
   }
 
-  setFieldPose(fieldInfo) {
-    [...this.children].forEach((child) => {
-      if (child.constructor.__IS_FIELD_OBJECT__) {
-        this.setObjectPose(child, fieldInfo);
-        this.setDrawingPose(child, fieldInfo);
-      }
-    });
-  }
-
-  setObjectPose(element, fieldInfo, parentInfo) {
+  setObjectPose(element: FieldObjectElement, fieldInfo: FieldInfo): void {
+    const {
+      unit: elementUnit,
+      width: elementWidth,
+      height: elementHeight,
+      x: elementX,
+      y: elementY,
+      rot: rotation,
+    } = element;
     const { toPx } = fieldInfo;
     // set element pose
-    const rotation = element.rot;
     const unit =
-      typeof toBaseConversions[element.unit] !== 'undefined'
-        ? element.unit
+      typeof (toBaseConversions as Record<string, number>)[elementUnit] !==
+      'undefined'
+        ? elementUnit
         : this.unit;
-    const width = convert(element.width, unit, this.unit);
-    const height = convert(element.height, unit, this.unit);
-    const x = convert(element.x, unit, this.unit);
-    const y = convert(element.y, unit, this.unit);
+    const width = convert(elementWidth, unit, this.unit);
+    const height = convert(elementHeight, unit, this.unit);
+    const x = convert(elementX, unit, this.unit);
+    const y = convert(elementY, unit, this.unit);
 
     element.style.width = `${toPx(width)}px`;
     element.style.height = `${toPx(height)}px`;
@@ -429,12 +272,12 @@ class Field extends LitElement {
     element.style.transform = `translate(${translateXPx}, ${translateYPx}) ${rotate}`;
   }
 
-  setDrawingPose(element, fieldInfo) {
+  setDrawingPose(element: FieldObjectElement, fieldInfo: FieldInfo): void {
     const { ctx, canvas, bottomCtx, bottomCanvas, rect } = fieldInfo;
-
-    const rotation = element.rot;
+    const { unit: elementUnit, rot: rotation } = element;
     const unit =
-      typeof toBaseConversions[element.unit] !== 'undefined'
+      typeof (toBaseConversions as Record<string, number>)[elementUnit] !==
+      'undefined'
         ? element.unit
         : this.unit;
     const x = convert(element.x, unit, this.unit);
@@ -470,7 +313,7 @@ class Field extends LitElement {
     ctx.beginPath();
     bottomCtx.beginPath();
 
-    element.renderDrawing({
+    (element as any).renderDrawing({
       canvas,
       ctx,
       bottomCanvas,
@@ -482,14 +325,17 @@ class Field extends LitElement {
     bottomCtx.restore();
   }
 
-  firstUpdated() {
-    this.field = this.shadowRoot.querySelector('[part=field]');
-    const field = this.field;
-    const canvas = this.shadowRoot.querySelector('[part=top-canvas]');
-    const ctx = canvas.getContext('2d');
+  firstUpdated(): void {
+    this.field = this.renderRoot.querySelector('[part=field]') as HTMLElement;
+    const canvas = this.renderRoot.querySelector(
+      '[part=top-canvas]'
+    ) as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
-    const bottomCanvas = this.shadowRoot.querySelector('[part=bottom-canvas]');
-    const bottomCtx = bottomCanvas.getContext('2d');
+    const bottomCanvas = this.renderRoot.querySelector(
+      '[part=bottom-canvas]'
+    ) as HTMLCanvasElement;
+    const bottomCtx = bottomCanvas.getContext('2d') as CanvasRenderingContext2D;
 
     // update object positions and size
     const updateObjectsAndDrawings = () => {
@@ -497,22 +343,30 @@ class Field extends LitElement {
       ctx.beginPath();
       bottomCtx.clearRect(0, 0, bottomCanvas.width, bottomCanvas.height);
       bottomCtx.beginPath();
-      const rect = field.getBoundingClientRect();
 
       const playingFieldImageRect = this.getPlayingFieldImageRect();
       const xOffset = playingFieldImageRect.left;
       const yOffset = playingFieldImageRect.top;
 
-      this.setFieldPose({
+      const fieldInfo: FieldInfo = {
         canvas,
         ctx,
         bottomCanvas,
         bottomCtx,
         rect: playingFieldImageRect,
-        toPx: (length) => (length * playingFieldImageRect.width) / this.width,
-        toLength: (px) => (px * this.width) / playingFieldImageRect.width,
+        toPx: (length: number) =>
+          (length * playingFieldImageRect.width) / this.width,
+        toLength: (px: number) =>
+          (px * this.width) / playingFieldImageRect.width,
         xOffset,
         yOffset,
+      };
+
+      [...this.children].forEach((child) => {
+        if ((child.constructor as any).__IS_FIELD_OBJECT__) {
+          this.setObjectPose(child as FieldObjectElement, fieldInfo);
+          this.setDrawingPose(child as FieldObjectElement, fieldInfo);
+        }
       });
       window.requestAnimationFrame(updateObjectsAndDrawings);
     };
@@ -521,9 +375,13 @@ class Field extends LitElement {
 
     const resizeObserver = new ResizeObserver(() => this.resized());
     resizeObserver.observe(this);
+
+    if (this.store) {
+      this.fieldObjectManager = new FieldObjectManager(this, this.store);
+    }
   }
 
-  getImageObject(src) {
+  private getImageObject(src: string): ImageObject {
     return (
       this.imageObjects[src] || {
         src,
@@ -534,7 +392,7 @@ class Field extends LitElement {
     );
   }
 
-  getPlayingFieldDimensions() {
+  private getPlayingFieldDimensions(): FieldDimensions {
     const imageObject = this.getImageObject(this.image);
     const dimensions = { x1: 0, y1: 0, x2: 0, y2: 0 };
 
@@ -561,7 +419,7 @@ class Field extends LitElement {
     return dimensions;
   }
 
-  getPlayingFieldImageRect() {
+  private getPlayingFieldImageRect(): PlayingFieldImageRect {
     if (!this.fullFieldImageSize) {
       return { left: 0, right: 0, top: 0, bottom: 0, width: 0, height: 0 };
     }
@@ -584,13 +442,15 @@ class Field extends LitElement {
     return { left, right, top, bottom, width, height };
   }
 
-  resizeField() {
-    const fieldElement = this.shadowRoot.querySelector('[part=field]');
+  private resizeField(): void {
+    const fieldElement = this.renderRoot.querySelector(
+      '[part=field]'
+    ) as HTMLElement;
     const imageObject = this.getImageObject(this.image);
     const elementSize = this.getBoundingClientRect();
     const fieldDimensions = this.getPlayingFieldDimensions();
 
-    let imageSize = {
+    const imageSize = {
       width: imageObject.loaded ? imageObject.width : fieldDimensions.x2,
       height: imageObject.loaded ? imageObject.height : fieldDimensions.y2,
     };
@@ -624,16 +484,16 @@ class Field extends LitElement {
     );
   }
 
-  resized() {
+  private resized(): void {
     this.resizeField();
     this.requestUpdate();
   }
 
-  render() {
+  render(): TemplateResult {
     this.setPlayingFieldWidthStyles();
     const playFieldWidth = this.field
       ? parseFloat(
-          this.field.style.getPropertyValue('--playing-field-width') || 0
+          this.field.style.getPropertyValue('--playing-field-width') || '0'
         )
       : 0;
     const { width, height } = this.field
@@ -678,5 +538,3 @@ class Field extends LitElement {
     `;
   }
 }
-
-customElements.define(elementName, Field);
