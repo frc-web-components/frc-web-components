@@ -6,20 +6,18 @@ export const elementName = 'frc-table-axis';
 export const elementConfig = {
   dashboard: {
     topLevel: false,
-    displayName: 'Table Axis'
+    displayName: 'Table Axis',
   },
   properties: {
     vertical: { type: Boolean },
     ticks: { type: Number },
     range: { type: Array },
-    unit: { type: String }
-  }
+    unit: { type: String },
+  },
 };
 
 class TableAxis extends LitElement {
-
   static styles = css`
-
     :host {
       display: block;
     }
@@ -44,6 +42,7 @@ class TableAxis extends LitElement {
     text {
       font-weight: normal;
       font-size: 13px;
+      fill: var(--frc-tab-axis-text-color, #000);
     }
   `;
 
@@ -76,15 +75,14 @@ class TableAxis extends LitElement {
 
     // Prevent update if nothing has changed
     if (
-      this.prevSize === size 
-      && this.prevTicks === this.ticks 
-      && this.prevMin === min 
-      && this.prevMax === max
-      && !changedProps.has('unit')
+      this.prevSize === size &&
+      this.prevTicks === this.ticks &&
+      this.prevMin === min &&
+      this.prevMax === max &&
+      !changedProps.has('unit')
     ) {
       return;
-    }
-    else {
+    } else {
       this.prevSize = size;
       this.prevTicks = this.ticks;
       this.prevMin = min;
@@ -93,21 +91,22 @@ class TableAxis extends LitElement {
 
     this.shadowRoot.getElementById('svg').innerHTML = '';
 
-    let svg = d3.select(this.shadowRoot.getElementById('svg'))
-      .attr("width", !this.vertical ? size : width)
-      .attr("height", !this.vertical ? width : size);
+    let svg = d3
+      .select(this.shadowRoot.getElementById('svg'))
+      .attr('width', !this.vertical ? size : width)
+      .attr('height', !this.vertical ? width : size);
 
     for (let i = 0; i < this.ticks; i++) {
-
       if (!this.vertical) {
-        svg.append('line')
+        svg
+          .append('line')
           .attr('x1', i * tickSpacing)
           .attr('y1', 0)
           .attr('x2', i * tickSpacing)
           .attr('y2', 8);
-      }
-      else {
-        svg.append('line')
+      } else {
+        svg
+          .append('line')
           .attr('x1', 0)
           .attr('y1', i * tickSpacing)
           .attr('x2', 8)
@@ -115,54 +114,55 @@ class TableAxis extends LitElement {
       }
 
       if (showNums) {
-          
-          if (!this.vertical) {
-            // check to see if text will fit
-            let spaceBetweenTicks = (i - lastTickWithText) * tickSpacing;
-            let pointWhereNewTextCanBegin = (lastTickWithText * tickSpacing) + spaceBetweenTicks * .4;
-            let textWillFit = textEnd < 0 || pointWhereNewTextCanBegin > textEnd;
+        if (!this.vertical) {
+          // check to see if text will fit
+          let spaceBetweenTicks = (i - lastTickWithText) * tickSpacing;
+          let pointWhereNewTextCanBegin =
+            lastTickWithText * tickSpacing + spaceBetweenTicks * 0.4;
+          let textWillFit = textEnd < 0 || pointWhereNewTextCanBegin > textEnd;
 
-            if (textWillFit) {
-              const value = min + i * (max - min) / Math.max(this.ticks - 1, 1);
-              
-              let textEl = svg.append('text')
-                .attr('x', i * tickSpacing)
-                .attr('y', 25)
-                .attr('text-anchor', 'middle')
-                .text(value.toFixed(2) + (this.unit ? ` ${this.unit}` : ''));
+          if (textWillFit) {
+            const value = min + (i * (max - min)) / Math.max(this.ticks - 1, 1);
 
-              textEnd = i * tickSpacing + textEl.node().getBBox().width / 2;
-              lastTickWithText = i;
-            }
-          }
-          else {
-            const value = min + i * (max - min) / Math.max(this.ticks - 1, 1);
-              
-            let textEl = svg.append('text')
-              .attr('x', -3)
-              .attr('y', i * tickSpacing + 4)
-              .attr('text-anchor', 'end')
+            let textEl = svg
+              .append('text')
+              .attr('x', i * tickSpacing)
+              .attr('y', 25)
+              .attr('text-anchor', 'middle')
               .text(value.toFixed(2) + (this.unit ? ` ${this.unit}` : ''));
-          }
-        }
 
+            textEnd = i * tickSpacing + textEl.node().getBBox().width / 2;
+            lastTickWithText = i;
+          }
+        } else {
+          const value = min + (i * (max - min)) / Math.max(this.ticks - 1, 1);
+
+          let textEl = svg
+            .append('text')
+            .attr('x', -3)
+            .attr('y', i * tickSpacing + 4)
+            .attr('text-anchor', 'end')
+            .text(value.toFixed(2) + (this.unit ? ` ${this.unit}` : ''));
+        }
+      }
 
       // don't do this for last tick
       if (i < this.ticks - 1) {
         for (let j = 1; j < 4; j++) {
           if (!this.vertical) {
-            svg.append('line')
-              .attr('x1', i * tickSpacing + j * tickSpacing / 4)
+            svg
+              .append('line')
+              .attr('x1', i * tickSpacing + (j * tickSpacing) / 4)
               .attr('y1', 0)
-              .attr('x2', i * tickSpacing + j * tickSpacing / 4)
+              .attr('x2', i * tickSpacing + (j * tickSpacing) / 4)
               .attr('y2', 4);
-          }
-          else {
-            svg.append('line')
+          } else {
+            svg
+              .append('line')
               .attr('x1', 4)
-              .attr('y1', i * tickSpacing + j * tickSpacing / 4)
+              .attr('y1', i * tickSpacing + (j * tickSpacing) / 4)
               .attr('x2', 8)
-              .attr('y2', i * tickSpacing + j * tickSpacing / 4);
+              .attr('y2', i * tickSpacing + (j * tickSpacing) / 4);
           }
         }
       }
@@ -181,11 +181,8 @@ class TableAxis extends LitElement {
   }
 
   render() {
-    return html`
-      <svg id="svg"></svg>
-    `;
+    return html` <svg id="svg"></svg> `;
   }
-
 }
 
 customElements.define(elementName, TableAxis);

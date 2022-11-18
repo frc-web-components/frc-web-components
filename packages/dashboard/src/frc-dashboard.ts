@@ -3,6 +3,7 @@ import { WebbitConfig } from '@webbitjs/webbit';
 import Dashboard from './dashboard';
 import getAllowedChildren from './get-allowed-children';
 import { createLayerElement } from './layer';
+import { addCSSRule, createSheet } from './themes';
 
 export interface Tutorial {
   id: string;
@@ -14,6 +15,7 @@ export interface Tutorial {
 export default class FrcDashboard extends Dashboard {
   private tutorials: Record<string, Tutorial> = {};
   private layers: Record<string, HTMLElement> = {};
+  private themeSheets: Record<string, CSSStyleSheet> = {};
 
   constructor(rootElement?: HTMLElement) {
     super(rootElement);
@@ -27,6 +29,7 @@ export default class FrcDashboard extends Dashboard {
         this.publish('elementPreview', { element: this.getPreviewedElement() });
       }
     });
+    this.getRootElement().setAttribute('data-theme', this.getTheme());
   }
 
   openDrawer(): void {
@@ -240,5 +243,41 @@ export default class FrcDashboard extends Dashboard {
 
   getLayers(): Record<string, HTMLElement> {
     return this.layers;
+  }
+
+  addThemeRules(theme: string, cssVariables: Record<string, string>): void {
+    if (typeof this.themeSheets[theme] === 'undefined') {
+      this.themeSheets[theme] = createSheet();
+    }
+
+    const rules = Object.entries(cssVariables).map(
+      ([variableName, value]) => `${variableName}: ${value};`
+    );
+    addCSSRule(
+      this.themeSheets[theme],
+      `
+      [data-theme="${theme}"] {
+        ${rules.join('\n')}
+      }
+    `
+    );
+    this.publish('themeRulesAdd');
+  }
+
+  setTheme(theme: string): void {
+    this.getRootElement().setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    this.setStoreValue('theme', theme);
+    this.publish('themeSet');
+  }
+
+  getTheme(): string {
+    const storedTheme = localStorage.getItem('theme') ?? 'light';
+    return this.getStoreValue('theme', storedTheme) as string;
+  }
+
+  getThemes(): string[] {
+    const themes = ['light', ...Object.keys(this.themeSheets)];
+    return [...new Set(themes).values()];
   }
 }

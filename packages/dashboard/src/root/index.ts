@@ -1,29 +1,15 @@
-import { LitElement, html, css, TemplateResult } from 'lit';
+/* eslint-disable import/extensions */
+import { LitElement, html, css, TemplateResult, render } from 'lit';
 import './dashboard-tab';
 import './navbar';
 import './drawer';
-import { WebbitConnector } from '@webbitjs/webbit';
-// eslint-disable-next-line import/extensions
 import { customElement, property, state } from 'lit/decorators.js';
+import { guard } from 'lit/directives/guard.js';
 import { onRemoveKeyPress } from '../hotkeys';
 import { dashboardProvider } from '../context-providers';
 import FrcDashboard from '../frc-dashboard';
-
-export function removeElement(
-  element: HTMLElement,
-  connector: WebbitConnector
-): HTMLElement | null {
-  const parent = element.parentElement;
-  const siblings = [...(parent?.children ?? [])];
-  const elementIndex = siblings.indexOf(element);
-  const nextElement =
-    siblings[elementIndex + 1] ?? siblings[elementIndex - 1] ?? parent;
-  element?.remove();
-  const isInDashboard =
-    connector.getRootElement().contains(nextElement) &&
-    nextElement !== connector.getRootElement();
-  return isInDashboard ? (nextElement as HTMLElement) : null;
-}
+import './source-picker-dialog';
+import removeElement from './remove-element';
 
 const styles = css`
   :host {
@@ -61,14 +47,15 @@ const styles = css`
 
   #container {
     position: relative;
-    width: calc(100vw - 16px);
     height: 100%;
+    width: 100vw;
     box-sizing: border-box;
   }
 
   ::slotted([slot='dashboard']) {
     width: 100%;
     height: 100%;
+    background: var(--dashboard-background, white);
   }
 
   ::slotted([slot='layer']) {
@@ -85,6 +72,7 @@ const styles = css`
 export default class DashboardRoot extends LitElement {
   @state() drawerOpened = true;
   @state() ready = false;
+  @state() dialogOpened = false;
   @property({ type: Object, attribute: false }) dashboard?: FrcDashboard;
 
   static styles = styles;
@@ -155,7 +143,28 @@ export default class DashboardRoot extends LitElement {
       this.appendChild(value.layer);
     });
 
+    const navbar = document.createElement('dashboard-navbar');
+    (navbar as any).dashboard = this.dashboard;
+    navbar.setAttribute('slot', 'navbar');
+    navbar.addEventListener('drawerToggle', () => {
+      this.#onDrawerToggle();
+    });
+    this.appendChild(navbar);
+
+    this.dashboard.subscribe('themeSet', () => this.#updateTheme());
+    this.#updateTheme();
+
+    this.dashboard.subscribe('sourcesDialogOpen', () => {
+      this.dialogOpened = true;
+    });
+
     this.ready = true;
+  }
+
+  #updateTheme(): void {
+    const navbar = this.querySelector('dashboard-navbar');
+    const theme = this.dashboard?.getTheme() ?? '';
+    navbar?.setAttribute('data-theme', theme);
   }
 
   updated(updatedProps: Map<string, unknown>): void {
@@ -189,11 +198,30 @@ export default class DashboardRoot extends LitElement {
     const isEditable = this.dashboard?.isElementEditable();
     return html`
       <div class="layout">
+        <vaadin-dialog
+          theme="no-padding"
+          draggable
+          modeless
+          resizable
+          .opened=${this.drawerOpened && this.dialogOpened}
+          .renderer=${guard([], () => (root: HTMLElement) => {
+            render(
+              html`
+                <dashboard-source-picker-dialog
+                  .dashboard=${this.dashboard}
+                  .dialogOpened=${this.dialogOpened}
+                  @closeDialog=${() => {
+                    this.dialogOpened = false;
+                  }}
+                ></dashboard-source-picker-dialog>
+              `,
+              root
+            );
+          })}
+        ></vaadin-dialog>
         <dashboard-drawer .interact="${null}"></dashboard-drawer>
         <div class="dashboard">
-          <dashboard-navbar
-            @drawerToggle=${this.#onDrawerToggle}
-          ></dashboard-navbar>
+          <slot name="navbar"></slot>
           <div class="dashboard-elements">
             <div id="container">
               <slot name="dashboard"></slot>
