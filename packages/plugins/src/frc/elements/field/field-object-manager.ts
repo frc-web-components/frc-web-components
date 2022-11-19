@@ -56,10 +56,6 @@ export default class FieldObjectManager {
     return typeof this.getChildren()[key] !== 'undefined';
   }
 
-  // private getChild(key: string): HTMLElement | undefined {
-  //   return this.getChildren()[key];
-  // }
-
   private getChildren(): Record<string, HTMLElement> {
     const children: Record<string, HTMLElement> = {};
     [...this.fieldElement.children].forEach((child) => {

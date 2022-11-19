@@ -115,16 +115,6 @@ export const elementConfig = {
     showGrid: { type: Boolean, attribute: 'show-grid' },
     swapAxes: { type: Boolean, attribute: 'swap-axes' },
   },
-  // slots: [
-  //   {
-  //     name: '',
-  //     allowedChildren: [
-  //       'frc-field-camera',
-  //       'frc-field-robot',
-  //       'frc-field-trajectory',
-  //     ],
-  //   },
-  // ],
   demos: [
     {
       html: `
