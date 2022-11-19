@@ -3,32 +3,53 @@ import { SourceProvider } from '@webbitjs/store';
 import { NT4_Client, NT4_Topic } from './NT4';
 
 export default class Nt4Provider extends SourceProvider {
-  private client: NT4_Client;
+  private serverAddress = '';
+  private clients: Record<string, NT4_Client> = {};
   private connected = false;
   private topics: Record<string, NT4_Topic> = {};
+  private connectionListeners: ((connected: boolean) => unknown)[] = [];
 
   constructor() {
     super();
-    this.client = this.createClient('localhost');
+    this.connect('localhost');
+  }
+
+  getServerAddress(): string {
+    return this.serverAddress;
   }
 
   connect(serverAddr: string): void {
-    this.client = this.createClient(serverAddr);
+    if (this.serverAddress === serverAddr) {
+      return;
+    }
+    this.clearSources();
+    this.createClient(serverAddr);
   }
 
   disconnect(): void {
-    this.client.disconnect();
+    this.clients[this.serverAddress]?.disconnect();
   }
 
   isConnected(): boolean {
     return this.connected;
   }
 
+  addConnectionListener(
+    listener: (connected: boolean) => unknown,
+    callImediately = false
+  ): void {
+    this.connectionListeners.push(listener);
+    if (callImediately) {
+      listener(this.connected);
+    }
+  }
+
   userUpdate(key: string, value: unknown): void {
     const topic = this.topics[key];
     if (topic) {
-      this.client.publishNewTopic(topic.name, topic.type);
-      this.client.addSample(topic.name, value);
+      const client = this.clients[this.serverAddress];
+      client.publishNewTopic(topic.name, topic.type);
+      client.addSample(topic.name, value);
       this.updateSource(topic.name, value);
     }
   }
@@ -47,29 +68,56 @@ export default class Nt4Provider extends SourceProvider {
 
   private onConnect() {
     this.connected = true;
+    this.connectionListeners.forEach((listener) => listener(true));
   }
 
   private onDisconnect() {
     this.connected = false;
+    this.connectionListeners.forEach((listener) => listener(false));
   }
 
   private createClient(serverAddr: string): NT4_Client {
-    if (this.client) {
-      this.client.disconnect();
+    if (this.clients[this.serverAddress]) {
+      this.clients[this.serverAddress].disconnect();
       this.topics = {};
     }
+    this.serverAddress = serverAddr;
 
     const appName = 'FRC Web Components';
 
-    const client = new NT4_Client(
-      serverAddr,
-      appName,
-      (...args) => this.onTopicAnnounce(...args),
-      (...args) => this.onTopicUnannounce(...args),
-      (...args) => this.onNewTopicData(...args),
-      () => this.onConnect(),
-      () => this.onDisconnect()
-    );
+    if (!this.clients[serverAddr]) {
+      this.clients[serverAddr] = new NT4_Client(
+        serverAddr,
+        appName,
+        (...args) => {
+          if (this.serverAddress === serverAddr) {
+            this.onTopicAnnounce(...args);
+          }
+        },
+        (...args) => {
+          if (this.serverAddress === serverAddr) {
+            this.onTopicUnannounce(...args);
+          }
+        },
+        (...args) => {
+          if (this.serverAddress === serverAddr) {
+            this.onNewTopicData(...args);
+          }
+        },
+        () => {
+          if (this.serverAddress === serverAddr) {
+            this.onConnect();
+          }
+        },
+        () => {
+          if (this.serverAddress === serverAddr) {
+            this.onDisconnect();
+          }
+        }
+      );
+    }
+
+    const client = this.clients[serverAddr];
 
     client.connect();
     client.subscribeAll(['/'], true);

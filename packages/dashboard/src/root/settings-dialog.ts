@@ -8,6 +8,7 @@ export class SettingsDialog extends LitElement {
   @property({ type: Object, attribute: false }) dashboard!: FrcDashboard;
   @state() theme = '';
   @state() themes: string[] = [];
+  @state() serverAddress = '';
 
   static styles = css`
     :host {
@@ -59,11 +60,25 @@ export class SettingsDialog extends LitElement {
     this.dashboard.subscribe('themeRulesAdd', () => {
       this.themes = this.dashboard.getThemes();
     });
+
+    const ntProvider = this.dashboard
+      .getStore()
+      .getSourceProvider('NetworkTables');
+    this.serverAddress = (ntProvider as any).getServerAddress();
   }
 
   private onThemeChange(ev: CustomEvent): void {
     const input = ev.target || (ev as any).path[0];
     this.dashboard.setTheme(input.value);
+  }
+
+  private onAddressChange(ev: CustomEvent): void {
+    const { value } = ev.target as any;
+    const ntProvider = this.dashboard
+      .getStore()
+      .getSourceProvider('NetworkTables');
+    (ntProvider as any).connect(value);
+    this.serverAddress = value;
   }
 
   render(): TemplateResult {
@@ -93,6 +108,14 @@ export class SettingsDialog extends LitElement {
             .value=${this.theme}
             @change=${this.onThemeChange}
           ></vaadin-combo-box>
+        </div>
+        <div class="form-item">
+          <label>NT4 Server</label>
+          <vaadin-text-field
+            class="input"
+            .value=${this.serverAddress}
+            @change=${this.onAddressChange}
+          ></vaadin-text-field>
         </div>
       </div>
       <footer
