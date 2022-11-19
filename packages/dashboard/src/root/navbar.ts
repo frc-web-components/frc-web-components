@@ -137,8 +137,10 @@ export class DashboardNavbar extends LitElement {
   }
 
   firstUpdated(): void {
-    const { NetworkTables } = window as any;
-    NetworkTables.addRobotConnectionListener((connected: any) => {
+    const ntProvider = this.dashboard
+      .getStore()
+      .getSourceProvider('NetworkTables');
+    (ntProvider as any).addConnectionListener((connected: any) => {
       this.ntConnected = connected;
     }, true);
     const connector = this.dashboard.getConnector();
