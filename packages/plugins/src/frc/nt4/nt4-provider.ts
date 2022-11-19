@@ -10,7 +10,7 @@ export default class Nt4Provider extends SourceProvider {
   private connectionListeners: ((connected: boolean) => unknown)[] = [];
 
   constructor() {
-    super();
+    super({}, 1000 / 60);
     this.connect(localStorage.getItem('nt4Address') ?? 'localhost');
   }
 
