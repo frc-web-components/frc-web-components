@@ -27,21 +27,21 @@ export const elementConfig = {
           return Object.keys(toBaseConversions);
         },
         allowCustomValues: false,
-      }
+      },
     },
     image: { type: String },
-    color: { type: String, input: { type: 'ColorPicker' }, defaultValue: '#0000ff' },
+    color: {
+      type: String,
+      input: { type: 'ColorPicker' },
+      defaultValue: '#0000ff',
+    },
     pose: { type: Array, primary: true },
-    width: { type: Number, defaultValue: .6 },
-    height: { type: Number, defaultValue: .9 },
+    width: { type: Number, defaultValue: 0.6 },
+    height: { type: Number, defaultValue: 0.9 },
   },
-  slots: [
-    { name: '', allowedChildren: ['frc-field-camera', 'frc-field-object'] }
-  ]
 };
 
 class FieldRobot extends FieldObject {
-
   static properties = elementConfig.properties;
 
   constructor() {
@@ -55,8 +55,8 @@ class FieldRobot extends FieldObject {
     this.image = '';
     this.color = '#0000ff';
     this.pose = [0, 0, 0];
-    this.width = .6;
-    this.height = .9;
+    this.width = 0.6;
+    this.height = 0.9;
     this.unit = 'm';
   }
 
@@ -74,7 +74,12 @@ class FieldRobot extends FieldObject {
   renderDrawing({ bottomCtx, scalingFactor }) {
     bottomCtx.fillStyle = this.color;
     bottomCtx.moveTo(0, 0);
-    bottomCtx.fillRect(-this.width / 2, -this.height / 2, this.width, this.height);
+    bottomCtx.fillRect(
+      -this.width / 2,
+      -this.height / 2,
+      this.width,
+      this.height
+    );
 
     bottomCtx.beginPath();
     bottomCtx.strokeStyle = 'black';
@@ -83,12 +88,11 @@ class FieldRobot extends FieldObject {
     bottomCtx.rect(-this.width / 2, -this.height / 2, this.width, this.height);
     bottomCtx.stroke();
 
-
     // draw wheels
-    const wheelRadius = Math.min(this.width * .17, this.height * .19);
+    const wheelRadius = Math.min(this.width * 0.17, this.height * 0.19);
     const wheelWidth = wheelRadius;
 
-    const verticalPadding = this.height * .1;
+    const verticalPadding = this.height * 0.1;
 
     bottomCtx.beginPath();
     bottomCtx.fillStyle = 'black';

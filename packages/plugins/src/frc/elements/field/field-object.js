@@ -30,18 +30,14 @@ export const elementConfig = {
           return Object.keys(toBaseConversions);
         },
         allowCustomValues: false,
-      }
+      },
     },
     image: { type: String },
     draw: { type: String },
   },
-  slots: [
-    { name: '', allowedChildren: ['frc-field-object', 'frc-field-camera'] }
-  ]
 };
 
 export default class FieldObject extends LitElement {
-
   static __IS_FIELD_OBJECT__ = true;
 
   static properties = elementConfig.properties;
@@ -52,7 +48,7 @@ export default class FieldObject extends LitElement {
       position: absolute;
     }
 
-    [part=field-object] {
+    [part='field-object'] {
       width: 100%;
       height: 100%;
       background-image: var(--field-object-image);
@@ -76,7 +72,10 @@ export default class FieldObject extends LitElement {
   updated(changedProperties) {
     if (changedProperties.has('image')) {
       const fieldElement = this.shadowRoot.querySelector('[part=field-object]');
-      fieldElement.style.setProperty('--field-object-image', `url(${this.image}`);
+      fieldElement.style.setProperty(
+        '--field-object-image',
+        `url(${this.image}`
+      );
     }
 
     if (changedProperties.has('draw')) {
@@ -88,9 +87,8 @@ export default class FieldObject extends LitElement {
     this.requestUpdate();
   }
 
-
   render() {
-    return html`   
+    return html`
       <div part="field-object">
         <slot></slot>
       </div>
