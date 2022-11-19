@@ -1,27 +1,28 @@
-import Store, { SourceProvider } from '@webbitjs/store';
+import Store from '@webbitjs/store';
+import throttle from 'lodash.throttle';
 import getPoses from './get-poses';
 
 export default class FieldObjectManager {
   private sourceKey = '';
   private sourceProvider = '';
-  private provider?: SourceProvider;
   private store: Store;
   private fieldElement: HTMLElement;
+  private unsubscriber?: () => void;
 
   constructor(fieldElement: HTMLElement, store: Store) {
     this.fieldElement = fieldElement;
     this.store = store;
   }
 
-  setProvider(provider: SourceProvider): void {
-    this.provider = provider;
-    this.addFieldObjectsFromSources();
-  }
-
   setSource(key: string, provider: string): void {
     this.sourceKey = key;
     this.sourceProvider = provider;
     this.addFieldObjectsFromSources();
+    this.unsubscriber?.();
+    const subscriber = throttle(() => {
+      this.addFieldObjectsFromSources();
+    }, 500) as () => void;
+    this.unsubscriber = this.store.subscribe(provider, key, subscriber, true);
   }
 
   private addFieldObjectsFromSources(): void {
@@ -55,9 +56,9 @@ export default class FieldObjectManager {
     return typeof this.getChildren()[key] !== 'undefined';
   }
 
-  private getChild(key: string): HTMLElement | undefined {
-    return this.getChildren()[key];
-  }
+  // private getChild(key: string): HTMLElement | undefined {
+  //   return this.getChildren()[key];
+  // }
 
   private getChildren(): Record<string, HTMLElement> {
     const children: Record<string, HTMLElement> = {};
