@@ -11,7 +11,7 @@ export default class Nt4Provider extends SourceProvider {
 
   constructor() {
     super();
-    this.connect('localhost');
+    this.connect(localStorage.getItem('nt4Address') ?? 'localhost');
   }
 
   getServerAddress(): string {
@@ -82,6 +82,7 @@ export default class Nt4Provider extends SourceProvider {
       this.topics = {};
     }
     this.serverAddress = serverAddr;
+    localStorage.setItem('nt4Address', serverAddr);
 
     const appName = 'FRC Web Components';
 
