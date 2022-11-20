@@ -8,4 +8,7 @@ module.exports = defineConfig({
       formats: ['es'],
     },
   },
+  server: {
+    open: '/',
+  },
 });
