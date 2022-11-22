@@ -1,7 +1,7 @@
 export default [
   {
     game: 'Rapid React',
-    'field-image': '/public/field-images/2022-field.jpg',
+    'field-image': '/field-images/2022-field.jpg',
     'field-corners': {
       'top-left': [74, 50],
       'bottom-right': [1774, 900],
@@ -11,7 +11,7 @@ export default [
   },
   {
     game: 'Infinite Recharge',
-    'field-image': '/public/field-images/2020-field.jpg',
+    'field-image': '/field-images/2020-field.jpg',
     'field-corners': {
       'top-left': [96, 25],
       'bottom-right': [1040, 514],
@@ -21,7 +21,7 @@ export default [
   },
   {
     game: 'Destination: Deep Space',
-    'field-image': '/public/field-images/2019-field.jpg',
+    'field-image': '/field-images/2019-field.jpg',
     'field-corners': {
       'top-left': [217, 40],
       'bottom-right': [1372, 615],
@@ -31,7 +31,7 @@ export default [
   },
   {
     game: 'FIRST Power Up',
-    'field-image': '/public/field-images/2018-field.jpg',
+    'field-image': '/field-images/2018-field.jpg',
     'field-corners': {
       'top-left': [125, 20],
       'bottom-right': [827, 370],
@@ -41,7 +41,7 @@ export default [
   },
   {
     game: 'Barrel Racing Path',
-    'field-image': '/public/field-images/2021-barrel.png',
+    'field-image': '/field-images/2021-barrel.png',
     'field-corners': {
       'top-left': [20, 20],
       'bottom-right': [780, 400],
@@ -51,7 +51,7 @@ export default [
   },
   {
     game: 'Bounce Path',
-    'field-image': '/public/field-images/2021-bounce.png',
+    'field-image': '/field-images/2021-bounce.png',
     'field-corners': {
       'top-left': [20, 20],
       'bottom-right': [780, 400],
@@ -61,7 +61,7 @@ export default [
   },
   {
     game: 'Galactic Search A',
-    'field-image': '/public/field-images/2021-galacticsearcha.png',
+    'field-image': '/field-images/2021-galacticsearcha.png',
     'field-corners': {
       'top-left': [20, 20],
       'bottom-right': [780, 400],
@@ -71,7 +71,7 @@ export default [
   },
   {
     game: 'Galactic Search B',
-    'field-image': '/public/field-images/2021-galacticsearchb.png',
+    'field-image': '/field-images/2021-galacticsearchb.png',
     'field-corners': {
       'top-left': [20, 20],
       'bottom-right': [780, 400],
@@ -81,7 +81,7 @@ export default [
   },
   {
     game: 'Slalom Path',
-    'field-image': '/public/field-images/2021-slalom.png',
+    'field-image': '/field-images/2021-slalom.png',
     'field-corners': {
       'top-left': [20, 20],
       'bottom-right': [780, 400],
