@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
-import { FrcDashboard, getElementBoundingBox } from '../../../dashboard';
+import FrcDashboard from '../../frc-dashboard';
+import { getElementBoundingBox } from '../../layer';
 
 function createPreviewElement(): HTMLElement {
   const box = document.createElement('div');

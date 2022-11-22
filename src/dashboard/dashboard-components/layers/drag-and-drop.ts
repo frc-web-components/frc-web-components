@@ -1,4 +1,5 @@
-import { FrcDashboard, appendElementToDashboard } from '../../../dashboard';
+import { appendElementToDashboard } from '../../root/get-element-html';
+import FrcDashboard from '../../frc-dashboard';
 import DashboardDragEvents from './dashboard-drag-events';
 
 interface DragElement {

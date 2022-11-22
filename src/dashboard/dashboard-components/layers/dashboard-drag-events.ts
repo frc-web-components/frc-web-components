@@ -1,5 +1,5 @@
 import { WebbitConnector } from '@webbitjs/webbit';
-import { getAllowedChildrenByConfig } from '../../../dashboard';
+import { getAllowedChildrenByConfig } from '../../get-allowed-children';
 
 type DragListener = (event: DragEvent) => unknown;
 

@@ -1,10 +1,10 @@
-import {
-  addInteractions,
-  FrcDashboard,
-  getElementBoundingBox,
-  removeInteractions,
-} from '../../../dashboard';
 import interact from 'interactjs';
+import {
+  getElementBoundingBox,
+  addInteractions,
+  removeInteractions,
+} from '../../layer';
+import FrcDashboard from '../../frc-dashboard';
 import DashboardSelections from './dashboard-selections';
 import getTranslationFromStyles from './getTranslationFromStyles';
 

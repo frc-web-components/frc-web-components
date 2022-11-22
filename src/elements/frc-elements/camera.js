@@ -4,7 +4,7 @@ let nextStreamId = 0;
 
 export const elementName = 'frc-camera';
 
-const DEFAULT_WAIT_IMAGE = '/public/no-camera-stream.jpg';
+const DEFAULT_WAIT_IMAGE = '/no-camera-stream.jpg';
 
 export const elementConfig = {
   dashboard: {

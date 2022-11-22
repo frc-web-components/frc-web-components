@@ -1,4 +1,4 @@
-import { FrcDashboard } from '../../../dashboard';
+import FrcDashboard from '../../dashboard/frc-dashboard';
 import booleanBoxTutorial from './boolean-box';
 import threeAxisAccelerometer from './3-axis-accelerometer';
 import accelerometer from './accelerometer';
