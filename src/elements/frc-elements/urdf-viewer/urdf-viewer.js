@@ -8,11 +8,9 @@ export const elementName = 'frc-urdf-viewer';
 export const elementConfig = {
   dashboard: {
     displayName: 'URDF Viewer',
+    topLevel: false,
   },
   description: 'Component used to display and manipulate URDF models',
-  dashboard: {
-    displayName: 'URDF Viewer',
-  },
   properties: {
     text: { type: String, primary: true },
     urdf: { type: String },

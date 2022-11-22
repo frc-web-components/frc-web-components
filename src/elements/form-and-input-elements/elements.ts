@@ -11,6 +11,7 @@ export default {
   'vaadin-checkbox-group': {
     dashboard: {
       displayName: 'Checkbox Group',
+      topLevel: false,
     },
     properties: {
       disabled: { type: 'Boolean', reflect: true },
@@ -46,6 +47,7 @@ export default {
   'vaadin-checkbox': {
     dashboard: {
       displayName: 'Checkbox',
+      topLevel: false,
     },
     properties: {
       checked: { type: 'Boolean', reflect: true, primary: true },
@@ -68,9 +70,9 @@ export default {
       allowCustomValue: { type: 'Boolean', attribute: 'allow-custom-value' },
       label: { type: 'String' },
       placeholder: { type: 'String' },
-      helperText: { type: 'String' },
-      errorMessage: { type: 'String', attribute: 'error-message' },
-      required: { type: 'Boolean' },
+      // helperText: { type: 'String' },
+      // errorMessage: { type: 'String', attribute: 'error-message' },
+      // required: { type: 'Boolean' },
       disabled: { type: 'Boolean', reflect: true },
       readonly: { type: 'Boolean', reflect: true },
     },
@@ -159,6 +161,7 @@ export default {
   'vaadin-radio-group': {
     dashboard: {
       displayName: 'Radio Button Group',
+      topLevel: false,
     },
     properties: {
       label: { type: 'String', defaultValue: '' },

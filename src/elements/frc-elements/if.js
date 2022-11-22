@@ -9,6 +9,7 @@ export const elementConfig = {
   slots: [{ name: 'true' }, { name: 'false' }],
   dashboard: {
     displayName: 'If',
+    topLevel: false,
     layout: {
       type: 'absolute',
     },

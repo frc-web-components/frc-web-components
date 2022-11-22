@@ -7,6 +7,7 @@ import { customElement, property } from 'lit/decorators.js';
 export const fwcStringConfig: Partial<WebbitConfig> = {
   dashboard: {
     displayName: 'String Source',
+    topLevel: false,
     layout: {
       movable: false,
       resizable: {

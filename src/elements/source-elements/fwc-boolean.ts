@@ -7,6 +7,7 @@ import { customElement, property } from 'lit/decorators.js';
 export const fwcBooleanConfig: Partial<WebbitConfig> = {
   dashboard: {
     displayName: 'Boolean Source',
+    topLevel: false,
     layout: {
       movable: false,
       resizable: {

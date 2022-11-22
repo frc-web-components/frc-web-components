@@ -23,7 +23,7 @@ FWC can also be installed as a script and included directly into an HTML page. S
 Try it out!
 ===========
 
-A live version of the application be viewed here: https://frc-web-components.github.io/dashboard3/
+A live version of the application be viewed here: https://frc-web-components.github.io/dashboard/
 
 Documentation
 =============
