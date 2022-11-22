@@ -1,4 +1,4 @@
-import { FrcDashboard } from '../../dashboard';
+import FrcDashboard from '../frc-dashboard';
 import { addElementPreview } from './layers/element-preview';
 import { addAbsolutePositionLayout } from './layers/absolute-position-layout';
 import properties from './properties';
@@ -6,7 +6,7 @@ import elementEditors from './element-editors';
 import './element-tree';
 import { addDragAndDrop } from './layers/drag-and-drop';
 
-export default function addPlugin(dashboard: FrcDashboard): void {
+export default function addDashboardComponents(dashboard: FrcDashboard): void {
   addElementPreview(dashboard);
   addAbsolutePositionLayout(dashboard);
   addDragAndDrop(dashboard);
