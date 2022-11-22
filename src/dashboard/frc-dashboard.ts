@@ -272,7 +272,7 @@ export default class FrcDashboard extends Dashboard {
   }
 
   getTheme(): string {
-    const storedTheme = localStorage.getItem('theme') ?? 'light';
+    const storedTheme = localStorage.getItem('theme') ?? 'dark';
     return this.getStoreValue('theme', storedTheme) as string;
   }
 
