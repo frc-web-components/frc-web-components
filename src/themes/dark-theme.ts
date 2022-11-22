@@ -1,6 +1,6 @@
-import { FrcDashboard } from '../../dashboard';
+import { FrcDashboard } from '../dashboard';
 
-export default function addTheme(dashboard: FrcDashboard): void {
+export default function addDarkTheme(dashboard: FrcDashboard): void {
   dashboard.addThemeRules('dark', {
     /* Base (background) */
     '--lumo-base-color': 'hsl(214, 35%, 21%)',

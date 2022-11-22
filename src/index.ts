@@ -1,10 +1,8 @@
 import './icons';
-import './theme';
-import './vaadin';
 import './ace-editor';
 import { FrcDashboard } from './dashboard';
-import './components/frc-dashboard';
-import './components/frc-dashboard-builder';
+import './frc-dashboard';
+import './frc-dashboard-builder';
 
 export default function createDashboard(
   element: HTMLElement,
