@@ -59,6 +59,7 @@ export class DashboardNavbar extends LitElement {
       padding-right: 15px;
       align-items: end;
       gap: 2px;
+      line-height: normal;
     }
 
     .settings {

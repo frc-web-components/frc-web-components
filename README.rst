@@ -27,3 +27,5 @@ A live version of the application be viewed here: https://frc-web-components.git
 
 Documentation
 =============
+
+- `Plugin Development </docs/plugins.rst>`_

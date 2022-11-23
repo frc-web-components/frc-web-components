@@ -1,6 +1,6 @@
 import './icons';
 import './ace-editor';
-import { FrcDashboard } from './dashboard';
+import { FrcDashboard as Dashboard } from './dashboard';
 import './frc-dashboard';
 import './frc-dashboard-builder';
 import addElements from './elements';
@@ -12,8 +12,8 @@ import addDashboardComponents from './dashboard/dashboard-components';
 export default function createDashboard(
   element: HTMLElement,
   dashboardElementName = 'dashboard-root'
-): FrcDashboard {
-  const dashboard = new FrcDashboard();
+): Dashboard {
+  const dashboard = new Dashboard();
   addElements(dashboard);
   addProviders(dashboard);
   // addTutorials(dashboard);
@@ -24,3 +24,5 @@ export default function createDashboard(
   element.appendChild(dashboardElement);
   return dashboard;
 }
+
+export type FrcDashboard = Dashboard;
