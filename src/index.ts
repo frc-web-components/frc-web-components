@@ -9,6 +9,11 @@ import addProviders from './source-providers';
 import addThemes from './themes';
 import addDashboardComponents from './dashboard/dashboard-components';
 
+export function getAssetUrl(relativePath: string): string {
+  const origin = import.meta.url ? new URL(import.meta.url).origin : '';
+  return `${origin}/assets/${relativePath}`;
+}
+
 export default function createDashboard(
   element: HTMLElement,
   dashboardElementName = 'dashboard-root'

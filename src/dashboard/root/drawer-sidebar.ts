@@ -120,6 +120,9 @@ export default class DashboardDrawerSidebar extends LitElement {
     this.dashboard.subscribe('elementSelect', () => {
       this.selectedElement = this.dashboard.getSelectedElement() ?? undefined;
     });
+    this.dashboard.subscribe('elementsAdd', () => {
+      this.groups = this.getGroups();
+    });
     this.selectedElement = this.dashboard.getSelectedElement() ?? undefined;
   }
 
@@ -227,6 +230,7 @@ export default class DashboardDrawerSidebar extends LitElement {
               img.src =
                 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
               event.dataTransfer?.setDragImage(img, 0, 0);
+
               this.dashboard.publish('dragNewElementStart', {
                 selector,
                 event,

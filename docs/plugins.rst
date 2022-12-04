@@ -17,7 +17,7 @@ FWC provides a cli tool which generates a sample plugin that can be used to help
   
   $ npm init @frc-web-components/plugin <name>
 
-Note: You'll need both `node` installed to run the above command: https://nodejs.org/en/download/
+Note: You'll need `node` installed to run the above command: https://nodejs.org/en/download/
 
 Custom Components
 =================
