@@ -71,6 +71,7 @@ export class DashboardNavbar extends LitElement {
     .nt-connection {
       align-self: center;
       color: var(--lumo-contrast, black);
+      white-space: nowrap;
     }
 
     .nt-connection span.connected {
