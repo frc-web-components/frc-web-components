@@ -46,8 +46,13 @@ const styles = css`
     display: none;
   }
 
-  .childless > summary {
+  details > summary {
     list-style: none;
+  }
+
+  details > summary::marker,
+  details > summary::-webkit-details-marker {
+    display: none;
   }
 
   details:not(.selected) > summary:hover {

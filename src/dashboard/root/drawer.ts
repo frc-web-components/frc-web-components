@@ -83,6 +83,15 @@ export default class DashboardDrawer extends LitElement {
     .editor-components details {
       margin-bottom: 15px;
     }
+
+    details > summary {
+      list-style: none;
+    }
+
+    details > summary::marker,
+    details > summary::-webkit-details-marker {
+      display: none;
+    }
   `;
 
   constructor() {
