@@ -51,9 +51,10 @@ If the plugin does not launch automatically, copy the URL and paste it into a br
 
 .. image:: ./images/plugin-launched.png
 
-From here you'll be able to test the functionality of your plugin in a browser instance of the FWC Dashboard. By default the plugin CLI tool includes an example component called `My Counter` you can use to get started. The components you create for your plugin can be tested by adding them to the dashboard layout. Elements can be added by dragging them into the layout or clicking the `Prepend` and `Append` buttons:
+From here you'll be able to test the functionality of your plugin in a browser instance of the FWC Dashboard. By default the plugin CLI tool includes an example component called **My Counter** you can use to get started. The components you create for your plugin can be tested by adding them to the dashboard layout. Elements can be added by dragging them into the layout or clicking the **Prepend** and **Append** buttons:
 
 .. image:: ./images/plugin-dnd-test.gif
+  :width: 750
 
 Let's open the plugin source code to see what's inside. I recommend using Visual Studio Code, but you are free to use any editor you wish:
 
