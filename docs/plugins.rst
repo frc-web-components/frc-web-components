@@ -75,7 +75,7 @@ The root of your plugin source code is in the **plugin.ts** file. It exports a f
     },
   }, 'My Elements');
 
-The above adds a new component to the FWC Dashboard interface. Note that the above is just a config for the **my-counter** HTML element and not the code for the **my-counter** element itself. The above configuration is required by the dashboard so it knows things like how to add the component to the interface, and information about its property so they can be controlled using external sources such as NetworkTables.
+The above adds a new component to the FWC Dashboard interface. Note that the above is just a config for the **my-counter** HTML element and not the code for the **my-counter** element itself. The above configuration is required by the dashboard so it knows things like how to add the component to the interface, and information about its properties so they can be controlled using external sources such as NetworkTables.
 
 Some config fields are used for display purposes only, such as the **displayName** field and the second argument in the **.addElements** method which is used by the dashboard app to group similar components together. Update the plugin code to the following and see how it appears in the dashboard:
 
@@ -92,10 +92,71 @@ Some config fields are used for display purposes only, such as the **displayName
     },
   }, 'My Plugin');
 
-The browser should automatically refresh with the latest changes on save. In the dropdown on the top left, you should now see **My Plugin** option:
+The browser should automatically refresh with the latest changes on save. In the dropdown on the top left, you should now see the **My Plugin** option:
 
 .. image:: ./images/my-plugin-group.png
 
 Select this group and you should see the **my-counter** element with the new display name:
 
 .. image:: ./images/my-first-element.png
+
+Now let's take a look at the code for the **my-counter** component.
+
+Creating custom elements
+========================
+
+The source code for the **my-counter** element can be found in the **my-counter.ts** file under the **src** folder of your plugin.
+
+.. code:: javascript
+
+  import { html, css, LitElement } from "lit";
+  import { customElement, property } from "lit/decorators.js";
+  import getAssetUrl from "./get-asset-url";
+
+  @customElement("my-counter")
+  export class MyCounter extends LitElement {
+    static styles = css`
+      :host {
+        display: inline-block;
+        width: 200px;
+        height: 50px;
+      }
+
+      button {
+        border: 3px solid black;
+        background: white;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+      }
+
+      button div {
+        padding: 10px;
+        background: white;
+        display: inline-block;
+      }
+    `;
+
+    /**
+    * The number of times the button has been clicked.
+    */
+    @property({ type: Number, reflect: true })
+    count = 0;
+
+    private onClick() {
+      this.count++;
+    }
+
+    render() {
+      return html`
+        <button
+          @click=${this.onClick}
+          part="button"
+          style='background-image: url("${getAssetUrl("button-background.jpg")}")'
+        >
+          count is ${this.count}
+        </button>
+      `;
+    }
+  }
