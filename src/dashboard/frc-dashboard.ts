@@ -73,6 +73,7 @@ export default class FrcDashboard extends Dashboard {
         getAllowedChildren(selectedElement, this.getConnector())
       );
     }
+    this.publish('elementsAdd');
   }
 
   setHtml(html: string): void {

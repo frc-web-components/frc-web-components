@@ -2,6 +2,11 @@
 import { html, css, LitElement, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import FrcDashboard from '../frc-dashboard';
+import {
+  isUsingNt3,
+  setIsUsingNt3,
+  setNetworkTablesProvider,
+} from '../../source-providers/nt-provider';
 
 @customElement('dashboard-settings-dialog')
 export class SettingsDialog extends LitElement {
@@ -9,6 +14,7 @@ export class SettingsDialog extends LitElement {
   @state() theme = '';
   @state() themes: string[] = [];
   @state() serverAddress = '';
+  @state() usingNt3 = isUsingNt3();
 
   static styles = css`
     :host {
@@ -81,6 +87,13 @@ export class SettingsDialog extends LitElement {
     this.serverAddress = value;
   }
 
+  private onUsingNt3Change(ev: CustomEvent): void {
+    const { checked } = ev.target as any;
+    this.usingNt3 = checked;
+    setIsUsingNt3(checked);
+    setNetworkTablesProvider(this.dashboard);
+  }
+
   render(): TemplateResult {
     const items = this.dashboard.getThemes().map((theme) => ({
       id: theme,
@@ -116,6 +129,13 @@ export class SettingsDialog extends LitElement {
             .value=${this.serverAddress}
             @change=${this.onAddressChange}
           ></vaadin-text-field>
+        </div>
+        <div class="form-item">
+          <label>Use NT3</label>
+          <vaadin-checkbox
+            ?checked=${this.usingNt3}
+            @change=${this.onUsingNt3Change}
+          ></vaadin-checkbox>
         </div>
       </div>
       <footer

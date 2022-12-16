@@ -59,6 +59,7 @@ export class DashboardNavbar extends LitElement {
       padding-right: 15px;
       align-items: end;
       gap: 2px;
+      line-height: normal;
     }
 
     .settings {
@@ -70,6 +71,7 @@ export class DashboardNavbar extends LitElement {
     .nt-connection {
       align-self: center;
       color: var(--lumo-contrast, black);
+      white-space: nowrap;
     }
 
     .nt-connection span.connected {

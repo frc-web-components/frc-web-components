@@ -76,7 +76,6 @@ export default class DashboardDragEvents {
   }
 
   #addEvents(droppableSelectors: { slot: string; selector: string }[]): void {
-    // this.#droppableSelectors = droppableSelectors;
     const selectors = droppableSelectors.map(({ selector }) => selector);
     const droppableElements: HTMLElement[] = [];
     this.#elements.forEach((element) => {
