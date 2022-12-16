@@ -56,6 +56,46 @@ From here you'll be able to test the functionality of your plugin in a browser i
 .. image:: ./images/plugin-dnd-test.gif
   :width: 750
 
-Let's open the plugin source code to see what's inside. I recommend using Visual Studio Code, but you are free to use any editor you wish:
+Let's open the plugin source code to see what's inside. Visual Studio Code is recommended, but you are free to use any editor you wish:
 
 .. image:: ./images/plugin-source-code.png
+
+The root of your plugin source code is in the **plugin.ts** file. It exports a function which the FWC Dashboard app calls when it starts up. The **addPlugin** function is passed in the dashboard API which can be used to extend the dashboard's functionality. The most common way of extending the dashboard is by adding custom components. You can do this using the **dashboard.addElements** method. Let's look a little closer at the code above:
+
+.. code:: javascript
+
+  dashboard.addElements({
+    'my-counter': {
+      dashboard: {
+        displayName: 'My Counter',
+      },
+      properties: {
+        count: { type: 'Number', reflect: true }
+      }
+    },
+  }, 'My Elements');
+
+The above adds a new component to the FWC Dashboard interface. Note that the above is just a config for the **my-counter** HTML element and not the code for the **my-counter** element itself. The above configuration is required by the dashboard so it knows things like how to add the component to the interface, and information about its property so they can be controlled using external sources such as NetworkTables.
+
+Some config fields are used for display purposes only, such as the **displayName** field and the second argument in the **.addElements** method which is used by the dashboard app to group similar components together. Update the plugin code to the following and see how it appears in the dashboard:
+
+.. code:: javascript
+
+  dashboard.addElements({
+    'my-counter': {
+      dashboard: {
+        displayName: 'My First Element',
+      },
+      properties: {
+        count: { type: 'Number', reflect: true }
+      }
+    },
+  }, 'My Plugin');
+
+The browser should automatically refresh with the latest changes on save. In the dropdown on the top left, you should now see **My Plugin** option:
+
+.. image:: ./images/my-plugin-group.png
+
+Select this group and you should see the **my-counter** element with the new display name:
+
+.. image:: ./images/my-first-element.png
