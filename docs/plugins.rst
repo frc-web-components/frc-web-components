@@ -179,7 +179,7 @@ Each **ElementConfig** added to the FWC Dashboard requires a **selector** so the
     [selector: string]: ElementConfig
   });
 
-A **selector** is any valid CSS selector. Most of the time these are the element tag names, but they can also be more specific, such selectors that match elements with classes and attributes. For example take the following HTML and element configs added to the dashboard:
+A **selector** is any valid CSS selector. Most of the time these are the element tag names, but they can also be more specific, such as selectors that match elements with classes and attributes. For example take the following HTML and element configs added to the dashboard:
 
 .. code:: html
 
@@ -211,3 +211,76 @@ Also note that when an element matches multiple configs, the one with the highes
 
 You can read more on CSS selectors here: https://web.dev/learn/css/selectors/
 
+Properties
+----------
+
+Properties config is used to connect your element's properties and attributes to external sources such as NetworkTables:
+
+.. code:: javascript
+
+  dashboard.addElements({
+    'some-element': {
+      properties: { 
+        [propertyName: string]: PropertyConfig
+      }
+    },
+  });
+
+**propertyName** is a string in camelCase format used to map sources to your elements. For example, take the properties from the **frc-gauge** component:
+
+.. code:: javascript
+
+  properties: {
+    min: { type: 'Number' },
+    max: { type: 'Number', defaultValue: 100 },
+    value: { type: 'Number', primary: true },
+  },
+
+Let's see how a Gauge's properties can be controlled in the dashboard using NetworkTables:
+
+.. image:: ./images/gauge-properties.png
+  
+The element's source was set to the NetworkTables key "/gauge". Since "/gauge" is a subtable, its "children" will be mapped to the element's properties. Note that even though the keys "/gauge/Max" and "/gauge/Value?!" are not exact matches for the "max" and "value" properties they are still mapped because internally FWC converts keys to camelCase.
+
+Now let's look at how to configure individual properties:
+
+.. code:: javascript
+
+  {
+    // This is the only required field and is used by the dashboard to know what type
+    // of value element expects for that property. For example, a number input field
+    // might have a property "value" that is type 'Number' and a property "disabled"
+    // that is type 'Boolean'. 'SourceProvider' and 'Store' are special properties
+    // that are used by FWC to inject the SourceProvider and Store object for more
+    // advanced use cases.
+    type: 'String' | 'Boolean' | 'Number' | 'Array' | 'Object' | 'SourceProvider' | 'Store',
+    // Optional field. The type of value you provide is determined by the 'type' field.
+    // This value will default to '' for 'String' type, false for 'Boolean' type,
+    // 0 for 'Number' type, [] for 'Array' type, and {} for 'Object' type
+    defaultValue?: string | boolean | number | Array<unknown> | Record<string, unknown>,
+    // Property values can be get or set through an element's attribute or property
+    // on the element object itself. At least one of the 'attribute' and 'property'
+    // fields here should be set. 'property' will be set to the 'propertyName' value.
+    // You should explicitly set 'property' to false or null if the element does not
+    // have one.
+    attribute?: string | null | false,
+    property?: string | null | false,
+    // Optional description used for display purposes.
+    description?: string,
+    // Whether the property value when set should reflect back to the element's attribute.
+    // This is used by the dashboard to detect changes to the property value and send
+    // updates to the external source.
+    reflect?: boolean,
+    // If the source is a value instead of a table, it will be mapped to this property if
+    // primary is set to true. Only one property should be be the primary value. Defaults
+    // to false.
+    primary?: boolean,
+    // For the dashboard to send updates to external sources based on changes to property 
+    // values, it needs some way to detect that the property value has changed. If the
+    // element emits an event when the property changes, the dashboard can detect updates
+    // by listening to the event.
+    changeEvent?: string,
+    // Optional configuration for the input control used to set the property value in
+    // the dashboard
+    input?: PropertyInputConfig
+  }
