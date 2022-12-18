@@ -239,6 +239,7 @@ Properties config is used to connect your element's properties and attributes to
 Let's see how a Gauge's properties can be controlled in the dashboard using NetworkTables:
 
 .. image:: ./images/gauge-properties.png
+  :width: 600
   
 The element's source was set to the NetworkTables key "/gauge". Since "/gauge" is a subtable, its "children" will be mapped to the element's properties. Note that even though the keys "/gauge/Max" and "/gauge/Value?!" are not exact matches for the "max" and "value" properties they are still mapped because internally FWC converts keys to camelCase.
 
