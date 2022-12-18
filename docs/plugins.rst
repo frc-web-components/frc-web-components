@@ -105,7 +105,7 @@ Now let's take a look at the code for the **my-counter** component.
 Creating custom elements
 ========================
 
-The source code for the **my-counter** element can be found in the **my-counter.ts** file under the **src** folder of your plugin.
+The source code for the **my-counter** element can be found in the **my-counter.ts** file under the **src** folder of your plugin:
 
 .. code:: javascript
 
@@ -160,3 +160,54 @@ The source code for the **my-counter** element can be found in the **my-counter.
       `;
     }
   }
+
+
+Element Config
+==============
+
+For elements to be added and handled by the FWC Dashboard, they need an associated **ElementConfig**. Below are the configuration options needed to define an **ElementConfig**:
+
+Selectors
+---------
+
+Each **ElementConfig** added to the FWC Dashboard requires a **selector** so the dashboard interface knows which config should be applied to elements added to the dashboard:
+
+
+.. code:: javascript
+
+  dashboard.addElements({
+    [selector: string]: ElementConfig
+  });
+
+A **selector** is any valid CSS selector. Most of the time these are the element tag names, but they can also be more specific, such selectors that match elements with classes and attributes. For example take the following HTML and element configs added to the dashboard:
+
+.. code:: html
+
+  <button>Click me</button>
+  <frc-gyro></frc-gyro>
+  <input type="text" />
+  <input type="checkbox" />
+  <div class="checkbox-group">
+    <input type="checkbox" />
+    <input type="checkbox" />
+  </div>
+
+  <script>
+    ...
+    dashboard.addElements({
+      "button": { ... },
+      "frc-gyro": { ... },
+      "input[type=text]": { ... },
+      "input[type=checkbox]": { ... },
+      ".checkbox-group input[type=checkbox]": { ... },
+    });
+  </script>
+
+In the above script tag there are 5 element configs added to the dashboard each with a different selector. The *<button>* and *<frc-gyro>* elements will match the *"button"* and *"frc-gyro"* element configs.
+
+To create separate configs for the checkbox and text input elements, configs with attribute selectors *"input[type=text]"* and *"input[type=checkbox]"* are needed.
+
+Also note that when an element matches multiple configs, the one with the highest specificity wins. The checkbox inputs in the div element match both the *"input[type=checkbox]"* and *".checkbox-group input[type=checkbox]"*. Since the second is more specific, the elements will take on those configs.
+
+You can read more on CSS selectors here: https://web.dev/learn/css/selectors/
+
