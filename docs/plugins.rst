@@ -161,6 +161,9 @@ The source code for the **my-counter** element can be found in the **my-counter.
     }
   }
 
+The component above was created using `lit <https://lit.dev/>`_, a library for building web components that act just like built-in elements. There are many resources online to learn about the web component standard such as this one: https://kinsta.com/blog/web-components/
+
+Web components are supported by all major browsers and can be built using many libraries and frameworks. A list of templates with examples can be found here: https://webcomponents.dev/new
 
 Element Config
 ==============
