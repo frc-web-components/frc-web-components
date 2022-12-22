@@ -288,3 +288,86 @@ Now let's look at how to configure individual properties:
     // the dashboard
     input?: PropertyInputConfig
   }
+
+Property Input Config
+---------------------
+
+The **input** config option for properties is used to control how the property input behaves on the dashboard. The **input** config option takes on the following structure:
+
+.. code:: javascript
+
+  {
+    type?: string,
+    [option: string]: unknown
+  }
+
+The current available types are: 
+
+- String
+- Number
+- Boolean
+- Array
+- StringArray
+- BooleanArray
+- NumberArray
+- Textarea
+- StringDropdown
+- ColorPicker
+
+By default **input.type** field will be equal to the property's type. For example:
+
+.. code:: javascript
+
+  dashboard.addElements({
+    'some-element': {
+      properties: { 
+        someProp: { type: 'String' }
+      }
+    },
+  });
+
+Although **input** is not set in the **someProp** property, it will default to the following:
+
+.. code:: javascript
+
+  properties: { 
+    someProp: { 
+      type: 'String',
+      input: { type: 'String' } 
+    }
+  }
+
+The above property will be displayed as a text input field on the dashboard:
+
+.. image:: ./images/text-input-property.png
+  :width: 500
+
+What if we had a property that took in a a hex color? Although we could store the data as a **String**, displaying this in a text input field isn't very pretty.
+
+.. code:: javascript
+
+  properties: { 
+    color: { type: 'String' } 
+  }
+
+The above property would be displayed as the following if the current hex value was red:
+
+.. image:: ./images/text-input-property2.png
+  :width: 500
+
+It would be far better in this case if we displayed this using a color picker:
+
+.. code:: javascript
+
+  properties: { 
+    color: { 
+      type: 'String',
+      input: { type: 'ColorPicker' }
+    } 
+  }
+
+The above property would be displayed as the following if the current hex value was red:
+
+.. image:: ./images/color-picker-input.png
+  :width: 500
+
