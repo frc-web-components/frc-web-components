@@ -371,3 +371,21 @@ The above property would be displayed as the following if the current hex value 
 .. image:: ./images/color-picker-input.png
   :width: 500
 
+Let's look at the configs for the available input types in more detail.
+
+String Property Input
+---------------------
+
+The **String** property input displays a text field and accepts properties of type **String**. It takes on the following config:
+
+.. code:: javascript
+
+  { 
+    type: 'String',
+    disabled?: boolean,
+  }
+
+A string input with the value "some string" looks like the following:
+
+.. image:: ./images/string-input.png
+  :width: 500
