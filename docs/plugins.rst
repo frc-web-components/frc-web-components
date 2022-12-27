@@ -382,10 +382,167 @@ The **String** property input displays a text field and accepts properties of ty
 
   { 
     type: 'String',
-    disabled?: boolean,
+    isDisabled?: (element: HTMLElement) => boolean,
   }
 
 A string input with the value "some string" looks like the following:
 
 .. image:: ./images/string-input.png
+  :width: 500
+
+Number Property Input
+---------------------
+
+The **Number** property input displays a number field and accepts properties of type **Number**. It takes on the following config:
+
+.. code:: javascript
+
+  { 
+    type: 'Number',
+    isDisabled?: (element: HTMLElement) => boolean,
+  }
+
+A number input with the value 5 looks like the following:
+
+.. image:: ./images/number-input.png
+  :width: 500
+
+Boolean Property Input
+---------------------
+
+The **Boolean** property input displays a checkbox and accepts properties of type **Boolean**. It takes on the following config:
+
+.. code:: javascript
+
+  { 
+    type: 'Boolean',
+    isDisabled?: (element: HTMLElement) => boolean,
+  }
+
+A boolean input with the value **true** looks like the following:
+
+.. image:: ./images/boolean-input.png
+  :width: 400
+
+Array Property Input
+---------------------
+
+The **Array** property input displays a token input and accepts properties of type **Array**. You can add values by typing and pressing the enter/return key and remove them by clicking on the **x** button on each item. It takes on the following config:
+
+.. code:: javascript
+
+  { 
+    type: 'Array',
+    isDisabled?: (element: HTMLElement) => boolean,
+  }
+
+An Array input with the value ["a", "b", "a", "1", "2", "3"] looks like the following:
+
+.. image:: ./images/array-input.png
+  :width: 500
+
+StringArray Property Input
+---------------------
+
+The **StringArray** property input is an alias of the **Array** property input.
+
+BooleanArray Property Input
+---------------------
+
+The **BooleanArray** property input displays a token input and accepts properties of type **Array**. You can add **true** and **false** values by typing and pressing the enter/return key or selecting them from the dropdown options. Values can be removed by clicking on the **x** button on each item. It takes on the following config:
+
+.. code:: javascript
+
+  { 
+    type: 'BooleanArray',
+    isDisabled?: (element: HTMLElement) => boolean,
+  }
+
+An Array input with the value [true, false, true, false] looks like the following:
+
+.. image:: ./images/boolean-array-input.png
+  :width: 500
+
+NumberArray Property Input
+---------------------
+
+The **NumberArray** property input displays a token input and accepts properties of type **Array**. You can add number values by typing and pressing the enter/return key. Values can be removed by clicking on the **x** button on each item. It takes on the following config:
+
+.. code:: javascript
+
+  { 
+    type: 'NumberArray',
+    isDisabled?: (element: HTMLElement) => boolean,
+  }
+
+An Array input with the value [1, 2, 3, 4] looks like the following:
+
+.. image:: ./images/number-array-input.png
+  :width: 500
+
+Textarea Property Input
+-----------------------
+
+The **Textarea** property input displays a textarea and accepts properties of type **String**. It takes on the following config:
+
+.. code:: javascript
+
+  { 
+    type: 'Textarea',
+    isDisabled?: (element: HTMLElement) => boolean,
+  }
+
+A textarea input with the value "I love textareas!" looks like the following:
+
+.. image:: ./images/textarea-input.png
+  :width: 500
+
+
+StringDropdown Property Input
+---------------------
+
+The **StringDropdown** property input displays a dropdown and accepts properties of type **Array**. It accepts a function **getOptions** which should return an array of strings for each option. By default it only accepts values from the available options, but will accept custom values if allowCustomValues** is set to **true**. It takes on the following config:
+
+.. code:: javascript
+
+  { 
+    type: 'StringDropdown',
+    isDisabled?: (element: HTMLElement) => boolean,
+    allowCustomValues?: boolean,
+    getOptions: (element: HTMLElement) => string[]
+  }
+
+For example, the following config:
+
+.. code:: javascript
+
+  stringDropdown: {
+    type: "Array",
+    input: {
+      type: "StringDropdown",
+      allowCustomValues: true,
+      getOptions: () => ["Option 1", "Option 2", "Option 3"],
+    },
+  },
+
+Would produce the following:
+
+.. image:: ./images/string-dropdown-input.png
+  :width: 500
+
+ColorPicker Property Input
+-----------------------
+
+The **ColorPicker** property input displays a color picker and accepts properties of type **String**. It takes on the following config:
+
+.. code:: javascript
+
+  { 
+    type: 'ColorPicker',
+    isDisabled?: (element: HTMLElement) => boolean,
+  }
+
+A color picker input with the value "#FF0000" looks like the following:
+
+.. image:: ./images/color-picker-input.png
   :width: 500

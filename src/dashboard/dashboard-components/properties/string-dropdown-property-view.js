@@ -37,9 +37,10 @@ class StringDropdownPropertyView extends PropertyView {
 
   getOptions() {
     const getOptions = this.property?.input?.getOptions;
-    return typeof getOptions === 'function'
-      ? getOptions.bind(this.element)()
-      : [];
+    if (typeof getOptions !== 'function') {
+      return [];
+    }
+    return getOptions(this.element);
   }
 
   renderInputField() {

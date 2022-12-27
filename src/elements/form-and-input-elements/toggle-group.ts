@@ -22,8 +22,8 @@ export const toggleGroupConfig = {
       input: {
         type: 'StringDropdown',
         allowCustomValues: false,
-        getOptions(): string[] {
-          return (this as any).options;
+        getOptions({ options }: { options: string[] }): string[] {
+          return options;
         },
       },
     },
