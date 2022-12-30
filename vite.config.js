@@ -5,7 +5,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: {
-        'frc-web-components': 'src/index.ts',
+        fwc: 'src/index.ts',
         'get-asset-url': 'src/get-asset-url.ts',
       },
       formats: ['es'],

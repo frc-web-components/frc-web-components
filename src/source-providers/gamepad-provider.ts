@@ -28,11 +28,11 @@ export default class GamepadProvider extends SourceProvider {
         this.updateSource(`/${index}/mapping`, mapping);
         this.updateSource(`/${index}/timestamp`, timestamp);
 
-        const presses = [];
-        const touches = [];
-        const values = [];
+        const presses: boolean[] = [];
+        const touches: boolean[] = [];
+        const values: number[] = [];
 
-        buttons.forEach((button, buttonIndex) => {
+        buttons.forEach((button) => {
           const { pressed, touched, value } = button;
           presses.push(pressed);
           touches.push(touched);

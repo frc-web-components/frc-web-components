@@ -1,17 +1,17 @@
 {
-  "name": "@frc-web-components/frc-web-components",
-  "version": "4.5.3-alpha.0",
+  "name": "@frc-web-components/fwc",
+  "version": "1.0.0",
   "description": "",
   "files": [
     "dist",
     "types"
   ],
-  "main": "dist/frc-web-components.es.js",
-  "module": "dist/frc-web-components.es.js",
+  "main": "dist/fwc.es.js",
+  "module": "dist/fwc.es.js",
   "type": "module",
   "types": "types/index.d.ts",
   "exports": {
-    ".": "./dist/frc-web-components.es.js",
+    ".": "./dist/fwc.es.js",
     "./get-asset-url": "./dist/get-asset-url.es.js"
   },
   "typesVersions": {
