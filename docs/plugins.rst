@@ -170,6 +170,27 @@ Element Config
 
 For elements to be added and handled by the FWC Dashboard, they need an associated **ElementConfig**. Below are the configuration options needed to define an **ElementConfig**:
 
+.. code:: javascript
+
+  {
+    // A description for the element
+    description?: string,
+    // This is useful if the element is usually associated with a particular source.
+    // e.g. Robot code publishes field related info to "/SmartDashboard/Field" in NetworkTables
+    // so "defaultSourceKey" is set to this key and "defaultSourceProvider" to "NetworkTables"
+    // for the Field2d element.
+    defaultSourceKey?: string,
+    defaultSourceProvider?: string,
+    // 
+    dashboard?: DashboardConfig,
+    // Properties are used to control how the element looks and behaves. They can be bound
+    // to external sources such as NetworkTables
+    properties: {
+      [propertyName: string]: PropertyConfig
+    },
+    slots?: SlotConfig[],
+  }
+
 Selectors
 ---------
 
