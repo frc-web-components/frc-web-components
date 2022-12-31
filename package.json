@@ -12,12 +12,16 @@
   "types": "types/index.d.ts",
   "exports": {
     ".": "./dist/fwc.es.js",
-    "./get-asset-url": "./dist/get-asset-url.es.js"
+    "./get-asset-url": "./dist/get-asset-url.es.js",
+    "./load-local-storage": "./dist/load-local-storage.es.js"
   },
   "typesVersions": {
     "*": {
       "get-asset-url": [
         "types/get-asset-url.d.ts"
+      ],
+      "load-local-storage": [
+        "types/load-local-storage.d.ts"
       ]
     }
   },

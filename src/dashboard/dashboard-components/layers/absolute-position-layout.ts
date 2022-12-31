@@ -205,6 +205,11 @@ class AbsolutePositioningLayout {
             this.#selectedElement.style.webkitTransform = translate;
           }
         },
+        end: () => {
+          this.dashboard.publish('elementResizeEnd', {
+            element: this.#selectedElement,
+          });
+        },
       },
       modifiers: [
         // keep the edges inside the parent
@@ -252,6 +257,11 @@ class AbsolutePositioningLayout {
           const translate = `translate(${x}px, ${y}px)`;
           this.#selectedElement.style.transform = translate;
           this.#selectedElement.style.webkitTransform = translate;
+        },
+        end: () => {
+          this.dashboard.publish('elementDragEnd', {
+            element: this.#selectedElement,
+          });
         },
       },
       modifiers: [

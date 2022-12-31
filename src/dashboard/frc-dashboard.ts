@@ -84,6 +84,7 @@ export default class FrcDashboard extends Dashboard {
     if (tab) {
       this.setSelectedElement(tab);
     }
+    this.publish('htmlSet');
   }
 
   resetHtml(): void {

@@ -81,6 +81,11 @@ class PropertiesEditor extends LitElement {
     this.sourceChangeObserver?.disconnect();
     if (this.#element) {
       this.sourceChangeObserver = new MutationObserver(() => {
+        this.dashboard.publish('sourceChange', {
+          sourceKey: this.sourceKey,
+          sourceProvider: this.sourceProvider,
+          element: this.#element,
+        });
         this.requestUpdate();
       });
       this.sourceChangeObserver.observe(this.#element, {
@@ -157,6 +162,12 @@ class PropertiesEditor extends LitElement {
 
     return html`
       <dashboard-component-renderer
+        @change=${(event) => {
+          this.dashboard.publish('propertyChange', {
+            ...event.detail,
+            element: this.#element,
+          });
+        }}
         component-type="propertyInput"
         component-id=${inputType}
         .config=${{
