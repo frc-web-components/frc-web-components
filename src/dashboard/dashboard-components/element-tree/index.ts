@@ -1,4 +1,8 @@
-import { LitElement, html, css } from 'lit';
+/* eslint-disable import/extensions */
+import { WebbitConnector } from '@webbitjs/webbit';
+import { LitElement, html, css, TemplateResult } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import FrcDashboard from '../../frc-dashboard';
 import './element-tree-node';
 
 const styles = css`
@@ -22,24 +26,23 @@ const styles = css`
   }
 `;
 
-class ElementTree extends LitElement {
+@customElement('dashboard-element-tree')
+export class ElementTree extends LitElement {
   static styles = styles;
 
-  static properties = {
-    dashboard: { attribute: false },
-  };
+  @property({ type: Object, attribute: false }) dashboard!: FrcDashboard;
 
-  get #connector() {
+  get #connector(): WebbitConnector {
     return this.dashboard.getConnector();
   }
 
-  firstUpdated() {
+  firstUpdated(): void {
     this.#connector.subscribeElementConnected(() => this.requestUpdate());
     this.#connector.subscribeElementDisconnected(() => this.requestUpdate());
     this.dashboard.subscribe('elementSelect', () => this.requestUpdate());
   }
 
-  render() {
+  render(): TemplateResult {
     const children = [...this.#connector.getRootElement().children];
     return html`
       <div class="tree">
@@ -56,5 +59,3 @@ class ElementTree extends LitElement {
     `;
   }
 }
-
-customElements.define('dashboard-element-tree', ElementTree);

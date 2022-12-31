@@ -1,12 +1,18 @@
-import { LitElement, html, css } from 'lit';
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable import/extensions */
+import { LitElement, html, css, TemplateResult } from 'lit';
+import { customElement, property, state, query } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
 import Iconify from '@iconify/iconify';
+import { WebbitConfig, WebbitConnector } from '@webbitjs/webbit';
+import FrcDashboard from '../../frc-dashboard';
 
-function classMap(classes) {
-  const filteredClasses = Object.entries(classes)
-    .filter(([, filter]) => filter)
-    .map(([className]) => className);
-  return filteredClasses.join(' ');
-}
+// function classMap(classes) {
+//   const filteredClasses = Object.entries(classes)
+//     .filter(([, filter]) => filter)
+//     .map(([className]) => className);
+//   return filteredClasses.join(' ');
+// }
 
 const styles = css`
   :host {
@@ -106,70 +112,59 @@ const styles = css`
   }
 `;
 
-class ElementTreeNode extends LitElement {
-  #unsubscribeFromWebbit;
-  #elementObserver;
+@customElement('dashboard-element-tree-node')
+export class ElementTreeNode extends LitElement {
+  #unsubscribeFromWebbit: () => void = () => {};
+  #elementObserver: MutationObserver | null = null;
 
   static styles = styles;
 
-  static get properties() {
-    return {
-      element: { type: HTMLElement, attribute: false },
-      level: { type: Number },
-      draggable: { type: Boolean },
-      droppable: { type: Boolean },
-      isReordering: { state: true },
-      dashboard: { attribute: false },
-      expanded: { type: Boolean },
-    };
-  }
+  @property({ type: HTMLElement, attribute: false })
+  element: HTMLElement | null = null;
+  @property({ type: Number }) level = 0;
+  @property({ type: Boolean }) draggable = false;
+  @property({ type: Boolean }) droppable = false;
+  @property({ type: Boolean }) expanded = false;
+  @property({ type: Object, attribute: false }) dashboard!: FrcDashboard;
 
-  constructor() {
-    super();
-    this.element = null;
-    this.level = 0;
-    this.#unsubscribeFromWebbit = () => {};
-    this.#elementObserver = null;
-    this.draggable = false;
-    this.droppable = false;
-    this.isReordering = false;
-  }
+  @state() isReordering = false;
 
-  get selectedElement() {
+  get selectedElement(): HTMLElement | null {
     return this.dashboard.getSelectedElement();
   }
 
-  get connector() {
+  get connector(): WebbitConnector {
     return this.dashboard.getConnector();
   }
 
-  get headerElement() {
-    return this.renderRoot.querySelector('.header');
-  }
+  @query('details') detailsElement!: HTMLDetailsElement;
+  @query('.header') headerElement?: HTMLElement;
 
-  get detailsElement() {
-    return this.renderRoot.querySelector('details');
-  }
-
-  get elementConfig() {
+  get elementConfig(): WebbitConfig | null {
+    if (!this.element) {
+      return null;
+    }
     return this.connector?.getMatchingElementConfig(this.element) ?? null;
   }
 
-  #hasChildren() {
+  #hasChildren(): boolean {
+    if (!this.element) {
+      return false;
+    }
     return this.element.children.length > 0;
   }
 
-  #isSelected() {
+  #isSelected(): boolean {
     return this.element === this.selectedElement;
   }
 
-  #removeSubscriptions() {
+  #removeSubscriptions(): void {
     this.#elementObserver?.disconnect();
     this.#unsubscribeFromWebbit();
   }
 
-  updated(changedProps) {
-    if (changedProps.has('element')) {
+  updated(changedProps: Map<string, unknown>): void {
+    if (changedProps.has('element') && this.element) {
       this.#removeSubscriptions();
       const webbit = this.connector.getElementWebbit(this.element);
       this.#unsubscribeFromWebbit =
@@ -188,16 +183,16 @@ class ElementTreeNode extends LitElement {
       });
     }
 
-    Iconify.scan(this.renderRoot);
+    Iconify.scan(this.renderRoot as HTMLElement);
   }
 
-  firstUpdated() {
+  firstUpdated(): void {
     this.connector.subscribeElementConnected(() => this.requestUpdate());
     this.connector.subscribeElementDisconnected(() => this.requestUpdate());
     this.dashboard.subscribe('elementSelect', () => {
       if (
         this.selectedElement &&
-        this.element.contains(this.selectedElement) &&
+        this.element?.contains(this.selectedElement) &&
         this.element !== this.selectedElement
       ) {
         this.detailsElement.open = true;
@@ -209,126 +204,130 @@ class ElementTreeNode extends LitElement {
     }
   }
 
-  disconnectedCallback() {
+  disconnectedCallback(): void {
     super.disconnectedCallback();
     this.#removeSubscriptions();
   }
 
-  #dispatchEvent(eventName) {
+  #dispatchEvent(eventName: string): void {
     const event = new CustomEvent(eventName, {
       bubbles: true,
       composed: true,
       detail: {
         element: this.element,
-        name: this.connector.getMatchingElementSelector(this.element),
+        name: this.connector.getMatchingElementSelector(this.element!),
       },
     });
     this.dispatchEvent(event);
   }
 
-  #onSelect(ev) {
-    const element = ev.target || ev.path[0];
+  #onSelect(ev: MouseEvent): void {
+    const element: HTMLElement = ev.target || (ev as any).path[0];
     const caret = this.renderRoot.querySelector('.caret');
     if (!caret || !caret.contains(element)) {
-      this.dashboard.setSelectedElement(this.element);
+      this.dashboard.setSelectedElement(this.element!);
     }
   }
 
-  #onPreviewStart() {
+  #onPreviewStart(): void {
     this.dashboard.setPreviewedElement(this.element);
   }
 
-  #onPreviewEnd() {
+  #onPreviewEnd(): void {
     this.dashboard.setPreviewedElement(null);
   }
 
-  #groupChildren() {
-    const slots = {
+  #groupChildren(): {
+    name: string;
+    elements: HTMLElement[];
+  }[] {
+    const slots: Record<string, HTMLElement[]> = {
       '': [],
     };
 
-    [...this.element.children].forEach((child) => {
+    [...this.element!.children].forEach((child) => {
       const slotName = child.getAttribute('slot') ?? '';
       if (typeof slots[slotName] === 'undefined') {
         slots[slotName] = [];
       }
-      slots[slotName].push(child);
+      slots[slotName].push(child as HTMLElement);
     });
 
-    return Object.entries(slots).map(([slotName, children]) => {
-      return { name: slotName, elements: children };
-    });
+    return Object.entries(slots).map(([slotName, children]) => ({
+      name: slotName,
+      elements: children,
+    }));
   }
 
   renderAttributes() {
     const attributes = ['id', 'slot'];
 
     return attributes
-      .filter((attribute) => {
-        return this.element.hasAttribute(attribute);
-      })
+      .filter((attribute) => this.element?.hasAttribute(attribute))
       .map(
         (attribute) => html`
           <span class="attribute">
             <span class="attribute-name">${attribute}</span>="<span
               class="attribute-value"
-              >${this.element.getAttribute(attribute)}</span
+              >${this.element?.getAttribute(attribute)}</span
             >"
           </span>
         `
       );
   }
 
-  _onOpenToggle() {
+  #onOpenToggle(): void {
     setTimeout(() => {
       this.detailsElement.open = !this.detailsElement.open;
     });
   }
 
-  #onDragStart(ev) {
+  #onDragStart(ev: DragEvent): void {
     const elem = document.createElement('div');
-    ev.dataTransfer.setDragImage(elem, 0, 0);
+    ev.dataTransfer?.setDragImage(elem, 0, 0);
     this.#dispatchEvent('reorderStart');
   }
 
-  #onDragEnd() {
+  #onDragEnd(): void {
     this.#dispatchEvent('reorderEnd');
   }
 
-  #onDragleave(ev) {
+  #onDragleave(ev: DragEvent): void {
     if (this.droppable) {
       ev.preventDefault();
     }
   }
 
-  #onDragenter(ev) {
+  #onDragenter(ev: DragEvent): void {
     if (this.droppable) {
       ev.preventDefault();
     }
   }
 
-  #onDragover(ev) {
+  #onDragover(ev: DragEvent): void {
     if (this.droppable) {
       ev.preventDefault();
     }
   }
 
-  #onReorderStart(ev) {
+  #onReorderStart(ev: DragEvent): void {
     ev.stopPropagation();
     this.isReordering = true;
   }
 
-  #onReorderEnd(ev) {
+  #onReorderEnd(ev: DragEvent): void {
     ev.stopPropagation();
     this.isReordering = false;
   }
 
-  render() {
-    const elementName = this.dashboard.getElementDisplayName(this.element);
+  render(): TemplateResult {
+    const elementName = this.element
+      ? this.dashboard.getElementDisplayName(this.element)
+      : '';
 
     return html`
       <details
-        @click=${(ev) => ev.preventDefault()}
+        @click=${(ev: MouseEvent) => ev.preventDefault()}
         style=${`--level: ${this.level}`}
         class=${classMap({
           childless: !this.#hasChildren(),
@@ -348,7 +347,7 @@ class ElementTreeNode extends LitElement {
               <span class="element-name">
                 ${this.#hasChildren()
                   ? html`
-                      <span class="caret" @click=${this._onOpenToggle}>
+                      <span class="caret" @click=${this.#onOpenToggle}>
                         <vaadin-icon
                           icon="vaadin:angle-right"
                           class="closed-cursor"
@@ -408,5 +407,3 @@ class ElementTreeNode extends LitElement {
     `;
   }
 }
-
-customElements.define('dashboard-element-tree-node', ElementTreeNode);
