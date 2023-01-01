@@ -6,7 +6,6 @@ import './drawer';
 import { customElement, property, state } from 'lit/decorators.js';
 import { guard } from 'lit/directives/guard.js';
 import { onRemoveKeyPress } from '../hotkeys';
-import { dashboardProvider } from '../context-providers';
 import FrcDashboard from '../frc-dashboard';
 import './source-picker-dialog';
 import removeElement from './remove-element';
@@ -91,8 +90,6 @@ export default class DashboardRoot extends LitElement {
     if (!this.dashboard) {
       return;
     }
-
-    dashboardProvider.setProvider(this, this.dashboard);
 
     this.dashboard.addElements({
       'dashboard-tab': {
@@ -219,7 +216,10 @@ export default class DashboardRoot extends LitElement {
             );
           })}
         ></vaadin-dialog>
-        <dashboard-drawer .interact="${null}"></dashboard-drawer>
+        <dashboard-drawer
+          .interact="${null}"
+          .dashboard=${this.dashboard}
+        ></dashboard-drawer>
         <div class="dashboard">
           <slot name="navbar"></slot>
           <div class="dashboard-elements">

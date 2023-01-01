@@ -1,13 +1,12 @@
 /* eslint-disable import/extensions */
 import { LitElement, html, css, TemplateResult } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
-import { dashboardProvider } from '../context-providers';
+import { customElement, state, property } from 'lit/decorators.js';
 import FrcDashboard from '../frc-dashboard';
 import './drawer-sidebar';
 
 @customElement('dashboard-drawer')
 export default class DashboardDrawer extends LitElement {
-  @state() dashboard!: FrcDashboard;
+  @property({ type: Object, attribute: false }) dashboard!: FrcDashboard;
   @state() selectedElement?: HTMLElement;
   @state() editors: HTMLElement[] = [];
   @state() editorOpened: Record<string, boolean> = {};
@@ -93,11 +92,6 @@ export default class DashboardDrawer extends LitElement {
       display: none;
     }
   `;
-
-  constructor() {
-    super();
-    dashboardProvider.addConsumer(this);
-  }
 
   firstUpdated(): void {
     this.dashboard.subscribe('elementSelect', () => {

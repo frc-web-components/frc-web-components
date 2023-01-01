@@ -1,8 +1,8 @@
 import hotkeys from 'hotkeys-js';
 import { throttle } from './utils';
 
-function isHotKeyArea(ev) {
-  const path = ev.path ?? ev.composedPath?.() ?? [];
+function isHotKeyArea(ev: KeyboardEvent): boolean {
+  const path: HTMLElement[] = (ev as any).path ?? ev.composedPath?.() ?? [];
   const isInDrawer = path.find((part) => part?.matches?.('dashboard-drawer'));
   const isInElementTree = path.find((part) =>
     part?.matches?.('dashboard-element-tree')
@@ -15,20 +15,23 @@ function isHotKeyArea(ev) {
   return !isInDrawer;
 }
 
-export function onRemoveKeyPress(callback) {
+export function onRemoveKeyPress(callback: () => unknown): void {
   let calls = 0;
 
-  const { throttledCallback, reset, setTime } = throttle((ev) => {
-    if (!isHotKeyArea(ev)) {
-      return;
-    }
+  const { throttledCallback, reset, setTime } = throttle(
+    (ev: KeyboardEvent) => {
+      if (!isHotKeyArea(ev)) {
+        return;
+      }
 
-    if (calls === 1) {
-      setTime(100);
-    }
-    callback();
-    calls++;
-  }, 500);
+      if (calls === 1) {
+        setTime(100);
+      }
+      callback();
+      calls += 1;
+    },
+    500
+  );
   hotkeys(
     'backspace,del,delete',
     { keyup: false, keydown: true },
