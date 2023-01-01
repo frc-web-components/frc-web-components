@@ -320,6 +320,15 @@ export class ElementTreeNode extends LitElement {
           childless: !this.#hasChildren(),
           selected: this.#isSelected(),
         })}
+        @keyup=${(ev: KeyboardEvent) => {
+          if (this.element?.tagName === 'DASHBOARD-TAB') {
+            return;
+          }
+          const isDelete = ev.key === 'Delete' || ev.key === 'Backspace';
+          if (this.#isSelected() && isDelete) {
+            this.element?.remove();
+          }
+        }}
       >
         <summary>
           <div

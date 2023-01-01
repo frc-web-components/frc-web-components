@@ -15,12 +15,15 @@ function isHotKeyArea(ev: KeyboardEvent): boolean {
   return !isInDrawer;
 }
 
-export function onRemoveKeyPress(callback: () => unknown): void {
+export function onRemoveKeyPress(
+  callback: () => unknown,
+  filter = isHotKeyArea
+): void {
   let calls = 0;
 
   const { throttledCallback, reset, setTime } = throttle(
     (ev: KeyboardEvent) => {
-      if (!isHotKeyArea(ev)) {
+      if (!filter(ev)) {
         return;
       }
 
