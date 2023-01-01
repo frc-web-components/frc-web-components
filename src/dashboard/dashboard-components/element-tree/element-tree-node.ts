@@ -7,13 +7,6 @@ import Iconify from '@iconify/iconify';
 import { WebbitConfig, WebbitConnector } from '@webbitjs/webbit';
 import FrcDashboard from '../../frc-dashboard';
 
-// function classMap(classes) {
-//   const filteredClasses = Object.entries(classes)
-//     .filter(([, filter]) => filter)
-//     .map(([className]) => className);
-//   return filteredClasses.join(' ');
-// }
-
 const styles = css`
   :host {
     display: block;
@@ -127,7 +120,7 @@ export class ElementTreeNode extends LitElement {
   @property({ type: Boolean }) expanded = false;
   @property({ type: Object, attribute: false }) dashboard!: FrcDashboard;
 
-  @state() isReordering = false;
+  @state() reorderElement?: HTMLElement;
 
   get selectedElement(): HTMLElement | null {
     return this.dashboard.getSelectedElement();
@@ -292,12 +285,6 @@ export class ElementTreeNode extends LitElement {
     this.#dispatchEvent('reorderEnd');
   }
 
-  #onDragleave(ev: DragEvent): void {
-    if (this.droppable) {
-      ev.preventDefault();
-    }
-  }
-
   #onDragenter(ev: DragEvent): void {
     if (this.droppable) {
       ev.preventDefault();
@@ -310,14 +297,14 @@ export class ElementTreeNode extends LitElement {
     }
   }
 
-  #onReorderStart(ev: DragEvent): void {
+  #onReorderStart(ev: CustomEvent): void {
     ev.stopPropagation();
-    this.isReordering = true;
+    this.reorderElement = ev.detail.element;
   }
 
-  #onReorderEnd(ev: DragEvent): void {
+  #onReorderEnd(ev: CustomEvent): void {
     ev.stopPropagation();
-    this.isReordering = false;
+    this.reorderElement = undefined;
   }
 
   render(): TemplateResult {
@@ -392,9 +379,22 @@ export class ElementTreeNode extends LitElement {
                           .dashboard=${this.dashboard}
                           level="${this.level + 1}"
                           ?draggable="${children.length > 1}"
-                          ?droppable="${this.isReordering}"
+                          ?droppable="${this.reorderElement}"
                           @reorderStart="${this.#onReorderStart}"
                           @reorderEnd="${this.#onReorderEnd}"
+                          @drop=${(ev: DragEvent) => {
+                            const position = ev.offsetY / 25;
+                            if (
+                              this.reorderElement &&
+                              child !== this.reorderElement
+                            ) {
+                              if (position < 0.5) {
+                                child.before(this.reorderElement);
+                              } else {
+                                child.after(this.reorderElement);
+                              }
+                            }
+                          }}
                         ></dashboard-element-tree-node>
                       `
                     )}
