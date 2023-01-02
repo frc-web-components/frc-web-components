@@ -88,6 +88,18 @@ const styles = css`
     cursor: grab;
   }
 
+  .attributes {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 5px;
+    overflow: auto;
+    scrollbar-width: none;
+  }
+
+  .attributes::-webkit-scrollbar {
+    display: none;
+  }
+
   .attribute {
     color: gray;
   }
@@ -98,6 +110,7 @@ const styles = css`
 
   .attribute-value {
     color: blue;
+    white-space: nowrap;
   }
 
   .caret {
@@ -339,7 +352,7 @@ export class ElementTreeNode extends LitElement {
             @dragover="${this.#onDragover}"
             @dragenter="${this.#onDragenter}"
           >
-            <div>
+            <div style="overflow: hidden">
               <span class="element-name">
                 ${this.#hasChildren()
                   ? html`
