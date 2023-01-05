@@ -4,6 +4,7 @@
     "target": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "declaration": true,
+    "declarationDir": "types",
     "emitDeclarationOnly": true,
     "outDir": "./dist",
     "strict": true,

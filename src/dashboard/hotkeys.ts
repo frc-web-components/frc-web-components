@@ -40,7 +40,7 @@ export function onRemoveKeyPress(
     { keyup: false, keydown: true },
     throttledCallback
   );
-  hotkeys('backspace,del,delete', { keyup: true, keydown: false }, (ev) => {
+  hotkeys('backspace,del,delete', { keyup: true, keydown: false }, () => {
     setTime(500);
     reset();
     calls = 0;

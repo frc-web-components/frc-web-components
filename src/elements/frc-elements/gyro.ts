@@ -170,7 +170,7 @@ export class Gyro extends LitElement {
 
     return svg`
       ${this.tickAngles.map((angle) => {
-        const radians = (angle * Math.PI) / 180;
+        const radians = toRadians(angle);
         const x1 = width / 2 + innerRadius * Math.cos(radians);
         const y1 = width / 2 + innerRadius * Math.sin(radians);
         const x2 = width / 2 + outerRadius * Math.cos(radians);
@@ -204,7 +204,7 @@ export class Gyro extends LitElement {
 
     const radians = this.fromRadians
       ? this.value - Math.PI / 2
-      : ((this.value - 90) * Math.PI) / 180;
+      : toRadians(this.value - 90);
 
     const sign = this.counterClockwise ? -1 : 1;
 
@@ -247,7 +247,7 @@ export class Gyro extends LitElement {
 
     return svg`
       ${this.degreeLabelAngles.map((angle) => {
-        const radians = ((angle - 90) * Math.PI) / 180;
+        const radians = toRadians(angle - 90);
         const x = width / 2 + radius * Math.cos(radians) * sign;
         const y = width / 2 + radius * Math.sin(radians);
 

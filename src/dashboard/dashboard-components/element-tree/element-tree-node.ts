@@ -393,7 +393,7 @@ export class ElementTreeNode extends LitElement {
           ? html`
               <div class="nodes">
                 ${this.#groupChildren().map(
-                  ({ name, elements: children }) => html`
+                  ({ elements: children }) => html`
                     ${children.map(
                       (child) => html`
                         <dashboard-element-tree-node
