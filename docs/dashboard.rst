@@ -65,6 +65,7 @@ Source Providers
 Themes
 ======
 
+- Themes can be changed in the settings menu. The available themes are "dark" and "light".
 
 Saving and Opening Dashboards
 =============================
