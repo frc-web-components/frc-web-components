@@ -46,7 +46,7 @@ Moving and Resizing Elements
 
 Selected elements can be moved by dragging them around their center:
 
-.. image:: ./images/dashboard/moving-element.gif
+.. image:: ./images/dashboard/move-element.gif
 
 Elements can be resized by dragging their edges and corners:
 
@@ -56,10 +56,13 @@ Elements can be resized by dragging their edges and corners:
 Setting Element Properties
 ==========================
 
-- Element behavior changes based on their properties.
-- Selected element properties can be viewed in the "Properties" view.
-- Property values can be changed through their input fields
+Element behavior changes based on their properties. A selected element's property values can be set in the **Properties** view:
 
+.. image:: ./images/dashboard/viewing-properties.gif
+
+Property values can be changed through their input fields:
+
+.. image:: ./images/dashboard/updating-properties.gif
 
 Property Sources and Robot Communication
 ========================================
@@ -86,7 +89,9 @@ Source Providers
 Themes
 ======
 
-- Themes can be changed in the settings menu. The available themes are "dark" and "light".
+Themes can be changed in the settings menu. The available themes are "dark" and "light":
+
+.. image:: ./images/dashboard/themes.gif
 
 Saving and Opening Dashboards
 =============================
