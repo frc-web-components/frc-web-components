@@ -5,31 +5,52 @@ Dashboard
 Adding, Selecting and Removing Elements
 =============================
 
-- Add by dragging
-- Add by clicking "Add" button
-- Add element by scrolling
-- Show selecting other element categories to view different elements
-- Show the available elements that can be added depends on the selected element.
-- Show selecting an element by clicking on it. 
-- Most selected elements have a green dashed border, although some do not. Selected dashboard tabs don't, and neither do elements that have no size. Line Chart data and axis elements have no size and can't be selected by clicking on them.
-- Elements can also be selected in the element tree by clicking on them.
-- Show selecting line chart data
-- Selected elements are highlighted.
-- Selected elements can be removed by pressing the "delete" or "backspace" key.
+Elements can be added to the dashboard by dragging them from the sidebar to the dashboard:
 
+.. image:: ./images/dashboard/add-by-dragging.gif
+
+Elements can also be added by clicking on the **append** or **prepend** button:
+
+.. image:: ./images/dashboard/add-by-clicking.gif
+
+Elements are grouped into categories. Other categories can be selected from the dropdown at the top of the sidebar:
+
+.. image:: ./images/dashboard/selecting-element-categories.gif
+
+The available elements to add depends on the element currently selected. For example, the **Chart Axis** and **Chart Data** are the only elements that can be added to a **Line Chart**:
+
+.. image:: ./images/dashboard/show-avaiable-elements-to-add.gif
+
+Elements can be selected by clicking on them:
+
+.. image:: ./images/dashboard/select-by-clicking.gif
+
+Most selected elements have a green dashed border, although some do not. Selected dashboard tabs don't, and neither do elements that have no size. Line Chart data and axis elements have no size and can't be selected by clicking on them.
+
+All Elements including sizeless ones like **Chart Data**, can alternatively be selected in the element tree by clicking on them:
+
+.. image:: ./images/dashboard/select-in-tree.gif
+
+Most elements can be removed by pressing the delete/backspace key.
 
 Adding and Removing Tabs
 ========================
 
-- Tabs are added with the "+" button
-- Tabs are deleted by clicking on the "x" button.
+Tabs can be added with the **+** button and removed with the **x** button. They can also be renamed using the **tabName** property in the **Properties** view:
+
+.. image:: ./images/dashboard/manage-tabs.gif
 
 
 Moving and Resizing Elements
 ============================
 
-- Selected elements can be moved by dragging them around their center.
-- Elements can be resized by dragging their edges and corners.
+Selected elements can be moved by dragging them around their center:
+
+.. image:: ./images/dashboard/moving-element.gif
+
+Elements can be resized by dragging their edges and corners:
+
+.. image:: ./images/dashboard/resize-element.gif
 
 
 Setting Element Properties
