@@ -16,7 +16,7 @@ To install using npm:
 
 .. code:: bash
 
-  $ npm i @frc-web-components/frc-web-components
+  $ npm i @frc-web-components/fwc
 
 FWC can also be installed as a script and included directly into an HTML page. Script can be downloaded from the the `releases <https://github.com/frc-web-components/frc-web-components/releases>`_ page.
 
