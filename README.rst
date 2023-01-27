@@ -29,3 +29,4 @@ Documentation
 =============
 
 - `Plugin Development </docs/plugins.rst>`_
+- `Dashboard Interface </docs/dashboard.rst>`_
