@@ -67,17 +67,23 @@ Property values can be changed through their input fields:
 Property Sources and Robot Communication
 ========================================
 
-- Element properties can be controlled externally through sources such as NetworkTables. An element connected to NetworkTables can send to or receive updates from a physical or simulated robot.
-- Show dashboard connecting and disconnecting from NetworkTables as simulator is launched
-- To connect to a physical robot, the "NT4 Server" setting can be changed from "localhost" to the IP address of the robot.
-- An element's source can be set through the "Source" input field at the top of the "Properties" view:
-- The Source value can be changed by clicking on the "edit" button
-- Clicking on this button opens up the Sources dialog.
-- Show selecting a NetworkTable source through the sources tree for a gyro (select an entry)
-- In the above the selected source is a table with sub entries "value", "Precision" and "Hide Label".
-- These sub entries are converted to camelCase and mapped to the element's properties.
-- Show how assigning to source with a value will map it to the element's "primary" property.
-- Talk about how an element can also update source values.
+Element properties can be controlled externally through sources such as NetworkTables. An element connected to NetworkTables can send to or receive updates from a physical or simulated robot. Below the dashboard will connect to OutlineViewer running in server mode when the NT4 address is set to "localhost":
+
+.. image:: ./images/dashboard/connecting-locally.gif
+
+To connect to a physical robot, the "NT4 Server" setting can be changed from "localhost" to the IP address of the robot.
+
+An element's source can be set through the "Source" input field at the top of the "Properties" view. The Source value can be changed by clicking on the "edit" button. Clicking on this button opens up the Sources dialog. From the dialog you can set the selected element's source:
+
+.. image:: ./images/dashboard/setting-gyro-source.gif
+
+Above, the selected source is a table with sub entries "value", "Precision" and "Hide Label". These sub entries are converted to camelCase and mapped to the element's properties. If the element is assigned an entry as a source instead of a subtable, the entry's value will be mapped to the element's "primary" property:
+
+.. image:: ./images/dashboard/setting-gyro-single-source.gif
+
+Elements can also update source values:
+
+.. image:: ./images/dashboard/change-source-value-in-dashboard.gif
 
 Source Providers
 ================
