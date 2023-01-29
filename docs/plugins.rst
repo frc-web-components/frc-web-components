@@ -5,7 +5,7 @@ FRC Web Components (FWC) can be extended through its plugin system. Plugins are 
 
 .. code:: javascript
 
-  import { FrcDashboard } from '@frc-web-components/frc-web-components';
+  import { FrcDashboard } from '@frc-web-components/fwc';
 
   export default function addPlugin(dashboard: FrcDashboard) {
     // Plugin code goes here
@@ -15,7 +15,7 @@ FWC provides a cli tool which generates a sample plugin that can be used to help
 
 .. code:: bash
   
-  $ npm init @frc-web-components/plugin <name>
+  $ npm init fwc <name>
 
 Note: You'll need `node` installed to run the above command: https://nodejs.org/en/download/
 
@@ -26,7 +26,7 @@ To get started, open a terminal and enter in the following command:
 
 .. code:: bash
   
-  $ npm init @frc-web-components/plugin my-first-plugin
+  $ npm init fwc my-first-plugin
 
 After being prompted with a few questions to help setup your plugin, the plugin project will be created and installed:
 
