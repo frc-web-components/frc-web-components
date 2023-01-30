@@ -1,6 +1,8 @@
 Dashboard
 =========
 
+`< Back </README.rst>`_
+
 - `Adding, Selecting and Removing Elements <#adding-selecting-and-removing-elements>`_
 - `Adding and Removing Tabs <#adding-and-removing-tabs>`_
 - `Moving and Resizing Elements <#moving-and-resizing-elements>`_
