@@ -1,6 +1,16 @@
 Plugin Development
 ==================
 
+`<- Back </README.rst>`_
+
+- `Creating your first plugin <#creating-your-first-plugin>`_
+- `Creating custom elements <#creating-custom-elements>`_
+- `Element Config <#element-config>`_
+
+  - `Selectors <#selectors>`_
+  - `Properties <#properties>`_
+  - `Property Input Config <#property-input-config>`_
+
 FRC Web Components (FWC) can be extended through its plugin system. Plugins are created by making an ES module which exports a function that takes in the dashboard instance as a parameter:
 
 .. code:: javascript
