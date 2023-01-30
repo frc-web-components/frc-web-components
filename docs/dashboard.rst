@@ -88,9 +88,14 @@ Elements can also update source values:
 Source Providers
 ================
 
-- Sources can come from different places called "Providers". So far we've discussed only the "NetworkTables" provider but others exist as well.
-- Talk about the Gamepad providers
 
+- Sources can come from different places called "Providers". So far we've discussed only the "NetworkTables" provider but others exist as well. The Gamepad provider gets data from plugged in gamepads such as Xbox and Playstation controllers:
+
+.. image:: ./images/dashboard/gamepad-provider.png
+
+The element's source provider will show up in parentheses above the input field: 
+
+.. image:: ./images/dashboard/source-input-field.png
 
 Themes
 ======
