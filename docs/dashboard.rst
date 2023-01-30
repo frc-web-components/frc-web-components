@@ -1,6 +1,16 @@
 Dashboard
 =========
 
+- `Adding, Selecting and Removing Elements <#adding-selecting-and-removing-elements>`_
+- `Adding and Removing Tabs <#adding-and-removing-tabs>`_
+- `Moving and Resizing Elements <#moving-and-resizing-elements>`_
+- `Setting Element Properties <#setting-element-properties>`_
+- `Property Sources and Robot Communication <#property-sources-and-robot-communication>`_
+- `Source Providers <#source-providers>`_
+- `Themes <#themes>`_
+- `Saving and Opening Dashboards <#saving-and-opening-dashboards>`_
+- `Importing Plugins <#importing-plugins>`_
+
 
 Adding, Selecting and Removing Elements
 =============================
