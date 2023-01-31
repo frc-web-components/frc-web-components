@@ -155,6 +155,9 @@ Dashboards can be saved and reopened through the file menu:
 .. image:: ./images/dashboard/open-dashboard.gif
   :width: 850
 
+The filename of the opened dashboard will appear at the top of the window. If the current dashboard has not been saved to a file it will be labeled "Untitled Dashboard".
+
+
 Importing Plugins
 =================
 
