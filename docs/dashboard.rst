@@ -147,6 +147,13 @@ Themes can be changed in the settings menu. The available themes are "dark" and 
 Saving and Opening Dashboards
 =============================
 
+Dashboards can be saved and reopened through the file menu:
+
+.. image:: ./images/dashboard/save-dashboard.gif
+  :width: 850
+
+.. image:: ./images/dashboard/open-dashboard.gif
+  :width: 850
 
 Importing Plugins
 =================
