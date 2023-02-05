@@ -1,21 +1,32 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable import/extensions */
-import { svg, css, LitElement, TemplateResult } from 'lit';
+import { html, svg, css, LitElement, TemplateResult } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
+import * as d3 from 'd3';
 import { containerStyles } from '../styles';
 
 export const elementName = 'frc-gyro';
+
+function deg2Rad(deg: number): number {
+  return (deg * Math.PI) / 180;
+}
+
+function rad2Deg(rad: number): number {
+  return (rad * 180) / Math.PI;
+}
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(value, min));
 }
 
-function toRadians(degrees: number): number {
-  return (degrees * Math.PI) / 180;
-}
-
-function toDegrees(radians: number): number {
-  return (radians * 180) / Math.PI;
+/**
+ *
+ * @param angleDeg - top is 0, increases cw. Should be converted to right 0, increases ccw.
+ * @returns
+ */
+function getUnitCircleCords(angleDeg: number): [number, number] {
+  const unitAngle = deg2Rad(-(angleDeg - 90));
+  return [Math.cos(unitAngle), Math.sin(unitAngle)];
 }
 
 export const elementConfig = {
@@ -40,102 +51,100 @@ export class Gyro extends LitElement {
   counterClockwise = false;
   @property({ type: Boolean, attribute: 'from-radians' }) fromRadians = false;
 
-  tickAngles: number[] = [];
-  degreeLabelAngles: number[] = [];
-
-  @query('.container') _containerNode!: HTMLElement;
-  @query('svg') _edgeElement?: HTMLElement;
+  @query('svg') _svg!: SVGSVGElement;
+  @query('.dial') _dial!: SVGLineElement;
+  @query('.gyro') _gyro!: SVGGElement;
+  @query('.gyro-edge') _gyroEdge!: SVGCircleElement;
+  @query('.minor-ticks') _minorTicks!: SVGGElement;
+  @query('.major-ticks') _majorTicks!: SVGGElement;
+  @query('.labels') _labels!: SVGGElement;
 
   static styles = [
     containerStyles,
     css`
       :host {
         display: inline-flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
         position: relative;
         width: 300px;
         height: auto;
       }
 
-      .container {
-        position: relative;
-        width: var(--gyro-container-size);
-        height: var(--gyro-container-size);
-      }
-
       svg {
-        width: 80%;
-        height: 80%;
-        position: relative;
-        top: 5%;
-        left: 10%;
-        overflow: visible;
+        width: 100%;
       }
 
-      :host([hide-label]) svg {
-        width: 90%;
-        height: 90%;
-        top: 5%;
-        left: 5%;
-      }
-
-      svg .edge {
-        fill: none;
-        stroke: var(--frc-gyro-edge-color, #000);
-        stroke-width: 1px;
-        overflow: overlay;
-      }
-
-      .tick {
-        stroke: var(--frc-gyro-tick-color, #bbb);
-        stroke-width: 1px;
-      }
-
-      .tick.big {
-        stroke-width: 2px;
-        stroke: var(--frc-gyro-big-tick-color, #000);
+      label {
+        color: var(--frc-gyro-color, #000);
+        text-align: center;
+        display: block;
+        font-size: 16px;
       }
 
       .dial-circle {
-        fill: var(--frc-gyro-dial-circle-color, #ddd);
-        stroke: var(--frc-gyro-dial-circle-stroke-color, #fff);
-        stroke-width: 1%;
+        fill: var(--frc-gyro-dial-color, blue);
       }
 
-      .dial-hand {
-        fill: blue;
-        stroke: blue;
-        stroke-width: 3px;
-      }
-
-      .degree-label {
-        fill: var(--frc-gyro-text-color, #000);
-        text-anchor: middle;
-        alignment-baseline: middle;
-        font-size: var(--degree-label-font-size);
-      }
-
-      .angle-label {
-        fill: var(--frc-gyro-text-color, #000);
-        text-anchor: middle;
-        font-size: var(--angle-label-font-size);
+      .dial {
+        stroke: var(--frc-gyro-dial-color, blue);
+        stroke-width: 3;
       }
     `,
   ];
 
-  constructor() {
-    super();
+  setLabels(): void {
+    const chartRadius = this.getGyroRadius();
+    d3.select(this._labels)
+      .selectAll('text')
+      .data([0, 45, 90, 135, 180, -135, -90, -45])
+      .join((enter) =>
+        enter
+          .append('text')
+          .attr('text-anchor', 'middle')
+          .attr('alignment-baseline', 'middle')
+          .attr('font-size', 15)
+          .attr('fill', 'var(--frc-gyro-color, #000)')
+          .text((angle) => `${angle}°`)
+      )
+      .attr('x', (angle) => getUnitCircleCords(angle)[0] * (chartRadius + 30))
+      .attr('y', (angle) => -getUnitCircleCords(angle)[1] * (chartRadius + 30));
+  }
 
-    for (let angle = 0; angle <= 360; angle += 5) {
-      this.tickAngles.push(angle);
-    }
+  setDialAngle(): void {
+    const chartRadius = this.getGyroRadius();
+    d3.select(this._dial)
+      .attr('x2', getUnitCircleCords(this.value)[0] * (chartRadius - 7))
+      .attr('y2', -getUnitCircleCords(this.value)[1] * (chartRadius - 7));
+  }
 
-    this.degreeLabelAngles = [];
-
-    for (let angle = 0; angle < 360; angle += 45) {
-      this.degreeLabelAngles.push(angle);
-    }
+  // eslint-disable-next-line class-methods-use-this
+  addTicks(
+    parent: SVGElement,
+    tickLength: number,
+    step: number,
+    strokeWidth: number
+  ): void {
+    const chartRadius = this.getGyroRadius();
+    d3.select(parent)
+      .selectAll('line')
+      .data(d3.range(0, 360, step))
+      .join((enter) =>
+        enter
+          .append('line')
+          .attr('stroke', 'var(--frc-gyro-color, #000)')
+          .attr('stroke-width', strokeWidth)
+      )
+      .attr('x1', (angle) => getUnitCircleCords(angle)[0] * chartRadius)
+      .attr('y1', (angle) => -getUnitCircleCords(angle)[1] * chartRadius)
+      .attr(
+        'x2',
+        (angle) => getUnitCircleCords(angle)[0] * (chartRadius + tickLength)
+      )
+      .attr(
+        'y2',
+        (angle) => -getUnitCircleCords(angle)[1] * (chartRadius + tickLength)
+      );
   }
 
   firstUpdated(): void {
@@ -143,159 +152,60 @@ export class Gyro extends LitElement {
       this.resized();
     });
     resizeObserver.observe(this);
+    this.resized();
   }
 
   resized(): void {
-    const { width, height } = this.getBoundingClientRect();
-    this._containerNode.style.setProperty(
-      '--gyro-container-size',
-      `${Math.min(width, height)}px`
+    const size = this.getSize();
+    d3.select(this._svg).attr('width', size).attr('height', size);
+
+    d3.select(this._gyro).attr(
+      'transform',
+      `translate(${size / 2},${size / 2})`
     );
-    this.requestUpdate();
+
+    const chartRadius = this.getGyroRadius();
+
+    d3.select(this._gyroEdge).attr('r', chartRadius);
+
+    this.addTicks(this._minorTicks, 5, 5, 1);
+    this.addTicks(this._majorTicks, 10, 45, 2);
+    this.setLabels();
+    this.setDialAngle();
   }
 
-  getWidth(): number {
-    if (!this._edgeElement) {
-      return 0;
-    }
-
-    const { width } = this._edgeElement.getBoundingClientRect();
+  getSize(): number {
+    const { width } = this.getBoundingClientRect();
     return width;
   }
 
-  renderTicks(): TemplateResult {
-    const width = this.getWidth();
-    const innerRadius = width / 2 - width / 20;
-    const outerRadius = width / 2 - width / 10;
-
-    return svg`
-      ${this.tickAngles.map((angle) => {
-        const radians = toRadians(angle);
-        const x1 = width / 2 + innerRadius * Math.cos(radians);
-        const y1 = width / 2 + innerRadius * Math.sin(radians);
-        const x2 = width / 2 + outerRadius * Math.cos(radians);
-        const y2 = width / 2 + outerRadius * Math.sin(radians);
-        const bigTick = angle % 45 === 0;
-        return svg`
-          <line
-            class="tick ${bigTick ? 'big' : ''}"
-            x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"
-          />
-        `;
-      })}
-    `;
+  getGyroRadius(): number {
+    return this.getSize() / 2 - 53;
   }
 
-  renderEdge(): TemplateResult {
-    const width = this.getWidth();
-    const cx = width * 0.5;
-    const cy = width * 0.5;
-    const radius = width * 0.4;
-
-    return svg`
-      <circle class="edge" cx="${cx}" cy="${cy}" r="${radius}" />
-    `;
-  }
-
-  renderDialHand(): TemplateResult {
-    const width = this.getWidth();
-
-    const outerRadius = width / 2 - width / 20 - width / 40;
-
-    const radians = this.fromRadians
-      ? this.value - Math.PI / 2
-      : toRadians(this.value - 90);
-
-    const sign = this.counterClockwise ? -1 : 1;
-
-    const x1 = width / 2;
-    const y1 = width / 2;
-    const x2 = width / 2 + outerRadius * Math.cos(radians) * sign;
-    const y2 = width / 2 + outerRadius * Math.sin(radians);
-
-    return svg`
-      <line
-        class="dial-hand"
-        x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"
-      />
-    `;
-  }
-
-  renderDialCircle(): TemplateResult {
-    const width = this.getWidth();
-    const cx = width * 0.5;
-    const cy = width * 0.5;
-    const radius = width * 0.04;
-
-    return svg`
-      <circle class="dial-circle" cx="${cx}" cy="${cy}" r="${radius}" />
-    `;
-  }
-
-  renderDegreeLabels(): TemplateResult {
-    const width = this.getWidth();
-    const radius = width / 2 + width / 100;
-
-    if (this._edgeElement) {
-      this._edgeElement.style.setProperty(
-        '--degree-label-font-size',
-        `${width * 0.055}px`
-      );
+  updated(changedProps: Map<string, unknown>): void {
+    if (changedProps.has('value')) {
+      this.setDialAngle();
     }
-
-    const sign = this.counterClockwise ? -1 : 1;
-
-    return svg`
-      ${this.degreeLabelAngles.map((angle) => {
-        const radians = toRadians(angle - 90);
-        const x = width / 2 + radius * Math.cos(radians) * sign;
-        const y = width / 2 + radius * Math.sin(radians);
-
-        return svg`
-          <text class="degree-label" x="${x}" y="${y}">${angle}</text>
-        `;
-      })}
-    `;
-  }
-
-  renderAngleLabel(): TemplateResult | null {
-    if (this.hideLabel) {
-      return null;
-    }
-
-    const width = this.getWidth();
-
-    if (this._edgeElement) {
-      this._edgeElement.style.setProperty(
-        '--angle-label-font-size',
-        `${width * 0.08}px`
-      );
-    }
-
-    const x = width / 2;
-    const y = width + width * 0.15;
-
-    const value = this.fromRadians ? toDegrees(this.value) : this.value;
-
-    return svg`
-      <text class="angle-label" x="${x}" y="${y}">
-        ${value.toFixed(clamp(this.precision, 0, 100))}&deg;
-      </text>
-    `;
   }
 
   render(): TemplateResult {
+    const angle = this.fromRadians ? rad2Deg(this.value) : this.value;
+    const label = `${angle.toFixed(clamp(this.precision, 0, 100))}`;
     return svg`
-      <div class="container">
+        <div>
         <svg>
-          ${this.renderEdge()}
-          ${this.renderTicks()}
-          ${this.renderDialHand()}
-          ${this.renderDialCircle()}
-          ${this.renderDegreeLabels()}
-          ${this.renderAngleLabel()}
+          <g class="gyro">
+            <circle class="gyro-edge" stroke-width="2" stroke="var(--frc-gyro-color, #000)" style="fill: none"></circle>
+            <g class="minor-ticks"></g>
+            <g class="major-ticks"></g>
+            <g class="labels"></g>
+            <circle class="dial-circle" r="9"></circle>
+            <line class="dial" x1="0" x2="0"></line>
+          </g>
         </svg>
-      </div>
+        ${!this.hideLabel ? html`<label>${label}&deg</label> ` : null}
+        </div>
     `;
   }
 }

@@ -98,6 +98,8 @@ export default function addDarkTheme(dashboard: FrcDashboard): void {
     '--frc-encoder-label-color': '#fff',
 
     /* frc-gyro */
+    '--frc-gyro-color': '#fff',
+    '--frc-gyro-dial-color': 'blue',
     '--frc-gyro-big-tick-color': '#fff',
     '--frc-gyro-tick-color': '#777',
     '--frc-gyro-edge-color': '#fff',
