@@ -24,9 +24,13 @@ function clamp(value: number, min: number, max: number) {
  * @param angleDeg - top is 0, increases cw. Should be converted to right 0, increases ccw.
  * @returns
  */
-function getUnitCircleCords(angleDeg: number): [number, number] {
+function getUnitCircleCords(
+  angleDeg: number,
+  counterClockwise = false
+): [number, number] {
   const unitAngle = deg2Rad(-(angleDeg - 90));
-  return [Math.cos(unitAngle), Math.sin(unitAngle)];
+  const x = counterClockwise ? -Math.cos(unitAngle) : Math.cos(unitAngle);
+  return [x, Math.sin(unitAngle)];
 }
 
 export const elementConfig = {
@@ -107,15 +111,32 @@ export class Gyro extends LitElement {
           .attr('fill', 'var(--frc-gyro-color, #000)')
           .text((angle) => `${angle}°`)
       )
-      .attr('x', (angle) => getUnitCircleCords(angle)[0] * (chartRadius + 30))
-      .attr('y', (angle) => -getUnitCircleCords(angle)[1] * (chartRadius + 30));
+      .attr(
+        'x',
+        (angle) =>
+          getUnitCircleCords(angle, this.counterClockwise)[0] *
+          (chartRadius + 30)
+      )
+      .attr(
+        'y',
+        (angle) =>
+          -getUnitCircleCords(angle, this.counterClockwise)[1] *
+          (chartRadius + 30)
+      );
   }
 
   setDialAngle(): void {
     const chartRadius = this.getGyroRadius();
+    const angle = this.fromRadians ? rad2Deg(this.value) : this.value;
     d3.select(this._dial)
-      .attr('x2', getUnitCircleCords(this.value)[0] * (chartRadius - 7))
-      .attr('y2', -getUnitCircleCords(this.value)[1] * (chartRadius - 7));
+      .attr(
+        'x2',
+        getUnitCircleCords(angle, this.counterClockwise)[0] * (chartRadius - 7)
+      )
+      .attr(
+        'y2',
+        -getUnitCircleCords(angle, this.counterClockwise)[1] * (chartRadius - 7)
+      );
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -184,8 +205,16 @@ export class Gyro extends LitElement {
   }
 
   updated(changedProps: Map<string, unknown>): void {
-    if (changedProps.has('value')) {
+    if (
+      changedProps.has('value') ||
+      changedProps.has('fromRadians') ||
+      changedProps.has('counterClockwise')
+    ) {
       this.setDialAngle();
+    }
+
+    if (changedProps.has('counterClockwise')) {
+      this.setLabels();
     }
   }
 
