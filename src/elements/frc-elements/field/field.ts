@@ -22,7 +22,7 @@ export class Field extends LitElement {
   @property({ type: Object, attribute: false }) store?: Store;
   @property({ type: String, attribute: 'source-provider' }) sourceProvider = '';
   @property({ type: String, attribute: 'source-key' }) sourceKey = '';
-  @property({ type: String }) game = 'Rapid React';
+  @property({ type: String }) game = 'Charged Up';
   @property({ type: Number, attribute: 'grid-size' }) gridSize = 1;
   @property({ type: Boolean, attribute: 'show-grid' }) showGrid = false;
   @property({ type: Boolean, attribute: 'swap-axes' }) swapAxes = false;

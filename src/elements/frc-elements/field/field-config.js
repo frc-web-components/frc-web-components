@@ -1,5 +1,15 @@
 export default [
   {
+    game: 'Charged Up',
+    'field-image': '/field-images/2023-field.jpg',
+    'field-corners': {
+      'top-left': [46, 36],
+      'bottom-right': [1088, 544],
+    },
+    'field-size': [54.27083, 26.2916],
+    'field-unit': 'foot',
+  },
+  {
     game: 'Rapid React',
     'field-image': '/field-images/2022-field.jpg',
     'field-corners': {

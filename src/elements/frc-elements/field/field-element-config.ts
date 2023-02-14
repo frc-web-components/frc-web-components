@@ -20,7 +20,7 @@ export const elementConfig = {
     },
     game: {
       type: String,
-      defaultValue: 'Rapid React',
+      defaultValue: 'Charged Up',
       input: {
         type: 'StringDropdown',
         allowCustomValues: false,
