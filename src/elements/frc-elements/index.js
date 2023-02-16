@@ -20,6 +20,7 @@ import * as numberBar from './number-bar';
 import * as pdp from './pdp';
 import * as relay from './relay';
 import * as voltageView from './voltage-view';
+import sendableChooserConfig from './sendable-chooser';
 
 const elements = [
   ...baseElements,
@@ -44,6 +45,10 @@ const elements = [
   pdp,
   relay,
   voltageView,
+  {
+    elementName: 'frc-sendable-chooser',
+    elementConfig: sendableChooserConfig,
+  },
 ];
 
 export default Object.fromEntries(
