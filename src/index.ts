@@ -19,6 +19,7 @@ export default function createDashboard(
   // addTutorials(dashboard);
   addThemes(dashboard);
   addDashboardComponents(dashboard);
+
   const dashboardElement = document.createElement(dashboardElementName);
   (dashboardElement as any).dashboard = dashboard;
   element.appendChild(dashboardElement);

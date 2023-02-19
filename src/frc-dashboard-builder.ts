@@ -7,6 +7,7 @@ import addProviders from './source-providers';
 // import addTutorials from './tutorials';
 import addThemes from './themes';
 import addDashboardComponents from './dashboard/dashboard-components';
+import layoutBuilder from './dashboard/layout-builder';
 
 @customElement('frc-dashboard-builder')
 export default class FrcDashboardBuilder extends LitElement {
@@ -18,6 +19,7 @@ export default class FrcDashboardBuilder extends LitElement {
     // addTutorials(dashboard);
     addThemes(dashboard);
     addDashboardComponents(dashboard);
+    layoutBuilder(dashboard);
     const dashboardElement = document.createElement('dashboard-root');
     (dashboardElement as any).dashboard = dashboard;
     this.appendChild(dashboardElement);
