@@ -59,22 +59,23 @@ export class Swerve extends LitElement {
   ];
   @property({ type: Number, attribute: 'robot-rotation' }) robotRotation = 0;
 
-  private normalizedRotation = 0;
-
   @property({ type: Number, attribute: 'max-speed' }) maxSpeed = 1;
   @property({ type: String, attribute: 'rotation-unit' }) rotationUnit =
     'radians';
 
   @property({ type: Number, attribute: 'size-left-right' }) sizeLeftRight = 4;
   @property({ type: Number, attribute: 'size-front-back' }) sizeFrontBack = 5;
-  @property({ type: String, attribute: 'forward-direction' }) forwardDirection =
-    'up';
-  @property({ type: Number, attribute: 'max-angular-velocity' })
-  maxAngularVelocity = Math.PI * 2;
-  @property({ type: Array, attribute: 'measured-chassis-speeds' })
-  measuredChassisSpeeds: number[] = [];
-  @property({ type: Array, attribute: 'desired-chassis-speeds' })
-  desiredChassisSpeeds: number[] = [];
+
+  private normalizedRotation = 0;
+
+  // @property({ type: String, attribute: 'forward-direction' }) forwardDirection =
+  //   'up';
+  // @property({ type: Number, attribute: 'max-angular-velocity' })
+  // maxAngularVelocity = Math.PI * 2;
+  // @property({ type: Array, attribute: 'measured-chassis-speeds' })
+  // measuredChassisSpeeds: number[] = [];
+  // @property({ type: Array, attribute: 'desired-chassis-speeds' })
+  // desiredChassisSpeeds: number[] = [];
 
   @query('svg') _svg!: SVGSVGElement;
   @query('.swerve') _swerve!: SVGGElement;
@@ -94,7 +95,8 @@ export class Swerve extends LitElement {
       overflow: visible;
     }
 
-    svg * {
+    .swerve
+    /*.velocity-indicator*/ {
       transition-property: transform;
       transition-duration: 0.1s;
       transition-timing-function: linear;
@@ -264,6 +266,10 @@ export class Swerve extends LitElement {
     arrowLength += 50 * Math.sign(arrowLength);
     arrowLength *= -1;
 
+    const y1 = Math.abs(arrowLength) - 20;
+    const y2 = Math.abs(arrowLength);
+    const arrowHeadPath = `M -17.5,${y1} L 2.5,${y2} L 22.5,${y1}`;
+
     const transform = `rotate(${-rotationDeg + (arrowLength < 0 ? 180 : 0)})`;
     const maskId = `${id}-velocity`;
     return svg`
@@ -273,8 +279,9 @@ export class Swerve extends LitElement {
           <circle r="52.5" fill="black" ></circle>
         </mask>
       </defs>
-      <g transform=${transform} mask="url(#${maskId})">
+      <g class="velocity-indicator" transform=${transform} mask="url(#${maskId})">
         <rect width="5" height=${Math.abs(arrowLength)} fill=${color}></rect>
+        <path d=${arrowHeadPath} stroke=${color} stroke-width="5" fill="none" />
       </g>
     `;
   }

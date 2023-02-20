@@ -58,34 +58,34 @@ export default {
       defaultValue: 2,
       description: 'The distance between the front and back modules.',
     },
-    forwardDirection: {
-      type: 'String',
-      defaultValue: 'up',
-      description:
-        'The direction the robot should be facing when the "Robot Rotation" is zero or blank. This option is often useful to align with odometry data or match videos.',
-      input: {
-        type: 'StringDropdown',
-        allowCustomValues: false,
-        getOptions(): string[] {
-          return ['up', 'right', 'down', 'left'];
-        },
-      },
-    },
-    maxAngularVelocity: {
-      type: 'Number',
-      defaultValue: Math.PI * 2,
-      description:
-        'The maximum achievable angular velocity of the robot. This is used to visualize the angular velocity from the chassis speeds properties.',
-    },
-    measuredChassisSpeeds: {
-      type: 'Array',
-      description:
-        'Describes the measured forward, sideways and angular velocity of the robot',
-    },
-    desiredChassisSpeeds: {
-      type: 'Array',
-      description:
-        'Describes the desired forward, sideways and angular velocity of the robot',
-    },
+    // forwardDirection: {
+    //   type: 'String',
+    //   defaultValue: 'up',
+    //   description:
+    //     'The direction the robot should be facing when the "Robot Rotation" is zero or blank. This option is often useful to align with odometry data or match videos.',
+    //   input: {
+    //     type: 'StringDropdown',
+    //     allowCustomValues: false,
+    //     getOptions(): string[] {
+    //       return ['up', 'right', 'down', 'left'];
+    //     },
+    //   },
+    // },
+    // maxAngularVelocity: {
+    //   type: 'Number',
+    //   defaultValue: Math.PI * 2,
+    //   description:
+    //     'The maximum achievable angular velocity of the robot. This is used to visualize the angular velocity from the chassis speeds properties.',
+    // },
+    // measuredChassisSpeeds: {
+    //   type: 'Array',
+    //   description:
+    //     'Describes the measured forward, sideways and angular velocity of the robot',
+    // },
+    // desiredChassisSpeeds: {
+    //   type: 'Array',
+    //   description:
+    //     'Describes the desired forward, sideways and angular velocity of the robot',
+    // },
   },
 };
