@@ -27,6 +27,20 @@ function rad2Deg(rad: number): number {
   return (rad * 180) / Math.PI;
 }
 
+/**
+ *
+ * @param angleDeg - top is 0, increases cw. Should be converted to right 0, increases ccw.
+ * @returns
+ */
+function getUnitCircleCords(
+  angleDeg: number,
+  counterClockwise = false
+): [number, number] {
+  const unitAngle = deg2Rad(-(angleDeg - 90));
+  const x = counterClockwise ? -Math.cos(unitAngle) : Math.cos(unitAngle);
+  return [x, Math.sin(unitAngle)];
+}
+
 @customElement('frc-swerve-drivebase')
 export class Swerve extends LitElement {
   @property({ type: Number, attribute: 'module-count' }) moduleCount = 4;
@@ -40,9 +54,13 @@ export class Swerve extends LitElement {
     0, 0, 0, 0, 0, 0, 0, 0,
   ];
   @property({ type: Number, attribute: 'robot-rotation' }) robotRotation = 0;
+
+  private normalizedRotation = 0;
+
   @property({ type: Number, attribute: 'max-speed' }) maxSpeed = 1;
   @property({ type: String, attribute: 'rotation-unit' }) rotationUnit =
     'radians';
+
   @property({ type: Number, attribute: 'size-left-right' }) sizeLeftRight = 4;
   @property({ type: Number, attribute: 'size-front-back' }) sizeFrontBack = 5;
   @property({ type: String, attribute: 'forward-direction' }) forwardDirection =
@@ -71,6 +89,12 @@ export class Swerve extends LitElement {
       width: 100%;
       overflow: visible;
     }
+
+    svg * {
+      transition-property: transform;
+      transition-duration: 0.1s;
+      transition-timing-function: linear;
+    }
   `;
 
   drawBase(): void {
@@ -87,7 +111,7 @@ export class Swerve extends LitElement {
     const rotationRad = this.getRobotRotationRad();
     d3.select(this._swerve).attr(
       'transform',
-      `rotate(-${rad2Deg(rotationRad)})`
+      `rotate(${-this.normalizedRotation})`
     );
   }
 
@@ -115,6 +139,34 @@ export class Swerve extends LitElement {
   }
 
   updated(changedProps: Map<string, unknown>): void {
+    if (changedProps.has('robotRotation')) {
+      const robotRotation = this.robotRotation ?? 0;
+      const prevRobotRotation =
+        (changedProps.get('robotRotation') as number) ?? robotRotation;
+      const rotationChange = prevRobotRotation - robotRotation;
+      const rotationChangeDeg =
+        this.rotationUnit === 'degrees'
+          ? rotationChange
+          : rad2Deg(rotationChange);
+      const normalizedChange = [
+        rotationChangeDeg - 720,
+        rotationChangeDeg - 360,
+        rotationChangeDeg,
+        rotationChangeDeg + 360,
+        rotationChangeDeg + 720,
+      ];
+      let minIndex = 0;
+      let minDiff = Math.abs(normalizedChange[0]);
+      for (let i = 1; i < normalizedChange.length; i += 1) {
+        const diff = Math.abs(normalizedChange[i]);
+        if (diff < minDiff) {
+          minIndex = i;
+          minDiff = diff;
+        }
+      }
+      this.normalizedRotation -= normalizedChange[minIndex];
+    }
+
     if (
       hasChangedProp(
         changedProps,
@@ -173,22 +225,55 @@ export class Swerve extends LitElement {
     return modules;
   }
 
+  renderModuleDirectionIndicator(
+    clipId: string,
+    desiredRotation: number,
+    color: string
+  ): TemplateResult {
+    const desiredRotDeg =
+      this.rotationUnit === 'degrees'
+        ? desiredRotation
+        : rad2Deg(desiredRotation);
+    const [x1, y1] = getUnitCircleCords(desiredRotDeg - 15, true);
+    const [x2, y2] = getUnitCircleCords(desiredRotDeg + 15, true);
+
+    const path = `M ${-x1 * 60},${y1 * 60} L 0,0 ${-x2 * 60},${y2 * 60}`;
+    return svg`
+      <defs>
+        <clipPath id=${clipId}>
+          <path d=${path} fill="white" stroke="5" stroke="white" />
+        </clipPath>
+      </defs>
+      <circle r="47.5" fill=${color} stroke-width="0" clip-path=${`url(#${clipId})`}></circle>
+    `;
+  }
+
   renderModules(): TemplateResult {
     const modules = this.getSwerveModules();
     const [baseWidth, baseHeight] = this.getBaseSize();
     return svg`
       <g class="modules">
-        ${modules.map((module) => {
+        ${modules.map((module, index) => {
+          const { desiredRotation, measuredRotation, location } = module;
           const y =
-            baseHeight / 2 -
-            (baseHeight * module.location[0]) / this.sizeFrontBack;
+            baseHeight / 2 - (baseHeight * location[0]) / this.sizeFrontBack;
           const x =
-            baseWidth / 2 -
-            (baseWidth * module.location[1]) / this.sizeLeftRight;
-
+            baseWidth / 2 - (baseWidth * location[1]) / this.sizeLeftRight;
+          const measuredClipId = `module-${index}-measured-clip`;
+          const desiredClipId = `module-${index}-desired-clip`;
           return svg`
             <g transform=${`translate(${x}, ${y})`}>
               <circle r="50" stroke="white" stroke-width="5" fill="none"></circle>
+              ${this.renderModuleDirectionIndicator(
+                measuredClipId,
+                measuredRotation,
+                'blue'
+              )}
+              ${this.renderModuleDirectionIndicator(
+                desiredClipId,
+                desiredRotation,
+                'red'
+              )}
             </g>
           `;
         })} 
