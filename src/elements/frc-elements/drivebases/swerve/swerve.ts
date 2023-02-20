@@ -27,6 +27,10 @@ function rad2Deg(rad: number): number {
   return (rad * 180) / Math.PI;
 }
 
+function bound(value: number, min: number, max: number): number {
+  return Math.max(Math.min(value, max), min);
+}
+
 /**
  *
  * @param angleDeg - top is 0, increases cw. Should be converted to right 0, increases ccw.
@@ -108,7 +112,6 @@ export class Swerve extends LitElement {
   }
 
   setSwerveRotation(): void {
-    const rotationRad = this.getRobotRotationRad();
     d3.select(this._swerve).attr(
       'transform',
       `rotate(${-this.normalizedRotation})`
@@ -248,13 +251,47 @@ export class Swerve extends LitElement {
     `;
   }
 
+  renderModuleVelocityIndicator(
+    id: string,
+    rotation: number,
+    velocity: number,
+    color: string
+  ): TemplateResult {
+    const rotationDeg =
+      this.rotationUnit === 'degrees' ? rotation : rad2Deg(rotation);
+
+    let arrowLength = bound((100 * velocity) / this.maxSpeed, -100, 100);
+    arrowLength += 50 * Math.sign(arrowLength);
+    arrowLength *= -1;
+
+    const transform = `rotate(${-rotationDeg + (arrowLength < 0 ? 180 : 0)})`;
+    const maskId = `${id}-velocity`;
+    return svg`
+     <defs>
+        <mask id=${maskId}>
+          <circle r="300" fill="white" ></circle>
+          <circle r="52.5" fill="black" ></circle>
+        </mask>
+      </defs>
+      <g transform=${transform} mask="url(#${maskId})">
+        <rect width="5" height=${Math.abs(arrowLength)} fill=${color}></rect>
+      </g>
+    `;
+  }
+
   renderModules(): TemplateResult {
     const modules = this.getSwerveModules();
     const [baseWidth, baseHeight] = this.getBaseSize();
     return svg`
       <g class="modules">
         ${modules.map((module, index) => {
-          const { desiredRotation, measuredRotation, location } = module;
+          const {
+            desiredRotation,
+            measuredRotation,
+            location,
+            measuredVelocity,
+            desiredVelocity,
+          } = module;
           const y =
             baseHeight / 2 - (baseHeight * location[0]) / this.sizeFrontBack;
           const x =
@@ -272,6 +309,18 @@ export class Swerve extends LitElement {
               ${this.renderModuleDirectionIndicator(
                 desiredClipId,
                 desiredRotation,
+                'red'
+              )}
+              ${this.renderModuleVelocityIndicator(
+                measuredClipId,
+                measuredRotation,
+                measuredVelocity,
+                'blue'
+              )}
+              ${this.renderModuleVelocityIndicator(
+                desiredClipId,
+                desiredRotation,
+                desiredVelocity,
                 'red'
               )}
             </g>
