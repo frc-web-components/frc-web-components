@@ -126,5 +126,8 @@ export default function addDarkTheme(dashboard: FrcDashboard): void {
     '--frc-gauge-fill-color': 'rgb(90,150,200)',
     '--frc-gauge-color': '#666',
     '--frc-gauge-text-color': 'rgb(220, 220, 220)',
+
+    /* frc-swerve-drivetrain */
+    '--frc-swerve-drive-color': 'white',
   });
 }

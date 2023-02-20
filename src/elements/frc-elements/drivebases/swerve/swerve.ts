@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable import/extensions */
-import { html, svg, css, LitElement, TemplateResult } from 'lit';
+import { svg, css, LitElement, TemplateResult } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import * as d3 from 'd3';
 
@@ -101,6 +101,18 @@ export class Swerve extends LitElement {
       transition-duration: 0.1s;
       transition-timing-function: linear;
     }
+
+    .base {
+      stroke: var(--frc-swerve-drive-color, black);
+    }
+
+    .arrow {
+      stroke: var(--frc-swerve-drive-color, black);
+    }
+
+    .module-circle {
+      stroke: var(--frc-swerve-drive-color, black);
+    }
   `;
 
   drawBase(): void {
@@ -109,7 +121,6 @@ export class Swerve extends LitElement {
       .attr('width', width)
       .attr('height', height)
       .attr('stroke-width', 5)
-      .attr('stroke', 'white')
       .attr('fill', 'none');
   }
 
@@ -307,7 +318,7 @@ export class Swerve extends LitElement {
           const desiredClipId = `module-${index}-desired-clip`;
           return svg`
             <g transform=${`translate(${x}, ${y})`}>
-              <circle r="50" stroke="white" stroke-width="5" fill="none"></circle>
+              <circle class="module-circle" r="50" stroke-width="5" fill="none"></circle>
               ${this.renderModuleDirectionIndicator(
                 measuredClipId,
                 measuredRotation,
@@ -369,10 +380,10 @@ export class Swerve extends LitElement {
       baseWidth / 2 + 30
     },60`;
     return svg`
-      <line x1=${baseWidth / 2} y1=${30} x2=${baseWidth / 2} y2=${
+      <line class="arrow" x1=${baseWidth / 2} y1=${30} x2=${baseWidth / 2} y2=${
       baseHeight - 30
-    } stroke="white" stroke-width="5" />
-      <path d=${arrowHeadPath} stroke="white" stroke-width="5" fill="none" />
+    } stroke-width="5" />
+      <path class="arrow" d=${arrowHeadPath} stroke-width="5" fill="none" />
       
     `;
   }
