@@ -2,6 +2,28 @@
 import { SourceProvider } from '@webbitjs/store';
 import { NT4_Client, NT4_Topic } from './NT4';
 
+function getType(value: unknown): string | undefined {
+  if (typeof value === 'boolean' || typeof value === 'string') {
+    return typeof value;
+  }
+  if (typeof value === 'number') {
+    return 'double';
+  }
+  if (value instanceof Array) {
+    if (value.length === 0) {
+      return undefined;
+    }
+    const type = getType(value[0]);
+    const typeMismatch = value.some((v) => getType(v) !== type);
+    if (typeMismatch) {
+      return undefined;
+    }
+    return type;
+  }
+
+  return undefined;
+}
+
 export default class Nt4Provider extends SourceProvider {
   private serverAddress = '';
   private clients: Record<string, NT4_Client> = {};
@@ -44,6 +66,7 @@ export default class Nt4Provider extends SourceProvider {
     }
   }
 
+  // TODO: Be able to optionally pass in additional data
   userUpdate(key: string, value: unknown): void {
     const topic = this.topics[key];
     if (topic) {
@@ -51,6 +74,14 @@ export default class Nt4Provider extends SourceProvider {
       client.publishNewTopic(topic.name, topic.type);
       client.addSample(topic.name, value);
       this.updateSource(topic.name, value);
+    } else {
+      const client = this.clients[this.serverAddress];
+      const type = getType(value);
+      if (type !== undefined) {
+        client.publishNewTopic(key, type);
+        client.addSample(key, value);
+        this.updateSource(key, value);
+      }
     }
   }
 
