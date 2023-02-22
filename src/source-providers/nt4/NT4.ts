@@ -40,7 +40,7 @@ class NT4_Subscription {
 }
 
 class NT4_SubscriptionOptions {
-  periodic = 0.1;
+  periodic = 0.02;
   all = false;
   topicsOnly = false;
   prefix = false;

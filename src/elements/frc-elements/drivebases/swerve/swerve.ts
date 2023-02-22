@@ -95,13 +95,6 @@ export class Swerve extends LitElement {
       overflow: visible;
     }
 
-    .swerve
-    /*.velocity-indicator*/ {
-      transition-property: transform;
-      transition-duration: 0.1s;
-      transition-timing-function: linear;
-    }
-
     .base {
       stroke: var(--frc-swerve-drive-color, black);
     }
