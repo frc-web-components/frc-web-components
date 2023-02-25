@@ -21,6 +21,7 @@ import * as pdp from './pdp';
 import * as relay from './relay';
 import * as voltageView from './voltage-view';
 import sendableChooserConfig from './sendable-chooser';
+import { elementConfig as stateMachineConfig } from './state-machine';
 
 const elements = [
   ...baseElements,
@@ -49,6 +50,7 @@ const elements = [
     elementName: 'frc-sendable-chooser',
     elementConfig: sendableChooserConfig,
   },
+  { elementName: 'frc-state-machine', elementConfig: stateMachineConfig },
 ];
 
 export default Object.fromEntries(
