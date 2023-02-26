@@ -327,11 +327,13 @@ export class StateMachine extends LitElement {
       const startStateIndex = this.transitions[index * 2];
       const color = d3.schemePastel1[startStateIndex % 9];
       return svg`
-        <path id=${`transition${index}`} class="transition" stroke=${color} fill="none" stroke-width="2" />
-        <path class="transitionHead" fill=${color} />
-        <text fill=${color} text-anchor="middle" dy="-5">
-          <textPath href=${`#transition${index}`} startOffset="50%">${name}</textPath>
-        </text>
+        <g>
+          <path id=${`transition${index}`} class="transition" stroke=${color} fill="none" stroke-width="2" />
+          <path class="transitionHead" fill=${color} />
+          <text fill=${color} text-anchor="middle" dy="-5">
+            <textPath href=${`#transition${index}`} startOffset="50%">${name}</textPath>
+          </text>
+        </g>
       `;
     });
     return svg`
