@@ -20,6 +20,10 @@ export const elementConfig = {
   },
 };
 
+function getUnitCircleCords(radians: number): [number, number] {
+  return [Math.cos(radians), Math.sin(radians)];
+}
+
 type Side = 'top' | 'bottom' | 'left' | 'right';
 
 function getRectCenter(rect: DOMRect): [number, number] {
@@ -147,13 +151,32 @@ function getArrowCurvePoints(
   return points;
 }
 
-function getArrowCurve(points: [number, number][]): string {
+function getArrowCurve(points: [number, number][]): [string, string] {
   const curve = d3.line().curve(d3.curveBasis);
 
   // http://using-d3js.com/05_01_paths.html
-  const path = d3.path();
+  const [, , [x1, y1], [x2, y2]] = points;
+  const x = x2 - x1;
+  const y = y2 - y1;
+  // const xM =  d3.interpolate(x1, x2)(.5);
+  const angle = Math.atan(y / x);
+  const point2Offset = getUnitCircleCords(angle + Math.PI / 2).map(
+    (v) => v * 10
+  );
+  const point3Offset = getUnitCircleCords(angle - Math.PI / 2).map(
+    (v) => v * 10
+  );
 
-  return curve(points) ?? '';
+  const point4Offset = getUnitCircleCords(angle + Math.PI).map((v) => v * 10);
+  const [xOffset, yOffset] = [x2 + point4Offset[0], y2 + point4Offset[1]];
+  const arrowPoints: [number, number][] = [
+    [x2, y2],
+    [xOffset + point2Offset[0], yOffset + point2Offset[1]],
+    [xOffset + point3Offset[0], yOffset + point3Offset[1]],
+    [x2, y2],
+  ];
+  const arrowHead = d3.line().curve(d3.curveLinear);
+  return [curve(points) ?? '', arrowHead(arrowPoints) ?? ''];
 }
 
 @customElement('frc-state-machine')
@@ -174,6 +197,9 @@ export class StateMachine extends LitElement {
 
   @queryAll('.transition')
   _transitions!: SVGPathElement[];
+
+  @queryAll('.transitionHead')
+  _transitionHeads!: SVGPathElement[];
 
   @query('svg')
   _svg!: SVGElement;
@@ -230,6 +256,7 @@ export class StateMachine extends LitElement {
     });
 
     this._transitions.forEach((element, index) => {
+      const transitionHead = this._transitionHeads[index];
       const startStateIndex = this.transitions[index * 2];
       const endStateIndex = this.transitions[index * 2 + 1];
 
@@ -248,10 +275,12 @@ export class StateMachine extends LitElement {
         startBox,
         endBox
       );
-      const arrowCurve = getArrowCurve(curvePoints);
+      const [arrowCurve, arrowHead] = getArrowCurve(curvePoints);
       // const [, , arrowHeadStart, arrowHeadEnd] = curvePoints;
 
       element.setAttribute('d', arrowCurve);
+      transitionHead.setAttribute('d', arrowHead);
+      // element.setAttribute('fill',)
     });
 
     requestAnimationFrame(() => {
@@ -298,7 +327,11 @@ export class StateMachine extends LitElement {
       const startStateIndex = this.transitions[index * 2];
       const color = d3.schemePastel1[startStateIndex % 9];
       return svg`
-        <path class="transition" stroke=${color} fill="none" stroke-width="2" />
+        <path id=${`transition${index}`} class="transition" stroke=${color} fill="none" stroke-width="2" />
+        <path class="transitionHead" fill=${color} />
+        <text fill=${color} text-anchor="middle" dy="-5">
+          <textPath href=${`#transition${index}`} startOffset="50%">${name}</textPath>
+        </text>
       `;
     });
     return svg`
