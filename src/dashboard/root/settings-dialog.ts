@@ -1,6 +1,7 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable import/extensions */
 import { html, css, LitElement, TemplateResult } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { customElement, property, state, query } from 'lit/decorators.js';
 import FrcDashboard from '../frc-dashboard';
 
 function getRecentAddressSuggestions(): string[] {
@@ -38,6 +39,8 @@ export class SettingsDialog extends LitElement {
   @state() themes: string[] = [];
   @state() serverAddress = '';
 
+  @query('#ip-input') _ipInputField!: HTMLElement;
+
   static styles = css`
     :host {
       display: flex;
@@ -49,7 +52,7 @@ export class SettingsDialog extends LitElement {
     .form {
       flex: 1;
       width: 100%;
-      padding: 15px 20px;
+      padding: 15px 20px 0;
       box-sizing: border-box;
     }
 
@@ -102,12 +105,15 @@ export class SettingsDialog extends LitElement {
 
   private onAddressChange(ev: CustomEvent): void {
     const { value } = ev.target || (ev as any).path[0];
-    const ntProvider = this.dashboard
-      .getStore()
-      .getSourceProvider('NetworkTables');
-    addRecentAddressSuggestion(value);
-    (ntProvider as any).connect(value);
-    this.serverAddress = value;
+    const isValid: boolean = (this._ipInputField as any)?.checkValidity();
+    if (isValid) {
+      const ntProvider = this.dashboard
+        .getStore()
+        .getSourceProvider('NetworkTables');
+      addRecentAddressSuggestion(value);
+      (ntProvider as any).connect(value);
+      this.serverAddress = value;
+    }
   }
 
   render(): TemplateResult {
@@ -143,6 +149,7 @@ export class SettingsDialog extends LitElement {
         <div class="form-item">
           <label>Team/IP</label>
           <vaadin-combo-box
+            id="ip-input"
             class="input"
             item-label-path="name"
             item-value-path="id"
@@ -150,6 +157,12 @@ export class SettingsDialog extends LitElement {
             .value=${this.serverAddress}
             allow-custom-value
             @change=${this.onAddressChange}
+            @input=${() => {
+              (this._ipInputField as any)?.validate();
+            }}
+            pattern="^([0-9]+)|(([0-9]{1,3}).([0-9]{1,3}).([0-9]{1,3}).([0-9]{1,3}))|(localhost)$"
+            error-message="Please enter a valid team # or IP address"
+            auto-open-disabled
           ></vaadin-combo-box>
         </div>
       </div>
