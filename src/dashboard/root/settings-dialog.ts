@@ -106,7 +106,7 @@ export class SettingsDialog extends LitElement {
   private onAddressChange(ev: CustomEvent): void {
     const { value } = ev.target || (ev as any).path[0];
     const isValid: boolean = (this._ipInputField as any)?.checkValidity();
-    if (isValid) {
+    if (isValid && value) {
       const ntProvider = this.dashboard
         .getStore()
         .getSourceProvider('NetworkTables');
