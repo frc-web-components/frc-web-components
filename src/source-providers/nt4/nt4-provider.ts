@@ -29,11 +29,14 @@ export default class Nt4Provider extends SourceProvider {
   private clients: Record<string, NT4_Client> = {};
   private connected = false;
   private topics: Record<string, NT4_Topic> = {};
-  private connectionListeners: ((connected: boolean) => unknown)[] = [];
+  private connectionListeners: ((
+    connected: boolean,
+    serverAddress: string
+  ) => unknown)[] = [];
 
   constructor() {
     super({}, 1000 / 60);
-    this.connect(localStorage.getItem('nt4Address') ?? 'localhost');
+    this.connect(localStorage.getItem('nt4Address') ?? '127.0.0.1');
   }
 
   getServerAddress(): string {
@@ -57,12 +60,12 @@ export default class Nt4Provider extends SourceProvider {
   }
 
   addConnectionListener(
-    listener: (connected: boolean) => unknown,
+    listener: (connected: boolean, serverAddress: string) => unknown,
     callImediately = false
   ): void {
     this.connectionListeners.push(listener);
     if (callImediately) {
-      listener(this.connected);
+      listener(this.connected, this.serverAddress);
     }
   }
 
@@ -99,12 +102,16 @@ export default class Nt4Provider extends SourceProvider {
 
   private onConnect() {
     this.connected = true;
-    this.connectionListeners.forEach((listener) => listener(true));
+    this.connectionListeners.forEach((listener) =>
+      listener(true, this.serverAddress)
+    );
   }
 
   private onDisconnect() {
     this.connected = false;
-    this.connectionListeners.forEach((listener) => listener(false));
+    this.connectionListeners.forEach((listener) =>
+      listener(false, this.serverAddress)
+    );
   }
 
   private createClient(serverAddr: string): NT4_Client {
@@ -113,6 +120,9 @@ export default class Nt4Provider extends SourceProvider {
       this.topics = {};
     }
     this.serverAddress = serverAddr;
+    this.connectionListeners.forEach((listener) =>
+      listener(this.connected, this.serverAddress)
+    );
     localStorage.setItem('nt4Address', serverAddr);
 
     const appName = 'FRC Web Components';

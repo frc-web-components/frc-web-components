@@ -9,6 +9,7 @@ import './settings-dialog';
 @customElement('dashboard-navbar')
 export class DashboardNavbar extends LitElement {
   @state() ntConnected = false;
+  @state() nt4Address = '127.0.0.1';
   @state() selectedTabIndex = 0;
   @state() settingsDialogOpened = false;
   @property({ type: Object }) dashboard!: FrcDashboard;
@@ -58,28 +59,60 @@ export class DashboardNavbar extends LitElement {
       justify-content: center;
       padding-right: 15px;
       align-items: end;
-      gap: 2px;
+      gap: 4px;
       line-height: normal;
+      font-size: 14px;
+      text-align: end;
     }
 
     .settings {
       color: var(--lumo-primary-text-color, blue);
       cursor: pointer;
       font-size: 14px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .settings vaadin-icon {
+      width: 14px;
+      height: 14px;
     }
 
     .nt-connection {
-      align-self: center;
       color: var(--lumo-contrast, black);
       white-space: nowrap;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 5px;
     }
 
-    .nt-connection span.connected {
+    .nt-connection.connected span {
       color: green;
     }
 
-    .nt-connection span.disconnected {
+    .nt-connection.disconnected span {
       color: red;
+    }
+
+    .nt-connection.connected .dot {
+      width: 14px;
+      height: 14px;
+      background-color: rgb(137, 255, 0);
+      border-radius: 50%;
+      box-shadow: rgba(0, 0, 0, 0.2) 0px -1px 7px 1px,
+        rgb(48, 71, 1) 0px -1px 2px inset, rgb(137, 255, 0) 0px 0px 8px;
+    }
+
+    .nt-connection.disconnected .dot {
+      width: 14px;
+      height: 14px;
+      background-color: rgb(255, 0, 0);
+      border-radius: 50%;
+      box-shadow: rgba(0, 0, 0, 0.2) 0px -1px 7px 1px,
+        rgb(48, 71, 1) 0px -1px 2px inset, red 0px 0px 8px;
     }
   `;
 
@@ -142,9 +175,13 @@ export class DashboardNavbar extends LitElement {
     const ntProvider = this.dashboard
       .getStore()
       .getSourceProvider('NetworkTables');
-    (ntProvider as any).addConnectionListener((connected: any) => {
-      this.ntConnected = connected;
-    }, true);
+    (ntProvider as any).addConnectionListener(
+      (connected: boolean, nt4Address: string) => {
+        this.ntConnected = connected;
+        this.nt4Address = nt4Address;
+      },
+      true
+    );
     const connector = this.dashboard.getConnector();
     [...this.#rootElement.querySelectorAll('dashboard-tab')].forEach(
       (element) => this.#updateIfTab(element as HTMLElement)
@@ -252,11 +289,13 @@ export class DashboardNavbar extends LitElement {
           </vaadin-button>
         </div>
         <div class="info">
-          <div class="nt-connection">
-            NetworkTables:
-            <span class=${this.ntConnected ? 'connected' : 'disconnected'}>
-              ${this.ntConnected ? 'Connected' : 'Disconnected'}
-            </span>
+          <div
+            class=${`nt-connection ${
+              this.ntConnected ? 'connected' : 'disconnected'
+            }`}
+          >
+            <div class="dot"></div>
+            <span>${this.nt4Address}</span>
           </div>
           <div
             class="settings"
@@ -264,6 +303,7 @@ export class DashboardNavbar extends LitElement {
               this.settingsDialogOpened = true;
             }}
           >
+            <vaadin-icon icon="vaadin:cog"></vaadin-icon>
             Settings
           </div>
         </div>
