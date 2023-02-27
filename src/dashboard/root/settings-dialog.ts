@@ -3,6 +3,34 @@ import { html, css, LitElement, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import FrcDashboard from '../frc-dashboard';
 
+function getRecentAddressSuggestions(): string[] {
+  try {
+    const suggestions: string[] = JSON.parse(
+      localStorage.getItem('recentRobotAddresses') ?? '[]'
+    );
+    if (suggestions instanceof Array) {
+      return suggestions;
+    }
+    // eslint-disable-next-line no-empty
+  } catch (e) {}
+  return [];
+}
+
+function addRecentAddressSuggestion(address: string): void {
+  let suggestions = getRecentAddressSuggestions();
+
+  if (
+    address === 'localhost' ||
+    address === '127.0.0.1' ||
+    suggestions.includes(address)
+  ) {
+    return;
+  }
+
+  suggestions = [address, ...suggestions.slice(0, 9)];
+  localStorage.setItem('recentRobotAddresses', JSON.stringify(suggestions));
+}
+
 @customElement('dashboard-settings-dialog')
 export class SettingsDialog extends LitElement {
   @property({ type: Object, attribute: false }) dashboard!: FrcDashboard;
@@ -73,10 +101,11 @@ export class SettingsDialog extends LitElement {
   }
 
   private onAddressChange(ev: CustomEvent): void {
-    const { value } = ev.target as any;
+    const { value } = ev.target || (ev as any).path[0];
     const ntProvider = this.dashboard
       .getStore()
       .getSourceProvider('NetworkTables');
+    addRecentAddressSuggestion(value);
     (ntProvider as any).connect(value);
     this.serverAddress = value;
   }
@@ -86,6 +115,8 @@ export class SettingsDialog extends LitElement {
       id: theme,
       name: theme,
     }));
+
+    const addressItems = ['127.0.0.1', ...getRecentAddressSuggestions()];
 
     return html`
       <header
@@ -110,12 +141,16 @@ export class SettingsDialog extends LitElement {
           ></vaadin-combo-box>
         </div>
         <div class="form-item">
-          <label>NT4 Server</label>
-          <vaadin-text-field
+          <label>Team/IP</label>
+          <vaadin-combo-box
             class="input"
+            item-label-path="name"
+            item-value-path="id"
+            .items=${addressItems}
             .value=${this.serverAddress}
+            allow-custom-value
             @change=${this.onAddressChange}
-          ></vaadin-text-field>
+          ></vaadin-combo-box>
         </div>
       </div>
       <footer

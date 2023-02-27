@@ -24,6 +24,16 @@ function getType(value: unknown): string | undefined {
   return undefined;
 }
 
+/**
+ * Get the mDNS address of a robot.
+ *
+ * @param team - The team number.
+ * @returns The mDNS address of the robot.
+ */
+function getRobotAddress(team: number): string {
+  return `roborio-${team}-frc.local`;
+}
+
 export default class Nt4Provider extends SourceProvider {
   private serverAddress = '';
   private clients: Record<string, NT4_Client> = {};
@@ -128,8 +138,14 @@ export default class Nt4Provider extends SourceProvider {
     const appName = 'FRC Web Components';
 
     if (!this.clients[serverAddr]) {
+      const teamRegex = /^[0-9]+$/;
+      const isTeamNumber =
+        teamRegex.test(serverAddr) && !Number.isNaN(parseFloat(serverAddr));
+      const robotAddress = isTeamNumber
+        ? getRobotAddress(parseFloat(serverAddr))
+        : serverAddr;
       this.clients[serverAddr] = new NT4_Client(
-        serverAddr,
+        robotAddress,
         appName,
         (...args) => {
           if (this.serverAddress === serverAddr) {
