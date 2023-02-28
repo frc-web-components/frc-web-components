@@ -35,6 +35,11 @@ export const elementConfig = {
       input: { type: 'ColorPicker' },
       defaultValue: '#0000ff',
     },
+    opacity: {
+      type: Number,
+      defaultValue: 1,
+      input: { type: 'Number', min: 0, max: 100, suffix: '%' },
+    },
     pose: { type: Array, primary: true },
     width: { type: Number, defaultValue: 0.6 },
     height: { type: Number, defaultValue: 0.9 },
@@ -54,6 +59,7 @@ class FieldRobot extends FieldObject {
     this.unit = 'inherit';
     this.image = '';
     this.color = '#0000ff';
+    this.opacity = 100;
     this.pose = [0, 0, 0];
     this.width = 0.6;
     this.height = 0.9;
@@ -73,6 +79,8 @@ class FieldRobot extends FieldObject {
 
   renderDrawing({ bottomCtx, scalingFactor }) {
     bottomCtx.fillStyle = this.color;
+    bottomCtx.globalAlpha = Math.max(0, Math.min(1, this.opacity / 100));
+
     bottomCtx.moveTo(0, 0);
     bottomCtx.fillRect(
       -this.width / 2,
@@ -83,12 +91,25 @@ class FieldRobot extends FieldObject {
 
     bottomCtx.beginPath();
     bottomCtx.strokeStyle = 'black';
-    bottomCtx.lineWidth = 2 / scalingFactor;
+    bottomCtx.lineWidth = this.width * 0.1;
     bottomCtx.moveTo(0, 0);
     bottomCtx.rect(-this.width / 2, -this.height / 2, this.width, this.height);
     bottomCtx.stroke();
 
-    // draw wheels
+    // draw arrow
+    bottomCtx.beginPath();
+    bottomCtx.fillStyle = 'white';
+    bottomCtx.moveTo(0, -this.height * 0.3);
+    bottomCtx.strokeStyle = 'white';
+    bottomCtx.lineWidth = 2 / scalingFactor;
+
+    bottomCtx.lineTo(0, this.height * 0.3);
+    bottomCtx.moveTo(-this.width * 0.2, this.height * 0.1);
+    bottomCtx.lineTo(0, this.height * 0.3);
+    bottomCtx.lineTo(this.width * 0.2, this.height * 0.1);
+    bottomCtx.stroke();
+
+    // Draw wheels
     const wheelRadius = Math.min(this.width * 0.17, this.height * 0.19);
     const wheelWidth = wheelRadius;
 

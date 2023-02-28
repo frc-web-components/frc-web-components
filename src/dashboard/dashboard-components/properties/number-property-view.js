@@ -20,7 +20,12 @@ class NumberPropertyView extends PropertyView {
         ?disabled="${this.isDisabled()}"
         theme="small"
         has-controls
-      ></vaadin-number-field>
+        .min=${this.property?.input?.min}
+        .max=${this.property?.input?.max}
+      >
+        <div slot="prefix">${this.property?.input?.prefix ?? ''}</div>
+        <div slot="suffix">${this.property?.input?.suffix ?? ''}</div>
+      </vaadin-number-field>
     `;
   }
 }
