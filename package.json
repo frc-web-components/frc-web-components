@@ -97,7 +97,7 @@
     "@vaadin/vaadin": "^22.0.0",
     "@webbitjs/store": "^5.5.0",
     "@webbitjs/webbit": "^5.5.0",
-    "api-viewer-element": "^0.4.4",
+    "api-viewer-element": "^1.0.0-pre.7",
     "chart.js": "^2.8.0",
     "codeflask": "^1.4.1",
     "d3": "^7.8.2",
