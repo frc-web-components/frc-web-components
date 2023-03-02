@@ -112,7 +112,7 @@
     "lodash.unescape": "^4.0.1",
     "multiselect-combo-box": "^3.0.0-alpha.2",
     "svg-gauge": "^1.0.6",
-    "three": "^0.116.1",
+    "three": "^0.125.0",
     "urdf-loader": "^0.8.2"
   },
   "lint-staged": {
