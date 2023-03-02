@@ -1,3 +1,5 @@
+**Note**: *If you are looking for the docs to an older version of FRC Web Components you can find them* `here <https://github.com/frc-web-components/frc-web-components/tree/version3>`_.
+
 FRC Web Components
 ==================
 
@@ -6,6 +8,8 @@ FRC Web Components (FWC) is a web-based dashboard used for the `FIRST Robotics C
 .. image:: ./docs/images/dashboard.png
 
 FWC can be either installed as a standalone application, or as a javascript package for custom dashboard solutions.
+
+
 
 Installation
 ============
