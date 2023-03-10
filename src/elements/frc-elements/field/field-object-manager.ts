@@ -38,7 +38,10 @@ export default class FieldObjectManager {
       if (property.startsWith('.') || this.hasChild(childSource.getKey())) {
         return;
       }
-      const poses = getPoses(childSource.getValue());
+      const poseValue = childSource.hasChildren()
+        ? childSource.getChildren().pose.getValue()
+        : childSource.getValue();
+      const poses = getPoses(poseValue);
       const type =
         poses.length === 1 ? 'frc-field-robot' : 'frc-field-trajectory';
       this.addChild(childSource.getKey(), type);

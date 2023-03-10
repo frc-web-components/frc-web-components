@@ -114,6 +114,7 @@ export const elementConfig = {
     gridSize: { type: Number, attribute: 'grid-size', defaultValue: 1 },
     showGrid: { type: Boolean, attribute: 'show-grid' },
     swapAxes: { type: Boolean, attribute: 'swap-axes' },
+    flip: { type: Boolean },
   },
   demos: [
     {

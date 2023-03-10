@@ -26,6 +26,7 @@ export class Field extends LitElement {
   @property({ type: Number, attribute: 'grid-size' }) gridSize = 1;
   @property({ type: Boolean, attribute: 'show-grid' }) showGrid = false;
   @property({ type: Boolean, attribute: 'swap-axes' }) swapAxes = false;
+  @property({ type: Boolean }) flip = false;
 
   private _width = 54;
   private _height = 27;
@@ -503,7 +504,10 @@ export class Field extends LitElement {
 
     return html`
       <div part="field">
-        <img part="field-image" />
+        <img
+          part="field-image"
+          style="transform: rotate(${this.flip ? 180 : 0}deg)"
+        />
         <div part="playing-field-area">
           ${this.showGrid && this.gridSize > 0
             ? html`
