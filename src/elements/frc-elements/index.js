@@ -21,6 +21,7 @@ import * as pdp from './pdp';
 import * as relay from './relay';
 import * as voltageView from './voltage-view';
 import sendableChooserConfig from './sendable-chooser';
+import Mechanism2dConfig from './mechanism2d';
 
 const elements = [
   ...baseElements,
@@ -48,6 +49,10 @@ const elements = [
   {
     elementName: 'frc-sendable-chooser',
     elementConfig: sendableChooserConfig,
+  },
+  {
+    elementName: 'frc-mechanism2d',
+    elementConfig: Mechanism2dConfig,
   },
 ];
 
