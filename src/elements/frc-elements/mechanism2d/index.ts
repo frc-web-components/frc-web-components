@@ -103,9 +103,8 @@ export class Mechanism2dElement extends LitElement {
 
     if ((mechHeight / mechWidth) * width < height) {
       return [width, (mechHeight / mechWidth) * width];
-    } else {
-      return [(mechWidth / mechHeight) * height, height];
     }
+    return [(mechWidth / mechHeight) * height, height];
   }
 
   resized(): void {
@@ -157,13 +156,13 @@ export class Mechanism2dElement extends LitElement {
       return [];
     }
     const children: Record<string, Source> = source?.getChildren() ?? {};
-    const rootSources = Object.values(children).filter((source) => {
-      return source.hasChildren();
-    });
+    const rootSources = Object.values(children).filter((rootSource) =>
+      rootSource.hasChildren()
+    );
     const roots: Mechanism2dRoot[] = rootSources.map((rootSource) => {
       const root: Mechanism2dRoot = {
-        x: (rootSource.getChildren()['x'].getSourceValue() as number) ?? 0,
-        y: (rootSource.getChildren()['y'].getSourceValue() as number) ?? 0,
+        x: (rootSource.getChildren().x.getSourceValue() as number) ?? 0,
+        y: (rootSource.getChildren().y.getSourceValue() as number) ?? 0,
         children: this.getMechanism2dLines(rootSource),
       };
       return root;
@@ -173,19 +172,18 @@ export class Mechanism2dElement extends LitElement {
 
   getMechanism2dLines(source: Source): Mechanism2dLine[] {
     const children: Record<string, Source> = source?.getChildren() ?? {};
-    const lineSources = Object.values(children).filter((source) => {
-      return (
-        source.hasChildren() &&
-        source.getChildren()['.type']?.getSourceValue() === 'line'
-      );
-    });
+    const lineSources = Object.values(children).filter(
+      (lineSource) =>
+        lineSource.hasChildren() &&
+        lineSource.getChildren()['.type']?.getSourceValue() === 'line'
+    );
     const lines: Mechanism2dLine[] = lineSources.map((lineSource) => {
-      const children = lineSource.getChildren();
+      const lineChildren = lineSource.getChildren();
       const line: Mechanism2dLine = {
-        angle: (children['angle'].getSourceValue() as number) ?? 0,
-        color: (children['color'].getSourceValue() as string) ?? '#ffffff',
-        length: (children['length'].getSourceValue() as number) ?? 1,
-        weight: (children['weight'].getSourceValue() as number) ?? 1,
+        angle: (lineChildren.angle.getSourceValue() as number) ?? 0,
+        color: (lineChildren.color.getSourceValue() as string) ?? '#ffffff',
+        length: (lineChildren.length.getSourceValue() as number) ?? 1,
+        weight: (lineChildren.weight.getSourceValue() as number) ?? 1,
         children: this.getMechanism2dLines(lineSource),
       };
       return line;
@@ -208,7 +206,6 @@ export class Mechanism2dElement extends LitElement {
     `;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   renderMechanism2dRoot(root: Mechanism2dRoot): TemplateResult {
     const [width, height] = this.dims;
     const [svgWidth, svgHeight] = this.getMech2dSize();
@@ -223,7 +220,6 @@ export class Mechanism2dElement extends LitElement {
     `;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   renderMechanism2dLine(line: Mechanism2dLine): TemplateResult {
     const [width] = this.dims;
     const [svgWidth] = this.getMech2dSize();
