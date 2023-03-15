@@ -127,7 +127,8 @@ class PropertiesEditor extends LitElement {
         theme="small"
         readonly
         .value=${this.sourceKey || 'Connect to a data source...'}
-        style="width: 100%; margin-bottom: 10px"
+        style="width: 100%; margin-bottom: 10px;"
+        @click=${() => this.dashboard.publish('sourcesDialogOpen')}
       >
         <vaadin-icon
           slot="suffix"

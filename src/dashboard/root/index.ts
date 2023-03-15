@@ -69,7 +69,7 @@ const styles = css`
 
 @customElement('dashboard-root')
 export default class DashboardRoot extends LitElement {
-  @state() drawerOpened = true;
+  @state() drawerOpened = false;
   @state() ready = false;
   @state() dialogOpened = false;
   @property({ type: Object, attribute: false }) dashboard?: FrcDashboard;
@@ -78,7 +78,6 @@ export default class DashboardRoot extends LitElement {
 
   constructor() {
     super();
-    this.drawerOpened = true;
     document.body.style.margin = '0';
   }
 
@@ -146,6 +145,7 @@ export default class DashboardRoot extends LitElement {
     navbar.addEventListener('drawerToggle', () => {
       this.#onDrawerToggle();
     });
+
     this.appendChild(navbar);
 
     this.dashboard.subscribe('themeSet', () => this.#updateTheme());
@@ -177,15 +177,6 @@ export default class DashboardRoot extends LitElement {
   #onDrawerToggle(): void {
     this.drawerOpened = !this.drawerOpened;
     this.dashboard?.setPreviewedElement(null);
-    const layout = this.renderRoot.querySelector('.layout') as HTMLElement;
-    const drawer = this.renderRoot.querySelector(
-      'dashboard-drawer'
-    ) as HTMLElement;
-    if (this.drawerOpened && layout && drawer) {
-      layout.classList.remove('closed');
-    } else {
-      layout.classList.add('closed');
-    }
   }
 
   render(): TemplateResult {
@@ -194,17 +185,17 @@ export default class DashboardRoot extends LitElement {
     }
     const isEditable = this.dashboard?.isElementEditable();
     return html`
-      <div class="layout">
+      <div class="layout ${!this.drawerOpened ? 'closed' : ''}">
         <vaadin-dialog
           theme="no-padding"
           draggable
           modeless
-          resizable
           .opened=${this.drawerOpened && this.dialogOpened}
           .renderer=${guard([], () => (root: HTMLElement) => {
             render(
               html`
                 <dashboard-source-picker-dialog
+                  style="width: 500px;"
                   .dashboard=${this.dashboard}
                   .dialogOpened=${this.dialogOpened}
                   @closeDialog=${() => {
