@@ -34,9 +34,29 @@ function getRobotAddress(team: number): string {
   return `roborio-${team}-frc.local`;
 }
 
+function getRobotAddresses(teamNumber: number) {
+  const t = teamNumber.toString().at(-4) ?? '';
+  const e = teamNumber.toString().at(-3) ?? '';
+  const a = teamNumber.toString().at(-2) ?? '';
+  const m = teamNumber.toString().at(-1) ?? '';
+
+  const te = parseInt(`${t}${e}`, 10) ?? 0;
+  const am = parseInt(`${a}${m}`, 10) ?? 0;
+  const team = t + e + a + m;
+
+  return [
+    `10.${te.toString()}.${am.toString()}.2`,
+    `172.22.11.2`,
+    `roborio-${team}-FRC.local`,
+    `roborio-${team}-FRC.lan`,
+    `roborio-${team}-FRC.frc-field.local`,
+  ];
+}
+
 export default class Nt4Provider extends SourceProvider {
   private serverAddress = '';
   private clients: Record<string, NT4_Client> = {};
+  private client?: NT4_Client;
   private connected = false;
   private topics: Record<string, NT4_Topic> = {};
   private connectionListeners: ((
@@ -62,7 +82,7 @@ export default class Nt4Provider extends SourceProvider {
   }
 
   disconnect(): void {
-    this.clients[this.serverAddress]?.disconnect();
+    this.client?.disconnect();
   }
 
   isConnected(): boolean {
@@ -81,18 +101,19 @@ export default class Nt4Provider extends SourceProvider {
 
   // TODO: Be able to optionally pass in additional data
   userUpdate(key: string, value: unknown): void {
+    if (!this.client) {
+      return;
+    }
     const topic = this.topics[key];
     if (topic) {
-      const client = this.clients[this.serverAddress];
-      client.publishNewTopic(topic.name, topic.type);
-      client.addSample(topic.name, value);
+      this.client.publishNewTopic(topic.name, topic.type);
+      this.client.addSample(topic.name, value);
       this.updateSource(topic.name, value);
     } else {
-      const client = this.clients[this.serverAddress];
       const type = getType(value);
       if (type !== undefined) {
-        client.publishNewTopic(key, type);
-        client.addSample(key, value);
+        this.client.publishNewTopic(key, type);
+        this.client.addSample(key, value);
         this.updateSource(key, value);
       }
     }
@@ -124,11 +145,16 @@ export default class Nt4Provider extends SourceProvider {
     );
   }
 
-  private createClient(serverAddr: string): NT4_Client {
-    if (this.clients[this.serverAddress]) {
-      this.clients[this.serverAddress].disconnect();
+  private createClient(serverAddr: string) {
+    if (this.client) {
+      this.client.disconnect();
       this.topics = {};
+      this.connected = false;
+      this.client = undefined;
     }
+    Object.values(this.clients).forEach((client) => client.disconnect());
+    this.clients = {};
+
     this.serverAddress = serverAddr;
     this.connectionListeners.forEach((listener) =>
       listener(this.connected, this.serverAddress)
@@ -137,48 +163,53 @@ export default class Nt4Provider extends SourceProvider {
 
     const appName = 'FRC Web Components';
 
-    if (!this.clients[serverAddr]) {
-      const teamRegex = /^[0-9]+$/;
-      const isTeamNumber =
-        teamRegex.test(serverAddr) && !Number.isNaN(parseFloat(serverAddr));
-      const robotAddress = isTeamNumber
-        ? getRobotAddress(parseFloat(serverAddr))
-        : serverAddr;
-      this.clients[serverAddr] = new NT4_Client(
+    const teamRegex = /^[0-9]+$/;
+    const isTeamNumber =
+      teamRegex.test(serverAddr) && !Number.isNaN(parseFloat(serverAddr));
+    const robotAddresses = isTeamNumber
+      ? getRobotAddresses(parseFloat(serverAddr))
+      : [serverAddr];
+
+    robotAddresses.forEach((robotAddress) => {
+      const client = new NT4_Client(
         robotAddress,
         appName,
         (...args) => {
-          if (this.serverAddress === serverAddr) {
+          if (this.client === client) {
             this.onTopicAnnounce(...args);
           }
         },
         (...args) => {
-          if (this.serverAddress === serverAddr) {
+          if (this.client === client) {
             this.onTopicUnannounce(...args);
           }
         },
         (...args) => {
-          if (this.serverAddress === serverAddr) {
+          if (this.client === client) {
             this.onNewTopicData(...args);
           }
         },
         () => {
-          if (this.serverAddress === serverAddr) {
-            this.onConnect();
-          }
+          this.client = client;
+          Object.entries(this.clients).forEach(
+            ([entryAddress, entryClient]) => {
+              if (entryAddress !== robotAddress) {
+                entryClient.disconnect();
+              }
+            }
+          );
+          this.clients = {};
+          this.onConnect();
         },
         () => {
-          if (this.serverAddress === serverAddr) {
+          if (this.client === client) {
             this.onDisconnect();
           }
         }
       );
-    }
-
-    const client = this.clients[serverAddr];
-
-    client.connect();
-    client.subscribeAll(['/'], true);
-    return client;
+      this.clients[robotAddress] = client;
+      client.connect();
+      client.subscribeAll(['/'], true);
+    });
   }
 }
