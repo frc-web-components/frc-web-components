@@ -6,6 +6,8 @@ class DashboardTab extends LitElement {
       display: none;
       width: 100%;
       height: 100%;
+      overflow: auto;
+      position: relative;
     }
 
     ::slotted(*) {

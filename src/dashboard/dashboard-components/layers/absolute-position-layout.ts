@@ -242,11 +242,12 @@ class AbsolutePositioningLayout {
           if (!this.#layoutConfig.movable || !this.#selectedElement) {
             return;
           }
+
           deltaX += event.dx;
           deltaY += event.dy;
 
-          let x = startX + deltaX;
-          let y = startY + deltaY;
+          let x = Math.max(0, startX + deltaX);
+          let y = Math.max(0, startY + deltaY);
 
           if (this.snappingEnabled) {
             x = Math.floor(x / gridSize + 0.5) * gridSize;
@@ -257,6 +258,43 @@ class AbsolutePositioningLayout {
           const translate = `translate(${x}px, ${y}px)`;
           this.#selectedElement.style.transform = translate;
           this.#selectedElement.style.webkitTransform = translate;
+
+          if ((window as any).dashboardScroll) {
+            const { width, height } =
+              this.#selectedElement.getBoundingClientRect();
+
+            const { dashboardScroll } = window as any;
+            // const {
+            //   scrollWidth,
+            //   scrollHeight,
+            //   scrollLeft,
+            //   scrollTop,
+            //   width,
+            //   height,
+            // } = (window as any).dashboardScroll;
+            const { scrollLeft } = dashboardScroll;
+            const scrollRight = scrollLeft + dashboardScroll.width;
+            const { scrollTop } = dashboardScroll;
+            const scrollBottom = scrollTop + dashboardScroll.height;
+
+            const right = x + width;
+            const left = x;
+            const top = y;
+            const bottom = y + height;
+
+            console.log('scroll?:', { right, scrollRight, dx: event.dx });
+
+            if (right > scrollRight && event.dx > 0) {
+              dashboardScroll.element.scrollLeft += event.dx;
+            } else if (x < scrollLeft && event.dx < 0) {
+              dashboardScroll.element.scrollLeft += event.dx;
+            }
+            if (y < scrollTop && event.dy < 0) {
+              dashboardScroll.element.scrollTop += event.dx;
+            } else if (bottom > scrollTop && event.dy > 0) {
+              dashboardScroll.element.scrollTop += event.dx;
+            }
+          }
         },
         end: () => {
           this.dashboard.publish('elementDragEnd', {
@@ -266,8 +304,10 @@ class AbsolutePositioningLayout {
       },
       modifiers: [
         interact.modifiers.restrict({
-          restriction: () => this.element.getBoundingClientRect(),
-          elementRect: { left: 0, right: 1, top: 0, bottom: 1 },
+          // restriction: { top: 0, bottom: 0, width: 100000, height: 10000 },
+          // endOnly: true,
+          // restriction: () => this.element.getBoundingClientRect(),
+          // elementRect: {  top: 0, left: 0, bottom: 1, right: 1 },
         }),
       ],
     });

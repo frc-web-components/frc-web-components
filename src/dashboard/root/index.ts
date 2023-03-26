@@ -1,9 +1,10 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable import/extensions */
 import { LitElement, html, css, TemplateResult, render } from 'lit';
 import './dashboard-tab';
 import './navbar';
 import './drawer';
-import { customElement, property, state } from 'lit/decorators.js';
+import { customElement, property, state, query } from 'lit/decorators.js';
 import { guard } from 'lit/directives/guard.js';
 import { onRemoveKeyPress } from '../hotkeys';
 import FrcDashboard from '../frc-dashboard';
@@ -33,21 +34,22 @@ const styles = css`
   .dashboard {
     display: flex;
     flex-direction: column;
-    overflow: auto;
+    // overflow: hidden;
     flex: 1;
-    height: 100vh;
+    min-height: 100vh;
+    height: 100%;
   }
 
   .dashboard-elements {
     width: 100%;
-    overflow: auto;
+    position: relative;
     flex: 1;
   }
 
   #container {
     position: relative;
     height: 100%;
-    width: 100vw;
+    width: 100%;
     box-sizing: border-box;
   }
 
@@ -73,6 +75,8 @@ export default class DashboardRoot extends LitElement {
   @state() ready = false;
   @state() dialogOpened = false;
   @property({ type: Object, attribute: false }) dashboard?: FrcDashboard;
+
+  @query('.dashboard-elements') _dashboardElements!: HTMLElement;
 
   static styles = styles;
 
@@ -162,6 +166,7 @@ export default class DashboardRoot extends LitElement {
     const navbar = this.querySelector('dashboard-navbar');
     const theme = this.dashboard?.getTheme() ?? '';
     navbar?.setAttribute('data-theme', theme);
+    this.requestUpdate();
   }
 
   updated(updatedProps: Map<string, unknown>): void {
@@ -184,6 +189,9 @@ export default class DashboardRoot extends LitElement {
       return html``;
     }
     const isEditable = this.dashboard?.isElementEditable();
+    const dashboardBackground = this.dashboard
+      ? getComputedStyle(this.dashboard?.getRootElement()).background
+      : 'auto';
     return html`
       <div class="layout ${!this.drawerOpened ? 'closed' : ''}">
         <vaadin-dialog
@@ -211,9 +219,32 @@ export default class DashboardRoot extends LitElement {
           .interact="${null}"
           .dashboard=${this.dashboard}
         ></dashboard-drawer>
-        <div class="dashboard">
+        <div class="dashboard" style="background: ${dashboardBackground}">
           <slot name="navbar"></slot>
-          <div class="dashboard-elements">
+          <div
+            class="dashboard-elements"
+            @scroll=${(ev: MouseEvent) => {
+              const { scrollWidth, scrollHeight, scrollLeft, scrollTop } =
+                this._dashboardElements;
+              const rect = this._dashboardElements.getBoundingClientRect();
+              console.log('scroll:', {
+                scrollWidth,
+                scrollHeight,
+                scrollLeft,
+                scrollTop,
+                width: rect.width,
+              });
+              (window as any).dashboardScroll = {
+                scrollWidth,
+                scrollHeight,
+                scrollLeft,
+                scrollTop,
+                width: rect.width,
+                height: rect.height,
+                element: this._dashboardElements,
+              };
+            }}
+          >
             <div id="container">
               <slot name="dashboard"></slot>
               ${isEditable ? html` <slot name="layer"></slot> ` : ''}
