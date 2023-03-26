@@ -476,9 +476,6 @@ export class NT4_Client {
     if (event.reason !== '') {
       console.log('[NT4] Socket is closed: ', event.reason);
     }
-    if (!event.wasClean) {
-      this.useSecure = !this.useSecure;
-    }
     if (this.serverConnectionRequested) {
       setTimeout(() => this.ws_connect(), 500);
     }
