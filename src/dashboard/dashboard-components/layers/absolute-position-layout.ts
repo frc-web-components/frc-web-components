@@ -8,6 +8,20 @@ import FrcDashboard from '../../frc-dashboard';
 import DashboardSelections from './dashboard-selections';
 import getTranslationFromStyles from './getTranslationFromStyles';
 
+function getScrollData(element: HTMLElement) {
+  const { scrollWidth, scrollHeight, scrollLeft, scrollTop } = element;
+  const rect = element.getBoundingClientRect();
+
+  return {
+    scrollWidth,
+    scrollHeight,
+    scrollLeft,
+    scrollTop,
+    width: rect.width,
+    height: rect.height,
+  };
+}
+
 function round(val: number, gridSize: number): number {
   return Math.floor(val / gridSize + 0.5) * gridSize;
 }
@@ -259,23 +273,16 @@ class AbsolutePositioningLayout {
           this.#selectedElement.style.transform = translate;
           this.#selectedElement.style.webkitTransform = translate;
 
-          if ((window as any).dashboardScroll) {
+          const tabElement = this.#selectedElement.closest('dashboard-tab');
+          if (tabElement) {
+            const scrollData = getScrollData(tabElement as HTMLElement);
             const { width, height } =
               this.#selectedElement.getBoundingClientRect();
 
-            const { dashboardScroll } = window as any;
-            // const {
-            //   scrollWidth,
-            //   scrollHeight,
-            //   scrollLeft,
-            //   scrollTop,
-            //   width,
-            //   height,
-            // } = (window as any).dashboardScroll;
-            const { scrollLeft } = dashboardScroll;
-            const scrollRight = scrollLeft + dashboardScroll.width;
-            const { scrollTop } = dashboardScroll;
-            const scrollBottom = scrollTop + dashboardScroll.height;
+            const { scrollLeft } = scrollData;
+            const scrollRight = scrollLeft + scrollData.width;
+            const { scrollTop } = scrollData;
+            const scrollBottom = scrollTop + scrollData.height;
 
             const right = x + width;
             const left = x;
@@ -285,14 +292,14 @@ class AbsolutePositioningLayout {
             console.log('scroll?:', { right, scrollRight, dx: event.dx });
 
             if (right > scrollRight && event.dx > 0) {
-              dashboardScroll.element.scrollLeft += event.dx;
+              tabElement.scrollLeft += event.dx;
             } else if (x < scrollLeft && event.dx < 0) {
-              dashboardScroll.element.scrollLeft += event.dx;
+              tabElement.scrollLeft += event.dx;
             }
             if (y < scrollTop && event.dy < 0) {
-              dashboardScroll.element.scrollTop += event.dx;
+              tabElement.scrollTop += event.dx;
             } else if (bottom > scrollTop && event.dy > 0) {
-              dashboardScroll.element.scrollTop += event.dx;
+              tabElement.scrollTop += event.dx;
             }
           }
         },
