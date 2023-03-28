@@ -27,6 +27,17 @@ export const toggleGroupConfig = {
         },
       },
     },
+    direction: {
+      type: 'String',
+      defaultValue: 'vertical',
+      input: {
+        type: 'StringDropdown',
+        allowCustomValues: false,
+        getOptions(): string[] {
+          return ['vertical', 'horizontal'];
+        },
+      },
+    },
   },
 };
 
@@ -34,14 +45,16 @@ export const toggleGroupConfig = {
 export class ToggleGroup extends LitElement {
   @property({ type: Array }) options = ['On', 'Off'];
   @property({ type: String }) value = '';
+  @property({ type: String }) direction = 'vertical';
 
   static styles = css`
     :host {
       font-size: 15px;
       display: inline-flex;
-      flex-direction: column;
+      flex-direction: var(--frc-toggle-group-direction, column);
       width: 150px;
       height: 300px;
+      gap: 0;
     }
 
     [part='button'] {
@@ -50,6 +63,7 @@ export class ToggleGroup extends LitElement {
       flex: 1;
       font-size: inherit;
       height: 100%;
+      padding: 0;
     }
   `;
 
@@ -69,6 +83,13 @@ export class ToggleGroup extends LitElement {
 
     if (changedProps.has('options')) {
       this.#dispatchOptionsUpdate();
+    }
+
+    if (changedProps.has('direction')) {
+      this.style.setProperty(
+        'flex-direction',
+        this.direction === 'vertical' ? 'column' : 'row'
+      );
     }
   }
 
@@ -98,7 +119,7 @@ export class ToggleGroup extends LitElement {
         (option) => html`
           <vaadin-button
             part="button"
-            theme="contrast ${this.value === option ? 'primary' : ''}"
+            theme="contrast small ${this.value === option ? 'primary' : ''}"
             @click="${() => this.setValue(option)}"
           >
             ${option}
