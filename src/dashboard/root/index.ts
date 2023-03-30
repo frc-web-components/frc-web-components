@@ -47,14 +47,17 @@ const styles = css`
   }
 
   #container {
-    position: relative;
+    // position: relative;
+    position: absolute;
     height: 100%;
     width: 100%;
     box-sizing: border-box;
+    overflow: auto;
   }
 
   ::slotted([slot='dashboard']) {
-    width: 100%;
+    // width: 100%;
+    width: 100vw;
     height: 100%;
     background: var(--dashboard-background, white);
   }
@@ -189,9 +192,11 @@ export default class DashboardRoot extends LitElement {
       return html``;
     }
     const isEditable = this.dashboard?.isElementEditable();
+
     const dashboardBackground = this.dashboard
       ? getComputedStyle(this.dashboard?.getRootElement()).background
       : 'auto';
+
     return html`
       <div class="layout ${!this.drawerOpened ? 'closed' : ''}">
         <vaadin-dialog
@@ -221,30 +226,7 @@ export default class DashboardRoot extends LitElement {
         ></dashboard-drawer>
         <div class="dashboard" style="background: ${dashboardBackground}">
           <slot name="navbar"></slot>
-          <div
-            class="dashboard-elements"
-            @scroll=${(ev: MouseEvent) => {
-              const { scrollWidth, scrollHeight, scrollLeft, scrollTop } =
-                this._dashboardElements;
-              const rect = this._dashboardElements.getBoundingClientRect();
-              console.log('scroll:', {
-                scrollWidth,
-                scrollHeight,
-                scrollLeft,
-                scrollTop,
-                width: rect.width,
-              });
-              (window as any).dashboardScroll = {
-                scrollWidth,
-                scrollHeight,
-                scrollLeft,
-                scrollTop,
-                width: rect.width,
-                height: rect.height,
-                element: this._dashboardElements,
-              };
-            }}
-          >
+          <div class="dashboard-elements">
             <div id="container">
               <slot name="dashboard"></slot>
               ${isEditable ? html` <slot name="layer"></slot> ` : ''}

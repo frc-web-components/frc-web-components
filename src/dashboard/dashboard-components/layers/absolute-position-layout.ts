@@ -8,20 +8,6 @@ import FrcDashboard from '../../frc-dashboard';
 import DashboardSelections from './dashboard-selections';
 import getTranslationFromStyles from './getTranslationFromStyles';
 
-function getScrollData(element: HTMLElement) {
-  const { scrollWidth, scrollHeight, scrollLeft, scrollTop } = element;
-  const rect = element.getBoundingClientRect();
-
-  return {
-    scrollWidth,
-    scrollHeight,
-    scrollLeft,
-    scrollTop,
-    width: rect.width,
-    height: rect.height,
-  };
-}
-
 function round(val: number, gridSize: number): number {
   return Math.floor(val / gridSize + 0.5) * gridSize;
 }
@@ -247,6 +233,8 @@ class AbsolutePositioningLayout {
     const gridSize = 40.0;
     this.interactive.draggable({
       origin: 'parent',
+      autoScroll: true,
+
       listeners: {
         start: () => {
           startX = (this.#translation as any).x;
@@ -272,36 +260,6 @@ class AbsolutePositioningLayout {
           const translate = `translate(${x}px, ${y}px)`;
           this.#selectedElement.style.transform = translate;
           this.#selectedElement.style.webkitTransform = translate;
-
-          const tabElement = this.#selectedElement.closest('dashboard-tab');
-          if (tabElement) {
-            const scrollData = getScrollData(tabElement as HTMLElement);
-            const { width, height } =
-              this.#selectedElement.getBoundingClientRect();
-
-            const { scrollLeft } = scrollData;
-            const scrollRight = scrollLeft + scrollData.width;
-            const { scrollTop } = scrollData;
-            const scrollBottom = scrollTop + scrollData.height;
-
-            const right = x + width;
-            const left = x;
-            const top = y;
-            const bottom = y + height;
-
-            console.log('scroll?:', { right, scrollRight, dx: event.dx });
-
-            if (right > scrollRight && event.dx > 0) {
-              tabElement.scrollLeft += event.dx;
-            } else if (x < scrollLeft && event.dx < 0) {
-              tabElement.scrollLeft += event.dx;
-            }
-            if (y < scrollTop && event.dy < 0) {
-              tabElement.scrollTop += event.dx;
-            } else if (bottom > scrollTop && event.dy > 0) {
-              tabElement.scrollTop += event.dx;
-            }
-          }
         },
         end: () => {
           this.dashboard.publish('elementDragEnd', {
@@ -311,10 +269,15 @@ class AbsolutePositioningLayout {
       },
       modifiers: [
         interact.modifiers.restrict({
-          // restriction: { top: 0, bottom: 0, width: 100000, height: 10000 },
-          // endOnly: true,
-          // restriction: () => this.element.getBoundingClientRect(),
-          // elementRect: {  top: 0, left: 0, bottom: 1, right: 1 },
+          restriction: () => {
+            const tabElement = this.#selectedElement?.closest('dashboard-tab');
+            if (tabElement) {
+              return tabElement.getBoundingClientRect();
+            }
+            const rect = this.element.getBoundingClientRect();
+            return rect;
+          },
+          elementRect: { top: 0, left: 0, bottom: 1, right: 1 },
         }),
       ],
     });

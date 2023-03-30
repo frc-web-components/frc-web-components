@@ -6,7 +6,7 @@ class DashboardTab extends LitElement {
       display: none;
       width: 100%;
       height: 100%;
-      overflow: auto;
+      // overflow: auto;
       position: relative;
     }
 
@@ -17,6 +17,13 @@ class DashboardTab extends LitElement {
     :host([selected]) {
       display: block;
     }
+
+    :host(:before) {
+      display: block;
+      width: 2000px;
+      height: 1px;
+      content: ' ';
+    }
   `;
 
   static properties = {
@@ -24,7 +31,7 @@ class DashboardTab extends LitElement {
   };
 
   render() {
-    return html`<slot></slot>`;
+    return html` <slot></slot> `;
   }
 }
 
