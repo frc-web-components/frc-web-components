@@ -233,8 +233,6 @@ class AbsolutePositioningLayout {
     const gridSize = 40.0;
     this.interactive.draggable({
       origin: 'parent',
-      autoScroll: true,
-
       listeners: {
         start: () => {
           startX = (this.#translation as any).x;

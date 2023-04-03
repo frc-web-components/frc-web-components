@@ -34,7 +34,6 @@ const styles = css`
   .dashboard {
     display: flex;
     flex-direction: column;
-    // overflow: hidden;
     flex: 1;
     min-height: 100vh;
     height: 100%;
@@ -47,7 +46,6 @@ const styles = css`
   }
 
   #container {
-    // position: relative;
     position: absolute;
     height: 100%;
     width: 100%;
@@ -56,7 +54,6 @@ const styles = css`
   }
 
   ::slotted([slot='dashboard']) {
-    // width: 100%;
     width: 100vw;
     height: 100%;
     background: var(--dashboard-background, white);
