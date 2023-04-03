@@ -22,6 +22,7 @@ import * as relay from './relay';
 import * as voltageView from './voltage-view';
 import sendableChooserConfig from './sendable-chooser';
 import Mechanism2dConfig from './mechanism2d';
+import iconConfig from './icon';
 
 const elements = [
   ...baseElements,
@@ -53,6 +54,10 @@ const elements = [
   {
     elementName: 'frc-mechanism2d',
     elementConfig: Mechanism2dConfig,
+  },
+  {
+    elementName: 'frc-icon',
+    elementConfig: iconConfig,
   },
 ];
 

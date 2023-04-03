@@ -10,10 +10,13 @@ export default class DashboardDrawer extends LitElement {
   @state() selectedElement?: HTMLElement;
   @state() editors: HTMLElement[] = [];
   @state() editorOpened: Record<string, boolean> = {};
+  @state() showSidebar = true;
+  @state() dragging = false;
 
   static styles = css`
     :host {
       display: block;
+      position: relative;
     }
 
     .dashboard {
@@ -91,6 +94,29 @@ export default class DashboardDrawer extends LitElement {
     details > summary::-webkit-details-marker {
       display: none;
     }
+
+    .resize-handle {
+      height: 100vh;
+      width: 4px;
+      cursor: col-resize;
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 100;
+    }
+
+    .hide-sidebar .resize-handle {
+      position: fixed;
+      left: 0;
+      right: auto;
+    }
+
+    .hide-sidebar dashboard-drawer-sidebar {
+      display: none;
+    }
+    .hide-sidebar .editors {
+      display: none;
+    }
   `;
 
   firstUpdated(): void {
@@ -151,7 +177,7 @@ export default class DashboardDrawer extends LitElement {
   render(): TemplateResult {
     const isEditable = this.dashboard.isElementEditable();
     return html`
-      <div class="dashboard">
+      <div class="dashboard ${!this.showSidebar ? 'hide-sidebar' : ''}">
         <dashboard-drawer-sidebar
           .dashboard=${this.dashboard}
         ></dashboard-drawer-sidebar>
@@ -165,6 +191,16 @@ export default class DashboardDrawer extends LitElement {
             : null}
           <div class="editor-components">${this.renderElementTree()}</div>
         </div>
+        <div
+          class="resize-handle"
+          draggable="true"
+          @drag=${(ev: DragEvent) => {
+            if (ev.screenX === 0 && ev.screenY === 0) {
+              return;
+            }
+            this.showSidebar = ev.screenX > 270;
+          }}
+        ></div>
       </div>
     `;
   }

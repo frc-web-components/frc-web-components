@@ -22,10 +22,6 @@ export class DashboardNavbar extends LitElement {
       height: 44px;
     }
 
-    vaadin-drawer-toggle {
-      height: 44px;
-    }
-
     vaadin-tabs {
       height: 44px;
       min-height: 44px;
@@ -258,9 +254,18 @@ export class DashboardNavbar extends LitElement {
           );
         })}
       ></vaadin-dialog>
-      <vaadin-drawer-toggle
+      <vaadin-button
+        theme="icon small tertiary"
+        title="Edit"
         @click=${this.#onToggleClick}
-      ></vaadin-drawer-toggle>
+        style="margin: 0; padding: 0; height: 100%; width: 44px; cursor: pointer;"
+      >
+        <frc-icon
+          icon="${this.dashboard.isDrawerOpened() ? 'check-circle' : 'edit'}"
+          color="#90bdf9"
+          style="width: 20px; height: 20px"
+        ></frc-icon>
+      </vaadin-button>
       <div class="navbar">
         <div class="tabs">
           <vaadin-tabs
