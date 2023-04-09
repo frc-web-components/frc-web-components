@@ -13,42 +13,41 @@
     "plugin:import/typescript",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier"
+    "prettier",
+    "plugin:storybook/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": [
-    "@typescript-eslint",
-    "jest-dom",
-    "testing-library"
-  ],
+  "plugins": ["@typescript-eslint", "jest-dom", "testing-library"],
   "rules": {
     "linebreak-style": 0,
     "eol-last": 0,
     "import/extensions": [
-      "error",
+      "off",
       "ignorePackages",
       {
-        "js": "never",
-        "ts": "never"
+        "js": "always",
+        "ts": "always"
       }
-   ],
-   "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/*.test.ts", "**/*.test.tsx"]}],
-   "lines-between-class-members": 0,
-   "arrow-parens": 0,
-   "import/newline-after-import": 0,
-   "import/prefer-default-export": "off"
+    ],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": ["**/*.test.ts", "**/*.test.tsx"]
+      }
+    ],
+    "lines-between-class-members": 0,
+    "arrow-parens": 0,
+    "import/newline-after-import": 0,
+    "import/prefer-default-export": "off"
   },
   "settings": {
     "import/resolver": {
       "node": {
-        "extensions": [
-          ".js",
-          ".ts"
-        ]
+        "extensions": [".js", ".ts"]
       }
     }
   },
