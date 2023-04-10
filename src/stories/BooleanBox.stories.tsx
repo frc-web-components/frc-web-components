@@ -1,3 +1,4 @@
+// import React from 'react';
 import '../elements/base/boolean-box';
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
@@ -16,8 +17,32 @@ const meta: Meta = {
   component: 'frc-boolean-box',
   args: defaultArgs,
   argTypes: {
-    falseColor: { control: 'color' },
-    trueColor: { control: 'color' },
+    value: {
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: false },
+      },
+    },
+    falseColor: {
+      control: 'color',
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: '#ff0000' },
+      },
+    },
+    trueColor: {
+      control: 'color',
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: '#00ff00' },
+      },
+    },
+    label: {
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: '' },
+      },
+    },
   },
 };
 export default meta;
@@ -31,6 +56,9 @@ function createBooleanBoxStory(optionalArgs: Record<string, any> = {}): Story {
   };
   return {
     args: storyArgs,
+    parameters: {
+      canvas: { sourceState: 'shown' },
+    },
     render: (args) => html`
       <frc-boolean-box
         ?value=${args.value}
