@@ -1,6 +1,5 @@
 import { html, css, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { containerStyles } from '../styles';
 import '../frc-elements/base-elements/bar';
 import '../frc-elements/base-elements/table-axis';
 

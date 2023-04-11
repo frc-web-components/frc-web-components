@@ -25,7 +25,7 @@ const meta: Meta = {
   title: 'FRC/Number Bar',
   tags: ['autodocs'],
   component: 'frc-number-bar',
-  // args: defaultArgs,
+  args: defaultArgs,
   argTypes: {
     value: {
       table: {
