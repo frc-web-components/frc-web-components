@@ -4,7 +4,6 @@ const config = {
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',
-    '@ljcl/storybook-addon-cssprops',
     'storybook-addon-themes',
   ],
   framework: {
