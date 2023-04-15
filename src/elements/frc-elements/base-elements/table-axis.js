@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import * as d3 from 'd3';
+import { select } from 'd3';
 
 export const elementName = 'frc-table-axis';
 
@@ -91,8 +91,7 @@ class TableAxis extends LitElement {
 
     this.shadowRoot.getElementById('svg').innerHTML = '';
 
-    let svg = d3
-      .select(this.shadowRoot.getElementById('svg'))
+    let svg = select(this.shadowRoot.getElementById('svg'))
       .attr('width', !this.vertical ? size : width)
       .attr('height', !this.vertical ? width : size);
 

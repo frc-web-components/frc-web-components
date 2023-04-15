@@ -181,8 +181,8 @@ export default class MecanumDrivebase extends LitElement {
     resizeObserver.observe(this);
   }
 
-  drawMotionVector(fl, fr, rl, rr) {
-    const svgNode = this.shadowRoot.getElementById('svg');
+  drawMotionVector(fl: number, fr: number, rl: number, rr: number) {
+    const svgNode = this.renderRoot.querySelector('#svg')!;
     const rect = svgNode.getBoundingClientRect();
 
     const wheelWidth = rect.width * 0.13;
@@ -241,7 +241,7 @@ export default class MecanumDrivebase extends LitElement {
   }
 
   drawDrivetrain() {
-    const svgNode = this.shadowRoot.getElementById('svg');
+    const svgNode = this.renderRoot.querySelector('#svg')!;
     const rect = svgNode.getBoundingClientRect();
 
     const wheelWidth = rect.width * 0.13;
@@ -315,9 +315,9 @@ export default class MecanumDrivebase extends LitElement {
 
   firstUpdated() {
     const drawing = this.drawMotionVector(0, 0, 0, 0);
-    this.shadowRoot.getElementById('drivetrain').innerHTML =
+    this.renderRoot.querySelector('#drivetrain')!.innerHTML =
       this.drawDrivetrain();
-    this.shadowRoot.getElementById('forceVector').innerHTML = drawing;
+    this.renderRoot.querySelector('#forceVector')!.innerHTML = drawing;
   }
 
   resized() {
@@ -327,19 +327,19 @@ export default class MecanumDrivebase extends LitElement {
       clamp(this.rearLeftMotorSpeed),
       clamp(this.rearRightMotorSpeed)
     );
-    this.shadowRoot.getElementById('forceVector').innerHTML = drawing;
-    const svgNode = this.shadowRoot.getElementById('svg');
+    this.renderRoot.querySelector('#forceVector')!.innerHTML = drawing;
+    const svgNode = this.renderRoot.querySelector('#svg')!;
     const rect = svgNode.getBoundingClientRect();
-    this.shadowRoot.getElementById(
-      'forceVector'
+    (
+      this.renderRoot.querySelector('#forceVector')! as HTMLElement
     ).style.transform = `translate(${rect.width * 0.5}px, ${
       rect.height * 0.5
     }px)`;
-    this.shadowRoot.getElementById('drivetrain').innerHTML =
+    this.renderRoot.querySelector('#drivetrain')!.innerHTML =
       this.drawDrivetrain();
   }
 
-  updated(changedProps) {
+  updated(changedProps: Map<string, unknown>) {
     super.updated(changedProps);
     const drawing = this.drawMotionVector(
       clamp(this.frontLeftMotorSpeed),
@@ -347,7 +347,7 @@ export default class MecanumDrivebase extends LitElement {
       clamp(this.rearLeftMotorSpeed),
       clamp(this.rearRightMotorSpeed)
     );
-    this.shadowRoot.getElementById('forceVector').innerHTML = drawing;
+    this.renderRoot.querySelector('#forceVector')!.innerHTML = drawing;
   }
 
   render() {

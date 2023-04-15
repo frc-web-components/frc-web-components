@@ -15,6 +15,7 @@ export const elementConfig = {
   },
 };
 
+// TODO: Could use an upgrade. Maybe something like this? https://d3gaugechart.mxapps.io/
 class Gauge extends LitElement {
   static properties = elementConfig.properties;
 
