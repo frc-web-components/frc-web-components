@@ -1,0 +1,41 @@
+
+Use clip to only show part of the field (values are percentages of the image): 
+
+<frc-field
+  game="Charged Up"
+  top-left-clip="[20, 10]"
+  bottom-right-clip="[50, 80]"
+>
+</frc-field>
+
+
+Use <frc-field-config> to create a new field config:
+
+<frc-field name="Custom Field">
+  <frc-field-config
+    game="Custom Field"
+    image="/path/to/custom/field/image"
+    width="54"
+    height="27"
+    unit="ft"
+    top-left-corner="[50, 1000]"
+    bottom-right-corner="[40, 540]"
+  ></frc-field-config>
+</frc-field>
+
+
+Use `rotate` attribute to rotate or flip the field:
+
+<frc-field game="Charged Up" rotation="180"></frc-field>
+
+
+Add grid to field. Optional grid size (defaults to 1 in whatever unit chosen):
+
+<frc-field game="Charged Up" unit="ft" show-grid grid-size="2"></frc-field>
+
+
+Add a robot to the field:
+
+<frc-field game="Charged Up">
+  <frc-field-robot></frc-field-robot>
+</frc-field>
