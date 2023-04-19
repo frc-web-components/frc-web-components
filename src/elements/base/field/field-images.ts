@@ -1,13 +1,16 @@
+type Dims = { width: number; height: number };
+
 export interface ImageObject {
   src: string;
   width: number;
   height: number;
   loaded: boolean;
+  image: HTMLImageElement;
 }
 
 export default class FieldImages {
   #images: Record<string, ImageObject> = {};
-  #onImageLoadCallbacks: Record<symbol, (src: string) => unknown> = {};
+  #onImageLoadCallbacks: Map<symbol, (src: string) => unknown> = new Map();
 
   getImage(src: string): ImageObject {
     if (typeof this.#images[src] === 'undefined') {
@@ -17,12 +20,14 @@ export default class FieldImages {
         width: 0,
         height: 0,
         loaded: false,
+        image,
       };
       image.onload = () => {
         imageObject.loaded = true;
         imageObject.width = image.width;
         imageObject.height = image.height;
-        Object.values(this.#onImageLoadCallbacks).forEach((callback: any) => {
+        [...this.#onImageLoadCallbacks.values()].forEach((callback) => {
+          console.log('on load', callback);
           callback(src);
         });
       };
@@ -32,10 +37,7 @@ export default class FieldImages {
     return this.#images[src];
   }
 
-  static getBoundingBoxDims(
-    image: ImageObject,
-    rotationRadians: number
-  ): { width: number; height: number } {
+  static getBoundingBoxDims(image: ImageObject, rotationRadians: number): Dims {
     const boundingBoxWidth =
       Math.abs(image.width * Math.cos(rotationRadians)) +
       Math.abs(image.height * Math.sin(rotationRadians));
@@ -49,11 +51,27 @@ export default class FieldImages {
     };
   }
 
+  static fitImageInsideBox(image: Dims, boundingBox: Dims): Dims {
+    if (
+      (boundingBox.width / image.width) * image.height <=
+      boundingBox.height
+    ) {
+      return {
+        width: boundingBox.width,
+        height: (boundingBox.width / image.width) * image.height,
+      };
+    }
+    return {
+      width: (boundingBox.height / image.height) * image.width,
+      height: boundingBox.height,
+    };
+  }
+
   onImageLoad(callback: (src: string) => unknown): () => void {
     const uniqueId = Symbol('image');
-    this.#onImageLoadCallbacks[uniqueId] = callback;
+    this.#onImageLoadCallbacks.set(uniqueId, callback);
     return () => {
-      delete this.#onImageLoadCallbacks[uniqueId];
+      this.#onImageLoadCallbacks.delete(uniqueId);
     };
   }
 }
