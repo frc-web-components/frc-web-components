@@ -1,9 +1,7 @@
 type Dims = { width: number; height: number };
 
-export interface ImageObject {
+export interface ImageObject extends Dims {
   src: string;
-  width: number;
-  height: number;
   loaded: boolean;
   image: HTMLImageElement;
 }
@@ -37,7 +35,7 @@ export default class FieldImages {
     return this.#images[src];
   }
 
-  static getBoundingBoxDims(image: ImageObject, rotationRadians: number): Dims {
+  static getBoundingBoxDims(image: Dims, rotationRadians: number): Dims {
     const boundingBoxWidth =
       Math.abs(image.width * Math.cos(rotationRadians)) +
       Math.abs(image.height * Math.sin(rotationRadians));

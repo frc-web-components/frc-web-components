@@ -4,6 +4,8 @@ import fieldConfigs, { FieldConfig } from './field-configs';
 import { baseUnit, toBaseConversions, convert, unitAliases } from './units';
 import FieldImages from './field-images';
 
+type ClipType = 'percent' | 'distance';
+
 function toRadians(degrees: number): number {
   return (degrees * Math.PI) / 180;
 }
@@ -11,14 +13,15 @@ function toRadians(degrees: number): number {
 @customElement('frc-field2')
 export class Field extends LitElement {
   @property({ type: String }) game = fieldConfigs[0].game;
-  @property({ type: Array, attribute: 'top-left-clip' }) topLeftClip: [
-    number,
-    number
-  ] = [0, 0];
-  @property({ type: Array, attribute: 'bottom-right-clip' }) bottomRightClip: [
-    number,
-    number
-  ] = [100, 100];
+  @property({ type: Array, attribute: 'top-left-clip' }) topLeftClip:
+    | [number, number]
+    | null = null;
+  @property({ type: Array, attribute: 'bottom-right-clip' }) bottomRightClip:
+    | [number, number]
+    | null = null;
+  @property({ type: String, attribute: 'clip-type' }) clipType:
+    | 'percent'
+    | 'distance' = 'percent';
   @property({ type: String }) unit = baseUnit;
   @property({ type: Number }) rotation = 0;
   @property({ type: Boolean, attribute: 'show-grid' }) showGrid = false;
@@ -62,6 +65,52 @@ export class Field extends LitElement {
     return ctx;
   }
 
+  getClipPercent(): { x1: number; y1: number; x2: number; y2: number } {
+    if (this.clipType === 'percent') {
+      const x1 = this.topLeftClip?.[0] ?? 0;
+      const y1 = this.topLeftClip?.[1] ?? 0;
+      const x2 = this.bottomRightClip?.[0] ?? 1;
+      const y2 = this.bottomRightClip?.[1] ?? 1;
+      return { x1, y1, x2, y2 };
+    }
+
+    const { corners, image, unit, size } = this.getConfig();
+    const { loaded, width, height } = this.#fieldImages.getImage(image);
+
+    if (!loaded) {
+      return { x1: 0, y1: 0, x2: 1, y2: 1 };
+    }
+
+    const topLeftClip = this.topLeftClip ?? [0, 0];
+    const bottomRightClip = this.bottomRightClip ?? size;
+
+    const x1Corner = corners.topLeft[0] / width;
+    const y1Corner = corners.topLeft[1] / height;
+    const x2Corner = corners.bottomRight[0] / width;
+    const y2Corner = corners.bottomRight[1] / height;
+
+    const widthPercent = x2Corner - x1Corner;
+    const heightPercent = y2Corner - y1Corner;
+
+    const value = {
+      x1:
+        x1Corner +
+        (widthPercent * convert(topLeftClip[0], this.unit, unit)) / size[0],
+      y1:
+        y1Corner +
+        (heightPercent * convert(topLeftClip[1], this.unit, unit)) / size[1],
+      x2:
+        x1Corner +
+        (widthPercent * convert(bottomRightClip[0], this.unit, unit)) / size[0],
+      y2:
+        y1Corner +
+        (heightPercent * convert(bottomRightClip[1], this.unit, unit)) /
+          size[1],
+    };
+
+    return value;
+  }
+
   getFieldRectPx(): { x: number; y: number; width: number; height: number } {
     const { corners, image } = this.getConfig();
     const { loaded, width, height } = this.#fieldImages.getImage(image);
@@ -70,16 +119,22 @@ export class Field extends LitElement {
       return { x: 0, y: 0, width: 0, height: 0 };
     }
 
-    const x1 = corners.topLeft[0] / width;
-    const y1 = corners.topLeft[1] / height;
-    const x2 = corners.bottomRight[0] / width;
-    const y2 = corners.bottomRight[1] / height;
+    const x1Percent = corners.topLeft[0] / width;
+    const y1Percent = corners.topLeft[1] / height;
+    const x2Percent = corners.bottomRight[0] / width;
+    const y2Percent = corners.bottomRight[1] / height;
+
+    const clipPercent = this.getClipPercent();
+    const clipWidthPercent = clipPercent.x2 - clipPercent.x1;
+    const clipHeightPercent = clipPercent.y2 - clipPercent.y1;
+    const originalWidth = this.canvas.width / clipWidthPercent;
+    const originalHeight = this.canvas.height / clipHeightPercent;
 
     return {
-      x: x1 * this.canvas.width,
-      y: y1 * this.canvas.height,
-      width: (x2 - x1) * this.canvas.width,
-      height: (y2 - y1) * this.canvas.height,
+      x: (x1Percent - clipPercent.x1) * originalWidth,
+      y: (y1Percent - clipPercent.y1) * originalHeight,
+      width: (x2Percent - x1Percent) * originalWidth,
+      height: (y2Percent - y1Percent) * originalHeight,
     };
   }
 
@@ -122,8 +177,16 @@ export class Field extends LitElement {
     if (!loaded) {
       return;
     }
+
+    const clipPercent = this.getClipPercent();
+
+    const imageDims = {
+      width: (clipPercent.x2 - clipPercent.x1) * imageObject.width,
+      height: (clipPercent.y2 - clipPercent.y1) * imageObject.height,
+    };
+
     const boundingBoxDims = FieldImages.getBoundingBoxDims(
-      imageObject,
+      imageDims,
       toRadians(this.rotation)
     );
     const dims = FieldImages.fitImageInsideBox(boundingBoxDims, {
@@ -131,14 +194,14 @@ export class Field extends LitElement {
       height: rect.height,
     });
     const scale = dims.width / boundingBoxDims.width;
-    this.container.style.width = `${imageObject.width * scale}px`;
-    this.container.style.height = `${imageObject.height * scale}px`;
+    this.container.style.width = `${imageDims.width * scale}px`;
+    this.container.style.height = `${imageDims.height * scale}px`;
   }
 
   drawImage(): void {
     const ctx = this.getCanvasCtx();
     const src = this.getConfig().image;
-    const { loaded, image } = this.#fieldImages.getImage(src);
+    const { loaded, image, width, height } = this.#fieldImages.getImage(src);
     if (!loaded) {
       return;
     }
@@ -147,7 +210,19 @@ export class Field extends LitElement {
     const canvasHeight = clientHeight * window.devicePixelRatio;
     this.canvas.width = canvasWidth;
     this.canvas.height = canvasHeight;
-    ctx.drawImage(image, 0, 0, canvasWidth, canvasHeight);
+    const clipPercent = this.getClipPercent();
+
+    ctx.drawImage(
+      image,
+      clipPercent.x1 * width,
+      clipPercent.y1 * height,
+      (clipPercent.x2 - clipPercent.x1) * width,
+      (clipPercent.y2 - clipPercent.y1) * height,
+      0,
+      0,
+      canvasWidth,
+      canvasHeight
+    );
   }
 
   drawFieldRect(): void {
