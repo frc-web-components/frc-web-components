@@ -1,6 +1,6 @@
 /* eslint-disable no-bitwise */
 import { html, css, LitElement } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import '../frc-elements/icon';
 
 const ENABLED_FLAG = 0x01;
@@ -12,7 +12,6 @@ const DS_ATTACHED_FLAG = 0x20;
 
 const MATCH_TYPES = ['Unknown', 'Practice', 'Qualification', 'Elimination'];
 
-@customElement('frc-basic-fms-info')
 export default class BasicFmsInfo extends LitElement {
   @property({ type: Number, attribute: 'match-type' }) matchType = 0;
   @property({ type: Number, attribute: 'match-number' }) matchNumber = 0;
@@ -129,4 +128,8 @@ export default class BasicFmsInfo extends LitElement {
       <p style="font-weight: normal">Robot state: ${this.getRobotState()}</p>
     `;
   }
+}
+
+if (!customElements.get('frc-basic-fms-info')) {
+  customElements.define('frc-basic-fms-info', BasicFmsInfo);
 }

@@ -1,13 +1,12 @@
 import { html, css, LitElement } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
-import '../frc-elements/base-elements/bar';
-import '../frc-elements/base-elements/table-axis';
+import { property } from 'lit/decorators.js';
+import './base-elements/bar';
+import './base-elements/table-axis';
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(value, min));
 }
 
-@customElement('frc-number-bar')
 export default class NumberBar extends LitElement {
   @property({ type: Number }) value = 0;
   @property({ type: Number }) min = -1;
@@ -78,4 +77,8 @@ export default class NumberBar extends LitElement {
         : ''}
     `;
   }
+}
+
+if (!customElements.get('frc-number-bar')) {
+  customElements.define('frc-number-bar', NumberBar);
 }

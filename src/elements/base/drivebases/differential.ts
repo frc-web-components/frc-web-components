@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { html, css, LitElement } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import * as CurvedArrow from './curved-arrow';
-import '../../frc-elements/base-elements/bar';
-import '../../frc-elements/base-elements/table-axis';
+import '../base-elements/bar';
+import '../base-elements/table-axis';
 /**
  * Copyright (c) 2017-2018 FIRST
  * All rights reserved.
@@ -71,7 +71,6 @@ function generateX(width: number) {
   return `<g class="x">${lineA} ${lineB}</g>`;
 }
 
-@customElement('frc-differential-drivebase')
 export default class DifferentialDrivebase extends LitElement {
   @property({ type: Number, attribute: 'left-motor-speed' }) leftMotorSpeed = 0;
   @property({ type: Number, attribute: 'right-motor-speed' })
@@ -420,4 +419,8 @@ export default class DifferentialDrivebase extends LitElement {
       </div>
     `;
   }
+}
+
+if (!customElements.get('frc-differential-drivebase')) {
+  customElements.define('frc-differential-drivebase', DifferentialDrivebase);
 }

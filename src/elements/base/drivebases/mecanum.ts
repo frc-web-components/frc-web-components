@@ -1,8 +1,8 @@
 import { html, css, LitElement } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import * as CurvedArrow from './curved-arrow';
-import '../../frc-elements/base-elements/bar';
-import '../../frc-elements/base-elements/table-axis';
+import '../base-elements/bar';
+import '../base-elements/table-axis';
 
 /**
  * Copyright (c) 2017-2018 FIRST
@@ -77,7 +77,6 @@ function getForegroundStyle(value: number) {
   `;
 }
 
-@customElement('frc-mecanum-drivebase')
 export default class MecanumDrivebase extends LitElement {
   @property({ type: Number, attribute: 'front-left-motor-speed' })
   frontLeftMotorSpeed = 0;
@@ -416,4 +415,8 @@ export default class MecanumDrivebase extends LitElement {
       </div>
     `;
   }
+}
+
+if (!customElements.get('frc-mecanum-drivebase')) {
+  customElements.define('frc-mecanum-drivebase', MecanumDrivebase);
 }

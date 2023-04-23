@@ -1,8 +1,7 @@
 import { html, css, LitElement, TemplateResult } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 import iconset from './iconset';
 
-@customElement('frc-icon')
 export class Icon extends LitElement {
   @property({ type: String }) color = '#000000';
   @property({ type: String }) icon = Object.keys(iconset)[0];
@@ -36,4 +35,8 @@ export class Icon extends LitElement {
       </svg>
     `;
   }
+}
+
+if (!customElements.get('frc-icon')) {
+  customElements.define('frc-icon', Icon);
 }

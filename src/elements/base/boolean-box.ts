@@ -1,7 +1,6 @@
 import { html, css, LitElement } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 
-@customElement('frc-boolean-box')
 export default class BooleanBox extends LitElement {
   static DEFAULT_FALSE_COLOR = '#ff0000';
   static DEFAULT_TRUE_COLOR = '#00ff00';
@@ -46,4 +45,8 @@ export default class BooleanBox extends LitElement {
   render() {
     return html` <div part="box">${this.label || html`&nbsp;`}</div> `;
   }
+}
+
+if (!customElements.get('frc-boolean-box')) {
+  customElements.define('frc-boolean-box', BooleanBox);
 }

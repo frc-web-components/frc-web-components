@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { html, svg, css, LitElement, TemplateResult } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
 // TODO: We should only import the parts we need
 import * as d3 from 'd3';
 
@@ -30,7 +30,6 @@ function getUnitCircleCords(
   return [x, Math.sin(unitAngle)];
 }
 
-@customElement('frc-gyro')
 export default class Gyro extends LitElement {
   @property({ type: Number }) value = 0;
   @property({ type: Boolean, attribute: 'hide-label' }) hideLabel = false;
@@ -219,4 +218,8 @@ export default class Gyro extends LitElement {
         </div>
     `;
   }
+}
+
+if (!customElements.get('frc-gyro')) {
+  customElements.define('frc-gyro', Gyro);
 }

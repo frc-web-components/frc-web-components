@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { svg, css, LitElement, TemplateResult } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
 import * as d3 from 'd3';
 
 interface SwerveModule {
@@ -44,7 +44,6 @@ function getUnitCircleCords(
   return [x, Math.sin(unitAngle)];
 }
 
-@customElement('frc-swerve-drivebase')
 export default class Swerve extends LitElement {
   @property({ type: Number, attribute: 'module-count' }) moduleCount = 4;
   @property({ type: Array, attribute: 'wheel-locations' }) wheelLocations = [
@@ -394,4 +393,8 @@ export default class Swerve extends LitElement {
       </div>
     `;
   }
+}
+
+if (!customElements.get('frc-swerve-drivebase')) {
+  customElements.define('frc-swerve-drivebase', Swerve);
 }

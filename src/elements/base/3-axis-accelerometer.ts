@@ -1,10 +1,9 @@
 import { html, css, LitElement } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
-import '../frc-elements/accelerometer';
-import '../frc-elements/base-elements/bar';
-import '../frc-elements/base-elements/table-axis';
+import { property } from 'lit/decorators.js';
+import './accelerometer';
+import './base-elements/bar';
+import './base-elements/table-axis';
 
-@customElement('frc-3-axis-accelerometer')
 export default class ThreeAxisAccelerometer extends LitElement {
   @property({ type: Number }) x = 0;
   @property({ type: Number }) y = 0;
@@ -85,4 +84,8 @@ export default class ThreeAxisAccelerometer extends LitElement {
       ${this.renderAccelerometer('z', this.numTickMarks)}
     `;
   }
+}
+
+if (!customElements.get('frc-3-axis-accelerometer')) {
+  customElements.define('frc-3-axis-accelerometer', ThreeAxisAccelerometer);
 }

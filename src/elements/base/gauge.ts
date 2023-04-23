@@ -1,9 +1,8 @@
 import { html, css, LitElement } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
 import SvgGauge, { GaugeInstance } from 'svg-gauge';
 
 // TODO: Could use an upgrade. Maybe something like this? https://d3gaugechart.mxapps.io/
-@customElement('frc-gauge')
 export default class Gauge extends LitElement {
   @property({ type: Number }) min = 0;
   @property({ type: Number }) max = 100;
@@ -88,4 +87,8 @@ export default class Gauge extends LitElement {
       </div>
     `;
   }
+}
+
+if (!customElements.get('frc-gauge')) {
+  customElements.define('frc-gauge', Gauge);
 }
