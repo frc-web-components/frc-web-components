@@ -6,6 +6,14 @@ import FieldImages from './field-images';
 
 type ClipType = 'percent' | 'distance';
 
+export interface FieldObject {
+  canvas: CanvasRenderingContext2D;
+  xToPx: (xUnits: number, unit: string) => number;
+  yToPx: (yUnits: number, unit: string) => number;
+  getFieldRectPx: () => { x: number; y: number; width: number; height: number };
+  unit: string;
+}
+
 function toRadians(degrees: number): number {
   return (degrees * Math.PI) / 180;
 }
@@ -19,9 +27,8 @@ export class Field extends LitElement {
   @property({ type: Array, attribute: 'bottom-right-clip' }) bottomRightClip:
     | [number, number]
     | null = null;
-  @property({ type: String, attribute: 'clip-type' }) clipType:
-    | 'percent'
-    | 'distance' = 'percent';
+  @property({ type: String, attribute: 'clip-type' }) clipType: ClipType =
+    'percent';
   @property({ type: String }) unit = baseUnit;
   @property({ type: Number }) rotation = 0;
   @property({ type: Boolean, attribute: 'show-grid' }) showGrid = false;
@@ -271,6 +278,15 @@ export class Field extends LitElement {
     window.requestAnimationFrame(() => {
       this.drawField();
     });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  drawChildren(): void {
+    const ctx = this.getCanvasCtx();
+    ctx.save();
+    ctx.beginPath();
+
+    ctx.restore();
   }
 
   firstUpdated(): void {
