@@ -1,25 +1,16 @@
-import { customElement, property, query } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
 import { html, css, LitElement, TemplateResult } from 'lit';
 import fieldConfigs, { FieldConfig } from './field-configs';
-import { baseUnit, toBaseConversions, convert, unitAliases } from './units';
+import { baseUnit, convert } from './units';
 import FieldImages from './field-images';
-
-type ClipType = 'percent' | 'distance';
-
-export interface FieldObject {
-  canvas: CanvasRenderingContext2D;
-  xToPx: (xUnits: number, unit: string) => number;
-  yToPx: (yUnits: number, unit: string) => number;
-  getFieldRectPx: () => { x: number; y: number; width: number; height: number };
-  unit: string;
-}
+import './field-robot';
+import { ClipType, FieldObjectApi, FieldObject } from './field-interfaces';
 
 function toRadians(degrees: number): number {
   return (degrees * Math.PI) / 180;
 }
 
-@customElement('frc-field2')
-export class Field extends LitElement {
+export default class Field extends LitElement {
   @property({ type: String }) game = fieldConfigs[0].game;
   @property({ type: Array, attribute: 'top-left-clip' }) topLeftClip:
     | [number, number]
@@ -89,7 +80,10 @@ export class Field extends LitElement {
     }
 
     const topLeftClip = this.topLeftClip ?? [0, 0];
-    const bottomRightClip = this.bottomRightClip ?? size;
+    const bottomRightClip = this.bottomRightClip ?? [
+      convert(size[0], unit, this.unit),
+      convert(size[1], unit, this.unit),
+    ];
 
     const x1Corner = corners.topLeft[0] / width;
     const y1Corner = corners.topLeft[1] / height;
@@ -173,6 +167,19 @@ export class Field extends LitElement {
     return !this.flipSide
       ? fieldRectPx.y + fieldRectPx.height - yValue * pxPerUnit
       : fieldRectPx.y + yValue * pxPerUnit;
+  }
+
+  lengthToPx(length: number, unit: string = this.unit): number {
+    const fieldRectPx = this.getFieldRectPx();
+    const { size, unit: configUnit } = this.getConfig();
+
+    if (fieldRectPx.width === 0) {
+      return 0;
+    }
+
+    const pxPerUnit = fieldRectPx.width / size[0];
+    const lengthConverted = convert(length, unit, configUnit);
+    return lengthConverted * pxPerUnit;
   }
 
   setContainerSize(): void {
@@ -269,24 +276,39 @@ export class Field extends LitElement {
     }
   }
 
-  drawField(): void {
-    this.setContainerSize();
-    this.drawImage();
-    this.drawFieldRect();
-    this.drawGrid();
-
-    window.requestAnimationFrame(() => {
-      this.drawField();
-    });
-  }
-
-  // eslint-disable-next-line class-methods-use-this
   drawChildren(): void {
     const ctx = this.getCanvasCtx();
     ctx.save();
     ctx.beginPath();
 
+    const api: FieldObjectApi = {
+      canvas: this.getCanvasCtx(),
+      getFieldRectPx: () => this.getFieldRectPx(),
+      unit: this.unit,
+      xToPx: (xUnits, unit) => this.xToPx(xUnits, unit),
+      yToPx: (yUnits, unit) => this.yToPx(yUnits, unit),
+      lengthToPx: (length, unit) => this.lengthToPx(length, unit),
+      flipSide: this.flipSide,
+    };
+
+    [...this.children].forEach((child) => {
+      const fieldObject = child as any as FieldObject;
+      fieldObject.draw?.(api);
+    });
+
     ctx.restore();
+  }
+
+  drawField(): void {
+    this.setContainerSize();
+    this.drawImage();
+    this.drawFieldRect();
+    this.drawGrid();
+    this.drawChildren();
+
+    window.requestAnimationFrame(() => {
+      this.drawField();
+    });
   }
 
   firstUpdated(): void {
@@ -301,4 +323,8 @@ export class Field extends LitElement {
       </div>
     `;
   }
+}
+
+if (!customElements.get('frc-field')) {
+  customElements.define('frc-field', Field);
 }

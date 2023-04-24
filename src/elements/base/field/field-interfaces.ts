@@ -41,3 +41,19 @@ export interface FieldDimensions {
   x2: number;
   y2: number;
 }
+
+export type ClipType = 'percent' | 'distance';
+
+export interface FieldObjectApi {
+  canvas: CanvasRenderingContext2D;
+  xToPx: (xUnits: number, unit: string) => number;
+  yToPx: (yUnits: number, unit: string) => number;
+  lengthToPx: (length: number, unit: string) => number;
+  getFieldRectPx: () => { x: number; y: number; width: number; height: number };
+  unit: string;
+  flipSide: boolean;
+}
+
+export interface FieldObject {
+  draw: (api: FieldObjectApi) => unknown;
+}
