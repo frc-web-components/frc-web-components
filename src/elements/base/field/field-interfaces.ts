@@ -42,7 +42,7 @@ export interface FieldDimensions {
   y2: number;
 }
 
-export type ClipType = 'percent' | 'distance';
+export type CropType = 'percent' | 'distance';
 
 export interface FieldObjectApi {
   canvas: CanvasRenderingContext2D;

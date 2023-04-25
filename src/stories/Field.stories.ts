@@ -1,46 +1,149 @@
 // import React from 'react';
-import '../elements/base/boolean-box';
+import '../elements/base/field/field';
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import fieldConfigs from '../elements/base/field/field-configs';
+import { baseUnit, toBaseConversions } from '../elements/base/field/units';
 
 const defaultArgs: Record<string, any> = {
-  value: false,
-  falseColor: '#ff0000',
-  trueColor: '#00ff00',
-  label: '',
+  game: fieldConfigs[0].game,
+  cropType: 'percent',
+  unit: baseUnit,
+  rotation: 0,
+  showGrid: false,
+  gridSize: 1,
+  flipSide: false,
+
+  // robotImage: '',
+  robotColor: 'blue',
+  robotOpacity: 1,
+  robotX: 0,
+  robotY: 0,
+  robotAngle: 0,
+  robotWidth: 0.6,
+  robotLength: 0.9,
 };
 
 const meta: Meta = {
-  title: 'FRC/Boolean Box',
+  title: 'FRC/Field',
   tags: ['autodocs'],
-  component: 'frc-boolean-box',
+  component: 'frc-field',
   args: defaultArgs,
   argTypes: {
-    value: {
+    game: {
       table: {
-        category: 'Properties',
+        category: 'Field',
+        defaultValue: { summary: fieldConfigs[0].game },
+      },
+      options: fieldConfigs.map(({ game }) => game),
+      control: 'select',
+    },
+    cropType: {
+      control: 'radio',
+      options: ['percent', 'distance'],
+      table: {
+        category: 'Field',
+        defaultValue: 'percent',
+      },
+    },
+    cropTop: {
+      control: 'number',
+      table: {
+        category: 'Field',
+      },
+    },
+    cropBottom: {
+      control: 'number',
+      table: {
+        category: 'Field',
+      },
+    },
+    cropLeft: {
+      control: 'number',
+      table: {
+        category: 'Field',
+      },
+    },
+    cropRight: {
+      control: 'number',
+      table: {
+        category: 'Field',
+      },
+    },
+    unit: {
+      table: {
+        category: 'Field',
+        defaultValue: baseUnit,
+      },
+      options: Object.keys(toBaseConversions),
+      control: 'select',
+    },
+    rotation: {
+      table: {
+        category: 'Field',
+        defaultValue: { summary: 0 },
+      },
+    },
+    showGrid: {
+      table: {
+        category: 'Field',
         defaultValue: { summary: false },
       },
     },
-    falseColor: {
-      control: 'color',
+    gridSize: {
       table: {
-        category: 'Properties',
-        defaultValue: { summary: '#ff0000' },
+        category: 'Field',
+        defaultValue: { summary: 1 },
       },
     },
-    trueColor: {
-      control: 'color',
+    flipSide: {
       table: {
-        category: 'Properties',
-        defaultValue: { summary: '#00ff00' },
+        category: 'Field',
+        defaultValue: { summary: false },
       },
     },
-    label: {
+    robotColor: {
+      control: 'color',
       table: {
-        category: 'Properties',
-        defaultValue: { summary: '' },
+        category: 'Robot',
+        defaultValue: { summary: 'blue' },
+      },
+    },
+    robotOpacity: {
+      table: {
+        category: 'Robot',
+        defaultValue: { summary: 1 },
+      },
+    },
+    robotX: {
+      table: {
+        category: 'Robot',
+        defaultValue: { summary: 0 },
+      },
+    },
+    robotY: {
+      table: {
+        category: 'Robot',
+        defaultValue: { summary: 0 },
+      },
+    },
+    robotAngle: {
+      table: {
+        category: 'Robot',
+        defaultValue: { summary: 0 },
+      },
+    },
+    robotWidth: {
+      table: {
+        category: 'Robot',
+        defaultValue: { summary: 0.6 },
+      },
+    },
+    robotLength: {
+      table: {
+        category: 'Robot',
+        defaultValue: { summary: 0.9 },
       },
     },
   },
@@ -49,7 +152,7 @@ export default meta;
 
 type Story = StoryObj;
 
-function createBooleanBoxStory(optionalArgs: Record<string, any> = {}): Story {
+function createFieldStory(optionalArgs: Record<string, any> = {}): Story {
   const storyArgs = {
     ...defaultArgs,
     ...optionalArgs,
@@ -60,23 +163,29 @@ function createBooleanBoxStory(optionalArgs: Record<string, any> = {}): Story {
       canvas: { sourceState: 'shown' },
     },
     render: (args) => html`
-      <frc-boolean-box
-        ?value=${args.value}
-        false-color=${ifDefined(args.falseColor || undefined)}
-        true-color=${ifDefined(args.trueColor || undefined)}
-        label=${ifDefined(args.label || undefined)}
-      ></frc-boolean-box>
+      <frc-field
+        game=${args.game}
+        crop-type=${args.cropType}
+        crop-top=${ifDefined(args.cropTop ?? undefined)}
+        crop-bottom=${ifDefined(args.cropBottom ?? undefined)}
+        crop-left=${ifDefined(args.cropLeft ?? undefined)}
+        crop-right=${ifDefined(args.cropRight ?? undefined)}
+        unit=${args.unit}
+        rotation=${args.rotation}
+        ?show-grid=${args.showGrid}
+        grid-size=${args.gridSize}
+        ?flip-side=${args.flipSide}
+      >
+        <frc-field-robot
+          color=${args.robotColor}
+          opacity=${args.robotOpacity}
+          pose="[${[args.robotX, args.robotY, args.robotAngle]}]"
+          width=${args.robotWidth}
+          length=${args.robotLength}
+        ></frc-field-robot>
+      </frc-field>
     `,
   };
 }
 
-export const FalseValue = createBooleanBoxStory();
-export const TrueValue = createBooleanBoxStory({ value: true });
-export const CustomFalseColor = createBooleanBoxStory({
-  falseColor: '#f67b12',
-});
-export const CustomTrueColor = createBooleanBoxStory({
-  value: true,
-  trueColor: '#21e4bb',
-});
-export const WithLabel = createBooleanBoxStory({ label: `I'm a box` });
+export const Field = createFieldStory();

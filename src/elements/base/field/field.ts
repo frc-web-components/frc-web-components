@@ -4,7 +4,7 @@ import fieldConfigs, { FieldConfig } from './field-configs';
 import { baseUnit, convert } from './units';
 import FieldImages from './field-images';
 import './field-robot';
-import { ClipType, FieldObjectApi, FieldObject } from './field-interfaces';
+import { CropType, FieldObjectApi, FieldObject } from './field-interfaces';
 
 function toRadians(degrees: number): number {
   return (degrees * Math.PI) / 180;
@@ -12,13 +12,17 @@ function toRadians(degrees: number): number {
 
 export default class Field extends LitElement {
   @property({ type: String }) game = fieldConfigs[0].game;
-  @property({ type: Array, attribute: 'top-left-clip' }) topLeftClip:
-    | [number, number]
+  @property({ type: Number, attribute: 'crop-top' }) cropTop: number | null =
+    null;
+  @property({ type: Number, attribute: 'crop-bottom' }) cropBottom:
+    | number
     | null = null;
-  @property({ type: Array, attribute: 'bottom-right-clip' }) bottomRightClip:
-    | [number, number]
+  @property({ type: Number, attribute: 'crop-left' }) cropLeft: number | null =
+    null;
+  @property({ type: Number, attribute: 'crop-right' }) cropRight:
+    | number
     | null = null;
-  @property({ type: String, attribute: 'clip-type' }) clipType: ClipType =
+  @property({ type: String, attribute: 'crop-type' }) cropType: CropType =
     'percent';
   @property({ type: String }) unit = baseUnit;
   @property({ type: Number }) rotation = 0;
@@ -63,12 +67,12 @@ export default class Field extends LitElement {
     return ctx;
   }
 
-  getClipPercent(): { x1: number; y1: number; x2: number; y2: number } {
-    if (this.clipType === 'percent') {
-      const x1 = this.topLeftClip?.[0] ?? 0;
-      const y1 = this.topLeftClip?.[1] ?? 0;
-      const x2 = this.bottomRightClip?.[0] ?? 1;
-      const y2 = this.bottomRightClip?.[1] ?? 1;
+  getCropPercent(): { x1: number; y1: number; x2: number; y2: number } {
+    if (this.cropType === 'percent') {
+      const x1 = this.cropLeft ?? 0;
+      const y1 = this.cropTop ?? 0;
+      const x2 = this.cropRight ?? 1;
+      const y2 = this.cropBottom ?? 1;
       return { x1, y1, x2, y2 };
     }
 
@@ -79,10 +83,10 @@ export default class Field extends LitElement {
       return { x1: 0, y1: 0, x2: 1, y2: 1 };
     }
 
-    const topLeftClip = this.topLeftClip ?? [0, 0];
-    const bottomRightClip = this.bottomRightClip ?? [
-      convert(size[0], unit, this.unit),
-      convert(size[1], unit, this.unit),
+    const topLeftCrop = [this.cropLeft ?? 0, this.cropTop ?? 0];
+    const bottomRightCrop = [
+      this.cropRight ?? convert(size[0], unit, this.unit),
+      this.cropBottom ?? convert(size[1], unit, this.unit),
     ];
 
     const x1Corner = corners.topLeft[0] / width;
@@ -96,16 +100,16 @@ export default class Field extends LitElement {
     const value = {
       x1:
         x1Corner +
-        (widthPercent * convert(topLeftClip[0], this.unit, unit)) / size[0],
+        (widthPercent * convert(topLeftCrop[0], this.unit, unit)) / size[0],
       y1:
         y1Corner +
-        (heightPercent * convert(topLeftClip[1], this.unit, unit)) / size[1],
+        (heightPercent * convert(topLeftCrop[1], this.unit, unit)) / size[1],
       x2:
         x1Corner +
-        (widthPercent * convert(bottomRightClip[0], this.unit, unit)) / size[0],
+        (widthPercent * convert(bottomRightCrop[0], this.unit, unit)) / size[0],
       y2:
         y1Corner +
-        (heightPercent * convert(bottomRightClip[1], this.unit, unit)) /
+        (heightPercent * convert(bottomRightCrop[1], this.unit, unit)) /
           size[1],
     };
 
@@ -125,15 +129,15 @@ export default class Field extends LitElement {
     const x2Percent = corners.bottomRight[0] / width;
     const y2Percent = corners.bottomRight[1] / height;
 
-    const clipPercent = this.getClipPercent();
-    const clipWidthPercent = clipPercent.x2 - clipPercent.x1;
-    const clipHeightPercent = clipPercent.y2 - clipPercent.y1;
-    const originalWidth = this.canvas.width / clipWidthPercent;
-    const originalHeight = this.canvas.height / clipHeightPercent;
+    const cropPercent = this.getCropPercent();
+    const cropWidthPercent = cropPercent.x2 - cropPercent.x1;
+    const cropHeightPercent = cropPercent.y2 - cropPercent.y1;
+    const originalWidth = this.canvas.width / cropWidthPercent;
+    const originalHeight = this.canvas.height / cropHeightPercent;
 
     return {
-      x: (x1Percent - clipPercent.x1) * originalWidth,
-      y: (y1Percent - clipPercent.y1) * originalHeight,
+      x: (x1Percent - cropPercent.x1) * originalWidth,
+      y: (y1Percent - cropPercent.y1) * originalHeight,
       width: (x2Percent - x1Percent) * originalWidth,
       height: (y2Percent - y1Percent) * originalHeight,
     };
@@ -192,11 +196,11 @@ export default class Field extends LitElement {
       return;
     }
 
-    const clipPercent = this.getClipPercent();
+    const cropPercent = this.getCropPercent();
 
     const imageDims = {
-      width: (clipPercent.x2 - clipPercent.x1) * imageObject.width,
-      height: (clipPercent.y2 - clipPercent.y1) * imageObject.height,
+      width: (cropPercent.x2 - cropPercent.x1) * imageObject.width,
+      height: (cropPercent.y2 - cropPercent.y1) * imageObject.height,
     };
 
     const boundingBoxDims = FieldImages.getBoundingBoxDims(
@@ -224,14 +228,14 @@ export default class Field extends LitElement {
     const canvasHeight = clientHeight * window.devicePixelRatio;
     this.canvas.width = canvasWidth;
     this.canvas.height = canvasHeight;
-    const clipPercent = this.getClipPercent();
+    const cropPercent = this.getCropPercent();
 
     ctx.drawImage(
       image,
-      clipPercent.x1 * width,
-      clipPercent.y1 * height,
-      (clipPercent.x2 - clipPercent.x1) * width,
-      (clipPercent.y2 - clipPercent.y1) * height,
+      cropPercent.x1 * width,
+      cropPercent.y1 * height,
+      (cropPercent.x2 - cropPercent.x1) * width,
+      (cropPercent.y2 - cropPercent.y1) * height,
       0,
       0,
       canvasWidth,

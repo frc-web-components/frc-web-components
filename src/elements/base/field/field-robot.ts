@@ -10,7 +10,7 @@ export default class FieldRobot extends LitElement {
   @property({ type: Number }) opacity = 1;
   @property({ type: Array }) pose = [0, 0, 0];
   @property({ type: Number }) width = 0.6;
-  @property({ type: Number }) height = 0.9;
+  @property({ type: Number }) length = 0.9;
 
   draw({
     canvas,
@@ -36,9 +36,9 @@ export default class FieldRobot extends LitElement {
     );
     canvas.rotate(-angle + (flipSide ? Math.PI : 0));
     canvas.roundRect(
-      -lengthToPx(this.height / 2, unit),
+      -lengthToPx(this.length / 2, unit),
       -lengthToPx(this.width / 2, unit),
-      lengthToPx(this.height, unit),
+      lengthToPx(this.length, unit),
       lengthToPx(this.width, unit),
       1
     );
@@ -51,16 +51,16 @@ export default class FieldRobot extends LitElement {
     canvas.strokeStyle = 'white';
     canvas.lineWidth = lengthToPx(2, 'in');
 
-    canvas.moveTo(-lengthToPx(this.height * 0.3, unit), 0);
-    canvas.lineTo(lengthToPx(this.height * 0.3, unit), 0);
+    canvas.moveTo(-lengthToPx(this.length * 0.3, unit), 0);
+    canvas.lineTo(lengthToPx(this.length * 0.3, unit), 0);
 
     canvas.moveTo(
-      lengthToPx(this.height * 0.1, unit),
+      lengthToPx(this.length * 0.1, unit),
       -lengthToPx(this.width * 0.25, unit)
     );
-    canvas.lineTo(lengthToPx(this.height * 0.3, unit), 0);
+    canvas.lineTo(lengthToPx(this.length * 0.3, unit), 0);
     canvas.lineTo(
-      lengthToPx(this.height * 0.1, unit),
+      lengthToPx(this.length * 0.1, unit),
       lengthToPx(this.width * 0.25, unit)
     );
 
