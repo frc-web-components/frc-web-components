@@ -3,11 +3,18 @@ import { html, css, LitElement } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+
 // function rgbtohex() {
 
 // }
 
 export class Field3d extends LitElement {
+  scene = new THREE.Scene();
+  renderer!: THREE.WebGLRenderer;
+  camera!: THREE.PerspectiveCamera;
+  controls!: OrbitControls;
+
   @query('canvas') canvas!: HTMLCanvasElement;
 
   static styles = css`
@@ -22,18 +29,9 @@ export class Field3d extends LitElement {
     }
   `;
 
-  firstUpdated(): void {
+  getCamera(): THREE.PerspectiveCamera {
     const rect = this.getBoundingClientRect();
 
-    const renderer = new THREE.WebGLRenderer({
-      antialias: true,
-      canvas: this.canvas,
-    });
-
-    const scene = new THREE.Scene();
-    // scene.background = new THREE.Color(0xffffff);
-
-    // add camera
     const camera = new THREE.PerspectiveCamera(
       75,
       rect.width / rect.height,
@@ -43,63 +41,80 @@ export class Field3d extends LitElement {
     camera.position.z = 0;
     camera.position.y = 10;
     camera.rotateX(30);
+    return camera;
+  }
 
-    // create cube
-    const boxWidth = 2;
-    const boxHeight = 0.5;
-    const boxDepth = 1;
-    const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+  static getOrbitControls(
+    camera: THREE.Camera,
+    canvas: HTMLElement
+  ): OrbitControls {
+    const controls = new OrbitControls(camera, canvas);
+    controls.maxDistance = 30;
+    controls.enabled = true;
+    controls.update();
+    return controls;
+  }
 
-    const material = new THREE.MeshPhongMaterial({ color: 9827634 }); // greenish blue //noice
-
-    const cube = new THREE.Mesh(geometry, material);
-    cube.position.x = 1;
-
-    // scene.add(cube);
-
-    const loader = new GLTFLoader();
-
-    loader.load('Field3d_2023.glb', (gltf) => {
-      scene.add(gltf.scene);
-    });
-    // create oval thing
-    const ovalWidth = 1;
-    const ovalSegments = 12;
-    const ovalAngle = 50;
-    const ovalGeometry = new THREE.CircleGeometry(
-      ovalWidth,
-      ovalSegments,
-      ovalAngle
-    );
-
-    const ovalColor = 0x00aaff;
-    const redColor = 0;
-    const blueColor = 0;
-    const greenColor = 255;
-
-    const ovalMaterial = new THREE.MeshPhongMaterial({ color: ovalColor });
-
-    const oval = new THREE.Mesh(ovalGeometry, ovalMaterial);
-    oval.position.x = 1;
-
-    // scene.add(oval);
-
-    // light
+  static addLights(scene: THREE.Scene): void {
     const color = 0xffffff;
-    const intensity = 100;
-    const light = new THREE.DirectionalLight(color, intensity);
+    const pointLightIntensity = 0.2;
+    const light = new THREE.PointLight(color, pointLightIntensity);
     light.position.set(0, 10, 0);
     scene.add(light);
 
-    // render scene
-    renderer.setSize(rect.width, rect.height);
-    renderer.render(scene, camera);
+    const skyColor = 0xffffff;
+    const groundColor = 0x444444;
+    const hemisphereLightIntensity = 1;
+    const hemisphereLight = new THREE.HemisphereLight(
+      skyColor,
+      groundColor,
+      hemisphereLightIntensity
+    );
+    scene.add(hemisphereLight);
+  }
 
+  initScene(): void {
+    this.renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      canvas: this.canvas,
+    });
+    const rect = this.getBoundingClientRect();
+    this.renderer.setSize(rect.width, rect.height);
+    // this.scene.background = new THREE.Color(0xffffff);
+  }
+
+  firstUpdated(): void {
+    this.initScene();
+
+    // Create Objects
+    this.camera = this.getCamera();
+    this.controls = Field3d.getOrbitControls(this.camera, this.canvas);
+
+    // add objects to scene
+    Field3d.addLights(this.scene);
+    const loader = new GLTFLoader();
+    loader.load('Field3d_2023.glb', (gltf) => {
+      this.scene.add(gltf.scene);
+
+      gltf.scene.traverse((node: THREE.Object3D) => {
+        const mesh = node as THREE.Mesh; // Traverse function returns Object3d or Mesh
+        if (
+          mesh.isMesh &&
+          mesh.material instanceof THREE.MeshStandardMaterial
+        ) {
+          const material = mesh.material as THREE.MeshStandardMaterial;
+          material.metalness = 0;
+          material.roughness = 1;
+        }
+      });
+    });
+
+    // render scene periodically
     setInterval(() => {
-      cube.rotation.x += 0.01;
-      cube.rotation.y += 0.01;
-      cube.rotation.z += 0.01;
-      renderer.render(scene, camera);
+      // cube.rotation.x += 0.01;
+      // cube.rotation.y += 0.01;
+      // cube.rotation.z += 0.01;
+      this.renderer.render(this.scene, this.camera);
     }, 1000 / 90);
   }
 
