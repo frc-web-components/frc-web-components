@@ -1,18 +1,21 @@
-import { html, css, LitElement } from 'lit';
-// eslint-disable-next-line import/extensions
+import { html, css, LitElement, TemplateResult } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { getQuaternionFromRotSeq } from './utils';
-import robotConfigs, { RobotConfig } from './robot-configs';
+import { VRButton } from 'three/addons/webxr/VRButton.js';
+import { getQuaternionFromRotSeq, rotation3dToQuaternion } from './utils';
 import fieldConfigs, { FieldConfig } from './field-configs';
+import { Pose3d } from './field-interfaces';
+import { convert } from '../field/units';
 
-// function rgbtohex() {
-
-// }
-
+// https://toji.dev/webxr-scene-optimization/
 export class Field3d extends LitElement {
+  @property({ type: String }) game = fieldConfigs[0].game;
+  @property({ type: String }) origin: 'red' | 'blue' = 'red';
+  @property({ type: String, attribute: 'background-color' }) backgroundColor =
+    'black';
+
   private ORBIT_FIELD_DEFAULT_TARGET = new THREE.Vector3(0, 0.5, 0);
   private ORBIT_FIELD_DEFAULT_POSITION = new THREE.Vector3(0, 6, -12);
   private WPILIB_ROTATION = getQuaternionFromRotSeq([
@@ -33,22 +36,33 @@ export class Field3d extends LitElement {
   renderer!: THREE.WebGLRenderer;
   camera!: THREE.PerspectiveCamera;
   controls!: OrbitControls;
+  loader = new GLTFLoader();
+  fieldObject?: THREE.Object3D;
 
   @query('canvas') canvas!: HTMLCanvasElement;
+  @query('.container') container!: HTMLCanvasElement;
 
   static styles = css`
     :host {
+      position: relative;
       display: block;
-      width: 100%;
-      height: 100%;
+      width: 700px;
+      height: 400px;
     }
     canvas {
+      display: block;
       width: 100%;
       height: 100%;
     }
   `;
 
-  getCamera(): THREE.PerspectiveCamera {
+  private getFieldConfig(): FieldConfig {
+    return (
+      fieldConfigs.find(({ game }) => game === this.game) ?? fieldConfigs[0]
+    );
+  }
+
+  private getCamera(): THREE.PerspectiveCamera {
     const rect = this.getBoundingClientRect();
 
     const camera = new THREE.PerspectiveCamera(
@@ -57,9 +71,6 @@ export class Field3d extends LitElement {
       0.1,
       100
     );
-    // camera.position.z = 0;
-    // camera.position.y = 10;
-    // camera.rotateX(30);
 
     return camera;
   }
@@ -93,20 +104,28 @@ export class Field3d extends LitElement {
     scene.add(hemisphereLight);
   }
 
-  initScene(): void {
+  private initScene(): void {
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
       canvas: this.canvas,
     });
+    this.renderer.xr.enabled = true;
+    this.container.appendChild(VRButton.createButton(this.renderer));
     const rect = this.getBoundingClientRect();
     this.renderer.setSize(rect.width, rect.height);
-    // this.scene.background = new THREE.Color(0xffffff);
 
     this.wpilibCoordinateGroup = new THREE.Group();
     this.scene.add(this.wpilibCoordinateGroup);
     this.wpilibCoordinateGroup.rotation.setFromQuaternion(this.WPILIB_ROTATION);
     this.wpilibFieldCoordinateGroup = new THREE.Group();
     this.wpilibCoordinateGroup.add(this.wpilibFieldCoordinateGroup);
+  }
+
+  private updateCanvasSize() {
+    const rect = this.getBoundingClientRect();
+    this.renderer.setSize(rect.width, rect.height);
+    this.camera.aspect = rect.width / rect.height;
+    this.camera.updateProjectionMatrix();
   }
 
   static adjustMaterials(group: THREE.Group): void {
@@ -120,9 +139,18 @@ export class Field3d extends LitElement {
     });
   }
 
-  loadFieldModel(fieldConfig: FieldConfig): void {
-    const loader = new GLTFLoader();
-    loader.load(fieldConfig.src, (gltf) => {
+  static updatePose(object: THREE.Object3D, pose: Pose3d): void {
+    const [x, y, z] = pose.translation;
+    object.position.set(y, -x, z);
+    object.rotation.setFromQuaternion(rotation3dToQuaternion(pose.rotation));
+  }
+
+  private loadFieldModel(fieldConfig: FieldConfig): void {
+    if (this.fieldObject) {
+      this.wpilibCoordinateGroup.remove(this.fieldObject);
+    }
+    this.loader.load(fieldConfig.src, (gltf) => {
+      this.fieldObject = gltf.scene;
       this.wpilibCoordinateGroup.add(gltf.scene);
       Field3d.adjustMaterials(gltf.scene);
       gltf.scene.rotation.setFromQuaternion(
@@ -131,16 +159,8 @@ export class Field3d extends LitElement {
     });
   }
 
-  loadRobotModel(robotConfig: RobotConfig): void {
-    const loader = new GLTFLoader();
-    loader.load(robotConfig.src, (gltf) => {
-      this.wpilibCoordinateGroup.add(gltf.scene);
-      Field3d.adjustMaterials(gltf.scene);
-      gltf.scene.rotation.setFromQuaternion(
-        getQuaternionFromRotSeq(robotConfig.rotations)
-      );
-      gltf.scene.position.set(...robotConfig.position);
-    });
+  getFieldGroup(): THREE.Group {
+    return this.wpilibFieldCoordinateGroup;
   }
 
   firstUpdated(): void {
@@ -155,23 +175,54 @@ export class Field3d extends LitElement {
 
     // add objects to scene
     Field3d.addLights(this.scene);
-    this.loadFieldModel(fieldConfigs[0]);
-    this.loadRobotModel(robotConfigs[0]);
 
-    this.renderField();
+    this.renderer.setAnimationLoop(() => this.renderField());
+
+    const resizeObserver = new ResizeObserver(() => {
+      this.updateCanvasSize();
+    });
+    resizeObserver.observe(this);
+  }
+
+  updated(changedProps: Map<string, unknown>): void {
+    if (changedProps.has('game')) {
+      this.loadFieldModel(this.getFieldConfig());
+    }
+    if (changedProps.has('backgroundColor')) {
+      this.scene.background = new THREE.Color(this.backgroundColor);
+    }
+
+    if (changedProps.has('origin')) {
+      const fieldConfig = this.getFieldConfig();
+
+      if (fieldConfig) {
+        const isBlue = this.origin !== 'red';
+        this.wpilibFieldCoordinateGroup.setRotationFromAxisAngle(
+          new THREE.Vector3(0, 0, 1),
+          isBlue ? 0 : Math.PI
+        );
+        this.wpilibFieldCoordinateGroup.position.set(
+          convert(fieldConfig.size[0] / 2, fieldConfig.unit, 'm') *
+            (isBlue ? -1 : 1),
+          convert(fieldConfig.size[1] / 2, fieldConfig.unit, 'm') *
+            (isBlue ? -1 : 1),
+          0
+        );
+      }
+    }
   }
 
   renderField(): void {
     this.renderer.render(this.scene, this.camera);
-
-    requestAnimationFrame(() => {
-      this.renderField();
-    });
+    this.controls.update();
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, class-methods-use-this
-  render() {
-    return html` <canvas></canvas> `;
+  // eslint-disable-next-line class-methods-use-this
+  render(): TemplateResult {
+    return html` <div class="container">
+      <canvas></canvas>
+      <div></div>
+    </div>`;
   }
 }
 

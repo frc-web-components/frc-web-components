@@ -37,6 +37,7 @@
   },
   "scripts": {
     "start": "vite",
+    "host": "vite --host",
     "test": "",
     "test:coverage": "npm test -- --coverage --watchAll=false",
     "generate-docs": "jsdoc -c jsdoc.conf.json",
@@ -82,6 +83,7 @@
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/parser": "^4.26.0",
     "@vaadin/vaadin-icons": "^22.0.0",
+    "@vitejs/plugin-basic-ssl": "^1.0.1",
     "babel-jest": "^25.5.1",
     "concurrently": "^7.4.0",
     "eslint": "^7.27.0",

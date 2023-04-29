@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Rotation } from './field-interfaces';
+import { Rotation, Rotation3d } from './field-interfaces';
 
 // https://github.com/Mechanical-Advantage/AdvantageScope/blob/main/src/shared/visualizers/ThreeDimensionVisualizer.ts#L909
 export function getQuaternionFromRotSeq(
@@ -17,4 +17,13 @@ export function getQuaternionFromRotSeq(
     );
   });
   return quaternion;
+}
+
+export function getRotation3dFromRotSeq(rotations: Rotation[]): Rotation3d {
+  const [x, y, z, w] = getQuaternionFromRotSeq(rotations);
+  return [w, x, y, z];
+}
+
+export function rotation3dToQuaternion(input: Rotation3d): THREE.Quaternion {
+  return new THREE.Quaternion(input[1], input[2], input[3], input[0]);
 }

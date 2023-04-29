@@ -21,7 +21,24 @@ const configs: FieldConfig[] = [
   },
   {
     game: 'Rapid React',
-    src: '/3d-models/Field2d_2022.glb',
+    src: '/3d-models/Field3d_2022.glb',
+    rotations: [{ axis: 'x', degrees: 90 }],
+    size: [54, 27],
+    unit: 'foot',
+  },
+  {
+    game: 'Infinite Recharge',
+    src: '/3d-models/Field3d_2021.glb',
+    rotations: [
+      { axis: 'x', degrees: 90 },
+      { axis: 'z', degrees: 90 },
+    ],
+    size: [52.4375, 26.9375],
+    unit: 'foot',
+  },
+  {
+    game: 'Evergreen',
+    src: '/3d-models/Field3d_Evergreen.glb',
     rotations: [{ axis: 'x', degrees: 90 }],
     size: [54, 27],
     unit: 'foot',

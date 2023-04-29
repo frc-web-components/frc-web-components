@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import * as path from 'path';
+import basicSsl from '@vitejs/plugin-basic-ssl';
 
 export default defineConfig({
   build: {
@@ -30,4 +31,5 @@ export default defineConfig({
   server: {
     open: '/',
   },
+  plugins: [basicSsl()],
 });
