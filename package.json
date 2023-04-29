@@ -1,6 +1,6 @@
 {
   "name": "@frc-web-components/fwc",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "",
   "files": [
     "dist",
@@ -14,16 +14,28 @@
     ".": "./dist/fwc.es.js",
     "./get-asset-url": "./dist/get-asset-url.es.js",
     "./load-local-storage": "./dist/load-local-storage.es.js",
+    "./source-providers/NT4": "./dist/source-providers/NT4",
+    "./components": "./dist/components.es.js",
+    "./components/bar": "./dist/components/bar.es.js",
+    "./components/axis": "./dist/components/axis.es.js",
+    "./components/icon": "./dist/components/icon.es.js",
     "./components/drivebases/differential": "./dist/components/drivebases/differential.es.js",
     "./components/drivebases/mecanum": "./dist/components/drivebases/mecanum.es.js",
     "./components/drivebases/swerve": "./dist/components/drivebases/swerve.es.js",
-    "./components/icon": "./dist/components/icon.es.js",
+    "./components/field/field": "./dist/components/field/field.es.js",
+    "./components/field/field-robot": "./dist/components/field/field-robot.es.js",
+    "./components/field/field-configs": "./dist/components/field/field-configs.es.js",
+    "./components/field3d/field3d": "./dist/components/field3d/field3d.es.js",
+    "./components/field3d/field3d-object": "./dist/components/field3d/field3d-object.es.js",
+    "./components/field3d/field-configs": "./dist/components/field3d/field-configs.es.js",
+    "./components/field3d/object-configs": "./dist/components/field3d/object-configs.es.js",
+    "./components/3-axis-accelerometer": "./dist/components/3-axis-accelerometer.es.js",
+    "./components/accelerometer": "./dist/components/accelerometer.es.js",
     "./components/basic-fms-info": "./dist/components/basic-fms-info.es.js",
     "./components/boolean-box": "./dist/components/boolean-box.es.js",
-    "./components/gyro": "./dist/components/gyro.es.js",
-    "./components/number-bar": "./dist/components/number-bar.es.js",
     "./components/gauge": "./dist/components/gauge.es.js",
-    "./components/3-axis-accelerometer": "./dist/components/3-axis-accelerometer.es.js"
+    "./components/gyro": "./dist/components/gyro.es.js",
+    "./components/number-bar": "./dist/components/number-bar.es.js"
   },
   "typesVersions": {
     "*": {
@@ -37,7 +49,7 @@
   },
   "scripts": {
     "start": "vite",
-    "host": "vite --host",
+    "host": "vite --host -- --useHttps",
     "test": "",
     "test:coverage": "npm test -- --coverage --watchAll=false",
     "generate-docs": "jsdoc -c jsdoc.conf.json",
@@ -140,7 +152,8 @@
     "multiselect-combo-box": "^3.0.0-alpha.2",
     "svg-gauge": "^1.0.6",
     "three": "^0.151.3",
-    "urdf-loader": "^0.8.2"
+    "urdf-loader": "^0.8.2",
+    "yargs": "^17.7.2"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

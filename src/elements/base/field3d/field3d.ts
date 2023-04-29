@@ -3,18 +3,20 @@ import { property, query } from 'lit/decorators.js';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { VRButton } from 'three/addons/webxr/VRButton.js';
+import { VRButton } from 'three/examples/jsm/webxr/VRButton';
 import { getQuaternionFromRotSeq, rotation3dToQuaternion } from './utils';
 import fieldConfigs, { FieldConfig } from './field-configs';
-import { Pose3d } from './field-interfaces';
+import { Pose3d, IField3d } from './field-interfaces';
 import { convert } from '../field/units';
+import './field3d-object';
 
 // https://toji.dev/webxr-scene-optimization/
-export class Field3d extends LitElement {
+export class Field3d extends LitElement implements IField3d {
   @property({ type: String }) game = fieldConfigs[0].game;
   @property({ type: String }) origin: 'red' | 'blue' = 'red';
   @property({ type: String, attribute: 'background-color' }) backgroundColor =
     'black';
+  @property({ type: Boolean, attribute: 'enable-vr' }) enableVR = false;
 
   private ORBIT_FIELD_DEFAULT_TARGET = new THREE.Vector3(0, 0.5, 0);
   private ORBIT_FIELD_DEFAULT_POSITION = new THREE.Vector3(0, 6, -12);
@@ -41,6 +43,7 @@ export class Field3d extends LitElement {
 
   @query('canvas') canvas!: HTMLCanvasElement;
   @query('.container') container!: HTMLCanvasElement;
+  private vrButton!: HTMLElement;
 
   static styles = css`
     :host {
@@ -109,8 +112,7 @@ export class Field3d extends LitElement {
       antialias: true,
       canvas: this.canvas,
     });
-    this.renderer.xr.enabled = true;
-    this.container.appendChild(VRButton.createButton(this.renderer));
+    this.vrButton = VRButton.createButton(this.renderer);
     const rect = this.getBoundingClientRect();
     this.renderer.setSize(rect.width, rect.height);
 
@@ -210,6 +212,15 @@ export class Field3d extends LitElement {
         );
       }
     }
+
+    if (changedProps.has('enableVR')) {
+      if (this.enableVR) {
+        this.container.appendChild(this.vrButton);
+      } else {
+        this.container.removeChild(this.vrButton);
+      }
+      this.renderer.xr.enabled = this.enableVR;
+    }
   }
 
   renderField(): void {
@@ -221,7 +232,6 @@ export class Field3d extends LitElement {
   render(): TemplateResult {
     return html` <div class="container">
       <canvas></canvas>
-      <div></div>
     </div>`;
   }
 }

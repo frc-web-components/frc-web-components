@@ -1,3 +1,5 @@
+import THREE from 'three';
+
 export interface Rotation {
   axis: 'x' | 'y' | 'z';
   degrees: number;
@@ -16,3 +18,19 @@ export type Pose3d = {
   translation: Translation3d;
   rotation: Rotation3d;
 };
+
+export interface ObjectConfig {
+  name: string;
+  src: string;
+  rotations: Rotation[];
+  position: [number, number, number];
+  components?: {
+    name: string;
+    src: string;
+    rotations: Rotation[];
+    position: [number, number, number];
+  }[];
+}
+export interface IField3d {
+  getFieldGroup: () => THREE.Group;
+}

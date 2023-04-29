@@ -1,7 +1,7 @@
 import { html, css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 import './base-elements/bar';
-import './base-elements/table-axis';
+import './base-elements/axis';
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(value, min));
@@ -67,12 +67,12 @@ export default class NumberBar extends LitElement {
       </frc-bar>
       ${this.numTickMarks > 0
         ? html`
-            <frc-table-axis
+            <frc-axis
               part="axis"
               ticks="${this.numTickMarks}"
               .range="${[min, max]}"
               unit="${this.unit}"
-            ></frc-table-axis>
+            ></frc-axis>
           `
         : ''}
     `;

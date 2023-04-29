@@ -2,7 +2,7 @@ import { html, css, LitElement } from 'lit';
 import { property, state, query } from 'lit/decorators.js';
 import { select } from 'd3';
 
-export default class TableAxis extends LitElement {
+export default class Axis extends LitElement {
   @property({ type: Boolean }) vertical = false;
   @property({ type: Number }) ticks = 0;
   @property({ type: Array }) range = [];
@@ -168,6 +168,6 @@ export default class TableAxis extends LitElement {
   }
 }
 
-if (!customElements.get('frc-table-axis')) {
-  customElements.define('frc-table-axis', TableAxis);
+if (!customElements.get('frc-axis')) {
+  customElements.define('frc-axis', Axis);
 }

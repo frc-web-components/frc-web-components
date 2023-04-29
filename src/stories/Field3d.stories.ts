@@ -1,4 +1,3 @@
-// import React from 'react';
 import '../elements/base/field3d/field3d';
 import '../elements/base/field3d/field3d-object';
 import type { Meta, StoryObj } from '@storybook/web-components';
@@ -6,7 +5,6 @@ import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import fieldConfigs from '../elements/base/field3d/field-configs';
 import objectConfigs from '../elements/base/field3d/object-configs';
-import { baseUnit, toBaseConversions } from '../elements/base/field/units';
 
 const defaultArgs: Record<string, any> = {
   game: fieldConfigs[0].game,
@@ -71,7 +69,7 @@ const meta: Meta = {
     },
   },
   decorators: [
-    (story, props) => html` <div
+    (story) => html` <div
       style=${styleMap({
         padding: '20px 10px',
         marginBottom: '5px',

@@ -2,7 +2,7 @@ import { html, css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 import * as CurvedArrow from './curved-arrow';
 import '../base-elements/bar';
-import '../base-elements/table-axis';
+import '../base-elements/axis';
 
 /**
  * Copyright (c) 2017-2018 FIRST
@@ -157,7 +157,7 @@ export default class MecanumDrivebase extends LitElement {
       margin-left: 30px;
     }
 
-    frc-table-axis {
+    frc-axis {
       width: 10px;
       height: calc(100% - 35px);
     }
@@ -354,11 +354,7 @@ export default class MecanumDrivebase extends LitElement {
       <div class="diff-drive-container">
         <div class="speed-pair">
           <div class="speed">
-            <frc-table-axis
-              ticks="5"
-              vertical
-              .range="${[1, -1]}"
-            ></frc-table-axis>
+            <frc-axis ticks="5" vertical .range="${[1, -1]}"></frc-axis>
             <div class="bar">
               <div
                 class="foreground"
@@ -367,11 +363,7 @@ export default class MecanumDrivebase extends LitElement {
             </div>
           </div>
           <div class="speed">
-            <frc-table-axis
-              ticks="5"
-              vertical
-              .range="${[1, -1]}"
-            ></frc-table-axis>
+            <frc-axis ticks="5" vertical .range="${[1, -1]}"></frc-axis>
             <div class="bar">
               <div
                 class="foreground"
@@ -386,11 +378,7 @@ export default class MecanumDrivebase extends LitElement {
         </svg>
         <div class="speed-pair">
           <div class="speed">
-            <frc-table-axis
-              ticks="5"
-              vertical
-              .range="${[1, -1]}"
-            ></frc-table-axis>
+            <frc-axis ticks="5" vertical .range="${[1, -1]}"></frc-axis>
             <div class="bar">
               <div
                 class="foreground"
@@ -399,11 +387,7 @@ export default class MecanumDrivebase extends LitElement {
             </div>
           </div>
           <div class="speed">
-            <frc-table-axis
-              ticks="5"
-              vertical
-              .range="${[1, -1]}"
-            ></frc-table-axis>
+            <frc-axis ticks="5" vertical .range="${[1, -1]}"></frc-axis>
             <div class="bar">
               <div
                 class="foreground"

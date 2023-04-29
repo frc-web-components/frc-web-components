@@ -2,7 +2,7 @@ import { html, css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 import './accelerometer';
 import './base-elements/bar';
-import './base-elements/table-axis';
+import './base-elements/axis';
 
 export default class ThreeAxisAccelerometer extends LitElement {
   @property({ type: Number }) x = 0;

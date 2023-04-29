@@ -35,6 +35,8 @@ export default class FieldRobot extends LitElement {
       yToPx(y, unit)
     );
     canvas.rotate(-angle + (flipSide ? Math.PI : 0));
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     canvas.roundRect(
       -lengthToPx(this.length / 2, unit),
       -lengthToPx(this.width / 2, unit),

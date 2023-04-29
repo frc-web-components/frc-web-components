@@ -7,15 +7,16 @@ import {
   rotation3dToQuaternion,
   getRotation3dFromRotSeq,
 } from './utils';
-import objectConfigs, { ObjectConfig } from './object-configs';
+import objectConfigs from './object-configs';
 import {
   Pose3d,
   Rotation2d,
   Rotation3d,
   Translation3d,
   Translation2d,
+  ObjectConfig,
+  IField3d,
 } from './field-interfaces';
-import { Field3d } from './field3d';
 
 export class Object3d extends LitElement {
   @property({ type: String }) name = objectConfigs[0].name;
@@ -36,14 +37,14 @@ export class Object3d extends LitElement {
     );
   }
 
-  getField(): Field3d | undefined {
+  getField(): IField3d | undefined {
     const field = this.closest('frc-field3d');
 
     if (!field) {
       return undefined;
     }
 
-    return field as Field3d;
+    return field as any as IField3d;
   }
 
   static adjustMaterials(group: THREE.Group): void {

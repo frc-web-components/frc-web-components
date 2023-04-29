@@ -1,17 +1,4 @@
-import { Rotation } from './field-interfaces';
-
-export interface ObjectConfig {
-  name: string;
-  src: string;
-  rotations: Rotation[];
-  position: [number, number, number];
-  components?: {
-    name: string;
-    src: string;
-    rotations: Rotation[];
-    position: [number, number, number];
-  }[];
-}
+import { ObjectConfig } from './field-interfaces';
 
 const configs: ObjectConfig[] = [
   {
