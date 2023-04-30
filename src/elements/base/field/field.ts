@@ -184,7 +184,7 @@ export default class Field extends LitElement {
   }
 
   setContainerSize(): void {
-    const rect = this.getBoundingClientRect();
+    const rect = { width: this.clientWidth, height: this.clientHeight };
     const src = this.getConfig().image;
     const imageObject = this.#fieldImages.getImage(src);
     const { loaded } = imageObject;

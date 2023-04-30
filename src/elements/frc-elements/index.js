@@ -23,8 +23,6 @@ import * as voltageView from './voltage-view';
 import sendableChooserConfig from './sendable-chooser';
 import Mechanism2dConfig from './mechanism2d';
 import iconConfig from './icon';
-import '../base/field3d/field3d';
-import '../base/field3d/field3d-object';
 
 const elements = [
   ...baseElements,
