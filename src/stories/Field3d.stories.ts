@@ -46,6 +46,8 @@ const meta: Meta = {
       },
     },
     enableVR: {
+      description:
+        'VR field can be viewed by visiting this page in the browser of a VR enabled device',
       table: {
         category: 'Field',
         defaultValue: { summary: false },

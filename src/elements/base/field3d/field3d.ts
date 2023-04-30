@@ -35,7 +35,7 @@ export class Field3d extends LitElement implements IField3d {
   private wpilibFieldCoordinateGroup!: THREE.Group; // Field coordinates (origin at driver stations and flipped based on alliance)
 
   scene = new THREE.Scene();
-  renderer!: THREE.WebGLRenderer;
+  renderer?: THREE.WebGLRenderer;
   camera!: THREE.PerspectiveCamera;
   controls!: OrbitControls;
   loader = new GLTFLoader();
@@ -107,15 +107,22 @@ export class Field3d extends LitElement implements IField3d {
     scene.add(hemisphereLight);
   }
 
-  private initScene(): void {
+  private initRenderer(): void {
+    if (!this.canvas) {
+      return;
+    }
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
       canvas: this.canvas,
     });
-    this.vrButton = VRButton.createButton(this.renderer);
     const rect = this.getBoundingClientRect();
     this.renderer.setSize(rect.width, rect.height);
+    this.vrButton = VRButton.createButton(this.renderer);
+    this.renderer.xr.enabled = this.enableVR;
+    this.renderer.setAnimationLoop(() => this.renderField());
+  }
 
+  private initScene(): void {
     this.wpilibCoordinateGroup = new THREE.Group();
     this.scene.add(this.wpilibCoordinateGroup);
     this.wpilibCoordinateGroup.rotation.setFromQuaternion(this.WPILIB_ROTATION);
@@ -125,7 +132,7 @@ export class Field3d extends LitElement implements IField3d {
 
   private updateCanvasSize() {
     const rect = this.getBoundingClientRect();
-    this.renderer.setSize(rect.width, rect.height);
+    this.renderer?.setSize(rect.width, rect.height);
     this.camera.aspect = rect.width / rect.height;
     this.camera.updateProjectionMatrix();
   }
@@ -167,6 +174,7 @@ export class Field3d extends LitElement implements IField3d {
 
   firstUpdated(): void {
     this.initScene();
+    this.initRenderer();
 
     // Create Objects
     this.camera = this.getCamera();
@@ -177,8 +185,6 @@ export class Field3d extends LitElement implements IField3d {
 
     // add objects to scene
     Field3d.addLights(this.scene);
-
-    this.renderer.setAnimationLoop(() => this.renderField());
 
     const resizeObserver = new ResizeObserver(() => {
       this.updateCanvasSize();
@@ -219,13 +225,26 @@ export class Field3d extends LitElement implements IField3d {
       } else {
         this.vrButton.remove();
       }
-      this.renderer.xr.enabled = this.enableVR;
+      if (this.renderer) {
+        this.renderer.xr.enabled = this.enableVR;
+      }
     }
   }
 
   renderField(): void {
-    this.renderer.render(this.scene, this.camera);
+    this.renderer?.render(this.scene, this.camera);
     this.controls.update();
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.initRenderer();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.renderer?.dispose();
+    this.renderer = undefined;
   }
 
   // eslint-disable-next-line class-methods-use-this

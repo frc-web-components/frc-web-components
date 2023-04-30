@@ -35,9 +35,6 @@ export default class Field extends LitElement {
   @query('.container', true) container!: HTMLElement;
 
   #fieldImages: FieldImages = new FieldImages();
-  // #onImageLoadUnsub = (): void => {
-  //   /* noop */
-  // };
 
   static styles = css`
     :host {
