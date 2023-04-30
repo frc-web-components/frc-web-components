@@ -316,7 +316,6 @@ export default class Field extends LitElement {
     this.drawField();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   render(): TemplateResult {
     return html`
       <div class="container" style="transform: rotate(${-this.rotation}deg)">

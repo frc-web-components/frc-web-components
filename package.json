@@ -1,6 +1,6 @@
 {
   "name": "@frc-web-components/fwc",
-  "version": "1.4.0",
+  "version": "1.4.2",
   "description": "",
   "files": [
     "dist",
@@ -14,7 +14,7 @@
     ".": "./dist/fwc.es.js",
     "./get-asset-url": "./dist/get-asset-url.es.js",
     "./load-local-storage": "./dist/load-local-storage.es.js",
-    "./source-providers/NT4": "./dist/source-providers/NT4",
+    "./source-providers/nt4/NT4": "./dist/source-providers/nt4/NT4",
     "./components": "./dist/components.es.js",
     "./components/bar": "./dist/components/bar.es.js",
     "./components/axis": "./dist/components/axis.es.js",
@@ -35,7 +35,8 @@
     "./components/boolean-box": "./dist/components/boolean-box.es.js",
     "./components/gauge": "./dist/components/gauge.es.js",
     "./components/gyro": "./dist/components/gyro.es.js",
-    "./components/number-bar": "./dist/components/number-bar.es.js"
+    "./components/number-bar": "./dist/components/number-bar.es.js",
+    "./components/sendable-chooser": "./dist/components/sendable-chooser.es.js"
   },
   "typesVersions": {
     "*": {
@@ -44,6 +45,69 @@
       ],
       "load-local-storage": [
         "types/load-local-storage.d.ts"
+      ],
+      "source-providers/nt4/NT4": [
+        "types/source-providers/nt4/NT4.d.ts"
+      ],
+      "components": [
+        "types/elements/base/index.d.ts"
+      ],
+      "components/bar": [
+        "types/elements/base/base-elements/bar.d.ts"
+      ],
+      "components/axis": [
+        "types/elements/base/base-elements/axis.d.ts"
+      ],
+      "components/icon": [
+        "types/elements/base/icon/index.d.ts"
+      ],
+      "components/drivebases/differential": [
+        "types/elements/base/drivebases/differential.d.ts"
+      ],
+      "components/drivebases/mecanum": [
+        "types/elements/base/drivebases/mecanum.d.ts"
+      ],
+      "components/drivebases/swerve": [
+        "types/elements/base/drivebases/swerve.d.ts"
+      ],
+      "components/field/field": [
+        "types/elements/base/field/field.d.ts"
+      ],
+      "components/field/field-robot": [
+        "types/elements/base/field/field-robot.d.ts"
+      ],
+      "components/field/field-configs": [
+        "types/elements/base/field/field-configs.d.ts"
+      ],
+      "components/field3d/field3d": [
+        "types/elements/base/field3d/field3d.d.ts"
+      ],
+      "components/field3d/field3d-object": [
+        "types/elements/base/field3d/field3d-object.d.ts"
+      ],
+      "components/3-axis-accelerometer": [
+        "types/elements/base/3-axis-accelerometer.d.ts"
+      ],
+      "components/accelerometer": [
+        "types/elements/base/accelerometer.d.ts"
+      ],
+      "components/basic-fms-info": [
+        "types/elements/base/basic-fms-info.d.ts"
+      ],
+      "components/boolean-box": [
+        "types/elements/base/boolean-box.d.ts"
+      ],
+      "components/gauge": [
+        "types/elements/base/gauge.d.ts"
+      ],
+      "components/gyro": [
+        "types/elements/base/gyro.d.ts"
+      ],
+      "components/number-bar": [
+        "types/elements/base/number-bar.d.ts"
+      ],
+      "components/sendable-chooser": [
+        "types/elements/base/sendable-chooser.d.ts"
       ]
     }
   },

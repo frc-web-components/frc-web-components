@@ -18,7 +18,7 @@ export default defineConfig({
         fwc: 'src/index.ts',
         'get-asset-url': 'src/get-asset-url.ts',
         'load-local-storage': 'src/load-local-storage.ts',
-        'source-providers/NT4': 'src/source-providers/nt4/NT4.ts',
+        'source-providers/nt4/NT4': 'src/source-providers/nt4/NT4.ts',
         // base components
         'components/bar': 'src/elements/base/base-elements/bar.ts',
         'components/axis': 'src/elements/base/base-elements/axis.ts',
@@ -52,6 +52,7 @@ export default defineConfig({
         'components/gauge': 'src/elements/base/gauge.ts',
         'components/gyro': 'src/elements/base/gyro.ts',
         'components/number-bar': 'src/elements/base/number-bar.ts',
+        'components/sendable-chooser': 'src/elements/base/sendable-chooser.ts',
         // all components
         components: 'src/elements/base/index.ts',
       },
