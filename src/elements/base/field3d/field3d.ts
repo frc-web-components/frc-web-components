@@ -217,7 +217,7 @@ export class Field3d extends LitElement implements IField3d {
       if (this.enableVR) {
         this.container.appendChild(this.vrButton);
       } else {
-        this.container.removeChild(this.vrButton);
+        this.vrButton.remove();
       }
       this.renderer.xr.enabled = this.enableVR;
     }

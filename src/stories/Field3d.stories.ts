@@ -10,7 +10,7 @@ const defaultArgs: Record<string, any> = {
   game: fieldConfigs[0].game,
   origin: 'red',
   backgroundColor: 'black',
-
+  enableVR: false,
   objectName: objectConfigs[0].name,
   objectTranslation: [0, 0, 0],
   objectRotation: [0, 0, 0, 0],
@@ -43,6 +43,12 @@ const meta: Meta = {
       table: {
         category: 'Field',
         defaultValue: { summary: 'black' },
+      },
+    },
+    enableVR: {
+      table: {
+        category: 'Field',
+        defaultValue: { summary: false },
       },
     },
     objectName: {
@@ -104,6 +110,7 @@ function createFieldStory(optionalArgs: Record<string, any> = {}): Story {
         game=${args.game}
         origin=${args.origin}
         background-color=${args.backgroundColor}
+        ?enable-vr=${args.enableVR}
       >
         <frc-field3d-object
           name=${args.objectName}
@@ -116,3 +123,8 @@ function createFieldStory(optionalArgs: Record<string, any> = {}): Story {
 }
 
 export const Field = createFieldStory();
+export const VRField = createFieldStory({
+  game: 'Infinite Recharge',
+  enableVR: true,
+  objectTranslation: [4, 3, 0],
+});
