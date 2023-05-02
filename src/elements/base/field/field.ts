@@ -39,6 +39,7 @@ export default class Field extends LitElement {
   static styles = css`
     :host {
       display: inline-flex;
+      position: relative;
       width: 500px;
       height: 300px;
       justify-content: center;
@@ -204,6 +205,7 @@ export default class Field extends LitElement {
       imageDims,
       toRadians(this.rotation)
     );
+
     const dims = FieldImages.fitImageInsideBox(boundingBoxDims, {
       width: rect.width,
       height: rect.height,
@@ -318,8 +320,10 @@ export default class Field extends LitElement {
 
   render(): TemplateResult {
     return html`
-      <div class="container" style="transform: rotate(${-this.rotation}deg)">
-        <canvas></canvas>
+      <div class="outside-container">
+        <div class="container" style="transform: rotate(${-this.rotation}deg)">
+          <canvas></canvas>
+        </div>
       </div>
     `;
   }
