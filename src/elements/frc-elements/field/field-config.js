@@ -51,7 +51,7 @@ export default [
   },
   {
     game: 'Barrel Racing Path',
-    'field-image': .'/field-images/2021-barrel.png',
+    'field-image': './field-images/2021-barrel.png',
     'field-corners': {
       'top-left': [20, 20],
       'bottom-right': [780, 400],

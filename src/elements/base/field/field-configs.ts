@@ -12,7 +12,7 @@ export interface FieldConfig {
 const configs: FieldConfig[] = [
   {
     game: 'Charged Up',
-    image: '/field-images/2023-field.jpg',
+    image: './field-images/2023-field.jpg',
     corners: {
       topLeft: [46, 36],
       bottomRight: [1088, 544],
@@ -22,7 +22,7 @@ const configs: FieldConfig[] = [
   },
   {
     game: 'Rapid React',
-    image: '/field-images/2022-field.jpg',
+    image: './field-images/2022-field.jpg',
     corners: {
       topLeft: [74, 50],
       bottomRight: [1774, 900],
@@ -32,7 +32,7 @@ const configs: FieldConfig[] = [
   },
   {
     game: 'Infinite Recharge',
-    image: '/field-images/2020-field.jpg',
+    image: './field-images/2020-field.jpg',
     corners: {
       topLeft: [96, 25],
       bottomRight: [1040, 514],
@@ -42,7 +42,7 @@ const configs: FieldConfig[] = [
   },
   {
     game: 'Destination: Deep Space',
-    image: '/field-images/2019-field.jpg',
+    image: './field-images/2019-field.jpg',
     corners: {
       topLeft: [217, 40],
       bottomRight: [1372, 615],
@@ -52,7 +52,7 @@ const configs: FieldConfig[] = [
   },
   {
     game: 'FIRST Power Up',
-    image: '/field-images/2018-field.jpg',
+    image: './field-images/2018-field.jpg',
     corners: {
       topLeft: [125, 20],
       bottomRight: [827, 370],
@@ -62,7 +62,7 @@ const configs: FieldConfig[] = [
   },
   {
     game: 'Barrel Racing Path',
-    image: '/field-images/2021-barrel.png',
+    image: './field-images/2021-barrel.png',
     corners: {
       topLeft: [20, 20],
       bottomRight: [780, 400],
@@ -72,7 +72,7 @@ const configs: FieldConfig[] = [
   },
   {
     game: 'Bounce Path',
-    image: '/field-images/2021-bounce.png',
+    image: './field-images/2021-bounce.png',
     corners: {
       topLeft: [20, 20],
       bottomRight: [780, 400],
@@ -82,7 +82,7 @@ const configs: FieldConfig[] = [
   },
   {
     game: 'Galactic Search A',
-    image: '/field-images/2021-galacticsearcha.png',
+    image: './field-images/2021-galacticsearcha.png',
     corners: {
       topLeft: [20, 20],
       bottomRight: [780, 400],
@@ -92,7 +92,7 @@ const configs: FieldConfig[] = [
   },
   {
     game: 'Galactic Search B',
-    image: '/field-images/2021-galacticsearchb.png',
+    image: './field-images/2021-galacticsearchb.png',
     corners: {
       topLeft: [20, 20],
       bottomRight: [780, 400],
@@ -102,7 +102,7 @@ const configs: FieldConfig[] = [
   },
   {
     game: 'Slalom Path',
-    image: '/field-images/2021-slalom.png',
+    image: './field-images/2021-slalom.png',
     corners: {
       topLeft: [20, 20],
       bottomRight: [780, 400],

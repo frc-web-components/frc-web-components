@@ -28,7 +28,7 @@ export default class Field extends LitElement {
   @property({ type: Number }) rotation = 0;
   @property({ type: Boolean, attribute: 'show-grid' }) showGrid = false;
   @property({ type: Number, attribute: 'grid-size' }) gridSize = 1;
-  @property({ type: Boolean, attribute: 'flip-side' }) flipSide = false;
+  @property({ type: String }) origin: 'red' | 'blue' = 'red';
 
   @query('canvas', true)
   canvas!: HTMLCanvasElement;
@@ -151,7 +151,7 @@ export default class Field extends LitElement {
 
     const pxPerUnit = fieldRectPx.width / size[0];
     const xValue = convert(xUnits, unit, configUnit);
-    return !this.flipSide
+    return this.origin === 'blue'
       ? fieldRectPx.x + xValue * pxPerUnit
       : fieldRectPx.x + fieldRectPx.width - xValue * pxPerUnit;
   }
@@ -166,7 +166,7 @@ export default class Field extends LitElement {
 
     const pxPerUnit = fieldRectPx.height / size[1];
     const yValue = convert(yUnits, unit, configUnit);
-    return !this.flipSide
+    return this.origin === 'blue'
       ? fieldRectPx.y + fieldRectPx.height - yValue * pxPerUnit
       : fieldRectPx.y + yValue * pxPerUnit;
   }
@@ -291,7 +291,7 @@ export default class Field extends LitElement {
       xToPx: (xUnits, unit) => this.xToPx(xUnits, unit),
       yToPx: (yUnits, unit) => this.yToPx(yUnits, unit),
       lengthToPx: (length, unit) => this.lengthToPx(length, unit),
-      flipSide: this.flipSide,
+      origin: this.origin,
     };
 
     [...this.children].forEach((child) => {

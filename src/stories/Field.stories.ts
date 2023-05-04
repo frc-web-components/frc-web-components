@@ -13,8 +13,7 @@ const defaultArgs: Record<string, any> = {
   rotation: 0,
   showGrid: false,
   gridSize: 1,
-  flipSide: false,
-
+  origin: 'blue',
   // robotImage: '',
   robotColor: 'blue',
   robotOpacity: 1,
@@ -97,10 +96,12 @@ const meta: Meta = {
         defaultValue: { summary: 1 },
       },
     },
-    flipSide: {
+    origin: {
+      control: 'radio',
+      options: ['blue', 'red'],
       table: {
         category: 'Field',
-        defaultValue: { summary: false },
+        defaultValue: 'blue',
       },
     },
     robotColor: {
@@ -174,7 +175,7 @@ function createFieldStory(optionalArgs: Record<string, any> = {}): Story {
         rotation=${args.rotation}
         ?show-grid=${args.showGrid}
         grid-size=${args.gridSize}
-        ?flip-side=${args.flipSide}
+        origin=${args.origin}
       >
         <frc-field-robot
           color=${args.robotColor}

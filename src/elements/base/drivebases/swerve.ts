@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import { svg, css, LitElement, TemplateResult } from 'lit';
+import { html, svg, css, LitElement, TemplateResult } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import * as d3 from 'd3';
 
@@ -380,16 +380,18 @@ export default class Swerve extends LitElement {
   }
 
   render(): TemplateResult {
-    return svg`
+    return html`
       <div>
-        <svg>
+        ${svg`
+          <svg>
             ${this.renderWheelMask()}
-          <g class="swerve">
-            <rect class="base" mask="url(#wheel-mask)"></rect>
-            ${this.renderModules()}
-            ${this.renderArrow()}
-          </g>
-        </svg>
+            <g class="swerve">
+              <rect class="base" mask="url(#wheel-mask)"></rect>
+              ${this.renderModules()}
+              ${this.renderArrow()}
+            </g>
+          </svg>
+      `}
       </div>
     `;
   }

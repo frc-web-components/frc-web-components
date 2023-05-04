@@ -18,7 +18,7 @@ export default class FieldRobot extends LitElement {
     xToPx,
     yToPx,
     lengthToPx,
-    flipSide,
+    origin,
   }: FieldObjectApi): void {
     const unit = this.unit === 'inherit' ? parentUnit : this.unit;
     const [x, y, angle] = this.pose;
@@ -34,7 +34,7 @@ export default class FieldRobot extends LitElement {
       xToPx(x, unit),
       yToPx(y, unit)
     );
-    canvas.rotate(-angle + (flipSide ? Math.PI : 0));
+    canvas.rotate(-angle + (origin === 'red' ? Math.PI : 0));
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     canvas.roundRect(

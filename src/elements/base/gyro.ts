@@ -202,20 +202,21 @@ export default class Gyro extends LitElement {
   render(): TemplateResult {
     const angle = this.fromRadians ? rad2Deg(this.value) : this.value;
     const label = `${angle.toFixed(clamp(this.precision, 0, 100))}`;
-    return svg`
-        <div>
-        <svg>
-          <g class="gyro">
-            <circle class="gyro-edge" stroke-width="2" stroke="var(--frc-gyro-color, #000)" style="fill: none"></circle>
-            <g class="minor-ticks"></g>
-            <g class="major-ticks"></g>
-            <g class="labels"></g>
-            <circle class="dial-circle" r="9"></circle>
-            <line class="dial" x1="0" x2="0"></line>
-          </g>
-        </svg>
-        ${!this.hideLabel ? html`<label>${label}&deg</label> ` : null}
-        </div>
+    return html`
+      <div>
+        ${svg`
+          <svg>
+            <g class="gyro">
+              <circle class="gyro-edge" stroke-width="2" stroke="var(--frc-gyro-color, #000)" style="fill: none"></circle>
+              <g class="minor-ticks"></g>
+              <g class="major-ticks"></g>
+              <g class="labels"></g>
+              <circle class="dial-circle" r="9"></circle>
+              <line class="dial" x1="0" x2="0"></line>
+            </g>
+          </svg>
+        `} ${!this.hideLabel ? html`<label>${label}&deg</label> ` : null}
+      </div>
     `;
   }
 }
