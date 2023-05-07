@@ -1,7 +1,7 @@
 /* eslint-disable no-bitwise */
 import { html, css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
-import '../frc-elements/icon';
+import './icon';
 
 const ENABLED_FLAG = 0x01;
 const AUTO_FLAG = 0x02;

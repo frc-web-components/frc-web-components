@@ -4,7 +4,7 @@ import { LitElement } from 'lit';
 import { FieldObjectApi } from './field-interfaces';
 
 export default class FieldRobot extends LitElement {
-  @property({ type: String }) unit = 'inherit';
+  @property({ type: String }) unit: string | null = 'inherit';
   @property({ type: String }) image = '';
   @property({ type: String }) color = '#0000ff';
   @property({ type: Number }) opacity = 1;
@@ -20,7 +20,8 @@ export default class FieldRobot extends LitElement {
     lengthToPx,
     origin,
   }: FieldObjectApi): void {
-    const unit = this.unit === 'inherit' ? parentUnit : this.unit;
+    const unit =
+      this.unit === 'inherit' || this.unit === null ? parentUnit : this.unit;
     const [x, y, angle] = this.pose;
 
     canvas.globalAlpha = Math.max(0, Math.min(1, this.opacity));
@@ -28,12 +29,7 @@ export default class FieldRobot extends LitElement {
     canvas.strokeStyle = this.color;
     canvas.lineWidth = lengthToPx(3, 'in');
 
-    canvas.translate(
-      // xToPx(x - this.height / 2, unit),
-      // yToPx(y + this.width / 2, unit)
-      xToPx(x, unit),
-      yToPx(y, unit)
-    );
+    canvas.translate(xToPx(x, unit), yToPx(y, unit));
     canvas.rotate(-angle + (origin === 'red' ? Math.PI : 0));
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

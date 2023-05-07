@@ -4,6 +4,7 @@ import fieldConfigs, { FieldConfig } from './field-configs';
 import { baseUnit, convert } from './units';
 import FieldImages from './field-images';
 import './field-robot';
+import './field-path';
 import { CropType, FieldObjectApi, FieldObject } from './field-interfaces';
 
 function toRadians(degrees: number): number {
@@ -28,7 +29,7 @@ export default class Field extends LitElement {
   @property({ type: Number }) rotation = 0;
   @property({ type: Boolean, attribute: 'show-grid' }) showGrid = false;
   @property({ type: Number, attribute: 'grid-size' }) gridSize = 1;
-  @property({ type: String }) origin: 'red' | 'blue' = 'red';
+  @property({ type: String }) origin: 'red' | 'blue' = 'blue';
 
   @query('canvas', true)
   canvas!: HTMLCanvasElement;
@@ -151,7 +152,7 @@ export default class Field extends LitElement {
 
     const pxPerUnit = fieldRectPx.width / size[0];
     const xValue = convert(xUnits, unit, configUnit);
-    return this.origin === 'blue'
+    return this.origin !== 'red'
       ? fieldRectPx.x + xValue * pxPerUnit
       : fieldRectPx.x + fieldRectPx.width - xValue * pxPerUnit;
   }
@@ -166,7 +167,7 @@ export default class Field extends LitElement {
 
     const pxPerUnit = fieldRectPx.height / size[1];
     const yValue = convert(yUnits, unit, configUnit);
-    return this.origin === 'blue'
+    return this.origin !== 'red'
       ? fieldRectPx.y + fieldRectPx.height - yValue * pxPerUnit
       : fieldRectPx.y + yValue * pxPerUnit;
   }
@@ -280,10 +281,6 @@ export default class Field extends LitElement {
   }
 
   drawChildren(): void {
-    const ctx = this.getCanvasCtx();
-    ctx.save();
-    ctx.beginPath();
-
     const api: FieldObjectApi = {
       canvas: this.getCanvasCtx(),
       getFieldRectPx: () => this.getFieldRectPx(),
@@ -295,11 +292,15 @@ export default class Field extends LitElement {
     };
 
     [...this.children].forEach((child) => {
+      const ctx = this.getCanvasCtx();
+      ctx.save();
+      ctx.beginPath();
+
       const fieldObject = child as any as FieldObject;
       fieldObject.draw?.(api);
-    });
 
-    ctx.restore();
+      ctx.restore();
+    });
   }
 
   drawField(): void {
