@@ -7,7 +7,7 @@ interface ViewProperty {
   provider?: string;
 }
 
-export default class SourceView {
+export default class SourceView<T extends Record<string, unknown>> {
   private onPropertyChangeCallbacks: Record<
     string,
     Map<symbol, () => unknown>
@@ -47,7 +47,7 @@ export default class SourceView {
     return undefined;
   }
 
-  getPropertyValues() {
+  getPropertyValues(): T {
     const valueEntries: [string, unknown][] = Object.entries(
       this.viewProperties
     ).map(([name, { key, value }]) => {
@@ -64,7 +64,7 @@ export default class SourceView {
       return [name, value];
     });
 
-    return Object.fromEntries(valueEntries);
+    return Object.fromEntries(valueEntries) as T;
   }
 
   private updateSubscriberCallback(property: string) {

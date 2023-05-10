@@ -1,4 +1,4 @@
-import '../elements/base/gyro';
+import '../components/gyro';
 import type { Args, Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';

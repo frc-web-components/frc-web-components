@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { html, css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 import * as CurvedArrow from './curved-arrow';
-import '../base-elements/bar';
-import '../base-elements/axis';
-
+import '../bar';
+import '../axis';
 /**
  * Copyright (c) 2017-2018 FIRST
  * All rights reserved.
@@ -31,6 +31,23 @@ import '../base-elements/axis';
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(value, min));
+}
+
+function map(
+  x: number,
+  minInput: number,
+  maxInput: number,
+  minOutput: number,
+  maxOutput: number
+) {
+  return (
+    ((x - minInput) * (maxOutput - minOutput)) / (maxInput - minInput) +
+    minOutput
+  );
+}
+
 function generateX(width: number) {
   const halfW = width / 2;
   const lineA = `
@@ -54,38 +71,10 @@ function generateX(width: number) {
   return `<g class="x">${lineA} ${lineB}</g>`;
 }
 
-function clamp(value: number) {
-  return Math.min(1, Math.max(value, -1));
-}
-
-function getForegroundStyle(value: number) {
-  const min = -1;
-  const max = 1;
-  const val = clamp(value);
-
-  if (val > 0) {
-    return `
-      height: ${(Math.abs(val) / (max - min)) * 100}%;
-      top: auto;
-      bottom: 50%;
-    `;
-  }
-  return `
-    height: ${(Math.abs(val) / (max - min)) * 100}%;
-    top: 50%;
-    bottom: auto;
-  `;
-}
-
-export default class MecanumDrivebase extends LitElement {
-  @property({ type: Number, attribute: 'front-left-motor-speed' })
-  frontLeftMotorSpeed = 0;
-  @property({ type: Number, attribute: 'front-right-motor-speed' })
-  frontRightMotorSpeed = 0;
-  @property({ type: Number, attribute: 'rear-left-motor-speed' })
-  rearLeftMotorSpeed = 0;
-  @property({ type: Number, attribute: 'rear-right-motor-speed' })
-  rearRightMotorSpeed = 0;
+export default class DifferentialDrivebase extends LitElement {
+  @property({ type: Number, attribute: 'left-motor-speed' }) leftMotorSpeed = 0;
+  @property({ type: Number, attribute: 'right-motor-speed' })
+  rightMotorSpeed = 0;
 
   static styles = css`
     :host {
@@ -130,7 +119,7 @@ export default class MecanumDrivebase extends LitElement {
 
     svg .drivetrain {
       fill: none;
-      stroke: var(--frc-mecanum-drivebase-drivetrain-color, #000);
+      stroke: var(--frc-differential-drivebase-drivetrain-color, #000);
     }
 
     .bar {
@@ -142,16 +131,9 @@ export default class MecanumDrivebase extends LitElement {
       background: var(--frc-bar-background, #ddd);
     }
 
-    .speed-pair {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-    }
-
     .speed {
       display: flex;
-      height: 48%;
+      height: 100%;
       flex-direction: row;
       align-items: center;
       margin-left: 30px;
@@ -171,6 +153,14 @@ export default class MecanumDrivebase extends LitElement {
     }
   `;
 
+  get clampedLeftMotorSpeed() {
+    return clamp(this.leftMotorSpeed, -1, 1);
+  }
+
+  get clampedRightMotorSpeed() {
+    return clamp(this.rightMotorSpeed, -1, 1);
+  }
+
   constructor() {
     super();
 
@@ -180,7 +170,7 @@ export default class MecanumDrivebase extends LitElement {
     resizeObserver.observe(this);
   }
 
-  drawMotionVector(fl: number, fr: number, rl: number, rr: number) {
+  drawMotionVector(left: number, right: number) {
     const svgNode = this.renderRoot.querySelector('#svg')!;
     const rect = svgNode.getBoundingClientRect();
 
@@ -191,52 +181,75 @@ export default class MecanumDrivebase extends LitElement {
     const FRAME_WIDTH = rect.width - (wheelWidth + padding) * 2;
     const FRAME_HEIGHT = rect.height - verticalPadding * 2;
 
-    const vectorRadius = Math.min(FRAME_WIDTH, FRAME_HEIGHT) / 2 - 16;
-    const direction = {
-      x: (fl - fr - rl + rr) / 4,
-      y: (fl + fr + rl + rr) / 4,
-    };
-    const moment = (-fl + fr - rl + rr) / 4;
-    const directionMagnitude = Math.hypot(direction.x, direction.y);
-    const directionAngle = Math.atan2(direction.y, direction.x);
-
-    // Barely moving, draw an X
-    if (Math.abs(moment) <= 0.01 && directionMagnitude <= 0.01) {
+    // Barely moving, or not moving at all. Curved arrows look weird at low radii, so show an X instead
+    if (Math.abs(left) <= 0.05 && Math.abs(right) <= 0.05) {
       return generateX(rect.width * 0.2);
     }
 
-    let rightMomentArrow = '';
-    let leftMomentArrow = '';
-    let directionArrow = '';
-
-    if (Math.abs(moment) > 0.01) {
-      // Only draw the moment vectors if the moment is significant enough
-      rightMomentArrow = CurvedArrow.createPolar(
+    // Max radius is half of the narrowest dimension, minus padding to avoid clipping with the frame
+    const maxRadius = Math.min(FRAME_WIDTH, FRAME_HEIGHT) / 2 - 8;
+    const arrowheadSize = 8;
+    if (Math.abs(left - right) <= 0.001) {
+      // Moving more-or-less straight (or not moving at all)
+      // Using a threshold instead of a simpler `if(left == right)` avoids edge cases where left and right are very
+      // close, which can cause floating-point issues with extremely large radii (on the order of 1E15 pixels)
+      // and extremely small arc lengths (on the order of 1E-15 degrees)
+      const arrow = CurvedArrow.createStraight(
+        Math.abs(left * maxRadius),
+        (-Math.sign(left) * Math.PI) / 2,
         0,
-        vectorRadius,
-        -moment * Math.PI,
-        0,
-        8
+        arrowheadSize
       );
-      leftMomentArrow = CurvedArrow.createPolar(
-        Math.PI,
-        vectorRadius,
-        -moment * Math.PI,
-        0,
-        8
-      );
+      return `<g class="arrow">${arrow}</g>`;
     }
-    if (directionMagnitude > 0.01) {
-      // Only draw the direction vector if it'd be long enough
-      directionArrow = CurvedArrow.createStraight(
-        directionMagnitude * vectorRadius,
-        -directionAngle,
-        0,
-        8
-      );
-    }
+    // Moving in an arc
 
-    return `<g class="arrow">${rightMomentArrow} ${leftMomentArrow} ${directionArrow}</g>`;
+    const pi = Math.PI;
+    const moment = (right - left) / 2;
+    const avgSpeed = (left + right) / 2;
+    const turnRadius = avgSpeed / moment;
+
+    let arrow;
+
+    if (Math.abs(turnRadius) >= 1) {
+      // Motion is mostly forward/backward, and curving to a side
+
+      const arcSign = -Math.sign(turnRadius); // +1 if arc is to left of frame, -1 if arc is to the right
+      const startAngle = ((arcSign + 1) * pi) / 2; // pi if arc is to the right, 0 if to the left
+      const radius = Math.abs(turnRadius * maxRadius);
+      arrow = CurvedArrow.create(
+        startAngle,
+        radius,
+        arcSign * avgSpeed * maxRadius,
+        arcSign * radius,
+        arrowheadSize
+      );
+    } else {
+      // Turning about a point inside the frame of the robot
+      const turnSign = Math.sign(left - right); // positive for clockwise, negative for counter-clockwise
+      if (turnRadius === 0) {
+        // Special case, rotating about the center of the frame
+        const radius = Math.max(left, right) * maxRadius; // left == -right, we just want the positive one
+        const angle = turnSign * pi;
+        const start = moment < 0 ? pi : 0;
+        arrow = CurvedArrow.createPolar(start, radius, angle, 0, arrowheadSize);
+      } else {
+        const dominant = turnRadius < 0 ? left : right; // the dominant side that's driving the robot
+        const secondary = turnRadius < 0 ? right : left; // the non-dominant side
+        const radius = Math.abs(dominant) * maxRadius; // make radius dependent on how fast the dominant side is
+        const centerX = -turnRadius * radius;
+        const angle = map(secondary / dominant, 0, -1, 0.5, pi);
+        const start = turnRadius < 0 ? pi : 0;
+        arrow = CurvedArrow.createPolar(
+          start,
+          radius,
+          turnSign * angle,
+          centerX,
+          arrowheadSize
+        );
+      }
+    }
+    return `<g class="arrow">${arrow}</g>`;
   }
 
   drawDrivetrain() {
@@ -296,24 +309,50 @@ export default class MecanumDrivebase extends LitElement {
     return base + tlWheel + trWheel + blWheel + brWheel;
   }
 
-  getFlForegroundStyle() {
-    return getForegroundStyle(this.frontLeftMotorSpeed);
+  getLeftForegroundStyle() {
+    return this.getForegroundStyle(this.clampedLeftMotorSpeed);
   }
 
-  getFrForegroundStyle() {
-    return getForegroundStyle(this.frontRightMotorSpeed);
+  getRightForegroundStyle() {
+    return this.getForegroundStyle(this.clampedRightMotorSpeed);
   }
 
-  getRlForegroundStyle() {
-    return getForegroundStyle(this.rearLeftMotorSpeed);
-  }
+  // eslint-disable-next-line class-methods-use-this
+  getForegroundStyle(value: number) {
+    const min = -1;
+    const max = 1;
+    const val = clamp(value, min, max);
 
-  getRrForegroundStyle() {
-    return getForegroundStyle(this.rearRightMotorSpeed);
+    if (max < 0) {
+      return `
+        height: ${(Math.abs(val - max) / (max - min)) * 100}%;
+        top: 'auto';
+        bottom: 0;
+      `;
+    }
+    if (min > 0) {
+      return `
+        height: ${(Math.abs(val - min) / (max - min)) * 100}%;
+        top: 0;
+        bottom: 'auto';
+      `;
+    }
+    if (val > 0) {
+      return `
+        height: ${(Math.abs(val) / (max - min)) * 100}%;
+        top: auto;
+        bottom: 50%;
+      `;
+    }
+    return `
+        height: ${(Math.abs(val) / (max - min)) * 100}%;
+        top: 50%;
+        bottom: auto;
+      `;
   }
 
   firstUpdated() {
-    const drawing = this.drawMotionVector(0, 0, 0, 0);
+    const drawing = this.drawMotionVector(0, 0);
     this.renderRoot.querySelector('#drivetrain')!.innerHTML =
       this.drawDrivetrain();
     this.renderRoot.querySelector('#forceVector')!.innerHTML = drawing;
@@ -321,10 +360,8 @@ export default class MecanumDrivebase extends LitElement {
 
   resized() {
     const drawing = this.drawMotionVector(
-      clamp(this.frontLeftMotorSpeed),
-      clamp(this.frontRightMotorSpeed),
-      clamp(this.rearLeftMotorSpeed),
-      clamp(this.rearRightMotorSpeed)
+      this.clampedLeftMotorSpeed,
+      this.clampedRightMotorSpeed
     );
     this.renderRoot.querySelector('#forceVector')!.innerHTML = drawing;
     const svgNode = this.renderRoot.querySelector('#svg')!;
@@ -338,13 +375,10 @@ export default class MecanumDrivebase extends LitElement {
       this.drawDrivetrain();
   }
 
-  updated(changedProps: Map<string, unknown>) {
-    super.updated(changedProps);
+  updated() {
     const drawing = this.drawMotionVector(
-      clamp(this.frontLeftMotorSpeed),
-      clamp(this.frontRightMotorSpeed),
-      clamp(this.rearLeftMotorSpeed),
-      clamp(this.rearRightMotorSpeed)
+      this.clampedLeftMotorSpeed,
+      this.clampedRightMotorSpeed
     );
     this.renderRoot.querySelector('#forceVector')!.innerHTML = drawing;
   }
@@ -352,48 +386,26 @@ export default class MecanumDrivebase extends LitElement {
   render() {
     return html`
       <div class="diff-drive-container">
-        <div class="speed-pair">
-          <div class="speed">
-            <frc-axis ticks="5" vertical .range="${[1, -1]}"></frc-axis>
-            <div class="bar">
-              <div
-                class="foreground"
-                style="${this.getFlForegroundStyle()}"
-              ></div>
-            </div>
-          </div>
-          <div class="speed">
-            <frc-axis ticks="5" vertical .range="${[1, -1]}"></frc-axis>
-            <div class="bar">
-              <div
-                class="foreground"
-                style="${this.getRlForegroundStyle()}"
-              ></div>
-            </div>
+        <div class="speed">
+          <frc-axis ticks="5" vertical .range="${[1, -1]}"></frc-axis>
+          <div class="bar">
+            <div
+              class="foreground"
+              style="${this.getLeftForegroundStyle()}"
+            ></div>
           </div>
         </div>
         <svg id="svg">
           <g id="forceVector"></g>
           <g id="drivetrain" class="drivetrain"></g>
         </svg>
-        <div class="speed-pair">
-          <div class="speed">
-            <frc-axis ticks="5" vertical .range="${[1, -1]}"></frc-axis>
-            <div class="bar">
-              <div
-                class="foreground"
-                style="${this.getFrForegroundStyle()}"
-              ></div>
-            </div>
-          </div>
-          <div class="speed">
-            <frc-axis ticks="5" vertical .range="${[1, -1]}"></frc-axis>
-            <div class="bar">
-              <div
-                class="foreground"
-                style="${this.getRrForegroundStyle()}"
-              ></div>
-            </div>
+        <div class="speed">
+          <frc-axis ticks="5" vertical .range="${[1, -1]}"></frc-axis>
+          <div class="bar">
+            <div
+              class="foreground"
+              style="${this.getRightForegroundStyle()}"
+            ></div>
           </div>
         </div>
       </div>
@@ -401,6 +413,6 @@ export default class MecanumDrivebase extends LitElement {
   }
 }
 
-if (!customElements.get('frc-mecanum-drivebase')) {
-  customElements.define('frc-mecanum-drivebase', MecanumDrivebase);
+if (!customElements.get('frc-differential-drivebase')) {
+  customElements.define('frc-differential-drivebase', DifferentialDrivebase);
 }

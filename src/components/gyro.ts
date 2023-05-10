@@ -224,3 +224,9 @@ export default class Gyro extends LitElement {
 if (!customElements.get('frc-gyro')) {
   customElements.define('frc-gyro', Gyro);
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-gyro': Gyro;
+  }
+}

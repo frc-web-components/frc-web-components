@@ -1,7 +1,7 @@
 import { html, css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
-import './base-elements/bar';
-import './base-elements/axis';
+import './bar';
+import './axis';
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(value, min));

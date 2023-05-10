@@ -1,4 +1,4 @@
-import '../elements/base/number-bar';
+import '../components/number-bar';
 import type { Args, Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';

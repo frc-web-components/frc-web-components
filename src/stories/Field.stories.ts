@@ -1,10 +1,10 @@
 // import React from 'react';
-import '../elements/base/field/field';
+import '../components/field/field';
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import fieldConfigs from '../elements/base/field/field-configs';
-import { baseUnit, toBaseConversions } from '../elements/base/field/units';
+import fieldConfigs from '../components/field/field-configs';
+import { baseUnit, toBaseConversions } from '../components/field/units';
 
 const defaultArgs: Record<string, any> = {
   game: fieldConfigs[0].game,

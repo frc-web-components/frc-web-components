@@ -1,4 +1,4 @@
-import '../elements/base/gauge';
+import '../components/gauge';
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';

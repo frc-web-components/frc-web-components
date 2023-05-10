@@ -1,10 +1,10 @@
-import '../elements/base/field3d/field3d';
-import '../elements/base/field3d/field3d-object';
+import '../components/field3d/field3d';
+import '../components/field3d/field3d-object';
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
-import fieldConfigs from '../elements/base/field3d/field-configs';
-import objectConfigs from '../elements/base/field3d/object-configs';
+import fieldConfigs from '../components/field3d/field-configs';
+import objectConfigs from '../components/field3d/object-configs';
 
 const defaultArgs: Record<string, any> = {
   game: fieldConfigs[0].game,

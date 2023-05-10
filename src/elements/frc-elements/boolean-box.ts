@@ -1,4 +1,4 @@
-import '../base/boolean-box';
+import '../../components/boolean-box';
 export const elementName = 'frc-boolean-box';
 
 export const elementConfig = {

@@ -1,4 +1,4 @@
-import '../elements/base/sendable-chooser';
+import '../components/sendable-chooser';
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 

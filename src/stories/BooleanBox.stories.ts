@@ -1,5 +1,5 @@
 // import React from 'react';
-import '../elements/base/boolean-box';
+import '../components/boolean-box';
 import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
