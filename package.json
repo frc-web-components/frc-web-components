@@ -1,6 +1,6 @@
 {
   "name": "@frc-web-components/fwc",
-  "version": "1.4.4",
+  "version": "1.6.0",
   "description": "",
   "files": [
     "dist",
@@ -14,6 +14,7 @@
     ".": "./dist/fwc.es.js",
     "./get-asset-url": "./dist/get-asset-url.es.js",
     "./load-local-storage": "./dist/load-local-storage.es.js",
+    "./source-view": "./dist/source-view.es.js",
     "./source-providers/nt4/NT4": "./dist/source-providers/nt4/NT4.es.js",
     "./components": "./dist/components.es.js",
     "./components/bar": "./dist/components/bar.es.js",

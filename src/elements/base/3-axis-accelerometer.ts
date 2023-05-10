@@ -59,7 +59,7 @@ export default class ThreeAxisAccelerometer extends LitElement {
     }
   `;
 
-  renderAccelerometer(part: 'x' | 'y' | 'z', numTickMarks: number) {
+  private renderAccelerometer(part: 'x' | 'y' | 'z', numTickMarks: number) {
     return html`
       <div part="accelerometer">
         <label part="label">${part}</label>
@@ -88,4 +88,10 @@ export default class ThreeAxisAccelerometer extends LitElement {
 
 if (!customElements.get('frc-3-axis-accelerometer')) {
   customElements.define('frc-3-axis-accelerometer', ThreeAxisAccelerometer);
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-3-axis-accelerometer': ThreeAxisAccelerometer;
+  }
 }

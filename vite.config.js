@@ -18,6 +18,7 @@ export default defineConfig({
         fwc: 'src/index.ts',
         'get-asset-url': 'src/get-asset-url.ts',
         'load-local-storage': 'src/load-local-storage.ts',
+        'source-view': 'src/source-view.ts',
         'source-providers/nt4/NT4': 'src/source-providers/nt4/NT4.ts',
         // base components
         'components/bar': 'src/elements/base/base-elements/bar.ts',
