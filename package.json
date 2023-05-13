@@ -1,6 +1,6 @@
 {
   "name": "@frc-web-components/fwc",
-  "version": "1.6.2",
+  "version": "1.7.0",
   "description": "",
   "files": [
     "dist",
@@ -17,7 +17,8 @@
     "./source-view": "./dist/source-view.es.js",
     "./source-providers/*": "./dist/source-providers/*.es.js",
     "./components": "./dist/components.es.js",
-    "./components/*": "./dist/components/*.es.js"
+    "./components/*": "./dist/components/*.es.js",
+    "./lit/*": "./dist/lit/*.es.js"
   },
   "typesVersions": {
     "*": {
@@ -38,6 +39,9 @@
       ],
       "components/*": [
         "types/components/*.d.ts"
+      ],
+      "lit/*": [
+        "types/lit/*.d.ts"
       ]
     }
   },

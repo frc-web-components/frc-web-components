@@ -55,6 +55,9 @@ export default defineConfig({
         'components/sendable-chooser': 'src/components/sendable-chooser.ts',
         // all components
         components: 'src/components/index.ts',
+        // lit
+        'lit/create-dashboard': 'src/lit/create-dashboard.ts',
+        'lit/directives': 'src/lit/directives.ts',
       },
       formats: ['es'],
       fileName: (format, entryName) => `${entryName}.${format}.js`,
