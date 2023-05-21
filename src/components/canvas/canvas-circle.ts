@@ -6,11 +6,15 @@ import { CanvasObjectApi } from './interfaces';
 type XOrigin = 'left' | 'center' | 'right';
 type YOrigin = 'top' | 'center' | 'bottom';
 
-export default class CanvasRect extends LitElement {
+export default class CanvasCircle extends LitElement {
   @property({ type: Array }) origin: [number, number] = [0, 0];
-  @property({ type: Number }) width = 10;
-  @property({ type: Number }) height = 10;
-  @property({ type: Number }) radii = 0;
+  @property({ type: Number }) radius = 10;
+  @property({ type: Number, attribute: 'start-angle' }) startAngle:
+    | number
+    | null = 0;
+  @property({ type: Number, attribute: 'end-angle' }) endAngle:
+    | number
+    | null = 360;
   @property({ type: Number }) opacity = 1;
   @property({ type: String, attribute: 'stroke-color' }) strokeColor:
     | string
@@ -41,16 +45,16 @@ export default class CanvasRect extends LitElement {
     let [x, y] = this.origin;
     const [xDrawOrigin, yDrawOrigin] = this.drawOrigin ?? ['center', 'center'];
 
-    if (xDrawOrigin === 'center') {
-      x -= this.width / 2;
+    if (xDrawOrigin === 'left') {
+      x += this.radius;
     } else if (xDrawOrigin === 'right') {
-      x -= this.width;
+      x -= this.radius;
     }
 
-    if (yDrawOrigin === 'center') {
-      y -= this.height / 2;
+    if (yDrawOrigin === 'top') {
+      y += this.radius;
     } else if (yDrawOrigin === 'bottom') {
-      y -= this.height;
+      y -= this.radius;
     }
 
     const [transformX, transformY, transformRotation] = this.transform ?? [
@@ -64,13 +68,21 @@ export default class CanvasRect extends LitElement {
 
     const [XTransformOrigin, yTransformOrigin] = this.transformOrigin ?? [0, 0];
 
-    const xTranform = XTransformOrigin + this.width / 2;
-    const yTranform = yTransformOrigin + this.height / 2;
+    const xTranform = XTransformOrigin;
+    const yTranform = yTransformOrigin;
     ctx.translate(xTranform, yTranform); // move the origin
     ctx.rotate(-(transformRotation * Math.PI) / 180); // rotate
     ctx.translate(-xTranform, -yTranform); // move the origin back
 
-    ctx.roundRect(0, 0, this.width, this.height, this.radii);
+    ctx.beginPath();
+    ctx.arc(
+      0,
+      0,
+      this.radius,
+      (-(this.startAngle ?? 0) * Math.PI) / 180,
+      (-(this.endAngle ?? 360) * Math.PI) / 180,
+      true
+    );
 
     if (this.fillColor) {
       ctx.fill();
@@ -81,6 +93,6 @@ export default class CanvasRect extends LitElement {
   }
 }
 
-if (!customElements.get('frc-canvas-rect')) {
-  customElements.define('frc-canvas-rect', CanvasRect);
+if (!customElements.get('frc-canvas-circle')) {
+  customElements.define('frc-canvas-circle', CanvasCircle);
 }

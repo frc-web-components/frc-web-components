@@ -2,6 +2,8 @@ import { html, css, LitElement, TemplateResult } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import { CanvasObject, CanvasObjectApi } from './interfaces';
 import './canvas-rect';
+import './canvas-circle';
+import './canvas-group';
 
 export default class Canvas extends LitElement {
   @query('canvas') canvas!: HTMLCanvasElement;
