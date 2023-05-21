@@ -3,6 +3,7 @@ import { property, query } from 'lit/decorators.js';
 import { CanvasObject, CanvasObjectApi } from './interfaces';
 import './canvas-rect';
 import './canvas-circle';
+import './canvas-ngon';
 import './canvas-group';
 
 export default class Canvas extends LitElement {
@@ -50,7 +51,6 @@ export default class Canvas extends LitElement {
     [...this.children].forEach((child) => {
       const ctx = this.getCanvasCtx();
       ctx.save();
-      ctx.beginPath();
 
       const canvasObject = child as any as CanvasObject;
       canvasObject.draw?.(api);
