@@ -6,8 +6,6 @@ import './drivebases/swerve';
 import './field/field';
 import './field/field-robot';
 import './field/field-path';
-import './field3d/field3d';
-import './field3d/field3d-object';
 import './icon';
 import './3-axis-accelerometer';
 import './accelerometer';

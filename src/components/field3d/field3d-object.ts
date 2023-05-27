@@ -1,6 +1,12 @@
 import { LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
-import * as THREE from 'three';
+import {
+  WebGLRenderer,
+  Group,
+  Object3D,
+  Mesh,
+  MeshStandardMaterial,
+} from 'three';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import {
   getQuaternionFromRotSeq,
@@ -25,10 +31,10 @@ export class Object3d extends LitElement {
   ];
   @property({ type: Array }) rotation: Rotation3d | Rotation2d = [0, 0, 0, 0];
 
-  renderer!: THREE.WebGLRenderer;
+  renderer!: WebGLRenderer;
   loader = new GLTFLoader();
-  group = new THREE.Group();
-  object?: THREE.Object3D;
+  group = new Group();
+  object?: Object3D;
 
   // eslint-disable-next-line class-methods-use-this
   getObjectConfig(): ObjectConfig {
@@ -47,18 +53,18 @@ export class Object3d extends LitElement {
     return field as any as IField3d;
   }
 
-  static adjustMaterials(group: THREE.Group): void {
-    group.traverse((node: THREE.Object3D) => {
-      const mesh = node as THREE.Mesh; // Traverse function returns Object3d or Mesh
-      if (mesh.isMesh && mesh.material instanceof THREE.MeshStandardMaterial) {
-        const material = mesh.material as THREE.MeshStandardMaterial;
+  static adjustMaterials(group: Group): void {
+    group.traverse((node: Object3D) => {
+      const mesh = node as Mesh; // Traverse function returns Object3d or Mesh
+      if (mesh.isMesh && mesh.material instanceof MeshStandardMaterial) {
+        const material = mesh.material as MeshStandardMaterial;
         material.metalness = 0;
         material.roughness = 1;
       }
     });
   }
 
-  static updatePose(object: THREE.Object3D, pose: Pose3d): void {
+  static updatePose(object: Object3D, pose: Pose3d): void {
     const [x, y, z] = pose.translation;
     object.position.set(x, y, z);
     object.rotation.setFromQuaternion(rotation3dToQuaternion(pose.rotation));
@@ -91,10 +97,10 @@ export class Object3d extends LitElement {
     );
 
     // Load objects and add them
-    const group = new THREE.Group();
+    const group = new Group();
     this.group = group;
     fieldGroup.add(this.group);
-    const object = new THREE.Group();
+    const object = new Group();
     this.object = object;
     group.add(object);
 

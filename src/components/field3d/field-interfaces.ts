@@ -1,4 +1,4 @@
-import THREE from 'three';
+import { Group } from 'three';
 
 export interface Rotation {
   axis: 'x' | 'y' | 'z';
@@ -32,5 +32,5 @@ export interface ObjectConfig {
   }[];
 }
 export interface IField3d {
-  getFieldGroup: () => THREE.Group;
+  getFieldGroup: () => Group;
 }

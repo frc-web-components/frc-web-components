@@ -1,6 +1,19 @@
 import { html, css, LitElement, TemplateResult } from 'lit';
 import { property, query } from 'lit/decorators.js';
-import * as THREE from 'three';
+import {
+  Vector3,
+  Scene,
+  WebGLRenderer,
+  PerspectiveCamera,
+  Object3D,
+  Group,
+  Camera,
+  PointLight,
+  HemisphereLight,
+  Mesh,
+  MeshStandardMaterial,
+  Color,
+} from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { VRButton } from 'three/examples/jsm/webxr/VRButton';
@@ -18,8 +31,8 @@ export class Field3d extends LitElement implements IField3d {
     'black';
   @property({ type: Boolean, attribute: 'enable-vr' }) enableVR = false;
 
-  private ORBIT_FIELD_DEFAULT_TARGET = new THREE.Vector3(0, 0.5, 0);
-  private ORBIT_FIELD_DEFAULT_POSITION = new THREE.Vector3(0, 6, -12);
+  private ORBIT_FIELD_DEFAULT_TARGET = new Vector3(0, 0.5, 0);
+  private ORBIT_FIELD_DEFAULT_POSITION = new Vector3(0, 6, -12);
   private WPILIB_ROTATION = getQuaternionFromRotSeq([
     {
       axis: 'x',
@@ -31,15 +44,15 @@ export class Field3d extends LitElement implements IField3d {
     },
   ]);
 
-  private wpilibCoordinateGroup!: THREE.Group; // Rotated to match WPILib
-  private wpilibFieldCoordinateGroup!: THREE.Group; // Field coordinates (origin at driver stations and flipped based on alliance)
+  private wpilibCoordinateGroup!: Group; // Rotated to match WPILib
+  private wpilibFieldCoordinateGroup!: Group; // Field coordinates (origin at driver stations and flipped based on alliance)
 
-  scene = new THREE.Scene();
-  renderer?: THREE.WebGLRenderer;
-  camera!: THREE.PerspectiveCamera;
+  scene = new Scene();
+  renderer?: WebGLRenderer;
+  camera!: PerspectiveCamera;
   controls!: OrbitControls;
   loader = new GLTFLoader();
-  fieldObject?: THREE.Object3D;
+  fieldObject?: Object3D;
 
   @query('canvas') canvas!: HTMLCanvasElement;
   @query('.container') container!: HTMLCanvasElement;
@@ -65,10 +78,10 @@ export class Field3d extends LitElement implements IField3d {
     );
   }
 
-  private getCamera(): THREE.PerspectiveCamera {
+  private getCamera(): PerspectiveCamera {
     const rect = this.getBoundingClientRect();
 
-    const camera = new THREE.PerspectiveCamera(
+    const camera = new PerspectiveCamera(
       50,
       rect.width / rect.height,
       0.1,
@@ -78,10 +91,7 @@ export class Field3d extends LitElement implements IField3d {
     return camera;
   }
 
-  static getOrbitControls(
-    camera: THREE.Camera,
-    canvas: HTMLElement
-  ): OrbitControls {
+  static getOrbitControls(camera: Camera, canvas: HTMLElement): OrbitControls {
     const controls = new OrbitControls(camera, canvas);
     controls.maxDistance = 30;
     controls.enabled = true;
@@ -89,17 +99,17 @@ export class Field3d extends LitElement implements IField3d {
     return controls;
   }
 
-  static addLights(scene: THREE.Scene): void {
+  static addLights(scene: Scene): void {
     const color = 0xffffff;
     const pointLightIntensity = 0.2;
-    const light = new THREE.PointLight(color, pointLightIntensity);
+    const light = new PointLight(color, pointLightIntensity);
     light.position.set(0, 10, 0);
     scene.add(light);
 
     const skyColor = 0xffffff;
     const groundColor = 0x444444;
     const hemisphereLightIntensity = 1;
-    const hemisphereLight = new THREE.HemisphereLight(
+    const hemisphereLight = new HemisphereLight(
       skyColor,
       groundColor,
       hemisphereLightIntensity
@@ -111,7 +121,7 @@ export class Field3d extends LitElement implements IField3d {
     if (!this.canvas) {
       return;
     }
-    this.renderer = new THREE.WebGLRenderer({
+    this.renderer = new WebGLRenderer({
       antialias: true,
       canvas: this.canvas,
     });
@@ -123,10 +133,10 @@ export class Field3d extends LitElement implements IField3d {
   }
 
   private initScene(): void {
-    this.wpilibCoordinateGroup = new THREE.Group();
+    this.wpilibCoordinateGroup = new Group();
     this.scene.add(this.wpilibCoordinateGroup);
     this.wpilibCoordinateGroup.rotation.setFromQuaternion(this.WPILIB_ROTATION);
-    this.wpilibFieldCoordinateGroup = new THREE.Group();
+    this.wpilibFieldCoordinateGroup = new Group();
     this.wpilibCoordinateGroup.add(this.wpilibFieldCoordinateGroup);
   }
 
@@ -137,18 +147,18 @@ export class Field3d extends LitElement implements IField3d {
     this.camera.updateProjectionMatrix();
   }
 
-  static adjustMaterials(group: THREE.Group): void {
-    group.traverse((node: THREE.Object3D) => {
-      const mesh = node as THREE.Mesh; // Traverse function returns Object3d or Mesh
-      if (mesh.isMesh && mesh.material instanceof THREE.MeshStandardMaterial) {
-        const material = mesh.material as THREE.MeshStandardMaterial;
+  static adjustMaterials(group: Group): void {
+    group.traverse((node: Object3D) => {
+      const mesh = node as Mesh; // Traverse function returns Object3d or Mesh
+      if (mesh.isMesh && mesh.material instanceof MeshStandardMaterial) {
+        const material = mesh.material as MeshStandardMaterial;
         material.metalness = 0;
         material.roughness = 1;
       }
     });
   }
 
-  static updatePose(object: THREE.Object3D, pose: Pose3d): void {
+  static updatePose(object: Object3D, pose: Pose3d): void {
     const [x, y, z] = pose.translation;
     object.position.set(y, -x, z);
     object.rotation.setFromQuaternion(rotation3dToQuaternion(pose.rotation));
@@ -168,7 +178,7 @@ export class Field3d extends LitElement implements IField3d {
     });
   }
 
-  getFieldGroup(): THREE.Group {
+  getFieldGroup(): Group {
     return this.wpilibFieldCoordinateGroup;
   }
 
@@ -197,7 +207,7 @@ export class Field3d extends LitElement implements IField3d {
       this.loadFieldModel(this.getFieldConfig());
     }
     if (changedProps.has('backgroundColor')) {
-      this.scene.background = new THREE.Color(this.backgroundColor);
+      this.scene.background = new Color(this.backgroundColor);
     }
 
     if (changedProps.has('origin')) {
@@ -206,7 +216,7 @@ export class Field3d extends LitElement implements IField3d {
       if (fieldConfig) {
         const isBlue = this.origin !== 'red';
         this.wpilibFieldCoordinateGroup.setRotationFromAxisAngle(
-          new THREE.Vector3(0, 0, 1),
+          new Vector3(0, 0, 1),
           isBlue ? 0 : Math.PI
         );
         this.wpilibFieldCoordinateGroup.position.set(
