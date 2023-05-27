@@ -70,6 +70,8 @@ export default class CanvasRect extends LitElement {
     ctx.rotate(-(transformRotation * Math.PI) / 180); // rotate
     ctx.translate(-xTranform, -yTranform); // move the origin back
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     ctx.roundRect(0, 0, this.width, this.height, this.radii);
 
     if (this.fillColor) {

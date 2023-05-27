@@ -43,6 +43,17 @@ export default defineConfig({
           'src/components/field3d/field-configs.ts',
         'components/field3d/object-configs':
           'src/components/field3d/object-configs.ts',
+        // canvas
+        'components/canvas/canvas': 'src/components/canvas/canvas.ts',
+        'components/canvas/canvas-circle':
+          'src/components/canvas/canvas-circle.ts',
+        'components/canvas/canvas-group':
+          'src/components/canvas/canvas-group.ts',
+        'components/canvas/canvas-line': 'src/components/canvas/canvas-line.ts',
+        'components/canvas/canvas-ngon': 'src/components/canvas/canvas-ngon.ts',
+        'components/canvas/canvas-rect': 'src/components/canvas/canvas-rect.ts',
+        'components/canvas/canvas-text': 'src/components/canvas/canvas-text.ts',
+        'components/canvas/interfaces': 'src/components/canvas/interfaces.ts',
         // other components
         'components/3-axis-accelerometer':
           'src/components/3-axis-accelerometer.ts',
