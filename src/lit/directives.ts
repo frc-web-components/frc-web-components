@@ -10,10 +10,8 @@ class SourceValue extends AsyncDirective {
     defaultValue: unknown
   ): unknown {
     const source = store.getSource(provider, key);
-    if (source?.hasValue()) {
-      return source.getValue();
-    }
-    return defaultValue;
+    const value = source?.hasValue() ? source.getValue() : defaultValue;
+    return typeof value === 'string' ? value : JSON.stringify(value);
   }
 
   render(store: Store, provider: string, key: string, defaultValue: unknown) {
