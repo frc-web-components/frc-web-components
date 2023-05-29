@@ -3,14 +3,10 @@ import { property } from 'lit/decorators.js';
 import { LitElement } from 'lit';
 import { CanvasObjectApi } from './interfaces';
 
-type TextAlign = 'left' | 'right' | 'center';
-type TextBaseline =
-  | 'top'
-  | 'hanging'
-  | 'middle'
-  | 'alphabetic'
-  | 'ideographic'
-  | 'bottom';
+// https://stackoverflow.com/questions/5026961/html5-canvas-ctx-filltext-wont-do-line-breaks
+
+type XOrigin = 'left' | 'center' | 'right';
+type YOrigin = 'top' | 'center' | 'bottom';
 
 export default class CanvasText extends LitElement {
   @property({ type: String }) text: string | null = '';
@@ -26,18 +22,17 @@ export default class CanvasText extends LitElement {
   @property({ type: String, attribute: 'stroke-color' }) strokeColor:
     | string
     | null = null;
+  @property({ type: Number, attribute: 'stroke-width' }) strokeWidth = 2;
   @property({ type: String, attribute: 'fill-color' }) fillColor:
     | string
     | null = 'gray';
-
-  @property({ type: String, attribute: 'text-align' }) textAlign: TextAlign =
-    'left';
-  @property({ type: String, attribute: 'text-baseline' })
-  textBaseline: TextBaseline = 'alphabetic';
   @property({ type: Array }) transform: number[] | null = [0, 0, 0];
   @property({ type: Array, attribute: 'transform-origin' }) transformOrigin:
     | number[]
     | null = [0, 0];
+  @property({ type: Array, attribute: 'draw-origin' }) drawOrigin:
+    | [XOrigin, YOrigin]
+    | null = ['center', 'center'];
   @property({ type: Array, attribute: 'z-index' }) zIndex = 0;
 
   draw({ ctx }: CanvasObjectApi): void {
@@ -49,13 +44,28 @@ export default class CanvasText extends LitElement {
       ctx.strokeStyle = this.strokeColor;
     }
 
-    ctx.textAlign = this.textAlign || 'start';
-    ctx.textBaseline = this.textBaseline || 'alphabetic';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
     ctx.font = `${this.fontSize ?? 12}px ${this.fontName || 'sans-serif'}`;
 
     let [x, y] = this.origin ?? [0, 0];
-    // const height = this.fontSize ?? 12;
-    const { width } = ctx.measureText(this.text ?? ''); // TextMetrics object
+    const { width, actualBoundingBoxAscent, actualBoundingBoxDescent } =
+      ctx.measureText(this.text ?? ''); // TextMetrics object
+    const height = actualBoundingBoxAscent + actualBoundingBoxDescent;
+
+    const [xDrawOrigin, yDrawOrigin] = this.drawOrigin ?? ['center', 'center'];
+
+    if (xDrawOrigin === 'left') {
+      x += width / 2;
+    } else if (xDrawOrigin === 'right') {
+      x -= width / 2;
+    }
+
+    if (yDrawOrigin === 'top') {
+      y += height / 2;
+    } else if (yDrawOrigin === 'bottom') {
+      y -= height / 2;
+    }
 
     const [transformX, transformY, transformRotation] = this.transform ?? [
       0, 0, 0,
@@ -68,7 +78,7 @@ export default class CanvasText extends LitElement {
 
     const [XTransformOrigin, yTransformOrigin] = this.transformOrigin ?? [0, 0];
 
-    const xTranform = XTransformOrigin + width / 2;
+    const xTranform = XTransformOrigin;
     const yTranform = yTransformOrigin;
     ctx.translate(xTranform, yTranform); // move the origin
     ctx.rotate(-(transformRotation * Math.PI) / 180); // rotate
@@ -78,6 +88,7 @@ export default class CanvasText extends LitElement {
       ctx.fillText(this.text ?? '', 0, 0);
     }
     if (this.strokeColor) {
+      ctx.lineWidth = this.strokeWidth ?? 2;
       ctx.strokeText(this.text ?? '', 0, 0);
     }
   }
