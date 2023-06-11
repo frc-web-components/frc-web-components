@@ -7,6 +7,7 @@ import './canvas-circle';
 import './canvas-ngon';
 import './canvas-group';
 import './canvas-text';
+import './canvas-mjpg-stream';
 
 export default class Canvas extends LitElement {
   @query('canvas') canvas!: HTMLCanvasElement;
@@ -53,6 +54,7 @@ export default class Canvas extends LitElement {
     [...this.children].forEach((child) => {
       const ctx = this.getCanvasCtx();
       ctx.save();
+      ctx.beginPath();
 
       const canvasObject = child as any as CanvasObject;
       canvasObject.draw?.(api);
