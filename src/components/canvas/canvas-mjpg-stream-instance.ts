@@ -1,8 +1,58 @@
+/* eslint-disable max-classes-per-file */
 /* eslint-disable no-underscore-dangle */
 import { css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 import throttle from 'lodash.throttle';
 import { CanvasObjectApi } from './interfaces';
+
+class PingStream {
+  static TIMEOUT = 'TIMEOUT';
+  static ABORT = 'ABORT';
+  static UPDATE_STREAM = 'UPDATE_STREAM';
+
+  private src?: string;
+  private abortController?: AbortController;
+
+  private enabled = false;
+
+  setEnabled(isEnabled: boolean) {
+    if (this.enabled !== isEnabled) {
+      this.abortController?.abort(PingStream.ABORT);
+      this.enabled = isEnabled;
+
+      if (this.enabled) {
+        this.ping();
+      }
+    }
+  }
+
+  setStream(src: string) {
+    this.src = src;
+    this.abortController?.abort(PingStream.UPDATE_STREAM);
+    this.ping();
+  }
+
+  ping() {
+    if (this.src) {
+      const abortController = new AbortController();
+      this.abortController = abortController;
+      setTimeout(() => {
+        abortController.abort(PingStream.TIMEOUT);
+      }, 5000);
+      fetch(this.src, {
+        signal: abortController.signal,
+      })
+        .then(() => {
+          this.ping();
+        })
+        .catch(() => {
+          if (abortController.signal.reason === PingStream.TIMEOUT) {
+            this.ping();
+          }
+        });
+    }
+  }
+}
 
 export default class CanvasMjpgStreamInstance extends LitElement {
   @property({ type: String }) src = '';
@@ -18,6 +68,8 @@ export default class CanvasMjpgStreamInstance extends LitElement {
   private throttleUpdateImage = throttle(() => this.updateImage(), 5000);
   private onImageLoadBound = this.onImageLoad.bind(this);
   private onImageErrorBound = this.onImageError.bind(this);
+
+  private pingStream = new PingStream();
 
   static styles = css`
     :host {
@@ -165,6 +217,7 @@ export default class CanvasMjpgStreamInstance extends LitElement {
   protected updated(changedProps: Map<string, unknown>): void {
     if (changedProps.has('src')) {
       this.throttleUpdateImage();
+      // this.pingStream.setStream(this.src);
     }
 
     if (changedProps.has('disabled')) {
@@ -174,6 +227,8 @@ export default class CanvasMjpgStreamInstance extends LitElement {
       } else {
         this.throttleUpdateImage();
       }
+
+      // this.pingStream.setEnabled(!this.disabled);
     }
   }
 }

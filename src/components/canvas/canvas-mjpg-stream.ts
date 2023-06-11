@@ -127,7 +127,11 @@ export default class CanvasMjpgStream extends LitElement {
   }
 
   render(): TemplateResult {
-    return html` ${this.srcs.map((src) => this.renderStreamInstance(src))} `;
+    return html`
+      ${this.srcs.map((src) =>
+        this.renderStreamInstance(src.replace('mjpg:', ''))
+      )}
+    `;
   }
 }
 
