@@ -4,13 +4,12 @@ import { property } from 'lit/decorators.js';
 import throttle from 'lodash.throttle';
 import { CanvasObjectApi } from './interfaces';
 
-// mjpg:http://roboRIO-2423-FRC.local:1181/?action=stream, mjpg:http://10.24.23.2:1181/?action=stream, mjpg:http://169.254.33.181:1181/?action=stream]
-
 export default class CanvasMjpgStreamInstance extends LitElement {
   @property({ type: String }) src = '';
   @property({ type: Number }) width: number | null = null;
   @property({ type: Number }) height: number | null = null;
   @property({ type: Array }) origin: [number, number] = [0, 0];
+  @property({ type: Boolean }) disabled = false;
 
   private image = new Image();
 
@@ -82,7 +81,37 @@ export default class CanvasMjpgStreamInstance extends LitElement {
     }
   }
 
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    clearTimeout(this.loadedTimeout);
+    this.image.src = '';
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    this.throttleUpdateImage();
+  }
+
+  private isImageLoaded() {
+    return this.image.complete && this.image.naturalHeight !== 0;
+  }
+
   private updateImage() {
+    clearTimeout(this.loadedTimeout);
+
+    if (this.disabled) {
+      return;
+    }
+
+    if (!this.isConnected) {
+      this.setConnected(false);
+      return;
+    }
+
+    if (this.isImageLoaded()) {
+      return;
+    }
+
     this.loadedTimeout = setTimeout(() => {
       this.throttleUpdateImage();
     }, 5000);
@@ -136,6 +165,15 @@ export default class CanvasMjpgStreamInstance extends LitElement {
   protected updated(changedProps: Map<string, unknown>): void {
     if (changedProps.has('src')) {
       this.throttleUpdateImage();
+    }
+
+    if (changedProps.has('disabled')) {
+      if (this.disabled) {
+        clearTimeout(this.loadedTimeout);
+        this.image.src = '';
+      } else {
+        this.throttleUpdateImage();
+      }
     }
   }
 }
