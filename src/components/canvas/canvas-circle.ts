@@ -96,3 +96,9 @@ export default class CanvasCircle extends LitElement {
 if (!customElements.get('frc-canvas-circle')) {
   customElements.define('frc-canvas-circle', CanvasCircle);
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-canvas-circle': CanvasCircle;
+  }
+}

@@ -99,3 +99,9 @@ export default class CanvasNGon extends LitElement {
 if (!customElements.get('frc-canvas-ngon')) {
   customElements.define('frc-canvas-ngon', CanvasNGon);
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-canvas-ngon': CanvasNGon;
+  }
+}

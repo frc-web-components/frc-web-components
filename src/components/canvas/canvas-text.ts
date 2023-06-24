@@ -97,3 +97,9 @@ export default class CanvasText extends LitElement {
 if (!customElements.get('frc-canvas-text')) {
   customElements.define('frc-canvas-text', CanvasText);
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-canvas-text': CanvasText;
+  }
+}

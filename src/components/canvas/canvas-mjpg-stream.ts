@@ -15,6 +15,10 @@ export default class CanvasMjpgStream extends LitElement {
   @property({ type: Array }) origin: [number, number] = [0, 0];
   @property({ type: String, attribute: 'wait-image' }) waitImage =
     CanvasMjpgStream.DEFAULT_WAIT_IMAGE;
+  @property({ type: Boolean, attribute: 'hide-crosshair' }) hideCrosshair =
+    false;
+  @property({ type: Boolean, attribute: 'crosshair-color' }) crosshairColor =
+    'white';
 
   @state() _connectedSrc?: string;
 
@@ -120,6 +124,8 @@ export default class CanvasMjpgStream extends LitElement {
             height=${ifDefined(this.height !== null ? this.height : undefined)}
             .origin=${ifDefined(this.origin !== null ? this.origin : undefined)}
             ?disabled=${this._connectedSrc && this._connectedSrc !== src}
+            ?hide-crosshair=${this.hideCrosshair}
+            crosshair-color=${this.crosshairColor}
           ></frc-canvas-mjpg-stream-instance>
         `
       )}

@@ -5,61 +5,16 @@ import { property } from 'lit/decorators.js';
 import throttle from 'lodash.throttle';
 import { CanvasObjectApi } from './interfaces';
 
-class PingStream {
-  static TIMEOUT = 'TIMEOUT';
-  static ABORT = 'ABORT';
-  static UPDATE_STREAM = 'UPDATE_STREAM';
-
-  private src?: string;
-  private abortController?: AbortController;
-
-  private enabled = false;
-
-  setEnabled(isEnabled: boolean) {
-    if (this.enabled !== isEnabled) {
-      this.abortController?.abort(PingStream.ABORT);
-      this.enabled = isEnabled;
-
-      if (this.enabled) {
-        this.ping();
-      }
-    }
-  }
-
-  setStream(src: string) {
-    this.src = src;
-    this.abortController?.abort(PingStream.UPDATE_STREAM);
-    this.ping();
-  }
-
-  ping() {
-    if (this.src) {
-      const abortController = new AbortController();
-      this.abortController = abortController;
-      setTimeout(() => {
-        abortController.abort(PingStream.TIMEOUT);
-      }, 5000);
-      fetch(this.src, {
-        signal: abortController.signal,
-      })
-        .then(() => {
-          this.ping();
-        })
-        .catch(() => {
-          if (abortController.signal.reason === PingStream.TIMEOUT) {
-            this.ping();
-          }
-        });
-    }
-  }
-}
-
 export default class CanvasMjpgStreamInstance extends LitElement {
   @property({ type: String }) src = '';
   @property({ type: Number }) width: number | null = null;
   @property({ type: Number }) height: number | null = null;
   @property({ type: Array }) origin: [number, number] = [0, 0];
   @property({ type: Boolean }) disabled = false;
+  @property({ type: Boolean, attribute: 'hide-crosshair' }) hideCrosshair =
+    false;
+  @property({ type: Boolean, attribute: 'crosshair-color' }) crosshairColor =
+    'white';
 
   private image = new Image();
 
@@ -68,8 +23,6 @@ export default class CanvasMjpgStreamInstance extends LitElement {
   private throttleUpdateImage = throttle(() => this.updateImage(), 5000);
   private onImageLoadBound = this.onImageLoad.bind(this);
   private onImageErrorBound = this.onImageError.bind(this);
-
-  private pingStream = new PingStream();
 
   static styles = css`
     :host {
@@ -118,18 +71,35 @@ export default class CanvasMjpgStreamInstance extends LitElement {
 
     ctx.translate(x, y);
 
-    if (this.connected) {
-      try {
-        ctx.drawImage(
-          this.image,
-          (containerSize.width - width) / 2,
-          (containerSize.height - height) / 2,
-          width,
-          height
-        );
-      } catch (e) {
-        this.throttleUpdateImage();
+    if (!this.connected) {
+      return;
+    }
+
+    try {
+      const drawX = (containerSize.width - width) / 2;
+      const drawY = (containerSize.height - height) / 2;
+
+      ctx.drawImage(this.image, drawX, drawY, width, height);
+
+      // draw crosshair
+      if (!this.hideCrosshair) {
+        ctx.strokeStyle = this.crosshairColor || 'white';
+        ctx.lineWidth = 1;
+
+        ctx.beginPath();
+        ctx.setLineDash([7, 7]);
+        ctx.moveTo(drawX, drawY + height / 2);
+        ctx.lineTo(drawX + width, drawY + height / 2);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.setLineDash([5, 5]);
+        ctx.moveTo(drawX + width / 2, drawY);
+        ctx.lineTo(drawX + width / 2, drawY + height);
+        ctx.stroke();
       }
+    } catch (e) {
+      this.throttleUpdateImage();
     }
   }
 
@@ -217,7 +187,6 @@ export default class CanvasMjpgStreamInstance extends LitElement {
   protected updated(changedProps: Map<string, unknown>): void {
     if (changedProps.has('src')) {
       this.throttleUpdateImage();
-      // this.pingStream.setStream(this.src);
     }
 
     if (changedProps.has('disabled')) {
@@ -227,8 +196,6 @@ export default class CanvasMjpgStreamInstance extends LitElement {
       } else {
         this.throttleUpdateImage();
       }
-
-      // this.pingStream.setEnabled(!this.disabled);
     }
   }
 }

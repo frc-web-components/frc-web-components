@@ -86,3 +86,9 @@ export default class CanvasRect extends LitElement {
 if (!customElements.get('frc-canvas-rect')) {
   customElements.define('frc-canvas-rect', CanvasRect);
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-canvas-rect': CanvasRect;
+  }
+}

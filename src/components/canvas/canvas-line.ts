@@ -108,3 +108,9 @@ export default class CanvasLine extends LitElement {
 if (!customElements.get('frc-canvas-line')) {
   customElements.define('frc-canvas-line', CanvasLine);
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-canvas-line': CanvasLine;
+  }
+}

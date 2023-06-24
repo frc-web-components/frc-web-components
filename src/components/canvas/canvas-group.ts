@@ -43,3 +43,9 @@ export default class CanvasGroup extends LitElement {
 if (!customElements.get('frc-canvas-group')) {
   customElements.define('frc-canvas-group', CanvasGroup);
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-canvas-group': CanvasGroup;
+  }
+}
