@@ -13,7 +13,7 @@ export default class CanvasMjpgStreamInstance extends LitElement {
   @property({ type: Boolean }) disabled = false;
   @property({ type: Boolean, attribute: 'hide-crosshair' }) hideCrosshair =
     false;
-  @property({ type: Boolean, attribute: 'crosshair-color' }) crosshairColor =
+  @property({ type: String, attribute: 'crosshair-color' }) crosshairColor =
     'white';
 
   private image = new Image();
@@ -42,8 +42,8 @@ export default class CanvasMjpgStreamInstance extends LitElement {
     height: number;
   } {
     const containerSize = {
-      width: this.width ?? canvas.width,
-      height: this.height ?? canvas.height,
+      width: this.width || canvas.width,
+      height: this.height || canvas.height,
     };
     if (
       (this.image.height / this.image.width) * containerSize.width >
@@ -63,8 +63,8 @@ export default class CanvasMjpgStreamInstance extends LitElement {
   protected draw({ ctx, canvas }: CanvasObjectApi): void {
     const { width, height } = this.getImageSize(canvas);
     const containerSize = {
-      width: this.width ?? canvas.width,
-      height: this.height ?? canvas.height,
+      width: this.width || canvas.width,
+      height: this.height || canvas.height,
     };
 
     const [x, y] = this.origin ?? [0, 0];

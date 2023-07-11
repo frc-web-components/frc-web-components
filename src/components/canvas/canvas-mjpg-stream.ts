@@ -17,7 +17,7 @@ export default class CanvasMjpgStream extends LitElement {
     CanvasMjpgStream.DEFAULT_WAIT_IMAGE;
   @property({ type: Boolean, attribute: 'hide-crosshair' }) hideCrosshair =
     false;
-  @property({ type: Boolean, attribute: 'crosshair-color' }) crosshairColor =
+  @property({ type: String, attribute: 'crosshair-color' }) crosshairColor =
     'white';
 
   @state() _connectedSrc?: string;
@@ -32,8 +32,8 @@ export default class CanvasMjpgStream extends LitElement {
     height: number;
   } {
     const containerSize = {
-      width: this.width ?? canvas.width,
-      height: this.height ?? canvas.height,
+      width: this.width || canvas.width,
+      height: this.height || canvas.height,
     };
     if (
       (this.waitImageElement.height / this.waitImageElement.width) *
@@ -66,8 +66,8 @@ export default class CanvasMjpgStream extends LitElement {
     } else {
       const { width, height } = this.getImageSize(canvas);
       const containerSize = {
-        width: this.width ?? canvas.width,
-        height: this.height ?? canvas.height,
+        width: this.width || canvas.width,
+        height: this.height || canvas.height,
       };
 
       const [x, y] = this.origin ?? [0, 0];
