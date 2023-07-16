@@ -74,7 +74,7 @@ const meta: Meta = {
     },
   },
   decorators: [
-    (story, props) => html` <div
+    (story) => html` <div
       style=${styleMap({
         padding: '20px 10px',
         marginBottom: '5px',

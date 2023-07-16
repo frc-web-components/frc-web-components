@@ -53,6 +53,10 @@ export default defineConfig({
         'components/canvas/canvas-ngon': 'src/components/canvas/canvas-ngon.ts',
         'components/canvas/canvas-rect': 'src/components/canvas/canvas-rect.ts',
         'components/canvas/canvas-text': 'src/components/canvas/canvas-text.ts',
+        'components/canvas/canvas-mjpg-stream':
+          'src/components/canvas/canvas-mjpg-stream.ts',
+        'components/canvas/canvas-mjpg-stream-instance':
+          'src/components/canvas/canvas-mjpg-stream-instance.ts',
         'components/canvas/interfaces': 'src/components/canvas/interfaces.ts',
         // other components
         'components/3-axis-accelerometer':
