@@ -58,6 +58,7 @@
     "*.d.ts",
     "*.svg",
     "*.mdx",
-    "introduction2"
+    "introduction2",
+    "*.txt"
   ]
 }
