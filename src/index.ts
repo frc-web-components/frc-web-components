@@ -8,6 +8,7 @@ import addProviders from './source-providers';
 // import addTutorials from './tutorials';
 import addThemes from './themes';
 import addDashboardComponents from './dashboard/dashboard-components';
+import './components/line-chart';
 
 export default function createDashboard(
   element: HTMLElement,

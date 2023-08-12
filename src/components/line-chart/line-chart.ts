@@ -1,27 +1,54 @@
-import { html, css, LitElement, svg } from 'lit';
+import { css, LitElement, svg } from 'lit';
 import { property, state, query } from 'lit/decorators.js';
 import * as d3 from 'd3';
 import { ref } from 'lit/directives/ref.js';
+import getRealTimeXAxis, { getXAxis } from './real-time-x-axis';
 
 export default class LineChart extends LitElement {
+  @property({ type: Number, attribute: 'start-time' }) startTime = 0;
   @property({ type: Boolean }) value = false;
   @state() data: number[] = [];
 
   @query('.data-path') path!: SVGPathElement;
   @query('svg') svg!: SVGSVGElement;
+  @query('.axis--x') xAxis!: SVGSVGElement;
 
-  static styles = css``;
+  elapsedTime = 0;
+
+  static styles = css`
+    .line {
+      fill: none;
+      stroke: #000;
+      stroke-width: 1.5px;
+    }
+  `;
 
   firstUpdated(): void {
     const n = 40 * 20;
     const random = d3.randomNormal(0.5, 0.1);
     this.data = d3.range(n).map(random);
+
+    this.startTime = Date.now();
+
+    requestAnimationFrame(() => {
+      this.updateChart();
+    });
   }
 
-  tick(): void {
+  updateChart() {
+    this.elapsedTime = Date.now() - this.startTime;
+
+    this.requestUpdate();
+
+    requestAnimationFrame(() => {
+      this.updateChart();
+    });
+  }
+
+  tick(pathElement: SVGPathElement): void {
     const { width, height } = LineChart.getDimensions();
 
-    const x = LineChart.getXAxis(width);
+    const x = getXAxis(width, 10 * 1000, this.elapsedTime);
     const y = LineChart.getYAxis(height);
 
     // Push a new data point onto the back.
@@ -34,26 +61,20 @@ export default class LineChart extends LitElement {
       .y((d, i) => y(d as any));
 
     // Redraw the line.
-    d3.select(this.path)
+    d3.select(pathElement)
       .attr('d', line as any)
       .attr('transform', null);
 
     // Slide it to the left.
-    d3.active(this.path)!
+    d3.active(pathElement)!
       .attr('transform', `translate(${x(0)},0)`)
       .transition()
-      .on('start', this.tick);
+      .duration(1000 / 60)
+      .ease(d3.easeLinear)
+      .on('start', () => this.tick(pathElement));
 
     // Pop the old data point off the front.
     this.data.shift();
-  }
-
-  static getXAxis(width: number) {
-    const n = 40 * 20;
-    return d3
-      .scaleLinear()
-      .domain([1, n - 2])
-      .range([0, width]);
   }
 
   static getYAxis(height: number) {
@@ -81,22 +102,18 @@ export default class LineChart extends LitElement {
     const { margin, svgWidth, svgHeight, width, height } =
       LineChart.getDimensions();
 
-    const x = LineChart.getXAxis(width);
     const y = LineChart.getYAxis(height);
 
     return svg`
       <svg width=${svgWidth} height=${svgHeight}>
         <g transform="translate(${margin.left},${margin.top})">
           <defs>
-            <clipPath id="clip"></clipPath>
-            <rect width=${width} height=${height}></rect>
+            <clipPath id="clip">
+              <rect width=${width} height=${height}></rect>
+            </clipPath>
           </defs>
-          <g 
-            class="axis axis--x" 
-            transform="translate(0,${y(0)})" 
-            ${ref((xAxis) => {
-              d3.axisBottom(x)(d3.select(xAxis as SVGGElement));
-            })}>
+          <g transform="translate(0,${height})">
+            ${getRealTimeXAxis(width, 10 * 1000, this.elapsedTime)}
           </g>
           <g 
             class="axis axis--y" 
@@ -113,9 +130,7 @@ export default class LineChart extends LitElement {
                   .datum(this.data)
                   .attr('class', 'line')
                   .transition()
-                  .duration(1000 / 60)
-                  .ease(d3.easeLinear)
-                  .on('start', this.tick);
+                  .on('start', () => this.tick(pathElement as SVGPathElement));
               })}>
             ></path>
           </g>
@@ -125,6 +140,6 @@ export default class LineChart extends LitElement {
   }
 }
 
-if (!customElements.get('frc-line-chart')) {
-  customElements.define('frc-line-chart', LineChart);
+if (!customElements.get('frc-line-chart2')) {
+  customElements.define('frc-line-chart2', LineChart);
 }
