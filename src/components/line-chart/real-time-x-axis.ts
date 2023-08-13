@@ -2,11 +2,11 @@ import { TemplateResult, svg } from 'lit';
 import * as d3 from 'd3';
 import { ref } from 'lit/directives/ref.js';
 
-export function getXAxis(
+export function getXScale(
   width: number,
   totalTimeMs: number,
   elapsedTime: number
-) {
+): d3.ScaleTime<number, number, never> {
   const xScale = d3
     .scaleTime()
     .domain([elapsedTime - totalTimeMs, elapsedTime])
@@ -15,13 +15,9 @@ export function getXAxis(
 }
 
 export default function getRealTimeXAxis(
-  width: number,
-  totalTimeMs: number,
-  elapsedTime: number
+  xScale: d3.ScaleTime<number, number, never>
 ): TemplateResult {
-  const x = getXAxis(width, totalTimeMs, elapsedTime);
-
-  const xAxis = d3.axisBottom(x).tickFormat((d) => {
+  const xAxis = d3.axisBottom(xScale).tickFormat((d) => {
     const date = d as Date;
     const diff = date.getTime() / 1000;
     return `${diff}`;

@@ -2,32 +2,54 @@ import { css, LitElement, svg } from 'lit';
 import { property, state, query } from 'lit/decorators.js';
 import * as d3 from 'd3';
 import { ref } from 'lit/directives/ref.js';
-import getRealTimeXAxis, { getXAxis } from './real-time-x-axis';
+import getRealTimeXAxis, { getXScale } from './real-time-x-axis';
+import './line-chart-data';
+import './line-chart-axis';
+
+function bound(value: number, min: number, max: number): number {
+  return Math.max(min, Math.min(max, value));
+}
+
+interface ChartDatum {
+  timeMs: number;
+  value: number;
+}
+
+interface ChartData {
+  data: ChartDatum[];
+  color: string;
+  isHidden: boolean;
+  yAxis: number;
+}
+
+interface YScale {
+  scale: d3.ScaleLinear<number, number, never>;
+  autoFit: boolean;
+  invert: boolean;
+  side: 'left' | 'right';
+}
 
 export default class LineChart extends LitElement {
-  @property({ type: Number, attribute: 'start-time' }) startTime = 0;
   @property({ type: Boolean }) value = false;
-  @state() data: number[] = [];
+  @property({ type: Number, attribute: 'view-time' }) viewTime = 10;
+
+  @state() data: ChartData[] = [];
 
   @query('.data-path') path!: SVGPathElement;
   @query('svg') svg!: SVGSVGElement;
   @query('.axis--x') xAxis!: SVGSVGElement;
 
-  elapsedTime = 0;
+  startTime = 0;
+  elapsedTimeMs = 0;
 
   static styles = css`
     .line {
       fill: none;
-      stroke: #000;
       stroke-width: 1.5px;
     }
   `;
 
   firstUpdated(): void {
-    const n = 40 * 20;
-    const random = d3.randomNormal(0.5, 0.1);
-    this.data = d3.range(n).map(random);
-
     this.startTime = Date.now();
 
     requestAnimationFrame(() => {
@@ -35,8 +57,43 @@ export default class LineChart extends LitElement {
     });
   }
 
+  getFilteredData(data: ChartDatum[]): ChartDatum[] {
+    const removalCutoffIndex =
+      data.findIndex(
+        ({ timeMs }) =>
+          this.elapsedTimeMs - timeMs < Math.round(this.viewTime * 1000)
+      ) - 1;
+
+    if (removalCutoffIndex < 0) {
+      return data;
+    }
+
+    return data.slice(removalCutoffIndex);
+  }
+
   updateChart() {
-    this.elapsedTime = Date.now() - this.startTime;
+    this.elapsedTimeMs = Date.now() - this.startTime;
+
+    const dataElements = [...this.children].filter(
+      (child) => child.tagName.toLowerCase() === 'frc-line-chart-data2'
+    );
+
+    const rand = (prevValue: number) => d3.randomNormal(prevValue, 0.01)();
+
+    this.data = dataElements.map((child, index) => {
+      const data = this.data[index]?.data ?? [];
+      const mostRecentValue = data[data.length - 1]?.value ?? 0.5;
+      data.push({
+        value: bound(rand(mostRecentValue), 0, 1),
+        timeMs: this.elapsedTimeMs,
+      });
+      return {
+        data: this.getFilteredData(data),
+        color: (child as any).color ?? 'black',
+        isHidden: (child as any).isHidden ?? false,
+        yAxis: (child as any).yAxis ?? 0,
+      };
+    });
 
     this.requestUpdate();
 
@@ -45,44 +102,13 @@ export default class LineChart extends LitElement {
     });
   }
 
-  tick(pathElement: SVGPathElement): void {
-    const { width, height } = LineChart.getDimensions();
-
-    const x = getXAxis(width, 10 * 1000, this.elapsedTime);
-    const y = LineChart.getYAxis(height);
-
-    // Push a new data point onto the back.
-    this.data.push(Math.random());
-
-    const line = d3
-      .line()
-      .curve(d3.curveBasis)
-      .x((d, i) => x(i))
-      .y((d, i) => y(d as any));
-
-    // Redraw the line.
-    d3.select(pathElement)
-      .attr('d', line as any)
-      .attr('transform', null);
-
-    // Slide it to the left.
-    d3.active(pathElement)!
-      .attr('transform', `translate(${x(0)},0)`)
-      .transition()
-      .duration(1000 / 60)
-      .ease(d3.easeLinear)
-      .on('start', () => this.tick(pathElement));
-
-    // Pop the old data point off the front.
-    this.data.shift();
-  }
-
-  static getYAxis(height: number) {
-    return d3.scaleLinear().domain([-1, 1]).range([height, 0]);
+  static getYScale(height: number, min = -1, max = 1, invert = false) {
+    const range = invert ? [0, height] : [height, 0];
+    return d3.scaleLinear().domain([min, max]).range(range);
   }
 
   static getDimensions() {
-    const margin = { top: 20, right: 20, bottom: 20, left: 40 };
+    const margin = { top: 20, right: 40, bottom: 20, left: 40 };
     const svgWidth = 960;
     const svgHeight = 500;
 
@@ -98,11 +124,58 @@ export default class LineChart extends LitElement {
     };
   }
 
+  getYScales(): YScale[] {
+    const { height } = LineChart.getDimensions();
+    const axisElements = [...this.children].filter(
+      (child) => child.tagName.toLowerCase() === 'frc-line-chart-axis2'
+    );
+
+    if (axisElements.length === 0) {
+      return [
+        {
+          autoFit: false,
+          invert: false,
+          side: 'left',
+          scale: LineChart.getYScale(height, -1, 1),
+        },
+      ];
+    }
+
+    return axisElements.map((element) => {
+      const min = (element as any).min ?? -1;
+      const max = (element as any).max ?? 1;
+      const autoFit = (element as any).autoFit ?? false;
+      const invert = (element as any).invert ?? false;
+      const side = (element as any).side ?? 'left';
+
+      return {
+        autoFit,
+        invert,
+        side,
+        scale: LineChart.getYScale(height, min, max, invert),
+      };
+    });
+  }
+
   render() {
     const { margin, svgWidth, svgHeight, width, height } =
       LineChart.getDimensions();
 
-    const y = LineChart.getYAxis(height);
+    const xScale = getXScale(
+      width,
+      Math.round(this.viewTime * 1000),
+      this.elapsedTimeMs
+    );
+    const yScales = this.getYScales();
+
+    const lines = yScales.map((yScale) => {
+      const line = d3
+        .line<ChartDatum>()
+        .x((d) => xScale(new Date(d.timeMs)))
+        .y((d) => yScale.scale(d.value))
+        .curve(d3.curveMonotoneX);
+      return line;
+    });
 
     return svg`
       <svg width=${svgWidth} height=${svgHeight}>
@@ -113,27 +186,42 @@ export default class LineChart extends LitElement {
             </clipPath>
           </defs>
           <g transform="translate(0,${height})">
-            ${getRealTimeXAxis(width, 10 * 1000, this.elapsedTime)}
+            ${getRealTimeXAxis(xScale)}
           </g>
-          <g 
-            class="axis axis--y" 
-            ${ref((yAxis) => {
-              d3.axisLeft(y)(d3.select(yAxis as SVGGElement));
-            })}>
-          </g>
-          <g clip-path="url(#clip)">
-            <path 
-              class="data-path"
-              ${ref((pathElement) => {
-                const path = d3.select(pathElement as SVGPathElement);
-                path
-                  .datum(this.data)
-                  .attr('class', 'line')
-                  .transition()
-                  .on('start', () => this.tick(pathElement as SVGPathElement));
-              })}>
-            ></path>
-          </g>
+          ${yScales.map(
+            (scale) => svg`
+              <g 
+                class="axis axis--y" 
+                transform="translate(${scale.side === 'left' ? 0 : width}, 0)"
+                ${ref((yAxis) => {
+                  const axis =
+                    scale.side === 'left' ? d3.axisLeft : d3.axisRight;
+                  axis(scale.scale)(d3.select(yAxis as SVGGElement));
+                })}>
+              </g>
+            `
+          )}
+          ${this.data
+            .filter(
+              ({ isHidden, yAxis }) =>
+                !isHidden && yAxis < yScales.length && yAxis >= 0
+            )
+            .map(
+              (data) => svg`
+            <g clip-path="url(#clip)">
+              <path 
+                class="data-path"
+                ${ref((pathElement) => {
+                  const path = d3.select(pathElement as SVGPathElement);
+                  path
+                    .attr('class', 'line')
+                    .attr('stroke', data.color)
+                    .attr('d', lines[data.yAxis](data.data));
+                })}>
+              ></path>
+            </g>
+          `
+            )}
         </g>
       </svg>
     `;
