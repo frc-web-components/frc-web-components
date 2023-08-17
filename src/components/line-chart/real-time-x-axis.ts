@@ -32,3 +32,22 @@ export default function getRealTimeXAxis(
     </g> 
   `;
 }
+
+export function getRealTimeXGrid(
+  xScale: d3.ScaleTime<number, number, never>,
+  height: number
+): TemplateResult {
+  const xAxisGrid = d3
+    .axisBottom(xScale)
+    .tickSize(-height)
+    .tickFormat('' as any);
+
+  return svg`
+    <g 
+      class="axis-x-grid" 
+      ${ref((xAxisEl) => {
+        xAxisGrid(d3.select(xAxisEl as SVGGElement));
+      })}>
+    </g> 
+  `;
+}

@@ -1,5 +1,4 @@
 import { baseElements } from './base-elements';
-import { chartElements } from './chart';
 import { commandBasedElements } from './command-based-robot';
 import * as controlPanel from './control-panel';
 import { drivebaseElements } from './drivebases';
@@ -26,7 +25,6 @@ import iconConfig from './icon';
 
 const elements = [
   ...baseElements,
-  ...chartElements,
   ...commandBasedElements,
   controlPanel,
   ...drivebaseElements,

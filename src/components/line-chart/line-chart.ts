@@ -2,12 +2,20 @@ import { css, LitElement, svg } from 'lit';
 import { property, state, query } from 'lit/decorators.js';
 import * as d3 from 'd3';
 import { ref } from 'lit/directives/ref.js';
-import getRealTimeXAxis, { getXScale } from './real-time-x-axis';
+import getRealTimeXAxis, {
+  getRealTimeXGrid,
+  getXScale,
+} from './real-time-x-axis';
 import './line-chart-data';
-import './line-chart-axis';
+import { ILineChartAxis } from './line-chart-axis';
 
 function bound(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
+}
+
+function setPrecision(value: number, precision: number): number {
+  const multiplier = 10 ** precision;
+  return Math.round(value * multiplier) / multiplier;
 }
 
 interface ChartDatum {
@@ -24,9 +32,7 @@ interface ChartData {
 
 interface YScale {
   scale: d3.ScaleLinear<number, number, never>;
-  autoFit: boolean;
-  invert: boolean;
-  side: 'left' | 'right';
+  chartAxis: ILineChartAxis;
 }
 
 export default class LineChart extends LitElement {
@@ -46,6 +52,16 @@ export default class LineChart extends LitElement {
     .line {
       fill: none;
       stroke-width: 1.5px;
+    }
+
+    .chart-border {
+      fill: none;
+      stroke-width: 1;
+      stroke: black;
+    }
+
+    .axis-x-grid line {
+      stroke: #eee;
     }
   `;
 
@@ -75,16 +91,13 @@ export default class LineChart extends LitElement {
     this.elapsedTimeMs = Date.now() - this.startTime;
 
     const dataElements = [...this.children].filter(
-      (child) => child.tagName.toLowerCase() === 'frc-line-chart-data2'
+      (child) => child.tagName.toLowerCase() === 'frc-line-chart-data'
     );
-
-    const rand = (prevValue: number) => d3.randomNormal(prevValue, 0.01)();
 
     this.data = dataElements.map((child, index) => {
       const data = this.data[index]?.data ?? [];
-      const mostRecentValue = data[data.length - 1]?.value ?? 0.5;
       data.push({
-        value: bound(rand(mostRecentValue), 0, 1),
+        value: (child as any).value ?? 0,
         timeMs: this.elapsedTimeMs,
       });
       return {
@@ -95,14 +108,32 @@ export default class LineChart extends LitElement {
       };
     });
 
-    this.requestUpdate();
-
     requestAnimationFrame(() => {
       this.updateChart();
     });
   }
 
-  static getYScale(height: number, min = -1, max = 1, invert = false) {
+  static getYScale(
+    height: number,
+    chartData: ChartData[],
+    chartAxis: ILineChartAxis
+  ) {
+    const { invert, lockMin, lockMax } = chartAxis;
+    let { min, max } = chartAxis;
+
+    if (!lockMin || !lockMax) {
+      chartData.forEach((data) => {
+        data.data.forEach(({ value }) => {
+          if (!lockMin) {
+            min = Math.min(min, value);
+          }
+          if (!lockMax) {
+            max = Math.max(max, value);
+          }
+        });
+      });
+    }
+
     const range = invert ? [0, height] : [height, 0];
     return d3.scaleLinear().domain([min, max]).range(range);
   }
@@ -127,34 +158,62 @@ export default class LineChart extends LitElement {
   getYScales(): YScale[] {
     const { height } = LineChart.getDimensions();
     const axisElements = [...this.children].filter(
-      (child) => child.tagName.toLowerCase() === 'frc-line-chart-axis2'
+      (child) => child.tagName.toLowerCase() === 'frc-line-chart-axis'
     );
 
     if (axisElements.length === 0) {
+      const chartAxis: ILineChartAxis = {
+        min: -1,
+        max: 1,
+        lockMin: false,
+        lockMax: false,
+        autoFit: false,
+        invert: false,
+        side: 'left',
+      };
       return [
         {
-          autoFit: false,
-          invert: false,
-          side: 'left',
-          scale: LineChart.getYScale(height, -1, 1),
+          chartAxis,
+          scale: LineChart.getYScale(
+            height,
+            this.data.filter(({ yAxis }) => yAxis === 0),
+            chartAxis
+          ),
         },
       ];
     }
 
-    return axisElements.map((element) => {
-      const min = (element as any).min ?? -1;
-      const max = (element as any).max ?? 1;
-      const autoFit = (element as any).autoFit ?? false;
-      const invert = (element as any).invert ?? false;
-      const side = (element as any).side ?? 'left';
-
+    return axisElements.map((element, index) => {
+      const axisElement = element as any as Partial<ILineChartAxis>;
+      const chartAxis: ILineChartAxis = {
+        min: axisElement.min ?? -1,
+        max: axisElement.max ?? 1,
+        lockMin: axisElement.lockMin ?? false,
+        lockMax: axisElement.lockMax ?? false,
+        autoFit: axisElement.autoFit ?? false,
+        invert: axisElement.invert ?? false,
+        side: axisElement.side ?? 'left',
+      };
       return {
-        autoFit,
-        invert,
-        side,
-        scale: LineChart.getYScale(height, min, max, invert),
+        chartAxis,
+        scale: LineChart.getYScale(
+          height,
+          this.data.filter(({ yAxis }) => yAxis === index),
+          chartAxis
+        ),
       };
     });
+  }
+
+  static getPath(
+    data: ChartDatum[],
+    getX: (datum: ChartDatum) => number,
+    getY: (datum: ChartDatum) => number
+  ): string {
+    const points = data.map((datum) =>
+      [getX(datum).toFixed(3), getY(datum).toFixed(3)].join(',')
+    );
+    return `M${points.join('L')}`;
   }
 
   render() {
@@ -169,11 +228,16 @@ export default class LineChart extends LitElement {
     const yScales = this.getYScales();
 
     const lines = yScales.map((yScale) => {
-      const line = d3
-        .line<ChartDatum>()
-        .x((d) => xScale(new Date(d.timeMs)))
-        .y((d) => yScale.scale(d.value))
-        .curve(d3.curveMonotoneX);
+      // const line = d3
+      //   .line<ChartDatum>()
+      //   .x((d) => xScale(new Date(d.timeMs)))
+      //   .y((d) => yScale.scale(d.value));
+      const line = (data: ChartDatum[]) =>
+        LineChart.getPath(
+          data,
+          (d) => xScale(new Date(d.timeMs)),
+          (d) => yScale.scale(d.value)
+        );
       return line;
     });
 
@@ -185,17 +249,23 @@ export default class LineChart extends LitElement {
               <rect width=${width} height=${height}></rect>
             </clipPath>
           </defs>
+          <rect class="chart-border" width=${width} height=${height}></rect>
           <g transform="translate(0,${height})">
             ${getRealTimeXAxis(xScale)}
+            ${getRealTimeXGrid(xScale, height)}
           </g>
           ${yScales.map(
             (scale) => svg`
               <g 
                 class="axis axis--y" 
-                transform="translate(${scale.side === 'left' ? 0 : width}, 0)"
+                transform="translate(${
+                  scale.chartAxis.side === 'left' ? 0 : width
+                }, 0)"
                 ${ref((yAxis) => {
                   const axis =
-                    scale.side === 'left' ? d3.axisLeft : d3.axisRight;
+                    scale.chartAxis.side === 'left'
+                      ? d3.axisLeft
+                      : d3.axisRight;
                   axis(scale.scale)(d3.select(yAxis as SVGGElement));
                 })}>
               </g>
@@ -213,10 +283,11 @@ export default class LineChart extends LitElement {
                 class="data-path"
                 ${ref((pathElement) => {
                   const path = d3.select(pathElement as SVGPathElement);
+                  const pathD = lines[data.yAxis](data.data);
                   path
                     .attr('class', 'line')
                     .attr('stroke', data.color)
-                    .attr('d', lines[data.yAxis](data.data));
+                    .attr('d', pathD);
                 })}>
               ></path>
             </g>
@@ -228,6 +299,6 @@ export default class LineChart extends LitElement {
   }
 }
 
-if (!customElements.get('frc-line-chart2')) {
-  customElements.define('frc-line-chart2', LineChart);
+if (!customElements.get('frc-line-chart')) {
+  customElements.define('frc-line-chart', LineChart);
 }

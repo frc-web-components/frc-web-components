@@ -8,6 +8,6 @@ export default class LineChartData extends LitElement {
   @property({ type: Number, attribute: 'y-axis' }) yAxis = 0;
 }
 
-if (!customElements.get('frc-line-chart-data2')) {
-  customElements.define('frc-line-chart-data2', LineChartData);
+if (!customElements.get('frc-line-chart-data')) {
+  customElements.define('frc-line-chart-data', LineChartData);
 }
