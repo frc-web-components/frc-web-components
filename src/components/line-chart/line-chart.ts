@@ -1,22 +1,15 @@
-import { css, LitElement, svg } from 'lit';
+import { css, html, LitElement, svg } from 'lit';
 import { property, state, query } from 'lit/decorators.js';
 import * as d3 from 'd3';
 import { ref } from 'lit/directives/ref.js';
+import { styleMap } from 'lit/directives/style-map.js';
 import getRealTimeXAxis, {
   getRealTimeXGrid,
   getXScale,
 } from './real-time-x-axis';
 import './line-chart-data';
 import { ILineChartAxis } from './line-chart-axis';
-
-function bound(value: number, min: number, max: number): number {
-  return Math.max(min, Math.min(max, value));
-}
-
-function setPrecision(value: number, precision: number): number {
-  const multiplier = 10 ** precision;
-  return Math.round(value * multiplier) / multiplier;
-}
+import { IChartLegend } from './line-chart-legend';
 
 interface ChartDatum {
   timeMs: number;
@@ -28,6 +21,7 @@ interface ChartData {
   color: string;
   isHidden: boolean;
   yAxis: number;
+  displayName: string;
 }
 
 interface YScale {
@@ -35,8 +29,35 @@ interface YScale {
   chartAxis: ILineChartAxis;
 }
 
+const colorScale = d3
+  .scaleOrdinal<number, string>()
+  .domain(
+    Array(8)
+      .fill(0)
+      .map((_, index) => index)
+  )
+  .range(d3.schemeSet2);
+
+export function getYScaleWidth(text: string /* , fontSize: number */): number {
+  return text.length * 5.5 + 9;
+  // Create SVG element
+  // const svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  // svgElement.setAttribute('width', '500');
+  // svgElement.setAttribute('height', '500');
+  // svgElement.setAttribute('viewBox', '0 0 500 500');
+  // const textElement = document.createElementNS(
+  //   'http://www.w3.org/2000/svg',
+  //   'text'
+  // );
+  // textElement.style.fontFamily = 'monospace';
+  // textElement.style.fontSize = `${fontSize}px`;
+  // textElement.textContent = text;
+
+  // svgElement.appendChild(textElement);
+  // return textElement.getComputedTextLength();
+}
+
 export default class LineChart extends LitElement {
-  @property({ type: Boolean }) value = false;
   @property({ type: Number, attribute: 'view-time' }) viewTime = 10;
 
   @state() data: ChartData[] = [];
@@ -44,11 +65,67 @@ export default class LineChart extends LitElement {
   @query('.data-path') path!: SVGPathElement;
   @query('svg') svg!: SVGSVGElement;
   @query('.axis--x') xAxis!: SVGSVGElement;
+  @query('.chart-container') chartContainer!: HTMLDivElement;
 
   startTime = 0;
   elapsedTimeMs = 0;
 
   static styles = css`
+    :host {
+      display: inline-block;
+      width: 700px;
+      height: 400px;
+    }
+
+    .chart-and-legend {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .legend-container {
+      position: relative;
+    }
+
+    .legend {
+      display: flex;
+      z-index: 100;
+    }
+
+    .legend.outside {
+      position: relative;
+    }
+
+    .legend.inside {
+      position: absolute;
+    }
+
+    .legend-item {
+      display: flex;
+      flex-wrap: no-wrap;
+      gap: 5px;
+      align-items: center;
+      padding: 5px;
+    }
+
+    .legend.horizontal {
+      flex-direction: row;
+    }
+
+    .legend.vertical {
+      flex-direction: column;
+    }
+
+    .legend-item-box {
+      width: 15px;
+      height: 15px;
+    }
+
+    .legend-item-label {
+      font: sans-serif;
+      font-size: 15px;
+    }
+
     .line {
       fill: none;
       stroke-width: 1.5px;
@@ -62,6 +139,10 @@ export default class LineChart extends LitElement {
 
     .axis-x-grid line {
       stroke: #eee;
+    }
+
+    .axis--y {
+      font-family: monospace;
     }
   `;
 
@@ -102,9 +183,10 @@ export default class LineChart extends LitElement {
       });
       return {
         data: this.getFilteredData(data),
-        color: (child as any).color ?? 'black',
+        color: (child as any).color || colorScale(index % 8),
         isHidden: (child as any).isHidden ?? false,
         yAxis: (child as any).yAxis ?? 0,
+        displayName: (child as any).displayName || `Data ${index}`,
       };
     });
 
@@ -138,10 +220,14 @@ export default class LineChart extends LitElement {
     return d3.scaleLinear().domain([min, max]).range(range);
   }
 
-  static getDimensions() {
+  getDimensions() {
     const margin = { top: 20, right: 40, bottom: 20, left: 40 };
-    const svgWidth = 960;
-    const svgHeight = 500;
+    const box = this.chartContainer?.getBoundingClientRect() ?? {
+      width: 960,
+      height: 500,
+    };
+    const svgWidth = box.width;
+    const svgHeight = box.height;
 
     const width = svgWidth - margin.left - margin.right;
     const height = svgHeight - margin.top - margin.bottom;
@@ -156,7 +242,7 @@ export default class LineChart extends LitElement {
   }
 
   getYScales(): YScale[] {
-    const { height } = LineChart.getDimensions();
+    const { height } = this.getDimensions();
     const axisElements = [...this.children].filter(
       (child) => child.tagName.toLowerCase() === 'frc-line-chart-axis'
     );
@@ -216,9 +302,150 @@ export default class LineChart extends LitElement {
     return `M${points.join('L')}`;
   }
 
+  getLegend(): IChartLegend {
+    const legendElement = [...this.children].find(
+      (child) => child.tagName.toLowerCase() === 'frc-line-chart-legend'
+    );
+
+    if (!legendElement) {
+      return {
+        direction: 'horizontal',
+        position: 'n',
+        inside: false,
+        hide: false,
+      };
+    }
+
+    const legend = legendElement as any as Partial<IChartLegend>;
+    const legendWithDefaults: IChartLegend = {
+      direction: legend.direction ?? 'horizontal',
+      position: legend.position ?? 'n',
+      inside: legend.inside ?? false,
+      hide: legend.hide ?? false,
+    };
+    return legendWithDefaults;
+  }
+
   render() {
-    const { margin, svgWidth, svgHeight, width, height } =
-      LineChart.getDimensions();
+    const { inside, position, direction } = this.getLegend();
+    const isRowLayout =
+      position === 'w' ||
+      position === 'e' ||
+      (['ne', 'nw', 'se', 'sw'].includes(position) && direction === 'vertical');
+    const isReverse =
+      (isRowLayout && ['ne', 'e', 'se'].includes(position)) ||
+      (!isRowLayout && ['sw', 's', 'se'].includes(position));
+
+    const styles = styleMap({
+      display: inside ? 'block' : 'flex',
+      flexDirection: `${isRowLayout ? 'row' : 'column'}${
+        isReverse ? '-reverse' : ''
+      }`,
+    });
+
+    const chartContainerStyles = inside
+      ? {
+          width: '100%',
+          height: '100%',
+        }
+      : { flex: '1' };
+
+    return html`<div class="chart-and-legend" style=${styles}>
+      ${this.renderLegend()}
+      <div class="chart-container" style=${styleMap(chartContainerStyles)}>
+        ${this.renderChart()}
+      </div>
+    </div>`;
+  }
+
+  renderLegend() {
+    const { margin } = this.getDimensions();
+    const { inside, direction, position } = this.getLegend();
+
+    const alignSelf = (() => {
+      if (['n', 's', 'e', 'w'].includes(position)) {
+        return 'center';
+      }
+      if (position === 'nw') {
+        return 'flex-start';
+      }
+      if (position === 'se') {
+        return 'flex-end';
+      }
+      if (position === 'ne') {
+        return direction === 'horizontal' ? 'flex-end' : 'flex-start';
+      }
+      // otherwise position sw
+      return direction === 'vertical' ? 'flex-end' : 'flex-start';
+    })();
+
+    const marginStyles = (() => {
+      if (!inside) {
+        return {};
+      }
+      const styles: Record<string, string> = {
+        alignItems: 'center',
+      };
+      if (position.includes('n')) {
+        styles.top = `${margin.top}px`;
+      } else if (position.includes('s')) {
+        styles.bottom = `${margin.bottom}px`;
+      }
+      if (position.includes('w')) {
+        styles.left = `${margin.left}px`;
+      } else if (position.includes('e')) {
+        styles.right = `${margin.right}px`;
+      }
+
+      if (['n', 's', 'e', 'w'].includes(position)) {
+        styles.justifyContent = 'center';
+      }
+
+      if (['n', 's'].includes(position)) {
+        styles.left = '0';
+        styles.right = '0';
+      }
+
+      if (['e', 'w'].includes(position)) {
+        styles.top = '0';
+        styles.bottom = '0';
+      }
+
+      return styles;
+    })();
+
+    const styles = styleMap({
+      alignSelf,
+      ...marginStyles,
+    });
+
+    const directionClass =
+      direction === 'horizontal' ? 'horizontal' : 'vertical';
+
+    return html`
+      <div
+        class="legend ${inside ? 'inside' : 'outside'} ${directionClass}"
+        style=${styles}
+      >
+        ${this.data.map(
+          ({ color, displayName }) => html`
+            <div class="legend-item">
+              <div
+                class="legend-item-box"
+                style=${styleMap({
+                  background: color,
+                })}
+              ></div>
+              <span class="legend-item-label">${displayName}</span>
+            </div>
+          `
+        )}
+      </div>
+    `;
+  }
+
+  renderChart() {
+    const { margin, svgWidth, svgHeight, width, height } = this.getDimensions();
 
     const xScale = getXScale(
       width,
@@ -228,10 +455,6 @@ export default class LineChart extends LitElement {
     const yScales = this.getYScales();
 
     const lines = yScales.map((yScale) => {
-      // const line = d3
-      //   .line<ChartDatum>()
-      //   .x((d) => xScale(new Date(d.timeMs)))
-      //   .y((d) => yScale.scale(d.value));
       const line = (data: ChartDatum[]) =>
         LineChart.getPath(
           data,
@@ -242,7 +465,7 @@ export default class LineChart extends LitElement {
     });
 
     return svg`
-      <svg width=${svgWidth} height=${svgHeight}>
+      <svg width=${svgWidth} height=${svgHeight} style="position: absolute">
         <g transform="translate(${margin.left},${margin.top})">
           <defs>
             <clipPath id="clip">
@@ -254,23 +477,8 @@ export default class LineChart extends LitElement {
             ${getRealTimeXAxis(xScale)}
             ${getRealTimeXGrid(xScale, height)}
           </g>
-          ${yScales.map(
-            (scale) => svg`
-              <g 
-                class="axis axis--y" 
-                transform="translate(${
-                  scale.chartAxis.side === 'left' ? 0 : width
-                }, 0)"
-                ${ref((yAxis) => {
-                  const axis =
-                    scale.chartAxis.side === 'left'
-                      ? d3.axisLeft
-                      : d3.axisRight;
-                  axis(scale.scale)(d3.select(yAxis as SVGGElement));
-                })}>
-              </g>
-            `
-          )}
+          ${this.renderScales(yScales, 'left')}
+          ${this.renderScales(yScales, 'right')}
           ${this.data
             .filter(
               ({ isHidden, yAxis }) =>
@@ -295,6 +503,33 @@ export default class LineChart extends LitElement {
             )}
         </g>
       </svg>
+    `;
+  }
+
+  renderScales(yScales: YScale[], side: 'left' | 'right') {
+    // console.log('text width:', getYScaleWidth('-10'));
+    const { width } = this.getDimensions();
+
+    return svg`
+     ${yScales
+       .filter((scale) => scale.chartAxis.side === side)
+       .map((scale, index) => {
+         const xTransform =
+           scale.chartAxis.side === 'left' ? -index * 25 : width;
+         return svg`
+              <g 
+                class="axis axis--y" 
+                transform="translate(${xTransform}, 0)"
+                ${ref((yAxis) => {
+                  const axis =
+                    scale.chartAxis.side === 'left'
+                      ? d3.axisLeft
+                      : d3.axisRight;
+                  axis(scale.scale)(d3.select(yAxis as SVGGElement));
+                })}>
+              </g>
+            `;
+       })}
     `;
   }
 }

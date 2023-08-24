@@ -6,6 +6,7 @@ export default class LineChartData extends LitElement {
   @property({ type: String }) color = '';
   @property({ type: Boolean, attribute: 'is-hidden' }) isHidden = false;
   @property({ type: Number, attribute: 'y-axis' }) yAxis = 0;
+  @property({ type: String, attribute: 'display-name' }) displayName = '';
 }
 
 if (!customElements.get('frc-line-chart-data')) {

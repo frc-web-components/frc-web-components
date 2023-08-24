@@ -9,8 +9,8 @@ export default class LineChartExperiments extends LitElement {
 
   render() {
     return html`
-      <frc-line-chart view-time="20">
-        <frc-line-chart-data color="green" value="2"></frc-line-chart-data>
+      <frc-line-chart view-time="10">
+        <frc-line-chart-data value="2"></frc-line-chart-data>
         <frc-line-chart-data
           color="blue"
           value="3"
@@ -22,6 +22,10 @@ export default class LineChartExperiments extends LitElement {
           max="1"
           side="right"
         ></frc-line-chart-axis>
+        <frc-line-chart-legend
+          position="n"
+          direction="horizontal"
+        ></frc-line-chart-legend>
       </frc-line-chart>
     `;
   }

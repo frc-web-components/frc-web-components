@@ -58,6 +58,8 @@ export default defineConfig({
         'components/canvas/canvas-mjpg-stream-instance':
           'src/components/canvas/canvas-mjpg-stream-instance.ts',
         'components/canvas/interfaces': 'src/components/canvas/interfaces.ts',
+        // line chart
+        'components/line-chart': 'src/components/line-chart/index.ts',
         // other components
         'components/3-axis-accelerometer':
           'src/components/3-axis-accelerometer.ts',
