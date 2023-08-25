@@ -217,10 +217,6 @@ export default class DashboardRoot extends LitElement {
             );
           })}
         ></vaadin-dialog>
-        <dashboard-drawer
-          .interact="${null}"
-          .dashboard=${this.dashboard}
-        ></dashboard-drawer>
         <div class="dashboard" style="background: ${dashboardBackground}">
           <slot name="navbar"></slot>
           <div class="dashboard-elements">
@@ -230,6 +226,10 @@ export default class DashboardRoot extends LitElement {
             </div>
           </div>
         </div>
+        <dashboard-drawer
+          .interact="${null}"
+          .dashboard=${this.dashboard}
+        ></dashboard-drawer>
       </div>
     `;
   }

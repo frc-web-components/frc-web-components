@@ -3,7 +3,6 @@ import { addElementPreview } from './layers/element-preview';
 import { addAbsolutePositionLayout } from './layers/absolute-position-layout';
 import properties from './properties';
 import elementEditors from './element-editors';
-import './element-tree';
 import { addDragAndDrop } from './layers/drag-and-drop';
 
 export default function addDashboardComponents(dashboard: FrcDashboard): void {

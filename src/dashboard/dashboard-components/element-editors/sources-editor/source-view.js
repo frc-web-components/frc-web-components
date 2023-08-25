@@ -16,7 +16,6 @@ const styles = css`
 
   summary {
     display: flex;
-    border-bottom: 1px solid rgb(187, 187, 187);
   }
 
   summary div {
@@ -263,9 +262,6 @@ class SourceView extends LitElement {
                   `
                 : ''}
               <label>${this.label !== '' ? this.label : html`&nbsp;`}</label>
-              ${!this.disabled
-                ? html` <button @click="${this.onSelect}">Select</button> `
-                : ''}
             </span>
             <span class="value">
               ${this.hasValue() ? this.renderValue() : ''}

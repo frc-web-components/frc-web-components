@@ -22,7 +22,7 @@ export default class DashboardDrawerSidebar extends LitElement {
     :host {
       font-family: sans-serif;
       font-size: 15px;
-      width: 200px;
+      width: 100%;
       height: 100vh;
       background: #444;
       padding: 20px 15px;
@@ -88,16 +88,6 @@ export default class DashboardDrawerSidebar extends LitElement {
     const allowedChildren =
       this.dashboard?.getAllowedChildren()?.[0]?.allowedChildren;
     return allowedChildren ?? [];
-  }
-
-  #appendToDashboard(): void {
-    if (this.selectedElement && this.newElementSelector) {
-      appendElementToDashboard(
-        this.dashboard.getConnector(),
-        this.newElementSelector,
-        this.selectedElement
-      );
-    }
   }
 
   getGroups(): string[] {
@@ -181,7 +171,6 @@ export default class DashboardDrawerSidebar extends LitElement {
   render(): TemplateResult {
     const isEditable = this.dashboard.isElementEditable();
     return html`
-      <header>Elements</header>
       <select
         class="group-selector"
         ?disabled=${this.groups.length === 0 || !isEditable}
@@ -202,14 +191,6 @@ export default class DashboardDrawerSidebar extends LitElement {
   }
 
   #renderChildren(): TemplateResult {
-    const isEditable = this.dashboard.isElementEditable();
-    if (!isEditable) {
-      return html`
-        <p class="no-children-warning">
-          No children can be added to a tutorial
-        </p>
-      `;
-    }
     return html`
       ${this.getElements().length === 0
         ? html`
@@ -244,43 +225,8 @@ export default class DashboardDrawerSidebar extends LitElement {
           >
             ${name}
           </p>
-          ${this.newElementSelector === selector
-            ? html`
-                ${this.renderDemo()}
-                <div style="margin-bottom: 8px">
-                  <button class="add-button" @click=${this.#appendToDashboard}>
-                    Prepend
-                  </button>
-                  <button class="add-button" @click=${this.#appendToDashboard}>
-                    Append
-                  </button>
-                </div>
-              `
-            : null}
         `
       )}
-    `;
-  }
-
-  renderDemo(): TemplateResult {
-    if (!this.newElementSelector) {
-      return html``;
-    }
-    const tutorials = this.dashboard.getElementTutorials(
-      this.newElementSelector
-    );
-    if (tutorials.length === 0) {
-      return html``;
-    }
-    return html`
-      <button
-        class="demo-button"
-        @click=${() => {
-          this.dashboard.showTutorial(tutorials[0].id);
-        }}
-      >
-        Demo element
-      </button>
     `;
   }
 }

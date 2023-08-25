@@ -11,10 +11,6 @@ class SourcesView extends LitElement {
       margin: 8px 0 5px;
       font-weight: bold;
     }
-
-    vaadin-accordion-panel {
-      border-bottom: none;
-    }
   `;
 
   static properties = {
