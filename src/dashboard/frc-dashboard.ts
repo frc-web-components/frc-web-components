@@ -1,6 +1,5 @@
 import { WebbitConfig } from '@webbitjs/webbit';
 import Dashboard from './dashboard';
-import getAllowedChildren from './get-allowed-children';
 import { createLayerElement } from './layer';
 import { addCSSRule, createSheet } from './themes';
 
@@ -40,10 +39,6 @@ export default class FrcDashboard extends Dashboard {
       return;
     }
     this.setStoreValue('selectedElement', element);
-    this.setStoreValue(
-      'allowedChildren',
-      getAllowedChildren(element, this.getConnector())
-    );
   }
 
   setPreviewedElement(element: HTMLElement | null): void {
@@ -57,13 +52,6 @@ export default class FrcDashboard extends Dashboard {
     group = 'default'
   ): void {
     super.addElements(elementConfigs, group);
-    const selectedElement = this.getSelectedElement();
-    if (selectedElement) {
-      this.setStoreValue(
-        'allowedChildren',
-        getAllowedChildren(selectedElement, this.getConnector())
-      );
-    }
     this.publish('elementsAdd');
   }
 
@@ -95,13 +83,6 @@ export default class FrcDashboard extends Dashboard {
 
   getPreviewedElement(): HTMLElement | null {
     return this.getStoreValue('previewedElement', null) as HTMLElement;
-  }
-
-  getAllowedChildren(): { slot: string; allowedChildren: string[] }[] {
-    return this.getStoreValue('allowedChildren', []) as {
-      slot: string;
-      allowedChildren: string[];
-    }[];
   }
 
   addTab(name: string, html?: string): HTMLElement {

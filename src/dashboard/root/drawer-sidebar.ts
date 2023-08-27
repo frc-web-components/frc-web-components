@@ -1,9 +1,7 @@
 /* eslint-disable import/extensions */
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { customElement, state, property } from 'lit/decorators.js';
-import { WebbitConfig } from '@webbitjs/webbit';
 import FrcDashboard from '../frc-dashboard';
-import { appendElementToDashboard } from './get-element-html';
 
 interface DashboardElement {
   selector: string;
@@ -13,10 +11,8 @@ interface DashboardElement {
 @customElement('dashboard-drawer-sidebar')
 export default class DashboardDrawerSidebar extends LitElement {
   @property({ type: Object }) dashboard!: FrcDashboard;
-  @state() groups: string[] = [];
   @state() newElementSelector?: string;
-  @state() selectedGroup = 'My Elements';
-  @state() selectedElement?: HTMLElement;
+  @state() topLevelComponents: string[] = [];
 
   static styles = css`
     :host {
@@ -53,90 +49,32 @@ export default class DashboardDrawerSidebar extends LitElement {
     p.selected {
       font-weight: bold;
     }
-
-    .group-selector {
-      margin-bottom: 10px;
-      padding: 3px 1px;
-      font-size: 16px;
-    }
-
-    .add-button {
-      border: 1px solid #aaa;
-      color: white;
-      background: none;
-      border-radius: 4px;
-      padding: 3px 5px;
-      cursor: pointer;
-    }
-
-    .demo-button {
-      color: rgb(187, 187, 255);
-      border: none;
-      background: none;
-      cursor: pointer;
-      text-align: left;
-      margin-bottom: 5px;
-      padding: 1px;
-    }
-
-    .no-children-warning span {
-      font-weight: bold;
-    }
   `;
 
-  get #allowedChildren(): string[] {
-    const allowedChildren =
-      this.dashboard?.getAllowedChildren()?.[0]?.allowedChildren;
-    return allowedChildren ?? [];
-  }
-
-  getGroups(): string[] {
-    const { dashboard } = this;
-    if (!dashboard) {
+  #getTopLevelComponents(): string[] {
+    const connector = this.dashboard?.getConnector();
+    if (!connector) {
       return [];
     }
-    const selectors = this.#allowedChildren;
-    const groups: string[] = selectors.map((selector) => {
-      const config = dashboard.getConnector().getElementConfig(selector);
-      if (!config) {
-        return '';
-      }
-      return config.group;
-    });
-    return [...new Set(groups)].filter((group) => group !== '').sort();
+
+    const topLevel = connector
+      .getElementConfigSelectors()
+      .filter(
+        (childSelector) =>
+          connector.getElementConfig(childSelector)?.dashboard?.topLevel
+      );
+    return topLevel;
   }
 
   firstUpdated(): void {
     this.dashboard.subscribe('elementSelect', () => {
-      this.selectedElement = this.dashboard.getSelectedElement() ?? undefined;
+      this.topLevelComponents = this.#getTopLevelComponents();
     });
     this.dashboard.subscribe('elementsAdd', () => {
-      this.groups = this.getGroups();
+      this.topLevelComponents = this.#getTopLevelComponents();
     });
-    this.selectedElement = this.dashboard.getSelectedElement() ?? undefined;
-  }
 
-  updated(changedProps: Map<string, unknown>): void {
-    if (changedProps.has('selectedElement')) {
-      this.groups = this.getGroups();
-      if (!this.groups.includes(this.selectedGroup)) {
-        this.selectedGroup = this.groups[0] ?? this.selectedGroup;
-      }
-      this.newElementSelector = this.getElements()[0]?.selector;
-    }
-    if (changedProps.has('selectedGroup')) {
-      const selectedElementGroup =
-        this.getElementConfig()?.group ?? this.groups[0];
-      if (selectedElementGroup !== this.selectedGroup) {
-        this.newElementSelector = this.getElements()[0]?.selector;
-      }
-    }
-  }
-
-  getElementConfig(): WebbitConfig | undefined {
-    return this.dashboard
-      ?.getConnector()
-      .getMatchingElementConfig(this.selectedElement);
+    this.topLevelComponents = this.#getTopLevelComponents();
   }
 
   getElements(): DashboardElement[] {
@@ -144,62 +82,22 @@ export default class DashboardDrawerSidebar extends LitElement {
     if (!dashboard) {
       return [];
     }
-    const selectors = this.#allowedChildren;
-    return selectors
+    const selectors = this.topLevelComponents;
+    const elements = selectors
       .filter((selector) => {
         const config = dashboard.getConnector().getElementConfig(selector);
-        if (!config) {
-          return false;
-        }
-        return config.group === this.selectedGroup;
+        return !!config;
       })
       .map((selector) => ({
         selector,
         name: dashboard.getSelectorDisplayName(selector),
       }))
       .sort((el1, el2) => el1.name.localeCompare(el2.name));
-  }
-
-  #getSelectedElementName(): string {
-    const { selectedElement } = this;
-    if (!selectedElement) {
-      return '';
-    }
-    return this.dashboard?.getElementDisplayName(selectedElement) ?? '';
+    return elements;
   }
 
   render(): TemplateResult {
-    const isEditable = this.dashboard.isElementEditable();
     return html`
-      <select
-        class="group-selector"
-        ?disabled=${this.groups.length === 0 || !isEditable}
-        @change=${(ev: any) => {
-          this.selectedGroup = ev.target.value;
-        }}
-      >
-        ${this.groups.map(
-          (group) => html`
-            <option value=${group} ?selected=${group === this.selectedGroup}>
-              ${group}
-            </option>
-          `
-        )}
-      </select>
-      ${this.#renderChildren()}
-    `;
-  }
-
-  #renderChildren(): TemplateResult {
-    return html`
-      ${this.getElements().length === 0
-        ? html`
-            <p class="no-children-warning">
-              No children can be added to element
-              <span>${this.#getSelectedElementName()}</span>
-            </p>
-          `
-        : null}
       ${this.getElements().map(
         ({ selector, name }) => html`
           <p

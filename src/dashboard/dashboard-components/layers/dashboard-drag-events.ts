@@ -1,5 +1,4 @@
 import { WebbitConnector } from '@webbitjs/webbit';
-import { getAllowedChildrenByConfig } from '../../get-allowed-children';
 
 type DragListener = (event: DragEvent) => unknown;
 
@@ -36,42 +35,12 @@ export default class DashboardDragEvents {
       const element = value.element as HTMLElement;
       this.#elements.delete(element);
     });
-
-    // connector.subscribeElementDisconnected((value: any) => {
-    //   const element = value.element as HTMLElement;
-    //   const dragoverListener = this.#eventListeners.get(element);
-    //   if (dragoverListener) {
-    //     element.removeEventListener('dragover', dragoverListener);
-    //   }
-    //   const dropListener = this.#eventListeners.get(element);
-    //   if (dropListener) {
-    //     element.removeEventListener('drop', dropListener);
-    //   }
-    //   this.#eventListeners.delete(element);
-    // });
   }
 
-  setDraggedElement(elementSelector: string): void {
-    const droppableElements: { slot: string; selector: string }[] = [];
-    const selectors = this.#connector.getElementConfigSelectors();
-    selectors.forEach((selector) => {
-      const config = this.#connector.getElementConfig(selector);
-      if (config) {
-        const allowedChildren = getAllowedChildrenByConfig(
-          config,
-          this.#connector
-        );
-        const draggedElementAllowed = allowedChildren.find(
-          ({ allowedChildren: allowed }) => allowed.includes(elementSelector)
-        );
-        if (draggedElementAllowed) {
-          droppableElements.push({
-            slot: draggedElementAllowed.slot,
-            selector,
-          });
-        }
-      }
-    });
+  setDraggedElement(): void {
+    const droppableElements: { slot: string; selector: string }[] = [
+      { slot: '', selector: 'dashboard-tab' },
+    ];
     this.#addEvents(droppableElements);
   }
 

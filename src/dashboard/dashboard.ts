@@ -8,19 +8,6 @@ function getFormattedHtml(html: string) {
   });
 }
 
-type ComponentRenderer = (params: {
-  // eslint-disable-next-line no-use-before-define
-  dashboard: Dashboard;
-  element: HTMLElement;
-  config: Record<string, unknown>;
-}) => (() => void) | undefined;
-
-interface DashboardComponent {
-  type: string;
-  id: string;
-  mount: ComponentRenderer;
-}
-
 type SubscriberCallback = (...args: unknown[]) => unknown;
 
 export default class Dashboard {
