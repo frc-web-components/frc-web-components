@@ -1,7 +1,6 @@
 import { WebbitConnector, WebbitConfig } from '@webbitjs/webbit';
 import { Store, SourceProvider } from '@webbitjs/store';
 import { html as beautifyHtml } from 'js-beautify';
-import KeyStore from './KeyStore';
 
 function getFormattedHtml(html: string) {
   return beautifyHtml(html, {
@@ -27,25 +26,8 @@ type SubscriberCallback = (...args: unknown[]) => unknown;
 export default class Dashboard {
   private store: Store = new Store();
   private connector;
-  private components = new Map<symbol, DashboardComponent>();
-  private mountedElements = new Map<
-    HTMLElement,
-    {
-      componentId: string;
-      componentType: string;
-      config: Record<string, unknown>;
-      unmount:
-        | ((props: {
-            config: Record<string, unknown>;
-            dashboard: Dashboard;
-            element: HTMLElement;
-          }) => void)
-        | undefined;
-    }
-  >();
 
   private subscribers = new Map<string, Map<symbol, SubscriberCallback>>();
-  private componentKeys = new KeyStore(2);
   private dashboardState = new Store();
   private provider = new SourceProvider();
 
@@ -95,74 +77,6 @@ export default class Dashboard {
 
   getStore(): Store {
     return this.connector.getStore();
-  }
-
-  addComponent(component: DashboardComponent): void {
-    const key = this.componentKeys.getKey(component.type, component.id);
-    if (key) {
-      this.components.set(key, component);
-    }
-  }
-
-  hasComponent(type: string, id: string): boolean {
-    const componentKey = this.componentKeys.getKey(type, id);
-    if (componentKey) {
-      return this.components.has(componentKey);
-    }
-    return false;
-  }
-
-  getComponentIdsOfType(type: string): string[] {
-    return [...this.components.values()]
-      .filter(({ type: componentType }) => componentType === type)
-      .map(({ id }) => id);
-  }
-
-  create(
-    componentType: string,
-    componentId: string,
-    config: Record<string, unknown> = {}
-  ): HTMLElement | undefined {
-    const element = document.createElement('div');
-    const componentKey = this.componentKeys.getKey(componentType, componentId);
-    if (!componentKey) {
-      return undefined;
-    }
-    const component = this.components.get(componentKey);
-    if (component) {
-      const unmount = component.mount({
-        dashboard: this,
-        element,
-        config,
-      });
-      this.mountedElements.set(element, {
-        componentId,
-        componentType,
-        config,
-        unmount,
-      });
-      return element;
-    }
-    return undefined;
-  }
-
-  /**
-   * Unmounts the mounted component from a particular element
-   * @param {HTMLElement} element
-   */
-  unmount(element: HTMLElement): void {
-    const mountedElement = this.mountedElements.get(element);
-    if (mountedElement) {
-      const { config, unmount } = mountedElement;
-      if (unmount) {
-        unmount({
-          dashboard: this,
-          element,
-          config,
-        });
-      }
-      this.mountedElements.delete(element);
-    }
   }
 
   /**

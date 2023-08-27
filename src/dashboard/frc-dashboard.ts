@@ -1,4 +1,3 @@
-import { LitElement } from 'lit';
 import { WebbitConfig } from '@webbitjs/webbit';
 import Dashboard from './dashboard';
 import getAllowedChildren from './get-allowed-children';
@@ -103,59 +102,6 @@ export default class FrcDashboard extends Dashboard {
       slot: string;
       allowedChildren: string[];
     }[];
-  }
-
-  /**
-   *
-   * @param {string} id
-   * @param {string} elementName
-   */
-  addPropertyInput(id: string, elementName: string): void {
-    this.addComponent({
-      type: 'propertyInput',
-      id,
-      mount({ dashboard, element, config }) {
-        const propertyView = document.createElement(elementName);
-        (propertyView as any).element = config.element;
-        (propertyView as any).propertyHandler = config.propertyHandler;
-        (propertyView as any).propertyName = config.propertyName;
-        (propertyView as any).dashboard = dashboard;
-        element.append(propertyView);
-
-        const elementChangeListener = (ev: Event) => {
-          dashboard.publish('propertyInputChange', (ev as CustomEvent).detail);
-        };
-        propertyView.addEventListener('change', elementChangeListener);
-
-        const propertyInputChangeUnsubscriber = dashboard.subscribe(
-          'propertyInputChange',
-          () => {
-            (propertyView as LitElement)?.requestUpdate();
-          }
-        );
-
-        return () => {
-          propertyView.removeEventListener('change', elementChangeListener);
-          propertyInputChangeUnsubscriber();
-          propertyView.remove();
-        };
-      },
-    });
-  }
-
-  addElementEditor(id: string, elementName: string): void {
-    this.addComponent({
-      type: 'elementEditor',
-      id,
-      mount({ dashboard, element }) {
-        const propertyView = document.createElement(elementName);
-        (propertyView as any).dashboard = dashboard;
-        element.append(propertyView);
-        return () => {
-          propertyView.remove();
-        };
-      },
-    });
   }
 
   addTab(name: string, html?: string): HTMLElement {
