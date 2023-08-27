@@ -5,15 +5,7 @@ import getAllowedChildren from './get-allowed-children';
 import { createLayerElement } from './layer';
 import { addCSSRule, createSheet } from './themes';
 
-export interface Tutorial {
-  id: string;
-  name: string;
-  element?: string;
-  html: string;
-}
-
 export default class FrcDashboard extends Dashboard {
-  private tutorials: Record<string, Tutorial> = {};
   private layers: Record<string, HTMLElement> = {};
   private themeSheets: Record<string, CSSStyleSheet> = {};
 
@@ -166,43 +158,6 @@ export default class FrcDashboard extends Dashboard {
     });
   }
 
-  addTutorial(tutorial: Tutorial): void {
-    this.tutorials[tutorial.id] = tutorial;
-  }
-
-  getTutorialIds(): string[] {
-    return Object.keys(this.tutorials);
-  }
-
-  getTutorial(id: string): Tutorial | undefined {
-    return this.tutorials[id];
-  }
-
-  showTutorial(id: string): void {
-    const tutorial = this.getTutorial(id);
-    if (tutorial) {
-      const tab = this.addTab(tutorial.name, tutorial.html);
-      tab.setAttribute('tutorial', '');
-      tab.querySelectorAll('script').forEach((scriptElement) => {
-        const clonedElement = document
-          .createRange()
-          .createContextualFragment(scriptElement.outerHTML);
-        scriptElement.parentElement?.replaceChild(clonedElement, scriptElement);
-      });
-      this.setSelectedElement(tab);
-    }
-  }
-
-  getElementTutorials(selector: string): Tutorial[] {
-    const tutorials: Tutorial[] = [];
-    Object.entries(this.tutorials).forEach(([, tutorial]) => {
-      if (tutorial.element === selector) {
-        tutorials.push(tutorial);
-      }
-    });
-    return tutorials;
-  }
-
   addTab(name: string, html?: string): HTMLElement {
     const tab = document.createElement('dashboard-tab');
     if (html) {
@@ -220,10 +175,7 @@ export default class FrcDashboard extends Dashboard {
     if (!element) {
       return true;
     }
-    return (
-      element.tagName.toLowerCase() !== 'dashboard-tab' ||
-      !element.hasAttribute('tutorial')
-    );
+    return element.tagName.toLowerCase() !== 'dashboard-tab';
   }
 
   addLayer(name: string): HTMLElement {

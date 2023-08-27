@@ -5,7 +5,6 @@ import './frc-dashboard';
 import './frc-dashboard-builder';
 import addElements from './elements';
 import addProviders from './source-providers';
-// import addTutorials from './tutorials';
 import addThemes from './themes';
 import addDashboardComponents from './dashboard/dashboard-components';
 
@@ -16,7 +15,6 @@ export default function createDashboard(
   const dashboard = new Dashboard();
   addElements(dashboard);
   addProviders(dashboard);
-  // addTutorials(dashboard);
   addThemes(dashboard);
   addDashboardComponents(dashboard);
   const dashboardElement = document.createElement(dashboardElementName);

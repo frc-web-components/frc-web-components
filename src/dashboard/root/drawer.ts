@@ -21,6 +21,7 @@ export default class DashboardDrawer extends LitElement {
       width: 300px;
       height: calc(100vh - 44px);
       overflow: hidden;
+      max-width: 100vw;
     }
 
     vaadin-tabs {
@@ -37,6 +38,8 @@ export default class DashboardDrawer extends LitElement {
 
     .drawer-content {
       flex: 1;
+      width: 100%;
+      overflow: hidden;
     }
 
     .splitter {
@@ -75,7 +78,7 @@ export default class DashboardDrawer extends LitElement {
       }
 
       if (this.dragHandle) {
-        this.drawerWidth = ev.screenX;
+        this.drawerWidth = Math.max(8, ev.screenX);
         this.style.width = `${this.drawerWidth}px`;
       }
     });
@@ -107,13 +110,13 @@ export default class DashboardDrawer extends LitElement {
             `
           : ''}
       </div>
-      <div class="splitter">
-        <div
-          class="handle"
-          @mousedown=${(ev: MouseEvent) => {
-            this.dragHandle = true;
-          }}
-        ></div>
+      <div
+        class="splitter"
+        @mousedown=${(ev: MouseEvent) => {
+          this.dragHandle = true;
+        }}
+      >
+        <div class="handle"></div>
       </div>
     `;
   }
