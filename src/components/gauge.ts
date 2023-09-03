@@ -92,3 +92,9 @@ export default class Gauge extends LitElement {
 if (!customElements.get('frc-gauge')) {
   customElements.define('frc-gauge', Gauge);
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-gauge': Gauge;
+  }
+}
