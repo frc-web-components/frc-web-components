@@ -131,5 +131,11 @@ export default function addDarkTheme(dashboard: FrcDashboard): void {
 
     /* frc-swerve-drivetrain */
     '--frc-swerve-drive-color': 'white',
+
+    /* buttons */
+    '--frc-button-background-color': 'rgba(255,255,255,.1)',
+    '--frc-button-text-color': 'white',
+    '--frc-button-toggled-background-color': 'rgba(240,240,240)',
+    '--frc-button-toggled-text-color': 'black',
   });
 }

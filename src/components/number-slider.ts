@@ -1,8 +1,7 @@
 /* eslint-disable import/extensions */
 import { html, css, LitElement, TemplateResult } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
 
-@customElement('frc-number-slider')
 export default class NumberSlider extends LitElement {
   @property({ type: Number }) value = 0;
   @property({ type: Number }) min = -1;

@@ -20,3 +20,7 @@ import './line-chart';
 import './pdp';
 import './voltage-view';
 import './number-slider';
+import './toggle-switch';
+import './toggle-button';
+import './toggle-group';
+import './relay';
