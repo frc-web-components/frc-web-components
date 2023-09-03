@@ -40,25 +40,11 @@ const colorScale = d3
 
 export function getYScaleWidth(text: string /* , fontSize: number */): number {
   return text.length * 5.5 + 9;
-  // Create SVG element
-  // const svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  // svgElement.setAttribute('width', '500');
-  // svgElement.setAttribute('height', '500');
-  // svgElement.setAttribute('viewBox', '0 0 500 500');
-  // const textElement = document.createElementNS(
-  //   'http://www.w3.org/2000/svg',
-  //   'text'
-  // );
-  // textElement.style.fontFamily = 'monospace';
-  // textElement.style.fontSize = `${fontSize}px`;
-  // textElement.textContent = text;
-
-  // svgElement.appendChild(textElement);
-  // return textElement.getComputedTextLength();
 }
 
 export default class LineChart extends LitElement {
   @property({ type: Number, attribute: 'view-time' }) viewTime = 10;
+  @property({ type: String, attribute: 'chart-title' }) chartTitle = '';
 
   @state() data: ChartData[] = [];
 
@@ -75,11 +61,26 @@ export default class LineChart extends LitElement {
       display: inline-block;
       width: 700px;
       height: 400px;
+      color: var(--frc-line-chart-text-color, black);
+    }
+
+    .chart-and-header {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .chart-and-header header {
+      font-size: 18px;
+      font-family: sans-serif;
+      margin: 3px 0;
     }
 
     .chart-and-legend {
+      flex: 1;
       width: 100%;
-      height: 100%;
       position: relative;
     }
 
@@ -122,7 +123,7 @@ export default class LineChart extends LitElement {
     }
 
     .legend-item-label {
-      font: sans-serif;
+      font-family: sans-serif;
       font-size: 15px;
     }
 
@@ -134,15 +135,20 @@ export default class LineChart extends LitElement {
     .chart-border {
       fill: none;
       stroke-width: 1;
-      stroke: black;
+      stroke: var(--frc-line-chart-border-color, black);
     }
 
-    .axis-x-grid line {
-      stroke: #eee;
+    .axis-x-grid line,
+    .axis-y-grid line {
+      stroke: var(--frc-line-chart-grid-color, #eee);
     }
 
     .axis--y {
       font-family: monospace;
+    }
+
+    svg {
+      overflow: visible;
     }
   `;
 
@@ -221,7 +227,7 @@ export default class LineChart extends LitElement {
   }
 
   getDimensions() {
-    const margin = { top: 20, right: 40, bottom: 20, left: 40 };
+    const margin = { top: 0, right: 40, bottom: 20, left: 40 };
     const box = this.chartContainer?.getBoundingClientRect() ?? {
       width: 960,
       height: 500,
@@ -256,6 +262,7 @@ export default class LineChart extends LitElement {
         autoFit: false,
         invert: false,
         side: 'left',
+        hideGridLines: false,
       };
       return [
         {
@@ -279,6 +286,7 @@ export default class LineChart extends LitElement {
         autoFit: axisElement.autoFit ?? false,
         invert: axisElement.invert ?? false,
         side: axisElement.side ?? 'left',
+        hideGridLines: axisElement.hideGridLines ?? false,
       };
       return {
         chartAxis,
@@ -350,12 +358,17 @@ export default class LineChart extends LitElement {
         }
       : { flex: '1' };
 
-    return html`<div class="chart-and-legend" style=${styles}>
-      ${this.renderLegend()}
-      <div class="chart-container" style=${styleMap(chartContainerStyles)}>
-        ${this.renderChart()}
+    return html`
+      <div class="chart-and-header">
+        ${this.chartTitle ? html`<header>Chart Title</header>` : ''}
+        <div class="chart-and-legend" style=${styles}>
+          ${this.renderLegend()}
+          <div class="chart-container" style=${styleMap(chartContainerStyles)}>
+            ${this.renderChart()}
+          </div>
+        </div>
       </div>
-    </div>`;
+    `;
   }
 
   renderLegend() {
@@ -472,13 +485,13 @@ export default class LineChart extends LitElement {
               <rect width=${width} height=${height}></rect>
             </clipPath>
           </defs>
-          <rect class="chart-border" width=${width} height=${height}></rect>
           <g transform="translate(0,${height})">
             ${getRealTimeXAxis(xScale)}
             ${getRealTimeXGrid(xScale, height)}
           </g>
           ${this.renderScales(yScales, 'left')}
           ${this.renderScales(yScales, 'right')}
+          <rect class="chart-border" width=${width} height=${height}></rect>
           ${this.data
             .filter(
               ({ isHidden, yAxis }) =>
@@ -507,7 +520,6 @@ export default class LineChart extends LitElement {
   }
 
   renderScales(yScales: YScale[], side: 'left' | 'right') {
-    // console.log('text width:', getYScaleWidth('-10'));
     const { width } = this.getDimensions();
 
     return svg`
@@ -516,6 +528,7 @@ export default class LineChart extends LitElement {
        .map((scale, index) => {
          const xTransform =
            scale.chartAxis.side === 'left' ? -index * 25 : width;
+
          return svg`
               <g 
                 class="axis axis--y" 
@@ -528,6 +541,23 @@ export default class LineChart extends LitElement {
                   axis(scale.scale)(d3.select(yAxis as SVGGElement));
                 })}>
               </g>
+              ${
+                !scale.chartAxis.hideGridLines
+                  ? svg`
+                    <g 
+                      class="axis-y-grid" 
+                      ${ref((yAxisEl) => {
+                        const yAxisGrid = d3
+                          .axisLeft(scale.scale)
+                          .tickSize(-width)
+                          .tickFormat('' as any);
+
+                        yAxisGrid(d3.select(yAxisEl as SVGGElement));
+                      })}>
+                    </g> 
+                  `
+                  : ''
+              }
             `;
        })}
     `;

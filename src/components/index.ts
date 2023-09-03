@@ -16,3 +16,4 @@ import './gyro';
 import './number-bar';
 import './sendable-chooser';
 import './canvas/canvas';
+import './line-chart';

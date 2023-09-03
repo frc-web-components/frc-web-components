@@ -121,6 +121,8 @@ export default function addDarkTheme(dashboard: FrcDashboard): void {
 
     /* Line Chart */
     '--frc-line-chart-text-color': 'white',
+    '--frc-line-chart-border-color': 'white',
+    '-frc-line-chart-grid-color': 'rgba(22,22,22,.2)',
 
     /* frc-gauge */
     '--frc-gauge-fill-color': 'rgb(90,150,200)',

@@ -9,6 +9,7 @@ export interface ILineChartAxis {
   autoFit: boolean;
   invert: boolean;
   side: 'left' | 'right';
+  hideGridLines: boolean;
 }
 
 export default class LineChartAxis
@@ -22,6 +23,8 @@ export default class LineChartAxis
   @property({ type: Boolean, attribute: 'auto-fit' }) autoFit = false;
   @property({ type: Boolean }) invert = false;
   @property({ type: String }) side: 'left' | 'right' = 'left';
+  @property({ type: Boolean, attribute: 'hide-grid-lines' }) hideGridLines =
+    false;
 }
 
 if (!customElements.get('frc-line-chart-axis')) {
