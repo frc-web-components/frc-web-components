@@ -34,3 +34,9 @@ export default class LineChartLegend
 if (!customElements.get('frc-line-chart-legend')) {
   customElements.define('frc-line-chart-legend', LineChartLegend);
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-line-chart-legend': LineChartLegend;
+  }
+}

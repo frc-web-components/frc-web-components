@@ -567,3 +567,9 @@ export default class LineChart extends LitElement {
 if (!customElements.get('frc-line-chart')) {
   customElements.define('frc-line-chart', LineChart);
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-line-chart': LineChart;
+  }
+}

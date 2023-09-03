@@ -12,3 +12,9 @@ export default class LineChartData extends LitElement {
 if (!customElements.get('frc-line-chart-data')) {
   customElements.define('frc-line-chart-data', LineChartData);
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-line-chart-data': LineChartData;
+  }
+}

@@ -30,3 +30,9 @@ export default class LineChartAxis
 if (!customElements.get('frc-line-chart-axis')) {
   customElements.define('frc-line-chart-axis', LineChartAxis);
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-line-chart-axis': LineChartAxis;
+  }
+}

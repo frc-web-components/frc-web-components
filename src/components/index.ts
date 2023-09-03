@@ -17,3 +17,5 @@ import './number-bar';
 import './sendable-chooser';
 import './canvas/canvas';
 import './line-chart';
+import './pdp';
+import './voltage-view';

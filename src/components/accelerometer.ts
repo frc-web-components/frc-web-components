@@ -15,3 +15,9 @@ class Accelerometer extends NumberBar {
 if (!customElements.get('frc-accelerometer')) {
   customElements.define('frc-accelerometer', Accelerometer);
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-accelerometer': Accelerometer;
+  }
+}
