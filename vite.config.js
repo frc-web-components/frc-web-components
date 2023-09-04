@@ -60,6 +60,10 @@ export default defineConfig({
         'components/canvas/interfaces': 'src/components/canvas/interfaces.ts',
         // line chart
         'components/line-chart': 'src/components/line-chart/index.ts',
+        // mechanism2d
+        'components/mechanism2d': 'src/components/mechanism2d.ts',
+        // logger
+        'components/logger/logger': 'src/components/logger/logger.ts',
         // other components
         'components/3-axis-accelerometer':
           'src/components/3-axis-accelerometer.ts',
@@ -70,6 +74,7 @@ export default defineConfig({
         'components/gyro': 'src/components/gyro.ts',
         'components/number-bar': 'src/components/number-bar.ts',
         'components/sendable-chooser': 'src/components/sendable-chooser.ts',
+        'components/encoder': 'src/components/encoder.ts',
         // all components
         components: 'src/components/index.ts',
         // lit

@@ -24,3 +24,5 @@ import './toggle-switch';
 import './toggle-button';
 import './toggle-group';
 import './relay';
+import './mechanism2d';
+import './encoder';

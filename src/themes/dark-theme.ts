@@ -96,6 +96,7 @@ export default function addDarkTheme(dashboard: FrcDashboard): void {
 
     /* frc-encoder */
     '--frc-encoder-label-color': '#fff',
+    '--frc-encoder-value-color': '#aaa',
 
     /* frc-gyro */
     '--frc-gyro-color': '#fff',
