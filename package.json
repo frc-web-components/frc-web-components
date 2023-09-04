@@ -38,7 +38,7 @@
         "types/components/index.d.ts"
       ],
       "components/*": [
-        "types/components/*.d.ts"
+        "types/components/*/index.d.ts"
       ],
       "lit/*": [
         "types/lit/*.d.ts"

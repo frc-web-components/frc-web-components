@@ -5,6 +5,9 @@ import { FieldObjectApi } from './field-interfaces';
 
 export default class FieldRobot extends LitElement {
   @property({ type: String }) unit: string | null = 'inherit';
+  @property({ type: String, attribute: 'rotation-unit' }) rotationUnit:
+    | string
+    | null = 'inherit';
   @property({ type: String }) image = '';
   @property({ type: String }) color = '#0000ff';
   @property({ type: Number }) opacity = 1;
@@ -15,6 +18,7 @@ export default class FieldRobot extends LitElement {
   draw({
     canvas,
     unit: parentUnit,
+    rotationUnit: parentRotationUnit,
     xToPx,
     yToPx,
     lengthToPx,
@@ -22,7 +26,13 @@ export default class FieldRobot extends LitElement {
   }: FieldObjectApi): void {
     const unit =
       this.unit === 'inherit' || this.unit === null ? parentUnit : this.unit;
-    const [x, y, angle] = this.pose;
+    const rotationUnit =
+      this.rotationUnit === 'inherit' || this.rotationUnit === null
+        ? parentRotationUnit
+        : this.rotationUnit;
+    const [x, y] = this.pose;
+    const angle =
+      rotationUnit === 'rad' ? this.pose[2] : this.pose[2] / (180 / Math.PI);
 
     canvas.globalAlpha = Math.max(0, Math.min(1, this.opacity));
     canvas.fillStyle = '#222';
@@ -68,4 +78,10 @@ export default class FieldRobot extends LitElement {
 
 if (!customElements.get('frc-field-robot')) {
   customElements.define('frc-field-robot', FieldRobot);
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-field-robot': FieldRobot;
+  }
 }

@@ -51,6 +51,7 @@ export interface FieldObjectApi {
   lengthToPx: (length: number, unit: string) => number;
   getFieldRectPx: () => { x: number; y: number; width: number; height: number };
   unit: string;
+  rotationUnit: string;
   origin: 'red' | 'blue';
 }
 

@@ -404,3 +404,9 @@ export default class MecanumDrivebase extends LitElement {
 if (!customElements.get('frc-mecanum-drivebase')) {
   customElements.define('frc-mecanum-drivebase', MecanumDrivebase);
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-mecanum-drivebase': MecanumDrivebase;
+  }
+}

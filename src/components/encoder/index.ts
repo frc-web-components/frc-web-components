@@ -32,6 +32,7 @@ export default class Encoder extends LitElement {
       border-color: var(--frc-encoder-value-color, #666);
       color: var(--frc-encoder-value-color, #666);
       border-radius: 3px;
+      box-sizing: border-box;
     }
   `;
 

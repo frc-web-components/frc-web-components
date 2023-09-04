@@ -1,6 +1,6 @@
 import { css } from 'lit';
 import { property } from 'lit/decorators.js';
-import NumberBar from './number-bar';
+import NumberBar from '../number-bar';
 
 export default class VoltageView extends NumberBar {
   @property({ type: Number }) value = 0;

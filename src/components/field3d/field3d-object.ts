@@ -24,7 +24,7 @@ import {
   IField3d,
 } from './field-interfaces';
 
-export class Object3d extends LitElement {
+export default class Object3d extends LitElement {
   @property({ type: String }) name = objectConfigs[0].name;
   @property({ type: Array }) translation: Translation3d | Translation2d = [
     0, 0, 0,
@@ -149,4 +149,10 @@ export class Object3d extends LitElement {
 
 if (!customElements.get('frc-field3d-object')) {
   customElements.define('frc-field3d-object', Object3d);
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-field3d-object': Object3d;
+  }
 }

@@ -1,7 +1,7 @@
 /* eslint-disable no-bitwise */
 import { html, css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
-import './icon';
+import '../icon';
 
 const ENABLED_FLAG = 0x01;
 const AUTO_FLAG = 0x02;
@@ -132,4 +132,10 @@ export default class BasicFmsInfo extends LitElement {
 
 if (!customElements.get('frc-basic-fms-info')) {
   customElements.define('frc-basic-fms-info', BasicFmsInfo);
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-basic-fms-info': BasicFmsInfo;
+  }
 }

@@ -416,3 +416,9 @@ export default class DifferentialDrivebase extends LitElement {
 if (!customElements.get('frc-differential-drivebase')) {
   customElements.define('frc-differential-drivebase', DifferentialDrivebase);
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-differential-drivebase': DifferentialDrivebase;
+  }
+}

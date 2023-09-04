@@ -1,6 +1,6 @@
 import { html, css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
-import './toggle-group';
+import '../toggle-group';
 
 const RELAY_OPTIONS = ['Off', 'On', 'Forward', 'Reverse'] as const;
 type RelayOption = typeof RELAY_OPTIONS[number];
