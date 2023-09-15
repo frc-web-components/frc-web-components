@@ -4,7 +4,7 @@ import iconset from './iconset';
 
 export default class Icon extends LitElement {
   @property({ type: String }) color = '#000000';
-  @property({ type: String }) icon = Object.keys(iconset)[0];
+  @property({ type: String }) icon = '';
   @property({ type: String }) svgPath = '';
   @property({ type: String }) viewBox = '0 0 24 24';
 
