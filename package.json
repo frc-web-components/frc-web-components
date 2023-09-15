@@ -1,6 +1,6 @@
 {
   "name": "@frc-web-components/fwc",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "description": "",
   "files": [
     "dist",
@@ -38,7 +38,7 @@
         "types/components/index.d.ts"
       ],
       "components/*": [
-        "types/components/*.d.ts"
+        "types/components/*/index.d.ts"
       ],
       "lit/*": [
         "types/lit/*.d.ts"

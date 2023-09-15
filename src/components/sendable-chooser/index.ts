@@ -1,8 +1,8 @@
 import { html, css, LitElement, TemplateResult } from 'lit';
 import { property, query } from 'lit/decorators.js';
-import './icon';
+import '../icon';
 
-export class SendableChooser extends LitElement {
+export default class SendableChooser extends LitElement {
   @property({ type: Array }) options: string[] = [];
   @property({ type: String, reflect: true }) selected = '';
   @property({ type: String }) default = '';
@@ -142,4 +142,10 @@ export class SendableChooser extends LitElement {
 
 if (!customElements.get('frc-sendable-chooser')) {
   customElements.define('frc-sendable-chooser', SendableChooser);
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-sendable-chooser': SendableChooser;
+  }
 }

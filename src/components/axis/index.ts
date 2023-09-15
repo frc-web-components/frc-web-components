@@ -171,3 +171,9 @@ export default class Axis extends LitElement {
 if (!customElements.get('frc-axis')) {
   customElements.define('frc-axis', Axis);
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-axis': Axis;
+  }
+}

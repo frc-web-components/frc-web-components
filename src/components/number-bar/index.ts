@@ -1,7 +1,7 @@
 import { html, css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
-import './bar';
-import './axis';
+import '../bar';
+import '../axis';
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(value, min));
@@ -81,4 +81,10 @@ export default class NumberBar extends LitElement {
 
 if (!customElements.get('frc-number-bar')) {
   customElements.define('frc-number-bar', NumberBar);
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-number-bar': NumberBar;
+  }
 }

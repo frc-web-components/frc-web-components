@@ -24,7 +24,7 @@ import { convert } from '../field/units';
 import './field3d-object';
 
 // https://toji.dev/webxr-scene-optimization/
-export class Field3d extends LitElement implements IField3d {
+export default class Field3d extends LitElement implements IField3d {
   @property({ type: String }) game = fieldConfigs[0].game;
   @property({ type: String }) origin: 'red' | 'blue' = 'red';
   @property({ type: String, attribute: 'background-color' }) backgroundColor =
@@ -267,4 +267,10 @@ export class Field3d extends LitElement implements IField3d {
 
 if (!customElements.get('frc-field3d')) {
   customElements.define('frc-field3d', Field3d);
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-field3d': Field3d;
+  }
 }

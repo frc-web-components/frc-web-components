@@ -5,7 +5,7 @@ import { property, state } from 'lit/decorators.js';
 import getPoses from './get-poses';
 import { FieldObjectApi } from './field-interfaces';
 
-class FieldPath extends LitElement {
+export default class FieldPath extends LitElement {
   @property({ type: Array }) poses: Uint8Array | number[] = [];
   @property({ type: Array }) translations: Uint8Array | number[] = [];
   @property({ type: String }) color = '#FFA500';
@@ -59,4 +59,10 @@ class FieldPath extends LitElement {
 
 if (!customElements.get('frc-field-path')) {
   customElements.define('frc-field-path', FieldPath);
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-field-path': FieldPath;
+  }
 }

@@ -6,6 +6,7 @@ import { ntValueDirective } from './directives';
 interface RenderOptions {
   html: typeof html;
   nt: ReturnType<typeof ntValueDirective>;
+  store: WebbitStore;
 }
 
 interface DashboardOptions {
@@ -22,7 +23,7 @@ export default function createDashboard(dashboardOptions: DashboardOptions) {
   nt4Provider.connect(dashboardOptions.address);
   const nt = ntValueDirective(store);
 
-  const template = dashboardOptions.render({ nt, html });
+  const template = dashboardOptions.render({ nt, html, store });
   const element =
     typeof dashboardOptions.rootElement === 'string'
       ? document.querySelector(dashboardOptions.rootElement)

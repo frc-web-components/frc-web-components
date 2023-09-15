@@ -26,6 +26,9 @@ export default class Field extends LitElement {
   @property({ type: String, attribute: 'crop-type' }) cropType: CropType =
     'percent';
   @property({ type: String }) unit = baseUnit;
+  @property({ type: String, attribute: 'rotation-unit' }) rotationUnit:
+    | 'deg'
+    | 'rad' = 'rad';
   @property({ type: Number }) rotation = 0;
   @property({ type: Boolean, attribute: 'show-grid' }) showGrid = false;
   @property({ type: Number, attribute: 'grid-size' }) gridSize = 1;
@@ -285,6 +288,7 @@ export default class Field extends LitElement {
       canvas: this.getCanvasCtx(),
       getFieldRectPx: () => this.getFieldRectPx(),
       unit: this.unit,
+      rotationUnit: this.rotationUnit,
       xToPx: (xUnits, unit) => this.xToPx(xUnits, unit),
       yToPx: (yUnits, unit) => this.yToPx(yUnits, unit),
       lengthToPx: (length, unit) => this.lengthToPx(length, unit),
@@ -332,4 +336,10 @@ export default class Field extends LitElement {
 
 if (!customElements.get('frc-field')) {
   customElements.define('frc-field', Field);
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-field': Field;
+  }
 }

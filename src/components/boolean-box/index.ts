@@ -50,3 +50,9 @@ export default class BooleanBox extends LitElement {
 if (!customElements.get('frc-boolean-box')) {
   customElements.define('frc-boolean-box', BooleanBox);
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-boolean-box': BooleanBox;
+  }
+}

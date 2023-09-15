@@ -111,3 +111,9 @@ export default class Canvas extends LitElement {
 if (!customElements.get('frc-canvas')) {
   customElements.define('frc-canvas', Canvas);
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-canvas': Canvas;
+  }
+}

@@ -1,7 +1,7 @@
 import { property } from 'lit/decorators.js';
-import NumberBar from './number-bar';
+import NumberBar from '../number-bar';
 
-class Accelerometer extends NumberBar {
+export default class Accelerometer extends NumberBar {
   @property({ type: Number }) value = 0;
   @property({ type: Number }) min = -1;
   @property({ type: Number }) max = 1;
@@ -14,4 +14,10 @@ class Accelerometer extends NumberBar {
 
 if (!customElements.get('frc-accelerometer')) {
   customElements.define('frc-accelerometer', Accelerometer);
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-accelerometer': Accelerometer;
+  }
 }

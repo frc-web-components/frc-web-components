@@ -174,3 +174,9 @@ export default class Bar extends LitElement {
 if (!customElements.get('frc-bar')) {
   customElements.define('frc-bar', Bar);
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-bar': Bar;
+  }
+}

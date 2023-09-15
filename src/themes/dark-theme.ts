@@ -96,6 +96,7 @@ export default function addDarkTheme(dashboard: FrcDashboard): void {
 
     /* frc-encoder */
     '--frc-encoder-label-color': '#fff',
+    '--frc-encoder-value-color': '#aaa',
 
     /* frc-gyro */
     '--frc-gyro-color': '#fff',
@@ -121,6 +122,8 @@ export default function addDarkTheme(dashboard: FrcDashboard): void {
 
     /* Line Chart */
     '--frc-line-chart-text-color': 'white',
+    '--frc-line-chart-border-color': 'white',
+    '-frc-line-chart-grid-color': 'rgba(22,22,22,.2)',
 
     /* frc-gauge */
     '--frc-gauge-fill-color': 'rgb(90,150,200)',
@@ -129,5 +132,11 @@ export default function addDarkTheme(dashboard: FrcDashboard): void {
 
     /* frc-swerve-drivetrain */
     '--frc-swerve-drive-color': 'white',
+
+    /* buttons */
+    '--frc-button-background-color': 'rgba(255,255,255,.1)',
+    '--frc-button-text-color': 'white',
+    '--frc-button-toggled-background-color': 'rgba(240,240,240)',
+    '--frc-button-toggled-text-color': 'black',
   });
 }

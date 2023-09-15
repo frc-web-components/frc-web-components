@@ -400,3 +400,9 @@ export default class Swerve extends LitElement {
 if (!customElements.get('frc-swerve-drivebase')) {
   customElements.define('frc-swerve-drivebase', Swerve);
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-swerve-drivebase': Swerve;
+  }
+}

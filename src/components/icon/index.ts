@@ -2,9 +2,9 @@ import { html, css, LitElement, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 import iconset from './iconset';
 
-export class Icon extends LitElement {
+export default class Icon extends LitElement {
   @property({ type: String }) color = '#000000';
-  @property({ type: String }) icon = Object.keys(iconset)[0];
+  @property({ type: String }) icon = '';
   @property({ type: String }) svgPath = '';
   @property({ type: String }) viewBox = '0 0 24 24';
 
@@ -39,4 +39,10 @@ export class Icon extends LitElement {
 
 if (!customElements.get('frc-icon')) {
   customElements.define('frc-icon', Icon);
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-icon': Icon;
+  }
 }
