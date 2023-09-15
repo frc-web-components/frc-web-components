@@ -36,7 +36,7 @@ class AbsolutePositioningLayout {
     this.element = layerElement;
     // eslint-disable-next-line no-new
     new DashboardSelections(this.dashboard.getConnector(), (element) => {
-      if (this.dashboard.isElementEditable()) {
+      if (this.dashboard.isElementEditable(element)) {
         this.dashboard.setSelectedElement(element);
       }
     });

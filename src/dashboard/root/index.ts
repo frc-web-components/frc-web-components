@@ -159,6 +159,10 @@ export default class DashboardRoot extends LitElement {
       this.dialogOpened = true;
     });
 
+    this.dashboard.subscribe('elementSelect', () => {
+      this.requestUpdate();
+    });
+
     this.ready = true;
   }
 
@@ -181,7 +185,6 @@ export default class DashboardRoot extends LitElement {
 
   #onDrawerToggle(): void {
     this.drawerOpened = !this.drawerOpened;
-    this.dashboard?.setPreviewedElement(null);
   }
 
   render(): TemplateResult {
@@ -189,6 +192,7 @@ export default class DashboardRoot extends LitElement {
       return html``;
     }
     const isEditable = this.dashboard?.isElementEditable();
+    console.log('editable:', isEditable);
 
     const dashboardBackground = this.dashboard
       ? getComputedStyle(this.dashboard?.getRootElement()).background

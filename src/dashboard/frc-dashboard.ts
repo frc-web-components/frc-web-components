@@ -15,8 +15,6 @@ export default class FrcDashboard extends Dashboard {
         this.publish('drawerToggle', { opened: value });
       } else if (key === 'selectedElement') {
         this.publish('elementSelect', { element: this.getSelectedElement() });
-      } else if (key === 'previewedElement') {
-        this.publish('elementPreview', { element: this.getPreviewedElement() });
       }
     });
     this.getRootElement().setAttribute('data-theme', this.getTheme());
@@ -39,12 +37,6 @@ export default class FrcDashboard extends Dashboard {
       return;
     }
     this.setStoreValue('selectedElement', element);
-  }
-
-  setPreviewedElement(element: HTMLElement | null): void {
-    if (this.getPreviewedElement() !== element) {
-      this.setStoreValue('previewedElement', element);
-    }
   }
 
   addElements(
@@ -79,10 +71,6 @@ export default class FrcDashboard extends Dashboard {
 
   getSelectedElement(): HTMLElement | null {
     return this.getStoreValue('selectedElement', null) as HTMLElement;
-  }
-
-  getPreviewedElement(): HTMLElement | null {
-    return this.getStoreValue('previewedElement', null) as HTMLElement;
   }
 
   addTab(name: string, html?: string): HTMLElement {
