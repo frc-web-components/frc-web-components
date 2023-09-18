@@ -1,14 +1,12 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable import/extensions */
-import { LitElement, html, css, TemplateResult, render } from 'lit';
+import { LitElement, html, css, TemplateResult } from 'lit';
 import './dashboard-tab';
 import './navbar';
 import './drawer';
 import { customElement, property, state, query } from 'lit/decorators.js';
-import { guard } from 'lit/directives/guard.js';
 import { onRemoveKeyPress } from '../hotkeys';
 import FrcDashboard from '../frc-dashboard';
-import './source-picker-dialog';
 import removeElement from './remove-element';
 
 const styles = css`
@@ -192,7 +190,6 @@ export default class DashboardRoot extends LitElement {
       return html``;
     }
     const isEditable = this.dashboard?.isElementEditable();
-    console.log('editable:', isEditable);
 
     const dashboardBackground = this.dashboard
       ? getComputedStyle(this.dashboard?.getRootElement()).background
@@ -200,27 +197,6 @@ export default class DashboardRoot extends LitElement {
 
     return html`
       <div class="layout ${!this.drawerOpened ? 'closed' : ''}">
-        <vaadin-dialog
-          theme="no-padding"
-          draggable
-          modeless
-          .opened=${this.drawerOpened && this.dialogOpened}
-          .renderer=${guard([], () => (root: HTMLElement) => {
-            render(
-              html`
-                <dashboard-source-picker-dialog
-                  style="width: 500px;"
-                  .dashboard=${this.dashboard}
-                  .dialogOpened=${this.dialogOpened}
-                  @closeDialog=${() => {
-                    this.dialogOpened = false;
-                  }}
-                ></dashboard-source-picker-dialog>
-              `,
-              root
-            );
-          })}
-        ></vaadin-dialog>
         <div class="dashboard" style="background: ${dashboardBackground}">
           <slot name="navbar"></slot>
           <div class="dashboard-elements">

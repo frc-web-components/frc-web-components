@@ -40,6 +40,8 @@ export default class DashboardDrawer extends LitElement {
       flex: 1;
       width: 100%;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     .splitter {
