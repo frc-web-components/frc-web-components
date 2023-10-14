@@ -26,6 +26,7 @@ class AbsolutePositioningLayout {
   private dashboard: FrcDashboard;
   private element: HTMLElement;
   private selectionBox = createSelectionBox();
+  private contextMenu = document.createElement('vaadin-context-menu');
   private interactive = interact(this.selectionBox);
 
   private snappingEnabled = false;
@@ -35,9 +36,22 @@ class AbsolutePositioningLayout {
     this.dashboard = dashboard;
     this.element = layerElement;
     // eslint-disable-next-line no-new
-    new DashboardSelections(this.dashboard.getConnector(), (element) => {
-      if (this.dashboard.isElementEditable(element)) {
-        this.dashboard.setSelectedElement(element);
+    new DashboardSelections(
+      this.dashboard.getConnector(),
+      (element) => {
+        if (this.dashboard.isElementEditable(element)) {
+          this.dashboard.setSelectedElement(element);
+        }
+      },
+      (ev, element) => this.#openContextMenu(ev, element)
+    );
+
+    this.selectionBox.addEventListener('contextmenu', (ev) => {
+      const selectedElement = this.dashboard.getSelectedElement();
+      if (selectedElement) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.#openContextMenu(ev, selectedElement);
       }
     });
 
@@ -72,6 +86,7 @@ class AbsolutePositioningLayout {
 
     this.element.appendChild(this.selectionBox);
     this.interactive = interact(this.selectionBox);
+    this.element.appendChild(this.contextMenu);
 
     this.interactive.on('resizeend', () => {
       this.#addResizeInteraction();
@@ -82,6 +97,31 @@ class AbsolutePositioningLayout {
     });
     this.#setBounds();
     this.#addDragInteraction();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  #openContextMenu(ev: Event, element: HTMLElement) {
+    const config = this.dashboard
+      .getConnector()
+      .getMatchingElementConfig(element);
+    if (!config) {
+      return;
+    }
+
+    if (element.tagName.toLowerCase() === 'dashboard-tab') {
+      this.contextMenu.items = [
+        { text: this.dashboard.getElementDisplayName(element), disabled: true },
+        { text: 'Clear' },
+      ];
+      this.contextMenu.open(ev);
+    } else {
+      this.contextMenu.items = [
+        { text: this.dashboard.getElementDisplayName(element), disabled: true },
+        { text: 'Remove' },
+        { text: 'Edit' },
+      ];
+      this.contextMenu.open(ev);
+    }
   }
 
   #setBounds(): void {

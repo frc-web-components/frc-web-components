@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import './sources-view';
 import FrcDashboard from '../../../frc-dashboard';
+import './caret';
 
 const sourceStyles = css`
   summary {
@@ -112,13 +113,12 @@ export class SourcesEditor extends LitElement {
 
       .key-value-table {
         border-collapse: collapse;
-        margin: 25px 0;
         font-size: 0.9em;
         font-family: sans-serif;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
         max-width: 100%;
         width: 100%;
-        height: 100%;
+        box-sizing: border-box;
       }
 
       .key-value-table thead tr {
@@ -133,7 +133,7 @@ export class SourcesEditor extends LitElement {
 
       .key-value-table th,
       .key-value-table td {
-        padding: 12px 15px;
+        padding: 5px 15px;
         max-width: 600px;
       }
 
@@ -169,6 +169,26 @@ export class SourcesEditor extends LitElement {
         display: table-row;
         vertical-align: inherit;
         border-color: inherit;
+        height: 15px;
+      }
+
+      .accordion {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .accordion label {
+        padding: 5px 0;
+      }
+
+      .accordion .content {
+        display: none;
+      }
+
+      .accordion label.selected + .content {
+        flex: 1;
+        display: block;
       }
     `,
   ];

@@ -8,6 +8,7 @@ import { customElement, property, state, query } from 'lit/decorators.js';
 import { onRemoveKeyPress } from '../hotkeys';
 import FrcDashboard from '../frc-dashboard';
 import removeElement from './remove-element';
+import './context-menu';
 
 const styles = css`
   :host {
@@ -196,6 +197,9 @@ export default class DashboardRoot extends LitElement {
       : 'auto';
 
     return html`
+      <!-- <dashboard-context-menu
+        .dashboard=${this.dashboard}
+      ></dashboard-context-menu> -->
       <div class="layout ${!this.drawerOpened ? 'closed' : ''}">
         <div class="dashboard" style="background: ${dashboardBackground}">
           <slot name="navbar"></slot>

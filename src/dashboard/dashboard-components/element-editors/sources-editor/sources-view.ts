@@ -1,5 +1,6 @@
 import { LitElement, html, TemplateResult } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
 import './source-view';
 import Store, { Source } from '@webbitjs/store';
 
@@ -9,6 +10,8 @@ export class SourcesView extends LitElement {
   @property({ type: String }) sourceProvider = '';
   @property({ type: String }) store!: Store;
   @property({ type: Boolean }) disabled = false;
+
+  @state() selectedProviderIndex = 0;
 
   openedSources: Record<string, boolean> = {};
 
@@ -95,32 +98,42 @@ export class SourcesView extends LitElement {
     }
 
     return html`
-      <vaadin-accordion opened="${null}">
+      <div class="accordion">
         ${this.sourceProviderNames.map(
-          (name) => html`
-            <vaadin-accordion-panel theme="small">
-              <div slot="summary">${name}</div>
-              <div>
-                <table class="key-value-table">
-                  <thead>
-                    <tr>
-                      <th>Key</th>
-                      <th>Value</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    ${this.renderSources(
-                      name,
-                      this.store.getSource(name, ''),
-                      0
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </vaadin-accordion-panel>
+          (name, index) => html`
+            <label
+              class=${classMap({
+                selected: index === this.selectedProviderIndex,
+              })}
+            >
+              <dashboard-sources-caret
+                ?open=${index === this.selectedProviderIndex}
+                @toggle=${() => {
+                  if (this.selectedProviderIndex === index) {
+                    this.selectedProviderIndex = -1;
+                  } else {
+                    this.selectedProviderIndex = index;
+                  }
+                }}
+              ></dashboard-sources-caret>
+              ${name}
+            </label>
+            <div class="content">
+              <table class="key-value-table">
+                <thead>
+                  <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${this.renderSources(name, this.store.getSource(name, ''), 0)}
+                </tbody>
+              </table>
+            </div>
           `
         )}
-      </vaadin-accordion>
+      </div>
     `;
   }
 }
