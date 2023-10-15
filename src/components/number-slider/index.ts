@@ -79,7 +79,7 @@ export default class NumberSlider extends LitElement {
           @change="${this.onChange}"
         />
 
-        <frc-axis ticks="5" .range="${[this.min, this.max]}"></frc-axis>
+        <frc-axis ticks="5" min=${min} max=${max}></frc-axis>
       </div>
     `;
   }

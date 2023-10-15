@@ -354,7 +354,7 @@ export default class MecanumDrivebase extends LitElement {
       <div class="diff-drive-container">
         <div class="speed-pair">
           <div class="speed">
-            <frc-axis ticks="5" vertical .range="${[1, -1]}"></frc-axis>
+            <frc-axis ticks="5" vertical min="1" max="-1"></frc-axis>
             <div class="bar">
               <div
                 class="foreground"
@@ -363,7 +363,7 @@ export default class MecanumDrivebase extends LitElement {
             </div>
           </div>
           <div class="speed">
-            <frc-axis ticks="5" vertical .range="${[1, -1]}"></frc-axis>
+            <frc-axis ticks="5" vertical min="1" max="-1"></frc-axis>
             <div class="bar">
               <div
                 class="foreground"
@@ -378,7 +378,7 @@ export default class MecanumDrivebase extends LitElement {
         </svg>
         <div class="speed-pair">
           <div class="speed">
-            <frc-axis ticks="5" vertical .range="${[1, -1]}"></frc-axis>
+            <frc-axis ticks="5" vertical min="1" max="-1"></frc-axis>
             <div class="bar">
               <div
                 class="foreground"
@@ -387,7 +387,7 @@ export default class MecanumDrivebase extends LitElement {
             </div>
           </div>
           <div class="speed">
-            <frc-axis ticks="5" vertical .range="${[1, -1]}"></frc-axis>
+            <frc-axis ticks="5" vertical min="1" max="-1"></frc-axis>
             <div class="bar">
               <div
                 class="foreground"

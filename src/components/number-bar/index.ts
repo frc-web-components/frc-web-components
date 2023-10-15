@@ -70,7 +70,8 @@ export default class NumberBar extends LitElement {
             <frc-axis
               part="axis"
               ticks="${this.numTickMarks}"
-              .range="${[min, max]}"
+              min=${min}
+              max=${max}
               unit="${this.unit}"
             ></frc-axis>
           `

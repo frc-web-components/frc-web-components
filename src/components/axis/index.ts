@@ -4,8 +4,9 @@ import { select } from 'd3';
 
 export default class Axis extends LitElement {
   @property({ type: Boolean }) vertical = false;
-  @property({ type: Number }) ticks = 0;
-  @property({ type: Array }) range = [];
+  @property({ type: Number }) ticks = 5;
+  @property({ type: Number }) min = -1;
+  @property({ type: Number }) max = 1;
   @property({ type: String }) unit = '';
 
   @state() prevSize = 0;
@@ -17,7 +18,8 @@ export default class Axis extends LitElement {
 
   static styles = css`
     :host {
-      display: block;
+      display: inline-block;
+      position: relative;
     }
 
     :host([vertical]) {
@@ -30,6 +32,9 @@ export default class Axis extends LitElement {
 
     svg {
       overflow: visible;
+      position: absolute;
+      top: 0;
+      left: 0;
     }
 
     line {
@@ -47,10 +52,8 @@ export default class Axis extends LitElement {
   setAxis(changedProps: Map<string, unknown>) {
     const size = this.vertical ? this.clientHeight : this.clientWidth;
     const tickSpacing = size / Math.max(1, this.ticks - 1);
-    const width = this.range ? 30 : 10;
-    const showNums = this.range && this.range.length === 2;
-    const min = showNums ? this.range[0] : 0;
-    const max = showNums ? this.range[1] : 0;
+    const width = 30;
+    const { min, max } = this;
 
     let lastTickWithText = -Infinity;
     let textEnd = -Infinity;
@@ -61,7 +64,8 @@ export default class Axis extends LitElement {
       this.prevTicks === this.ticks &&
       this.prevMin === min &&
       this.prevMax === max &&
-      !changedProps.has('unit')
+      !changedProps.has('unit') &&
+      !changedProps.has('vertical')
     ) {
       return;
     }
@@ -93,39 +97,35 @@ export default class Axis extends LitElement {
           .attr('y2', i * tickSpacing);
       }
 
-      if (showNums) {
-        if (!this.vertical) {
-          // check to see if text will fit
-          const spaceBetweenTicks = (i - lastTickWithText) * tickSpacing;
-          const pointWhereNewTextCanBegin =
-            lastTickWithText * tickSpacing + spaceBetweenTicks * 0.4;
-          const textWillFit =
-            textEnd < 0 || pointWhereNewTextCanBegin > textEnd;
+      if (!this.vertical) {
+        // check to see if text will fit
+        const spaceBetweenTicks = (i - lastTickWithText) * tickSpacing;
+        const pointWhereNewTextCanBegin =
+          lastTickWithText * tickSpacing + spaceBetweenTicks * 0.4;
+        const textWillFit = textEnd < 0 || pointWhereNewTextCanBegin > textEnd;
 
-          if (textWillFit) {
-            const value = min + (i * (max - min)) / Math.max(this.ticks - 1, 1);
-
-            const textEl = svg
-              .append('text')
-              .attr('x', i * tickSpacing)
-              .attr('y', 25)
-              .attr('text-anchor', 'middle')
-              .text(value.toFixed(2) + (this.unit ? ` ${this.unit}` : ''));
-
-            textEnd =
-              i * tickSpacing + (textEl.node()?.getBBox().width ?? 0) / 2;
-            lastTickWithText = i;
-          }
-        } else {
+        if (textWillFit) {
           const value = min + (i * (max - min)) / Math.max(this.ticks - 1, 1);
 
-          svg
+          const textEl = svg
             .append('text')
-            .attr('x', -3)
-            .attr('y', i * tickSpacing + 4)
-            .attr('text-anchor', 'end')
+            .attr('x', i * tickSpacing)
+            .attr('y', 25)
+            .attr('text-anchor', 'middle')
             .text(value.toFixed(2) + (this.unit ? ` ${this.unit}` : ''));
+
+          textEnd = i * tickSpacing + (textEl.node()?.getBBox().width ?? 0) / 2;
+          lastTickWithText = i;
         }
+      } else {
+        const value = min + (i * (max - min)) / Math.max(this.ticks - 1, 1);
+
+        svg
+          .append('text')
+          .attr('x', -3)
+          .attr('y', i * tickSpacing + 4)
+          .attr('text-anchor', 'end')
+          .text(value.toFixed(2) + (this.unit ? ` ${this.unit}` : ''));
       }
 
       // don't do this for last tick
@@ -159,6 +159,7 @@ export default class Axis extends LitElement {
   }
 
   updated(changedProps: Map<string, unknown>) {
+    console.log('changedProps:', changedProps);
     this.setAxis(changedProps);
   }
 
