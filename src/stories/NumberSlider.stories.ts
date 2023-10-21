@@ -1,38 +1,48 @@
-import '../components/drivebases/differential';
+import '../components/number-slider';
 import type { Args, Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { styleMap } from 'lit/directives/style-map.js';
 
 const defaultArgs: Record<string, any> = {
-  leftMotorSpeed: 0,
-  rightMotorSpeed: 0,
+  value: 0,
+  min: -1,
+  max: 1,
+  blockIncrement: 0.05,
   theme: 'light',
   'background-color': '#fff',
-  '--frc-differential-drivebase-drivetrain-color': 'black',
-  '--frc-bar-background': '#ddd',
-  '--frc-bar-foreground': 'lightblue',
   '--frc-axis-text-color': 'black',
 };
 
 const meta: Meta = {
-  title: 'FRC/Differential Drivebase',
+  title: 'FRC/Number Slider',
   tags: ['autodocs'],
-  component: 'frc-differential-drivebase',
+  component: 'frc-number-slider',
   args: defaultArgs,
   argTypes: {
-    leftMotorSpeed: {
+    value: {
       table: {
         category: 'Properties',
         defaultValue: { summary: 0 },
       },
-      control: { type: 'number', min: -1, max: 1 },
     },
-    rightMotorSpeed: {
+    min: {
       table: {
         category: 'Properties',
-        defaultValue: { summary: 0 },
+        defaultValue: { summary: -1 },
       },
-      control: { type: 'number', min: -1, max: 1 },
+    },
+    max: {
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: 1 },
+      },
+    },
+    blockIncrement: {
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: 0.05 },
+      },
     },
     theme: {
       control: 'radio',
@@ -48,26 +58,8 @@ const meta: Meta = {
         defaultValue: '#fff',
       },
     },
-    '--frc-differential-drivebase-drivetrain-color': {
-      table: {
-        category: 'Styles',
-        defaultValue: { summary: 'black' },
-      },
-    },
-    '--frc-bar-background': {
-      table: {
-        category: 'Styles',
-        defaultValue: { summary: '#ddd' },
-      },
-    },
-    '--frc-bar-foreground': {
-      control: 'color',
-      table: {
-        category: 'Styles',
-        defaultValue: { summary: 'lightblue' },
-      },
-    },
     '--frc-axis-text-color': {
+      control: 'color',
       table: {
         category: 'Styles',
         defaultValue: { summary: 'black' },
@@ -90,6 +82,9 @@ const meta: Meta = {
       </div>`;
     },
   ],
+  // https://storybook.js.org/blog/storybook-addons-for-css/
+  // https://storybook.js.org/blog/how-to-add-a-theme-switcher-to-storybook/
+  // https://storybook.js.org/docs/react/writing-docs/autodocs
 };
 export default meta;
 
@@ -100,11 +95,6 @@ function getStyles(args: Args) {
     return html`
       <style>
         .custom {
-          --frc-differential-drivebase-drivetrain-color: ${args[
-            '--frc-differential-drivebase-drivetrain-color'
-          ]};
-          --frc-bar-background: ${args['--frc-bar-background']};
-          --frc-bar-foreground: ${args['--frc-bar-foreground']};
           --frc-axis-text-color: ${args['--frc-axis-text-color']};
         }
       </style>
@@ -115,9 +105,6 @@ function getStyles(args: Args) {
     return html`
       <style>
         .dark {
-          --frc-differential-drivebase-drivetrain-color: #aaa;
-          --frc-bar-background: #444;
-          --frc-bar-foreground: steelblue;
           --frc-axis-text-color: white;
         }
       </style>
@@ -127,16 +114,15 @@ function getStyles(args: Args) {
   return html`
     <style>
       .light {
-        --frc-differential-drivebase-drivetrain-color: black;
-        --frc-bar-background: #ddd;
-        --frc-bar-foreground: lightblue;
         --frc-axis-text-color: black;
       }
     </style>
   `;
 }
 
-function createDrivebaseStory(optionalArgs: Record<string, any> = {}): Story {
+function createNumberSliderStory(
+  optionalArgs: Record<string, any> = {}
+): Story {
   const storyArgs = {
     ...defaultArgs,
     ...optionalArgs,
@@ -145,19 +131,21 @@ function createDrivebaseStory(optionalArgs: Record<string, any> = {}): Story {
     args: storyArgs,
     render: (args) => html`
       ${getStyles(args)}
-      <frc-differential-drivebase
+      <frc-number-slider
         class=${args.theme}
-        left-motor-speed=${args.leftMotorSpeed}
-        right-motor-speed=${args.rightMotorSpeed}
-      ></frc-differential-drivebase>
+        value=${args.value}
+        min=${args.min}
+        max=${args.max}
+        block-increment=${args.blockIncrement}
+      ></frc-number-slider>
     `,
   };
 }
 
-export const LightTheme = createDrivebaseStory({
+export const LightTheme = createNumberSliderStory({
   theme: 'light',
 });
 
-export const DarkTheme = createDrivebaseStory({
+export const DarkTheme = createNumberSliderStory({
   theme: 'dark',
 });

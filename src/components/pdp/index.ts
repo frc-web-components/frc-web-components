@@ -1,5 +1,7 @@
 import { html, css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
+import '../number-bar';
+import '../voltage-view';
 
 function getRange(start: number, end: number) {
   const range = [];

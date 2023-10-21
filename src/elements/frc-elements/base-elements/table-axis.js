@@ -42,7 +42,7 @@ class TableAxis extends LitElement {
     text {
       font-weight: normal;
       font-size: 13px;
-      fill: var(--frc-tab-axis-text-color, #000);
+      fill: var(--frc-axis-text-color, #000);
     }
   `;
 

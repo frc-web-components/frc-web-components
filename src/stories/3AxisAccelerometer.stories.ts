@@ -19,7 +19,7 @@ const defaultArgs: Record<string, any> = {
   '--frc-bar-background': '#ddd',
   '--frc-bar-foreground': 'lightblue',
   '--frc-bar-color': 'black',
-  '--frc-tab-axis-text-color': 'black',
+  '--frc-axis-text-color': 'black',
   '--frc-3-axis-accelerometer-label-color': 'black',
 };
 
@@ -123,7 +123,7 @@ const meta: Meta = {
         defaultValue: { summary: 'black' },
       },
     },
-    '--frc-tab-axis-text-color': {
+    '--frc-axis-text-color': {
       control: 'color',
       table: {
         category: 'Styles',
@@ -167,7 +167,7 @@ function getStyles(args: Args) {
           --frc-bar-background: ${args['--frc-bar-background']};
           --frc-bar-foreground: ${args['--frc-bar-foreground']};
           --frc-bar-color: ${args['--frc-bar-color']};
-          --frc-tab-axis-text-color: ${args['--frc-tab-axis-text-color']};
+          --frc-axis-text-color: ${args['--frc-axis-text-color']};
           --frc-3-axis-accelerometer-label-color: ${args[
             '--frc-3-axis-accelerometer-label-color'
           ]};
@@ -183,7 +183,7 @@ function getStyles(args: Args) {
           --frc-bar-background: #444;
           --frc-bar-foreground: steelblue;
           --frc-bar-color: white;
-          --frc-tab-axis-text-color: white;
+          --frc-axis-text-color: white;
           --frc-3-axis-accelerometer-label-color: white;
         }
       </style>
@@ -196,7 +196,7 @@ function getStyles(args: Args) {
         --frc-bar-background: #ddd;
         --frc-bar-foreground: lightblue;
         --frc-bar-color: black;
-        --frc-tab-axis-text-color: black;
+        --frc-axis-text-color: black;
         --frc-3-axis-accelerometer-label-color: black;
       }
     </style>

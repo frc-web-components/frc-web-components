@@ -13,7 +13,7 @@ const defaultArgs: Record<string, any> = {
   '--frc-mecanum-drivebase-drivetrain-color': 'black',
   '--frc-bar-background': '#ddd',
   '--frc-bar-foreground': 'lightblue',
-  '--frc-tab-axis-text-color': 'black',
+  '--frc-axis-text-color': 'black',
 };
 
 const meta: Meta = {
@@ -83,7 +83,7 @@ const meta: Meta = {
         defaultValue: { summary: 'lightblue' },
       },
     },
-    '--frc-tab-axis-text-color': {
+    '--frc-axis-text-color': {
       table: {
         category: 'Styles',
         defaultValue: { summary: 'black' },
@@ -121,7 +121,7 @@ function getStyles(args: Args) {
           ]};
           --frc-bar-background: ${args['--frc-bar-background']};
           --frc-bar-foreground: ${args['--frc-bar-foreground']};
-          --frc-tab-axis-text-color: ${args['--frc-tab-axis-text-color']};
+          --frc-axis-text-color: ${args['--frc-axis-text-color']};
         }
       </style>
     `;
@@ -134,7 +134,7 @@ function getStyles(args: Args) {
           --frc-mecanum-drivebase-drivetrain-color: #aaa;
           --frc-bar-background: #444;
           --frc-bar-foreground: steelblue;
-          --frc-tab-axis-text-color: white;
+          --frc-axis-text-color: white;
         }
       </style>
     `;
@@ -146,7 +146,7 @@ function getStyles(args: Args) {
         --frc-mecanum-drivebase-drivetrain-color: black;
         --frc-bar-background: #ddd;
         --frc-bar-foreground: lightblue;
-        --frc-tab-axis-text-color: black;
+        --frc-axis-text-color: black;
       }
     </style>
   `;

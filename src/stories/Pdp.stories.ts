@@ -1,38 +1,48 @@
-import '../components/drivebases/differential';
+import '../components/pdp';
 import type { Args, Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 
 const defaultArgs: Record<string, any> = {
-  leftMotorSpeed: 0,
-  rightMotorSpeed: 0,
+  voltage: 0,
+  totalCurrent: 0,
+  channels: Array(16).fill(0),
   theme: 'light',
   'background-color': '#fff',
-  '--frc-differential-drivebase-drivetrain-color': 'black',
+  '--frc-label-text-color': 'black',
+  '--frc-axis-text-color': 'black',
   '--frc-bar-background': '#ddd',
   '--frc-bar-foreground': 'lightblue',
-  '--frc-axis-text-color': 'black',
+  '--frc-bar-color': 'black',
+  '--frc-voltage-view-foreground-color': '#ffbd2f',
 };
 
 const meta: Meta = {
-  title: 'FRC/Differential Drivebase',
+  title: 'FRC/PDP',
   tags: ['autodocs'],
-  component: 'frc-differential-drivebase',
+  component: 'frc-pdp',
   args: defaultArgs,
   argTypes: {
-    leftMotorSpeed: {
+    voltage: {
       table: {
         category: 'Properties',
         defaultValue: { summary: 0 },
       },
-      control: { type: 'number', min: -1, max: 1 },
+      control: { type: 'number', min: 0, max: 15 },
     },
-    rightMotorSpeed: {
+    totalCurrent: {
       table: {
         category: 'Properties',
         defaultValue: { summary: 0 },
       },
-      control: { type: 'number', min: -1, max: 1 },
+      control: { type: 'number', min: 0, max: 500 },
+    },
+    channels: {
+      control: 'object',
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: Array(16).fill(0) },
+      },
     },
     theme: {
       control: 'radio',
@@ -48,7 +58,7 @@ const meta: Meta = {
         defaultValue: '#fff',
       },
     },
-    '--frc-differential-drivebase-drivetrain-color': {
+    '--frc-label-text-color': {
       table: {
         category: 'Styles',
         defaultValue: { summary: 'black' },
@@ -67,10 +77,25 @@ const meta: Meta = {
         defaultValue: { summary: 'lightblue' },
       },
     },
-    '--frc-axis-text-color': {
+    '--frc-bar-color': {
+      control: 'color',
       table: {
         category: 'Styles',
         defaultValue: { summary: 'black' },
+      },
+    },
+    '--frc-axis-text-color': {
+      control: 'color',
+      table: {
+        category: 'Styles',
+        defaultValue: { summary: 'black' },
+      },
+    },
+    '--frc-voltage-view-foreground-color': {
+      control: 'color',
+      table: {
+        category: 'Styles',
+        defaultValue: { summary: '#ffbd2f' },
       },
     },
   },
@@ -90,6 +115,9 @@ const meta: Meta = {
       </div>`;
     },
   ],
+  // https://storybook.js.org/blog/storybook-addons-for-css/
+  // https://storybook.js.org/blog/how-to-add-a-theme-switcher-to-storybook/
+  // https://storybook.js.org/docs/react/writing-docs/autodocs
 };
 export default meta;
 
@@ -100,12 +128,14 @@ function getStyles(args: Args) {
     return html`
       <style>
         .custom {
-          --frc-differential-drivebase-drivetrain-color: ${args[
-            '--frc-differential-drivebase-drivetrain-color'
-          ]};
+          --frc-label-text-color: ${args['--frc-label-text-color']};
           --frc-bar-background: ${args['--frc-bar-background']};
           --frc-bar-foreground: ${args['--frc-bar-foreground']};
+          --frc-bar-color: ${args['--frc-bar-color']};
           --frc-axis-text-color: ${args['--frc-axis-text-color']};
+          --frc-voltage-view-foreground-color: ${args[
+            '--frc-voltage-view-foreground-color'
+          ]};
         }
       </style>
     `;
@@ -115,10 +145,12 @@ function getStyles(args: Args) {
     return html`
       <style>
         .dark {
-          --frc-differential-drivebase-drivetrain-color: #aaa;
+          --frc-label-text-color: white;
           --frc-bar-background: #444;
           --frc-bar-foreground: steelblue;
+          --frc-bar-color: white;
           --frc-axis-text-color: white;
+          --frc-voltage-view-foreground-color: #ffbd2f;
         }
       </style>
     `;
@@ -127,16 +159,18 @@ function getStyles(args: Args) {
   return html`
     <style>
       .light {
-        --frc-differential-drivebase-drivetrain-color: black;
+        --frc-label-text-color: black;
         --frc-bar-background: #ddd;
         --frc-bar-foreground: lightblue;
+        --frc-bar-color: black;
         --frc-axis-text-color: black;
+        --frc-voltage-view-foreground-color: #dd9b0d;
       }
     </style>
   `;
 }
 
-function createDrivebaseStory(optionalArgs: Record<string, any> = {}): Story {
+function createPdpStory(optionalArgs: Record<string, any> = {}): Story {
   const storyArgs = {
     ...defaultArgs,
     ...optionalArgs,
@@ -145,19 +179,20 @@ function createDrivebaseStory(optionalArgs: Record<string, any> = {}): Story {
     args: storyArgs,
     render: (args) => html`
       ${getStyles(args)}
-      <frc-differential-drivebase
+      <frc-pdp
         class=${args.theme}
-        left-motor-speed=${args.leftMotorSpeed}
-        right-motor-speed=${args.rightMotorSpeed}
-      ></frc-differential-drivebase>
+        voltage=${args.voltage}
+        total-current=${args.totalCurrent}
+        channels=${JSON.stringify(args.channels)}
+      ></frc-pdp>
     `,
   };
 }
 
-export const LightTheme = createDrivebaseStory({
+export const LightTheme = createPdpStory({
   theme: 'light',
 });
 
-export const DarkTheme = createDrivebaseStory({
+export const DarkTheme = createPdpStory({
   theme: 'dark',
 });

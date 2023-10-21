@@ -1,55 +1,82 @@
-import '../components/axis';
+import '../components/logger';
 import type { Args, Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
-import { ifDefined } from 'lit/directives/if-defined.js';
 import { styleMap } from 'lit/directives/style-map.js';
 
 const defaultArgs: Record<string, any> = {
-  vertical: false,
-  ticks: 5,
-  min: -1,
-  max: 1,
-  unit: '',
+  title: 'Robot Logger',
+  maxLogCount: 1000,
+  level: 'info',
+  debug: '',
+  info: '',
+  success: '',
+  warning: '',
+  error: '',
+  disabled: false,
   theme: 'light',
   'background-color': '#fff',
-  '--frc-axis-text-color': 'black',
 };
 
 const meta: Meta = {
-  title: 'FRC/Axis',
+  title: 'FRC/Logger',
   tags: ['autodocs'],
-  component: 'frc-axis',
+  component: 'frc-logger',
   args: defaultArgs,
   argTypes: {
-    vertical: {
+    title: {
       table: {
         category: 'Properties',
-        defaultValue: { summary: false },
+        defaultValue: { summary: 'Robot Logger' },
       },
     },
-    ticks: {
+    maxLogCount: {
       table: {
         category: 'Properties',
-        defaultValue: { summary: 5 },
+        defaultValue: { summary: 1000 },
       },
-      control: { type: 'number', min: 0 },
     },
-    min: {
+    level: {
       table: {
         category: 'Properties',
-        defaultValue: { summary: -1 },
+        defaultValue: { summary: 'info' },
       },
+      options: ['debug', 'info', 'success', 'warning', 'error'],
+      control: 'select',
     },
-    max: {
-      table: {
-        category: 'Properties',
-        defaultValue: { summary: 1 },
-      },
-    },
-    unit: {
+    debug: {
       table: {
         category: 'Properties',
         defaultValue: { summary: '' },
+      },
+    },
+    info: {
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: '' },
+      },
+    },
+    success: {
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: '' },
+      },
+    },
+    warning: {
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: '' },
+      },
+    },
+    error: {
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: '' },
+      },
+    },
+    disabled: {
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: false },
       },
     },
     theme: {
@@ -66,41 +93,21 @@ const meta: Meta = {
         defaultValue: '#fff',
       },
     },
-    '--frc-axis-text-color': {
-      control: 'color',
-      table: {
-        category: 'Styles',
-        defaultValue: { summary: 'black' },
-      },
-    },
   },
   decorators: [
     (story, props) => {
       const isDarkTheme = props.args.theme === 'dark';
       const themeColor = isDarkTheme ? 'hsl(214, 35%, 21%)' : '#fff';
       const customColor = props.args['background-color'];
-      return html`
-        <div
-          style=${styleMap({
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '100%',
-            background:
-              props.args.theme === 'custom' ? customColor : themeColor,
-          })}
-        >
-          <div
-            style=${styleMap({
-              [props.args.vertical ? 'height' : 'width']: '200px',
-              padding: '20px 20px',
-              marginBottom: '20px',
-            })}
-          >
-            ${story()}
-          </div>
-        </div>
-      `;
+      return html` <div
+        style=${styleMap({
+          padding: '20px 10px',
+          marginBottom: '5px',
+          background: props.args.theme === 'custom' ? customColor : themeColor,
+        })}
+      >
+        ${story()}
+      </div>`;
     },
   ],
   // https://storybook.js.org/blog/storybook-addons-for-css/
@@ -116,7 +123,6 @@ function getStyles(args: Args) {
     return html`
       <style>
         .custom {
-          --frc-axis-text-color: ${args['--frc-axis-text-color']};
         }
       </style>
     `;
@@ -126,7 +132,6 @@ function getStyles(args: Args) {
     return html`
       <style>
         .dark {
-          --frc-axis-text-color: white;
         }
       </style>
     `;
@@ -135,13 +140,12 @@ function getStyles(args: Args) {
   return html`
     <style>
       .light {
-        --frc-axis-text-color: black;
       }
     </style>
   `;
 }
 
-function createAxisStory(optionalArgs: Record<string, any> = {}): Story {
+function createLoggerStory(optionalArgs: Record<string, any> = {}): Story {
   const storyArgs = {
     ...defaultArgs,
     ...optionalArgs,
@@ -150,22 +154,26 @@ function createAxisStory(optionalArgs: Record<string, any> = {}): Story {
     args: storyArgs,
     render: (args) => html`
       ${getStyles(args)}
-      <frc-axis
+      <frc-logger
         class=${args.theme}
-        ?vertical=${args.vertical}
-        ticks=${args.ticks}
-        min=${args.min}
-        max=${args.max}
-        unit=${ifDefined(args.unit || undefined)}
-      ></frc-axis>
+        title=${args.title}
+        max-log-count=${args.maxLogCount}
+        debug=${args.debug}
+        info=${args.info}
+        success=${args.success}
+        warning=${args.warning}
+        error=${args.error}
+        level=${args.level}
+        ?disabled=${args.disabled}
+      ></frc-logger>
     `,
   };
 }
 
-export const LightTheme = createAxisStory({
+export const LightTheme = createLoggerStory({
   theme: 'light',
 });
 
-export const DarkTheme = createAxisStory({
+export const DarkTheme = createLoggerStory({
   theme: 'dark',
 });

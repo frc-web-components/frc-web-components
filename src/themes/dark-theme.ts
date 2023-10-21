@@ -80,7 +80,7 @@ export default function addDarkTheme(dashboard: FrcDashboard): void {
     '--frc-bar-color': '#fff',
 
     /* frc-table-axis */
-    '--frc-tab-axis-text-color': '#fff',
+    '--frc-axis-text-color': '#fff',
 
     /* frc-3-axis-accelerometer */
     '--frc-3-axis-accelerometer-label-color': '#fff',
