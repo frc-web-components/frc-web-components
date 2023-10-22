@@ -1,4 +1,4 @@
-import '../components/accelerometer';
+import '../components/voltage-view';
 import type { Args, Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
@@ -6,25 +6,25 @@ import { styleMap } from 'lit/directives/style-map.js';
 
 const defaultArgs: Record<string, any> = {
   value: 0,
-  min: -1,
-  max: 1,
+  min: 0,
+  max: 5,
   center: 0,
   precision: 2,
   hideText: false,
   numTickMarks: 3,
-  unit: 'g',
+  unit: 'V',
   theme: 'light',
   'background-color': '#fff',
+  '--frc-voltage-view-foreground-color': '#ffbd2f',
   '--frc-bar-background': '#ddd',
-  '--frc-bar-foreground': 'lightblue',
   '--frc-bar-color': 'black',
   '--frc-axis-text-color': 'black',
 };
 
 const meta: Meta = {
-  title: 'FRC/Accelerometer',
+  title: 'FRC/Voltage View',
   tags: ['autodocs'],
-  component: 'frc-accelerometer',
+  component: 'frc-voltage-view',
   args: defaultArgs,
   argTypes: {
     value: {
@@ -89,17 +89,17 @@ const meta: Meta = {
         defaultValue: '#fff',
       },
     },
+    '--frc-voltage-view-foreground-color': {
+      control: 'color',
+      table: {
+        category: 'Styles',
+        defaultValue: { summary: '#ffbd2f' },
+      },
+    },
     '--frc-bar-background': {
       table: {
         category: 'Styles',
         defaultValue: { summary: '#ddd' },
-      },
-    },
-    '--frc-bar-foreground': {
-      control: 'color',
-      table: {
-        category: 'Styles',
-        defaultValue: { summary: 'lightblue' },
       },
     },
     '--frc-bar-color': {
@@ -147,8 +147,10 @@ function getStyles(args: Args) {
     return html`
       <style>
         .custom {
+          --frc-voltage-view-foreground-color: ${args[
+            '--frc-voltage-view-foreground-color'
+          ]};
           --frc-bar-background: ${args['--frc-bar-background']};
-          --frc-bar-foreground: ${args['--frc-bar-foreground']};
           --frc-bar-color: ${args['--frc-bar-color']};
           --frc-axis-text-color: ${args['--frc-axis-text-color']};
         }
@@ -160,8 +162,8 @@ function getStyles(args: Args) {
     return html`
       <style>
         .dark {
+          --frc-voltage-view-foreground-color: #dd9b0d;
           --frc-bar-background: #444;
-          --frc-bar-foreground: steelblue;
           --frc-bar-color: white;
           --frc-axis-text-color: white;
         }
@@ -172,8 +174,8 @@ function getStyles(args: Args) {
   return html`
     <style>
       .light {
+        --frc-voltage-view-foreground-color: #ffbd2f;
         --frc-bar-background: #ddd;
-        --frc-bar-foreground: lightblue;
         --frc-bar-color: black;
         --frc-axis-text-color: black;
       }
@@ -181,9 +183,7 @@ function getStyles(args: Args) {
   `;
 }
 
-function createAccelerometerStory(
-  optionalArgs: Record<string, any> = {}
-): Story {
+function createVoltageViewStory(optionalArgs: Record<string, any> = {}): Story {
   const storyArgs = {
     ...defaultArgs,
     ...optionalArgs,
@@ -192,7 +192,7 @@ function createAccelerometerStory(
     args: storyArgs,
     render: (args) => html`
       ${getStyles(args)}
-      <frc-accelerometer
+      <frc-voltage-view
         class=${args.theme}
         value=${args.value}
         min=${args.min}
@@ -202,15 +202,15 @@ function createAccelerometerStory(
         ?hide-text=${args.hideText}
         num-tick-marks=${args.numTickMarks}
         unit=${ifDefined(args.unit || undefined)}
-      ></frc-accelerometer>
+      ></frc-voltage-view>
     `,
   };
 }
 
-export const LightTheme = createAccelerometerStory({
+export const LightTheme = createVoltageViewStory({
   theme: 'light',
 });
 
-export const DarkTheme = createAccelerometerStory({
+export const DarkTheme = createVoltageViewStory({
   theme: 'dark',
 });

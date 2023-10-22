@@ -124,6 +124,7 @@ const meta: Meta = {
       const customColor = props.args['background-color'];
       return html` <div
         style=${styleMap({
+          minHeight: '50px',
           padding: '20px 10px',
           marginBottom: '5px',
           background: props.args.theme === 'custom' ? customColor : themeColor,

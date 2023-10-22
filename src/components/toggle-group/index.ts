@@ -9,7 +9,7 @@ export default class ToggleGroup extends LitElement {
   static styles = css`
     :host {
       display: inline-flex;
-      flex-direction: var(--frc-toggle-group-direction, column);
+      flex-direction: column;
       width: 150px;
       height: 300px;
       gap: 0;
