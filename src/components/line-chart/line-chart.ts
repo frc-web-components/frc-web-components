@@ -19,7 +19,7 @@ interface ChartDatum {
 interface ChartData {
   data: ChartDatum[];
   color: string;
-  isHidden: boolean;
+  hide: boolean;
   yAxis: number;
   displayName: string;
 }
@@ -190,7 +190,7 @@ export default class LineChart extends LitElement {
       return {
         data: this.getFilteredData(data),
         color: (child as any).color || colorScale(index % 8),
-        isHidden: (child as any).isHidden ?? false,
+        hide: (child as any).hide ?? false,
         yAxis: (child as any).yAxis ?? 0,
         displayName: (child as any).displayName || `Data ${index}`,
       };
@@ -259,7 +259,6 @@ export default class LineChart extends LitElement {
         max: 1,
         lockMin: false,
         lockMax: false,
-        autoFit: false,
         invert: false,
         side: 'left',
         hideGridLines: false,
@@ -283,7 +282,6 @@ export default class LineChart extends LitElement {
         max: axisElement.max ?? 1,
         lockMin: axisElement.lockMin ?? false,
         lockMax: axisElement.lockMax ?? false,
-        autoFit: axisElement.autoFit ?? false,
         invert: axisElement.invert ?? false,
         side: axisElement.side ?? 'left',
         hideGridLines: axisElement.hideGridLines ?? false,
@@ -335,7 +333,7 @@ export default class LineChart extends LitElement {
   }
 
   render() {
-    const { inside, position, direction } = this.getLegend();
+    const { inside, position, direction, hide } = this.getLegend();
     const isRowLayout =
       position === 'w' ||
       position === 'e' ||
@@ -360,9 +358,9 @@ export default class LineChart extends LitElement {
 
     return html`
       <div class="chart-and-header">
-        ${this.chartTitle ? html`<header>Chart Title</header>` : ''}
+        ${this.chartTitle ? html`<header>${this.chartTitle}</header>` : ''}
         <div class="chart-and-legend" style=${styles}>
-          ${this.renderLegend()}
+          ${!hide ? this.renderLegend() : ''}
           <div class="chart-container" style=${styleMap(chartContainerStyles)}>
             ${this.renderChart()}
           </div>
@@ -494,8 +492,7 @@ export default class LineChart extends LitElement {
           <rect class="chart-border" width=${width} height=${height}></rect>
           ${this.data
             .filter(
-              ({ isHidden, yAxis }) =>
-                !isHidden && yAxis < yScales.length && yAxis >= 0
+              ({ hide, yAxis }) => !hide && yAxis < yScales.length && yAxis >= 0
             )
             .map(
               (data) => svg`

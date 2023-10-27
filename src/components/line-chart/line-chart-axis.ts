@@ -6,7 +6,6 @@ export interface ILineChartAxis {
   max: number;
   lockMin: boolean;
   lockMax: boolean;
-  autoFit: boolean;
   invert: boolean;
   side: 'left' | 'right';
   hideGridLines: boolean;
@@ -20,7 +19,6 @@ export default class LineChartAxis
   @property({ type: Number }) max = 1;
   @property({ type: Boolean, attribute: 'lock-min' }) lockMin = false;
   @property({ type: Boolean, attribute: 'lock-max' }) lockMax = false;
-  @property({ type: Boolean, attribute: 'auto-fit' }) autoFit = false;
   @property({ type: Boolean }) invert = false;
   @property({ type: String }) side: 'left' | 'right' = 'left';
   @property({ type: Boolean, attribute: 'hide-grid-lines' }) hideGridLines =

@@ -1,13 +1,18 @@
 import '../components/toggle-button';
-import type { Meta, StoryObj } from '@storybook/web-components';
+import type { Args, Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { styleMap } from 'lit/directives/style-map.js';
 
 const defaultArgs: Record<string, any> = {
-  value: false,
-  falseColor: '#ff0000',
-  trueColor: '#00ff00',
-  label: '',
+  toggled: false,
+  label: 'Button',
+  theme: 'light',
+  'background-color': '#fff',
+  '--frc-button-background-color': 'rgb(230, 230, 230)',
+  '--frc-button-text-color': 'black',
+  '--frc-button-toggled-background-color': 'black',
+  '--frc-button-toggled-text-color': 'white',
 };
 
 const meta: Meta = {
@@ -16,66 +21,150 @@ const meta: Meta = {
   component: 'frc-toggle-button',
   args: defaultArgs,
   argTypes: {
-    value: {
+    toggled: {
       table: {
         category: 'Properties',
         defaultValue: { summary: false },
       },
     },
-    falseColor: {
-      control: 'color',
-      table: {
-        category: 'Properties',
-        defaultValue: { summary: '#ff0000' },
-      },
-    },
-    trueColor: {
-      control: 'color',
-      table: {
-        category: 'Properties',
-        defaultValue: { summary: '#00ff00' },
-      },
-    },
     label: {
       table: {
         category: 'Properties',
-        defaultValue: { summary: '' },
+        defaultValue: { summary: 'Button' },
+      },
+    },
+    theme: {
+      control: 'radio',
+      options: ['light', 'dark', 'custom'],
+      table: {
+        category: 'Styles',
+        defaultValue: 'light',
+      },
+    },
+    'background-color': {
+      table: {
+        category: 'Styles',
+        defaultValue: '#fff',
+      },
+    },
+    '--frc-button-background-color': {
+      table: {
+        category: 'Styles',
+        defaultValue: { summary: 'rgb(230, 230, 230)' },
+      },
+    },
+    '--frc-button-text-color': {
+      table: {
+        category: 'Styles',
+        defaultValue: { summary: 'black' },
+      },
+    },
+    '--frc-button-toggled-background-color': {
+      table: {
+        category: 'Styles',
+        defaultValue: { summary: 'black' },
+      },
+    },
+    '--frc-button-toggled-text-color': {
+      table: {
+        category: 'Styles',
+        defaultValue: { summary: 'white' },
       },
     },
   },
+  decorators: [
+    (story, props) => {
+      const isDarkTheme = props.args.theme === 'dark';
+      const themeColor = isDarkTheme ? 'hsl(214, 35%, 21%)' : '#fff';
+      const customColor = props.args['background-color'];
+      return html` <div
+        style=${styleMap({
+          padding: '20px 10px',
+          marginBottom: '5px',
+          background: props.args.theme === 'custom' ? customColor : themeColor,
+        })}
+      >
+        ${story()}
+      </div>`;
+    },
+  ],
+  // https://storybook.js.org/blog/storybook-addons-for-css/
+  // https://storybook.js.org/blog/how-to-add-a-theme-switcher-to-storybook/
+  // https://storybook.js.org/docs/react/writing-docs/autodocs
 };
 export default meta;
 
 type Story = StoryObj;
 
-function createBooleanBoxStory(optionalArgs: Record<string, any> = {}): Story {
+function getStyles(args: Args) {
+  if (args.theme === 'custom') {
+    return html`
+      <style>
+        .custom {
+          --frc-button-background-color: ${args[
+            '--frc-button-background-color'
+          ]};
+          --frc-button-text-color: ${args['--frc-button-text-color']};
+          --frc-button-toggled-background-color: ${args[
+            '--frc-button-toggled-background-color'
+          ]};
+          --frc-button-toggled-text-color: ${args[
+            '--frc-button-toggled-text-color'
+          ]};
+        }
+      </style>
+    `;
+  }
+
+  if (args.theme === 'dark') {
+    return html`
+      <style>
+        .dark {
+          --frc-button-background-color: rgba(255, 255, 255, 0.1);
+          --frc-button-text-color: white;
+          --frc-button-toggled-background-color: rgba(240, 240, 240);
+          --frc-button-toggled-text-color: black;
+        }
+      </style>
+    `;
+  }
+
+  return html`
+    <style>
+      .light {
+        --frc-button-background-color: rgb(230, 230, 230);
+        --frc-button-text-color: black;
+        --frc-button-toggled-background-color: black;
+        --frc-button-toggled-text-color: white;
+      }
+    </style>
+  `;
+}
+
+function createToggleButtonStory(
+  optionalArgs: Record<string, any> = {}
+): Story {
   const storyArgs = {
     ...defaultArgs,
     ...optionalArgs,
   };
   return {
     args: storyArgs,
-    parameters: {
-      canvas: { sourceState: 'shown' },
-    },
     render: (args) => html`
-      <frc-boolean-box
-        ?value=${args.value}
-        false-color=${ifDefined(args.falseColor || undefined)}
-        true-color=${ifDefined(args.trueColor || undefined)}
-        label=${ifDefined(args.label || undefined)}
-      ></frc-boolean-box>
+      ${getStyles(args)}
+      <frc-toggle-button
+        class=${args.theme}
+        ?toggled=${args.toggled}
+        label=${args.label}
+      ></frc-toggle-button>
     `,
   };
 }
 
-export const FalseValue = createBooleanBoxStory();
-export const TrueValue = createBooleanBoxStory({ value: true });
-export const CustomFalseColor = createBooleanBoxStory({
-  falseColor: '#f67b12',
+export const LightTheme = createToggleButtonStory({
+  theme: 'light',
 });
-export const CustomTrueColor = createBooleanBoxStory({
-  value: true,
-  trueColor: '#21e4bb',
+
+export const DarkTheme = createToggleButtonStory({
+  theme: 'dark',
 });
-export const WithLabel = createBooleanBoxStory({ label: `I'm a box` });

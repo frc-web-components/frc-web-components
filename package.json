@@ -18,6 +18,7 @@
     "./source-providers/*": "./dist/source-providers/*.es.js",
     "./components": "./dist/components.es.js",
     "./components/*": "./dist/components/*.es.js",
+    "./themes": "./dist/themes.es.js",
     "./lit/*": "./dist/lit/*.es.js"
   },
   "typesVersions": {
@@ -39,6 +40,9 @@
       ],
       "components/*": [
         "types/components/*/index.d.ts"
+      ],
+      "themes": [
+        "types/themes/index.d.ts"
       ],
       "lit/*": [
         "types/lit/*.d.ts"
