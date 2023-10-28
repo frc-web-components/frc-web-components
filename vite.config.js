@@ -43,7 +43,7 @@ export default defineConfig({
         'components/mechanism2d': 'src/components/mechanism2d/index.ts',
         'components/number-bar': 'src/components/number-bar/index.ts',
         'components/number-slider': 'src/components/number-slider/index.ts',
-        'components/pdp': 'src/components/number-pdp/index.ts',
+        'components/pdp': 'src/components/pdp/index.ts',
         'components/relay': 'src/components/relay/index.ts',
         'components/sendable-chooser':
           'src/components/sendable-chooser/index.ts',

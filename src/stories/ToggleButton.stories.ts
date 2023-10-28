@@ -1,7 +1,6 @@
 import '../components/toggle-button';
 import type { Args, Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
-import { ifDefined } from 'lit/directives/if-defined.js';
 import { styleMap } from 'lit/directives/style-map.js';
 
 const defaultArgs: Record<string, any> = {
