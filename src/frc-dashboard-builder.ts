@@ -4,7 +4,6 @@ import { customElement } from 'lit/decorators.js';
 import { FrcDashboard as FrcDash } from './dashboard';
 import addElements from './elements';
 import addProviders from './source-providers';
-// import addTutorials from './tutorials';
 import addThemes from './themes';
 import addDashboardComponents from './dashboard/dashboard-components';
 
@@ -15,7 +14,6 @@ export default class FrcDashboardBuilder extends LitElement {
     const dashboard = new FrcDash();
     addElements(dashboard);
     addProviders(dashboard);
-    // addTutorials(dashboard);
     addThemes(dashboard);
     addDashboardComponents(dashboard);
     const dashboardElement = document.createElement('dashboard-root');
