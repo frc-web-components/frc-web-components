@@ -1,6 +1,6 @@
 {
   "name": "@frc-web-components/fwc",
-  "version": "1.10.0",
+  "version": "1.11.1",
   "description": "",
   "files": [
     "dist",
@@ -11,15 +11,60 @@
   "type": "module",
   "types": "types/index.d.ts",
   "exports": {
-    ".": "./dist/fwc.es.js",
-    "./get-asset-url": "./dist/get-asset-url.es.js",
-    "./load-local-storage": "./dist/load-local-storage.es.js",
-    "./source-view": "./dist/source-view.es.js",
-    "./source-providers/*": "./dist/source-providers/*.es.js",
-    "./components": "./dist/components.es.js",
-    "./components/*": "./dist/components/*.es.js",
-    "./themes": "./dist/themes.es.js",
-    "./lit/*": "./dist/lit/*.es.js"
+    ".": {
+      "import": {
+        "types": "./types/index.d.ts",
+        "default": "./dist/fwc.es.js"
+      }
+    },
+    "./get-asset-url": {
+      "import": {
+        "types": "./types/get-asset-url.d.ts",
+        "default": "./dist/get-asset-url.es.js"
+      }
+    },
+    "./load-local-storage": {
+      "import": {
+        "types": "./types/load-local-storage.d.ts",
+        "default": "./dist/load-local-storage.es.js"
+      }
+    },
+    "./source-view": {
+      "import": {
+        "types": "./types/source-view.d.ts",
+        "default": "./dist/source-view.es.js"
+      }
+    },
+    "./source-providers/*": {
+      "import": {
+        "types": "./types/source-providers/*.d.ts",
+        "default": "./dist/source-providers/*.es.js"
+      }
+    },
+    "./components": {
+      "import": {
+        "types": "./types/components/index.d.ts",
+        "default": "./dist/components.es.js"
+      }
+    },
+    "./components/*": {
+      "import": {
+        "types": "./types/components/*/index.d.ts",
+        "default": "./dist/components/*.es.js"
+      }
+    },
+    "./themes": {
+      "import": {
+        "types": "./types/themes/index.d.ts",
+        "default": "./dist/themes.es.js"
+      }
+    },
+    "./lit/*": {
+      "import": {
+        "types": "./types/lit/*.d.ts",
+        "default": "./dist/lit/*.es.js"
+      }
+    }
   },
   "typesVersions": {
     "*": {
