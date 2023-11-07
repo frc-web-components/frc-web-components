@@ -191,7 +191,7 @@
     "interactjs": "^1.10.17",
     "js-beautify": "^1.13.0",
     "juicy-ace-editor": "^2.0.5",
-    "lit": "^2.0.0-rc.2",
+    "lit": "^3.0.1",
     "lodash.escape": "^4.0.1",
     "lodash.throttle": "^4.1.1",
     "lodash.unescape": "^4.0.1",

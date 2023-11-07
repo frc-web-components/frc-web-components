@@ -5,8 +5,8 @@ import iconset from './iconset';
 export default class Icon extends LitElement {
   @property({ type: String }) color = '#000000';
   @property({ type: String }) icon = '';
-  @property({ type: String }) svgPath = '';
-  @property({ type: String }) viewBox = '0 0 24 24';
+  @property({ type: String, attribute: 'svg-path' }) svgPath = '';
+  @property({ type: String, attribute: 'view-box' }) viewBox = '0 0 24 24';
 
   static styles = css`
     :host {

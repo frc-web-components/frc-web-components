@@ -50,12 +50,16 @@ const meta: Meta = {
         category: 'Properties',
         defaultValue: { summary: '' },
       },
+      description:
+        'Custom svg path. SVGs icons can be downloaded from here: https://fonts.google.com/icons',
     },
     viewBox: {
       table: {
         category: 'Properties',
         defaultValue: { summary: '0 0 24 24' },
       },
+      description:
+        'ViewBox for custom svg. SVG icons can be downloaded from here: Custom svg path. SVGs icons can be downloaded here: https://fonts.google.com/icons',
     },
     theme: {
       control: 'radio',
@@ -139,3 +143,9 @@ function createIconStory(optionalArgs: Record<string, any> = {}): Story {
 }
 
 export const Icon = createIconStory();
+export const CustomIcon = createIconStory({
+  customIcon: true,
+  svgPath:
+    'M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z',
+  viewBox: '0 -960 960 960',
+});
