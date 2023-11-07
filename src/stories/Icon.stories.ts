@@ -59,7 +59,7 @@ const meta: Meta = {
         defaultValue: { summary: '0 0 24 24' },
       },
       description:
-        'ViewBox for custom svg. SVG icons can be downloaded from here: Custom svg path. SVGs icons can be downloaded here: https://fonts.google.com/icons',
+        'ViewBox for custom svg. SVG icons can be downloaded from here: https://fonts.google.com/icons',
     },
     theme: {
       control: 'radio',
