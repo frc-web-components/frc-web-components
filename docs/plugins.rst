@@ -1,7 +1,7 @@
 Plugin Development
 ==================
 
-`<- Back </README.rst>`_
+`<- Back </README.md>`_
 
 - `Creating your first plugin <#creating-your-first-plugin>`_
 - `Creating custom elements <#creating-custom-elements>`_

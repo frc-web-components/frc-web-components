@@ -1,7 +1,7 @@
 Dashboard
 =========
 
-`<- Back </README.rst>`_
+`<- Back </README.md>`_
 
 - `Adding, Selecting and Removing Elements <#adding-selecting-and-removing-elements>`_
 - `Adding and Removing Tabs <#adding-and-removing-tabs>`_
