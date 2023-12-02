@@ -137,6 +137,10 @@ export const darkTheme: Record<string, string> = {
   '--frc-button-text-color': 'white',
   '--frc-button-toggled-background-color': 'rgba(240,240,240)',
   '--frc-button-toggled-text-color': 'black',
+
+  /* network alerts */
+  '--frc-network-alerts-text-color': 'black',
+  '--frc-network-alerts-header-color': 'steelblue',
 };
 
 export default function addDarkTheme(dashboard: FrcDashboard): void {

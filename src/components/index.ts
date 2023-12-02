@@ -26,3 +26,4 @@ import './toggle-group';
 import './relay';
 import './mechanism2d';
 import './encoder';
+import './network-alerts';

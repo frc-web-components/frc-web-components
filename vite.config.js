@@ -1,9 +1,9 @@
 import { defineConfig } from 'vite';
 import basicSsl from '@vitejs/plugin-basic-ssl';
-import yargsHelpers from 'yargs/helpers';
+import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs/yargs';
 
-const argv = yargs(yargsHelpers.hideBin(process.argv)).argv;
+const argv = yargs(hideBin(process.argv)).argv;
 
 const plugins = [];
 
@@ -41,6 +41,7 @@ export default defineConfig({
         'components/line-chart': 'src/components/line-chart/index.ts',
         'components/logger': 'src/components/logger/index.ts',
         'components/mechanism2d': 'src/components/mechanism2d/index.ts',
+        'components/network-alerts': 'src/components/network-alerts/index.ts',
         'components/number-bar': 'src/components/number-bar/index.ts',
         'components/number-slider': 'src/components/number-slider/index.ts',
         'components/pdp': 'src/components/pdp/index.ts',
