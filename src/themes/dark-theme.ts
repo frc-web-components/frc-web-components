@@ -141,6 +141,11 @@ export const darkTheme: Record<string, string> = {
   /* network alerts */
   '--frc-network-alerts-text-color': 'black',
   '--frc-network-alerts-header-color': 'steelblue',
+
+  /* pid controller */
+  '--frc-pid-controller-text-color': 'white',
+  '--frc-pid-controller-input-background-color': 'rgba(255,255,255,.2)',
+  '--frc-pid-controller-input-border-color': 'rgba(255,255,255,.5)',
 };
 
 export default function addDarkTheme(dashboard: FrcDashboard): void {
