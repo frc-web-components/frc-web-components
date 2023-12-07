@@ -1,17 +1,18 @@
 import { html, css, LitElement, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 
-export default class PidController extends LitElement {
+export default class PidCommand extends LitElement {
   @property({ type: Number }) p = 0;
   @property({ type: Number }) i = 0;
   @property({ type: Number }) d = 0;
   @property({ type: Number }) setpoint = 0;
+  @property({ type: Boolean }) running = false;
 
   static styles = css`
     :host {
       display: inline-grid;
       grid-template-columns: min-content auto;
-      grid-template-rows: 25% 25% 25% 25%;
+      grid-template-rows: 20% 20% 20% 20% 20%;
       column-gap: 10px;
       row-gap: 5px;
       align-items: center;
@@ -25,7 +26,7 @@ export default class PidController extends LitElement {
       text-align: right;
     }
 
-    input {
+    input[type='number'] {
       width: 100%;
       min-width: 50px;
       display: inline-block;
@@ -37,6 +38,17 @@ export default class PidController extends LitElement {
       border: 1px solid var(--frc-pid-controller-input-border-color, #e0e0e0);
       color: var(--frc-pid-controller-text-color, black);
       background: var(--frc-pid-controller-input-background-color, white);
+    }
+
+    input[type='checkbox'] {
+      justify-self: right;
+      margin: 0;
+      width: 16px;
+      height: 16px;
+    }
+
+    label[for='running'] {
+      justify-self: left;
     }
   `;
 
@@ -56,8 +68,19 @@ export default class PidController extends LitElement {
     this.setpoint = parseFloat((ev as any).target.value);
   }
 
+  onRunningClick(): void {
+    this.running = !this.running;
+  }
+
   render(): TemplateResult {
     return html`
+      <input
+        type="checkbox"
+        id="running"
+        ?checked=${this.running}
+        @click=${this.onRunningClick}
+      />
+      <label for="running">Running</label>
       <label>P</label>
       <input type="number" value=${this.p} @change=${this.onPChange} />
       <label>I</label>
@@ -74,12 +97,12 @@ export default class PidController extends LitElement {
   }
 }
 
-if (!customElements.get('frc-pid-controller')) {
-  customElements.define('frc-pid-controller', PidController);
+if (!customElements.get('frc-pid-command')) {
+  customElements.define('frc-pid-command', PidCommand);
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'frc-pid-controller': PidController;
+    'frc-pid-command': PidCommand;
   }
 }
