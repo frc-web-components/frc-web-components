@@ -1,4 +1,4 @@
-import '../components/pid-command';
+import '../../components/profiled-pid-controller';
 import type { Args, Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
@@ -7,8 +7,7 @@ const defaultArgs: Record<string, any> = {
   p: 0,
   i: 0,
   d: 0,
-  setpoint: 0,
-  running: false,
+  goal: 0,
   theme: 'light',
   'background-color': '#fff',
   '--frc-pid-controller-text-color': 'black',
@@ -17,9 +16,9 @@ const defaultArgs: Record<string, any> = {
 };
 
 const meta: Meta = {
-  title: 'FRC/PID Command',
+  title: 'PID Controller/Profiled PID Controller',
   tags: ['autodocs'],
-  component: 'frc-pid-command',
+  component: 'frc-profiled-pid-controller',
   args: defaultArgs,
   argTypes: {
     p: {
@@ -40,16 +39,10 @@ const meta: Meta = {
         defaultValue: { summary: 0 },
       },
     },
-    setpoint: {
+    goal: {
       table: {
         category: 'Properties',
         defaultValue: { summary: 0 },
-      },
-    },
-    running: {
-      table: {
-        category: 'Properties',
-        defaultValue: { summary: false },
       },
     },
     theme: {
@@ -150,7 +143,9 @@ function getStyles(args: Args) {
   `;
 }
 
-function createPidCommandStory(optionalArgs: Record<string, any> = {}): Story {
+function createPidControllerStory(
+  optionalArgs: Record<string, any> = {}
+): Story {
   const storyArgs = {
     ...defaultArgs,
     ...optionalArgs,
@@ -159,22 +154,21 @@ function createPidCommandStory(optionalArgs: Record<string, any> = {}): Story {
     args: storyArgs,
     render: (args) => html`
       ${getStyles(args)}
-      <frc-pid-command
+      <frc-profiled-pid-controller
         class=${args.theme}
         p=${args.p}
         i=${args.i}
         d=${args.d}
-        setpoint=${args.setpoint}
-        ?running=${args.running}
-      ></frc-pid-command>
+        goal=${args.goal}
+      ></frc-profiled-pid-controller>
     `,
   };
 }
 
-export const LightTheme = createPidCommandStory({
+export const LightTheme = createPidControllerStory({
   theme: 'light',
 });
 
-export const DarkTheme = createPidCommandStory({
+export const DarkTheme = createPidControllerStory({
   theme: 'dark',
 });

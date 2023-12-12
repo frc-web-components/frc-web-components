@@ -12,11 +12,12 @@ export default class PidCommand extends LitElement {
     :host {
       display: inline-grid;
       grid-template-columns: min-content auto;
-      grid-template-rows: 20% 20% 20% 20% 20%;
+      grid-template-rows: auto auto auto auto auto;
       column-gap: 10px;
-      row-gap: 5px;
+      row-gap: 8px;
       align-items: center;
       width: 150px;
+      height: auto;
       font-family: sans-serif;
       color: var(--frc-pid-controller-text-color, black);
     }

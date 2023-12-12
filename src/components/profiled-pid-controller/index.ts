@@ -1,11 +1,11 @@
 import { html, css, LitElement, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 
-export default class PidController extends LitElement {
+export default class ProfiledPidController extends LitElement {
   @property({ type: Number }) p = 0;
   @property({ type: Number }) i = 0;
   @property({ type: Number }) d = 0;
-  @property({ type: Number }) setpoint = 0;
+  @property({ type: Number }) goal = 0;
 
   static styles = css`
     :host {
@@ -53,8 +53,8 @@ export default class PidController extends LitElement {
     this.d = parseFloat((ev as any).target.value);
   }
 
-  onSetpointChange(ev: InputEvent): void {
-    this.setpoint = parseFloat((ev as any).target.value);
+  onGoalChange(ev: InputEvent): void {
+    this.goal = parseFloat((ev as any).target.value);
   }
 
   render(): TemplateResult {
@@ -65,22 +65,18 @@ export default class PidController extends LitElement {
       <input type="number" value=${this.i} @change=${this.onIChange} />
       <label>D</label>
       <input type="number" value=${this.d} @change=${this.onDChange} />
-      <label>Setpoint</label>
-      <input
-        type="number"
-        value=${this.setpoint}
-        @change=${this.onSetpointChange}
-      />
+      <label>Goal</label>
+      <input type="number" value=${this.goal} @change=${this.onGoalChange} />
     `;
   }
 }
 
-if (!customElements.get('frc-pid-controller')) {
-  customElements.define('frc-pid-controller', PidController);
+if (!customElements.get('frc-profiled-pid-controller')) {
+  customElements.define('frc-profiled-pid-controller', ProfiledPidController);
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'frc-pid-controller': PidController;
+    'frc-profiled-pid-controller': ProfiledPidController;
   }
 }

@@ -28,3 +28,5 @@ import './mechanism2d';
 import './encoder';
 import './network-alerts';
 import './pid-controller';
+import './pid-command';
+import './profiled-pid-controller';

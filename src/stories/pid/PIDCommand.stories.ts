@@ -1,4 +1,4 @@
-import '../components/pid-controller';
+import '../../components/pid-command';
 import type { Args, Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
@@ -8,6 +8,7 @@ const defaultArgs: Record<string, any> = {
   i: 0,
   d: 0,
   setpoint: 0,
+  running: false,
   theme: 'light',
   'background-color': '#fff',
   '--frc-pid-controller-text-color': 'black',
@@ -16,9 +17,9 @@ const defaultArgs: Record<string, any> = {
 };
 
 const meta: Meta = {
-  title: 'FRC/PID Controller',
+  title: 'PID Controller/PID Command',
   tags: ['autodocs'],
-  component: 'frc-pid-controller',
+  component: 'frc-pid-command',
   args: defaultArgs,
   argTypes: {
     p: {
@@ -43,6 +44,12 @@ const meta: Meta = {
       table: {
         category: 'Properties',
         defaultValue: { summary: 0 },
+      },
+    },
+    running: {
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: false },
       },
     },
     theme: {
@@ -143,9 +150,7 @@ function getStyles(args: Args) {
   `;
 }
 
-function createPidControllerStory(
-  optionalArgs: Record<string, any> = {}
-): Story {
+function createPidCommandStory(optionalArgs: Record<string, any> = {}): Story {
   const storyArgs = {
     ...defaultArgs,
     ...optionalArgs,
@@ -154,21 +159,22 @@ function createPidControllerStory(
     args: storyArgs,
     render: (args) => html`
       ${getStyles(args)}
-      <frc-pid-controller
+      <frc-pid-command
         class=${args.theme}
         p=${args.p}
         i=${args.i}
         d=${args.d}
         setpoint=${args.setpoint}
-      ></frc-pid-controller>
+        ?running=${args.running}
+      ></frc-pid-command>
     `,
   };
 }
 
-export const LightTheme = createPidControllerStory({
+export const LightTheme = createPidCommandStory({
   theme: 'light',
 });
 
-export const DarkTheme = createPidControllerStory({
+export const DarkTheme = createPidCommandStory({
   theme: 'dark',
 });

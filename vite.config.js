@@ -45,7 +45,10 @@ export default defineConfig({
         'components/number-bar': 'src/components/number-bar/index.ts',
         'components/number-slider': 'src/components/number-slider/index.ts',
         'components/pdp': 'src/components/pdp/index.ts',
+        'components/pid-command': 'src/components/pid-command/index.ts',
         'components/pid-controller': 'src/components/pid-controller/index.ts',
+        'components/profiled-pid-controller':
+          'src/components/profiled-pid-controller/index.ts',
         'components/relay': 'src/components/relay/index.ts',
         'components/sendable-chooser':
           'src/components/sendable-chooser/index.ts',
