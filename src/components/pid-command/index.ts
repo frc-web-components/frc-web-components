@@ -53,24 +53,43 @@ export default class PidCommand extends LitElement {
     }
   `;
 
+  #emitChange(): void {
+    this.dispatchEvent(
+      new CustomEvent('change', {
+        detail: {
+          p: this.p,
+          i: this.i,
+          d: this.d,
+          setpoint: this.setpoint,
+          running: this.running,
+        },
+      })
+    );
+  }
+
   onPChange(ev: InputEvent): void {
     this.p = parseFloat((ev as any).target.value);
+    this.#emitChange();
   }
 
   onIChange(ev: InputEvent): void {
     this.i = parseFloat((ev as any).target.value);
+    this.#emitChange();
   }
 
   onDChange(ev: InputEvent): void {
     this.d = parseFloat((ev as any).target.value);
+    this.#emitChange();
   }
 
   onSetpointChange(ev: InputEvent): void {
     this.setpoint = parseFloat((ev as any).target.value);
+    this.#emitChange();
   }
 
   onRunningClick(): void {
     this.running = !this.running;
+    this.#emitChange();
   }
 
   render(): TemplateResult {
@@ -83,15 +102,15 @@ export default class PidCommand extends LitElement {
       />
       <label for="running">Running</label>
       <label>P</label>
-      <input type="number" value=${this.p} @change=${this.onPChange} />
+      <input type="number" .value=${this.p} @change=${this.onPChange} />
       <label>I</label>
-      <input type="number" value=${this.i} @change=${this.onIChange} />
+      <input type="number" .value=${this.i} @change=${this.onIChange} />
       <label>D</label>
-      <input type="number" value=${this.d} @change=${this.onDChange} />
+      <input type="number" .value=${this.d} @change=${this.onDChange} />
       <label>Setpoint</label>
       <input
         type="number"
-        value=${this.setpoint}
+        .value=${this.setpoint}
         @change=${this.onSetpointChange}
       />
     `;
