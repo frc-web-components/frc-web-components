@@ -46,6 +46,7 @@ export default defineConfig({
         'components/number-slider': 'src/components/number-slider/index.ts',
         'components/pdp': 'src/components/pdp/index.ts',
         'components/relay': 'src/components/relay/index.ts',
+        'components/scoring-grid': 'src/components/scoring-grid/index.ts',
         'components/sendable-chooser':
           'src/components/sendable-chooser/index.ts',
         'components/toggle-button': 'src/components/toggle-button/index.ts',
