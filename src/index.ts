@@ -25,7 +25,7 @@ export default function createDashboard(
   return dashboard;
 }
 
-const store = new KeyValueStore();
+const store = new KeyValueStore<number | string>();
 
 store.set('/a', 3);
 
