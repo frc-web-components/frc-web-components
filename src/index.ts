@@ -8,6 +8,7 @@ import addProviders from './source-providers';
 import addThemes from './themes';
 import addDashboardComponents from './dashboard/dashboard-components';
 import './components/line-chart';
+import { KeyValueStore } from './store';
 
 export default function createDashboard(
   element: HTMLElement,
@@ -23,5 +24,16 @@ export default function createDashboard(
   element.appendChild(dashboardElement);
   return dashboard;
 }
+
+const store = new KeyValueStore();
+
+store.set('/a', 3);
+
+console.log('storeValue:\n', JSON.stringify(store.getJson(''), null, 2));
+
+// store.delete('/a/b/c');
+
+store.set('/a/b/c', 'test');
+console.log('storeValue:\n', JSON.stringify(store.getJson(''), null, 2));
 
 export type FrcDashboard = Dashboard;
