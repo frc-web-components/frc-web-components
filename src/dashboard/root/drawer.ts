@@ -3,6 +3,7 @@ import { LitElement, html, css, TemplateResult } from 'lit';
 import { customElement, state, property } from 'lit/decorators.js';
 import FrcDashboard from '../frc-dashboard';
 import './drawer-sidebar';
+import './resize-handler';
 
 @customElement('dashboard-drawer')
 export default class DashboardDrawer extends LitElement {
@@ -24,9 +25,12 @@ export default class DashboardDrawer extends LitElement {
     }
 
     .editors {
+      z-index: 100;
+      position: absolute;
+      top: 44px;
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      height: calc(100vh - 44px);
       width: 370px;
       gap: 10px;
       font-family: sans-serif;
@@ -126,11 +130,11 @@ export default class DashboardDrawer extends LitElement {
     this.selectedElement = this.dashboard.getSelectedElement() ?? undefined;
   }
 
-  updated(updatedProps: Map<string, unknown>): void {
-    if (updatedProps.has('selectedElement')) {
-      this.#updateEditors();
-    }
-  }
+  // updated(updatedProps: Map<string, unknown>): void {
+  //   if (updatedProps.has('selectedElement')) {
+  //     this.#updateEditors();
+  //   }
+  // }
 
   #getEditorTags(): string[] {
     return this.dashboard.getComponentIdsOfType('elementEditor');
@@ -178,9 +182,6 @@ export default class DashboardDrawer extends LitElement {
     const isEditable = this.dashboard.isElementEditable();
     return html`
       <div class="dashboard ${!this.showSidebar ? 'hide-sidebar' : ''}">
-        <dashboard-drawer-sidebar
-          .dashboard=${this.dashboard}
-        ></dashboard-drawer-sidebar>
         <div class="editors ${!isEditable ? 'uneditable' : ''}">
           ${this.selectedElement
             ? html`
@@ -189,18 +190,23 @@ export default class DashboardDrawer extends LitElement {
                 </header>
               `
             : null}
-          <div class="editor-components">${this.renderElementTree()}</div>
+          ${this.renderElementTree()}
+          <!-- <div class="editor-components">${this.renderElementTree()}</div> -->
+          <dashboard-drawer-sidebar
+            .dashboard=${this.dashboard}
+          ></dashboard-drawer-sidebar>
         </div>
-        <div
+        <dashboard-resize-handler></dashboard-resize-handler>
+        <!-- <div
           class="resize-handle"
           draggable="true"
           @drag=${(ev: DragEvent) => {
-            if (ev.screenX === 0 && ev.screenY === 0) {
-              return;
-            }
-            this.showSidebar = ev.screenX > 270;
-          }}
-        ></div>
+          if (ev.screenX === 0 && ev.screenY === 0) {
+            return;
+          }
+          this.showSidebar = ev.screenX > 270;
+        }}
+        ></div> -->
       </div>
     `;
   }
