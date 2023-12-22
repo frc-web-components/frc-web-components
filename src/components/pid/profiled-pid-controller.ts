@@ -41,32 +41,49 @@ export default class ProfiledPidController extends LitElement {
     }
   `;
 
+  #emitChange(): void {
+    this.dispatchEvent(
+      new CustomEvent('change', {
+        detail: {
+          p: this.p,
+          i: this.i,
+          d: this.d,
+          goal: this.goal,
+        },
+      })
+    );
+  }
+
   onPChange(ev: InputEvent): void {
     this.p = parseFloat((ev as any).target.value);
+    this.#emitChange();
   }
 
   onIChange(ev: InputEvent): void {
     this.i = parseFloat((ev as any).target.value);
+    this.#emitChange();
   }
 
   onDChange(ev: InputEvent): void {
     this.d = parseFloat((ev as any).target.value);
+    this.#emitChange();
   }
 
   onGoalChange(ev: InputEvent): void {
     this.goal = parseFloat((ev as any).target.value);
+    this.#emitChange();
   }
 
   render(): TemplateResult {
     return html`
       <label>P</label>
-      <input type="number" value=${this.p} @change=${this.onPChange} />
+      <input type="number" .value=${this.p} @change=${this.onPChange} />
       <label>I</label>
-      <input type="number" value=${this.i} @change=${this.onIChange} />
+      <input type="number" .value=${this.i} @change=${this.onIChange} />
       <label>D</label>
-      <input type="number" value=${this.d} @change=${this.onDChange} />
+      <input type="number" .value=${this.d} @change=${this.onDChange} />
       <label>Goal</label>
-      <input type="number" value=${this.goal} @change=${this.onGoalChange} />
+      <input type="number" .value=${this.goal} @change=${this.onGoalChange} />
     `;
   }
 }
