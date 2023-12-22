@@ -1,48 +1,68 @@
-import '../../components/pid/profiled-pid-controller';
+import '../../components/command-based/subsystem';
 import type { Args, Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 
 const defaultArgs: Record<string, any> = {
-  p: 0,
-  i: 0,
-  d: 0,
-  goal: 0,
+  default: '',
+  command: '',
+  hasCommand: false,
+  hasDefault: false,
+  label: '',
+  name: '',
+  hideName: false,
   theme: 'light',
   'background-color': '#fff',
-  '--frc-pid-controller-text-color': 'black',
-  '--frc-pid-controller-input-background-color': 'white',
-  '--frc-pid-controller-input-border-color': '#e0e0e0',
+  '--frc-label-text-color': 'black',
+  '--frc-robot-subsystem-header-color': 'purple',
 };
 
 const meta: Meta = {
-  title: 'PID Controller/Profiled PID Controller',
+  title: 'Command Based/Robot Subsystem',
   tags: ['autodocs'],
-  component: 'frc-profiled-pid-controller',
+  component: 'frc-robot-subsystem',
   args: defaultArgs,
   argTypes: {
-    p: {
+    default: {
       table: {
         category: 'Properties',
-        defaultValue: { summary: 0 },
+        defaultValue: { summary: '' },
       },
     },
-    i: {
+    command: {
       table: {
         category: 'Properties',
-        defaultValue: { summary: 0 },
+        defaultValue: { summary: '' },
       },
     },
-    d: {
+    hasCommand: {
       table: {
         category: 'Properties',
-        defaultValue: { summary: 0 },
+        defaultValue: { summary: false },
       },
     },
-    goal: {
+    hasDefault: {
       table: {
         category: 'Properties',
-        defaultValue: { summary: 0 },
+        defaultValue: { summary: false },
+      },
+    },
+    label: {
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: '' },
+      },
+    },
+    name: {
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: '' },
+      },
+    },
+    hideName: {
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: false },
       },
     },
     theme: {
@@ -59,24 +79,16 @@ const meta: Meta = {
         defaultValue: '#fff',
       },
     },
-    '--frc-pid-controller-text-color': {
+    '--frc-label-text-color': {
       table: {
         category: 'Styles',
         defaultValue: { summary: 'black' },
       },
     },
-    '--frc-pid-controller-input-background-color': {
-      control: 'color',
+    '--frc-robot-subsystem-header-color': {
       table: {
         category: 'Styles',
-        defaultValue: { summary: 'white' },
-      },
-    },
-    '--frc-pid-controller-input-border-color': {
-      control: 'color',
-      table: {
-        category: 'Styles',
-        defaultValue: { summary: '#e0e0e0' },
+        defaultValue: { summary: 'purple' },
       },
     },
   },
@@ -106,14 +118,9 @@ function getStyles(args: Args) {
     return html`
       <style>
         .custom {
-          --frc-pid-controller-text-color: ${args[
-            '--frc-pid-controller-text-color'
-          ]};
-          --frc-pid-controller-input-background-color: ${args[
-            '--frc-pid-controller-input-background-color'
-          ]};
-          --frc-pid-controller-input-border-color: ${args[
-            '--frc-pid-controller-input-border-color'
+          --frc-label-text-color: ${args['--frc-label-text-color']};
+          --frc-robot-subsystem-header-color: ${args[
+            '--frc-robot-subsystem-header-color'
           ]};
         }
       </style>
@@ -124,9 +131,8 @@ function getStyles(args: Args) {
     return html`
       <style>
         .dark {
-          --frc-pid-controller-text-color: white;
-          --frc-pid-controller-input-background-color: rgba(255, 255, 255, 0.2);
-          --frc-pid-controller-input-border-color: rgba(255, 255, 255, 0.5);
+          --frc-label-text-color: white;
+          --frc-robot-subsystem-header-color: #a020f0;
         }
       </style>
     `;
@@ -135,17 +141,14 @@ function getStyles(args: Args) {
   return html`
     <style>
       .light {
-        --frc-pid-controller-text-color: black;
-        --frc-pid-controller-input-background-color: white;
-        --frc-pid-controller-input-border-color: #e0e0e0;
+        --frc-label-text-color: black;
+        --frc-robot-subsystem-header-color: purple;
       }
     </style>
   `;
 }
 
-function createPidControllerStory(
-  optionalArgs: Record<string, any> = {}
-): Story {
+function createSubsystemStory(optionalArgs: Record<string, any> = {}): Story {
   const storyArgs = {
     ...defaultArgs,
     ...optionalArgs,
@@ -154,21 +157,24 @@ function createPidControllerStory(
     args: storyArgs,
     render: (args) => html`
       ${getStyles(args)}
-      <frc-profiled-pid-controller
+      <frc-robot-subsystem
         class=${args.theme}
-        p=${args.p}
-        i=${args.i}
-        d=${args.d}
-        goal=${args.goal}
-      ></frc-profiled-pid-controller>
+        default=${args.default}
+        command=${args.command}
+        ?has-command=${args.hasCommand}
+        ?has-default=${args.hasDefault}
+        label=${args.label}
+        name=${args.name}
+        ?hide-name=${args.hideName}
+      ></frc-robot-subsystem>
     `,
   };
 }
 
-export const LightTheme = createPidControllerStory({
+export const LightTheme = createSubsystemStory({
   theme: 'light',
 });
 
-export const DarkTheme = createPidControllerStory({
+export const DarkTheme = createSubsystemStory({
   theme: 'dark',
 });

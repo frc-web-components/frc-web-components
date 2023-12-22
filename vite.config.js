@@ -31,6 +31,7 @@ export default defineConfig({
         'components/basic-fms-info': 'src/components/basic-fms-info/index.ts',
         'components/boolean-box': 'src/components/boolean-box/index.ts',
         'components/canvas': 'src/components/canvas/index.ts',
+        'components/command-based': 'src/components/command-based/index.ts',
         'components/drivebases': 'src/components/drivebases/index.ts',
         'components/encoder': 'src/components/encoder/index.ts',
         'components/field': 'src/components/field/index.ts',
@@ -50,6 +51,7 @@ export default defineConfig({
         'components/profiled-pid-controller':
           'src/components/profiled-pid-controller/index.ts',
         'components/relay': 'src/components/relay/index.ts',
+        'components/scoring-grid': 'src/components/scoring-grid/index.ts',
         'components/sendable-chooser':
           'src/components/sendable-chooser/index.ts',
         'components/toggle-button': 'src/components/toggle-button/index.ts',

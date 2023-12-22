@@ -1,57 +1,65 @@
-import '../../components/pid/pid-command';
+import '../../components/scoring-grid';
 import type { Args, Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 
 const defaultArgs: Record<string, any> = {
-  p: 0,
-  i: 0,
-  d: 0,
-  setpoint: 0,
-  running: false,
+  selection: -1,
+  cubesScored: [],
+  conesScored: [],
+  hideLinks: false,
+  reverseRow: false,
+  reverseCol: false,
   theme: 'light',
   'background-color': '#fff',
-  '--frc-pid-controller-text-color': 'black',
-  '--frc-pid-controller-input-background-color': 'white',
-  '--frc-pid-controller-input-border-color': '#e0e0e0',
 };
 
 const meta: Meta = {
-  title: 'PID Controller/PID Command',
+  title: 'Charged Up/Scoring Grid',
   tags: ['autodocs'],
-  component: 'frc-pid-command',
+  component: 'frc-scoring-grid',
   args: defaultArgs,
   argTypes: {
-    p: {
+    selection: {
       table: {
         category: 'Properties',
         defaultValue: { summary: 0 },
       },
+      control: { type: 'number', min: 0, step: 27 },
     },
-    i: {
+    cubesScored: {
+      control: 'object',
       table: {
         category: 'Properties',
-        defaultValue: { summary: 0 },
+        defaultValue: { summary: [] },
       },
     },
-    d: {
+    conesScored: {
+      control: 'object',
       table: {
         category: 'Properties',
-        defaultValue: { summary: 0 },
+        defaultValue: { summary: [] },
       },
     },
-    setpoint: {
-      table: {
-        category: 'Properties',
-        defaultValue: { summary: 0 },
-      },
-    },
-    running: {
+    hideLinks: {
       table: {
         category: 'Properties',
         defaultValue: { summary: false },
       },
     },
+    reverseRow: {
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: false },
+      },
+    },
+    reverseCol: {
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: false },
+      },
+    },
+
     theme: {
       control: 'radio',
       options: ['light', 'dark', 'custom'],
@@ -64,26 +72,6 @@ const meta: Meta = {
       table: {
         category: 'Styles',
         defaultValue: '#fff',
-      },
-    },
-    '--frc-pid-controller-text-color': {
-      table: {
-        category: 'Styles',
-        defaultValue: { summary: 'black' },
-      },
-    },
-    '--frc-pid-controller-input-background-color': {
-      control: 'color',
-      table: {
-        category: 'Styles',
-        defaultValue: { summary: 'white' },
-      },
-    },
-    '--frc-pid-controller-input-border-color': {
-      control: 'color',
-      table: {
-        category: 'Styles',
-        defaultValue: { summary: '#e0e0e0' },
       },
     },
   },
@@ -113,15 +101,6 @@ function getStyles(args: Args) {
     return html`
       <style>
         .custom {
-          --frc-pid-controller-text-color: ${args[
-            '--frc-pid-controller-text-color'
-          ]};
-          --frc-pid-controller-input-background-color: ${args[
-            '--frc-pid-controller-input-background-color'
-          ]};
-          --frc-pid-controller-input-border-color: ${args[
-            '--frc-pid-controller-input-border-color'
-          ]};
         }
       </style>
     `;
@@ -131,9 +110,6 @@ function getStyles(args: Args) {
     return html`
       <style>
         .dark {
-          --frc-pid-controller-text-color: white;
-          --frc-pid-controller-input-background-color: rgba(255, 255, 255, 0.2);
-          --frc-pid-controller-input-border-color: rgba(255, 255, 255, 0.5);
         }
       </style>
     `;
@@ -142,15 +118,12 @@ function getStyles(args: Args) {
   return html`
     <style>
       .light {
-        --frc-pid-controller-text-color: black;
-        --frc-pid-controller-input-background-color: white;
-        --frc-pid-controller-input-border-color: #e0e0e0;
       }
     </style>
   `;
 }
 
-function createPidCommandStory(optionalArgs: Record<string, any> = {}): Story {
+function createScoringGridStory(optionalArgs: Record<string, any> = {}): Story {
   const storyArgs = {
     ...defaultArgs,
     ...optionalArgs,
@@ -159,22 +132,27 @@ function createPidCommandStory(optionalArgs: Record<string, any> = {}): Story {
     args: storyArgs,
     render: (args) => html`
       ${getStyles(args)}
-      <frc-pid-command
+      <frc-scoring-grid
         class=${args.theme}
-        p=${args.p}
-        i=${args.i}
-        d=${args.d}
-        setpoint=${args.setpoint}
-        ?running=${args.running}
-      ></frc-pid-command>
+        selection=${args.selection}
+        cubes-scored=${JSON.stringify(args.cubesScored)}
+        cones-scored=${JSON.stringify(args.conesScored)}
+        ?hide-links=${args.hideLinks}
+        ?reverse-row=${args.reverseRow}
+        ?reverse-column=${args.reverseColumn}
+      ></frc-scoring-grid>
     `,
   };
 }
 
-export const LightTheme = createPidCommandStory({
+export const LightTheme = createScoringGridStory({
   theme: 'light',
+  cubesScored: [1, 1, 2, 3, 5, 13],
+  conesScored: [11, 14, 14],
 });
 
-export const DarkTheme = createPidCommandStory({
+export const DarkTheme = createScoringGridStory({
   theme: 'dark',
+  cubesScored: [1, 1, 2, 3, 5, 13],
+  conesScored: [11, 14, 14],
 });
