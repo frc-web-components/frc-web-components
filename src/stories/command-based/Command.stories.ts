@@ -1,12 +1,13 @@
-import '../components/toggle-button';
+import '../../components/command-based/command';
 import type { Args, Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 
 const defaultArgs: Record<string, any> = {
-  toggled: false,
-  label: 'Button',
-  disabled: false,
+  name: 'Command',
+  running: false,
+  controllable: false,
+  label: '',
   theme: 'light',
   'background-color': '#fff',
   '--frc-button-background-color': 'rgb(230, 230, 230)',
@@ -16,12 +17,24 @@ const defaultArgs: Record<string, any> = {
 };
 
 const meta: Meta = {
-  title: 'FRC/Toggle Button',
+  title: 'Command Based/Robot Command',
   tags: ['autodocs'],
-  component: 'frc-toggle-button',
+  component: 'frc-robot-command',
   args: defaultArgs,
   argTypes: {
-    toggled: {
+    name: {
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: 'Command' },
+      },
+    },
+    running: {
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: false },
+      },
+    },
+    controllable: {
       table: {
         category: 'Properties',
         defaultValue: { summary: false },
@@ -30,13 +43,7 @@ const meta: Meta = {
     label: {
       table: {
         category: 'Properties',
-        defaultValue: { summary: 'Button' },
-      },
-    },
-    disabled: {
-      table: {
-        category: 'Properties',
-        defaultValue: { summary: false },
+        defaultValue: { summary: '' },
       },
     },
     theme: {
@@ -147,9 +154,7 @@ function getStyles(args: Args) {
   `;
 }
 
-function createToggleButtonStory(
-  optionalArgs: Record<string, any> = {}
-): Story {
+function createCommandStory(optionalArgs: Record<string, any> = {}): Story {
   const storyArgs = {
     ...defaultArgs,
     ...optionalArgs,
@@ -158,20 +163,21 @@ function createToggleButtonStory(
     args: storyArgs,
     render: (args) => html`
       ${getStyles(args)}
-      <frc-toggle-button
+      <frc-robot-command
         class=${args.theme}
-        ?toggled=${args.toggled}
+        name=${args.name}
+        ?running=${args.running}
+        ?controllable=${args.controllable}
         label=${args.label}
-        ?disabled=${args.disabled}
-      ></frc-toggle-button>
+      ></frc-robot-command>
     `,
   };
 }
 
-export const LightTheme = createToggleButtonStory({
+export const LightTheme = createCommandStory({
   theme: 'light',
 });
 
-export const DarkTheme = createToggleButtonStory({
+export const DarkTheme = createCommandStory({
   theme: 'dark',
 });

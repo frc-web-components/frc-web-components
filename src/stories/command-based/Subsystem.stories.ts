@@ -1,27 +1,47 @@
-import '../components/toggle-button';
+import '../../components/command-based/subsystem';
 import type { Args, Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 
 const defaultArgs: Record<string, any> = {
-  toggled: false,
-  label: 'Button',
-  disabled: false,
+  default: '',
+  command: '',
+  hasCommand: false,
+  hasDefault: false,
+  label: '',
+  name: '',
+  hideName: false,
   theme: 'light',
   'background-color': '#fff',
-  '--frc-button-background-color': 'rgb(230, 230, 230)',
-  '--frc-button-text-color': 'black',
-  '--frc-button-toggled-background-color': 'black',
-  '--frc-button-toggled-text-color': 'white',
+  '--frc-label-text-color': 'black',
+  '--frc-robot-subsystem-header-color': 'purple',
 };
 
 const meta: Meta = {
-  title: 'FRC/Toggle Button',
+  title: 'Command Based/Robot Subsystem',
   tags: ['autodocs'],
-  component: 'frc-toggle-button',
+  component: 'frc-robot-subsystem',
   args: defaultArgs,
   argTypes: {
-    toggled: {
+    default: {
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: '' },
+      },
+    },
+    command: {
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: '' },
+      },
+    },
+    hasCommand: {
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: false },
+      },
+    },
+    hasDefault: {
       table: {
         category: 'Properties',
         defaultValue: { summary: false },
@@ -30,10 +50,16 @@ const meta: Meta = {
     label: {
       table: {
         category: 'Properties',
-        defaultValue: { summary: 'Button' },
+        defaultValue: { summary: '' },
       },
     },
-    disabled: {
+    name: {
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: '' },
+      },
+    },
+    hideName: {
       table: {
         category: 'Properties',
         defaultValue: { summary: false },
@@ -53,28 +79,16 @@ const meta: Meta = {
         defaultValue: '#fff',
       },
     },
-    '--frc-button-background-color': {
-      table: {
-        category: 'Styles',
-        defaultValue: { summary: 'rgb(230, 230, 230)' },
-      },
-    },
-    '--frc-button-text-color': {
+    '--frc-label-text-color': {
       table: {
         category: 'Styles',
         defaultValue: { summary: 'black' },
       },
     },
-    '--frc-button-toggled-background-color': {
+    '--frc-robot-subsystem-header-color': {
       table: {
         category: 'Styles',
-        defaultValue: { summary: 'black' },
-      },
-    },
-    '--frc-button-toggled-text-color': {
-      table: {
-        category: 'Styles',
-        defaultValue: { summary: 'white' },
+        defaultValue: { summary: 'purple' },
       },
     },
   },
@@ -94,9 +108,6 @@ const meta: Meta = {
       </div>`;
     },
   ],
-  // https://storybook.js.org/blog/storybook-addons-for-css/
-  // https://storybook.js.org/blog/how-to-add-a-theme-switcher-to-storybook/
-  // https://storybook.js.org/docs/react/writing-docs/autodocs
 };
 export default meta;
 
@@ -107,15 +118,9 @@ function getStyles(args: Args) {
     return html`
       <style>
         .custom {
-          --frc-button-background-color: ${args[
-            '--frc-button-background-color'
-          ]};
-          --frc-button-text-color: ${args['--frc-button-text-color']};
-          --frc-button-toggled-background-color: ${args[
-            '--frc-button-toggled-background-color'
-          ]};
-          --frc-button-toggled-text-color: ${args[
-            '--frc-button-toggled-text-color'
+          --frc-label-text-color: ${args['--frc-label-text-color']};
+          --frc-robot-subsystem-header-color: ${args[
+            '--frc-robot-subsystem-header-color'
           ]};
         }
       </style>
@@ -126,10 +131,8 @@ function getStyles(args: Args) {
     return html`
       <style>
         .dark {
-          --frc-button-background-color: rgba(255, 255, 255, 0.1);
-          --frc-button-text-color: white;
-          --frc-button-toggled-background-color: rgba(240, 240, 240);
-          --frc-button-toggled-text-color: black;
+          --frc-label-text-color: white;
+          --frc-robot-subsystem-header-color: #a020f0;
         }
       </style>
     `;
@@ -138,18 +141,14 @@ function getStyles(args: Args) {
   return html`
     <style>
       .light {
-        --frc-button-background-color: rgb(230, 230, 230);
-        --frc-button-text-color: black;
-        --frc-button-toggled-background-color: black;
-        --frc-button-toggled-text-color: white;
+        --frc-label-text-color: black;
+        --frc-robot-subsystem-header-color: purple;
       }
     </style>
   `;
 }
 
-function createToggleButtonStory(
-  optionalArgs: Record<string, any> = {}
-): Story {
+function createSubsystemStory(optionalArgs: Record<string, any> = {}): Story {
   const storyArgs = {
     ...defaultArgs,
     ...optionalArgs,
@@ -158,20 +157,24 @@ function createToggleButtonStory(
     args: storyArgs,
     render: (args) => html`
       ${getStyles(args)}
-      <frc-toggle-button
+      <frc-robot-subsystem
         class=${args.theme}
-        ?toggled=${args.toggled}
+        default=${args.default}
+        command=${args.command}
+        ?has-command=${args.hasCommand}
+        ?has-default=${args.hasDefault}
         label=${args.label}
-        ?disabled=${args.disabled}
-      ></frc-toggle-button>
+        name=${args.name}
+        ?hide-name=${args.hideName}
+      ></frc-robot-subsystem>
     `,
   };
 }
 
-export const LightTheme = createToggleButtonStory({
+export const LightTheme = createSubsystemStory({
   theme: 'light',
 });
 
-export const DarkTheme = createToggleButtonStory({
+export const DarkTheme = createSubsystemStory({
   theme: 'dark',
 });

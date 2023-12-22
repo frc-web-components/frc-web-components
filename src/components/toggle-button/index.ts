@@ -3,6 +3,7 @@ import { property } from 'lit/decorators.js';
 
 export default class ToggleButton extends LitElement {
   @property({ type: Boolean }) toggled = false;
+  @property({ type: Boolean }) disabled = false;
   @property({ type: String }) label = 'Button';
 
   static styles = css`
@@ -36,6 +37,9 @@ export default class ToggleButton extends LitElement {
   `;
 
   onClick(): void {
+    if (this.disabled) {
+      return;
+    }
     this.toggled = !this.toggled;
     this.dispatchEvent(
       new CustomEvent('toggle', {

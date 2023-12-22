@@ -28,3 +28,4 @@ import './mechanism2d';
 import './encoder';
 import './network-alerts';
 import './scoring-grid';
+import './command-based';
