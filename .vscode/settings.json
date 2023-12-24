@@ -1,3 +1,6 @@
 {
-  "esbonio.sphinx.confDir": ""
+  "esbonio.sphinx.confDir": "",
+  "recommendations": [
+    "nrwl.angular-console"
+  ]
 }

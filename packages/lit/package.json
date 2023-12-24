@@ -1,0 +1,34 @@
+{
+  "name": "@frc-web-components/lit",
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/fwc-lit.es.js",
+  "module": "./dist/fwc-lit.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/fwc-lit.es.js"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && tsc",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@lit/context": "^1.0.1"
+  },
+  "peerDependencies": {
+    "@frc-web-components/fwc": ">=1.11.0",
+    "lit": ">=2.7.0"
+  },
+  "devDependencies": {
+    "@frc-web-components/fwc": "*",
+    "lit": "^2.7.6",
+    "vite": "^4.4.5"
+  }
+}

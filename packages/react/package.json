@@ -1,0 +1,78 @@
+{
+  "name": "@frc-web-components/react",
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/fwc-react.es.js",
+  "module": "./dist/fwc-react.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types/fwc-react.d.ts",
+      "import": "./dist/fwc-react.es.js"
+    },
+    "./all-components": {
+      "import": {
+        "types": "./dist/components/index.d.js",
+        "default": "./dist/components/index.es.js"
+      }
+    },
+    "./components/*": {
+      "import": {
+        "types": "./dist/components/*.d.ts",
+        "default": "./dist/components/*.es.js"
+      }
+    },
+    "./networktables": {
+      "import": {
+        "types": "./dist/networktables/index.d.js",
+        "default": "./dist/networktables/index.es.js"
+      }
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "all-components": [
+        "./dist/components/index.d.js"
+      ],
+      "components/*": [
+        "./dist/components/*.d.ts"
+      ],
+      "networktables": [
+        "./dist/networktabless/index.d.js"
+      ]
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@lit/react": "^1.0.2",
+    "@webbitjs/store": "^5.5.0"
+  },
+  "peerDependencies": {
+    "react": ">=17.0.0",
+    "react-dom": ">=17.0.0",
+    "@frc-web-components/fwc": ">=1.11.0"
+  },
+  "devDependencies": {
+    "@frc-web-components/fwc": "*",
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react": "^4.0.3",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "vite": "^4.4.5",
+    "vite-plugin-dts": "^3.6.3"
+  }
+}

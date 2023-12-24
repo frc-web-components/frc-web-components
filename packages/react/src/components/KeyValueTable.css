@@ -1,0 +1,45 @@
+.key-value-table {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  max-width: 100%;
+}
+
+.key-value-table thead tr {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+}
+
+.key-value-table th {
+  text-align: left;
+}
+
+.key-value-table th,
+.key-value-table td {
+  padding: 12px 15px;
+  max-width: 600px;
+}
+
+.key-value-table td div {
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+
+.key-value-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.key-value-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+
+.key-value-table tbody tr.active-row {
+  font-weight: bold;
+  color: #009879;
+}
