@@ -8,7 +8,7 @@ export interface FieldConfig {
   unit: string;
 }
 
-const configs: FieldConfig[] = [
+export const configs: FieldConfig[] = [
   {
     game: 'Charged Up',
     src: '/3d-models/Field3d_2023.glb',

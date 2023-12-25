@@ -1,2 +1,3 @@
-export * from './NetworkTables';
-export * from './directives';
+
+import { FrcDashboard } from '@frc-web-components/fwc';
+import {  } from '@frc-web-components/fwc/source-providers';

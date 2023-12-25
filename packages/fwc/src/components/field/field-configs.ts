@@ -9,7 +9,7 @@ export interface FieldConfig {
   unit: string;
 }
 
-const configs: FieldConfig[] = [
+export const configs: FieldConfig[] = [
   {
     game: 'Charged Up',
     image: './field-images/2023-field.jpg',

@@ -1,6 +1,6 @@
 import { ObjectConfig } from './field-interfaces';
 
-const configs: ObjectConfig[] = [
+export const configs: ObjectConfig[] = [
   {
     name: 'KitBot',
     src: '/3d-models/Robot_KitBot.glb',
