@@ -148,6 +148,6 @@ export const darkTheme: Record<string, string> = {
   '--frc-pid-controller-input-border-color': 'rgba(255,255,255,.5)',
 };
 
-export default function addDarkTheme(dashboard: FrcDashboard): void {
+export function addDarkTheme(dashboard: FrcDashboard): void {
   dashboard.addThemeRules('dark', darkTheme);
 }

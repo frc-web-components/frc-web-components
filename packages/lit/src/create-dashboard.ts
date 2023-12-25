@@ -1,6 +1,8 @@
+
+// @ts-expect-error - no types
 import WebbitStore from '@webbitjs/store';
 import { render, html, TemplateResult } from 'lit';
-import NT4Provider from '../source-providers/nt4/nt4-provider';
+import  { Nt4Provider } from '@frc-web-components/fwc/source-providers';;
 import { ntValueDirective } from './directives';
 
 interface RenderOptions {
@@ -17,7 +19,7 @@ interface DashboardOptions {
 
 export default function createDashboard(dashboardOptions: DashboardOptions) {
   const store = new WebbitStore();
-  const nt4Provider = new NT4Provider();
+  const nt4Provider = new Nt4Provider();
   store.addSourceProvider('NetworkTables', nt4Provider);
   store.setDefaultSourceProvider('NetworkTables');
   nt4Provider.connect(dashboardOptions.address);

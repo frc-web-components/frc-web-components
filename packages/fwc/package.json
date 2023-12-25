@@ -35,6 +35,12 @@
         "default": "./dist/source-view.es.js"
       }
     },
+    "./source-providers": {
+      "import": {
+        "types": "./types/source-providers/index.d.ts",
+        "default": "./dist/source-providers.es.js"
+      }
+    },
     "./source-providers/*": {
       "import": {
         "types": "./types/source-providers/*.d.ts",
@@ -58,12 +64,6 @@
         "types": "./types/themes/index.d.ts",
         "default": "./dist/themes.es.js"
       }
-    },
-    "./lit/*": {
-      "import": {
-        "types": "./types/lit/*.d.ts",
-        "default": "./dist/lit/*.es.js"
-      }
     }
   },
   "typesVersions": {
@@ -77,6 +77,9 @@
       "source-view": [
         "types/source-view.d.ts"
       ],
+      "source-providers": [
+        "types/source-providers/index.d.ts"
+      ],
       "source-providers/*": [
         "types/source-providers/*.d.ts"
       ],
@@ -88,9 +91,6 @@
       ],
       "themes": [
         "types/themes/index.d.ts"
-      ],
-      "lit/*": [
-        "types/lit/*.d.ts"
       ]
     }
   },

@@ -3,12 +3,14 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "start": "nx start @frc-web-components/fwc",
     "build": "nx run-many -t build",
     "build:fwc": "nx build @frc-web-components/fwc",
     "build:lit": "nx build @frc-web-components/lit",
     "build:react": "nx build @frc-web-components/react",
     "build:svelte": "nx build @frc-web-components/svelte",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test": ""
   },
   "private": true,
   "devDependencies": {
