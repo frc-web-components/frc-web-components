@@ -1,15 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable import/extensions */
-import { LitElement, html, css, TemplateResult, render } from 'lit';
+import { LitElement, html, css, TemplateResult } from 'lit';
 import './dashboard-tab';
 import './navbar';
 import './drawer';
 import { customElement, property, state, query } from 'lit/decorators.js';
-import { guard } from 'lit/directives/guard.js';
 import { onRemoveKeyPress } from '../hotkeys';
 import FrcDashboard from '../frc-dashboard';
-import './source-picker-dialog';
 import removeElement from './remove-element';
+import './context-menu';
 
 const styles = css`
   :host {
@@ -159,6 +158,10 @@ export default class DashboardRoot extends LitElement {
       this.dialogOpened = true;
     });
 
+    this.dashboard.subscribe('elementSelect', () => {
+      this.requestUpdate();
+    });
+
     this.ready = true;
   }
 
@@ -181,7 +184,6 @@ export default class DashboardRoot extends LitElement {
 
   #onDrawerToggle(): void {
     this.drawerOpened = !this.drawerOpened;
-    this.dashboard?.setPreviewedElement(null);
   }
 
   render(): TemplateResult {
@@ -195,32 +197,10 @@ export default class DashboardRoot extends LitElement {
       : 'auto';
 
     return html`
+      <!-- <dashboard-context-menu
+        .dashboard=${this.dashboard}
+      ></dashboard-context-menu> -->
       <div class="layout ${!this.drawerOpened ? 'closed' : ''}">
-        <vaadin-dialog
-          theme="no-padding"
-          draggable
-          modeless
-          .opened=${this.drawerOpened && this.dialogOpened}
-          .renderer=${guard([], () => (root: HTMLElement) => {
-            render(
-              html`
-                <dashboard-source-picker-dialog
-                  style="width: 500px;"
-                  .dashboard=${this.dashboard}
-                  .dialogOpened=${this.dialogOpened}
-                  @closeDialog=${() => {
-                    this.dialogOpened = false;
-                  }}
-                ></dashboard-source-picker-dialog>
-              `,
-              root
-            );
-          })}
-        ></vaadin-dialog>
-        <dashboard-drawer
-          .interact="${null}"
-          .dashboard=${this.dashboard}
-        ></dashboard-drawer>
         <div class="dashboard" style="background: ${dashboardBackground}">
           <slot name="navbar"></slot>
           <div class="dashboard-elements">
@@ -230,6 +210,10 @@ export default class DashboardRoot extends LitElement {
             </div>
           </div>
         </div>
+        <dashboard-drawer
+          .interact="${null}"
+          .dashboard=${this.dashboard}
+        ></dashboard-drawer>
       </div>
     `;
   }

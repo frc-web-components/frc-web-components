@@ -1,5 +1,4 @@
 import { LitElement, html, css } from 'lit';
-import './dashboard-component-render';
 
 const styles = css`
   :host {

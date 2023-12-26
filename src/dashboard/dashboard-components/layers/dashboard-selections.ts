@@ -1,34 +1,50 @@
 import { WebbitConnector } from '@webbitjs/webbit';
 
 export default class DashboardSelections {
-  #eventListeners: Map<HTMLElement, (event: Event) => unknown> = new Map();
+  #eventListeners: Map<
+    HTMLElement,
+    {
+      onSelect: (event: Event) => unknown;
+      onContextMenu: (event: Event) => unknown;
+    }
+  > = new Map();
   #listen = true;
   constructor(
     connector: WebbitConnector,
-    onSelection: (element: HTMLElement) => void
+    onSelection: (element: HTMLElement) => void,
+    onContextMenuOpen: (ev: Event, element: HTMLElement) => void
   ) {
     connector.subscribeElementConnected((value: any) => {
       const element = value.element as HTMLElement;
-      const listener = (ev: Event) => {
+      const onSelect = (ev: Event) => {
         if (this.#listen) {
           ev.stopPropagation();
           onSelection(element);
         }
       };
-      element.addEventListener('mouseup', listener);
-      element.addEventListener('click', listener);
-      this.#eventListeners.set(element, listener);
+      const onContextMenu = (ev: Event) => {
+        if (this.#listen) {
+          ev.stopPropagation();
+          ev.preventDefault();
+          onContextMenuOpen(ev, element);
+        }
+      };
+      element.addEventListener('mouseup', onSelect);
+      element.addEventListener('click', onSelect);
+      element.addEventListener('contextmenu', onContextMenu);
+      this.#eventListeners.set(element, {
+        onSelect,
+        onContextMenu,
+      });
     });
 
     connector.subscribeElementDisconnected((value: any) => {
       const element = value.element as HTMLElement;
-      const mouseUpListener = this.#eventListeners.get(element);
-      if (mouseUpListener) {
-        element.removeEventListener('mouseup', mouseUpListener);
-      }
-      const clickListener = this.#eventListeners.get(element);
-      if (clickListener) {
-        element.removeEventListener('click', clickListener);
+      const listeners = this.#eventListeners.get(element);
+      if (listeners) {
+        element.removeEventListener('mouseup', listeners.onSelect);
+        element.removeEventListener('click', listeners.onSelect);
+        element.removeEventListener('contextmenu', listeners.onContextMenu);
       }
       this.#eventListeners.delete(element);
     });
