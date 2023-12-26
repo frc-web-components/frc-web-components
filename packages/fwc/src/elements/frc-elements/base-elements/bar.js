@@ -186,4 +186,6 @@ class Bar extends LitElement {
   }
 }
 
-customElements.define(elementName, Bar);
+if (!customElements.get(elementName)) {
+  customElements.define(elementName, Bar);
+}

@@ -6,6 +6,6 @@ import './vaadin';
 
 export default function addElements(dashboard: FrcDashboard): void {
   addFormElements(dashboard);
-  dashboard.addElements(frcElements as any, 'FRC');
+  dashboard.addElements(frcElements, 'FRC');
   addSourceElements(dashboard);
 }

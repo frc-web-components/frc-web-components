@@ -4,13 +4,13 @@ import React, {
   useState,
   ReactNode,
 } from "react";
-import NT4SourceProvider from "@frc-web-components/fwc/source-providers/nt4/nt4-provider";
+import { Nt4Provider } from "@frc-web-components/fwc/source-providers";
 // @ts-expect-error - no types
 import { Store } from "@webbitjs/store";
 
 interface StoreContextType {
   store: Store;
-  nt4Provider: NT4SourceProvider;
+  nt4Provider: Nt4Provider;
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -22,7 +22,7 @@ interface StoreProviderProps {
 
 function createStore(address: string) {
   const store = new Store();
-  const nt4Provider = new NT4SourceProvider();
+  const nt4Provider = new Nt4Provider();
   store.addSourceProvider("NetworkTables", nt4Provider);
   store.setDefaultSourceProvider("NetworkTables");
   nt4Provider.connect(address);

@@ -1,0 +1,18 @@
+{
+  "name": "example-app",
+  "private": true,
+  "scripts": {
+    "start": "vite",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@frc-web-components/app": "*",
+    "@frc-web-components/fwc": "*",
+    "@lit/context": "^1.0.1",
+    "lit": "^2.7.6",
+    "example-lit-plugin": "*"
+  },
+  "devDependencies": {
+    "vite": "^4.4.5"
+  }
+}

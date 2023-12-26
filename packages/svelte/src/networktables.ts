@@ -1,4 +1,4 @@
-import NT4SourceProvider from "@frc-web-components/fwc/source-providers/nt4/nt4-provider";
+import { Nt4Provider } from "@frc-web-components/fwc/source-providers";
 // @ts-expect-error - no types
 import { Store } from "@webbitjs/store";
 import { setContext, getContext, onDestroy } from "svelte";
@@ -6,7 +6,7 @@ import { writable } from "svelte/store";
 
 export function setNt4Context(address: string) {
   const store = new Store();
-  const provider = new NT4SourceProvider();
+  const provider = new Nt4Provider();
   store.addSourceProvider("NetworkTables", provider);
   store.setDefaultSourceProvider("NetworkTables");
   provider.connect(address);
@@ -16,7 +16,7 @@ export function setNt4Context(address: string) {
   });
 }
 
-export function getNt4Context(): { store: Store; provider: NT4SourceProvider } {
+export function getNt4Context(): { store: Store; provider: Nt4Provider } {
   return getContext("NT4");
 }
 

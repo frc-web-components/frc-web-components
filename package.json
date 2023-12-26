@@ -20,6 +20,7 @@
     "typescript": "^5.3.2"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "examples/*"
   ]
 }

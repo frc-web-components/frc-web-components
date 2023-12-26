@@ -1,5 +1,5 @@
 import { createContext } from "@lit/context";
-import NT4SourceProvider from "@frc-web-components/fwc/source-providers/nt4/nt4-provider";
+import { Nt4Provider } from "@frc-web-components/fwc/source-providers";
 // @ts-expect-error - no types
 import { Store } from "@webbitjs/store";
 import { ntValueDirective, SourceValue } from "./directives";
@@ -7,7 +7,7 @@ import { DirectiveResult } from "lit/directive.js";
 
 export class NetworkTables {
   private store = new Store();
-  private provider = new NT4SourceProvider();
+  private provider = new Nt4Provider();
   private nt4Directive = ntValueDirective(this.store);
 
   constructor(address: string) {
@@ -59,8 +59,7 @@ export class NetworkTables {
     return this.store;
   }
 
-
-  $value(key: string, value: unknown): DirectiveResult<typeof SourceValue>  {
+  $value(key: string, value: unknown): DirectiveResult<typeof SourceValue> {
     return this.nt4Directive(key, value);
   }
 }

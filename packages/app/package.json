@@ -5,13 +5,13 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/fwc-lit.es.js",
-  "module": "./dist/fwc-lit.es.js",
+  "main": "./dist/fwc-app.es.js",
+  "module": "./dist/fwc-app.es.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/fwc-lit.es.js"
+      "import": "./dist/fwc-app.es.js"
     }
   },
   "scripts": {
@@ -20,15 +20,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@lit/context": "^1.0.1"
+    "@lit/context": "^1.0.1",
+    "@webbitjs/store": "^5.5.0",
+    "@webbitjs/webbit": "^5.5.0",
+    "lit": "^2.7.6"
   },
   "peerDependencies": {
-    "@frc-web-components/fwc": ">=1.11.0",
+    "@frc-web-components/fwc": "*",
     "lit": ">=2.7.0"
   },
   "devDependencies": {
-    "@frc-web-components/fwc": "*",
-    "lit": "^2.7.6",
     "vite": "^4.4.5"
   }
 }

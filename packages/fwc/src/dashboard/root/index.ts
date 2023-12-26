@@ -10,6 +10,7 @@ import { onRemoveKeyPress } from '../hotkeys';
 import FrcDashboard from '../frc-dashboard';
 import './source-picker-dialog';
 import removeElement from './remove-element';
+import addDashboardComponents from '../dashboard-components';
 
 const styles = css`
   :host {
@@ -93,6 +94,8 @@ export default class DashboardRoot extends LitElement {
     if (!this.dashboard) {
       return;
     }
+
+    addDashboardComponents(this.dashboard);
 
     this.dashboard.addElements({
       'dashboard-tab': {

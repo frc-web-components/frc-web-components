@@ -2,6 +2,8 @@
 import { html, css, LitElement } from 'lit';
 import { property, state, query } from 'lit/decorators.js';
 
+alert('bar!');
+
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(value, min));
 }
