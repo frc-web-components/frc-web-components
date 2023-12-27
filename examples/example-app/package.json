@@ -10,7 +10,9 @@
     "@frc-web-components/fwc": "*",
     "@lit/context": "^1.0.1",
     "lit": "^2.7.6",
-    "example-lit-plugin": "*"
+    "example-lit-plugin": "*",
+    "example-react-plugin": "*",
+    "example-svelte-plugin": "*"
   },
   "devDependencies": {
     "vite": "^4.4.5"
