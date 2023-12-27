@@ -23,6 +23,7 @@ const WebApp = r2wc(Counter, {
   props: {
     count: "number",
   },
+  
 });
 
 customElements.define("my-react-element", WebApp);
