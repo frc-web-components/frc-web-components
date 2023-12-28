@@ -14,9 +14,3 @@ addSourceProvider("NetworkTables", new Nt4Provider());
 setDefaultSourceProvider("NetworkTables");
 addElements(elementConfigs);
 mountDashboard(document.getElementById("app")!);
-
-import * as fwcApp from "@frc-web-components/app";
-(window as any).fwcApp = fwcApp;
-
-import * as lit from 'lit';
-(window as any).lit = lit;

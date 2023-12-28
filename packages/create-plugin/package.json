@@ -1,0 +1,26 @@
+{
+  "name": "create-fwc",
+  "description": "Package for creating plugins for FRC Web Components",
+  "version": "1.0.4",
+  "author": "Amory Galili <amorygalili@gmail.com>",
+  "scripts": {
+    "build": "tsup src/cli.ts --minify",
+    "clean": "shx rm -rf lib",
+    "dev": "tsup src/cli.ts --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "bin": "dist/cli.js",
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "devDependencies": {
+    "@types/node": "^17.0.29",
+    "tsup": "^5.12.1",
+    "typescript": "^4.6.3"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "create-create-app": "^7.3.0"
+  }
+}
