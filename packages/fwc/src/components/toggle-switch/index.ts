@@ -1,8 +1,18 @@
 /* eslint-disable import/extensions */
+import { WebbitConfig } from '@webbitjs/webbit';
 import { html, css, LitElement, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 
-export default class ToggleSwitch extends LitElement {
+export const toggleSwitchDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    displayName: 'Toggle Switch',
+  },
+  properties: {
+    toggled: { type: 'Boolean', primary: true, changeEvent: 'toggle' },
+  },
+};
+
+export class ToggleSwitch extends LitElement {
   @property({ type: Boolean }) toggled = false;
 
   static styles = css`
@@ -104,6 +114,8 @@ export default class ToggleSwitch extends LitElement {
     `;
   }
 }
+
+export default ToggleSwitch;
 
 if (!customElements.get('frc-toggle-switch')) {
   customElements.define('frc-toggle-switch', ToggleSwitch);

@@ -1,8 +1,21 @@
 import { html, css, LitElement, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 import '../toggle-button';
+import { WebbitConfig } from '@webbitjs/webbit';
 
-export default class Command extends LitElement {
+export const robotCommandDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    displayName: 'Command',
+  },
+  properties: {
+    name: { type: 'String', defaultValue: 'Command' },
+    running: { type: 'Boolean', changeEvent: 'toggle' },
+    controllable: { type: 'Boolean' },
+    label: { type: 'String' },
+  },
+};
+
+export class RobotCommand extends LitElement {
   @property({ type: String }) name = 'Command';
   @property({ type: Boolean }) running = false;
   @property({ type: Boolean }) controllable = false;
@@ -53,11 +66,11 @@ export default class Command extends LitElement {
 }
 
 if (!customElements.get('frc-robot-command')) {
-  customElements.define('frc-robot-command', Command);
+  customElements.define('frc-robot-command', RobotCommand);
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'frc-robot-command': Command;
+    'frc-robot-command': RobotCommand;
   }
 }

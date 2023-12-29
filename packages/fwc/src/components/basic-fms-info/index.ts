@@ -2,6 +2,19 @@
 import { html, css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 import '../icon';
+import { WebbitConfig } from '@webbitjs/webbit';
+
+export const basicFmsInfoDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    displayName: 'Basic FMS Info',
+  },
+  properties: {
+    matchType: { type: 'Number', attribute: 'match-type' },
+    matchNumber: { type: 'Number', attribute: 'match-number' },
+    eventName: { type: 'String', attribute: 'event-name' },
+    fmsControlData: { type: 'Number', attribute: 'fms-control-data' },
+  },
+};
 
 const ENABLED_FLAG = 0x01;
 const AUTO_FLAG = 0x02;
@@ -12,7 +25,7 @@ const DS_ATTACHED_FLAG = 0x20;
 
 const MATCH_TYPES = ['Unknown', 'Practice', 'Qualification', 'Elimination'];
 
-export default class BasicFmsInfo extends LitElement {
+export class BasicFmsInfo extends LitElement {
   @property({ type: Number, attribute: 'match-type' }) matchType = 0;
   @property({ type: Number, attribute: 'match-number' }) matchNumber = 0;
   @property({ type: String, attribute: 'event-name' }) eventName = '';
@@ -129,6 +142,8 @@ export default class BasicFmsInfo extends LitElement {
     `;
   }
 }
+
+export default BasicFmsInfo;
 
 if (!customElements.get('frc-basic-fms-info')) {
   customElements.define('frc-basic-fms-info', BasicFmsInfo);

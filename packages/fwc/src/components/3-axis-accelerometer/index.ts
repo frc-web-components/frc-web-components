@@ -3,8 +3,31 @@ import { property } from 'lit/decorators.js';
 import '../accelerometer';
 import '../bar';
 import '../axis';
+import { WebbitConfig } from '@webbitjs/webbit';
 
-export default class ThreeAxisAccelerometer extends LitElement {
+export const threeAxisAccelerometerDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    displayName: '3-Axis Accelerometer',
+  },
+  properties: {
+    x: { type: 'Number' },
+    y: { type: 'Number' },
+    z: { type: 'Number' },
+    max: { type: 'Number', defaultValue: 1 },
+    min: { type: 'Number', defaultValue: -1 },
+    center: { type: 'Number' },
+    precision: { type: 'Number', defaultValue: 2 },
+    hideText: { type: 'Boolean', attribute: 'hide-text' },
+    numTickMarks: {
+      type: 'Number',
+      defaultValue: 3,
+      attribute: 'num-tick-marks',
+    },
+    unit: { type: 'String', defaultValue: 'g' },
+  },
+};
+
+export class ThreeAxisAccelerometer extends LitElement {
   @property({ type: Number }) x = 0;
   @property({ type: Number }) y = 0;
   @property({ type: Number }) z = 0;
@@ -85,6 +108,8 @@ export default class ThreeAxisAccelerometer extends LitElement {
     `;
   }
 }
+
+export default ThreeAxisAccelerometer;
 
 if (!customElements.get('frc-3-axis-accelerometer')) {
   customElements.define('frc-3-axis-accelerometer', ThreeAxisAccelerometer);

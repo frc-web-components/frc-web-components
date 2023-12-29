@@ -1,8 +1,22 @@
 import { html, css, LitElement, TemplateResult } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import '../icon';
+import { WebbitConfig } from '@webbitjs/webbit';
 
-export default class SendableChooser extends LitElement {
+export const sendableChooserDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    displayName: 'Sendable Chooser',
+  },
+  properties: {
+    options: { type: 'Array' },
+    selected: { type: 'String', input: { type: 'StringDropdown' } },
+    default: { type: 'String' },
+    active: { type: 'String' },
+    label: { type: 'String', defaultValue: 'Auto Choices' },
+  },
+};
+
+export class SendableChooser extends LitElement {
   @property({ type: Array }) options: string[] = [];
   @property({ type: String, reflect: true }) selected = '';
   @property({ type: String }) default = '';
@@ -139,6 +153,8 @@ export default class SendableChooser extends LitElement {
     `;
   }
 }
+
+export default SendableChooser;
 
 if (!customElements.get('frc-sendable-chooser')) {
   customElements.define('frc-sendable-chooser', SendableChooser);

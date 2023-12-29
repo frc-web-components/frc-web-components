@@ -1,11 +1,33 @@
 import { html, css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 import '../toggle-group';
+import { WebbitConfig } from '@webbitjs/webbit';
+
+export const relayDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    displayName: 'Relay',
+  },
+  properties: {
+    value: {
+      type: 'String',
+      defaultValue: 'Off',
+      reflect: true,
+      primary: true,
+      input: {
+        type: 'StringDropdown',
+        allowCustomValues: false,
+        getOptions() {
+          return ['Off', 'On', 'Forward', 'Reverse'];
+        },
+      },
+    },
+  },
+};
 
 const RELAY_OPTIONS = ['Off', 'On', 'Forward', 'Reverse'] as const;
 type RelayOption = typeof RELAY_OPTIONS[number];
 
-export default class Relay extends LitElement {
+export class Relay extends LitElement {
   @property({ type: String }) value: RelayOption = 'Off';
   @property({ type: String }) direction = 'vertical';
 
@@ -37,6 +59,8 @@ export default class Relay extends LitElement {
     `;
   }
 }
+
+export default Relay;
 
 if (!customElements.get('frc-relay')) {
   customElements.define('frc-relay', Relay);

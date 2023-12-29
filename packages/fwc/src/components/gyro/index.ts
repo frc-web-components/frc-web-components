@@ -3,6 +3,20 @@ import { html, svg, css, LitElement, TemplateResult } from 'lit';
 import { property, query } from 'lit/decorators.js';
 // TODO: We should only import the parts we need
 import * as d3 from 'd3';
+import { WebbitConfig } from '@webbitjs/webbit';
+
+export const gyroDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    displayName: 'Gyro',
+  },
+  properties: {
+    value: { type: 'Number', primary: true },
+    hideLabel: { type: 'Boolean', attribute: 'hide-label' },
+    precision: { type: 'Number', defaultValue: 2 },
+    counterClockwise: { type: 'Boolean', attribute: 'counter-clockwise' },
+    fromRadians: { type: 'Boolean', attribute: 'from-radians' },
+  },
+};
 
 function deg2Rad(deg: number): number {
   return (deg * Math.PI) / 180;
@@ -30,7 +44,7 @@ function getUnitCircleCords(
   return [x, Math.sin(unitAngle)];
 }
 
-export default class Gyro extends LitElement {
+export class Gyro extends LitElement {
   @property({ type: Number }) value = 0;
   @property({ type: Boolean, attribute: 'hide-label' }) hideLabel = false;
   @property({ type: Number }) precision = 2;
@@ -220,6 +234,8 @@ export default class Gyro extends LitElement {
     `;
   }
 }
+
+export default Gyro;
 
 if (!customElements.get('frc-gyro')) {
   customElements.define('frc-gyro', Gyro);

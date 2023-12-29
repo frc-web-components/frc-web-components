@@ -1,7 +1,30 @@
+import { WebbitConfig } from '@webbitjs/webbit';
 import { html, css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 
-export default class BooleanBox extends LitElement {
+export const booleanBoxDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    displayName: 'Boolean Box',
+  },
+  properties: {
+    value: { type: 'Boolean', primary: true },
+    trueColor: {
+      type: 'String',
+      input: { type: 'ColorPicker' },
+      defaultValue: '#00ff00',
+      attribute: 'true-color',
+    },
+    falseColor: {
+      type: 'String',
+      input: { type: 'ColorPicker' },
+      defaultValue: '#ff0000',
+      attribute: 'false-color',
+    },
+    label: { type: 'String' },
+  },
+};
+
+export class BooleanBox extends LitElement {
   static DEFAULT_FALSE_COLOR = '#ff0000';
   static DEFAULT_TRUE_COLOR = '#00ff00';
   @property({ type: Boolean }) value = false;
@@ -46,6 +69,8 @@ export default class BooleanBox extends LitElement {
     return html` <div part="box">${this.label || html`&nbsp;`}</div> `;
   }
 }
+
+export default BooleanBox;
 
 if (!customElements.get('frc-boolean-box')) {
   customElements.define('frc-boolean-box', BooleanBox);

@@ -1,7 +1,23 @@
+import { WebbitConfig } from '@webbitjs/webbit';
 import { html, css, LitElement, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 
-export default class Subsystem extends LitElement {
+export const robotSubsystemDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    displayName: 'Subsystem',
+  },
+  properties: {
+    default: { type: 'String' },
+    command: { type: 'String' },
+    hasCommand: { type: 'Boolean', attribute: 'has-command' },
+    hasDefault: { type: 'Boolean', attribute: 'has-default' },
+    label: { type: 'String' },
+    name: { type: 'String' },
+    hideName: { type: 'Boolean', attribute: 'hide-name' },
+  },
+};
+
+export class RobotSubsystem extends LitElement {
   @property({ type: String }) default = '';
   @property({ type: String }) command = '';
   @property({ type: Boolean, attribute: 'has-command' }) hasCommand = false;
@@ -62,11 +78,11 @@ export default class Subsystem extends LitElement {
       <div class="subsystem">
         <p>
           Default command:
-          ${Subsystem.renderValue(this.default, this.hasDefault)}
+          ${RobotSubsystem.renderValue(this.default, this.hasDefault)}
         </p>
         <p>
           Current command:
-          ${Subsystem.renderValue(this.command, this.hasCommand)}
+          ${RobotSubsystem.renderValue(this.command, this.hasCommand)}
         </p>
       </div>
     `;
@@ -74,11 +90,11 @@ export default class Subsystem extends LitElement {
 }
 
 if (!customElements.get('frc-robot-subsystem')) {
-  customElements.define('frc-robot-subsystem', Subsystem);
+  customElements.define('frc-robot-subsystem', RobotSubsystem);
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'frc-robot-subsystem': Subsystem;
+    'frc-robot-subsystem': RobotSubsystem;
   }
 }

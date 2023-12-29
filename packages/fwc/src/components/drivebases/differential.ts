@@ -4,6 +4,7 @@ import { property } from 'lit/decorators.js';
 import * as CurvedArrow from './curved-arrow';
 import '../bar';
 import '../axis';
+import { WebbitConfig } from '@webbitjs/webbit';
 /**
  * Copyright (c) 2017-2018 FIRST
  * All rights reserved.
@@ -30,6 +31,16 @@ import '../axis';
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
+export const differentialDrivebaseDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    displayName: 'Differential Drivebase',
+  },
+  properties: {
+    leftMotorSpeed: { type: 'Number', attribute: 'left-motor-speed' },
+    rightMotorSpeed: { type: 'Number', attribute: 'right-motor-speed' },
+  },
+};
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(value, min));
@@ -71,7 +82,7 @@ function generateX(width: number) {
   return `<g class="x">${lineA} ${lineB}</g>`;
 }
 
-export default class DifferentialDrivebase extends LitElement {
+export class DifferentialDrivebase extends LitElement {
   @property({ type: Number, attribute: 'left-motor-speed' }) leftMotorSpeed = 0;
   @property({ type: Number, attribute: 'right-motor-speed' })
   rightMotorSpeed = 0;

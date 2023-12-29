@@ -13,7 +13,7 @@ function getRange(start: number, end: number) {
 
 export const elementName = 'frc-pdp';
 
-export default class Pdp extends LitElement {
+export class Pdp extends LitElement {
   @property({ type: Number }) voltage = 0;
   @property({ type: Number, attribute: 'total-current' }) totalCurrent = 0;
   @property({ type: Array }) channels: number[] = Array(16).fill(0);
@@ -142,6 +142,8 @@ export default class Pdp extends LitElement {
     `;
   }
 }
+
+export default Pdp;
 
 if (!customElements.get('frc-pdp')) {
   customElements.define('frc-pdp', Pdp);

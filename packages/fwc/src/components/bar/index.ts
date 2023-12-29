@@ -1,14 +1,26 @@
 /* eslint-disable no-underscore-dangle */
+import { WebbitConfig } from '@webbitjs/webbit';
 import { html, css, LitElement } from 'lit';
 import { property, state, query } from 'lit/decorators.js';
 
-alert('bar!');
+export const barDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    topLevel: false,
+    displayName: 'Bar',
+  },
+  properties: {
+    value: { type: 'Number' },
+    min: { type: 'Number', defaultValue: -1 },
+    max: { type: 'Number', defaultValue: 1 },
+    center: { type: 'Number' },
+  },
+};
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(value, min));
 }
 
-export default class Bar extends LitElement {
+export class Bar extends LitElement {
   private _min = -1;
   private _max = 1;
 
@@ -172,6 +184,8 @@ export default class Bar extends LitElement {
     `;
   }
 }
+
+export default Bar;
 
 if (!customElements.get('frc-bar')) {
   customElements.define('frc-bar', Bar);

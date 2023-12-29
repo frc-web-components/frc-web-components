@@ -1,6 +1,38 @@
 import { html, css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 import HtmlLogger from './html-logger';
+import { WebbitConfig } from '@webbitjs/webbit';
+
+export const loggerDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    displayName: 'Logger',
+  },
+  properties: {
+    title: { type: 'String', defaultValue: 'Robot Logger' },
+    maxLogCount: {
+      type: 'Number',
+      attribute: 'max-log-count',
+      defaultValue: 1000,
+    },
+    debug: { type: 'String' },
+    info: { type: 'String', primary: true },
+    success: { type: 'String' },
+    warning: { type: 'String' },
+    error: { type: 'String' },
+    level: {
+      type: 'String',
+      defaultValue: 'info',
+      input: {
+        type: 'StringDropdown',
+        allowCustomValues: false,
+        getOptions() {
+          return ['debug', 'info', 'success', 'warning', 'error'];
+        },
+      },
+    },
+    disabled: { type: 'Boolean' },
+  },
+};
 
 export default class Logger extends LitElement {
   @property({ type: String }) title = 'Robot Logger';

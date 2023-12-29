@@ -1,8 +1,23 @@
 import { html, css, LitElement } from 'lit';
 import { property, state, query } from 'lit/decorators.js';
 import { select } from 'd3';
+import { WebbitConfig } from '@webbitjs/webbit';
 
-export default class Axis extends LitElement {
+export const axisDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    topLevel: false,
+    displayName: 'Axis',
+  },
+  properties: {
+    vertical: { type: 'Boolean' },
+    ticks: { type: 'Number', defaultValue: 5 },
+    min: { type: 'Number', defaultValue: -1 },
+    max: { type: 'Number', defaultValue: 1 },
+    unit: { type: 'String' },
+  },
+};
+
+export class Axis extends LitElement {
   @property({ type: Boolean }) vertical = false;
   @property({ type: Number }) ticks = 5;
   @property({ type: Number }) min = -1;
@@ -168,6 +183,8 @@ export default class Axis extends LitElement {
     return html` <svg id="svg"></svg> `;
   }
 }
+
+export default Axis;
 
 if (!customElements.get('frc-axis')) {
   customElements.define('frc-axis', Axis);

@@ -1,8 +1,29 @@
 import { css } from 'lit';
 import { property } from 'lit/decorators.js';
 import NumberBar from '../number-bar';
+import { WebbitConfig } from '@webbitjs/webbit';
 
-export default class VoltageView extends NumberBar {
+export const voltageViewDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    displayName: 'Voltage View',
+  },
+  properties: {
+    value: { type: 'Number' },
+    max: { type: 'Number', defaultValue: 5 },
+    min: { type: 'Number' },
+    center: { type: 'Number' },
+    precision: { type: 'Number', defaultValue: 2 },
+    hideText: { type: 'Boolean', attribute: 'hide-text' },
+    numTickMarks: {
+      type: 'Number',
+      defaultValue: 3,
+      attribute: 'num-tick-marks',
+    },
+    unit: { type: 'String', defaultValue: 'V' },
+  },
+};
+
+export class VoltageView extends NumberBar {
   @property({ type: Number }) value = 0;
   @property({ type: Number }) min = 0;
   @property({ type: Number }) max = 5;
@@ -21,6 +42,8 @@ export default class VoltageView extends NumberBar {
     `,
   ];
 }
+
+export default VoltageView;
 
 if (!customElements.get('frc-voltage-view')) {
   customElements.define('frc-voltage-view', VoltageView);

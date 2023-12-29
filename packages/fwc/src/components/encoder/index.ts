@@ -1,7 +1,18 @@
+import { WebbitConfig } from '@webbitjs/webbit';
 import { html, css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 
-export default class Encoder extends LitElement {
+export const encoderDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    displayName: 'Encoder',
+  },
+  properties: {
+    distance: { type: 'Number' },
+    speed: { type: 'Number' },
+  },
+};
+
+export class Encoder extends LitElement {
   @property({ type: Number }) distance = 0;
   @property({ type: Number }) speed = 0;
 
@@ -45,6 +56,8 @@ export default class Encoder extends LitElement {
     `;
   }
 }
+
+export default Encoder;
 
 if (!customElements.get('frc-encoder')) {
   customElements.define('frc-encoder', Encoder);

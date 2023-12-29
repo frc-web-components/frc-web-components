@@ -1,7 +1,20 @@
+import { WebbitConfig } from '@webbitjs/webbit';
 import { html, css, LitElement, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 
-export default class PidController extends LitElement {
+export const pidControllerDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    displayName: 'PID Controller',
+  },
+  properties: {
+    p: { type: 'Number' },
+    i: { type: 'Number' },
+    d: { type: 'Number' },
+    setpoint: { type: 'Number' },
+  },
+};
+
+export class PidController extends LitElement {
   @property({ type: Number }) p = 0;
   @property({ type: Number }) i = 0;
   @property({ type: Number }) d = 0;
@@ -91,6 +104,8 @@ export default class PidController extends LitElement {
     `;
   }
 }
+
+export default PidController;
 
 if (!customElements.get('frc-pid-controller')) {
   customElements.define('frc-pid-controller', PidController);

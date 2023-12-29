@@ -2,8 +2,19 @@ import { html, css, LitElement } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import SvgGauge, { GaugeInstance } from 'svg-gauge';
 
+export const gaugeDashboardConfig = {
+  dashboard: {
+    displayName: 'Gauge',
+  },
+  properties: {
+    min: { type: Number },
+    max: { type: Number, defaultValue: 100 },
+    value: { type: Number, primary: true },
+  },
+};
+
 // TODO: Could use an upgrade. Maybe something like this? https://d3gaugechart.mxapps.io/
-export default class Gauge extends LitElement {
+export class Gauge extends LitElement {
   @property({ type: Number }) min = 0;
   @property({ type: Number }) max = 100;
   @property({ type: Number }) value = 0;
@@ -88,6 +99,8 @@ export default class Gauge extends LitElement {
     `;
   }
 }
+
+export default Gauge;
 
 if (!customElements.get('frc-gauge')) {
   customElements.define('frc-gauge', Gauge);

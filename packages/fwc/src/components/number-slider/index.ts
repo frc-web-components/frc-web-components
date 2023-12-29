@@ -1,8 +1,25 @@
 /* eslint-disable import/extensions */
+import { WebbitConfig } from '@webbitjs/webbit';
 import { html, css, LitElement, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 
-export default class NumberSlider extends LitElement {
+export const numberSliderDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    displayName: 'Number Slider',
+  },
+  properties: {
+    value: { type: 'Number', primary: true, changeEvent: 'change' },
+    min: { type: 'Number', defaultValue: -1 },
+    max: { type: 'Number', defaultValue: 1 },
+    blockIncrement: {
+      type: 'Number',
+      attribute: 'block-increment',
+      defaultValue: 0.05,
+    },
+  },
+};
+
+export class NumberSlider extends LitElement {
   @property({ type: Number }) value = 0;
   @property({ type: Number }) min = -1;
   @property({ type: Number }) max = 1;
@@ -84,6 +101,8 @@ export default class NumberSlider extends LitElement {
     `;
   }
 }
+
+export default NumberSlider;
 
 if (!customElements.get('frc-number-slider')) {
   customElements.define('frc-number-slider', NumberSlider);

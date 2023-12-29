@@ -2,6 +2,29 @@ import { html, css, LitElement, TemplateResult } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import './node';
+import { WebbitConfig } from '@webbitjs/webbit';
+
+export const scoringGridDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    displayName: 'Scoring Grid',
+  },
+  properties: {
+    cubesScored: {
+      type: 'Array',
+      attribute: 'cubes-scored',
+      input: { type: 'NumberArray' },
+    },
+    conesScored: {
+      type: 'Array',
+      attribute: 'cones-scored',
+      input: { type: 'NumberArray' },
+    },
+
+    hideLinks: { type: 'Boolean', attribute: 'hide-links' },
+    reverseRow: { type: 'Boolean', attribute: 'reverse-row' },
+    reverseCol: { type: 'Boolean', attribute: 'reverse-col' },
+  },
+};
 
 function getColumnFromId(id: number, reverseCol = false) {
   if (!reverseCol) {
@@ -21,7 +44,7 @@ function getRange(start: number, end: number) {
   return Array.from(Array(end + 1).keys()).slice(start);
 }
 
-export default class ScoringGrid extends LitElement {
+export class ScoringGrid extends LitElement {
   @property({ type: Number }) selection = 0;
   @property({ type: Array, attribute: 'cubes-scored' }) cubesScored: number[] =
     [];
@@ -150,6 +173,8 @@ export default class ScoringGrid extends LitElement {
     `;
   }
 }
+
+export default ScoringGrid;
 
 if (!customElements.get('frc-scoring-grid')) {
   customElements.define('frc-scoring-grid', ScoringGrid);

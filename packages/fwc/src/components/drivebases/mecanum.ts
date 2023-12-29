@@ -3,6 +3,7 @@ import { property } from 'lit/decorators.js';
 import * as CurvedArrow from './curved-arrow';
 import '../bar';
 import '../axis';
+import { WebbitConfig } from '@webbitjs/webbit';
 
 /**
  * Copyright (c) 2017-2018 FIRST
@@ -30,6 +31,27 @@ import '../axis';
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
+export const mecanumDrivebaseDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    displayName: 'Mecanum Drivebase',
+  },
+  properties: {
+    frontLeftMotorSpeed: {
+      type: 'Number',
+      attribute: 'front-left-motor-speed',
+    },
+    frontRightMotorSpeed: {
+      type: 'Number',
+      attribute: 'front-right-motor-speed',
+    },
+    rearLeftMotorSpeed: { type: 'Number', attribute: 'rear-left-motor-speed' },
+    rearRightMotorSpeed: {
+      type: 'Number',
+      attribute: 'rear-right-motor-speed',
+    },
+  },
+};
 
 function generateX(width: number) {
   const halfW = width / 2;
@@ -77,7 +99,7 @@ function getForegroundStyle(value: number) {
   `;
 }
 
-export default class MecanumDrivebase extends LitElement {
+export class MecanumDrivebase extends LitElement {
   @property({ type: Number, attribute: 'front-left-motor-speed' })
   frontLeftMotorSpeed = 0;
   @property({ type: Number, attribute: 'front-right-motor-speed' })

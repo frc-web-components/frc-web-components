@@ -2,12 +2,33 @@ import { html, css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 import '../bar';
 import '../axis';
+import { WebbitConfig } from '@webbitjs/webbit';
+
+export const numberBarDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    displayName: 'Number Bar',
+  },
+  properties: {
+    value: { type: 'Number', primary: true },
+    max: { type: 'Number', defaultValue: 1 },
+    min: { type: 'Number', defaultValue: -1 },
+    center: { type: 'Number' },
+    precision: { type: 'Number', defaultValue: 2 },
+    hideText: { type: 'Boolean', attribute: 'hide-text' },
+    numTickMarks: {
+      type: 'Number',
+      defaultValue: 3,
+      attribute: 'num-tick-marks',
+    },
+    unit: { type: 'String' },
+  },
+};
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(value, min));
 }
 
-export default class NumberBar extends LitElement {
+export class NumberBar extends LitElement {
   @property({ type: Number }) value = 0;
   @property({ type: Number }) min = -1;
   @property({ type: Number }) max = 1;
@@ -79,6 +100,8 @@ export default class NumberBar extends LitElement {
     `;
   }
 }
+
+export default NumberBar;
 
 if (!customElements.get('frc-number-bar')) {
   customElements.define('frc-number-bar', NumberBar);

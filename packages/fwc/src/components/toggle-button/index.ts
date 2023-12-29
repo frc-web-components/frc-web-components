@@ -1,7 +1,23 @@
+import { WebbitConfig } from '@webbitjs/webbit';
 import { html, css, LitElement, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 
-export default class ToggleButton extends LitElement {
+export const toggleButtonDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    displayName: 'Toggle Button',
+  },
+  properties: {
+    toggled: {
+      type: 'Boolean',
+      defaultValue: false,
+      primary: true,
+      changeEvent: 'toggle',
+    },
+    label: { type: 'String', defaultValue: 'Button' },
+  },
+};
+
+export class ToggleButton extends LitElement {
   @property({ type: Boolean }) toggled = false;
   @property({ type: Boolean }) disabled = false;
   @property({ type: String }) label = 'Button';
@@ -60,6 +76,8 @@ export default class ToggleButton extends LitElement {
     `;
   }
 }
+
+export default ToggleButton;
 
 if (!customElements.get('frc-toggle-button')) {
   customElements.define('frc-toggle-button', ToggleButton);

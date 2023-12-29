@@ -1,7 +1,45 @@
+import { WebbitConfig } from '@webbitjs/webbit';
 import { html, css, LitElement, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 
-export default class ToggleGroup extends LitElement {
+export const toggleGroupDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    displayName: 'Toggle Group',
+  },
+  properties: {
+    options: {
+      type: 'Array',
+      changeEvent: 'optionsUpdate',
+      defaultValue: ['On', 'Off'],
+      input: { type: 'StringArray' },
+    },
+    value: {
+      primary: true,
+      type: 'String',
+      changeEvent: 'change',
+      input: {
+        type: 'StringDropdown',
+        allowCustomValues: false,
+        getOptions({ options }: { options: string[] }): string[] {
+          return options;
+        },
+      },
+    },
+    direction: {
+      type: 'String',
+      defaultValue: 'vertical',
+      input: {
+        type: 'StringDropdown',
+        allowCustomValues: false,
+        getOptions(): string[] {
+          return ['vertical', 'horizontal'];
+        },
+      },
+    },
+  },
+};
+
+export class ToggleGroup extends LitElement {
   @property({ type: Array }) options = ['On', 'Off'];
   @property({ type: String }) value = '';
   @property({ type: String }) direction = 'vertical';
@@ -108,6 +146,8 @@ export default class ToggleGroup extends LitElement {
     `;
   }
 }
+
+export default ToggleGroup;
 
 if (!customElements.get('frc-toggle-group')) {
   customElements.define('frc-toggle-group', ToggleGroup);
