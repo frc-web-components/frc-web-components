@@ -53,7 +53,7 @@
   },
   "dependencies": {
     "@lit/react": "^1.0.2",
-    "@webbitjs/store": "^5.5.0"
+    "@webbitjs/store": "^5.6.0"
   },
   "peerDependencies": {
     "react": ">=17.0.0",

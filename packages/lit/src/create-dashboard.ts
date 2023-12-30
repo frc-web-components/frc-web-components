@@ -1,5 +1,4 @@
 
-// @ts-expect-error - no types
 import WebbitStore from '@webbitjs/store';
 import { render, html, TemplateResult } from 'lit';
 import  { Nt4Provider } from '@frc-web-components/fwc/source-providers';;

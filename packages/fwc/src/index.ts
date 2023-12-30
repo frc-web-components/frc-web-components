@@ -1,7 +1,7 @@
 export * from './source-providers';
-// export * from './components';
-import './dashboard/root';
+export * from './components';
 export { FrcDashboard } from './dashboard';
-export { default as elementConfigs } from './elements/frc-elements';
+import './dashboard/root';
 import './elements/vaadin';
-export { default as addElements } from './elements';
+// export { default as elementConfigs } from './elements/frc-elements';
+// export { default as addElements } from './elements';

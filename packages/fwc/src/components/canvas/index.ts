@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-restricted-exports
 export { default } from './canvas';
+export { default as Canvas } from './canvas';
 export { default as CanvasCircle } from './canvas-circle';
 export { default as CanvasGroup } from './canvas-group';
 export { default as CanvasLine } from './canvas-line';

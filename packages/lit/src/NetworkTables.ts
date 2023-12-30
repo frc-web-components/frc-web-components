@@ -1,6 +1,5 @@
 import { createContext } from "@lit/context";
 import { Nt4Provider } from "@frc-web-components/fwc/source-providers";
-// @ts-expect-error - no types
 import { Store } from "@webbitjs/store";
 import { ntValueDirective, SourceValue } from "./directives";
 import { DirectiveResult } from "lit/directive.js";

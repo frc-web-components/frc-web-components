@@ -1,1 +1,0 @@
-function o(t,n){const r=[];for(let e=0;e<t.length/n;e+=1)r.push(t.slice(n*e,n*(e+1)));return r}function u(t){const n=new ArrayBuffer(8),r=new DataView(n);return t.forEach((e,c)=>{r.setUint8(c,e)}),r.getFloat64(0)}function f(t){return o(t,8).map(u)}function i(t,n=3){const r=t instanceof Uint8Array?f(t):t;return o(r,n)}export{i as f};

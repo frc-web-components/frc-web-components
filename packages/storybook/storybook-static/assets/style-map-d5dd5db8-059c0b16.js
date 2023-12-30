@@ -1,5 +1,0 @@
-import{v as u}from"./property-293dc01c-d6840d48.js";import{T as l,_ as c,s as d}from"./directive-daf4e9b6-78860a76.js";/**
- * @license
- * Copyright 2018 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */const i="important",a=" !"+i,p=l(class extends c{constructor(s){var e;if(super(s),s.type!==d.ATTRIBUTE||s.name!=="style"||((e=s.strings)==null?void 0:e.length)>2)throw Error("The `styleMap` directive must be used in the `style` attribute and must be the only part in the attribute.")}render(s){return Object.keys(s).reduce((e,r)=>{const t=s[r];return t==null?e:e+`${r=r.includes("-")?r:r.replace(/(?:^(webkit|moz|ms|o)|)(?=[A-Z])/g,"-$&").toLowerCase()}:${t};`},"")}update(s,[e]){const{style:r}=s.element;if(this.ut===void 0)return this.ut=new Set(Object.keys(e)),this.render(e);for(const t of this.ut)e[t]==null&&(this.ut.delete(t),t.includes("-")?r.removeProperty(t):r[t]=null);for(const t in e){const n=e[t];if(n!=null){this.ut.add(t);const o=typeof n=="string"&&n.endsWith(a);t.includes("-")||o?r.setProperty(t,o?n.slice(0,-11):n,o?i:""):r[t]=n}}return u}});export{p as m};

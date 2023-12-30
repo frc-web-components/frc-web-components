@@ -1,5 +1,4 @@
 import { Nt4Provider } from "@frc-web-components/fwc/source-providers";
-// @ts-expect-error - no types
 import { Store } from "@webbitjs/store";
 import { setContext, getContext, onDestroy } from "svelte";
 import { writable } from "svelte/store";
@@ -47,8 +46,8 @@ export function addKeyListener<T>(
   const unsubscribe = store.subscribe(
     "NetworkTables",
     key,
-    (value: T) => {
-      callback(key, value);
+    (value: unknown) => {
+      callback(key, value as T);
     },
     immediateNotify
   );

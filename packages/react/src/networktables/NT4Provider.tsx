@@ -5,7 +5,6 @@ import React, {
   ReactNode,
 } from "react";
 import { Nt4Provider } from "@frc-web-components/fwc/source-providers";
-// @ts-expect-error - no types
 import { Store } from "@webbitjs/store";
 
 interface StoreContextType {

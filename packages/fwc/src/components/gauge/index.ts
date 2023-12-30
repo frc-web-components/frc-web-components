@@ -1,15 +1,16 @@
+import { WebbitConfig } from '@webbitjs/webbit';
 import { html, css, LitElement } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import SvgGauge, { GaugeInstance } from 'svg-gauge';
 
-export const gaugeDashboardConfig = {
+export const gaugeDashboardConfig: Partial<WebbitConfig> = {
   dashboard: {
     displayName: 'Gauge',
   },
   properties: {
-    min: { type: Number },
-    max: { type: Number, defaultValue: 100 },
-    value: { type: Number, primary: true },
+    min: { type: 'Number' },
+    max: { type: 'Number', defaultValue: 100 },
+    value: { type: 'Number', primary: true },
   },
 };
 

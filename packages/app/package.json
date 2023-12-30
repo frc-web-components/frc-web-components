@@ -21,8 +21,8 @@
   },
   "dependencies": {
     "@lit/context": "^1.0.1",
-    "@webbitjs/store": "^5.5.0",
-    "@webbitjs/webbit": "^5.5.0",
+    "@webbitjs/store": "^5.6.0",
+    "@webbitjs/webbit": "^5.6.0",
     "lit": "^2.7.6"
   },
   "peerDependencies": {

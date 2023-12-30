@@ -1,6 +1,5 @@
 import { directive } from 'lit/directive.js';
 import { AsyncDirective } from 'lit/async-directive.js';
-// @ts-expect-error - no types
 import Store from '@webbitjs/store';
 
 export class SourceValue extends AsyncDirective {

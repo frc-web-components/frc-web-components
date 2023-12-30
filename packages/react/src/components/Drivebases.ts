@@ -1,9 +1,9 @@
 import React from "react";
 import { createComponent } from "@lit/react";
 import {
-  Differential as DifferentialWc,
-  Mecanum as MecanumWc,
-  Swerve as SwerveWc,
+  DifferentialDrivebase as DifferentialWc,
+  MecanumDrivebase as MecanumWc,
+  SwerveDrivebase as SwerveWc,
 } from "@frc-web-components/fwc/components/drivebases";
 
 export const Differential = createComponent({
