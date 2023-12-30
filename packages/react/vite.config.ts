@@ -2,21 +2,21 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
-import fs from 'fs';
+import fs from "fs";
 import path from "node:path";
 
 function getEntries(): Record<string, string> {
-  
   const componentEntries: Record<string, string> = {};
-  
+
   const folderPath = path.resolve(__dirname, "src/components");
   const fileNames = fs.readdirSync(folderPath);
 
   fileNames.forEach((fileName) => {
     const componentName = fileName.split(".")[0];
-    componentEntries[`components/${componentName}`] = `src/components/${fileName}`;
+    componentEntries[
+      `components/${componentName}`
+    ] = `src/components/${fileName}`;
   });
-
 
   return {
     "fwc-react": "src/index.ts",
@@ -25,7 +25,6 @@ function getEntries(): Record<string, string> {
     ...componentEntries,
   };
 }
-
 
 export default defineConfig({
   plugins: [
@@ -44,7 +43,7 @@ export default defineConfig({
       fileName: (format, entryName) => `${entryName}.${format}.js`,
     },
     rollupOptions: {
-      external: ["react", "react-dom"],
+      external: ["react", "react-dom", "@frc-web-components/fwc"],
       output: {
         globals: {
           react: "React",

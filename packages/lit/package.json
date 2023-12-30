@@ -15,8 +15,8 @@
     }
   },
   "scripts": {
-    "dev": "vite",
-    "build": "vite build && tsc",
+    "build": "vite build",
+    "watch": "vite build --watch",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -29,6 +29,7 @@
   "devDependencies": {
     "@frc-web-components/fwc": "*",
     "lit": "^2.7.6",
-    "vite": "^4.4.5"
+    "vite": "^4.4.5",
+    "vite-plugin-dts": "^3.7.0"
   }
 }

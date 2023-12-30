@@ -4,10 +4,11 @@ import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs/yargs';
 import fs from 'fs';
 import path from 'node:path';
+import dts from 'vite-plugin-dts';
 
 const argv = yargs(hideBin(process.argv)).argv;
 
-const plugins: Plugin[] = [];
+const plugins: Plugin[] = [dts()];
 
 if ((argv as any)._.includes('--useHttps')) {
   plugins.push(basicSsl());

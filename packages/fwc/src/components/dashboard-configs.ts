@@ -34,7 +34,56 @@ import {
 } from './command-based';
 import { WebbitConfig } from '@webbitjs/webbit';
 
+import { WebbitConfig } from '@webbitjs/webbit';
+import { html, css, LitElement, TemplateResult } from 'lit';
+import { property } from 'lit/decorators.js';
+
+export const testComponentDashboardConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    displayName: 'Test Component',
+  },
+  properties: {
+    stuff: {
+      type: 'Object',
+      defaultValue: {},
+      primary: true,
+    },
+  },
+};
+
+export class TestComponent extends LitElement {
+  @property({ type: Object }) stuff = {};
+
+  static styles = css`
+    :host {
+      display: inline-block;
+      width: 200px;
+      height: 200px;
+      background: green;
+    }
+  `;
+
+  update(changedProperties: Map<string, any>) {
+    console.log('stuff:', this.stuff);
+  }
+
+  render(): TemplateResult {
+    return html` <div>stuff: ${JSON.stringify(this.stuff)}</div> `;
+  }
+}
+
+if (!customElements.get('frc-test-component')) {
+  customElements.define('frc-test-component', TestComponent);
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'frc-test-component': TestComponent;
+  }
+}
+
 export const dashboardElementConfigs: Record<string, Partial<WebbitConfig>> = {
+  'frc-test-component': testComponentDashboardConfig,
   'frc-axis': axisDashboardConfig,
   'frc-bar': barDashboardConfig,
   'frc-differential-drivebase': differentialDrivebaseDashboardConfig,

@@ -3,65 +3,64 @@
   "version": "1.15.0",
   "description": "",
   "files": [
-    "dist",
-    "types"
+    "dist"
   ],
   "main": "dist/fwc.es.js",
   "module": "dist/fwc.es.js",
   "type": "module",
-  "types": "types/index.d.ts",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": {
-        "types": "./types/index.d.ts",
+        "types": "./dist/index.d.ts",
         "default": "./dist/fwc.es.js"
       }
     },
     "./get-asset-url": {
       "import": {
-        "types": "./types/get-asset-url.d.ts",
+        "types": "./dist/get-asset-url.d.ts",
         "default": "./dist/get-asset-url.es.js"
       }
     },
     "./load-local-storage": {
       "import": {
-        "types": "./types/load-local-storage.d.ts",
+        "types": "./dist/load-local-storage.d.ts",
         "default": "./dist/load-local-storage.es.js"
       }
     },
     "./source-view": {
       "import": {
-        "types": "./types/source-view.d.ts",
+        "types": "./dist/source-view.d.ts",
         "default": "./dist/source-view.es.js"
       }
     },
     "./source-providers": {
       "import": {
-        "types": "./types/source-providers/index.d.ts",
+        "types": "./dist/source-providers/index.d.ts",
         "default": "./dist/source-providers.es.js"
       }
     },
     "./source-providers/*": {
       "import": {
-        "types": "./types/source-providers/*.d.ts",
+        "types": "./dist/source-providers/*.d.ts",
         "default": "./dist/source-providers/*.es.js"
       }
     },
     "./components": {
       "import": {
-        "types": "./types/components/index.d.ts",
+        "types": "./dist/components/index.d.ts",
         "default": "./dist/components.es.js"
       }
     },
     "./components/*": {
       "import": {
-        "types": "./types/components/*/index.d.ts",
+        "types": "./dist/components/*/index.d.ts",
         "default": "./dist/components/*.es.js"
       }
     },
     "./themes": {
       "import": {
-        "types": "./types/themes/index.d.ts",
+        "types": "./dist/themes/index.d.ts",
         "default": "./dist/themes.es.js"
       }
     }
@@ -69,39 +68,39 @@
   "typesVersions": {
     "*": {
       "get-asset-url": [
-        "types/get-asset-url.d.ts"
+        "dist/get-asset-url.d.ts"
       ],
       "load-local-storage": [
-        "types/load-local-storage.d.ts"
+        "dist/load-local-storage.d.ts"
       ],
       "source-view": [
-        "types/source-view.d.ts"
+        "dist/source-view.d.ts"
       ],
       "source-providers": [
-        "types/source-providers/index.d.ts"
+        "dist/source-providers/index.d.ts"
       ],
       "source-providers/*": [
-        "types/source-providers/*.d.ts"
+        "dist/source-providers/*.d.ts"
       ],
       "components": [
-        "types/components/index.d.ts"
+        "dist/components/index.d.ts"
       ],
       "components/*": [
-        "types/components/*/index.d.ts"
+        "dist/components/*/index.d.ts"
       ],
       "themes": [
-        "types/themes/index.d.ts"
+        "dist/themes/index.d.ts"
       ]
     }
   },
   "scripts": {
-    "start": "vite",
+    "dev": "vite",
     "host": "vite --host -- --useHttps",
     "test": "",
     "test:coverage": "npm test -- --coverage --watchAll=false",
     "generate-docs": "jsdoc -c jsdoc.conf.json",
-    "build": "tsc && vite build",
-    "build:types": "tsc",
+    "build": "vite build",
+    "watch": "vite build --watch",
     "preview": "vite preview --port 8080",
     "lint": "eslint src/**/*",
     "lint:format": "eslint src/**/* --fix",
@@ -134,7 +133,6 @@
     "@vaadin/vaadin-icons": "^22.0.0",
     "@vitejs/plugin-basic-ssl": "^1.0.1",
     "babel-jest": "^25.5.1",
-    "concurrently": "^7.4.0",
     "eslint": "^7.27.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.5.0",
@@ -149,7 +147,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^4.4.4",
-    "vite": "^4.4.5"
+    "vite": "^4.4.5",
+    "vite-plugin-dts": "^3.7.0"
   },
   "repository": {
     "type": "git",
@@ -168,7 +167,7 @@
     "@lit-labs/context": "^0.1.1",
     "@vaadin/vaadin": "^22.0.0",
     "@webbitjs/store": "^5.6.0",
-    "@webbitjs/webbit": "^5.6.0",
+    "@webbitjs/webbit": "C:/Users/amory/Documents/repos/robotics/webbit/packages/webbit",
     "chart.js": "^2.8.0",
     "codeflask": "^1.4.1",
     "d3": "^7.8.2",

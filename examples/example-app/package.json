@@ -2,7 +2,7 @@
   "name": "example-app",
   "private": true,
   "scripts": {
-    "start": "vite",
+    "dev": "vite",
     "preview": "vite preview"
   },
   "dependencies": {

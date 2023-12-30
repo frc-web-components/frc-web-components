@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import dts from "vite-plugin-dts";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,7 +15,8 @@ export default defineConfig({
       fileName: (format, entryName) => `${entryName}.${format}.js`,
     },
     rollupOptions: {
-      external: ["lit"],
+      external: ["lit", "@frc-web-components/fwc"],
     },
   },
+  plugins: [dts()],
 });

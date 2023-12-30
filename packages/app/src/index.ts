@@ -1,7 +1,5 @@
 import { FrcDashboard } from '@frc-web-components/fwc';
-// @ts-expect-error - no types
-import { SourceProvider, WebbitConfig } from '@webbit/store';
-// @ts-expect-error - no types
+import { SourceProvider } from '@webbitjs/store';
 import { WebbitConfig } from '@webbitjs/webbit';
 
 const dashboard = new FrcDashboard();
