@@ -53,6 +53,8 @@ export default defineConfig({
       formats: ['es'],
       fileName: (format, entryName) => `${entryName}.${format}.js`,
     },
+    minify: true,
+    sourcemap: true,
   },
   server: {
     open: '/',

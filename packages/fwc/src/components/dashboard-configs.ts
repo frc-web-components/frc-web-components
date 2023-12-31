@@ -33,10 +33,9 @@ import {
   robotSubsystemDashboardConfig,
 } from './command-based';
 import { WebbitConfig } from '@webbitjs/webbit';
-
-import { WebbitConfig } from '@webbitjs/webbit';
 import { html, css, LitElement, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
+import { Source } from '@webbitjs/store';
 
 export const testComponentDashboardConfig: Partial<WebbitConfig> = {
   dashboard: {
@@ -44,15 +43,15 @@ export const testComponentDashboardConfig: Partial<WebbitConfig> = {
   },
   properties: {
     stuff: {
-      type: 'Object',
-      defaultValue: {},
+      type: 'Source',
       primary: true,
+      input: { type: 'None' },
     },
   },
 };
 
 export class TestComponent extends LitElement {
-  @property({ type: Object }) stuff = {};
+  @property({ type: Object }) stuff: Source | undefined;
 
   static styles = css`
     :host {
@@ -63,12 +62,14 @@ export class TestComponent extends LitElement {
     }
   `;
 
-  update(changedProperties: Map<string, any>) {
+  updated(changedProperties: Map<string, any>) {
     console.log('stuff:', this.stuff);
   }
 
   render(): TemplateResult {
-    return html` <div>stuff: ${JSON.stringify(this.stuff)}</div> `;
+    return html`
+      <div>stuff: ${JSON.stringify(this.stuff?.getJson(), null, 2)}</div>
+    `;
   }
 }
 
