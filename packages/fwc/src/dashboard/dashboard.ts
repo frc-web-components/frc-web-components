@@ -246,6 +246,8 @@ export default class Dashboard {
     }
     if (typeof config.dashboard.displayName === 'string') {
       return config.dashboard.displayName;
+    } else if (typeof config.dashboard.displayName === 'function') {
+      return config.dashboard.displayName();
     }
     return selector;
   }

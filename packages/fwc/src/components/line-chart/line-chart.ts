@@ -42,9 +42,10 @@ export function getYScaleWidth(text: string /* , fontSize: number */): number {
   return text.length * 5.5 + 9;
 }
 
-export default class LineChart extends LitElement {
+export class LineChart extends LitElement {
   @property({ type: Number, attribute: 'view-time' }) viewTime = 10;
-  @property({ type: String, attribute: 'chart-title' }) chartTitle = '';
+  @property({ type: String, attribute: 'chart-title', reflect: true })
+  chartTitle = '';
 
   @state() data: ChartData[] = [];
 
@@ -262,6 +263,7 @@ export default class LineChart extends LitElement {
         invert: false,
         side: 'left',
         hideGridLines: false,
+        hide: false,
       };
       return [
         {
@@ -285,6 +287,7 @@ export default class LineChart extends LitElement {
         invert: axisElement.invert ?? false,
         side: axisElement.side ?? 'left',
         hideGridLines: axisElement.hideGridLines ?? false,
+        hide: axisElement.hide ?? false,
       };
       return {
         chartAxis,
@@ -463,7 +466,9 @@ export default class LineChart extends LitElement {
       Math.round(this.viewTime * 1000),
       this.elapsedTimeMs
     );
-    const yScales = this.getYScales();
+    const yScales = this.getYScales().filter(
+      ({ chartAxis }) => !chartAxis.hide
+    );
 
     const lines = yScales.map((yScale) => {
       const line = (data: ChartDatum[]) =>
@@ -560,6 +565,8 @@ export default class LineChart extends LitElement {
     `;
   }
 }
+
+export default LineChart;
 
 if (!customElements.get('frc-line-chart')) {
   customElements.define('frc-line-chart', LineChart);

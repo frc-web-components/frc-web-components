@@ -22,7 +22,7 @@
   "dependencies": {
     "@lit/context": "^1.0.1",
     "@webbitjs/store": "^5.7.0",
-    "@webbitjs/webbit": "^5.7.0",
+    "@webbitjs/webbit": "^5.8.0",
     "lit": "^2.7.6"
   },
   "peerDependencies": {

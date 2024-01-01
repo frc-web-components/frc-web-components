@@ -32,59 +32,11 @@ import {
   robotCommandDashboardConfig,
   robotSubsystemDashboardConfig,
 } from './command-based';
+import { mechanism2dDashboardConfig } from './mechanism2d';
+import { lineChartDashboardConfigs } from './line-chart';
 import { WebbitConfig } from '@webbitjs/webbit';
-import { html, css, LitElement, TemplateResult } from 'lit';
-import { property } from 'lit/decorators.js';
-import { Source } from '@webbitjs/store';
-
-export const testComponentDashboardConfig: Partial<WebbitConfig> = {
-  dashboard: {
-    displayName: 'Test Component',
-  },
-  properties: {
-    stuff: {
-      type: 'Source',
-      primary: true,
-      input: { type: 'None' },
-    },
-  },
-};
-
-export class TestComponent extends LitElement {
-  @property({ type: Object }) stuff: Source | undefined;
-
-  static styles = css`
-    :host {
-      display: inline-block;
-      width: 200px;
-      height: 200px;
-      background: green;
-    }
-  `;
-
-  updated(changedProperties: Map<string, any>) {
-    console.log('stuff:', this.stuff);
-  }
-
-  render(): TemplateResult {
-    return html`
-      <div>stuff: ${JSON.stringify(this.stuff?.getJson(), null, 2)}</div>
-    `;
-  }
-}
-
-if (!customElements.get('frc-test-component')) {
-  customElements.define('frc-test-component', TestComponent);
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'frc-test-component': TestComponent;
-  }
-}
 
 export const dashboardElementConfigs: Record<string, Partial<WebbitConfig>> = {
-  'frc-test-component': testComponentDashboardConfig,
   'frc-axis': axisDashboardConfig,
   'frc-bar': barDashboardConfig,
   'frc-differential-drivebase': differentialDrivebaseDashboardConfig,
@@ -113,4 +65,6 @@ export const dashboardElementConfigs: Record<string, Partial<WebbitConfig>> = {
   'frc-scoring-grid': scoringGridDashboardConfig,
   'frc-robot-command': robotCommandDashboardConfig,
   'frc-robot-subsystem': robotSubsystemDashboardConfig,
+  'frc-mechanism2d-wrapper': mechanism2dDashboardConfig,
+  ...lineChartDashboardConfigs,
 };

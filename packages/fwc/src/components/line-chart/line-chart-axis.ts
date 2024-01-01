@@ -9,6 +9,7 @@ export interface ILineChartAxis {
   invert: boolean;
   side: 'left' | 'right';
   hideGridLines: boolean;
+  hide: boolean;
 }
 
 export default class LineChartAxis
@@ -20,9 +21,10 @@ export default class LineChartAxis
   @property({ type: Boolean, attribute: 'lock-min' }) lockMin = false;
   @property({ type: Boolean, attribute: 'lock-max' }) lockMax = false;
   @property({ type: Boolean }) invert = false;
-  @property({ type: String }) side: 'left' | 'right' = 'left';
+  @property({ type: String, reflect: true }) side: 'left' | 'right' = 'left';
   @property({ type: Boolean, attribute: 'hide-grid-lines' }) hideGridLines =
     false;
+  @property({ type: Boolean }) hide = false;
 }
 
 if (!customElements.get('frc-line-chart-axis')) {

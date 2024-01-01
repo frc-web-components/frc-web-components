@@ -101,7 +101,7 @@ export default class DashboardRoot extends LitElement {
       'dashboard-tab': {
         dashboard: {
           topLevel: false,
-          displayName: (element) => element.getAttribute('tab-name') || 'Tab',
+          displayName: (element) => element?.getAttribute('tab-name') || 'Tab',
           layout: {
             type: 'absolute',
             movable: false,
