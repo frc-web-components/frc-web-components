@@ -4,10 +4,7 @@ import { ChartLegendPositions } from './line-chart-legend';
 export const lineChartDashboardConfig: Partial<WebbitConfig> = {
   dashboard: {
     displayName: (element?: HTMLElement) => {
-      if (!element) {
-        return 'Line Chart';
-      }
-      const title = element.getAttribute('chart-title') ?? 'Line Chart';
+      const title = element?.getAttribute('chart-title') || 'Line Chart';
       return title;
     },
   },
@@ -47,7 +44,7 @@ export const lineChartAxisDashboardConfig: Partial<WebbitConfig> = {
       if (!element) {
         return 'Line Chart Axis';
       }
-      const side = element.getAttribute('side') ?? 'left';
+      const side = element.getAttribute('side') || 'left';
       return `Chart Axis (${side})`;
     },
   },

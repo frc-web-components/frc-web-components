@@ -34,6 +34,8 @@ import {
 } from './command-based';
 import { mechanism2dDashboardConfig } from './mechanism2d';
 import { lineChartDashboardConfigs } from './line-chart';
+import { fieldDashboardConfig } from './field';
+import { field3dDashboardConfig } from './field3d';
 import { WebbitConfig } from '@webbitjs/webbit';
 
 export const dashboardElementConfigs: Record<string, Partial<WebbitConfig>> = {
@@ -66,5 +68,7 @@ export const dashboardElementConfigs: Record<string, Partial<WebbitConfig>> = {
   'frc-robot-command': robotCommandDashboardConfig,
   'frc-robot-subsystem': robotSubsystemDashboardConfig,
   'frc-mechanism2d-wrapper': mechanism2dDashboardConfig,
+  'frc-field-wrapper': fieldDashboardConfig,
+  'frc-field3d': field3dDashboardConfig,
   ...lineChartDashboardConfigs,
 };

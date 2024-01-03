@@ -7,3 +7,4 @@ export {
 } from './field-configs';
 export * from './field-interfaces';
 export { configs as objectConfigs } from './object-configs';
+export * from './dashboard-configs';

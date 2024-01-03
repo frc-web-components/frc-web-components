@@ -11,7 +11,7 @@ function toRadians(degrees: number): number {
   return (degrees * Math.PI) / 180;
 }
 
-export default class Field extends LitElement {
+export class Field extends LitElement {
   @property({ type: String }) game = fieldConfigs[0].game;
   @property({ type: Number, attribute: 'crop-top' }) cropTop: number | null =
     null;
@@ -333,6 +333,8 @@ export default class Field extends LitElement {
     `;
   }
 }
+
+export default Field;
 
 if (!customElements.get('frc-field')) {
   customElements.define('frc-field', Field);

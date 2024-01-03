@@ -1,7 +1,8 @@
 // eslint-disable-next-line no-restricted-exports
 export { default } from './field';
-export { default as FieldPath } from './field-path';
-export { default as FieldRobot } from './field-robot';
+export * from './field';
+export * from './field-path';
+export * from './field-robot';
 export { type FieldConfig, configs as fieldConfigs } from './field-configs';
 export {
   baseUnit,
@@ -9,3 +10,4 @@ export {
   unitAliases,
   convert as convertUnit,
 } from './units';
+export * from './wrapper/wrapper';

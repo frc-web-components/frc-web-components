@@ -3,7 +3,7 @@ import { property } from 'lit/decorators.js';
 import { LitElement } from 'lit';
 import { FieldObjectApi } from './field-interfaces';
 
-export default class FieldRobot extends LitElement {
+export class FieldRobot extends LitElement {
   @property({ type: String }) unit: string | null = 'inherit';
   @property({ type: String, attribute: 'rotation-unit' }) rotationUnit:
     | string
