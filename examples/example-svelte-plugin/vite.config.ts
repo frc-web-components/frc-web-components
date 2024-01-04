@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
+import dts from "vite-plugin-dts";
 import { writeFileSync } from 'fs';
 import { join } from 'path';
 const packageJson = require('./package.json');
@@ -12,6 +13,7 @@ export default defineConfig({
         customElement: true,
       },
     }),
+    dts(),
     {
       name: 'postbuild-commands', // the name of your custom plugin. Could be anything.
       closeBundle: async () => {

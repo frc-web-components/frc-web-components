@@ -9,6 +9,15 @@
 </script>
 
 <button on:click={increment}>
-  count is {count}
-  <img src={getAssetUrl('button-background.jpg')} alt="Vite logo" />
+  <img src={getAssetUrl('party.svg')} alt="party time" />
+  Party Guests: {count}
 </button>
+
+<style>
+  button {
+    padding: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+</style>

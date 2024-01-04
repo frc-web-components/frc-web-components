@@ -1,4 +1,4 @@
-import './Counter.svelte';
+import './MyElement.svelte';
 import { addElements } from '@frc-web-components/app';
 
 

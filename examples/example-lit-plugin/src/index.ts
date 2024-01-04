@@ -7,7 +7,6 @@ addElements({
       displayName: 'My Lit Element',
     },
     properties: {
-      label: { type: 'String' },
       count: { type: 'Number' },
     },
   }

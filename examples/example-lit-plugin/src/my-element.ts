@@ -1,5 +1,6 @@
-import { LitElement, html } from "lit";
+import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { getAssetUrl } from "@frc-web-components/app";
 
 /**
  * An example element.
@@ -9,12 +10,31 @@ import { customElement, property } from "lit/decorators.js";
  */
 @customElement("my-lit-element")
 export class MyElement extends LitElement {
-  @property() label = "";
   @property({ type: Number }) count = 0;
+
+  static styles = css`
+    :host {
+      display: inline-block;
+    }
+    
+    button {
+      padding: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+  `;
 
   render() {
     return html`
-      <p>${this.label}: ${this.count}</p>
+      <button
+        @click=${() => {
+          this.count += 1;
+        }}
+      >
+        <img src=${getAssetUrl("party.svg")} alt="party time" /> Party Guests:
+        ${this.count}
+      </button>
     `;
   }
 }
