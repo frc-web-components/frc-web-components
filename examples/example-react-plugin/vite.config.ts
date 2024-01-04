@@ -12,8 +12,8 @@ export default defineConfig({
       name: "fwc-plugin",
       // TODO: multiple entry points are not supported with umd
       // How do we add umd support then?
-      formats: ["es"],
-      fileName: () => 'fwc-plugin.js',
+      formats: ["umd"],
+      fileName: () => 'index.js',
     },
     rollupOptions: {
       external: ['@frc-web-components/app'],
@@ -25,5 +25,8 @@ export default defineConfig({
         },
       },
     },
+  },
+  define: {
+    'process.env': process.env
   }
 })

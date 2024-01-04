@@ -1,5 +1,8 @@
 import { defineConfig } from "vite";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
+import { writeFileSync } from 'fs';
+import { join } from 'path';
+const packageJson = require('./package.json');
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -9,6 +12,19 @@ export default defineConfig({
         customElement: true,
       },
     }),
+    {
+      name: 'postbuild-commands', // the name of your custom plugin. Could be anything.
+      closeBundle: async () => {
+        const pluginJson = {
+          name: packageJson?.displayName ?? 'Some FWC Plugin',
+          description: packageJson?.description ?? '',
+          version: packageJson?.version ?? '0.0.0',
+        };
+        const pluginJsonPath = join(__dirname, "plugin/plugin.json");
+
+        writeFileSync(pluginJsonPath, JSON.stringify(pluginJson, null, 4));
+      }
+    },
   ],
   build: {
     lib: {
@@ -18,9 +34,10 @@ export default defineConfig({
       name: "fwc-plugin",
       // TODO: multiple entry points are not supported with umd
       // How do we add umd support then?
-      formats: ["es"],
-      fileName: () => "fwc-plugin.js",
+      formats: ["umd"],
+      fileName: () => "index.js",
     },
+    outDir: "plugin",
     rollupOptions: {
       external: ["@frc-web-components/app"],
       output: {
@@ -32,4 +49,7 @@ export default defineConfig({
       },
     },
   },
+  define: {
+    'process.env': process.env
+  }
 });

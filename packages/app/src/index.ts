@@ -23,10 +23,20 @@ export function setDefaultSourceProvider(providerName: string) {
   dashboard.setDefaultSourceProvider(providerName);
 }
 
-export function addElements(elementConfigs?: Record<string, WebbitConfig> | undefined, group?: string | undefined) {
+export function addElements(elementConfigs?: Record<string, Partial<WebbitConfig>> | undefined, group?: string | undefined) {
   dashboard.addElements(elementConfigs, group);
 }
 
 export function getDashboard() {
   return dashboard;
+}
+
+let assetBasePath = '';
+
+export function setAssetBasePath(path: string) {
+  assetBasePath = path;
+}
+
+export function getAssetUrl(relativePath: string): string {
+  return `${assetBasePath.replace(/\/$/, "")}/${relativePath.replace(/^\//, "")}`;
 }

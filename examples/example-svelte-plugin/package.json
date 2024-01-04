@@ -1,18 +1,20 @@
 {
   "name": "example-svelte-plugin",
-  "private": true,
+  "displayName": "Example Svelte Plugin",
+  "description": "Example svelte plugin for FRC Web Components",
   "version": "0.0.0",
+  "private": true,
   "type": "module",
   "files": [
-    "dist"
+    "plugin"
   ],
-  "main": "./dist/fwc-plugin.js",
-  "module": "./dist/fwc-plugin.js",
-  "types": "./dist/index.d.ts",
+  "main": "./plugin/index.js",
+  "module": "./plugin/index.js",
+  "types": "./plugin/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/fwc-plugin.js"
+      "types": "./plugin/index.d.ts",
+      "import": "./plugin/index.js"
     }
   },
   "scripts": {

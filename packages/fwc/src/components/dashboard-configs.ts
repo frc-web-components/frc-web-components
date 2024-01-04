@@ -38,7 +38,7 @@ import { fieldDashboardConfig } from './field';
 import { field3dDashboardConfig } from './field3d';
 import { WebbitConfig } from '@webbitjs/webbit';
 
-export const dashboardElementConfigs: Record<string, Partial<WebbitConfig>> = {
+export const dashboardElementConfigs = {
   'frc-axis': axisDashboardConfig,
   'frc-bar': barDashboardConfig,
   'frc-differential-drivebase': differentialDrivebaseDashboardConfig,
@@ -71,4 +71,4 @@ export const dashboardElementConfigs: Record<string, Partial<WebbitConfig>> = {
   'frc-field-wrapper': fieldDashboardConfig,
   'frc-field3d': field3dDashboardConfig,
   ...lineChartDashboardConfigs,
-};
+} as Record<string, WebbitConfig>;
