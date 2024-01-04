@@ -1,5 +1,6 @@
 {
-  "name": "{{name}}",
+  "name": "example-svelte-plugin",
+  "displayName": "{{name}}",
   "private": true,
   "version": "0.0.0",
   "description": "{{description}}",
@@ -8,15 +9,15 @@
   "license": "{{license}}",
   "type": "module",
   "files": [
-    "dist"
+    "plugin"
   ],
-  "main": "./dist/fwc-plugin.js",
-  "module": "./dist/fwc-plugin.js",
-  "types": "./dist/index.d.ts",
+  "main": "./plugin/index.js",
+  "module": "./plugin/index.js",
+  "types": "./plugin/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/fwc-plugin.js"
+      "types": "./plugin/index.d.ts",
+      "import": "./plugin/index.js"
     }
   },
   "scripts": {
@@ -35,6 +36,7 @@
     "svelte-check": "^3.4.6",
     "tslib": "^2.6.0",
     "typescript": "^5.0.2",
-    "vite": "^4.4.5"
+    "vite": "^4.4.5",
+    "vite-plugin-dts": "^3.7.0"
   }
 }

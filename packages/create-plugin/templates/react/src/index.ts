@@ -1,4 +1,4 @@
-import "./Counter.tsx";
+import "./MyElement.tsx";
 import { addElements } from "@frc-web-components/app";
 
 addElements({
