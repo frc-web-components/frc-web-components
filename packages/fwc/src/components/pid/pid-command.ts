@@ -7,11 +7,11 @@ export const pidCommandDashboardConfig: Partial<WebbitConfig> = {
     displayName: 'PID Command',
   },
   properties: {
-    p: { type: 'Number' },
-    i: { type: 'Number' },
-    d: { type: 'Number' },
-    setpoint: { type: 'Number' },
-    running: { type: 'Boolean' },
+    p: { type: 'Number', changeEvent: 'change' },
+    i: { type: 'Number', changeEvent: 'change' },
+    d: { type: 'Number', changeEvent: 'change' },
+    setpoint: { type: 'Number', changeEvent: 'change' },
+    running: { type: 'Boolean', reflect: true, changeEvent: 'change' },
   },
 };
 
@@ -20,7 +20,7 @@ export class PidCommand extends LitElement {
   @property({ type: Number }) i = 0;
   @property({ type: Number }) d = 0;
   @property({ type: Number }) setpoint = 0;
-  @property({ type: Boolean }) running = false;
+  @property({ type: Boolean, reflect: true }) running = false;
 
   static styles = css`
     :host {
@@ -111,7 +111,7 @@ export class PidCommand extends LitElement {
       <input
         type="checkbox"
         id="running"
-        ?checked=${this.running}
+        .checked=${this.running}
         @click=${this.onRunningClick}
       />
       <label for="running">Running</label>

@@ -4,7 +4,7 @@ import { property } from 'lit/decorators.js';
 
 export const profiledPidControllerDashboardConfig: Partial<WebbitConfig> = {
   dashboard: {
-    displayName: 'PID Controller',
+    displayName: 'Profiled PID Controller',
   },
   properties: {
     p: { type: 'Number' },

@@ -139,13 +139,16 @@ export const darkTheme: Record<string, string> = {
   '--frc-button-toggled-text-color': 'black',
 
   /* network alerts */
-  '--frc-network-alerts-text-color': 'black',
+  '--frc-network-alerts-text-color': 'white',
   '--frc-network-alerts-header-color': 'steelblue',
 
   /* pid controller */
   '--frc-pid-controller-text-color': 'white',
   '--frc-pid-controller-input-background-color': 'rgba(255,255,255,.2)',
   '--frc-pid-controller-input-border-color': 'rgba(255,255,255,.5)',
+
+  /* sendable chooser */
+  '--frc-sendable-chooser-label-color': 'white',
 };
 
 export function addDarkTheme(dashboard: FrcDashboard): void {

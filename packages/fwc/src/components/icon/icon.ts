@@ -45,6 +45,13 @@ export const iconDashboardConfig: Partial<WebbitConfig> = {
       },
     },
   },
+  demos: [
+    {
+      html: `
+      <frc-icon icon="${Object.keys(iconset)[0]}"></frc-icon>
+    `,
+    },
+  ],
 };
 
 export class Icon extends LitElement {

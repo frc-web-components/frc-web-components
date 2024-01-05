@@ -86,6 +86,7 @@ export class SendableChooser extends LitElement {
     }
 
     p {
+      color: var(--frc-sendable-chooser-label-color, black);
       margin: 0;
       font-size: 13px;
       padding-left: 3px;

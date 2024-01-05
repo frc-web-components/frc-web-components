@@ -16,6 +16,7 @@
     "build:lit": "nx build @frc-web-components/lit",
     "build:react": "nx build @frc-web-components/react",
     "build:svelte": "nx build @frc-web-components/svelte",
+    "storybook": "npm run storybook -w storybook",
     "prepare": "husky install",
     "test": ""
   },
