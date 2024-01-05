@@ -8,3 +8,4 @@ export { default as CanvasMjpgStream } from './canvas-mjpg-stream';
 export { default as CanvasNGon } from './canvas-ngon';
 export { default as CanvasRect } from './canvas-rect';
 export { default as CanvasText } from './canvas-text';
+export * from './wrappers/camera';
