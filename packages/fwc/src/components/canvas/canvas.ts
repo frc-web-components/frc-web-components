@@ -9,7 +9,7 @@ import './canvas-group';
 import './canvas-text';
 import './canvas-mjpg-stream';
 
-export default class Canvas extends LitElement {
+export class Canvas extends LitElement {
   @query('canvas') canvas!: HTMLCanvasElement;
   @property({ type: Number }) width: number | null = null;
   @property({ type: String, attribute: 'background-color' }) backgroundColor =
@@ -107,6 +107,8 @@ export default class Canvas extends LitElement {
     return html` <canvas></canvas> `;
   }
 }
+
+export default Canvas;
 
 if (!customElements.get('frc-canvas')) {
   customElements.define('frc-canvas', Canvas);

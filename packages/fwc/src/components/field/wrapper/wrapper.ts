@@ -1,10 +1,10 @@
 import { LitElement, css, html } from 'lit';
-import FieldObjectManager, { FieldObject } from './field-object-manager';
-import { property, query, state } from 'lit/decorators.js';
+import { property, state } from 'lit/decorators.js';
 import Store, { SourceProvider } from '@webbitjs/store';
-import { baseUnit, fieldConfigs } from '..';
 import { WebbitConfig } from '@webbitjs/webbit';
-import { toBaseConversions } from '../units';
+import { configs as fieldConfigs } from '../field-configs';
+import FieldObjectManager, { FieldObject } from './field-object-manager';
+import { baseUnit, toBaseConversions } from '../units';
 import { CropType } from '../field-interfaces';
 
 export const fieldDashboardConfig: Partial<WebbitConfig> = {
@@ -214,11 +214,8 @@ export class FieldWrapper extends LitElement {
             return html`<frc-field-robot
               .pose=${object.poses[0]}
             ></frc-field-robot>`;
-          } else {
-            return html`<frc-field-path
-              .poses=${object.poses}
-            ></frc-field-path>`;
           }
+          return html`<frc-field-path .poses=${object.poses}></frc-field-path>`;
         })}
       </frc-field>
     `;

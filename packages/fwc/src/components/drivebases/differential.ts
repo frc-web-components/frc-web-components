@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { html, css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
+import { WebbitConfig } from '@webbitjs/webbit';
 import * as CurvedArrow from './curved-arrow';
 import '../bar';
 import '../axis';
-import { WebbitConfig } from '@webbitjs/webbit';
 /**
  * Copyright (c) 2017-2018 FIRST
  * All rights reserved.

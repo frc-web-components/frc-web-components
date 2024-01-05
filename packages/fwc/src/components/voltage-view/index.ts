@@ -1,7 +1,7 @@
 import { css } from 'lit';
 import { property } from 'lit/decorators.js';
-import NumberBar from '../number-bar';
 import { WebbitConfig } from '@webbitjs/webbit';
+import { NumberBar } from '../number-bar';
 
 export const voltageViewDashboardConfig: Partial<WebbitConfig> = {
   dashboard: {

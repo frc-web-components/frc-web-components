@@ -1,3 +1,4 @@
+import { WebbitConfig } from '@webbitjs/webbit';
 import { axisDashboardConfig } from './axis';
 import { barDashboardConfig } from './bar';
 import {
@@ -36,7 +37,6 @@ import { mechanism2dDashboardConfig } from './mechanism2d';
 import { lineChartDashboardConfigs } from './line-chart';
 import { fieldDashboardConfig } from './field';
 import { field3dDashboardConfig } from './field3d';
-import { WebbitConfig } from '@webbitjs/webbit';
 
 export const dashboardElementConfigs = {
   'frc-axis': axisDashboardConfig,

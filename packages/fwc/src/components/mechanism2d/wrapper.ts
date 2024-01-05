@@ -1,8 +1,8 @@
 import { WebbitConfig } from '@webbitjs/webbit';
 import { html, css, LitElement, TemplateResult } from 'lit';
 import { property, state } from 'lit/decorators.js';
-import { Mechanism2dRoot, getMechanism2dRoots } from './index';
 import { Source } from '@webbitjs/store';
+import { Mechanism2dRoot, getMechanism2dRoots } from './mechanism2d';
 
 export const mechanism2dDashboardConfig: Partial<WebbitConfig> = {
   dashboard: {

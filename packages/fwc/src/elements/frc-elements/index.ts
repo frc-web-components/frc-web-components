@@ -1,3 +1,4 @@
+import { WebbitConfig } from '@webbitjs/webbit';
 import { baseElements } from './base-elements';
 import { commandBasedElements } from './command-based-robot';
 import * as controlPanel from './control-panel';
@@ -22,7 +23,6 @@ import * as voltageView from './voltage-view';
 import sendableChooserConfig from './sendable-chooser';
 import Mechanism2dConfig from './mechanism2d';
 import iconConfig from './icon';
-import { WebbitConfig } from '@webbitjs/webbit';
 
 const elements = [
   ...baseElements,

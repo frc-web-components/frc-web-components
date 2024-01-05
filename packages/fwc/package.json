@@ -1,6 +1,6 @@
 {
   "name": "@frc-web-components/fwc",
-  "version": "1.15.0",
+  "version": "2.0.0",
   "description": "",
   "files": [
     "dist"
@@ -128,8 +128,8 @@
     "@types/lodash.unescape": "^4.0.7",
     "@types/offscreencanvas": "^2019.7.0",
     "@types/three": "^0.150.1",
-    "@typescript-eslint/eslint-plugin": "^4.26.0",
-    "@typescript-eslint/parser": "^4.26.0",
+    "@typescript-eslint/eslint-plugin": "^5.3.1",
+    "@typescript-eslint/parser": "^5.3.1",
     "@vaadin/vaadin-icons": "^22.0.0",
     "@vitejs/plugin-basic-ssl": "^1.0.1",
     "babel-jest": "^25.5.1",

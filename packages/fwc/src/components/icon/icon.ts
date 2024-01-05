@@ -1,7 +1,7 @@
 import { html, css, LitElement, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
-import iconset from './iconset';
 import { WebbitConfig } from '@webbitjs/webbit';
+import iconset from './iconset';
 
 export const iconDashboardConfig: Partial<WebbitConfig> = {
   dashboard: {

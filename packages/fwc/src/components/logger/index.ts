@@ -1,7 +1,7 @@
 import { html, css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
-import HtmlLogger from './html-logger';
 import { WebbitConfig } from '@webbitjs/webbit';
+import HtmlLogger from './html-logger';
 
 export const loggerDashboardConfig: Partial<WebbitConfig> = {
   dashboard: {

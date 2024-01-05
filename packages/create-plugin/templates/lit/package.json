@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "lit": "^2.7.6",
-    "@frc-web-components/app": "*"
+    "@frc-web-components/app": "^0.0.0"
   },
   "devDependencies": {
     "typescript": "^5.0.2",

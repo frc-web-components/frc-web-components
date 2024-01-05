@@ -1,6 +1,6 @@
 import { property } from 'lit/decorators.js';
-import NumberBar from '../number-bar';
 import { WebbitConfig } from '@webbitjs/webbit';
+import { NumberBar } from '../number-bar';
 
 export const accelerometerDashboardConfig: Partial<WebbitConfig> = {
   dashboard: {

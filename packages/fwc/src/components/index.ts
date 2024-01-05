@@ -12,7 +12,6 @@ export * from './gauge';
 export * from './gyro';
 export * from './number-bar';
 export * from './sendable-chooser';
-export * from './canvas/canvas';
 export * from './line-chart';
 export * from './pdp';
 export * from './voltage-view';
