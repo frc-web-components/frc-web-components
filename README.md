@@ -26,5 +26,5 @@ A live version of the application can be viewed here: [https://frc-web-component
 
 ## Documentation
 
-- [Plugin Development](/docs/plugins.rst)
-- [Dashboard Interface](/docs/dashboard.rst)
+- [Plugin Development](/docs/plugins.md)
+- [Dashboard Interface](/docs/dashboard.md)

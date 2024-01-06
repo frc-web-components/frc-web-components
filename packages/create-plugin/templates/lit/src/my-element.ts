@@ -2,12 +2,6 @@ import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { getAssetUrl } from "@frc-web-components/app";
 
-/**
- * An example element.
- *
- * @slot - This element has a slot
- * @csspart button - The button
- */
 @customElement("my-lit-element")
 export class MyElement extends LitElement {
   @property({ type: Number }) count = 0;
