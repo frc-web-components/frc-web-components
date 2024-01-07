@@ -10,6 +10,16 @@ export interface FieldConfig {
 
 export const configs: FieldConfig[] = [
   {
+    game: 'Crescendo',
+    src: '/3d-models/Field3d_2024.glb',
+    rotations: [
+      { axis: 'x', degrees: 90 },
+      { axis: 'z', degrees: 180 },
+    ],
+    size: [54.2708333, 26.9375],
+    unit: 'foot',
+  },
+  {
     game: 'Charged Up',
     src: '/3d-models/Field3d_2023.glb',
     rotations: [

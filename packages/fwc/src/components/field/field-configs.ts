@@ -10,6 +10,18 @@ export interface FieldConfig {
 }
 
 export const configs: FieldConfig[] = [
+  // Thanks to MikLast for providing the 2024 field image here:
+  // https://www.chiefdelphi.com/t/2024-crescendo-top-down-field-renders/447764
+  {
+    game: 'Crescendo',
+    image: './field-images/2024-field.jpg',
+    corners: {
+      topLeft: [513, 78],
+      bottomRight: [3327, 1475],
+    },
+    size: [54.265092, 26.31234],
+    unit: 'foot',
+  },
   {
     game: 'Charged Up',
     image: './field-images/2023-field.jpg',

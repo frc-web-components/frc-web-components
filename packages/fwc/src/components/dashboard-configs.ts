@@ -38,6 +38,7 @@ import { lineChartDashboardConfigs } from './line-chart';
 import { fieldDashboardConfig } from './field';
 // import { field3dDashboardConfig } from './field3d';
 import { cameraDashboardConfig } from './canvas';
+import { labelDashboardConfig, numberLabelDashboardConfig } from './label';
 
 export const dashboardElementConfigs = {
   'frc-axis': axisDashboardConfig,
@@ -72,5 +73,7 @@ export const dashboardElementConfigs = {
   'frc-field-wrapper': fieldDashboardConfig,
   // 'frc-field3d': field3dDashboardConfig,
   'frc-camera-wrapper': cameraDashboardConfig,
+  'frc-label': labelDashboardConfig,
+  'frc-number-label': numberLabelDashboardConfig,
   ...lineChartDashboardConfigs,
 } as Record<string, WebbitConfig>;

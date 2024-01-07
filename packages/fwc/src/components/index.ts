@@ -27,4 +27,5 @@ export * from './pid';
 export * from './scoring-grid';
 export * from './command-based';
 export * from './canvas';
+export * from './label';
 export { dashboardElementConfigs } from './dashboard-configs';
