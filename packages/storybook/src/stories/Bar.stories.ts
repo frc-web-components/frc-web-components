@@ -15,6 +15,22 @@ const defaultArgs: Record<string, any> = {
   '--frc-bar-color': 'black',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/bar";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-bar ticks="5" min="-1" max="1"></frc-bar>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Bar',
   tags: ['autodocs'],

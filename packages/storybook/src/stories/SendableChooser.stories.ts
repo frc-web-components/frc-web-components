@@ -14,6 +14,22 @@ const defaultArgs: Record<string, any> = {
   "--frc-sendable-chooser-label-color": "black",
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/sendable-chooser";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-sendable-chooser selected="Option 1" options='["Option 1", "Option 2"]'></frc-sendable-chooser>
+ * ```
+ */
 const meta: Meta = {
   title: "FRC/Sendable Chooser",
   tags: ["autodocs"],
@@ -141,7 +157,7 @@ function createSendableChooserStory(
       ${getStyles(args)}
       <frc-sendable-chooser
         class=${args.theme}
-        .options=${args.options}
+        options=${JSON.stringify(args.options)}
         selected=${args.selected}
         default=${args.default}
         active=${args.active}

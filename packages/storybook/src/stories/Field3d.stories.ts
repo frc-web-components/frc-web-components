@@ -13,6 +13,24 @@ const defaultArgs: Record<string, any> = {
   objectRotation: [0, 0, 0, 0],
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/field3d";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-field3d game="Charged Up">
+ *   <frc-field3d-object name="KitBot" translation="[0,0,0]" rotation="[0,0,0,0]"></frc-field3d-object>
+ * </frc-field3d>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Field3d',
   tags: ['autodocs'],

@@ -14,6 +14,22 @@ const defaultArgs: Record<string, any> = {
   '--frc-button-toggled-text-color': 'white',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/relay";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-relay value="Off" direction="vertical"></frc-relay>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Relay',
   tags: ['autodocs'],

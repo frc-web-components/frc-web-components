@@ -146,6 +146,24 @@ const robotArgTypes: Record<string, any> = {
   },
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/field";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-field game="Charged Up">
+ *   <frc-field-robot pose="[0,0,0]"></frc-field-robot>
+ * </frc-field>
+ * ```
+ */
 const meta: Meta = {
   title: "FRC/Field",
   tags: ["autodocs"],

@@ -16,6 +16,22 @@ const defaultArgs: Record<string, any> = {
   height: 24,
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/icon";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-icon color="green" icon="check"></frc-icon>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Icon',
   tags: ['autodocs'],

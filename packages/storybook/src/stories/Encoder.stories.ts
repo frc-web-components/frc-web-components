@@ -12,6 +12,22 @@ const defaultArgs: Record<string, any> = {
   '--frc-encoder-value-color': '#666',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/encoder";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-encoder distance="0" speed="0"></frc-encoder>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Encoder',
   tags: ['autodocs'],

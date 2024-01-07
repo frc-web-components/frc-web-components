@@ -22,6 +22,9 @@ export const accelerometerDashboardConfig: Partial<WebbitConfig> = {
   },
 };
 
+/**
+ * A component for displaying accelerometer data.
+ */
 export class Accelerometer extends NumberBar {
   @property({ type: Number }) value = 0;
   @property({ type: Number }) min = -1;

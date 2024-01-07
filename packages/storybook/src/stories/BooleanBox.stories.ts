@@ -11,6 +11,22 @@ const defaultArgs: Record<string, any> = {
   label: '',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/boolean-box";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-boolean-box false-color="#9dae5c" true-color="#00ff00"></frc-boolean-box>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Boolean Box',
   tags: ['autodocs'],

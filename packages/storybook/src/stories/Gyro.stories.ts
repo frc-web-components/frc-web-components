@@ -15,6 +15,22 @@ const defaultArgs: Record<string, any> = {
   '--frc-gyro-dial-color': 'blue',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/gyro";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-gyro value="90"></frc-gyro>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Gyro',
   tags: ['autodocs'],

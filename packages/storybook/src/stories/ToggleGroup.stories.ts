@@ -15,6 +15,22 @@ const defaultArgs: Record<string, any> = {
   '--frc-button-toggled-text-color': 'white',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/toggle-group";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-toggle-group options='["On", "Off"]' value="Off"></frc-toggle-group>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Toggle Group',
   tags: ['autodocs'],

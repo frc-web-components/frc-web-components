@@ -11,6 +11,22 @@ const defaultArgs: Record<string, any> = {
   'background-color': '#fff',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/gauge";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-gauge value="0" min="0" max="100"></frc-gauge>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Gauge',
   tags: ['autodocs'],

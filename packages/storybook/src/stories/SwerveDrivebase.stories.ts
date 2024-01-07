@@ -18,6 +18,22 @@ const defaultArgs: Record<string, any> = {
   '--frc-swerve-drive-color': 'black',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/drivebases";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-swerve-drivebase measured-states="[0,0,0,0,0,0,0,0]" desired-states="[0,0,0,0,0,0,0,0]"></frc-swerve-drivebase>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Swerve Drivebase',
   tags: ['autodocs'],

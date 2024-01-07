@@ -21,6 +21,22 @@ const defaultArgs: Record<string, any> = {
   '--frc-axis-text-color': 'black',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/number-bar";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-number-bar value="0"></frc-number-bar>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Number Bar',
   tags: ['autodocs'],

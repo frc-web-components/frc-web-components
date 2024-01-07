@@ -10,6 +10,22 @@ const defaultArgs: Record<string, any> = {
   '--frc-toggle-switch-color': '#ccc',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/toggle-switch";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-toggle-switch toggled></frc-toggle-switch>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Toggle Switch',
   tags: ['autodocs'],

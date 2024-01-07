@@ -15,6 +15,22 @@ const defaultArgs: Record<string, any> = {
   '--frc-button-toggled-text-color': 'white',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/toggle-button";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-toggle-button label="Button" toggled></frc-toggle-button>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Toggle Button',
   tags: ['autodocs'],

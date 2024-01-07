@@ -17,6 +17,22 @@ const defaultArgs: Record<string, any> = {
   'background-color': '#fff',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/logger";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-logger title="Robot Logger" error="some error message"></frc-logger>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Logger',
   tags: ['autodocs'],

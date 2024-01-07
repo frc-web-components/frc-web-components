@@ -21,6 +21,23 @@ const defaultArgs: Record<string, any> = {
   '--frc-axis-text-color': 'black',
 };
 
+
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/accelerometer";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-accelerometer value=".5"></frc-accelerometer>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Accelerometer',
   tags: ['autodocs'],

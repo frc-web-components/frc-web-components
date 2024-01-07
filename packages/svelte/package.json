@@ -1,6 +1,6 @@
 {
   "name": "@frc-web-components/svelte",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "files": [
     "dist"
@@ -21,10 +21,10 @@
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "peerDependencies": {
-    "@frc-web-components/fwc": ">=2.0.0"
+    "@frc-web-components/fwc": ">=2.1.0"
   },
   "devDependencies": {
-    "@frc-web-components/fwc": "^2.0.0",
+    "@frc-web-components/fwc": "^2.1.0",
     "@sveltejs/vite-plugin-svelte": "^2.4.2",
     "@tsconfig/svelte": "^5.0.0",
     "svelte": "^4.0.5",

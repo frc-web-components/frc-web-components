@@ -1,7 +1,7 @@
 {
   "name": "example-lit-plugin",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "displayName": "{{name}}",
   "description": "{{description}}",
   "author": "{{author}}",
@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "lit": "^2.7.6",
-    "@frc-web-components/app": "^0.0.0"
+    "@frc-web-components/app": "^0.1.0"
   },
   "devDependencies": {
     "typescript": "^5.0.2",

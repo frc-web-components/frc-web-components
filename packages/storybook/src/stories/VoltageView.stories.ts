@@ -21,6 +21,22 @@ const defaultArgs: Record<string, any> = {
   '--frc-axis-text-color': 'black',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/voltage-view";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-voltage-view value="0"></frc-voltage-view>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Voltage View',
   tags: ['autodocs'],

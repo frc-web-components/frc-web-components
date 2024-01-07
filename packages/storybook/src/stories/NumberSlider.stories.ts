@@ -13,6 +13,22 @@ const defaultArgs: Record<string, any> = {
   '--frc-axis-text-color': 'black',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/number-slider";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-number-slider value="0" min="-1" max="1"></frc-number-slider>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Number Slider',
   tags: ['autodocs'],

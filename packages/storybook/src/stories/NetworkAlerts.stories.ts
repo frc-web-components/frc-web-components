@@ -15,6 +15,22 @@ const defaultArgs: Record<string, any> = {
   '--frc-network-alerts-header-color': 'lightblue',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/network-alerts";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-network-alerts errors='["some error"]'></frc-network-alerts>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Network Alerts',
   tags: ['autodocs'],

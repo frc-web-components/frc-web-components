@@ -16,6 +16,22 @@ const defaultArgs: Record<string, any> = {
   '--frc-axis-text-color': 'black',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/drivebases";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-mecanum-drivebase front-right-motor-speed="1" rear-left-motor-speed=".5"></frc-mecanum-drivebase>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Mecanum Drivebase',
   tags: ['autodocs'],

@@ -9,6 +9,22 @@ const defaultArgs: Record<string, any> = {
   roots: [],
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/mechanism2d";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-mechanism2d></frc-mechanism2d>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Mechanism2d',
   tags: ['autodocs'],

@@ -17,6 +17,22 @@ const defaultArgs: Record<string, any> = {
   '--frc-voltage-view-foreground-color': '#ffbd2f',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/pdp";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-pdp voltage="0" total-current="0" channels="[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]"></frc-pdp>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/PDP',
   tags: ['autodocs'],

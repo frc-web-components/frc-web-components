@@ -15,6 +15,22 @@ const defaultArgs: Record<string, any> = {
   '--frc-axis-text-color': 'black',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/axis";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-axis ticks="5" min="-1" max="1"></frc-axis>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Axis',
   tags: ['autodocs'],

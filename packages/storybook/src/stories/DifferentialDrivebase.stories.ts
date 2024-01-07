@@ -14,6 +14,22 @@ const defaultArgs: Record<string, any> = {
   '--frc-axis-text-color': 'black',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/drivebases";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-differential-drivebase left-motor-speed="0" right-motor-speed="0">></frc-differential-drivebase>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Differential Drivebase',
   tags: ['autodocs'],

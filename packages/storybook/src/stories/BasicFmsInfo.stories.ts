@@ -13,6 +13,22 @@ const defaultArgs: Record<string, any> = {
   '--frc-basic-fms-info-text-color': 'black',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/basic-fms-info";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-basic-fms-info match-type="1" match-number="2" event-name="Some event" fms-control-data="23"></frc-basic-fms-info>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC/Basic FMS Info',
   tags: ['autodocs'],
