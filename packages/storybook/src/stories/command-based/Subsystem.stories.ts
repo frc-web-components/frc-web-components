@@ -17,6 +17,22 @@ const defaultArgs: Record<string, any> = {
   '--frc-robot-subsystem-header-color': 'purple',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/command-based";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-robot-subsystem></frc-robot-subsystem>
+ * ```
+ */
 const meta: Meta = {
   title: 'Command Based/Robot Subsystem',
   tags: ['autodocs'],

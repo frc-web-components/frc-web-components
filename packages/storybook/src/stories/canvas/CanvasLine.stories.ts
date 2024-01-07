@@ -34,6 +34,24 @@ const defaultArgs: Record<string, any> = {
   zIndex: 0,
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/canvas";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-canvas>
+ *   <frc-canvas-line points="[100,100,300,100]" color="gray" line-width="2"></frc-canvas-line>
+ * </frc-canvas>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC Canvas/Canvas Line',
   tags: ['autodocs'],

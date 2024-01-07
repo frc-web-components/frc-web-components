@@ -14,6 +14,22 @@ const defaultArgs: Record<string, any> = {
   'background-color': '#fff',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/scoring-grid";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-scoring-grid selection="5" cubes-scored="[1,1,2,3,5,13]" cones-scored="[11,14,14]"></frc-scoring-grid>
+ * ```
+ */
 const meta: Meta = {
   title: 'Charged Up/Scoring Grid',
   tags: ['autodocs'],

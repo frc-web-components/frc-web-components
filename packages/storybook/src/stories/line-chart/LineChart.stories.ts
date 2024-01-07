@@ -42,6 +42,26 @@ const defaultArgs: Record<string, any> = {
   '--frc-line-chart-grid-color': '#eee',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/line-chart";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-line-chart view-time="10" chart-title="Line Chart">
+ *   <frc-line-chart-data value="0.5" color="green" display-name="Data"></frc-line-chart-data>
+ *   <frc-line-chart-axis min="-1" max="1" side="left"></frc-line-chart-axis>
+ *   <frc-line-chart-legend position="n" direction="horizontal"></frc-line-chart-legend>
+ * </frc-line-chart>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC Line Chart/Basic Chart',
   tags: ['autodocs'],

@@ -16,6 +16,22 @@ const defaultArgs: Record<string, any> = {
   '--frc-button-toggled-text-color': 'white',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/command-based";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-robot-command name="Command"></frc-robot-command>
+ * ```
+ */
 const meta: Meta = {
   title: 'Command Based/Robot Command',
   tags: ['autodocs'],

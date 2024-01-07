@@ -16,6 +16,22 @@ const defaultArgs: Record<string, any> = {
   '--frc-pid-controller-input-border-color': '#e0e0e0',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/pid";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-pid-command p="0" i="0" d="0" setpoint="0" running></frc-pid-command>
+ * ```
+ */
 const meta: Meta = {
   title: 'PID Controller/PID Command',
   tags: ['autodocs'],

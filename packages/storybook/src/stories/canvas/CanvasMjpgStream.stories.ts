@@ -14,6 +14,24 @@ const defaultArgs: Record<string, any> = {
   crosshairColor: 'white',
 };
 
+/**
+ * To use this component import the module:
+ * 
+ * ```javascript
+ * import "@frc-web-components/fwc/components/canvas";
+ * 
+ * // or to import all components:
+ * import "@frc-web-components/fwc/components";
+ * ```
+ * 
+ * And then add the component to your html:
+ * 
+ * ```html
+ * <frc-canvas>
+ *   <frc-canvas-mjpg-stream origin="[0,0]" crosshair-color="white"></frc-canvas-mjpg-stream>
+ * </frc-canvas>
+ * ```
+ */
 const meta: Meta = {
   title: 'FRC Canvas/Canvas MJPG Strem',
   tags: ['autodocs'],
