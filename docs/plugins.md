@@ -9,7 +9,7 @@
     -   [Properties](#properties)
     -   [Property Input Config](#property-input-config)
 
-FRC Web Components (FWC) dashboard can be extended through its plugin system using the `@frc-web-components/app` package. Below is a simple plugin which adds a custom component create in svelte to the dashboard:
+FRC Web Components (FWC) dashboard can be extended through its plugin system using the `@frc-web-components/app` package. Below is a simple plugin which adds a custom component created in svelte to the dashboard:
 
 ``` javascript
 import './MyElement.svelte';

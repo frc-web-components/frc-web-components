@@ -1,47 +1,82 @@
-# Svelte + TS + Vite
+# FWC Plugin with Svelte + TS + Vite
 
-This template should help get you started developing with Svelte and TypeScript in Vite.
+This template should help get you started developing a FWC plugin with Svelte and TypeScript in Vite.
 
 ## Recommended IDE Setup
 
 [VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
 
-## Need an official Svelte framework?
+## Installing
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+To install run the following command:
 
-## Technical considerations
-
-**Why use this over SvelteKit?**
-
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
-
-This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
-
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
-
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
-
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
-
-**Why include `.vscode/extensions.json`?**
-
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
-
-**Why enable `allowJs` in the TS template?**
-
-While `allowJs: false` would indeed prevent the use of `.js` files in the project, it does not prevent the use of JavaScript syntax in `.svelte` files. In addition, it would force `checkJs: false`, bringing the worst of both worlds: not being able to guarantee the entire codebase is TypeScript, and also having worse typechecking for the existing JavaScript. In addition, there are valid use cases in which a mixed codebase may be relevant.
-
-**Why is HMR not preserving my local component state?**
-
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/rixo/svelte-hmr#svelte-hmr).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
-
-```ts
-// store.ts
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
+```bash
+npm install
 ```
+
+## Running
+
+To run the dashboard in dev mode run the following command:
+
+```bash
+npm run dev
+```
+
+You should see the following in the terminal:
+
+![image](./docs/running-in-dev.png)
+
+The dashboard should launch automatically in the browser. If not, open it manually using link shown in the terminal. (http://localhost:5173 for me)
+
+You should see the dashboard in the browser:
+
+![image](./docs/dashboard.png)
+
+From here you should be able to navigate to your component which you can add and test in the browser:
+
+![image](./docs/nav-to-my-plugin.png)
+
+## Building and importing into dashboard app
+
+Before the plugin can be imported into the dashboard app the plugin must first be built. Run the following command to build
+
+```bash
+npm run build
+```
+
+A `plugin` folder should be generated:
+
+![image](./docs/build-files.png)
+
+
+> [!WARNING]  
+> This folder should not modified manually since your changes will be overwritten whenever the build command is run.
+
+Within the build file you'll find a few important files and folders:
+- `index.js` which is the root javascript file which the dashboard app will import.
+- `assets` folder which contains images and other static files that your plugin uses. These are copied over from the `public/assets` folder.
+- `plugin.json` which contains metadata like the plugin name, description and version used by the dashboard app for display purposes.
+
+To import the plugin open the app and click the `File > Plugins` menu item:
+
+![image](./docs/plugin-file-menu.png)
+
+This should open the plugins dialog:
+
+![image](./docs/plugin-dialog.png)
+
+Click `Load Plugin` which open up an open folder dialog. Navigate to your plugin and select the `plugin` folder generated with the `npm run build` command:
+
+![image](./docs/select-plugin-folder.png)
+
+You should now see the plugin loaded in the dialog:
+
+![image](./docs/plugin-loaded.png)
+
+The app must be refreshed to view the changes:
+
+![image](./docs/refresh-plugin.png)
+
+The plugin should now be successfully loaded:
+
+![image](./docs/plugin-successfully-loaded.png)

@@ -10,4 +10,4 @@ addElements({
       count: { type: "Number" },
     },
   },
-});
+}, 'My Plugin');
