@@ -1,9 +1,11 @@
 # Plugin Development
 
-[<- Back](/README.md)
+[<- Home](/README.md)
 
 -   [Creating your first plugin](#creating-your-first-plugin)
 -   [Creating custom elements](#creating-custom-elements)
+-   [Theming](#theming)
+-   [Including Static Assets](#including-static-assets)
 -   [Element Config](#element-config)
     -   [Selectors](#selectors)
     -   [Properties](#properties)
@@ -30,7 +32,7 @@ addElements({
 FWC provides a cli tool which generates a sample plugin that can be used to help get you started with writing your own plugin:
 
 ``` bash
-$ npm init fwc <name>
+$ npm init fwc@latest <name>
 ```
 
 Note: You'll need <span class="title-ref">node</span> installed to run
@@ -41,7 +43,7 @@ the above command: <https://nodejs.org/en/download/>
 To get started, open a terminal and enter in the following command:
 
 ``` bash
-$ npm init fwc my-first-plugin
+$ npm init fwc@latest my-first-plugin
 ```
 
 After being prompted with a few questions to help setup your plugin, the plugin project will be created and installed. The cli tool provides templates to create components using [lit](https://lit.dev/), [react](https://react.dev/) or [svelte](https://svelte.dev/):
@@ -200,6 +202,54 @@ declare global {
 ```
 
 A list of templates with examples can be found here: <https://webcomponents.dev/new>.
+
+# Theming
+
+Theming in the FWC dashboard app is done using [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties).
+
+As an example take the following style rule for the `my-svelte-element` component:
+
+```css
+color: white;
+```
+
+To make this rule themable change it to the following:
+
+```css
+color: var(--my-svelte-element-color, white);
+```
+
+`--my-svelte-element-color` is the CSS variable. CSS variables are prefixed with `--`. To ensure uniqueness and to prevent accidentally overwriting existing rules prepend your variable with the element name. `white` is the default value if a theme is not set.
+
+To add per theme rules add the following code:
+
+```typescript
+import { addThemeRules } from '@frc-web-components/app';
+
+addThemeRules('dark', {
+  '--my-svelte-element-color': 'black',
+});
+
+addThemeRules('light', {
+  '--my-svelte-element-color': 'white',
+});
+```
+
+# Including Static Assets
+
+Static assets like such as images should be placed in the `/public/assets` folder. They can be included into the app by calling the `getAssetUrl` function. For example:
+
+```typescript
+import { getAssetUrl } from "@frc-web-components/app";
+
+const url: string = getAssetUrl("party.svg");
+```
+
+The above URL can then be used as the src of an image element:
+
+```html
+<img src={url} />
+```
 
 # Element Config
 

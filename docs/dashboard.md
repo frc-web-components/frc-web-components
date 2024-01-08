@@ -1,6 +1,6 @@
 # Dashboard
 
-[<- Back](/README.md)
+[<- Home](/README.md)
 
 -   [Adding, Selecting and Removing
     Elements](#adding-selecting-and-removing-elements)
@@ -167,3 +167,27 @@ window. If the current dashboard has not been saved to a file it will be
 labeled "Untitled Dashboard".
 
 # Importing Plugins
+
+To import the plugin open the app and click the `File > Plugins` menu item:
+
+![image](./images/dashboard/plugins/plugin-file-menu.png)
+
+This should open the plugins dialog:
+
+![image](./images/dashboard/plugins/plugin-dialog.png)
+
+Click `Load Plugin` which open up an open folder dialog. Navigate to your plugin and select the `plugin` folder generated with the `npm run build` command:
+
+![image](./images/dashboard/plugins/select-plugin-folder.png)
+
+You should now see the plugin loaded in the dialog:
+
+![image](./images/dashboard/plugins/plugin-loaded.png)
+
+The app must be refreshed to view the changes:
+
+![image](./images/dashboard/plugins/refresh-plugin.png)
+
+The plugin should now be successfully loaded:
+
+![image](./images/dashboard/plugins/plugin-successfully-loaded.png)
