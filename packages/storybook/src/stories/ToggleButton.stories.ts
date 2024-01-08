@@ -30,6 +30,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-toggle-button label="Button" toggled></frc-toggle-button>
  * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { ToggleButton } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <ToggleButton label="Button" toggled />
+ * ```
  */
 const meta: Meta = {
   title: 'FRC/Toggle Button',

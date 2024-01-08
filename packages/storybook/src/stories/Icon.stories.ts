@@ -31,6 +31,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-icon color="green" icon="check"></frc-icon>
  * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { Icon } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <Icon color="green" icon="check" />
+ * ```
  */
 const meta: Meta = {
   title: 'FRC/Icon',

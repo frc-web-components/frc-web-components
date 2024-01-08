@@ -28,7 +28,19 @@ const defaultArgs: Record<string, any> = {
  * And then add the component to your html:
  * 
  * ```html
- * <frc-bar ticks="5" min="-1" max="1"></frc-bar>
+ * <frc-bar min="-1" max="1"></frc-bar>
+ * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { Bar } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <Bar min={-1} max={1} />
  * ```
  */
 const meta: Meta = {

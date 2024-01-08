@@ -31,6 +31,20 @@ const defaultArgs: Record<string, any> = {
  *   <frc-canvas-mjpg-stream origin="[0,0]" crosshair-color="white"></frc-canvas-mjpg-stream>
  * </frc-canvas>
  * ```
+ * 
+ * Or use the component in React:
+ *
+ * ```jsx
+ * import { CanvasMjpgStream, Canvas } from "@frc-web-components/react";
+ * ```
+ *
+ * And then add the component in your jsx:
+ *
+ * ```jsx
+ * <Canvas>
+ *   <CanvasMjpgStream origin={[0,0]} crosshairColor="white" />
+ * </Canvas>
+ * ```
  */
 const meta: Meta = {
   title: 'FRC Canvas/Canvas MJPG Strem',

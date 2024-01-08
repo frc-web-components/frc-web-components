@@ -25,6 +25,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-toggle-switch toggled></frc-toggle-switch>
  * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { ToggleSwitch } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <ToggleSwitch toggled />
+ * ```
  */
 const meta: Meta = {
   title: 'FRC/Toggle Switch',

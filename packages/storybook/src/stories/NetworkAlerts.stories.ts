@@ -30,6 +30,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-network-alerts errors='["some error"]'></frc-network-alerts>
  * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { NetworkAlerts } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <NetworkAlerts errors={["some error"]} />
+ * ```
  */
 const meta: Meta = {
   title: 'FRC/Network Alerts',

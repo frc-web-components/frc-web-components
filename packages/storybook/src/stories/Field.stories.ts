@@ -161,7 +161,23 @@ const robotArgTypes: Record<string, any> = {
  * ```html
  * <frc-field game="Charged Up">
  *   <frc-field-robot pose="[0,0,0]"></frc-field-robot>
+ *   <frc-field-path line-width="10" translations="[7,5,9,5,9,3,7,3,7,5,8,7,9,5]"></<frc-field-path>
  * </frc-field>
+ * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { Field, FieldPath, FieldRobot } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <Field game="Charged Up">
+ *   <FieldRobot pose={[0,0,0]} />
+ *   <FieldPath lineWidth={10} translations={[7,5,9,5,9,3,7,3,7,5,8,7,9,5]} />
+ * </Field>
  * ```
  */
 const meta: Meta = {

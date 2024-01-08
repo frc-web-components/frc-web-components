@@ -31,6 +31,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-robot-command name="Command"></frc-robot-command>
  * ```
+ * 
+ * Or use the component in React:
+ *
+ * ```jsx
+ * import { RobotCommand } from "@frc-web-components/react";
+ * ```
+ *
+ * And then add the component in your jsx:
+ *
+ * ```jsx
+ * <RobotCommand name="Command" />
+ * ```
  */
 const meta: Meta = {
   title: 'Command Based/Robot Command',

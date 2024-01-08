@@ -32,6 +32,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-pdp voltage="0" total-current="0" channels="[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]"></frc-pdp>
  * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { Pdp } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <Pdp voltage={0} totalCurrent={0} channels={[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]} />
+ * ```
  */
 const meta: Meta = {
   title: 'FRC/PDP',

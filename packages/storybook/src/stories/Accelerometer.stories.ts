@@ -37,6 +37,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-accelerometer value=".5"></frc-accelerometer>
  * ```
+ *
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { Accelerometer } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <Accelerometer value={.5} />
+ * ```
  */
 const meta: Meta = {
   title: 'FRC/Accelerometer',

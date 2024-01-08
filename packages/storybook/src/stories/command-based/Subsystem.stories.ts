@@ -32,6 +32,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-robot-subsystem></frc-robot-subsystem>
  * ```
+ * 
+ * Or use the component in React:
+ *
+ * ```jsx
+ * import { RobotSubsystem } from "@frc-web-components/react";
+ * ```
+ *
+ * And then add the component in your jsx:
+ *
+ * ```jsx
+ * <RobotSubsystem /> 
+ * ```
  */
 const meta: Meta = {
   title: 'Command Based/Robot Subsystem',

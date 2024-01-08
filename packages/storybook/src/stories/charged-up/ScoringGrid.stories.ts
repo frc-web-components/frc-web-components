@@ -29,6 +29,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-scoring-grid selection="5" cubes-scored="[1,1,2,3,5,13]" cones-scored="[11,14,14]"></frc-scoring-grid>
  * ```
+ * 
+ * Or use the component in React:
+ *
+ * ```jsx
+ * import { ScoringGrid } from "@frc-web-components/react";
+ * ```
+ *
+ * And then add the component in your jsx:
+ *
+ * ```jsx
+ * <ScoringGrid selection={5} cubesScored={[1,1,2,3,5,13]} conesScored={[11,14,14]} />
+ * ```
  */
 const meta: Meta = {
   title: 'Charged Up/Scoring Grid',

@@ -30,6 +30,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-profiled-pid-controller p="0" i="0" d="0" goal="0"></frc-profiled-pid-controller>
  * ```
+ * 
+ * Or use the component in React:
+ *
+ * ```jsx
+ * import { ProfiledPidController } from "@frc-web-components/react";
+ * ```
+ *
+ * And then add the component in your jsx:
+ *
+ * ```jsx
+ * <ProfiledPidController p={0} i={0} d={0} goal={0} />
+ * ```
  */
 const meta: Meta = {
   title: 'PID Controller/Profiled PID Controller',

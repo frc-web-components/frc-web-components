@@ -33,6 +33,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-swerve-drivebase measured-states="[0,0,0,0,0,0,0,0]" desired-states="[0,0,0,0,0,0,0,0]"></frc-swerve-drivebase>
  * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { Swerve } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <Swerve measuredStates={[0,0,0,0,0,0,0,0]} desiredStates={[0,0,0,0,0,0,0,0]} />
+ * ```
  */
 const meta: Meta = {
   title: 'FRC/Swerve Drivebase',

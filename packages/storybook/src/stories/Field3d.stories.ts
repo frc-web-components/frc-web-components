@@ -30,6 +30,20 @@ const defaultArgs: Record<string, any> = {
  *   <frc-field3d-object name="KitBot" translation="[0,0,0]" rotation="[0,0,0,0]"></frc-field3d-object>
  * </frc-field3d>
  * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { Field3d, Field3dObject } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <Field3d game="Charged Up">
+ *  <Field3dObject name="KitBot" translation={[0,0,0]} rotation={[0,0,0,0]} />
+ * </Field3d>
+ * ```
  */
 const meta: Meta = {
   title: 'FRC/Field3d',

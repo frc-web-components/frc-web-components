@@ -28,6 +28,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-number-slider value="0" min="-1" max="1"></frc-number-slider>
  * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { NumberSlider } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <NumberSlider value={0} min={-1} max={1} />
+ * ```
  */
 const meta: Meta = {
   title: 'FRC/Number Slider',

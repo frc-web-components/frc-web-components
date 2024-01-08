@@ -30,6 +30,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-axis ticks="5" min="-1" max="1"></frc-axis>
  * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { Axis } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <Axis ticks={5} min={-1} max={1} />
+ * ```
  */
 const meta: Meta = {
   title: 'FRC/Axis',

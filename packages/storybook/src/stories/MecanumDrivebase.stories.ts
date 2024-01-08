@@ -31,6 +31,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-mecanum-drivebase front-right-motor-speed="1" rear-left-motor-speed=".5"></frc-mecanum-drivebase>
  * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { Mecanum } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <Mecanum frontRightMotorSpeed={1} rearLeftMotorSpeed={.5} />
+ * ```
  */
 const meta: Meta = {
   title: 'FRC/Mecanum Drivebase',

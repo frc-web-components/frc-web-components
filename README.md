@@ -16,8 +16,6 @@ To install using npm:
 npm i @frc-web-components/fwc@latest
 ```
 
-FWC can also be installed as a script and included directly into an HTML page. Script can be downloaded from the [releases](https://github.com/frc-web-components/frc-web-components/releases) page.
-
 ## Try it out!
 
 A live version of the application can be viewed here: [https://frc-web-components.github.io/dashboard/](https://frc-web-components.github.io/dashboard/)

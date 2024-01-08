@@ -31,6 +31,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-pid-command p="0" i="0" d="0" setpoint="0" running></frc-pid-command>
  * ```
+ * 
+ * Or use the component in React:
+ *
+ * ```jsx
+ * import { PidCommand } from "@frc-web-components/react";
+ * ```
+ *
+ * And then add the component in your jsx:
+ *
+ * ```jsx
+ * <PidCommand p={0} i={0} d={0} setpoint={0} running />
+ * ```
  */
 const meta: Meta = {
   title: 'PID Controller/PID Command',

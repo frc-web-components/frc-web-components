@@ -29,6 +29,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-sendable-chooser selected="Option 1" options='["Option 1", "Option 2"]'></frc-sendable-chooser>
  * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { SendableChooser } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <SendableChooser selected="Option 1" options={["Option 1", "Option 2"]} />
+ * ```
  */
 const meta: Meta = {
   title: "FRC/Sendable Chooser",

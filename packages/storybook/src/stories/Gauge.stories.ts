@@ -26,6 +26,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-gauge value="0" min="0" max="100"></frc-gauge>
  * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { Gauge } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <Gauge value={0} min={0} max={100} />
+ * ```
  */
 const meta: Meta = {
   title: 'FRC/Gauge',

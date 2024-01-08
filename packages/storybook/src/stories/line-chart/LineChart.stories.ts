@@ -61,6 +61,22 @@ const defaultArgs: Record<string, any> = {
  *   <frc-line-chart-legend position="n" direction="horizontal"></frc-line-chart-legend>
  * </frc-line-chart>
  * ```
+ * 
+ * Or use the component in React:
+ *
+ * ```jsx
+ * import { LineChart, LineChartData, LineChartAxis, LineChartLegend } from "@frc-web-components/react";
+ * ```
+ *
+ * And then add the component in your jsx:
+ *
+ * ```jsx
+ * <LineChart viewTime={10} chartTitle="Line Chart">
+ *   <LineChartData value={0.5} color="green" displayName="Data" />
+ *   <LineChartAxis min={-1} max={1} side="left" />
+ *   <LineChartLegend position="n" direction="horizontal" />
+ * </LineChart>
+ * ```
  */
 const meta: Meta = {
   title: 'FRC Line Chart/Basic Chart',

@@ -29,6 +29,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-differential-drivebase left-motor-speed="0" right-motor-speed="0">></frc-differential-drivebase>
  * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { Differential } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <Differential leftMotorSpeed={0} rightMotorSpeed={0} />
+ * ```
  */
 const meta: Meta = {
   title: 'FRC/Differential Drivebase',

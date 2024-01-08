@@ -30,6 +30,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-toggle-group options='["On", "Off"]' value="Off"></frc-toggle-group>
  * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { ToggleGroup } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <ToggleGroup options={["On", "Off"]} value="Off" />
+ * ```
  */
 const meta: Meta = {
   title: 'FRC/Toggle Group',

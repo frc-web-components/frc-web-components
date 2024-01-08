@@ -27,6 +27,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-encoder distance="0" speed="0"></frc-encoder>
  * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { Encoder } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <Encoder distance={0} speed={0} />
+ * ```
  */
 const meta: Meta = {
   title: 'FRC/Encoder',

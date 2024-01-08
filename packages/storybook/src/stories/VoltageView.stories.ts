@@ -36,6 +36,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-voltage-view value="0"></frc-voltage-view>
  * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { VoltageView } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <VoltageView value={0} />
+ * ```
  */
 const meta: Meta = {
   title: 'FRC/Voltage View',

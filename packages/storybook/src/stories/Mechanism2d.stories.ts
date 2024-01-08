@@ -24,6 +24,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-mechanism2d></frc-mechanism2d>
  * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { Mechanism2d } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <Mechanism2d />
+ * ```
  */
 const meta: Meta = {
   title: 'FRC/Mechanism2d',

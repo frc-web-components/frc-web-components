@@ -28,6 +28,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-basic-fms-info match-type="1" match-number="2" event-name="Some event" fms-control-data="23"></frc-basic-fms-info>
  * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { BasicFmsInfo } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <BasicFmsInfo matchType={1} matchNumber={2} eventName="Some event" fmsControlData={23} />
+ * ```
  */
 const meta: Meta = {
   title: 'FRC/Basic FMS Info',

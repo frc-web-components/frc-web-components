@@ -30,6 +30,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-gyro value="90"></frc-gyro>
  * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { Gyro } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <Gyro value={90} />
+ * ```
  */
 const meta: Meta = {
   title: 'FRC/Gyro',

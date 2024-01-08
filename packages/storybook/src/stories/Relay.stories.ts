@@ -29,6 +29,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-relay value="Off" direction="vertical"></frc-relay>
  * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { Relay } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <Relay value="Off" direction="vertical" />
+ * ```
  */
 const meta: Meta = {
   title: 'FRC/Relay',

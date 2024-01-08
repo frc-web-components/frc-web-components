@@ -38,6 +38,18 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-3-axis-accelerometer x="0" y=".5" z="-1"></frc-3-axis-accelerometer>
  * ```
+ * 
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { ThreeAxisAccelerometer } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <ThreeAxisAccelerometer x={0} y={.5} z={-1} />
+ * ```
  */
 const meta: Meta = {
   title: 'FRC/3-Axis Accelerometer',

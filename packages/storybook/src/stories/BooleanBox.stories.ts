@@ -26,6 +26,17 @@ const defaultArgs: Record<string, any> = {
  * ```html
  * <frc-boolean-box false-color="#9dae5c" true-color="#00ff00"></frc-boolean-box>
  * ```
+ * Or use the component in React:
+ * 
+ * ```jsx
+ * import { BooleanBox } from "@frc-web-components/react";
+ * ```
+ * 
+ * And then add the component in your jsx:
+ * 
+ * ```jsx
+ * <BooleanBox falseColor="#9dae5c" trueColor="#00ff00" />
+ * ```
  */
 const meta: Meta = {
   title: 'FRC/Boolean Box',
