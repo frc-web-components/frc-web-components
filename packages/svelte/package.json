@@ -1,6 +1,6 @@
 {
   "name": "@frc-web-components/svelte",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
   "files": [
     "dist"
@@ -18,7 +18,8 @@
     "build": "vite build",
     "watch": "vite build --watch",
     "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
     "@frc-web-components/fwc": ">=2.1.0"

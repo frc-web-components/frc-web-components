@@ -31,6 +31,10 @@ class DashboardThemes {
   setTheme(element: HTMLElement, theme: string): void {
     element.setAttribute(this.themeAttribute, theme);
   }
+
+  getTheme(element: HTMLElement): string | undefined {
+    return element.getAttribute(this.themeAttribute) ?? undefined;
+  }
 }
 
 export default DashboardThemes;

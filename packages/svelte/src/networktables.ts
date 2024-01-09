@@ -1,16 +1,19 @@
 import { Nt4Provider } from "@frc-web-components/fwc/source-providers";
+import { dashboardElementConfigs, FrcDashboard } from "@frc-web-components/fwc";
 import { Store } from "@webbitjs/store";
 import { setContext, getContext, onDestroy } from "svelte";
 import { writable } from "svelte/store";
 
 export function setNt4Context(address: string) {
-  const store = new Store();
+  const dashboard = new FrcDashboard(document.body);
   const provider = new Nt4Provider();
-  store.addSourceProvider("NetworkTables", provider);
-  store.setDefaultSourceProvider("NetworkTables");
+  dashboard.addSourceProvider("NetworkTables", provider);
+  dashboard.setDefaultSourceProvider("NetworkTables");
+  dashboard.addElements(dashboardElementConfigs, "FRC");
   provider.connect(address);
+  
   setContext("NT4", {
-    store,
+    store: dashboard.getStore(),
     provider,
   });
 }
