@@ -25,6 +25,8 @@ A live version of the application can be viewed here: [https://frc-web-component
 - [Component documentation](https://frc-web-components.github.io/storybook) - Component examples and documentation
 - [Dashboard Interface](/docs/dashboard.md) - Learn how to use the FWC dashboard app
 - [Plugin Development](/docs/plugins.md) - Documentation on FWC dashboard plugin development.
-- [Lit plugin example](/examples/lit-plugin/README.md) - An example plugin using the lit template from the `create-fwc` cli tool.
-- [React plugin example](/examples/react-plugin/README.md) - An example plugin using the react template from the `create-fwc` cli tool.
-- [Svelte plugin example](/examples/svelte-plugin/README.md) - An example plugin using the svelte template from the `create-fwc` cli tool.
+- [Lit plugin example](/examples/lit-plugin/README.md) - An example plugin using the lit-plugin template from the `create-fwc` cli tool.
+- [React plugin example](/examples/react-plugin/README.md) - An example plugin using the react-plugin template from the `create-fwc` cli tool.
+- [Svelte plugin example](/examples/svelte-plugin/README.md) - An example plugin using the svelte-plugin template from the `create-fwc` cli tool.
+- [React custom dashboard example](/examples/react-custom-dashboard/README.md) - An example custom dashboard using the react-custom-dashboard template from the `create-fwc` cli tool.
+- [Svelte custom dashboard example](/examples/svelte-custom-dashboard/README.md) - An example custom dashboard using the svelte-custom-dashboard template from the `create-fwc` cli tool.

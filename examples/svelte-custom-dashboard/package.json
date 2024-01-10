@@ -1,0 +1,31 @@
+{
+  "name": "svelte-custom-dashboard",
+  "displayName": "svelte-custom-dashboard",
+  "private": true,
+  "version": "0.0.0",
+  "description": "",
+  "author": "",
+  "email": "",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-check --tsconfig ./tsconfig.json"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^2.4.2",
+    "@tsconfig/svelte": "^5.0.0",
+    "svelte": "^4.0.5",
+    "svelte-check": "^3.4.6",
+    "tslib": "^2.6.0",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
+  },
+  "dependencies": {
+    "@frc-web-components/fwc": "^2.2.0",
+    "@frc-web-components/svelte": "^0.3.0",
+    "@webbitjs/store": "^5.7.0"
+  }
+}

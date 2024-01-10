@@ -26,7 +26,7 @@
     "lit": "^2.7.6"
   },
   "peerDependencies": {
-    "@frc-web-components/fwc": ">=2.1.0",
+    "@frc-web-components/fwc": ">=2.2.0",
     "lit": ">=2.7.0"
   },
   "devDependencies": {
