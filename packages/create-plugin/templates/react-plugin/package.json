@@ -1,12 +1,12 @@
 {
   "name": "example-react-plugin",
-  "displayName": "react-plugin",
+  "displayName": "{{name}}",
   "private": true,
   "version": "0.0.0",
-  "description": "description",
-  "author": "amorygalili",
-  "email": "amorygalili@gmail.com",
-  "license": "MIT",
+  "description": "{{description}}",
+  "author": "{{author}}",
+  "email": "{{email}}",
+  "license": "{{license}}",
   "type": "module",
   "files": [
     "plugin"
