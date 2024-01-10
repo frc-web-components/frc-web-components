@@ -1,6 +1,6 @@
 {
   "name": "@frc-web-components/react",
-  "version": "0.2.0",
+  "version": "0.4.0",
   "type": "module",
   "files": [
     "dist"
@@ -10,7 +10,7 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./types/fwc-react.d.ts",
+      "types": "./dist/fwc-react.d.ts",
       "import": "./dist/fwc-react.es.js"
     },
     "./all-components": {
@@ -50,7 +50,8 @@
     "build": "vite build",
     "watch": "vite build --watch",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@lit/react": "^1.0.2",

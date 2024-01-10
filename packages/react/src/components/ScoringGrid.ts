@@ -6,6 +6,9 @@ export const ScoringGrid = createComponent({
   tagName: "frc-scoring-grid",
   elementClass: ScoringGridWc,
   react: React,
+  events: {
+    onselect: 'select',
+  },
 });
 
 export default ScoringGrid;

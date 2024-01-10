@@ -15,7 +15,7 @@ const templateRoot = resolve(__dirname, '..', 'templates');
 create('create-plugin', {
   templateRoot,
   promptForTemplate: true,
-  defaultTemplate: 'lit',
+  defaultTemplate: 'lit-plugin',
   // extra: {
   //   architecture: {
   //     type: 'list',

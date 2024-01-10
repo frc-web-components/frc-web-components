@@ -6,6 +6,7 @@ import React, {
 } from "react";
 import { Nt4Provider } from "@frc-web-components/fwc/source-providers";
 import { Store } from "@webbitjs/store";
+import { FrcDashboard, dashboardElementConfigs } from "@frc-web-components/fwc";
 
 interface StoreContextType {
   store: Store;
@@ -20,12 +21,13 @@ interface StoreProviderProps {
 }
 
 function createStore(address: string) {
-  const store = new Store();
+  const dashboard = new FrcDashboard(document.body);
   const nt4Provider = new Nt4Provider();
-  store.addSourceProvider("NetworkTables", nt4Provider);
-  store.setDefaultSourceProvider("NetworkTables");
+  dashboard.addSourceProvider("NetworkTables", nt4Provider);
+  dashboard.setDefaultSourceProvider("NetworkTables");
+  dashboard.addElements(dashboardElementConfigs, "FRC");
   nt4Provider.connect(address);
-  return { store, nt4Provider };
+  return { store: dashboard.getStore(), nt4Provider };
 }
 
 // make it retry like in NT4Provider in fwc

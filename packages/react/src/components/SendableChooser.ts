@@ -6,6 +6,9 @@ export const SendableChooser = createComponent({
   tagName: "frc-sendable-chooser",
   elementClass: SendableChooserWc,
   react: React,
+  events: {
+    onchange: 'change',
+  },
 });
 
 export default SendableChooser;

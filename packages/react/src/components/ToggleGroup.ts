@@ -6,6 +6,9 @@ export const ToggleGroup = createComponent({
   tagName: "frc-toggle-group",
   elementClass: ToggleGroupWc,
   react: React,
+  events: {
+    onchange: 'change',
+  },
 });
 
 export default ToggleGroup;

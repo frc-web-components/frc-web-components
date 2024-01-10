@@ -6,6 +6,9 @@ export const NumberSlider = createComponent({
   tagName: "frc-number-slider",
   elementClass: NumberSliderWc,
   react: React,
+  events: {
+    onchange: 'change',
+  },
 });
 
 export default NumberSlider;

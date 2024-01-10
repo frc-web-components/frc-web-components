@@ -9,6 +9,9 @@ export const RobotCommand = createComponent({
   tagName: 'frc-robot-command',
   elementClass: RobotCommandWc,
   react: React,
+  events: {
+    ontoggle: 'toggle',
+  },
 });
 
 export const RobotSubsystem = createComponent({

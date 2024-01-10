@@ -6,6 +6,9 @@ export const Relay = createComponent({
   tagName: "frc-relay",
   elementClass: RelayWc,
   react: React,
+  events: {
+    onchange: 'change',
+  },
 });
 
 export default Relay;

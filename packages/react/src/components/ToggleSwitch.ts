@@ -6,6 +6,9 @@ export const ToggleSwitch = createComponent({
   tagName: "frc-toggle-switch",
   elementClass: ToggleSwitchWc,
   react: React,
+  events: {
+    ontoggle: 'toggle',
+  },
 });
 
 export default ToggleSwitch;
