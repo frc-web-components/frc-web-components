@@ -3,7 +3,7 @@
   "displayName": "svelte-plugin",
   "private": true,
   "version": "0.0.0",
-  "description": "Example plugin for the FWC dashboard app using svelte",
+  "description": "Example svelte plugin",
   "author": "",
   "email": "",
   "license": "MIT",

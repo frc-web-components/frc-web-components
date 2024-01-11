@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "displayName": "lit-plugin",
-  "description": "Example plugin for the FWC dashboard app using lit",
+  "description": "Example lit plugin",
   "author": "",
   "email": "",
   "license": "MIT",

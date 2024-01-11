@@ -2,7 +2,7 @@ import { useEffect, useState, CSSProperties } from "react";
 import r2wc from "@r2wc/react-to-web-component";
 import { getAssetUrl } from "@frc-web-components/app";
 
-function MyElement({ count }: { count: number }) {
+function MyElement({ count = 0 }: { count: number }) {
   const [currentCount, setCount] = useState(0);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ function MyElement({ count }: { count: number }) {
       }}
     >
       <img src={getAssetUrl("party.svg")} alt="party time" />
-      Party Gusts: {currentCount}
+      Party Guests: {currentCount}
     </button>
   );
 }

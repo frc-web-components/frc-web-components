@@ -2,12 +2,21 @@
 
 This template should help you get started developing a FWC plugin with Lit + Typescript + Vite.
 
+[<- Home](/README.md)
+
+-   [Generating plugin](#generating-plugin)
+-   [Installing](#installing)
+-   [Running](#running)
+-   [Building and importing into dashboard app](#building-and-importing-into-dashboard-app)
+-   [Theming](#theming)
+-   [Including Static Assets](#including-static-assets)
+
 ## Generating plugin
 
 FWC provides a cli tool which generates a sample plugin that can be used to help get you started with writing your own plugin:
 
 ``` bash
-$ npm init fwc@latest <name>
+npm init fwc@latest <name>
 ```
 
 Note: You'll need <span class="title-ref">node</span> installed to run
@@ -16,7 +25,7 @@ the above command: <https://nodejs.org/en/download/>
 To get started, open a terminal and enter in the following command:
 
 ``` bash
-$ npm init fwc@latest my-first-plugin
+npm init fwc@latest my-first-plugin
 ```
 
 After being prompted with a few questions to help setup your plugin, the plugin project will be created and installed. The cli tool provides templates to create components using [lit](https://lit.dev/), [react](https://react.dev/) or [svelte](https://svelte.dev/):
@@ -34,7 +43,7 @@ npm install
 
 ## Running
 
-To run the dashboard in dev mode run the following command:
+To run the dashboard in dev mode cd into the directory that was created in the last step and run the following command:
 
 ```bash
 npm run dev
