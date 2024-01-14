@@ -2,6 +2,7 @@
 
 import { create } from 'create-create-app';
 import { resolve } from 'path';
+import { cpSync } from "fs";
 
 const templateRoot = resolve(__dirname, '..', 'templates');
 
@@ -24,6 +25,17 @@ create('create-plugin', {
   //     prompt: 'if-no-arg',
   //   },
   // },
-  // after: ({ answers }) => console.log(`Ok you chose ${answers.architecture}.`),
+  after: ({ packageDir, template}) => {
+      if (template == "react-custom-dashboard") {
+          try {
+              console.log(`Copying 3d-models into public...`);
+              cpSync(resolve(packageDir, "./node_modules/@frc-web-components/fwc/dist/3d-models"), resolve(packageDir, "./public/3d-models"), {recursive: true});
+              console.log("files copied successfully");
+          } catch (error) {
+              console.error("files could not be copied: " + error);
+          }
+      }
+  },
   // caveat,
-});
+})
+
