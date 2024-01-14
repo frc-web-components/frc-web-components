@@ -1,5 +1,6 @@
+/* eslint-disable no-underscore-dangle */
 import { LitElement } from 'lit';
-import { property } from 'lit/decorators.js';
+import { property, state } from 'lit/decorators.js';
 import {
   WebGLRenderer,
   Group,
@@ -26,10 +27,11 @@ import {
 
 export default class Object3d extends LitElement {
   @property({ type: String }) name = objectConfigs[0].name;
-  @property({ type: Array }) translation: Translation3d | Translation2d = [
-    0, 0, 0,
-  ];
-  @property({ type: Array }) rotation: Rotation3d | Rotation2d = [0, 0, 0, 0];
+  @property({ type: Array }) pose = [0, 0, 0];
+  @property({ type: Array }) translation?: Translation3d | Translation2d;
+  @property({ type: Array }) rotation?: Rotation3d | Rotation2d;
+  @state() _translation: Translation3d | Translation2d = [0, 0, 0];
+  @state() _rotation: Rotation3d | Rotation2d = [0, 0, 0, 0];
 
   renderer!: WebGLRenderer;
   loader = new GLTFLoader();
@@ -125,19 +127,36 @@ export default class Object3d extends LitElement {
     if (changedProps.has('name')) {
       this.loadRobotModel();
     }
+    if (
+      changedProps.has('translation') ||
+      changedProps.has('rotation') ||
+      changedProps.has('pose')
+    ) {
+      if (this.translation || this.rotation) {
+        this._translation = this.translation ?? [0, 0, 0];
+        this._rotation = this.rotation ?? [0, 0, 0, 0];
+      } else if (this.pose.length >= 7) {
+        this._translation = this.pose.slice(0, 3) as Translation3d;
+        this._rotation = this.pose.slice(3, 7) as Rotation3d;
+      } else {
+        const [x = 0, y = 0, rot = 0] = this.pose;
+        this._translation = [x, y];
+        this._rotation = rot;
+      }
+    }
   }
 
   renderObject(): void {
     if (this.group) {
       Object3d.updatePose(this.group, {
         translation:
-          this.translation.length === 2
-            ? [...this.translation, 0]
-            : this.translation,
+          this._translation.length === 2
+            ? [...this._translation, 0]
+            : this._translation,
         rotation:
-          typeof this.rotation === 'number'
-            ? getRotation3dFromRotSeq([{ axis: 'z', degrees: this.rotation }])
-            : this.rotation,
+          typeof this._rotation === 'number'
+            ? getRotation3dFromRotSeq([{ axis: 'z', degrees: this._rotation }])
+            : this._rotation,
       });
     }
 

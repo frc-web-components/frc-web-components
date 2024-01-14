@@ -5,11 +5,11 @@ import { WebbitConfig } from '@webbitjs/webbit';
 export const labelDashboardConfig: Partial<WebbitConfig> = {
   dashboard: {
     displayName: 'Label',
+    defaultHtml: `<frc-label text="label"></frc-label>`,
   },
   properties: {
     text: { type: 'String', primary: true },
   },
-  demos: [{ html: '<frc-label text="label"></frc-label>' }],
 };
 
 export class Label extends LitElement {

@@ -6,6 +6,9 @@ export default function getElementHtml(
 ): string {
   // TODO: demos isn't a properly of WebbitConfig
   const config: any = connector.getElementConfig(selector);
+  if (config?.dashboard?.defaultHtml) {
+    return config.dashboard.defaultHtml;
+  }
   if (config?.demos) {
     const [{ html }] = config.demos;
     return html;

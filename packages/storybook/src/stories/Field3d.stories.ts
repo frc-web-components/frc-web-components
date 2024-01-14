@@ -9,8 +9,7 @@ const defaultArgs: Record<string, any> = {
   backgroundColor: 'black',
   enableVR: false,
   objectName: objectConfigs[0].name,
-  objectTranslation: [0, 0, 0],
-  objectRotation: [0, 0, 0, 0],
+  pose: [0, 0, 0],
 };
 
 /**
@@ -27,7 +26,7 @@ const defaultArgs: Record<string, any> = {
  * 
  * ```html
  * <frc-field3d game="Charged Up">
- *   <frc-field3d-object name="KitBot" translation="[0,0,0]" rotation="[0,0,0,0]"></frc-field3d-object>
+ *   <frc-field3d-object name="KitBot" pose="[0,0,0]"></frc-field3d-object>
  * </frc-field3d>
  * ```
  * 
@@ -41,7 +40,7 @@ const defaultArgs: Record<string, any> = {
  * 
  * ```jsx
  * <Field3d game="Charged Up">
- *  <Field3dObject name="KitBot" translation={[0,0,0]} rotation={[0,0,0,0]} />
+ *  <Field3dObject name="KitBot" pose={[0,0,0]} />
  * </Field3d>
  * ```
  */
@@ -90,18 +89,11 @@ const meta: Meta = {
       options: objectConfigs.map(({ name }) => name),
       control: 'select',
     },
-    objectTranslation: {
+    pose: {
       control: 'object',
       table: {
         category: 'Object',
         defaultValue: { summary: [0, 0, 0] },
-      },
-    },
-    objectRotation: {
-      control: 'object',
-      table: {
-        category: 'Object',
-        defaultValue: { summary: [0, 0, 0, 0] },
       },
     },
   },
@@ -145,8 +137,7 @@ function createFieldStory(optionalArgs: Record<string, any> = {}): Story {
       >
         <frc-field3d-object
           name=${args.objectName}
-          translation=${JSON.stringify(args.objectTranslation)}
-          rotation=${JSON.stringify(args.objectRotation)}
+          pose=${JSON.stringify(args.pose)}
         ></frc-field3d-object>
       </frc-field3d>
     `,
@@ -157,5 +148,5 @@ export const Field = createFieldStory();
 export const VRField = createFieldStory({
   game: 'Infinite Recharge',
   enableVR: true,
-  objectTranslation: [4, 3, 0],
+  pose: [4, 3, 0],
 });

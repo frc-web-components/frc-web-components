@@ -10,6 +10,10 @@ import { CropType } from '../field-interfaces';
 export const fieldDashboardConfig: Partial<WebbitConfig> = {
   dashboard: {
     displayName: 'Field',
+    defaultHtml: `
+    <frc-field-wrapper source-key="/SmartDashboard/Field" source-provider="NetworkTables">
+    </frc-field-wrapper>
+    `,
   },
   properties: {
     provider: { type: 'SourceProvider', property: 'provider' },
@@ -124,14 +128,6 @@ export const fieldDashboardConfig: Partial<WebbitConfig> = {
       },
     },
   },
-  demos: [
-    {
-      html: `
-      <frc-field-wrapper source-key="/SmartDashboard/Field" source-provider="NetworkTables">
-      </frc-field-wrapper>
-    `,
-    },
-  ],
 };
 
 export class FieldWrapper extends LitElement {

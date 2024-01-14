@@ -71,8 +71,6 @@ export class Mechanism2dWrapper extends LitElement {
 
 export default Mechanism2dWrapper;
 
-console.log('MECHANISM WRAPPER', Mechanism2dWrapper);
-
 if (!customElements.get('frc-mechanism2d-wrapper')) {
   customElements.define('frc-mechanism2d-wrapper', Mechanism2dWrapper);
 }

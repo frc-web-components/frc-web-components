@@ -174,7 +174,6 @@ export class Axis extends LitElement {
   }
 
   updated(changedProps: Map<string, unknown>) {
-    console.log('changedProps:', changedProps);
     this.setAxis(changedProps);
   }
 

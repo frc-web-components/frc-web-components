@@ -7,6 +7,14 @@ export const lineChartDashboardConfig: Partial<WebbitConfig> = {
       const title = element?.getAttribute('chart-title') || 'Line Chart';
       return title;
     },
+    defaultHtml: `
+      <frc-line-chart chart-title="Line Chart">
+        <frc-line-chart-legend></frc-line-chart-legend>
+        <frc-line-chart-axis side="left"></frc-line-chart-axis>
+        <frc-line-chart-axis side="right"></frc-line-chart-axis>
+        <frc-line-chart-data></frc-line-chart-data>
+      </frc-line-chart>
+    `,
   },
   description: 'A component used to graph data over time.',
   properties: {
@@ -21,18 +29,6 @@ export const lineChartDashboardConfig: Partial<WebbitConfig> = {
         'frc-line-chart-axis',
         'frc-line-chart-legend',
       ],
-    },
-  ],
-  demos: [
-    {
-      html: `
-      <frc-line-chart chart-title="Line Chart">
-        <frc-line-chart-legend></frc-line-chart-legend>
-        <frc-line-chart-axis side="left"></frc-line-chart-axis>
-        <frc-line-chart-axis side="right"></frc-line-chart-axis>
-        <frc-line-chart-data></frc-line-chart-data>
-      </frc-line-chart>
-    `,
     },
   ],
 };

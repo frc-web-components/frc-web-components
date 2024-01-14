@@ -166,10 +166,8 @@ class UrdfViewer extends LitElement {
   }
 
   #addMutationObserver(child) {
-    console.log('child:', child);
     const observer = new MutationObserver(() => {
       this.#toUrdf();
-      console.log('attributes changed:', child);
     });
     observer.observe(child, {
       attributes: true,

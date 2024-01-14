@@ -27,6 +27,4 @@ class DashboardTab extends LitElement {
   }
 }
 
-console.log('dashboardTab:', DashboardTab);
-
 customElements.define('dashboard-tab', DashboardTab);
