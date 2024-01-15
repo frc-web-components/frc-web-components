@@ -11,7 +11,7 @@ export function setNt4Context(address: string) {
   dashboard.setDefaultSourceProvider("NetworkTables");
   dashboard.addElements(dashboardElementConfigs, "FRC");
   provider.connect(address);
-  
+
   setContext("NT4", {
     store: dashboard.getStore(),
     provider,
@@ -76,6 +76,24 @@ export function getEntry<T>(key: string, defaultValue: T) {
 
   return {
     subscribe,
-    setValue: (value: T) => provider.userUpdate(key, value)
+    setValue: (value: T) => provider.userUpdate(key, value),
+  };
+}
+
+export function getJson(key: string, defaultValue?: unknown) {
+  const { store } = getNt4Context();
+  const { subscribe, set } = writable(defaultValue);
+
+  addKeyListener(
+    key,
+    () => {
+      const json = store.getSource("NetworkTables", key)?.getJson();
+      set(json);
+    },
+    true
+  );
+
+  return {
+    subscribe,
   };
 }

@@ -1,12 +1,15 @@
-import type { Meta, StoryObj } from '@storybook/web-components';
-import { html } from 'lit';
-import { styleMap } from 'lit/directives/style-map.js';
-import { field3dConfigs, objectConfigs } from '@frc-web-components/fwc/components/field3d';
+import type { Meta, StoryObj } from "@storybook/web-components";
+import { html } from "lit";
+import { styleMap } from "lit/directives/style-map.js";
+import {
+  field3dConfigs,
+  objectConfigs,
+} from "@frc-web-components/fwc/components/field3d";
 
 const defaultArgs: Record<string, any> = {
   game: field3dConfigs[0].game,
-  origin: 'red',
-  backgroundColor: 'black',
+  origin: "red",
+  backgroundColor: "black",
   enableVR: false,
   objectName: objectConfigs[0].name,
   pose: [0, 0, 0],
@@ -14,30 +17,30 @@ const defaultArgs: Record<string, any> = {
 
 /**
  * To use this component import the module:
- * 
+ *
  * ```javascript
  * import "@frc-web-components/fwc/components/field3d";
- * 
+ *
  * // or to import all components:
  * import "@frc-web-components/fwc/components";
  * ```
- * 
+ *
  * And then add the component to your html:
- * 
+ *
  * ```html
  * <frc-field3d game="Charged Up">
  *   <frc-field3d-object name="KitBot" pose="[0,0,0]"></frc-field3d-object>
  * </frc-field3d>
  * ```
- * 
+ *
  * Or use the component in React:
- * 
+ *
  * ```jsx
  * import { Field3d, Field3dObject } from "@frc-web-components/react";
  * ```
- * 
+ *
  * And then add the component in your jsx:
- * 
+ *
  * ```jsx
  * <Field3d game="Charged Up">
  *  <Field3dObject name="KitBot" pose={[0,0,0]} />
@@ -45,54 +48,54 @@ const defaultArgs: Record<string, any> = {
  * ```
  */
 const meta: Meta = {
-  title: 'FRC/Field3d',
-  tags: ['autodocs'],
-  component: 'frc-field3d',
+  title: "FRC/Field3d",
+  tags: ["autodocs"],
+  component: "frc-field3d",
   args: defaultArgs,
   argTypes: {
     game: {
       table: {
-        category: 'Field',
+        category: "Field",
         defaultValue: { summary: field3dConfigs[0].game },
       },
       options: field3dConfigs.map(({ game }) => game),
-      control: 'select',
+      control: "select",
     },
     origin: {
-      control: 'radio',
-      options: ['red', 'blue'],
+      control: "radio",
+      options: ["red", "blue"],
       table: {
-        category: 'Field',
-        defaultValue: 'red',
+        category: "Field",
+        defaultValue: "red",
       },
     },
     backgroundColor: {
-      control: 'color',
+      control: "color",
       table: {
-        category: 'Field',
-        defaultValue: { summary: 'black' },
+        category: "Field",
+        defaultValue: { summary: "black" },
       },
     },
     enableVR: {
       description:
-        'VR field can be viewed by visiting this page in the browser of a VR enabled device',
+        "VR field can be viewed by visiting this page in the browser of a VR enabled device",
       table: {
-        category: 'Field',
+        category: "Field",
         defaultValue: { summary: false },
       },
     },
     objectName: {
       table: {
-        category: 'Object',
+        category: "Object",
         defaultValue: { summary: objectConfigs[0].name },
       },
       options: objectConfigs.map(({ name }) => name),
-      control: 'select',
+      control: "select",
     },
     pose: {
-      control: 'object',
+      control: "object",
       table: {
-        category: 'Object',
+        category: "Object",
         defaultValue: { summary: [0, 0, 0] },
       },
     },
@@ -100,8 +103,8 @@ const meta: Meta = {
   decorators: [
     (story) => html` <div
       style=${styleMap({
-        padding: '20px 10px',
-        marginBottom: '5px',
+        padding: "20px 10px",
+        marginBottom: "5px",
       })}
     >
       <style>
@@ -126,7 +129,7 @@ function createFieldStory(optionalArgs: Record<string, any> = {}): Story {
   return {
     args: storyArgs,
     parameters: {
-      canvas: { sourceState: 'shown' },
+      canvas: { sourceState: "shown" },
     },
     render: (args) => html`
       <frc-field3d
@@ -139,6 +142,13 @@ function createFieldStory(optionalArgs: Record<string, any> = {}): Story {
           name=${args.objectName}
           pose=${JSON.stringify(args.pose)}
         ></frc-field3d-object>
+        <frc-field3d-urdf
+          urdf-source="/atlas_v4_with_multisense.urdf"
+          .angles=${{
+            rArmShx: .5,
+            lArmShx: .5,
+          }}
+        ></frc-field3d-urdf>
       </frc-field3d>
     `,
   };
@@ -146,7 +156,7 @@ function createFieldStory(optionalArgs: Record<string, any> = {}): Story {
 
 export const Field = createFieldStory();
 export const VRField = createFieldStory({
-  game: 'Infinite Recharge',
+  game: "Infinite Recharge",
   enableVR: true,
   pose: [4, 3, 0],
 });

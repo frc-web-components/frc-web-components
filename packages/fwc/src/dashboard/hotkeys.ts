@@ -3,7 +3,11 @@ import { throttle } from './utils';
 
 function isHotKeyArea(ev: KeyboardEvent): boolean {
   const path: HTMLElement[] = (ev as any).path ?? ev.composedPath?.() ?? [];
-  const isInDrawer = path.find((part) => part?.matches?.('dashboard-drawer'));
+  const isInNoInteractElement = path.find((part) =>
+    part?.matches?.(
+      'dashboard-drawer, dashboard-source-picker-dialog, dashboard-settings-dialog'
+    )
+  );
   const isInElementTree = path.find((part) =>
     part?.matches?.('dashboard-element-tree')
   );
@@ -12,7 +16,7 @@ function isHotKeyArea(ev: KeyboardEvent): boolean {
     return true;
   }
 
-  return !isInDrawer;
+  return !isInNoInteractElement;
 }
 
 export function onRemoveKeyPress(

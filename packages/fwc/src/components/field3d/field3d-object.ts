@@ -26,7 +26,8 @@ import {
 } from './field-interfaces';
 
 export default class Object3d extends LitElement {
-  @property({ type: String }) name = objectConfigs[0].name;
+  @state() objectConfigs = objectConfigs;
+  @property({ type: String }) name = this.objectConfigs[0].name;
   @property({ type: Array }) pose = [0, 0, 0];
   @property({ type: Array }) translation?: Translation3d | Translation2d;
   @property({ type: Array }) rotation?: Rotation3d | Rotation2d;
@@ -41,7 +42,8 @@ export default class Object3d extends LitElement {
   // eslint-disable-next-line class-methods-use-this
   getObjectConfig(): ObjectConfig {
     return (
-      objectConfigs.find(({ name }) => name === this.name) ?? objectConfigs[0]
+      this.objectConfigs.find(({ name }) => name === this.name) ??
+      this.objectConfigs[0]
     );
   }
 
@@ -142,6 +144,20 @@ export default class Object3d extends LitElement {
         const [x = 0, y = 0, rot = 0] = this.pose;
         this._translation = [x, y];
         this._rotation = rot;
+      }
+    }
+  }
+
+  updateObjectConfigs() {
+    const field = this.getField();
+    const newConfigs = field?.objectConfigs;
+    if (newConfigs?.length && newConfigs !== this.objectConfigs) {
+      this.objectConfigs = newConfigs;
+      const hasObject = this.objectConfigs.some(
+        (config) => config.name === this.name
+      );
+      if (!hasObject) {
+        this.name = this.objectConfigs[0].name;
       }
     }
   }

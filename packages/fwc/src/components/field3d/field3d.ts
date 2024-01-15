@@ -19,17 +19,25 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { VRButton } from 'three/examples/jsm/webxr/VRButton';
 import { getQuaternionFromRotSeq, rotation3dToQuaternion } from './utils';
 import fieldConfigs, { FieldConfig } from './field-configs';
+import objectConfigs from './object-configs';
 import { Pose3d, IField3d } from './field-interfaces';
 import { convert } from '../field/units';
 import './field3d-object';
+import './field3d-urdf';
+
+const joinPaths = (start: string, end: string) =>
+  `${start.replace(/\/$/, '')}/${end.replace(/^\//, '')}`;
 
 // https://toji.dev/webxr-scene-optimization/
 export default class Field3d extends LitElement implements IField3d {
-  @property({ type: String }) game = fieldConfigs[0].game;
+  @property({ type: Array }) fieldConfigs = fieldConfigs;
+  @property({ type: Array }) objectConfigs = objectConfigs;
+  @property({ type: String }) game = this.fieldConfigs[0].game;
   @property({ type: String }) origin: 'red' | 'blue' = 'red';
   @property({ type: String, attribute: 'background-color' }) backgroundColor =
     'black';
   @property({ type: Boolean, attribute: 'enable-vr' }) enableVR = false;
+  @property({ type: String }) assetPathPrefix?: string;
 
   private ORBIT_FIELD_DEFAULT_TARGET = new Vector3(0, 0.5, 0);
   private ORBIT_FIELD_DEFAULT_POSITION = new Vector3(0, 6, -12);
@@ -74,7 +82,8 @@ export default class Field3d extends LitElement implements IField3d {
 
   private getFieldConfig(): FieldConfig {
     return (
-      fieldConfigs.find(({ game }) => game === this.game) ?? fieldConfigs[0]
+      this.fieldConfigs.find(({ game }) => game === this.game) ??
+      this.fieldConfigs[0]
     );
   }
 
@@ -168,7 +177,8 @@ export default class Field3d extends LitElement implements IField3d {
     if (this.fieldObject) {
       this.wpilibCoordinateGroup.remove(this.fieldObject);
     }
-    this.loader.load(fieldConfig.src, (gltf) => {
+    const src = joinPaths(this.assetPathPrefix ?? '', fieldConfig.src);
+    this.loader.load(src, (gltf) => {
       this.fieldObject = gltf.scene;
       this.wpilibCoordinateGroup.add(gltf.scene);
       Field3d.adjustMaterials(gltf.scene);
@@ -203,6 +213,14 @@ export default class Field3d extends LitElement implements IField3d {
   }
 
   updated(changedProps: Map<string, unknown>): void {
+    if (changedProps.has('fieldConfig')) {
+      const hasGame = this.fieldConfigs.some(
+        (config) => config.game === this.game
+      );
+      if (!hasGame) {
+        this.game = this.fieldConfigs[0].game;
+      }
+    }
     if (changedProps.has('game')) {
       this.loadFieldModel(this.getFieldConfig());
     }

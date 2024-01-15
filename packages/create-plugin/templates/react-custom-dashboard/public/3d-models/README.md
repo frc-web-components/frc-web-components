@@ -1,0 +1,1 @@
+3D model assets are not bundled due to large file size. They must be manually downloaded and added to this folder to use. Model assets can be found here: https://github.com/frc-web-components/frc-web-components/tree/master/packages/fwc/public/3d-models

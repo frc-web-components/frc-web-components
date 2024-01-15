@@ -33,4 +33,6 @@ export interface ObjectConfig {
 }
 export interface IField3d {
   getFieldGroup: () => Group;
+  assetPathPrefix?: string;
+  objectConfigs: ObjectConfig[];
 }

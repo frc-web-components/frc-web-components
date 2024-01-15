@@ -4,9 +4,10 @@ export default function getElementHtml(
   connector: WebbitConnector,
   selector: string
 ): string {
-  // TODO: demos isn't a properly of WebbitConfig
+  // TODO: demos isn't a property of WebbitConfig
   const config: any = connector.getElementConfig(selector);
-  if (config?.dashboard?.defaultHtml) {
+  const defaultHtml = config?.dashboard?.defaultHtml;
+  if (defaultHtml) {
     return config.dashboard.defaultHtml;
   }
   if (config?.demos) {
@@ -23,12 +24,14 @@ export function appendElementToDashboard(
 ): HTMLElement[] {
   const container = document.createElement('div');
   container.innerHTML = getElementHtml(connector, selector);
+  const config = connector.getElementConfig(selector);
+  const onInit = config?.dashboard?.onInit;
   return [...container.children].map((child) => {
-    // if (!this._slot) {
-    //   child.removeAttribute('slot');
-    // } else {
-    //   child.setAttribute('slot', this._slot);
-    // }
+    if (child.matches(selector)) {
+      if (typeof onInit === 'function') {
+        onInit(child as HTMLElement);
+      }
+    }
     parent.append(child);
     return child as HTMLElement;
   });

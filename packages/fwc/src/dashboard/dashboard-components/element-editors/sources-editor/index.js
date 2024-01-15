@@ -180,7 +180,7 @@ class SourcesEditor extends LitElement {
       <div style="display: flex; gap: 10px">
         <vaadin-combo-box
           style="flex: 1"
-          label="Source Key"
+          label="Source Keys"
           part="source-key-dropdown"
           clear-button-visible
           value="${this.sourceKey}"
