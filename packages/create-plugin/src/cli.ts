@@ -2,9 +2,13 @@
 
 import { create } from 'create-create-app';
 import { resolve } from 'path';
-import { cpSync } from "fs";
+import fs from "fs";
+import { DownloaderHelper } from "node-downloader-helper";
+import decompress from "decompress"
 
 const templateRoot = resolve(__dirname, '..', 'templates');
+const modelsUrl = "https://github.com/HarlanHaller/3d-models-temp/archive/refs/heads/main.zip";
+const downloadName = "3d-models-temp-main"
 
 // const caveat = `
 // This is a caveat!
@@ -27,13 +31,25 @@ create('create-plugin', {
   // },
   after: ({ packageDir, template}) => {
       if (template == "react-custom-dashboard") {
-          try {
-              console.log(`Copying 3d-models into public...`);
-              cpSync(resolve(packageDir, "./node_modules/@frc-web-components/fwc/dist/3d-models"), resolve(packageDir, "./public/3d-models"), {recursive: true});
-              console.log("files copied successfully");
-          } catch (error) {
-              console.error("files could not be copied: " + error);
-          }
+          const zipPath = resolve(packageDir, "./public/temp");
+          const outputPath = resolve(packageDir, "./public/3d-models");
+          fs.mkdirSync(zipPath)
+          console.log("Downloading files from git");
+          const dl = new DownloaderHelper(modelsUrl, zipPath);
+
+          dl.on('end', () => {
+              console.log("Files downloaded. Unzipping files");
+              decompress(resolve(zipPath, downloadName + ".zip"), zipPath).then(() => {
+                  console.log("Files unzipped successfully.");
+                  fs.cpSync(resolve(zipPath, downloadName), outputPath, {recursive: true})
+                  fs.rmSync(zipPath, { recursive: true });
+              });
+          });
+          dl.on('error', (err) => {
+              console.log("failed to download");
+              console.error(err);
+          });
+          dl.start();
       }
   },
   // caveat,
