@@ -7,6 +7,7 @@ import {
 import FrcDashboard from '../../frc-dashboard';
 import DashboardSelections from './dashboard-selections';
 import getTranslationFromStyles from './getTranslationFromStyles';
+import removeElement from '../../root/remove-element';
 
 function round(val: number, gridSize: number): number {
   return Math.floor(val / gridSize + 0.5) * gridSize;
@@ -27,6 +28,7 @@ class AbsolutePositioningLayout {
   private element: HTMLElement;
   private selectionBox = createSelectionBox();
   private interactive = interact(this.selectionBox);
+  private contextMenu = document.createElement('vaadin-context-menu');
 
   private snappingEnabled = false;
   private gridSize = 40.0;
@@ -35,9 +37,22 @@ class AbsolutePositioningLayout {
     this.dashboard = dashboard;
     this.element = layerElement;
     // eslint-disable-next-line no-new
-    new DashboardSelections(this.dashboard.getConnector(), (element) => {
-      if (this.dashboard.isElementEditable()) {
-        this.dashboard.setSelectedElement(element);
+    new DashboardSelections(
+      this.dashboard.getConnector(),
+      (element) => {
+        if (this.dashboard.isElementEditable(element)) {
+          this.dashboard.setSelectedElement(element);
+        }
+      },
+      (ev, element) => this.#openContextMenu(ev, element)
+    );
+
+    this.selectionBox.addEventListener('contextmenu', (ev) => {
+      const selectedElement = this.dashboard.getSelectedElement();
+      if (selectedElement) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.#openContextMenu(ev, selectedElement);
       }
     });
 
@@ -72,6 +87,10 @@ class AbsolutePositioningLayout {
 
     this.element.appendChild(this.selectionBox);
     this.interactive = interact(this.selectionBox);
+    this.element.appendChild(this.contextMenu);
+    this.contextMenu.addEventListener('item-selected', (ev: CustomEvent) => {
+      ev.detail.value?.action();
+    });
 
     this.interactive.on('resizeend', () => {
       this.#addResizeInteraction();
@@ -82,6 +101,53 @@ class AbsolutePositioningLayout {
     });
     this.#setBounds();
     this.#addDragInteraction();
+  }
+
+  #openContextMenu(ev: Event, element: HTMLElement) {
+    if (!this.dashboard.isDrawerOpened()) {
+      return;
+    }
+
+    const config = this.dashboard
+      .getConnector()
+      .getMatchingElementConfig(element);
+    if (!config) {
+      return;
+    }
+
+    ev.stopPropagation();
+    ev.preventDefault();
+
+    if (element.tagName.toLowerCase() === 'dashboard-tab') {
+      this.contextMenu.items = [
+        { text: this.dashboard.getElementDisplayName(element), disabled: true },
+        {
+          text: 'Clear',
+          action: () => {
+            // eslint-disable-next-line no-param-reassign
+            element.innerHTML = '';
+          },
+        },
+      ] as any;
+      this.contextMenu.open(ev);
+    } else {
+      this.contextMenu.items = [
+        { text: this.dashboard.getElementDisplayName(element), disabled: true },
+        {
+          text: 'Remove',
+          action: () => {
+            const nextElement = removeElement(
+              element,
+              this.dashboard.getConnector()
+            );
+            if (nextElement) {
+              this.dashboard.setSelectedElement(nextElement);
+            }
+          },
+        },
+      ] as any;
+      this.contextMenu.open(ev);
+    }
   }
 
   #setBounds(): void {
