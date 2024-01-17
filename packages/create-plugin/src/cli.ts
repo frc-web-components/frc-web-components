@@ -7,8 +7,8 @@ import { DownloaderHelper } from "node-downloader-helper";
 import decompress from "decompress"
 
 const templateRoot = resolve(__dirname, '..', 'templates');
-const modelsUrl = "https://github.com/HarlanHaller/3d-models-temp/archive/refs/heads/main.zip";
-const downloadName = "3d-models-temp-main"
+const modelsUrl = "https://github.com/HarlanHaller/3d-models-temp/raw/main/3d-models-zip.zip";
+const downloadName = "3d-models-zip"
 
 // const caveat = `
 // This is a caveat!
@@ -30,7 +30,7 @@ create('create-plugin', {
   //   },
   // },
   after: ({ packageDir, template}) => {
-      if (template == "react-custom-dashboard") {
+      if (template == "react-custom-dashboard" || template == "svelte-custom-dashboard") {
           const zipPath = resolve(packageDir, "./public/temp");
           const outputPath = resolve(packageDir, "./public/3d-models");
           fs.mkdirSync(zipPath)
