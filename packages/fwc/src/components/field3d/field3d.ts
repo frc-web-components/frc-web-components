@@ -20,18 +20,18 @@ import { VRButton } from 'three/examples/jsm/webxr/VRButton';
 import { getQuaternionFromRotSeq, rotation3dToQuaternion } from './utils';
 import fieldConfigs, { FieldConfig } from './field-configs';
 import objectConfigs from './object-configs';
+import urdfConfigs from './urdf-configs';
 import { Pose3d, IField3d } from './field-interfaces';
 import { convert } from '../field/units';
 import './field3d-object';
 import './field3d-urdf';
-
-const joinPaths = (start: string, end: string) =>
-  `${start.replace(/\/$/, '')}/${end.replace(/^\//, '')}`;
+import { joinPaths } from './file-utils';
 
 // https://toji.dev/webxr-scene-optimization/
 export default class Field3d extends LitElement implements IField3d {
   @property({ type: Array }) fieldConfigs = fieldConfigs;
   @property({ type: Array }) objectConfigs = objectConfigs;
+  @property({ type: Array }) urdfConfigs = urdfConfigs;
   @property({ type: String }) game = this.fieldConfigs[0].game;
   @property({ type: String }) origin: 'red' | 'blue' = 'red';
   @property({ type: String, attribute: 'background-color' }) backgroundColor =

@@ -31,8 +31,18 @@ export interface ObjectConfig {
     position: [number, number, number];
   }[];
 }
+
+export interface UrdfConfig {
+  name: string;
+  content?: string;
+  src?: string;
+  rotations: Rotation[];
+  position: [number, number, number];
+}
+
 export interface IField3d {
   getFieldGroup: () => Group;
   assetPathPrefix?: string;
   objectConfigs: ObjectConfig[];
+  urdfConfigs: UrdfConfig[];
 }

@@ -3,16 +3,14 @@ import { html } from "lit";
 import { styleMap } from "lit/directives/style-map.js";
 import {
   field3dConfigs,
-  objectConfigs,
+   urdfConfigs,
 } from "@frc-web-components/fwc/components/field3d";
 
 const defaultArgs: Record<string, any> = {
-  game: field3dConfigs[0].game,
+  game: "Evergreen",
   origin: "red",
-  backgroundColor: "black",
-  enableVR: false,
-  objectName: objectConfigs[0].name,
-  pose: [0, 0, 0],
+  urdfName: urdfConfigs[0].name,
+  pose: [10, 5, 0],
 };
 
 /**
@@ -29,26 +27,26 @@ const defaultArgs: Record<string, any> = {
  *
  * ```html
  * <frc-field3d game="Charged Up">
- *   <frc-field3d-object name="KitBot" pose="[0,0,0]"></frc-field3d-object>
+ *   <frc-field3d-urdf name="R2D2" pose="[0,0,0]"></frc-field3d-urdf>
  * </frc-field3d>
  * ```
  *
  * Or use the component in React:
  *
  * ```jsx
- * import { Field3d, Field3dObject } from "@frc-web-components/react";
+ * import { Field3d, Field3dUrdf } from "@frc-web-components/react";
  * ```
  *
  * And then add the component in your jsx:
  *
  * ```jsx
  * <Field3d game="Charged Up">
- *  <Field3dObject name="KitBot" pose={[0,0,0]} />
+ *  <Field3dUrdf name="R2D2" pose={[0,0,0]} />
  * </Field3d>
  * ```
  */
 const meta: Meta = {
-  title: "FRC/Field3d",
+  title: "Field 3D/URDF",
   tags: ["autodocs"],
   component: "frc-field3d",
   args: defaultArgs,
@@ -56,7 +54,7 @@ const meta: Meta = {
     game: {
       table: {
         category: "Field",
-        defaultValue: { summary: field3dConfigs[0].game },
+        defaultValue: { summary: "Evergreen" },
       },
       options: field3dConfigs.map(({ game }) => game),
       control: "select",
@@ -69,27 +67,12 @@ const meta: Meta = {
         defaultValue: "red",
       },
     },
-    backgroundColor: {
-      control: "color",
-      table: {
-        category: "Field",
-        defaultValue: { summary: "black" },
-      },
-    },
-    enableVR: {
-      description:
-        "VR field can be viewed by visiting this page in the browser of a VR enabled device",
-      table: {
-        category: "Field",
-        defaultValue: { summary: false },
-      },
-    },
-    objectName: {
+    urdfName: {
       table: {
         category: "Object",
-        defaultValue: { summary: objectConfigs[0].name },
+        defaultValue: { summary: urdfConfigs[0].name },
       },
-      options: objectConfigs.map(({ name }) => name),
+      options: urdfConfigs.map(({ name }) => name),
       control: "select",
     },
     pose: {
@@ -138,16 +121,13 @@ function createFieldStory(optionalArgs: Record<string, any> = {}): Story {
         background-color=${args.backgroundColor}
         ?enable-vr=${args.enableVR}
       >
-        <frc-field3d-object
-          name=${args.objectName}
-          pose=${JSON.stringify(args.pose)}
-        ></frc-field3d-object>
         <frc-field3d-urdf
-          urdf-source="/atlas_v4_with_multisense.urdf"
+          name="R2D2"
           .angles=${{
             rArmShx: .5,
             lArmShx: .5,
           }}
+          pose=${JSON.stringify(args.pose)}
         ></frc-field3d-urdf>
       </frc-field3d>
     `,
@@ -155,8 +135,3 @@ function createFieldStory(optionalArgs: Record<string, any> = {}): Story {
 }
 
 export const Field = createFieldStory();
-export const VRField = createFieldStory({
-  game: "Infinite Recharge",
-  enableVR: true,
-  pose: [4, 3, 0],
-});

@@ -24,6 +24,7 @@ import {
   ObjectConfig,
   IField3d,
 } from './field-interfaces';
+import { joinPaths } from './file-utils';
 
 export default class Object3d extends LitElement {
   @state() objectConfigs = objectConfigs;
@@ -96,7 +97,10 @@ export default class Object3d extends LitElement {
     const objectLoaders: Promise<GLTF>[] = objectSrcs.map(
       (src) =>
         new Promise((resolve) => {
-          this.loader.load(src, (gltf) => resolve(gltf));
+          this.loader.load(
+            joinPaths(field3d.assetPathPrefix ?? '', src),
+            (gltf) => resolve(gltf)
+          );
         })
     );
 
