@@ -126,6 +126,7 @@ export default class Object3d extends LitElement {
   }
 
   firstUpdated(): void {
+    this.updateObjectConfigs();
     this.renderObject();
   }
 

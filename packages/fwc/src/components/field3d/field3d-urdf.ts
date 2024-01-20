@@ -120,6 +120,7 @@ export default class Urdf3d extends LitElement {
   }
 
   firstUpdated(): void {
+    this.updateUrdfConfigs();
     this.renderObject();
   }
 
@@ -139,7 +140,7 @@ export default class Urdf3d extends LitElement {
     }
   }
 
-  updateObjectConfigs() {
+  updateUrdfConfigs() {
     const field = this.getField();
     const newConfigs = field?.urdfConfigs;
     if (newConfigs?.length && newConfigs !== this.urdfConfigs) {
