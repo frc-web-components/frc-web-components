@@ -1,11 +1,21 @@
 import { LitElement, css, html } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import FrcDashboard from '../../../frc-dashboard';
 
-class DashboardComponentRenderer extends LitElement {
+@customElement('dashboard-component-renderer')
+export class DashboardComponentRenderer extends LitElement {
   static styles = css`
     :host {
       display: block;
     }
   `;
+
+  @property({ type: Object, attribute: false }) dashboard!: FrcDashboard;
+  @property({ type: String, attribute: 'component-type' }) componentType = '';
+  @property({ type: String, attribute: 'component-id' }) componentId = '';
+  @property({ type: Object }) config!: Record<string, unknown>;
+
+  renderedElement?: HTMLElement;
 
   static properties = {
     dashboard: { type: Object, attribute: false },
@@ -13,11 +23,6 @@ class DashboardComponentRenderer extends LitElement {
     componentId: { type: String, attribute: 'component-id' },
     config: { type: Object },
   };
-
-  constructor() {
-    super();
-    this.renderedElement = null;
-  }
 
   updated() {
     if (
@@ -32,21 +37,20 @@ class DashboardComponentRenderer extends LitElement {
         this.componentId,
         this.config
       );
-      this.appendChild(this.renderedElement);
+      if (this.renderedElement) {
+        this.appendChild(this.renderedElement);
+      }
     }
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.dashboard.unmount(this.renderedElement);
+    if (this.renderedElement) {
+      this.dashboard.unmount(this.renderedElement);
+    }
   }
 
   render() {
     return html` <slot></slot> `;
   }
 }
-
-customElements.define(
-  'dashboard-component-renderer',
-  DashboardComponentRenderer
-);

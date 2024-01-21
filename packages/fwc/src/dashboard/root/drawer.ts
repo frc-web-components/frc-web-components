@@ -126,52 +126,26 @@ export default class DashboardDrawer extends LitElement {
     this.selectedElement = this.dashboard.getSelectedElement() ?? undefined;
   }
 
-  updated(updatedProps: Map<string, unknown>): void {
-    if (updatedProps.has('selectedElement')) {
-      this.#updateEditors();
-    }
-  }
-
-  #getEditorTags(): string[] {
-    return this.dashboard.getComponentIdsOfType('elementEditor');
-  }
-
-  #updateEditors(): void {
-    this.editors.forEach((editor) => {
-      editor.remove();
-      this.dashboard.unmount(editor);
-    });
-    const tags = this.#getEditorTags();
-    const editorComponents =
-      this.renderRoot.querySelector('.editor-components');
-    tags.forEach((tag) => {
-      const isOpened = this.editorOpened[tag] ?? true;
-      const editor = this.dashboard.create('elementEditor', tag);
-      if (editor) {
-        const container = document.createElement('details');
-        container.addEventListener('toggle', (ev) => {
-          const { open } = ev?.target as HTMLDetailsElement;
-          this.editorOpened = {
-            ...this.editorOpened,
-            [tag]: open,
-          };
-        });
-        if (isOpened) {
-          container.setAttribute('open', '');
-        }
-        container.innerHTML = `
-          <summary>
-            <span class="caret">
-              <vaadin-icon icon="vaadin:angle-right" class="closed-cursor"></vaadin-icon>
-              <vaadin-icon icon="vaadin:angle-down" class="opened-cursor"></vaadin-icon>
-            </span>
-            ${tag}
-          </summary>`;
-        container.appendChild(editor);
-        editorComponents?.append(container);
-        this.editors.push(container);
-      }
-    });
+  #renderPropertyEditors() {
+    return html`
+      <details open>
+        <summary>
+          <span class="caret">
+            <vaadin-icon
+              icon="vaadin:angle-right"
+              class="closed-cursor"
+            ></vaadin-icon>
+            <vaadin-icon
+              icon="vaadin:angle-down"
+              class="opened-cursor"
+            ></vaadin-icon>
+          </span>
+          Properties
+        </summary>
+        <dashboard-properties-editor .dashboard=${this.dashboard}>
+        </dashboard-properties-editor>
+      </details>
+    `;
   }
 
   render(): TemplateResult {
@@ -189,7 +163,9 @@ export default class DashboardDrawer extends LitElement {
                 </header>
               `
             : null}
-          <div class="editor-components">${this.renderElementTree()}</div>
+          <div class="editor-components">
+            ${this.renderElementTree()} ${this.#renderPropertyEditors()}
+          </div>
         </div>
         <div
           class="resize-handle"

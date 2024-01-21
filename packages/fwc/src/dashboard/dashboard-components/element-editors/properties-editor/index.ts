@@ -1,5 +1,7 @@
 import { LitElement, html, css } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 import './dashboard-component-render';
+import FrcDashboard from '../../../frc-dashboard';
 
 const styles = css`
   :host {
@@ -27,19 +29,12 @@ const styles = css`
   }
 `;
 
-class PropertiesEditor extends LitElement {
-  static properties = {
-    dashboard: { attribute: false },
-    dialogOpened: { state: true },
-  };
+@customElement('dashboard-properties-editor')
+export class PropertiesEditor extends LitElement {
+  @property({ type: Object, attribute: false }) dashboard!: FrcDashboard;
+  private sourceChangeObserver?: MutationObserver;
 
   static styles = styles;
-
-  constructor() {
-    super();
-    this.disalogOpened = false;
-    this.sourceChangeObserver = null;
-  }
 
   get #element() {
     return this.dashboard.getSelectedElement();
@@ -139,7 +134,7 @@ class PropertiesEditor extends LitElement {
         ></vaadin-icon>
       </vaadin-text-field>
       <div class="properties-view">
-        <vaadin-form-layout @change=${this.onValueChange}>
+        <vaadin-form-layout>
           ${Object.entries(properties)
             .filter(
               ([, { type }]) => !['SourceProvider', 'Store'].includes(type)
@@ -156,14 +151,14 @@ class PropertiesEditor extends LitElement {
     `;
   }
 
-  renderPropertyView(name, propertyHandler) {
+  renderPropertyView(name: string, propertyHandler: any) {
     const property = propertyHandler.getProperty();
 
     const inputType = property.input?.type ?? property.type;
 
     return html`
       <dashboard-component-renderer
-        @change=${(event) => {
+        @change=${(event: CustomEvent) => {
           this.dashboard.publish('propertyChange', {
             ...event.detail,
             element: this.#element,
@@ -181,5 +176,3 @@ class PropertiesEditor extends LitElement {
     `;
   }
 }
-
-customElements.define('dashboard-properties-editor', PropertiesEditor);
