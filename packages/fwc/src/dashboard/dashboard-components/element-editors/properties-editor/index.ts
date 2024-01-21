@@ -1,7 +1,9 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import './dashboard-component-render';
-import FrcDashboard from '../../../frc-dashboard';
+import FrcDashboard from '@dashboard/frc-dashboard';
+import { consume } from '@lit/context';
+import { dashboardContext } from '@dashboard/context-providers';
 
 const styles = css`
   :host {
@@ -31,14 +33,12 @@ const styles = css`
 
 @customElement('dashboard-properties-editor')
 export class PropertiesEditor extends LitElement {
-  @property({ type: Object, attribute: false }) dashboard!: FrcDashboard;
-  private sourceChangeObserver?: MutationObserver;
+  @consume({ context: dashboardContext }) dashboard!: FrcDashboard;
+  #sourceChangeObserver?: MutationObserver;
+
+  @property({ type: Object }) element?: HTMLElement;
 
   static styles = styles;
-
-  get #element() {
-    return this.dashboard.getSelectedElement();
-  }
 
   get #connector() {
     return this.dashboard.getConnector();
@@ -49,7 +49,7 @@ export class PropertiesEditor extends LitElement {
   }
 
   get webbit() {
-    return this.#element && this.#connector?.getElementWebbit(this.#element);
+    return this.element && this.#connector?.getElementWebbit(this.element);
   }
 
   get sourceKey() {
@@ -73,17 +73,17 @@ export class PropertiesEditor extends LitElement {
   }
 
   updateSourceChangedObserver() {
-    this.sourceChangeObserver?.disconnect();
-    if (this.#element) {
-      this.sourceChangeObserver = new MutationObserver(() => {
+    this.#sourceChangeObserver?.disconnect();
+    if (this.element) {
+      this.#sourceChangeObserver = new MutationObserver(() => {
         this.dashboard.publish('sourceChange', {
           sourceKey: this.sourceKey,
           sourceProvider: this.sourceProvider,
-          element: this.#element,
+          element: this.element,
         });
         this.requestUpdate();
       });
-      this.sourceChangeObserver.observe(this.#element, {
+      this.#sourceChangeObserver.observe(this.element, {
         attributes: true,
         attributeFilter: ['source-provider', 'source-key'],
       });
@@ -98,15 +98,15 @@ export class PropertiesEditor extends LitElement {
   }
 
   disconnectedCallback() {
-    this.sourceChangeObserver?.disconnect();
+    this.#sourceChangeObserver?.disconnect();
   }
 
   render() {
-    if (!this.#element) {
+    if (!this.element) {
       return html``;
     }
 
-    const webbit = this.#connector?.getElementWebbit(this.#element);
+    const webbit = this.#connector?.getElementWebbit(this.element);
 
     if (!webbit) {
       return html``;
@@ -161,13 +161,13 @@ export class PropertiesEditor extends LitElement {
         @change=${(event: CustomEvent) => {
           this.dashboard.publish('propertyChange', {
             ...event.detail,
-            element: this.#element,
+            element: this.element,
           });
         }}
         component-type="propertyInput"
         component-id=${inputType}
         .config=${{
-          element: this.#element,
+          element: this.element,
           propertyHandler,
           propertyName: name,
         }}

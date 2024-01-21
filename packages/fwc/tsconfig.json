@@ -19,7 +19,12 @@
     "forceConsistentCasingInFileNames": true,
     "useDefineForClassFields": false,
     "skipLibCheck": true,
-    "allowJs": true
+    "allowJs": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@dashboard/*": ["src/dashboard/*"]
+    }
   },
   "include": ["src/**/*.ts"],
   "exclude": [
@@ -28,5 +33,9 @@
     "vite*",
     "src/stories/assets/*.svg"
   ],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
 }

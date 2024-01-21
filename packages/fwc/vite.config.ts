@@ -47,6 +47,12 @@ function getAllEntries(): Record<string, string> {
 }
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      '@dashboard': path.resolve(__dirname, './src/dashboard'),
+    },
+  },
   build: {
     lib: {
       entry: getAllEntries(),

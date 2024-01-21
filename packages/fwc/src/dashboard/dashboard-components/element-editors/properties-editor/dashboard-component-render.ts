@@ -1,6 +1,6 @@
 import { LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import FrcDashboard from '../../../frc-dashboard';
+import FrcDashboard from '@dashboard/frc-dashboard';
 
 @customElement('dashboard-component-renderer')
 export class DashboardComponentRenderer extends LitElement {

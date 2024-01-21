@@ -6,8 +6,8 @@ import './navbar';
 import './drawer';
 import { customElement, property, state, query } from 'lit/decorators.js';
 import { guard } from 'lit/directives/guard.js';
-import { onRemoveKeyPress } from '../hotkeys';
-import FrcDashboard from '../frc-dashboard';
+import { onRemoveKeyPress } from '@dashboard/hotkeys';
+import FrcDashboard from '@dashboard/frc-dashboard';
 import './source-picker-dialog';
 import removeElement from './remove-element';
 import addDashboardComponents from '../dashboard-components';
@@ -75,7 +75,8 @@ export default class DashboardRoot extends LitElement {
   @state() drawerOpened = false;
   @state() ready = false;
   @state() dialogOpened = false;
-  @property({ type: Object, attribute: false }) dashboard?: FrcDashboard;
+
+  @property({ type: Object, attribute: false }) dashboard!: FrcDashboard;
 
   @query('.dashboard-elements') _dashboardElements!: HTMLElement;
 
@@ -198,42 +199,43 @@ export default class DashboardRoot extends LitElement {
       : 'auto';
 
     return html`
-      <div class="layout ${!this.drawerOpened ? 'closed' : ''}">
-        <vaadin-dialog
-          theme="no-padding"
-          draggable
-          modeless
-          .opened=${this.drawerOpened && this.dialogOpened}
-          .renderer=${guard([], () => (root: HTMLElement) => {
-            render(
-              html`
-                <dashboard-source-picker-dialog
-                  style="width: 500px;"
-                  .dashboard=${this.dashboard}
-                  .dialogOpened=${this.dialogOpened}
-                  @closeDialog=${() => {
-                    this.dialogOpened = false;
-                  }}
-                ></dashboard-source-picker-dialog>
-              `,
-              root
-            );
-          })}
-        ></vaadin-dialog>
-        <dashboard-drawer
-          .interact="${null}"
-          .dashboard=${this.dashboard}
-        ></dashboard-drawer>
-        <div class="dashboard" style="background: ${dashboardBackground}">
-          <slot name="navbar"></slot>
-          <div class="dashboard-elements">
-            <div id="container">
-              <slot name="dashboard"></slot>
-              ${isEditable ? html` <slot name="layer"></slot> ` : ''}
+      <dashbord-state-providers .dashboard=${this.dashboard}>
+        <div class="layout ${!this.drawerOpened ? 'closed' : ''}">
+          <vaadin-dialog
+            theme="no-padding"
+            draggable
+            modeless
+            .opened=${this.drawerOpened && this.dialogOpened}
+            .renderer=${guard([], () => (root: HTMLElement) => {
+              render(
+                html`
+                  <dashboard-source-picker-dialog
+                    style="width: 500px;"
+                    .dashboard=${this.dashboard}
+                    .dialogOpened=${this.dialogOpened}
+                    @closeDialog=${() => {
+                      this.dialogOpened = false;
+                    }}
+                  ></dashboard-source-picker-dialog>
+                `,
+                root
+              );
+            })}
+          ></vaadin-dialog>
+          <dashboard-drawer
+            .interact="${null}"
+          ></dashboard-drawer>
+          <div class="dashboard" style="background: ${dashboardBackground}">
+            <slot name="navbar"></slot>
+            <div class="dashboard-elements">
+              <div id="container">
+                <slot name="dashboard"></slot>
+                ${isEditable ? html` <slot name="layer"></slot> ` : ''}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </dashboard-state-providers>
     `;
   }
 }

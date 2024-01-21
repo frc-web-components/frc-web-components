@@ -1,13 +1,20 @@
 /* eslint-disable import/extensions */
 import { LitElement, html, css, TemplateResult } from 'lit';
-import { customElement, state, property } from 'lit/decorators.js';
-import FrcDashboard from '../frc-dashboard';
+import { customElement, state } from 'lit/decorators.js';
+import FrcDashboard from '@dashboard/frc-dashboard';
 import './drawer-sidebar';
+import {
+  dashboardContext,
+  selectedElementContext,
+} from '@dashboard/context-providers';
+import { consume } from '@lit/context';
 
 @customElement('dashboard-drawer')
 export default class DashboardDrawer extends LitElement {
-  @property({ type: Object, attribute: false }) dashboard!: FrcDashboard;
-  @state() selectedElement?: HTMLElement;
+  @consume({ context: dashboardContext }) dashboard!: FrcDashboard;
+  @consume({ context: selectedElementContext, subscribe: true })
+  @state()
+  selectedElement?: HTMLElement;
   @state() editors: HTMLElement[] = [];
   @state() editorOpened: Record<string, boolean> = {};
   @state() showSidebar = true;
@@ -119,32 +126,86 @@ export default class DashboardDrawer extends LitElement {
     }
   `;
 
-  firstUpdated(): void {
-    this.dashboard.subscribe('elementSelect', () => {
-      this.selectedElement = this.dashboard.getSelectedElement() ?? undefined;
-    });
-    this.selectedElement = this.dashboard.getSelectedElement() ?? undefined;
+  static createIcon() {
+    const icon = document.createElement('vaadin-icon');
+    icon.setAttribute('icon', 'vaadin:ellipsis-dots-v');
+    icon.setAttribute('theme', 'small');
+    return icon;
+  }
+
+  #renderPropertiesEditor(element?: HTMLElement, open = true) {
+    const displayName = element
+      ? this.dashboard.getElementDisplayName(element)
+      : '';
+    const items = [
+      {
+        component: DashboardDrawer.createIcon(),
+        children: [
+          { text: 'Select' },
+          { text: 'Remove' },
+          {
+            text: 'Add',
+            children: [
+              {
+                text: 'hello',
+              },
+              { text: 'bye' },
+            ],
+          },
+        ],
+      },
+    ];
+    return html`
+      <div style="position: relative;">
+        <details ?open=${open}>
+          <summary>
+            <span class="caret">
+              <vaadin-icon
+                icon="vaadin:angle-right"
+                class="closed-cursor"
+              ></vaadin-icon>
+              <vaadin-icon
+                icon="vaadin:angle-down"
+                class="opened-cursor"
+              ></vaadin-icon>
+            </span>
+
+            <span style="color: purple">${displayName}</span> Properties
+          </summary>
+          <dashboard-properties-editor .element=${element}>
+          </dashboard-properties-editor>
+        </details>
+        <div
+          style="display: inline-block; position: absolute; top: -5px; right: 0"
+          @click=${(ev: Event) => {
+            ev.stopPropagation();
+            ev.preventDefault();
+          }}
+        >
+          <vaadin-menu-bar
+            theme="icon small tertiary"
+            .items="${items}"
+          ></vaadin-menu-bar>
+        </div>
+        <div></div>
+      </div>
+    `;
   }
 
   #renderPropertyEditors() {
+    const childElementsWithConfig = !this.selectedElement
+      ? []
+      : [...this.selectedElement.children].filter((child) => {
+          const config = this.dashboard
+            .getConnector()
+            .getMatchingElementConfig(child as HTMLElement);
+          return !!config;
+        });
     return html`
-      <details open>
-        <summary>
-          <span class="caret">
-            <vaadin-icon
-              icon="vaadin:angle-right"
-              class="closed-cursor"
-            ></vaadin-icon>
-            <vaadin-icon
-              icon="vaadin:angle-down"
-              class="opened-cursor"
-            ></vaadin-icon>
-          </span>
-          Properties
-        </summary>
-        <dashboard-properties-editor .dashboard=${this.dashboard}>
-        </dashboard-properties-editor>
-      </details>
+      ${this.#renderPropertiesEditor(this.selectedElement)}
+      ${childElementsWithConfig.map((child) =>
+        this.#renderPropertiesEditor(child as HTMLElement, false)
+      )}
     `;
   }
 
