@@ -6,15 +6,23 @@ import './drawer-sidebar';
 import {
   dashboardContext,
   selectedElementContext,
+  selectElmentChildrenContext,
 } from '@dashboard/context-providers';
 import { consume } from '@lit/context';
+import './drawer-element-menu';
 
 @customElement('dashboard-drawer')
 export default class DashboardDrawer extends LitElement {
   @consume({ context: dashboardContext }) dashboard!: FrcDashboard;
+
   @consume({ context: selectedElementContext, subscribe: true })
   @state()
   selectedElement?: HTMLElement;
+
+  @consume({ context: selectElmentChildrenContext, subscribe: true })
+  @state()
+  selectedElementChildren: HTMLElement[] = [];
+
   @state() editors: HTMLElement[] = [];
   @state() editorOpened: Record<string, boolean> = {};
   @state() showSidebar = true;
@@ -126,35 +134,11 @@ export default class DashboardDrawer extends LitElement {
     }
   `;
 
-  static createIcon() {
-    const icon = document.createElement('vaadin-icon');
-    icon.setAttribute('icon', 'vaadin:ellipsis-dots-v');
-    icon.setAttribute('theme', 'small');
-    return icon;
-  }
-
   #renderPropertiesEditor(element?: HTMLElement, open = true) {
     const displayName = element
       ? this.dashboard.getElementDisplayName(element)
       : '';
-    const items = [
-      {
-        component: DashboardDrawer.createIcon(),
-        children: [
-          { text: 'Select' },
-          { text: 'Remove' },
-          {
-            text: 'Add',
-            children: [
-              {
-                text: 'hello',
-              },
-              { text: 'bye' },
-            ],
-          },
-        ],
-      },
-    ];
+
     return html`
       <div style="position: relative;">
         <details ?open=${open}>
@@ -175,35 +159,17 @@ export default class DashboardDrawer extends LitElement {
           <dashboard-properties-editor .element=${element}>
           </dashboard-properties-editor>
         </details>
-        <div
-          style="display: inline-block; position: absolute; top: -5px; right: 0"
-          @click=${(ev: Event) => {
-            ev.stopPropagation();
-            ev.preventDefault();
-          }}
-        >
-          <vaadin-menu-bar
-            theme="icon small tertiary"
-            .items="${items}"
-          ></vaadin-menu-bar>
-        </div>
-        <div></div>
+        <dashboard-drawer-element-menu
+          .element=${element}
+        ></dashboard-drawer-element-menu>
       </div>
     `;
   }
 
   #renderPropertyEditors() {
-    const childElementsWithConfig = !this.selectedElement
-      ? []
-      : [...this.selectedElement.children].filter((child) => {
-          const config = this.dashboard
-            .getConnector()
-            .getMatchingElementConfig(child as HTMLElement);
-          return !!config;
-        });
     return html`
       ${this.#renderPropertiesEditor(this.selectedElement)}
-      ${childElementsWithConfig.map((child) =>
+      ${this.selectedElementChildren.map((child) =>
         this.#renderPropertiesEditor(child as HTMLElement, false)
       )}
     `;
