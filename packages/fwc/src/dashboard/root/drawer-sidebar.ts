@@ -69,16 +69,6 @@ export default class DashboardDrawerSidebar extends LitElement {
       cursor: pointer;
     }
 
-    .demo-button {
-      color: rgb(187, 187, 255);
-      border: none;
-      background: none;
-      cursor: pointer;
-      text-align: left;
-      margin-bottom: 5px;
-      padding: 1px;
-    }
-
     .no-children-warning span {
       font-weight: bold;
     }
@@ -205,9 +195,7 @@ export default class DashboardDrawerSidebar extends LitElement {
     const isEditable = this.dashboard.isElementEditable();
     if (!isEditable) {
       return html`
-        <p class="no-children-warning">
-          No children can be added to a tutorial
-        </p>
+        <p class="no-children-warning">No children can be added</p>
       `;
     }
     return html`
@@ -246,7 +234,6 @@ export default class DashboardDrawerSidebar extends LitElement {
           </p>
           ${this.newElementSelector === selector
             ? html`
-                ${this.renderDemo()}
                 <div style="margin-bottom: 8px">
                   <button class="add-button" @click=${this.#appendToDashboard}>
                     Prepend
@@ -259,28 +246,6 @@ export default class DashboardDrawerSidebar extends LitElement {
             : null}
         `
       )}
-    `;
-  }
-
-  renderDemo(): TemplateResult {
-    if (!this.newElementSelector) {
-      return html``;
-    }
-    const tutorials = this.dashboard.getElementTutorials(
-      this.newElementSelector
-    );
-    if (tutorials.length === 0) {
-      return html``;
-    }
-    return html`
-      <button
-        class="demo-button"
-        @click=${() => {
-          this.dashboard.showTutorial(tutorials[0].id);
-        }}
-      >
-        Demo element
-      </button>
     `;
   }
 }
