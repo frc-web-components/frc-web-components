@@ -1,5 +1,9 @@
 import { LitElement, html, css } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { dashboardContext } from '@dashboard/context-providers';
+import { consume } from '@lit/context';
 import './sources-view';
+import FrcDashboard from '@/dashboard/frc-dashboard';
 
 const styles = css`
   :host {
@@ -54,28 +58,21 @@ const styles = css`
   }
 `;
 
-class SourcesEditor extends LitElement {
+@customElement('dashboard-sources-editor')
+export class SourcesEditor extends LitElement {
+  @consume({ context: dashboardContext }) dashboard!: FrcDashboard;
+  private sourceKeys: Record<string, Set<unknown>> = {};
+
+  @property({ type: Object }) element?: HTMLElement;
+
   static styles = styles;
-
-  static properties = {
-    dashboard: { attribute: false },
-  };
-
-  constructor() {
-    super();
-    this.sourceKeys = {};
-  }
-
-  get #element() {
-    return this.dashboard.getSelectedElement();
-  }
 
   get #connector() {
     return this.dashboard.getConnector();
   }
 
   get webbit() {
-    return this.#element && this.#connector?.getElementWebbit(this.#element);
+    return this.element && this.#connector?.getElementWebbit(this.element);
   }
 
   get sourceProvider() {
@@ -110,19 +107,19 @@ class SourcesEditor extends LitElement {
     return this.store?.getSourceProviderNames() ?? [];
   }
 
-  onSourceKeyInputChange(ev) {
-    const input = ev.target || ev.path[0];
+  onSourceKeyInputChange(ev: Event) {
+    const input = ev.target || (ev as any).path[0];
     this.sourceKey = input.value;
     this.requestUpdate();
   }
 
-  onSourceProviderInputChange(ev) {
-    const input = ev.target || ev.path[0];
+  onSourceProviderInputChange(ev: Event) {
+    const input = ev.target || (ev as any).path[0];
     this.sourceProvider = input.value;
     this.requestUpdate();
   }
 
-  onSourceSelect(ev) {
+  onSourceSelect(ev: CustomEvent) {
     const { sourceKey, sourceProvider } = ev.detail;
     this.sourceKey = sourceKey;
     this.sourceProvider = sourceProvider;
@@ -134,7 +131,7 @@ class SourcesEditor extends LitElement {
     return [...(this.sourceKeys[this.sourceProvider] ?? [])];
   }
 
-  updateSourceKeySet(providerName, key) {
+  updateSourceKeySet(providerName: string, key: string) {
     if (this.store.getSource(providerName, key)) {
       if (!this.sourceKeys[providerName].has(key)) {
         this.sourceKeys[providerName].add(key);
@@ -171,10 +168,10 @@ class SourcesEditor extends LitElement {
   }
 
   render() {
-    const webbit = this.#element
-      ? this.#connector?.getElementWebbit(this.#element)
+    const webbit = this.element
+      ? this.#connector?.getElementWebbit(this.element)
       : null;
-    const disabled = !this.#element || !webbit;
+    const disabled = !this.element || !webbit;
 
     return html`
       <div style="display: flex; gap: 10px">
@@ -212,5 +209,3 @@ class SourcesEditor extends LitElement {
     `;
   }
 }
-
-customElements.define('dashboard-sources-editor', SourcesEditor);

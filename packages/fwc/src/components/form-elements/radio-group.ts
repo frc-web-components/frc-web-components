@@ -44,7 +44,6 @@ export class RadioGroup extends LitElement {
 
   // eslint-disable-next-line class-methods-use-this
   #onChange(ev: CustomEvent) {
-    console.log('ev:', ev);
     this.selected = ev.detail.value;
     const event = new CustomEvent('change', {
       bubbles: true,

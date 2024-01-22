@@ -1,11 +1,14 @@
 /* eslint-disable import/extensions */
-import { html, css, LitElement, TemplateResult } from 'lit';
+import { html, css, LitElement, TemplateResult, PropertyValueMap } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import FrcDashboard from '../frc-dashboard';
+import FrcDashboard from '@dashboard/frc-dashboard';
+import { dashboardContext } from '@dashboard/context-providers';
+import { consume } from '@lit/context';
 
 @customElement('dashboard-source-picker-dialog')
 export class SourcePickerDialog extends LitElement {
-  @property({ type: Object, attribute: false }) dashboard!: FrcDashboard;
+  @consume({ context: dashboardContext }) dashboard!: FrcDashboard;
+  @property({ type: Object }) element?: HTMLElement;
 
   static styles = css`
     :host {
@@ -27,19 +30,19 @@ export class SourcePickerDialog extends LitElement {
     );
   }
 
-  firstUpdated(): void {
-    this.dashboard.subscribe('elementSelect', () => {
-      this.requestUpdate();
+  protected firstUpdated(): void {
+    this.dashboard.subscribe('sourcesDialogOpen', (args: any) => {
+      this.element =
+        args.element ?? this.dashboard.getSelectedElement() ?? undefined;
     });
   }
 
   render(): TemplateResult {
-    const selectedElement = this.dashboard.getSelectedElement();
-    const title = selectedElement
+    const title = this.element
       ? html`
           Source for
           <span style="color: purple"
-            >${this.dashboard.getElementDisplayName(selectedElement)}</span
+            >${this.dashboard.getElementDisplayName(this.element)}</span
           >
         `
       : 'Connect to Source';
@@ -61,6 +64,7 @@ export class SourcePickerDialog extends LitElement {
       >
         <dashboard-sources-editor
           .dashboard=${this.dashboard}
+          .element=${this.element}
         ></dashboard-sources-editor>
       </vaadin-scroller>
       <footer

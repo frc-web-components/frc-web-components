@@ -123,14 +123,20 @@ export class PropertiesEditor extends LitElement {
         readonly
         .value=${this.sourceKey || 'Connect to a data source...'}
         style="width: 100%; margin-bottom: 10px;"
-        @click=${() => this.dashboard.publish('sourcesDialogOpen')}
+        @click=${() =>
+          this.dashboard.publish('sourcesDialogOpen', {
+            element: this.element,
+          })}
       >
         <vaadin-icon
           slot="suffix"
           icon="vaadin:edit"
           style="cursor: pointer"
           title="edit"
-          @click=${() => this.dashboard.publish('sourcesDialogOpen')}
+          @click=${() =>
+            this.dashboard.publish('sourcesDialogOpen', {
+              element: this.element,
+            })}
         ></vaadin-icon>
       </vaadin-text-field>
       <div class="properties-view">

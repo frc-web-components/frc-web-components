@@ -73,6 +73,7 @@ const styles = css`
 @customElement('dashboard-root')
 export default class DashboardRoot extends LitElement {
   @state() drawerOpened = false;
+  @state() sourcesDialogElement?: HTMLElement;
   @state() ready = false;
   @state() dialogOpened = false;
 
@@ -159,8 +160,11 @@ export default class DashboardRoot extends LitElement {
     this.dashboard.subscribe('themeSet', () => this.#updateTheme());
     this.#updateTheme();
 
-    this.dashboard.subscribe('sourcesDialogOpen', () => {
+    this.dashboard.subscribe('sourcesDialogOpen', (args: any) => {
       this.dialogOpened = true;
+      this.sourcesDialogElement =
+        args.element ?? this.dashboard.getSelectedElement() ?? undefined;
+      console.log('!!!', this.sourcesDialogElement);
     });
 
     this.ready = true;
@@ -212,6 +216,7 @@ export default class DashboardRoot extends LitElement {
                   <dashboard-source-picker-dialog
                     style="width: 500px;"
                     .dashboard=${this.dashboard}
+                    .element=${this.sourcesDialogElement}
                     .dialogOpened=${this.dialogOpened}
                     @closeDialog=${() => {
                       this.dialogOpened = false;

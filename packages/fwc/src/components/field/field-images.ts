@@ -25,7 +25,6 @@ export default class FieldImages {
         imageObject.width = image.width;
         imageObject.height = image.height;
         [...this.#onImageLoadCallbacks.values()].forEach((callback) => {
-          console.log('on load', callback);
           callback(src);
         });
       };
