@@ -2,8 +2,9 @@
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { customElement, state, property } from 'lit/decorators.js';
 import { WebbitConfig } from '@webbitjs/webbit';
-import FrcDashboard from '../frc-dashboard';
+import FrcDashboard from '@dashboard/frc-dashboard';
 import { appendElementToDashboard } from './get-element-html';
+import getAllowedChildren from '@dashboard/get-allowed-children';
 
 interface DashboardElement {
   selector: string;
@@ -75,17 +76,35 @@ export default class DashboardDrawerSidebar extends LitElement {
   `;
 
   get #allowedChildren(): string[] {
+    const selectedTab = this.selectedElement?.closest('dashboard-tab');
+    if (!selectedTab) {
+      return [];
+    }
+
+    const allowedTabChildren = getAllowedChildren(
+      selectedTab as HTMLElement,
+      this.dashboard.getConnector()
+    )?.[0]?.allowedChildren;
+
     const allowedChildren =
       this.dashboard?.getAllowedChildren()?.[0]?.allowedChildren;
-    return allowedChildren ?? [];
+    return allowedChildren ?? allowedTabChildren ?? [];
   }
 
   #appendToDashboard(): void {
-    if (this.selectedElement && this.newElementSelector) {
+    const selectedTab = this.selectedElement?.closest('dashboard-tab');
+
+    const allowedChildren =
+      this.dashboard?.getAllowedChildren()?.[0]?.allowedChildren ?? [];
+
+    const parent =
+      allowedChildren.length > 0 ? this.selectedElement : selectedTab;
+
+    if (parent && this.newElementSelector) {
       appendElementToDashboard(
         this.dashboard.getConnector(),
         this.newElementSelector,
-        this.selectedElement
+        parent as HTMLElement
       );
     }
   }
