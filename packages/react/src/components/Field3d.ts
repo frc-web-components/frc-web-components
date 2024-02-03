@@ -21,6 +21,9 @@ export const Field3dUrdf = createComponent({
   tagName: "frc-field3d-urdf",
   elementClass: Field3dUrdfWc,
   react: React,
+  events: {
+    onurdfload: 'urdfLoad',
+  },
 });
 
 export default Field3d;

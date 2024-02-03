@@ -59,6 +59,16 @@ export default class Urdf3d extends LitElement {
     object.rotation.setFromQuaternion(rotation3dToQuaternion(pose.rotation));
   }
 
+  #emitLoadEvent(): void {
+    this.dispatchEvent(
+      new CustomEvent('urdfLoad', {
+        detail: {
+          urdf: this.robot,
+        },
+      })
+    );
+  }
+
   loadRobotModel(): void {
     const field3d = this.getField();
     const urdfConfig = this.getUrdfConfig();
@@ -112,6 +122,7 @@ export default class Urdf3d extends LitElement {
       this.robot = obj;
       this.updateAngles();
       object.add(obj);
+      this.#emitLoadEvent();
     });
   }
 

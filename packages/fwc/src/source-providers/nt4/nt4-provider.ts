@@ -57,6 +57,8 @@ export default class Nt4Provider extends SourceProvider {
   private client?: NT4_Client;
   private connected = false;
   private topics: Record<string, NT4_Topic> = {};
+  private topicValues: Record<string, unknown> = {};
+  private unprocessedUpdates: Record<string, unknown> = {};
   private connectionListeners: ((
     connected: boolean,
     serverAddress: string
@@ -65,6 +67,17 @@ export default class Nt4Provider extends SourceProvider {
   constructor() {
     super({}, 1000 / 60);
     this.connect(localStorage.getItem('nt4Address') ?? '127.0.0.1');
+  }
+
+  setValue(key: string, value: unknown) {
+    this.userUpdate(key, value);
+  }
+
+  getValue<T>(key: string, defaultValue: T): T {
+    if (key in this.topicValues) {
+      return this.topicValues[key] as T;
+    }
+    return defaultValue;
   }
 
   getServerAddress(): string {
@@ -97,9 +110,18 @@ export default class Nt4Provider extends SourceProvider {
     }
   }
 
+  private processUnprocessedUpdates() {
+    const updates = { ...this.unprocessedUpdates };
+    this.unprocessedUpdates = {};
+    Object.entries(updates).forEach(([key, value]) => {
+      this.userUpdate(key, value);
+    });
+  }
+
   // TODO: Be able to optionally pass in additional data
   userUpdate(key: string, value: unknown): void {
     if (!this.client) {
+      this.unprocessedUpdates[key] = value;
       return;
     }
     const topic = this.topics[key];
@@ -109,6 +131,7 @@ export default class Nt4Provider extends SourceProvider {
       this.updateSource(topic.name, value);
     } else {
       const type = getType(value);
+
       if (type !== undefined) {
         this.client.publishNewTopic(key, type);
         this.client.addSample(key, value);
@@ -122,11 +145,13 @@ export default class Nt4Provider extends SourceProvider {
   }
   private onTopicUnannounce(topic: NT4_Topic): void {
     delete this.topics[topic.name];
+    delete this.topicValues[topic.name];
     this.removeSource(topic.name);
   }
 
   private onNewTopicData(topic: NT4_Topic, _: number, value: unknown): void {
     this.updateSource(topic.name, value);
+    this.topicValues[topic.name] = value;
   }
 
   private onConnect() {
@@ -134,6 +159,7 @@ export default class Nt4Provider extends SourceProvider {
     this.connectionListeners.forEach((listener) =>
       listener(true, this.serverAddress)
     );
+    this.processUnprocessedUpdates();
   }
 
   private onDisconnect() {
@@ -147,6 +173,7 @@ export default class Nt4Provider extends SourceProvider {
     if (this.client) {
       this.client.disconnect();
       this.topics = {};
+      this.topicValues = {};
       this.connected = false;
       this.client = undefined;
     }

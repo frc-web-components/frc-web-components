@@ -26,6 +26,6 @@
   "dependencies": {
     "@frc-web-components/fwc": "^2.3.1",
     "@frc-web-components/svelte": "^0.3.0",
-    "@webbitjs/store": "^5.7.0"
+    "@webbitjs/store": "^5.8.0"
   }
 }
