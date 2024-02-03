@@ -23,12 +23,10 @@
     "@lit/context": "^1.0.1"
   },
   "peerDependencies": {
-    "@frc-web-components/fwc": ">=2.3.1",
+    "@frc-web-components/fwc": "workspace:>=2.3.1",
     "lit": ">=2.7.0"
   },
   "devDependencies": {
-    "@frc-web-components/fwc": "*",
-    "lit": "^2.7.6",
     "vite": "^4.4.5",
     "vite-plugin-dts": "^3.7.0"
   }

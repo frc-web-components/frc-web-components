@@ -60,10 +60,9 @@
   "peerDependencies": {
     "react": ">=17.0.0",
     "react-dom": ">=17.0.0",
-    "@frc-web-components/fwc": ">=2.3.1"
+    "@frc-web-components/fwc": "workspace:>=2.3.1"
   },
   "devDependencies": {
-    "@frc-web-components/fwc": "2.3.1",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",

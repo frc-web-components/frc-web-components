@@ -30,7 +30,7 @@ importers:
   examples/app:
     dependencies:
       '@frc-web-components/app':
-        specifier: ^0.2.0
+        specifier: workspace:*
         version: link:../../packages/app
       lit:
         specifier: ^2.7.6
@@ -49,7 +49,7 @@ importers:
   examples/lit-plugin:
     dependencies:
       '@frc-web-components/app':
-        specifier: ^0.2.0
+        specifier: workspace:*
         version: link:../../packages/app
       lit:
         specifier: ^2.7.6
@@ -68,11 +68,11 @@ importers:
   examples/react-custom-dashboard:
     dependencies:
       '@frc-web-components/fwc':
-        specifier: ^2.3.1
+        specifier: workspace:*
         version: link:../../packages/fwc
       '@frc-web-components/react':
-        specifier: ^0.4.0
-        version: 0.4.0(@frc-web-components/fwc@packages+fwc)(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0)
+        specifier: workspace:*
+        version: link:../../packages/react
       '@webbitjs/store':
         specifier: ^5.8.0
         version: 5.8.0
@@ -117,7 +117,7 @@ importers:
   examples/react-plugin:
     dependencies:
       '@frc-web-components/app':
-        specifier: ^0.2.0
+        specifier: workspace:*
         version: link:../../packages/app
       '@r2wc/react-to-web-component':
         specifier: ^2.0.3
@@ -166,10 +166,10 @@ importers:
   examples/svelte-custom-dashboard:
     dependencies:
       '@frc-web-components/fwc':
-        specifier: ^2.3.1
+        specifier: workspace:*
         version: link:../../packages/fwc
       '@frc-web-components/svelte':
-        specifier: ^0.3.0
+        specifier: workspace:*
         version: link:../../packages/svelte
       '@webbitjs/store':
         specifier: ^5.8.0
@@ -200,7 +200,7 @@ importers:
   examples/svelte-plugin:
     dependencies:
       '@frc-web-components/app':
-        specifier: ^0.2.0
+        specifier: workspace:*
         version: link:../../packages/app
     devDependencies:
       '@sveltejs/vite-plugin-svelte':
@@ -230,6 +230,9 @@ importers:
 
   packages/app:
     dependencies:
+      '@frc-web-components/fwc':
+        specifier: workspace:>=2.3.1
+        version: link:../fwc
       '@lit/context':
         specifier: ^1.0.1
         version: 1.1.0
@@ -240,12 +243,9 @@ importers:
         specifier: ^5.12.0
         version: 5.12.0
       lit:
-        specifier: ^2.7.6
-        version: 2.8.0
+        specifier: '>=2.7.0'
+        version: 3.1.2
     devDependencies:
-      '@frc-web-components/fwc':
-        specifier: 2.3.1
-        version: link:../fwc
       vite:
         specifier: ^4.4.5
         version: 4.5.2(@types/node@17.0.45)
@@ -649,16 +649,16 @@ importers:
 
   packages/lit:
     dependencies:
+      '@frc-web-components/fwc':
+        specifier: workspace:>=2.3.1
+        version: link:../fwc
       '@lit/context':
         specifier: ^1.0.1
         version: 1.1.0
-    devDependencies:
-      '@frc-web-components/fwc':
-        specifier: '*'
-        version: link:../fwc
       lit:
-        specifier: ^2.7.6
-        version: 2.8.0
+        specifier: '>=2.7.0'
+        version: 3.1.2
+    devDependencies:
       vite:
         specifier: ^4.4.5
         version: 4.5.2(@types/node@17.0.45)
@@ -668,6 +668,9 @@ importers:
 
   packages/react:
     dependencies:
+      '@frc-web-components/fwc':
+        specifier: workspace:>=2.3.1
+        version: link:../fwc
       '@lit/react':
         specifier: ^1.0.2
         version: 1.0.2(@types/react@18.2.48)
@@ -675,9 +678,6 @@ importers:
         specifier: ^5.8.0
         version: 5.8.0
     devDependencies:
-      '@frc-web-components/fwc':
-        specifier: 2.3.1
-        version: link:../fwc
       '@types/react':
         specifier: ^18.2.15
         version: 18.2.48
@@ -718,7 +718,7 @@ importers:
   packages/storybook:
     devDependencies:
       '@frc-web-components/fwc':
-        specifier: 2.3.1
+        specifier: workspace:*
         version: link:../fwc
       '@ljcl/storybook-addon-cssprops':
         specifier: ^3.2.0
@@ -752,10 +752,11 @@ importers:
         version: 6.1.0(react-dom@18.2.0)(react@18.2.0)
 
   packages/svelte:
-    devDependencies:
+    dependencies:
       '@frc-web-components/fwc':
-        specifier: ^2.3.1
+        specifier: workspace:>=2.3.1
         version: link:../fwc
+    devDependencies:
       '@sveltejs/vite-plugin-svelte':
         specifier: ^2.4.2
         version: 2.5.3(svelte@4.2.9)(vite@4.5.2)
@@ -2553,22 +2554,6 @@ packages:
     resolution: {integrity: sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==}
     dev: true
 
-  /@frc-web-components/react@0.4.0(@frc-web-components/fwc@packages+fwc)(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-rA3Qf8ld0ro7kyy86SsfqsUNyu7vZbEW96t4hzCCicLfQbcqjrCWNWRiGuQpxQ8YtBABY9qz+PdUnBqDerpzdw==}
-    peerDependencies:
-      '@frc-web-components/fwc': '>=2.1.0'
-      react: '>=17.0.0'
-      react-dom: '>=17.0.0'
-    dependencies:
-      '@frc-web-components/fwc': link:packages/fwc
-      '@lit/react': 1.0.2(@types/react@18.2.48)
-      '@webbitjs/store': 5.8.0
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-    transitivePeerDependencies:
-      - '@types/react'
-    dev: false
-
   /@humanwhocodes/config-array@0.11.14:
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
     engines: {node: '>=10.10.0'}
@@ -2974,7 +2959,6 @@ packages:
 
   /@lit-labs/ssr-dom-shim@1.2.0:
     resolution: {integrity: sha512-yWJKmpGE6lUURKAaIltoPIE/wrbY3TEkqQt+X0m+7fQNnAv0keydnYvbiJFP1PnMhizmIWRWOG5KLhYyc/xl+g==}
-    dev: true
 
   /@lit/context@1.1.0:
     resolution: {integrity: sha512-fCyv4dsH05wCNm3AKbB+PdYbXGJd/XT8OOwo4hVmD4COq5wOWJlQreGAMDvmHZ7osqxuu06Y4nmP6ooXpN7ErA==}
@@ -3005,7 +2989,6 @@ packages:
     resolution: {integrity: sha512-GFn91inaUa2oHLak8awSIigYz0cU0Payr1rcFsrkf5OJ5eSPxElyZfKh0f2p9FsTiZWXQdWGJeXZICEfXXYSXQ==}
     dependencies:
       '@lit-labs/ssr-dom-shim': 1.2.0
-    dev: true
 
   /@ljcl/storybook-addon-cssprops@3.2.0(@storybook/addons@7.6.12)(@storybook/api@7.6.12)(@storybook/blocks@7.6.10)(@storybook/components@7.6.12)(@storybook/preview-api@7.6.12)(@storybook/theming@7.6.12)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-vHWeRhlnsSwSztOk0fsimPScECp+Gwjb7dQU8uLj0JJ/skZslgaZwgFjPF5lhUnJc7FgdMr/YZfYz7ZECXFbUw==}
@@ -12626,7 +12609,6 @@ packages:
       '@lit-labs/ssr-dom-shim': 1.2.0
       '@lit/reactive-element': 2.0.4
       lit-html: 3.1.2
-    dev: true
 
   /lit-html@2.8.0:
     resolution: {integrity: sha512-o9t+MQM3P4y7M7yNzqAyjp7z+mQGa4NS4CxiyLqFPyFWyc4O+nodLrkrxSaCTrla6M5YOLaT3RpbbqjszB5g3Q==}
@@ -12643,7 +12625,6 @@ packages:
     resolution: {integrity: sha512-3OBZSUrPnAHoKJ9AMjRL/m01YJxQMf+TMHanNtTHG68ubjnZxK0RFl102DPzsw4mWnHibfZIBJm3LWCZ/LmMvg==}
     dependencies:
       '@types/trusted-types': 2.0.7
-    dev: true
 
   /lit@2.8.0:
     resolution: {integrity: sha512-4Sc3OFX9QHOJaHbmTMk28SYgVxLN3ePDjg7hofEft2zWlehFL3LiAuapWc4U/kYwMYJSh2hTCPZ6/LIC7ii0MA==}
@@ -12666,7 +12647,6 @@ packages:
       '@lit/reactive-element': 2.0.4
       lit-element: 4.0.4
       lit-html: 3.1.2
-    dev: true
 
   /load-json-file@4.0.0:
     resolution: {integrity: sha512-Kx8hMakjX03tiGTLAIdJ+lL0htKnXjEZN6hk/tozf/WOuYGdZBJrZ+rCJRbVCugsjB3jMLn9746NsQIf5VjBMw==}

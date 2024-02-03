@@ -6,7 +6,7 @@
     "build": "storybook build"
   },
   "devDependencies": {
-    "@frc-web-components/fwc": "2.3.1",
+    "@frc-web-components/fwc": "workspace:*",
     "@ljcl/storybook-addon-cssprops": "^3.2.0",
     "@storybook/addon-essentials": "^7.6.3",
     "@storybook/addon-links": "^7.6.3",
