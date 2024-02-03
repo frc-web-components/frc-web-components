@@ -38,7 +38,7 @@ class BooleanArrayPropertyView extends PropertyView {
 
   renderInputField() {
     return html`
-      <multiselect-combo-box
+      <vaadin-multi-select-combo-box
         part="input"
         theme="small"
         @change="${this.onInputChange}"
@@ -49,7 +49,7 @@ class BooleanArrayPropertyView extends PropertyView {
         ?disabled="${this.isDisabled()}"
       >
         <template> [[item.display]] </template>
-      </multiselect-combo-box>
+      </vaadin-multi-select-combo-box>
     `;
   }
 }

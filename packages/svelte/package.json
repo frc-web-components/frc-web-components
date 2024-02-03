@@ -19,7 +19,7 @@
     "watch": "vite build --watch",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "pnpm build"
   },
   "peerDependencies": {
     "@frc-web-components/fwc": ">=2.3.1"

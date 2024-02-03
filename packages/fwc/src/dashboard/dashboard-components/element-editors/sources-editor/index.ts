@@ -47,7 +47,7 @@ const styles = css`
     color: purple;
   }
   vaadin-form-layout vaadin-combo-box,
-  vaadin-form-layout multiselect-combo-box {
+  vaadin-form-layout vaadin-multi-select-combo-box {
     width: calc(100% - 5px);
   }
   vaadin-form-layout vaadin-form-item::part(label) {

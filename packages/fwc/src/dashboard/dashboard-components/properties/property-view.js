@@ -12,7 +12,7 @@ export default class PropertyView extends LitElement {
     }
     vaadin-text-field,
     vaadin-number-field,
-    multiselect-combo-box,
+    vaadin-multi-select-combo-box,
     vaadin-text-area,
     vaadin-combo-box {
       width: 100%;

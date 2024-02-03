@@ -33,10 +33,10 @@ class StringArrayPropertyView extends PropertyView {
 
   renderInputField() {
     return html`
-      <multiselect-combo-box
+      <vaadin-multi-select-combo-box
         part="input"
         theme="small"
-        allow-custom-values
+        allow-custom-value
         @custom-values-set="${this.onCustomValueSet}"
         @change="${this.onInputChange}"
         item-label-path="autocomplete"
@@ -45,7 +45,7 @@ class StringArrayPropertyView extends PropertyView {
         ?disabled="${this.isDisabled()}"
       >
         <template> [[item.display]] </template>
-      </multiselect-combo-box>
+      </vaadin-multi-select-combo-box>
     `;
   }
 }

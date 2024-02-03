@@ -1,0 +1,4 @@
+packages:
+  # include packages in subfolders (change as required)
+  - 'examples/**'
+  - 'packages/**'

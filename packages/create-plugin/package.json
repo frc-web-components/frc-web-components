@@ -7,7 +7,7 @@
     "build": "tsup src/cli.ts --minify",
     "clean": "shx rm -rf lib",
     "dev": "tsup src/cli.ts --watch",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "pnpm build"
   },
   "bin": "dist/cli.js",
   "files": [
