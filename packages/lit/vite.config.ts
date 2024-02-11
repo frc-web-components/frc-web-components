@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -15,7 +16,8 @@ export default defineConfig({
       fileName: (format, entryName) => `${entryName}.${format}.js`,
     },
     rollupOptions: {
-      external: ["lit", "@frc-web-components/fwc"],
+      external: [/node_modules/],
+      plugins: [nodeResolve()]
     },
   },
   plugins: [dts()],

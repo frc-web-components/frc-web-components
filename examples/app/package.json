@@ -27,7 +27,8 @@
   },
   "dependencies": {
     "lit": "^2.7.6",
-    "@frc-web-components/app": "workspace:*"
+    "@frc-web-components/app": "workspace:*",
+    "@frc-web-components/fwc": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.0.2",
