@@ -28,4 +28,5 @@ export * from './scoring-grid';
 export * from './command-based';
 export * from './canvas';
 export * from './label';
+export * from './preferences';
 export { dashboardElementConfigs } from './dashboard-configs';
