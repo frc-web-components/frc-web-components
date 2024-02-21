@@ -145,6 +145,25 @@ export class Field extends LitElement {
     };
   }
 
+  pxToX(px: number, unit: string = this.unit): number {
+    const fieldRectPx = this.getFieldRectPx();
+    const { size, unit: configUnit } = this.getConfig();
+
+    if (fieldRectPx.width === 0) {
+      return 0;
+    }
+
+    const pxPerUnit = fieldRectPx.width / size[0];
+
+    const pxScaled = px * (this.canvas.width / this.canvas.clientWidth);
+
+    const xValue =
+      this.origin !== 'red'
+        ? (pxScaled - fieldRectPx.x) / pxPerUnit
+        : (fieldRectPx.x + fieldRectPx.width - pxScaled) / pxPerUnit;
+    return convert(xValue, configUnit, unit);
+  }
+
   xToPx(xUnits: number, unit: string = this.unit): number {
     const fieldRectPx = this.getFieldRectPx();
     const { size, unit: configUnit } = this.getConfig();
@@ -173,6 +192,25 @@ export class Field extends LitElement {
     return this.origin !== 'red'
       ? fieldRectPx.y + fieldRectPx.height - yValue * pxPerUnit
       : fieldRectPx.y + yValue * pxPerUnit;
+  }
+
+  pxToY(px: number, unit: string = this.unit): number {
+    const fieldRectPx = this.getFieldRectPx();
+    const { size, unit: configUnit } = this.getConfig();
+
+    if (fieldRectPx.height === 0) {
+      return 0;
+    }
+
+    const pxPerUnit = fieldRectPx.height / size[1];
+
+    const pxScaled = px * (this.canvas.height / this.canvas.clientHeight);
+
+    const yValue =
+      this.origin !== 'red'
+        ? (fieldRectPx.y + fieldRectPx.height - pxScaled) / pxPerUnit
+        : (pxScaled - fieldRectPx.y) / pxPerUnit;
+    return convert(yValue, configUnit, unit);
   }
 
   lengthToPx(length: number, unit: string = this.unit): number {
@@ -323,11 +361,32 @@ export class Field extends LitElement {
     this.drawField();
   }
 
+  #onCanvasClick(ev: MouseEvent) {
+    const x = this.pxToX(ev.offsetX);
+    const y = this.pxToY(ev.offsetY);
+    this.dispatchEvent(
+      new CustomEvent('fieldClick', {
+        detail: {
+          feet: {
+            x: convert(x, this.unit, 'ft'),
+            y: convert(y, this.unit, 'ft'),
+          },
+          meters: {
+            x: convert(x, this.unit, 'm'),
+            y: convert(y, this.unit, 'm'),
+          },
+        },
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+
   render(): TemplateResult {
     return html`
       <div class="outside-container">
         <div class="container" style="transform: rotate(${-this.rotation}deg)">
-          <canvas></canvas>
+          <canvas @click=${this.#onCanvasClick}></canvas>
         </div>
       </div>
     `;
