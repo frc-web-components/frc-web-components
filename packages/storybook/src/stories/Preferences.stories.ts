@@ -8,12 +8,15 @@ const defaultArgs: Record<string, any> = {
   preferences: {},
   search: '',
   editable: false,
+  hideTitle: false,
   theme: 'light',
   'background-color': '#fff',
   '--frc-preferences-input-text-color': 'black',
   '--frc-preferences-input-background-color': 'rgba(0,0,0,.1)',
   '--frc-preferences-label-color': 'black',
   '--frc-preferences-input-button-text-color': '#444',
+  '--frc-preferences-placeholder-text-color': '#888',
+  '--frc-preferences-header-background-color': 'lightblue',
 };
 
 /**
@@ -79,6 +82,12 @@ const meta: Meta = {
         defaultValue: { summary: false },
       },
     },
+    hideTitle: {
+      table: {
+        category: 'Properties',
+        defaultValue: { summary: false },
+      },
+    },
     theme: {
       control: 'radio',
       options: ['light', 'dark', 'custom'],
@@ -117,6 +126,18 @@ const meta: Meta = {
         defaultValue: { summary: '#444' },
       },
     },
+    '--frc-preferences-placeholder-text-color': {
+      table: {
+        category: 'Styles',
+        defaultValue: { summary: '#888' },
+      },
+    },
+    '--frc-preferences-header-background-color': {
+      table: {
+        category: 'Styles',
+        defaultValue: { summary: 'lightblue' },
+      },
+    },
   },
   decorators: [
     (story, props) => {
@@ -151,6 +172,8 @@ function getStyles(args: Args) {
           --frc-preferences-input-background-color: ${args['--frc-input-background-color']};
           --frc-preferences-label-color: ${args['--frc-preferences-label-color']};
           --frc-preferences-input-button-text-color: ${args['--frc-preferences-input-button-text-color']};
+          --frc-preferences-placeholder-text-color: ${args['--frc-preferences-placeholder-text-color']};
+          --frc-preferences-header-background-color: ${args['--frc-preferences-header-background-color']};
         }
       </style>
     `;
@@ -164,6 +187,8 @@ function getStyles(args: Args) {
           --frc-preferences-input-background-color: rgba(255,255,255,.3);
           --frc-preferences-label-color: white;
           --frc-preferences-input-button-text-color: #ccc;
+          --frc-preferences-placeholder-text-color: #aaa;
+          --frc-preferences-header-background-color: steelblue;
         }
       </style>
     `;
@@ -174,7 +199,7 @@ function getStyles(args: Args) {
       .light {
         --frc-preferences-input-text-color: black;
         --frc-preferences-input-background-color: rgba(0,0,0,.1);
-        --frc-preferences-input-button-text-color: #444;
+        --frc-preferences-header-background-color: lightblue;
       }
     </style>
   `;
@@ -207,35 +232,11 @@ function createPreferencesStory(optionalArgs: Record<string, any> = {}): Story {
         .preferences=${preferences}
         search=${args.search}
         ?editable=${args.editable}
-        ?flat=${args.flat}
+        ?hide-title=${args.hideTitle}
       ></frc-preferences>
     `;
     }
   };
 }
 
-export const Mechanism2d = createPreferencesStory({
-  roots: [
-    {
-      x: 1.5,
-      y: 0.5,
-      children: [
-        {
-          angle: 90,
-          color: '#00FF00',
-          length: 0.5334,
-          weight: 10,
-          children: [
-            {
-              angle: 0,
-              color: '#008000',
-              length: 0.5,
-              weight: 6,
-              children: [],
-            },
-          ],
-        },
-      ],
-    },
-  ],
-});
+export const Preferences = createPreferencesStory();

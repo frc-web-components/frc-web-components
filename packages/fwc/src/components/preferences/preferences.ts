@@ -1,5 +1,6 @@
 import { html, css, LitElement, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
+import { when } from 'lit/directives/when.js';
 
 type IPreferences = {
   [property: string]: IPreferences | string | number | boolean;
@@ -10,18 +11,59 @@ export class Preferences extends LitElement {
   @property({ type: Object }) preferences: IPreferences = {};
   @property({ type: String }) search = '';
   @property({ type: Boolean }) editable = false;
+  @property({ type: Boolean, attribute: 'hide-title' }) hideTitle = false;
 
   static styles = css`
     :host {
-      display: inline-grid;
-      grid-template-columns: repeat(2, 1fr);
-      column-gap: 8px;
-      row-gap: 5px;
-      align-items: center;
-      justify-items: start;
+      display: inline-block;
       width: 250px;
+      height: 250px;
       font-family: sans-serif;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      height: 100%;
+      width: 100%;
+    }
+
+    header {
+      background: var(--frc-preferences-header-background-color, lightblue);
+      color: var(--frc-preferences-label-color, black);
+      text-align: center;
+      padding: 5px 3px;
+      border-radius: 3px;
+      margin: 0 3px;
+      font-size: 15px;
+    }
+
+    .search-input {
+      padding: 0 3px;
+    }
+
+    .preferences-container {
+      flex: 1;
+      overflow: auto;
+      width: 100%;
       box-sizing: border-box;
+
+      .preferences {
+        padding: 3px;
+        display: inline-grid;
+        grid-template-columns: repeat(2, 1fr);
+        column-gap: 8px;
+        row-gap: 5px;
+        align-items: center;
+        justify-items: start;
+        font-family: sans-serif;
+        box-sizing: border-box;
+      }
+    }
+
+    input::placeholder {
+      color: var(--frc-preferences-placeholder-text-color, #888);
     }
 
     input:not([type='checkbox']) {
@@ -112,6 +154,7 @@ export class Preferences extends LitElement {
       input {
         flex: 1;
         background: none;
+        text-align: center;
       }
     }
 
@@ -149,15 +192,28 @@ export class Preferences extends LitElement {
   }
 
   #renderInputs(prefs: IPreferences, sourceRoot?: string): TemplateResult {
+    const filteredEntries = Object.entries(prefs).filter(
+      ([property, value]) => {
+        const source =
+          typeof sourceRoot !== 'undefined'
+            ? [sourceRoot, property].join('/')
+            : property;
+        if (!this.search || typeof value === 'object') {
+          return true;
+        }
+        console.log('filtered source value:', source.toLowerCase());
+        return source.toLowerCase().includes(this.search.toLowerCase());
+      }
+    );
     return html`
-      ${Object.entries(prefs).map(([property, value]) => {
+      ${filteredEntries.map(([property, value]) => {
         const source =
           typeof sourceRoot !== 'undefined'
             ? [sourceRoot, property].join('/')
             : property;
         if (typeof value === 'boolean') {
           return html`
-            <label>${source}</label>
+            <label title=${source}>${source}</label>
             <input
               type="checkbox"
               .checked=${value}
@@ -169,7 +225,7 @@ export class Preferences extends LitElement {
         }
         if (typeof value === 'number') {
           return html`
-            <label>${source}</label>
+            <label title=${source}>${source}</label>
             <div class="number-input">
               <button
                 @click=${() => {
@@ -202,12 +258,12 @@ export class Preferences extends LitElement {
         }
         if (typeof value === 'string') {
           return html`
-            <label>${source}</label>
+            <label title=${source}>${source}</label>
             <input
               type="text"
               .value=${value}
               @change=${(ev: any) => {
-                this.#updateValue(source, ev.target.checked, prefs, property);
+                this.#updateValue(source, ev.target.value, prefs, property);
               }}
             />
           `;
@@ -218,7 +274,25 @@ export class Preferences extends LitElement {
   }
 
   render() {
-    return html` ${this.#renderInputs(this.preferences)} `;
+    return html`
+      <div class="container">
+        ${when(!this.hideTitle, () => html` <header>Preferences</header> `)}
+
+        <div class="search-input">
+          <input
+            placeholder="Search..."
+            .value=${this.search}
+            @input=${(ev: any) => {
+              console.log('on change:', ev);
+              this.search = ev.target.value;
+            }}
+          />
+        </div>
+        <div class="preferences-container">
+          <div class="preferences">${this.#renderInputs(this.preferences)}</div>
+        </div>
+      </div>
+    `;
   }
 }
 
