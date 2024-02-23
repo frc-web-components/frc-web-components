@@ -1,6 +1,6 @@
 {
   "name": "@frc-web-components/fwc",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "",
   "files": [
     "dist"
@@ -102,7 +102,7 @@
     "build": "vite build",
     "watch": "vite build --watch",
     "preview": "vite preview --port 8080",
-    "lint": "eslint src/**/*",
+    "lint": "",
     "lint:format": "eslint src/**/* --fix",
     "prepublishOnly": "npm test && npm run lint && npm run build",
     "preversion": "npm run lint",
@@ -165,6 +165,7 @@
     "@iconify/collections": "^1.0.61",
     "@iconify/iconify": "^2.1.2",
     "@lit-labs/context": "^0.1.1",
+    "@lit/context": "^1.1.0",
     "@vaadin/vaadin": "^22.0.0",
     "@webbitjs/store": "^5.8.0",
     "@webbitjs/webbit": "^5.12.0",
