@@ -13,15 +13,25 @@ import {
   Mesh,
   MeshStandardMaterial,
   Color,
+  Quaternion,
 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { VRButton } from 'three/examples/jsm/webxr/VRButton';
-import { getQuaternionFromRotSeq, rotation3dToQuaternion } from './utils';
+import {
+  getQuaternionFromRotSeq,
+  getRotation3dFromRotSeq,
+  rotation3dToQuaternion,
+} from './utils';
 import fieldConfigs, { FieldConfig } from './field-configs';
 import objectConfigs from './object-configs';
 import urdfConfigs from './urdf-configs';
-import { Pose3d, IField3d } from './field-interfaces';
+import {
+  Pose3d,
+  IField3d,
+  Rotation3d,
+  Translation3d,
+} from './field-interfaces';
 import { convert } from '../field/units';
 import './field3d-object';
 import './field3d-urdf';
@@ -38,6 +48,8 @@ export default class Field3d extends LitElement implements IField3d {
     'black';
   @property({ type: Boolean, attribute: 'enable-vr' }) enableVR = false;
   @property({ type: String }) assetPathPrefix?: string;
+  @property({ type: Array, attribute: 'camera-pose' }) cameraPose?: number[];
+  @property({ type: Boolean, attribute: 'fixed-camera' }) fixedCamera = false;
 
   private ORBIT_FIELD_DEFAULT_TARGET = new Vector3(0, 0.5, 0);
   private ORBIT_FIELD_DEFAULT_POSITION = new Vector3(0, 6, -12);
@@ -54,6 +66,7 @@ export default class Field3d extends LitElement implements IField3d {
 
   private wpilibCoordinateGroup!: Group; // Rotated to match WPILib
   private wpilibFieldCoordinateGroup!: Group; // Field coordinates (origin at driver stations and flipped based on alliance)
+  private cameraPoseObject = new Object3D();
 
   scene = new Scene();
   renderer?: WebGLRenderer;
@@ -147,6 +160,7 @@ export default class Field3d extends LitElement implements IField3d {
     this.wpilibCoordinateGroup.rotation.setFromQuaternion(this.WPILIB_ROTATION);
     this.wpilibFieldCoordinateGroup = new Group();
     this.wpilibCoordinateGroup.add(this.wpilibFieldCoordinateGroup);
+    this.wpilibFieldCoordinateGroup.add(this.cameraPoseObject);
   }
 
   private updateCanvasSize() {
@@ -169,7 +183,7 @@ export default class Field3d extends LitElement implements IField3d {
 
   static updatePose(object: Object3D, pose: Pose3d): void {
     const [x, y, z] = pose.translation;
-    object.position.set(y, -x, z);
+    object.position.set(x, y, z);
     object.rotation.setFromQuaternion(rotation3dToQuaternion(pose.rotation));
   }
 
@@ -257,11 +271,59 @@ export default class Field3d extends LitElement implements IField3d {
         this.renderer.xr.enabled = this.enableVR;
       }
     }
+
+    if (changedProps.has('fixedCamera')) {
+      this.controls.enabled = !this.fixedCamera;
+    }
+
+    if (changedProps.has('cameraPose') || changedProps.has('fixedCamera')) {
+      if (this.fixedCamera) {
+        if (this.cameraPose?.length === 7) {
+          const translation = this.cameraPose.slice(0, 3) as Translation3d;
+          const rotation = this.cameraPose.slice(3, 7) as Rotation3d;
+
+          this.#updateCameraPose({
+            translation,
+            rotation,
+          });
+        } else if (this.cameraPose?.length === 3) {
+          const [x = 0, y = 0, rot = 0] = this.cameraPose;
+          this.#updateCameraPose({
+            translation: [x, y, 0],
+            rotation: getRotation3dFromRotSeq([{ axis: 'z', degrees: rot }]),
+          });
+        }
+      }
+    }
+  }
+
+  #updateCameraPose(pose: Pose3d): void {
+    Field3d.updatePose(this.cameraPoseObject, pose);
+
+    const globalPosition = new Vector3();
+    this.cameraPoseObject.getWorldPosition(globalPosition);
+
+    const globalQuaternion = new Quaternion();
+    this.cameraPoseObject.getWorldQuaternion(globalQuaternion);
+
+    this.camera.position.copy(globalPosition);
+    this.camera.quaternion.copy(
+      globalQuaternion.multiply(
+        getQuaternionFromRotSeq([
+          { axis: 'z', degrees: -90 },
+          { axis: 'y', degrees: -90 },
+        ])
+      )
+    );
+
+    this.camera.updateMatrixWorld();
   }
 
   renderField(): void {
     this.renderer?.render(this.scene, this.camera);
-    this.controls.update();
+    if (!this.fixedCamera) {
+      this.controls.update();
+    }
   }
 
   connectedCallback() {
