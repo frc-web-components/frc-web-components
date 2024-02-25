@@ -40,7 +40,49 @@ export interface UrdfConfig {
   position: [number, number, number];
 }
 
+export class FieldObject {
+  #field3d: IField3d;
+  #onCreate?: (object: FieldObject) => unknown;
+  #onRemove?: (object: FieldObject) => void;
+
+  #group: Group = new Group();
+
+  constructor(
+    field3d: IField3d,
+    onCreate?: (object: FieldObject) => unknown,
+    onRemove?: (oobject: FieldObject) => unknown
+  ) {
+    this.#field3d = field3d;
+    this.#onCreate = onCreate;
+    this.#onRemove = onRemove;
+    this.create();
+  }
+
+  create() {
+    const fieldGroup = this.#field3d.getFieldGroup();
+    fieldGroup.remove(this.#group);
+    this.#onRemove?.(this);
+
+    const group = new Group();
+    this.#group = group;
+    fieldGroup.add(this.#group);
+    this.#onCreate?.(this);
+  }
+
+  getGroup(): Group {
+    return this.#group;
+  }
+
+  getField3d(): IField3d {
+    return this.#field3d;
+  }
+}
+
 export interface IField3d {
+  createFieldObject: (config?: {
+    onCreate?: (object: FieldObject) => unknown;
+    onRemove?: (oobject: FieldObject) => unknown;
+  }) => FieldObject;
   getFieldGroup: () => Group;
   assetPathPrefix?: string;
   objectConfigs: ObjectConfig[];

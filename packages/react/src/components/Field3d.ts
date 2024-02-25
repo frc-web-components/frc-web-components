@@ -4,6 +4,7 @@ import Field3dWc, {
   Field3dObject as Field3dObjectWc,
   Field3dUrdf as Field3dUrdfWc,
   Urdf as UrdfWc,
+  Field3dPoseVisualizer as Field3dPoseVisualizerWc,
 } from "@frc-web-components/fwc/components/field3d";
 
 export const Field3d = createComponent({
@@ -34,6 +35,12 @@ export const Urdf = createComponent({
   events: {
     onurdfload: 'urdfLoad',
   },
+});
+
+export const Field3dPoseVisualizer = createComponent({
+  tagName: "frc-field3d-pose-visualizer",
+  elementClass: Field3dPoseVisualizerWc,
+  react: React,
 });
 
 export default Field3d;
