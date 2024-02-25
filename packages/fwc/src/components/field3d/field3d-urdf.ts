@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { LitElement } from 'lit';
 import { property, state } from 'lit/decorators.js';
-import { WebGLRenderer, Group, Object3D, LoadingManager } from 'three';
+import { Group, Object3D, LoadingManager } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import URDFLoader from 'urdf-loader';
 import {
@@ -29,7 +29,6 @@ export default class Urdf3d extends LitElement {
   @state() _translation: Translation3d | Translation2d = [0, 0, 0];
   @state() _rotation: Rotation3d | Rotation2d = [0, 0, 0, 0];
 
-  renderer!: WebGLRenderer;
   loader = new GLTFLoader();
   group = new Group();
   object?: Object3D;

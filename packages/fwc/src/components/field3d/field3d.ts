@@ -19,19 +19,15 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { VRButton } from 'three/examples/jsm/webxr/VRButton';
 import {
+  getPose3d,
   getQuaternionFromRotSeq,
-  getRotation3dFromRotSeq,
+  getZeroPose3d,
   rotation3dToQuaternion,
 } from './utils';
 import fieldConfigs, { FieldConfig } from './field-configs';
 import objectConfigs from './object-configs';
 import urdfConfigs from './urdf-configs';
-import {
-  Pose3d,
-  IField3d,
-  Rotation3d,
-  Translation3d,
-} from './field-interfaces';
+import { Pose3d, IField3d, FieldObject } from './field-interfaces';
 import { convert } from '../field/units';
 import './field3d-object';
 import './field3d-urdf';
@@ -206,6 +202,13 @@ export default class Field3d extends LitElement implements IField3d {
     return this.wpilibFieldCoordinateGroup;
   }
 
+  createFieldObject(config?: {
+    onCreate?: (object: FieldObject) => unknown;
+    onRemove?: (oobject: FieldObject) => unknown;
+  }): FieldObject {
+    return new FieldObject(this, config?.onCreate, config?.onRemove);
+  }
+
   firstUpdated(): void {
     this.initScene();
     this.initRenderer();
@@ -278,21 +281,10 @@ export default class Field3d extends LitElement implements IField3d {
 
     if (changedProps.has('cameraPose') || changedProps.has('fixedCamera')) {
       if (this.fixedCamera) {
-        if (this.cameraPose?.length === 7) {
-          const translation = this.cameraPose.slice(0, 3) as Translation3d;
-          const rotation = this.cameraPose.slice(3, 7) as Rotation3d;
-
-          this.#updateCameraPose({
-            translation,
-            rotation,
-          });
-        } else if (this.cameraPose?.length === 3) {
-          const [x = 0, y = 0, rot = 0] = this.cameraPose;
-          this.#updateCameraPose({
-            translation: [x, y, 0],
-            rotation: getRotation3dFromRotSeq([{ axis: 'z', degrees: rot }]),
-          });
-        }
+        const pose3d = this.cameraPose
+          ? getPose3d(this.cameraPose)
+          : getZeroPose3d();
+        this.#updateCameraPose(pose3d);
       }
     }
   }
