@@ -125,6 +125,9 @@ export default class DashboardRoot extends LitElement {
     this.dashboard.resetHtml();
 
     onRemoveKeyPress(() => {
+      if (!this.dashboard.isDrawerOpened()) {
+        return;
+      }
       if (this.#selectedElement) {
         if (this.dashboard) {
           if (this.#selectedElement.tagName !== 'DASHBOARD-TAB') {

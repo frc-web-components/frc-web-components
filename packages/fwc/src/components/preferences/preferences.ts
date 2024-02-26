@@ -10,7 +10,6 @@ export class Preferences extends LitElement {
   @property({ type: String, attribute: 'source-root' }) sourceRoot: string = '';
   @property({ type: Object }) preferences: IPreferences = {};
   @property({ type: String }) search = '';
-  @property({ type: Boolean }) editable = false;
   @property({ type: Boolean, attribute: 'hide-title' }) hideTitle = false;
 
   static styles = css`
@@ -179,6 +178,17 @@ export class Preferences extends LitElement {
       })
     );
   }
+  #dispatchSearch(): void {
+    this.dispatchEvent(
+      new CustomEvent('search', {
+        detail: {
+          search: this.search,
+        },
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
 
   #updateValue(
     sourceKey: string,
@@ -198,10 +208,12 @@ export class Preferences extends LitElement {
           typeof sourceRoot !== 'undefined'
             ? [sourceRoot, property].join('/')
             : property;
+        if (property.startsWith('.')) {
+          return false;
+        }
         if (!this.search || typeof value === 'object') {
           return true;
         }
-        console.log('filtered source value:', source.toLowerCase());
         return source.toLowerCase().includes(this.search.toLowerCase());
       }
     );
@@ -283,8 +295,8 @@ export class Preferences extends LitElement {
             placeholder="Search..."
             .value=${this.search}
             @input=${(ev: any) => {
-              console.log('on change:', ev);
               this.search = ev.target.value;
+              this.#dispatchSearch();
             }}
           />
         </div>

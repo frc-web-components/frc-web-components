@@ -7,7 +7,6 @@ const defaultArgs: Record<string, any> = {
   sourceRoot: '',
   preferences: {},
   search: '',
-  editable: false,
   hideTitle: false,
   theme: 'light',
   'background-color': '#fff',
@@ -23,7 +22,7 @@ const defaultArgs: Record<string, any> = {
  * To use this component import the module:
  * 
  * ```javascript
- * import "@frc-web-components/fwc/components/mechanism2d";
+ * import "@frc-web-components/fwc/components/preferences";
  * 
  * // or to import all components:
  * import "@frc-web-components/fwc/components";
@@ -32,19 +31,19 @@ const defaultArgs: Record<string, any> = {
  * And then add the component to your html:
  * 
  * ```html
- * <frc-mechanism2d></frc-mechanism2d>
+ * <frc-preferences></frc-preferences>
  * ```
  * 
  * Or use the component in React:
  * 
  * ```jsx
- * import { Mechanism2d } from "@frc-web-components/react";
+ * import { Preferences } from "@frc-web-components/react";
  * ```
  * 
  * And then add the component in your jsx:
  * 
  * ```jsx
- * <Mechanism2d />
+ * <Preferences />
  * ```
  */
 const meta: Meta = {
@@ -75,12 +74,6 @@ const meta: Meta = {
       },
       description:
         '',
-    },
-    editable: {
-      table: {
-        category: 'Properties',
-        defaultValue: { summary: false },
-      },
     },
     hideTitle: {
       table: {
@@ -168,8 +161,8 @@ function getStyles(args: Args) {
     return html`
       <style>
         .custom {
-          --frc-preferences-input-text-color: ${args['--frc-input-text-color']};
-          --frc-preferences-input-background-color: ${args['--frc-input-background-color']};
+          --frc-preferences-input-text-color: ${args['--frc-preferences-input-text-color']};
+          --frc-preferences-input-background-color: ${args['--frc-preferences-input-background-color']};
           --frc-preferences-label-color: ${args['--frc-preferences-label-color']};
           --frc-preferences-input-button-text-color: ${args['--frc-preferences-input-button-text-color']};
           --frc-preferences-placeholder-text-color: ${args['--frc-preferences-placeholder-text-color']};
@@ -213,25 +206,14 @@ function createPreferencesStory(optionalArgs: Record<string, any> = {}): Story {
   return {
     args: storyArgs,
     render: (args) => {
-      const preferences = {
-        'a': 1,
-        'b': false,
-        c: 'hello',
-        ssddfdfs: {
-          "fsdf sff": {
-            a: 1,
-            b: 5
-          }
-        }
-      };
+      
       return html`
       ${getStyles(args)}
       <frc-preferences
         class=${args.theme}
         source-root=${args.sourceRoot}
-        .preferences=${preferences}
+        .preferences=${args.preferences}
         search=${args.search}
-        ?editable=${args.editable}
         ?hide-title=${args.hideTitle}
       ></frc-preferences>
     `;
@@ -239,4 +221,13 @@ function createPreferencesStory(optionalArgs: Record<string, any> = {}): Story {
   };
 }
 
-export const Preferences = createPreferencesStory();
+export const Preferences = createPreferencesStory({
+  preferences: {
+    someNumber: 1,
+    someBool: false,
+    someString: 'hello',
+    foo: {
+      bar: 'baz'
+    }
+  }
+});

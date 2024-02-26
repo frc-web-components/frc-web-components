@@ -149,6 +149,14 @@ export const darkTheme: Record<string, string> = {
 
   /* sendable chooser */
   '--frc-sendable-chooser-label-color': 'white',
+
+  /* preferences */
+  '--frc-preferences-input-text-color': 'white',
+  '--frc-preferences-input-background-color': 'rgba(255,255,255,.3)',
+  '--frc-preferences-label-color': 'white',
+  '--frc-preferences-input-button-text-color': '#ccc',
+  '--frc-preferences-placeholder-text-color': '#aaa',
+  '--frc-preferences-header-background-color': 'steelblue',
 };
 
 export function addDarkTheme(dashboard: FrcDashboard): void {

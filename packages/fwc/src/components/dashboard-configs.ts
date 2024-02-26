@@ -39,6 +39,7 @@ import { fieldDashboardConfig } from './field';
 import { cameraDashboardConfig } from './canvas';
 import { labelDashboardConfig, numberLabelDashboardConfig } from './label';
 import { formElementDashboardConfigs } from './form-elements';
+import { preferencesDashboardConfig } from './preferences';
 
 export const dashboardElementConfigs = {
   'frc-axis': axisDashboardConfig,
@@ -74,6 +75,7 @@ export const dashboardElementConfigs = {
   'frc-camera-wrapper': cameraDashboardConfig,
   'frc-label': labelDashboardConfig,
   'frc-number-label': numberLabelDashboardConfig,
+  'frc-preferences-wrapper': preferencesDashboardConfig,
   ...lineChartDashboardConfigs,
   ...formElementDashboardConfigs,
 } as Record<string, WebbitConfig>;

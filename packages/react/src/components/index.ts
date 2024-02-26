@@ -29,3 +29,4 @@ export * from './ToggleButton';
 export * from './ToggleGroup';
 export * from './ToggleSwitch';
 export * from './VoltageView';
+export * from './Preferences';
