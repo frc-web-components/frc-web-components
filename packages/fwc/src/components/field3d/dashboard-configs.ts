@@ -4,8 +4,10 @@ import defaultFieldConfigs, { FieldConfig } from './field-configs';
 import defaultObjectConfigs from './object-configs';
 import { ObjectConfig, UrdfConfig } from './field-interfaces';
 import defaultUrdfConfigs from './urdf-configs';
+import { getField3dUrdfDashboardConfig } from './field3d-urdf-wrapper';
+import { field3dPoseVisualizerConfig } from './field3d-pose-visualizer';
 
-export function getField3dDashboardConfig({
+export function getField3dDashboardConfigs({
   fieldConfigs = defaultFieldConfigs,
   objectConfigs = defaultObjectConfigs,
   urdfConfigs = defaultUrdfConfigs,
@@ -15,7 +17,7 @@ export function getField3dDashboardConfig({
   objectConfigs?: ObjectConfig[];
   urdfConfigs?: UrdfConfig[];
   assetPathPrefix?: string;
-} = {}): WebbitConfig {
+} = {}): Record<string, WebbitConfig> {
   const config: Partial<WebbitConfig> = {
     dashboard: {
       displayName: 'Field 3D',
@@ -69,6 +71,22 @@ export function getField3dDashboardConfig({
         attribute: 'fixed-camera',
       },
     },
+    slots: [
+      {
+        name: '',
+        allowedChildren: [
+          'frc-field3d-urdf-wrapper',
+          'frc-field3d-pose-visualizer',
+        ],
+      },
+    ],
   };
-  return config as WebbitConfig;
+
+  return {
+    'frc-field3d': config,
+    'frc-field3d-urdf-wrapper': getField3dUrdfDashboardConfig(
+      urdfConfigs.map(({ name }) => name)
+    ),
+    'frc-field3d-pose-visualizer': field3dPoseVisualizerConfig,
+  } as Record<string, WebbitConfig>;
 }

@@ -11,6 +11,20 @@ import {
 } from 'three';
 import { getZeroPose3d, getPose3d, rotation3dToQuaternion } from './utils';
 import { IField3d, FieldObject } from './field-interfaces';
+import { WebbitConfig } from '@webbitjs/webbit';
+
+export const field3dPoseVisualizerConfig: Partial<WebbitConfig> = {
+  dashboard: {
+    displayName: 'Field 3D Pose Visualizer',
+    topLevel: false,
+  },
+  properties: {
+    pose: {
+      type: 'Array',
+      input: { type: 'NumberArray' },
+    },
+  },
+};
 
 /**
  * Creates a bounding box with arrows for each axis to visualize pose.

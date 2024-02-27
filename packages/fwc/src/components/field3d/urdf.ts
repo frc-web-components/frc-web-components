@@ -234,7 +234,6 @@ export default class Urdf extends LitElement {
     }
     if (changedProps.has('backgroundColor')) {
       this.scene.background = new Color(this.backgroundColor);
-      console.log('BAKCGROND:', this.backgroundColor);
     }
 
     if (changedProps.has('enableVR')) {

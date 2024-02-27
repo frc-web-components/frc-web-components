@@ -24,7 +24,10 @@ import { getDirname, joinPaths } from './file-utils';
 export default class Urdf3d extends LitElement {
   @state() urdfConfigs = urdfConfigs;
   @property({ type: String }) name = this.urdfConfigs[0].name;
-  @property({ type: Object }) angles: Record<string, number> = {};
+  @property({ type: Object, attribute: 'joint-values' }) jointValues: Record<
+    string,
+    number
+  > = {};
   @property({ type: Array }) pose = [0, 0, 0];
   @state() _translation: Translation3d | Translation2d = [0, 0, 0];
   @state() _rotation: Rotation3d | Rotation2d = [0, 0, 0, 0];
@@ -119,14 +122,14 @@ export default class Urdf3d extends LitElement {
 
     urdfLoader.then((obj) => {
       this.robot = obj;
-      this.updateAngles();
+      this.updateJoints();
       object.add(obj);
       this.#emitLoadEvent();
     });
   }
 
-  updateAngles() {
-    (this.robot as any)?.setAngles(this.angles);
+  updateJoints() {
+    (this.robot as any)?.setJointValues(this.jointValues);
   }
 
   firstUpdated(): void {
@@ -139,8 +142,8 @@ export default class Urdf3d extends LitElement {
       this.loadRobotModel();
     }
 
-    if (changedProps.has('angles')) {
-      this.updateAngles();
+    if (changedProps.has('jointValues')) {
+      this.updateJoints();
     }
 
     if (changedProps.has('pose')) {

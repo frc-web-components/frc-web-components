@@ -127,7 +127,7 @@
     "@types/lodash.throttle": "^4.1.7",
     "@types/lodash.unescape": "^4.0.7",
     "@types/offscreencanvas": "^2019.7.0",
-    "@types/three": "^0.150.1",
+    "@types/three": "^0.152.0",
     "@typescript-eslint/eslint-plugin": "^5.3.1",
     "@typescript-eslint/parser": "^5.3.1",
     "@vaadin/vaadin-icons": "^22.0.0",
@@ -183,8 +183,8 @@
     "lodash.unescape": "^4.0.1",
     "multiselect-combo-box": "^3.0.0-alpha.2",
     "svg-gauge": "^1.0.6",
-    "three": "^0.151.3",
-    "urdf-loader": "^0.8.2",
+    "three": "^0.152.0",
+    "urdf-loader": "^0.12.0",
     "yargs": "^17.7.2"
   },
   "lint-staged": {
