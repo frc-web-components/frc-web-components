@@ -167,7 +167,6 @@ export default class DashboardRoot extends LitElement {
       this.dialogOpened = true;
       this.sourcesDialogElement =
         args.element ?? this.dashboard.getSelectedElement() ?? undefined;
-      console.log('!!!', this.sourcesDialogElement);
     });
 
     this.ready = true;

@@ -41,6 +41,8 @@ export class PreferencesWrapper extends LitElement {
   @property({ type: Object, attribute: false }) provider?: SourceProvider;
   @property({ type: Object, attribute: false }) store?: Store;
 
+  #sourceJson: unknown = {};
+
   #unsubscriber?: () => unknown;
 
   static styles = css`
@@ -72,6 +74,11 @@ export class PreferencesWrapper extends LitElement {
       this.sourceProvider,
       this.sourceKey,
       () => {
+        const source = this.store?.getSource(
+          this.sourceProvider,
+          this.sourceKey
+        );
+        this.#sourceJson = source?.getJson(false) ?? {};
         this.requestUpdate();
       },
       true
@@ -103,7 +110,7 @@ export class PreferencesWrapper extends LitElement {
         source-root=${this.sourceKey}
         search=${this.search}
         ?hide-title=${this.hideTitle}
-        .preferences=${this.source?.getJson(false) ?? {}}
+        .preferences=${this.#sourceJson}
       ></frc-preferences>
     `;
   }

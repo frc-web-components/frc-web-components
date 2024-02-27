@@ -14,7 +14,10 @@ import { booleanBoxDashboardConfig } from './boolean-box';
 import { gaugeDashboardConfig } from './gauge';
 import { gyroDashboardConfig } from './gyro';
 import { numberBarDashboardConfig } from './number-bar';
-import { sendableChooserDashboardConfig } from './sendable-chooser';
+import {
+  sendableChooserDashboardConfig,
+  sendableChooserOldDashboardConfig,
+} from './sendable-chooser';
 import { voltageViewDashboardConfig } from './voltage-view';
 import { numberSliderDashboardConfig } from './number-slider';
 import { toggleSwitchDashboardConfig } from './toggle-switch';
@@ -55,7 +58,8 @@ export const dashboardElementConfigs = {
   'frc-gauge': gaugeDashboardConfig,
   'frc-gyro': gyroDashboardConfig,
   'frc-number-bar': numberBarDashboardConfig,
-  'frc-sendable-chooser': sendableChooserDashboardConfig,
+  'frc-sendable-chooser': sendableChooserOldDashboardConfig,
+  'frc-sendable-chooser-wrapper': sendableChooserDashboardConfig,
   'frc-voltage-view': voltageViewDashboardConfig,
   'frc-number-slider': numberSliderDashboardConfig,
   'frc-toggle-switch': toggleSwitchDashboardConfig,
