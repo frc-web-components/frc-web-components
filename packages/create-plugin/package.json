@@ -1,7 +1,7 @@
 {
   "name": "create-fwc",
   "description": "Package for creating plugins for FRC Web Components",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "author": "Amory Galili <amorygalili@gmail.com>",
   "scripts": {
     "build": "tsup src/cli.ts --minify",
