@@ -147,7 +147,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^4.4.4",
-    "vite": "^4.4.5",
+    "vite": "^5.0.8",
     "vite-plugin-dts": "^3.7.0"
   },
   "repository": {
@@ -169,6 +169,7 @@
     "@vaadin/vaadin": "^22.0.0",
     "@webbitjs/store": "^5.8.0",
     "@webbitjs/webbit": "^5.12.0",
+    "@wpilib/node-wpilib-ws": "C:/Users/Owner/Documents/repos/robotics/tutorial/node-wpilib-ws",
     "chart.js": "^2.8.0",
     "codeflask": "^1.4.1",
     "d3": "^7.8.2",
