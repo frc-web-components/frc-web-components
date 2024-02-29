@@ -92,6 +92,8 @@ export default class RobotSimProvider extends SourceProvider {
       return;
     }
 
+    const payload = { [prop]: value };
+
     if (type === 'accel') {
       const [name] = parts;
       const [deviceName, channelString = ''] = name.split('[');
@@ -99,16 +101,62 @@ export default class RobotSimProvider extends SourceProvider {
       this.#wss.accelUpdateToWpilib(
         deviceName,
         isNaN(channel) ? null : channel,
-        {
-          [prop]: value,
-        }
+        payload
       );
     } else if (type === 'analog') {
       const [channel] = parts;
-      this.#wss.analogInUpdateToWpilib(parseInt(channel), {
-        [prop]: value,
-      });
+      this.#wss.analogInUpdateToWpilib(parseInt(channel), payload);
     } else if (type === 'dio') {
+      const [channel] = parts;
+      this.#wss.dioUpdateToWpilib(parseInt(channel), payload);
+    } else if (type === 'dpwm') {
+      const [channel] = parts;
+      this.#wss.dpwmUpdateToWpilib(parseInt(channel), payload);
+    } else if (type === 'driverStation') {
+      this.#wss.driverStationUpdateToWpilib(payload);
+    } else if (type === 'dutyCycle') {
+      const [channel] = parts;
+      this.#wss.dutyCycleUpdateToWpilib(parseInt(channel), payload);
+    } else if (type === 'encoder') {
+      const [channel] = parts;
+      this.#wss.encoderUpdateToWpilib(parseInt(channel), payload);
+    } else if (type === 'gyro') {
+      const [name] = parts;
+      const [deviceName, channelString = ''] = name.split('[');
+      const channel = parseInt(channelString.slice(0, -1));
+      this.#wss.gyroUpdateToWpilib(
+        deviceName,
+        (isNaN(channel) ? null : channel) as any,
+        payload
+      );
+    } else if (type === 'joystick') {
+      const [joystickNum] = parts;
+      this.#wss.joystickUpdateToWpilib(parseInt(joystickNum), payload);
+    } else if (type === 'pwm') {
+      const [channel] = parts;
+      this.#wss.pwmUpdateToWpilib(parseInt(channel), payload);
+    } else if (type === 'relay') {
+      const [channel] = parts;
+      this.#wss.relayUpdateToWpilib(parseInt(channel), payload);
+    } else if (type === 'roboRio') {
+      this.#wss.roboRioUpdateToWpilib(payload);
+    } else if (type === 'simDeviceEvent') {
+      const [name] = parts;
+      const [deviceName, deviceIndexString, deviceChannelString] =
+        name.split('[');
+      const deviceIndex = parseInt(deviceIndexString.slice(0, -1));
+      const deviceNumber = parseInt(deviceChannelString.slice(0, -1));
+      this.#wss.gyroUpdateToWpilib(
+        deviceName,
+        (isNaN(deviceIndex) ? null : deviceIndex) as any,
+        payload
+      );
+      this.#wss.simDeviceUpdateToWpilib(
+        deviceName,
+        isNaN(deviceIndex) ? null : deviceIndex,
+        isNaN(deviceNumber) ? null : deviceNumber,
+        payload
+      );
     }
   }
 
