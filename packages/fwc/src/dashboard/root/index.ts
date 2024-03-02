@@ -11,6 +11,7 @@ import FrcDashboard from '@dashboard/frc-dashboard';
 import './source-picker-dialog';
 import removeElement from './remove-element';
 import addDashboardComponents from '../dashboard-components';
+import { initElement } from './get-element-html';
 
 const styles = css`
   :host {
@@ -96,6 +97,10 @@ export default class DashboardRoot extends LitElement {
     if (!this.dashboard) {
       return;
     }
+
+    this.dashboard.getConnector().subscribeElementConnected((event: any) => {
+      initElement(this.dashboard.getConnector(), event.element);
+    });
 
     addDashboardComponents(this.dashboard);
 

@@ -230,13 +230,14 @@ export default class Field3d extends LitElement implements IField3d {
   }
 
   updated(changedProps: Map<string, unknown>): void {
-    if (changedProps.has('fieldConfig')) {
+    if (changedProps.has('fieldConfigs')) {
       const hasGame = this.fieldConfigs.some(
         (config) => config.game === this.game
       );
       if (!hasGame) {
         this.game = this.fieldConfigs[0].game;
       }
+      this.loadFieldModel(this.getFieldConfig());
     }
     if (changedProps.has('game')) {
       this.loadFieldModel(this.getFieldConfig());
@@ -286,6 +287,18 @@ export default class Field3d extends LitElement implements IField3d {
           : getZeroPose3d();
         this.#updateCameraPose(pose3d);
       }
+    }
+
+    if (changedProps.has('urdfConfigs')) {
+      this.dispatchEvent(
+        new CustomEvent('urdfConfigsChange', {
+          detail: {
+            urdfConfigs: this.urdfConfigs,
+          },
+          bubbles: true,
+          composed: true,
+        })
+      );
     }
   }
 

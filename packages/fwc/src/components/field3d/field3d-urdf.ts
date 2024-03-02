@@ -67,6 +67,8 @@ export default class Urdf3d extends LitElement {
         detail: {
           urdf: this.robot,
         },
+        bubbles: true,
+        composed: true,
       })
     );
   }
@@ -135,6 +137,11 @@ export default class Urdf3d extends LitElement {
   firstUpdated(): void {
     this.updateUrdfConfigs();
     this.renderObject();
+
+    const field = this.closest('frc-field3d');
+    field?.addEventListener('urdfConfigsChange', () => {
+      this.updateUrdfConfigs();
+    });
   }
 
   updated(changedProps: Map<string, unknown>): void {

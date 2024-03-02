@@ -17,6 +17,14 @@ export default function getElementHtml(
   return `<${selector}></${selector}>`;
 }
 
+export function initElement(connector: WebbitConnector, element: HTMLElement) {
+  const config = connector.getMatchingElementConfig(element);
+  const onInit = config?.dashboard?.onInit;
+  if (typeof onInit === 'function') {
+    onInit(element);
+  }
+}
+
 export function appendElementToDashboard(
   connector: WebbitConnector,
   selector: string,
