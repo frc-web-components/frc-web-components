@@ -6,7 +6,10 @@ import getPoses from './get-poses';
 import { FieldObjectApi } from './field-interfaces';
 
 export class FieldPath extends LitElement {
-  @property({ type: Array }) poses: Uint8Array | number[] = [];
+  @property({ type: Array }) poses:
+    | Uint8Array
+    | number[]
+    | (Uint8Array | number[])[] = [];
   @property({ type: Array }) translations: Uint8Array | number[] = [];
   @property({ type: String }) color = '#FFA500';
   @property({ type: String }) unit: string | null = 'inherit';
@@ -18,7 +21,14 @@ export class FieldPath extends LitElement {
 
   updated(changedProps: Map<string, unknown>) {
     if (changedProps.has('poses')) {
-      this._poses = getPoses(this.poses);
+      if (
+        typeof this.poses?.[0] === 'number' ||
+        this.poses instanceof Uint8Array
+      ) {
+        this._poses = getPoses(this.poses as any);
+      } else {
+        this._poses = this.poses as any;
+      }
     }
     if (changedProps.has('translations')) {
       this._translations = getPoses(this.translations, 2);

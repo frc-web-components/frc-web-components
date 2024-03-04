@@ -5,6 +5,8 @@ import getPoses from '../get-poses';
 export interface FieldObject {
   type: 'robot' | 'trajectory';
   poses: (Uint8Array | number[])[];
+  sourceKey?: string;
+  sourceProvider?: string;
 }
 
 export default class FieldObjectManager {
@@ -43,7 +45,8 @@ export default class FieldObjectManager {
 
     Object.entries(source.getChildren()).forEach(([property, childSource]) => {
       // Keys that start with '.' are metadata
-      if (property.startsWith('.')) {
+      // TODO: Handle XModules property from YAGSL
+      if (property.startsWith('.') || property === 'XModules') {
         return;
       }
       const poseValue = childSource.hasChildren()
@@ -53,6 +56,8 @@ export default class FieldObjectManager {
       objects.push({
         type: poses.length === 1 ? 'robot' : 'trajectory',
         poses,
+        sourceKey: childSource.getKey(),
+        sourceProvider: this.sourceProvider,
       });
       this.onUpdate(objects);
     });

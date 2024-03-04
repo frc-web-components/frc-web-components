@@ -333,7 +333,14 @@ export class Field extends LitElement {
       origin: this.origin,
     };
 
-    [...this.children].forEach((child) => {
+    const children = [...this.children].flatMap((child) => {
+      if (child.tagName === 'SLOT') {
+        return (child as HTMLSlotElement).assignedElements();
+      }
+      return child;
+    });
+
+    children.forEach((child) => {
       const ctx = this.getCanvasCtx();
       ctx.save();
       ctx.beginPath();

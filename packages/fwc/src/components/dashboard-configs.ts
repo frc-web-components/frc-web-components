@@ -38,7 +38,11 @@ import {
 } from './command-based';
 import { mechanism2dDashboardConfig } from './mechanism2d';
 import { lineChartDashboardConfigs } from './line-chart';
-import { fieldDashboardConfig } from './field';
+import {
+  fieldDashboardConfig,
+  fieldRobotDashboardConfig,
+  fieldPathDashboardConfig,
+} from './field';
 import { cameraDashboardConfig } from './canvas';
 import { labelDashboardConfig, numberLabelDashboardConfig } from './label';
 import { formElementDashboardConfigs } from './form-elements';
@@ -76,6 +80,8 @@ export const dashboardElementConfigs = {
   'frc-robot-subsystem': robotSubsystemDashboardConfig,
   'frc-mechanism2d-wrapper': mechanism2dDashboardConfig,
   'frc-field-wrapper': fieldDashboardConfig,
+  'frc-field-robot': fieldRobotDashboardConfig,
+  'frc-field-path': fieldPathDashboardConfig,
   'frc-camera-wrapper': cameraDashboardConfig,
   'frc-label': labelDashboardConfig,
   'frc-number-label': numberLabelDashboardConfig,
