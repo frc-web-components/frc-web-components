@@ -1,6 +1,6 @@
 {
   "name": "@frc-web-components/app",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "type": "module",
   "files": [
     "dist"
@@ -26,11 +26,11 @@
     "lit": "^2.7.6"
   },
   "peerDependencies": {
-    "@frc-web-components/fwc": ">=2.4.1",
+    "@frc-web-components/fwc": ">=2.4.2",
     "lit": ">=2.7.0"
   },
   "devDependencies": {
-    "@frc-web-components/fwc": "2.4.1",
+    "@frc-web-components/fwc": "2.4.2",
     "vite": "^4.4.5",
     "vite-plugin-dts": "^3.7.0"
   }
