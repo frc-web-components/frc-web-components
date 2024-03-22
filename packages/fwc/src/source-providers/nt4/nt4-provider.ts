@@ -18,7 +18,7 @@ function getType(value: unknown): string | undefined {
     if (typeMismatch) {
       return undefined;
     }
-    return type;
+    return `${type}[]`;
   }
 
   return undefined;
