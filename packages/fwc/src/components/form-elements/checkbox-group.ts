@@ -1,6 +1,6 @@
 import { WebbitConfig } from '@webbitjs/webbit';
 import { html, css, LitElement } from 'lit';
-import { property } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
 
 export const checkboxGroupDashboardConfig: Partial<WebbitConfig> = {
   dashboard: {
@@ -35,6 +35,7 @@ export class CheckboxGroup extends LitElement {
   @property({ type: Array }) options: string[] = [];
   @property({ type: Array }) selected: string[] = [];
   @property({ type: String }) direction: 'vertical' | 'horizontal' = 'vertical';
+  @query('vaadin-checkbox-group') element!: HTMLElement;
 
   static styles = css`
     :host {
@@ -43,8 +44,8 @@ export class CheckboxGroup extends LitElement {
   `;
 
   // eslint-disable-next-line class-methods-use-this
-  #onChange(ev: CustomEvent) {
-    this.selected = ev.detail.value;
+  #onChange() {
+    this.selected = (this.element as any).value;
     const event = new CustomEvent('change', {
       bubbles: true,
       composed: true,
@@ -57,7 +58,6 @@ export class CheckboxGroup extends LitElement {
   render() {
     return html`
       <vaadin-checkbox-group
-        @value-changed=${(ev: CustomEvent) => this.#onChange(ev)}
         .disabled=${this.disabled}
         .label=${this.label}
         theme=${this.direction}
@@ -65,7 +65,9 @@ export class CheckboxGroup extends LitElement {
       >
         ${this.options.map(
           (value) => html`
-            <vaadin-checkbox value=${value}>${value}</vaadin-checkbox>
+            <vaadin-checkbox value=${value} @change=${() => this.#onChange()}
+              >${value}</vaadin-checkbox
+            >
           `
         )}
       </vaadin-checkbox-group>
