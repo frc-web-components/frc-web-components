@@ -160,7 +160,7 @@ export default class HtmlLogger {
       let msgContainer = document.createElement('div');
       msgContainer.setAttribute(
         'style',
-        `word-wrap:break-word;margin-left:6.0em;color: ${hexColor}`
+        `word-wrap:break-word;margin-left:6.0em;color: ${hexColor}`,
       );
       msgContainer.appendChild(document.createTextNode(messageLine));
 
@@ -191,7 +191,7 @@ export default class HtmlLogger {
       this.print(
         [].map
           .call(arguments, this._determineString)
-          .join(this.options.argumentsSeparator)
+          .join(this.options.argumentsSeparator),
       );
   }
 
@@ -202,7 +202,7 @@ export default class HtmlLogger {
           .call(arguments, this._determineString)
           .join(this.options.argumentsSeparator),
         levels.debug.color,
-        levels.debug.name
+        levels.debug.name,
       );
   }
 
@@ -213,7 +213,7 @@ export default class HtmlLogger {
           .call(arguments, this._determineString)
           .join(this.options.argumentsSeparator),
         levels.warning.color,
-        levels.warning.name
+        levels.warning.name,
       );
   }
 
@@ -224,7 +224,7 @@ export default class HtmlLogger {
           .call(arguments, this._determineString)
           .join(this.options.argumentsSeparator),
         levels.success.color,
-        levels.success.name
+        levels.success.name,
       );
   }
 
@@ -235,7 +235,7 @@ export default class HtmlLogger {
           .call(arguments, this._determineString)
           .join(this.options.argumentsSeparator),
         levels.fatal.color,
-        levels.fatal.name
+        levels.fatal.name,
       );
   }
 

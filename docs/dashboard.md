@@ -2,192 +2,123 @@
 
 [<- Home](/README.md)
 
--   [Adding, Selecting and Removing
-    Elements](#adding-selecting-and-removing-elements)
--   [Adding and Removing Tabs](#adding-and-removing-tabs)
--   [Moving and Resizing Elements](#moving-and-resizing-elements)
--   [Setting Element Properties](#setting-element-properties)
--   [Property Sources and Robot
-    Communication](#property-sources-and-robot-communication)
--   [Source Providers](#source-providers)
--   [Themes](#themes)
--   [Saving and Opening Dashboards](#saving-and-opening-dashboards)
--   [Importing Plugins](#importing-plugins)
+- [Layout](#layout)
+- [Adding, Selecting, and Removing Elements](#adding-selecting-and-removing-elements)
+- [Tab Management](#tab-management)
+- [Moving and Resizing Components](#moving-and-resizing-components)
+- [Setting Element Properties](#setting-element-properties)
+- [Property Sources and Robot Communication](#property-sources-and-robot-communication)
+- [Source Providers](#source-providers)
+- [Themes](#themes)
+- [Saving and Opening Dashboards](#saving-and-opening-dashboards)
+- [Importing Plugins](#importing-plugins)
 
-Adding, Selecting and Removing Elements =============================
+## Layout
 
-Elements can be added to the dashboard by dragging them from the sidebar
-to the dashboard:
+When you first open the app, you will see the following panels:
+![screen-layout-1](./img/layout01.png)
+![screen-layout-2](./img/layout02.png)
 
-<img src="./images/dashboard/add-by-dragging.gif" width="850"
-alt="image" />
+## Adding, Selecting, and Removing Elements
 
-Elements can also be added by clicking on the **append** or **prepend**
-button:
+Elements can be added to the dashboard by dragging them from the `Components` tabl on the sidebar to the dashboard:
 
-<img src="./images/dashboard/add-by-clicking.gif" width="850"
-alt="image" />
+![add-component](./img/addComponent.gif)
 
-Elements are grouped into categories. Other categories can be selected
-from the dropdown at the top of the sidebar:
+To select an element, click on it in the dashboard. Its properties will appear in the `Properties` panel in the sidebar.
 
-<img src="./images/dashboard/selecting-element-categories.gif"
-width="850" alt="image" />
+![selection](./img/selection.png)
 
-The available elements to add depends on the element currently selected.
-For example, the **Chart Axis** and **Chart Data** are the only elements
-that can be added to a **Line Chart**:
+To delete a component, either press Delete on your keyboard, right click on the component and select "Remove", or click the red `X` in its `Properties` panel.
 
-<img src="./images/dashboard/show-available-elements-to-add.gif"
-width="850" alt="image" />
+![remove](./img/remove.gif)
 
-Elements can be selected by clicking on them:
+## Tab Management
 
-<img src="./images/dashboard/select-by-clicking.gif" width="850"
-alt="image" />
+By default, each dashboard starts with a TeleOperated tab and an Autonomous tab. If you need more tabs, you can add them with the `+` button. You can remove tabs by clicking the `x` button on the tab handle. You can rename a tab by double-clicking on the tab handle.
 
-Most selected elements have a green dashed border, although some do not.
-Selected dashboard tabs don't, and neither do elements that have no
-size. Line Chart data and axis elements have no size and can't be
-selected by clicking on them.
+![tabs](./img/tabs.gif)
 
-All Elements including sizeless ones like **Chart Data**, can
-alternatively be selected in the element tree by clicking on them:
-
-<img src="./images/dashboard/select-in-tree.gif" width="850"
-alt="image" />
-
-Most elements can be removed by pressing the delete/backspace key.
-
-# Adding and Removing Tabs
-
-Tabs can be added with the **+** button and removed with the **x**
-button. They can also be renamed using the **tabName** property in the
-**Properties** view:
-
-<img src="./images/dashboard/manage-tabs.gif" width="750" alt="image" />
-
-# Moving and Resizing Elements
+## Moving and Resizing Components
 
 Selected elements can be moved by dragging them around their center:
 
-<img src="./images/dashboard/move-element.gif" width="650"
-alt="image" />
+![move](./img/move.gif)
 
-Elements can be resized by dragging their edges and corners:
+Elements can be resized by dragging their upper left and lower right corners:
 
-<img src="./images/dashboard/resize-element.gif" width="650"
-alt="image" />
+![resize](./img/resize.gif)
 
-# Setting Element Properties
+## Setting Element Properties
 
-Element behavior changes based on their properties. A selected element's
-property values can be set in the **Properties** view:
+Element behavior changes based on their properties. A selected element's property values can be set in the Properties view. Property values can be changed through their input fields:
 
-<img src="./images/dashboard/viewing-properties.gif" width="350"
-alt="image" />
+![properties](./img/properties.gif)
 
-Property values can be changed through their input fields:
+## Property Sources and Robot Communication
 
-<img src="./images/dashboard/updating-properties.gif" width="800"
-alt="image" />
+You can connect to your robot or robot simulation from the Dashboard Settings panel:
 
-# Property Sources and Robot Communication
+![alt text](./img/address-setting.png)
 
-Element properties can be controlled externally through sources such as
-NetworkTables. An element connected to NetworkTables can send to or
-receive updates from a physical or simulated robot. Below the dashboard
-will connect to OutlineViewer running in server mode when the NT4
-address is set to "localhost":
+Use `localhost` to connect to your simulated robot or your team # or robot IP address to connnect to your robot.
 
-<img src="./images/dashboard/connecting-locally.gif" width="850"
-alt="image" />
+Component properties can be controlled externally through sources such as NetworkTables. A component connected to NetworkTables can send to or receive updates from a physical or simulated robot.
 
-To connect to a physical robot, the "NT4 Server" setting can be changed
-from "localhost" to the IP address of the robot.
+Below the slider component is bound to the `/num` topic in NetworkTables. The slider and value in OutlineViewer update when changed on either end:
 
-An element's source can be set through the "Source" input field at the
-top of the "Properties" view. The Source value can be changed by
-clicking on the "edit" button. Clicking on this button opens up the
-Sources dialog. From the dialog you can set the selected element's
-source:
+![NT slider](./img/nt-slider.gif)
 
-<img src="./images/dashboard/setting-gyro-source.gif" width="850"
-alt="image" />
+NetworkTable topics can be bound to components by dragging them from the `Sources` panel to the selected component's `Properties` panel:
 
-Above, the selected source is a table with sub entries "value",
-"Precision" and "Hide Label". These sub entries are converted to
-camelCase and mapped to the element's properties. If the element is
-assigned an entry as a source instead of a subtable, the entry's value
-will be mapped to the element's "primary" property:
+![Source](./img/gyro-source.gif)
 
-<img src="./images/dashboard/setting-gyro-single-source.gif" width="850"
-alt="image" />
+Sources with sub-topics can also be bound to components. Sub-topics will be mapped to properties. Topic names will be converted to camel-case so they don't have to align with property names perfectly:
 
-Elements can also update source values:
+![Source](./img/gyro-source2.gif)
 
-<img src="./images/dashboard/change-source-value-in-dashboard.gif"
-width="850" alt="image" />
+Sources can also be bound to individual properties:
 
-# Source Providers
+![Source](./img/gyro-source3.gif)
 
--   Sources can come from different places called "Providers". So far
-    we've discussed only the "NetworkTables" provider but others exist
-    as well. The Gamepad provider gets data from plugged in gamepads
-    such as Xbox and Playstation controllers:
+## Source Providers
 
-<img src="./images/dashboard/gamepad-provider.png" width="750"
-alt="image" />
+TODO
 
-The element's source provider will show up in parentheses above the
-input field:
+## Themes
 
-<img src="./images/dashboard/sources-input-field.png" width="400"
-alt="image" />
+Themes can be changed in the settings menu. The available themes are "dark" and "light":
 
-# Themes
+![themes](./img/themes.png)
 
-Themes can be changed in the settings menu. The available themes are
-"dark" and "light":
-
-<img src="./images/dashboard/themes.gif" width="850" alt="image" />
-
-# Saving and Opening Dashboards
+## Saving and Opening Dashboards
 
 Dashboards can be saved and reopened through the file menu:
 
-<img src="./images/dashboard/save-dashboard.gif" width="850"
-alt="image" />
+![saving dashboard](./img/saving-dashboard.gif)
 
-<img src="./images/dashboard/open-dashboard.gif" width="850"
-alt="image" />
+![opening dashboard](./img/opening-dashboard.gif)
 
-The filename of the opened dashboard will appear at the top of the
-window. If the current dashboard has not been saved to a file it will be
-labeled "Untitled Dashboard".
-
-# Importing Plugins
+## Importing Plugins
 
 To import the plugin open the app and click the `File > Plugins` menu item:
 
-![image](./images/dashboard/plugins/plugin-file-menu.png)
+![image](./img/plugins/plugin-file-menu.png)
 
 This should open the plugins dialog:
 
-![image](./images/dashboard/plugins/plugin-dialog.png)
+![image](./img/plugins/plugin-dialog.png)
 
 Click `Load Plugin` which open up an open folder dialog. Navigate to your plugin and select the `plugin` folder generated with the `npm run build` command:
 
-![image](./images/dashboard/plugins/select-plugin-folder.png)
+![image](./img/plugins/select-plugin-folder.png)
 
 You should now see the plugin loaded in the dialog:
 
-![image](./images/dashboard/plugins/plugin-loaded.png)
+![image](./img/plugins/plugin-loaded.png)
 
 The app must be refreshed to view the changes:
 
-![image](./images/dashboard/plugins/refresh-plugin.png)
+![image](./img/plugins/refresh-plugin.png)
 
-The plugin should now be successfully loaded:
-
-![image](./images/dashboard/plugins/plugin-successfully-loaded.png)
+The plugin should now be successfully loaded.

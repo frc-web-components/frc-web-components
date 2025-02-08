@@ -63,7 +63,7 @@ export class ProfiledPidController extends LitElement {
           d: this.d,
           goal: this.goal,
         },
-      })
+      }),
     );
   }
 

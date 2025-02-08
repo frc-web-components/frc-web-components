@@ -76,7 +76,7 @@ export const lineChartDataDashboardConfig: Partial<WebbitConfig> = {
       }
       const parent = element.parentElement as HTMLElement;
       const dataElements = [...parent.children].filter(
-        (child) => child.tagName.toLowerCase() === 'frc-line-chart-data'
+        (child) => child.tagName.toLowerCase() === 'frc-line-chart-data',
       );
       const index = dataElements.indexOf(element);
       const displayName =

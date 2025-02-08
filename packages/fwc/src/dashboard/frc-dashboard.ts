@@ -43,7 +43,7 @@ export default class FrcDashboard extends Dashboard {
     this.setStoreValue('selectedElement', element);
     this.setStoreValue(
       'allowedChildren',
-      getAllowedChildren(element, this.getConnector())
+      getAllowedChildren(element, this.getConnector()),
     );
   }
 
@@ -55,14 +55,14 @@ export default class FrcDashboard extends Dashboard {
 
   addElements(
     elementConfigs?: Record<string, Partial<WebbitConfig>>,
-    group = 'default'
+    group = 'default',
   ): void {
     super.addElements(elementConfigs, group);
     const selectedElement = this.getSelectedElement();
     if (selectedElement) {
       this.setStoreValue(
         'allowedChildren',
-        getAllowedChildren(selectedElement, this.getConnector())
+        getAllowedChildren(selectedElement, this.getConnector()),
       );
     }
     this.publish('elementsAdd');
@@ -131,7 +131,7 @@ export default class FrcDashboard extends Dashboard {
           'propertyInputChange',
           () => {
             (propertyView as LitElement)?.requestUpdate();
-          }
+          },
         );
 
         return () => {
@@ -170,7 +170,7 @@ export default class FrcDashboard extends Dashboard {
   }
 
   isElementEditable(
-    element: HTMLElement | null = this.getSelectedElement()
+    element: HTMLElement | null = this.getSelectedElement(),
   ): boolean {
     if (!element) {
       return true;
@@ -208,7 +208,7 @@ export default class FrcDashboard extends Dashboard {
     }
 
     const rules = Object.entries(cssVariables).map(
-      ([variableName, value]) => `${variableName}: ${value};`
+      ([variableName, value]) => `${variableName}: ${value};`,
     );
     addCSSRule(
       this.themeSheets[theme],
@@ -216,7 +216,7 @@ export default class FrcDashboard extends Dashboard {
       [data-theme="${theme}"] {
         ${rules.join('\n')}
       }
-    `
+    `,
     );
     this.publish('themeRulesAdd');
   }

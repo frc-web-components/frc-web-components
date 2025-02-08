@@ -1,34 +1,28 @@
 {
   "name": "@frc-web-components/lit",
-  "version": "0.4.1",
+  "version": "2.1.0",
   "type": "module",
   "files": [
-    "dist"
+    "dist",
+    "types"
   ],
-  "main": "./dist/fwc-lit.es.js",
-  "module": "./dist/fwc-lit.es.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/fwc-lit.es.js"
-    }
-  },
+  "main": "./dist/lit.js",
+  "types": "./types/index.d.ts",
   "scripts": {
-    "build": "vite build",
-    "watch": "vite build --watch",
-    "preview": "vite preview"
+    "dev": "vite build --watch --config ./vite.config.dev.ts",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --config ../../eslint.config.js"
   },
   "dependencies": {
-    "@lit/context": "^1.0.1"
+    "@lit/context": "^1.0.1",
+    "@webbitjs/store": "^5.8.0"
   },
   "peerDependencies": {
-    "@frc-web-components/fwc": ">=2.4.3",
-    "lit": ">=2.7.0"
+    "@frc-web-components/fwc": "workspace:*",
+    "lit": "catalog:"
   },
   "devDependencies": {
-    "@frc-web-components/fwc": "*",
-    "lit": "^2.7.6",
     "vite": "^4.4.5",
     "vite-plugin-dts": "^3.7.0"
   }

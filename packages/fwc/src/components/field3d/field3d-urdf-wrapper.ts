@@ -1,11 +1,10 @@
-/* eslint-disable no-underscore-dangle */
 import { LitElement, PropertyValueMap, TemplateResult, html } from 'lit';
 import { property } from 'lit/decorators.js';
 import Store, { SourceProvider } from '@webbitjs/store';
 import { WebbitConfig } from '@webbitjs/webbit';
 
 export function getField3dUrdfDashboardConfig(
-  urdfNames: string[]
+  urdfNames: string[],
 ): WebbitConfig {
   const config: Partial<WebbitConfig> = {
     dashboard: {
@@ -81,7 +80,7 @@ export default class Urdf3dWrapper extends LitElement {
         this.#publishJointValues();
         this.requestUpdate();
       },
-      true
+      true,
     );
   }
 
@@ -99,7 +98,7 @@ export default class Urdf3dWrapper extends LitElement {
     const jointValuesSourceKey = [this.sourceKey, 'joints'].join('/');
     const jointValuesSource = this.store!.getSource(
       this.sourceProvider,
-      jointValuesSourceKey
+      jointValuesSourceKey,
     );
     const jointValues: any = jointValuesSource?.getJson(false) ?? {};
     const values: Record<string, number> = {};
@@ -122,11 +121,11 @@ export default class Urdf3dWrapper extends LitElement {
 
     this.#jointNames.forEach((jointName) => {
       const jointValuesSourceKey = [this.sourceKey, 'joints', jointName].join(
-        '/'
+        '/',
       );
       const joinValuesSource = this.store!.getSource(
         this.sourceProvider,
-        jointValuesSourceKey
+        jointValuesSourceKey,
       );
       if (!joinValuesSource?.hasValue()) {
         this.provider?.userUpdate(jointValuesSourceKey, 0);
@@ -149,7 +148,7 @@ export default class Urdf3dWrapper extends LitElement {
   }
 
   protected updated(
-    changedProps: PropertyValueMap<any> | Map<PropertyKey, unknown>
+    changedProps: PropertyValueMap<any> | Map<PropertyKey, unknown>,
   ): void {
     if (
       changedProps.has('sourceProvider') ||

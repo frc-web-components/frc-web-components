@@ -59,7 +59,7 @@ export class BooleanBox extends LitElement {
     const falseColor = this.falseColor || BooleanBox.DEFAULT_FALSE_COLOR;
     const trueColor = this.trueColor || BooleanBox.DEFAULT_TRUE_COLOR;
     const backgroundNode = this.renderRoot.querySelector(
-      '[part=box]'
+      '[part=box]',
     ) as HTMLElement;
     const backgroundColor = this.value ? trueColor : falseColor;
     backgroundNode.style.setProperty('--box-color', backgroundColor);

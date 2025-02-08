@@ -31,6 +31,6 @@ npx create-plugin <name>
 - {{contact}} => Amory Galili <amorygalili@gmail.com>
 - {{license}} => MIT
 - {{year}} => 2022
-- {{custom}} =>  (undefined until it is defined in `extra` field in `create` function arguments)
+- {{custom}} => (undefined until it is defined in `extra` field in `create` function arguments)
 
 See https://github.com/uetchy/create-create-app#template for the further details.

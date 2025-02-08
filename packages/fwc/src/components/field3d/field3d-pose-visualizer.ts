@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { LitElement } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import {
@@ -63,7 +62,7 @@ export default class PoseVisualizer extends LitElement {
       0.3,
       0xff0000,
       0.1,
-      0.05
+      0.05,
     );
     this.#arrowY = new ArrowHelper(
       new Vector3(1, 0, 0).normalize(),
@@ -71,7 +70,7 @@ export default class PoseVisualizer extends LitElement {
       0.3,
       0xff0000,
       0.1,
-      0.05
+      0.05,
     );
     this.#arrowZ = new ArrowHelper(
       new Vector3(1, 0, 0).normalize(),
@@ -79,7 +78,7 @@ export default class PoseVisualizer extends LitElement {
       0.3,
       0xff0000,
       0.1,
-      0.05
+      0.05,
     );
 
     this.#fieldObject = this.getField().createFieldObject({

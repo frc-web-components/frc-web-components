@@ -106,7 +106,7 @@ export class ToggleGroup extends LitElement {
     if (changedProps.has('direction')) {
       this.style.setProperty(
         'flex-direction',
-        this.direction === 'vertical' ? 'column' : 'row'
+        this.direction === 'vertical' ? 'column' : 'row',
       );
     }
   }
@@ -117,7 +117,7 @@ export class ToggleGroup extends LitElement {
         detail: { value: this.value },
         bubbles: true,
         composed: true,
-      })
+      }),
     );
   }
 
@@ -127,7 +127,7 @@ export class ToggleGroup extends LitElement {
         detail: { options: this.options },
         bubbles: true,
         composed: true,
-      })
+      }),
     );
   }
 
@@ -141,7 +141,7 @@ export class ToggleGroup extends LitElement {
           >
             ${option}
           </button>
-        `
+        `,
       )}
     `;
   }

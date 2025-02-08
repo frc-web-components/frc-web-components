@@ -1,8 +1,8 @@
 {
   "name": "example-lit-plugin",
-  "private": true,
-  "version": "0.1.0",
   "displayName": "lit-plugin",
+  "private": true,
+  "version": "0.0.6",
   "description": "Example lit plugin",
   "author": "",
   "email": "",
@@ -26,12 +26,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "lit": "^2.7.6",
-    "@frc-web-components/app": "^0.5.0"
+    "@frc-web-components/app": "workspace:*",
+    "lit": "^3.2.1"
   },
   "devDependencies": {
-    "typescript": "^5.0.2",
-    "vite": "^4.4.5",
-    "vite-plugin-dts": "^3.7.0"
+    "typescript": "~5.6.2",
+    "vite": "^6.0.1",
+    "vite-plugin-dts": "^4.3.0"
   }
 }

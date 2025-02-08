@@ -5,7 +5,7 @@ import { ref } from 'lit/directives/ref.js';
 export function getXScale(
   width: number,
   totalTimeMs: number,
-  elapsedTime: number
+  elapsedTime: number,
 ): d3.ScaleTime<number, number, never> {
   const xScale = d3
     .scaleTime()
@@ -15,7 +15,7 @@ export function getXScale(
 }
 
 export default function getRealTimeXAxis(
-  xScale: d3.ScaleTime<number, number, never>
+  xScale: d3.ScaleTime<number, number, never>,
 ): TemplateResult {
   const xAxis = d3.axisBottom(xScale).tickFormat((d) => {
     const date = d as Date;
@@ -35,7 +35,7 @@ export default function getRealTimeXAxis(
 
 export function getRealTimeXGrid(
   xScale: d3.ScaleTime<number, number, never>,
-  height: number
+  height: number,
 ): TemplateResult {
   const xAxisGrid = d3
     .axisBottom(xScale)

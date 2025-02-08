@@ -51,6 +51,8 @@ export class ThreeAxisAccelerometer extends LitElement {
     [part='accelerometer'] {
       width: 100%;
       display: flex;
+      gap: 8px;
+      align-items: center;
       margin-bottom: 10px;
     }
 
@@ -71,12 +73,7 @@ export class ThreeAxisAccelerometer extends LitElement {
       flex: 1;
     }
 
-    :host(:not([num-tick-marks='0'])) frc-accelerometer::part(bar) {
-      width: calc(100% - 40px);
-      margin: 0 20px;
-    }
-
-    :host([num-tick-marks='0']) frc-accelerometer::part(bar) {
+    frc-accelerometer::part(bar) {
       width: 100%;
       margin: 0;
     }

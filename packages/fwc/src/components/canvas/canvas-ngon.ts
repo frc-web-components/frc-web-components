@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { property } from 'lit/decorators.js';
 import { LitElement } from 'lit';
 import { CanvasObjectApi } from './interfaces';

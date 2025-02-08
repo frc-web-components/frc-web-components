@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { SourceProvider } from '@webbitjs/store';
 import { NT4_Client, NT4_Topic } from './NT4';
 
@@ -61,7 +60,7 @@ export default class Nt4Provider extends SourceProvider {
   private unprocessedUpdates: Record<string, unknown> = {};
   private connectionListeners: ((
     connected: boolean,
-    serverAddress: string
+    serverAddress: string,
   ) => unknown)[] = [];
 
   constructor() {
@@ -102,7 +101,7 @@ export default class Nt4Provider extends SourceProvider {
 
   addConnectionListener(
     listener: (connected: boolean, serverAddress: string) => unknown,
-    callImediately = false
+    callImediately = false,
   ): void {
     this.connectionListeners.push(listener);
     if (callImediately) {
@@ -157,7 +156,7 @@ export default class Nt4Provider extends SourceProvider {
   private onConnect() {
     this.connected = true;
     this.connectionListeners.forEach((listener) =>
-      listener(true, this.serverAddress)
+      listener(true, this.serverAddress),
     );
     this.processUnprocessedUpdates();
   }
@@ -165,7 +164,7 @@ export default class Nt4Provider extends SourceProvider {
   private onDisconnect() {
     this.connected = false;
     this.connectionListeners.forEach((listener) =>
-      listener(false, this.serverAddress)
+      listener(false, this.serverAddress),
     );
   }
 
@@ -182,7 +181,7 @@ export default class Nt4Provider extends SourceProvider {
 
     this.serverAddress = serverAddr;
     this.connectionListeners.forEach((listener) =>
-      listener(this.connected, this.serverAddress)
+      listener(this.connected, this.serverAddress),
     );
     localStorage.setItem('nt4Address', serverAddr);
 
@@ -221,7 +220,7 @@ export default class Nt4Provider extends SourceProvider {
               if (entryAddress !== robotAddress) {
                 entryClient.disconnect();
               }
-            }
+            },
           );
           this.clients = {};
           this.onConnect();
@@ -230,7 +229,7 @@ export default class Nt4Provider extends SourceProvider {
           if (this.client === client) {
             this.onDisconnect();
           }
-        }
+        },
       );
       this.clients[robotAddress] = client;
       client.connect();

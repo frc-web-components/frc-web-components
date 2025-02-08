@@ -1,19 +1,6 @@
-import {
-  addElements,
-  addSourceProvider,
-  addThemeRules,
-  mountDashboard,
-  setDefaultSourceProvider,
-  setAssetBasePath,
-} from "@frc-web-components/app";
-import { Nt4Provider, GamepadProvider } from "@frc-web-components/fwc/source-providers";
-import { darkTheme } from "@frc-web-components/fwc/themes";
-import { dashboardElementConfigs } from "@frc-web-components/fwc";
+import * as fwcDashboard from '@frc-web-components/app';
+import '@frc-web-components/app/dist/style.css';
 
-setAssetBasePath("/assets");
-addThemeRules("dark", darkTheme);
-addSourceProvider("NetworkTables", new Nt4Provider());
-addSourceProvider("Gamepad", new GamepadProvider());
-setDefaultSourceProvider("NetworkTables");
-addElements(dashboardElementConfigs, "FRC");
-mountDashboard(document.getElementById("app")!);
+fwcDashboard.setAssetBasePath('/assets');
+fwcDashboard.mountDashboard(document.getElementById('root')!);
+(window as any).fwcDashboard = fwcDashboard;

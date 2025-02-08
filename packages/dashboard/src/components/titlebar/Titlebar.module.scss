@@ -1,0 +1,9 @@
+.open-example {
+  padding-left: 8px !important;
+
+  :global {
+    p {
+      font-size: 14px !important;
+    }
+  }
+}

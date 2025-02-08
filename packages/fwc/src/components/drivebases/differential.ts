@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { html, css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 import { WebbitConfig } from '@webbitjs/webbit';
@@ -51,7 +50,7 @@ function map(
   minInput: number,
   maxInput: number,
   minOutput: number,
-  maxOutput: number
+  maxOutput: number,
 ) {
   return (
     ((x - minInput) * (maxOutput - minOutput)) / (maxInput - minInput) +
@@ -209,7 +208,7 @@ export class DifferentialDrivebase extends LitElement {
         Math.abs(left * maxRadius),
         (-Math.sign(left) * Math.PI) / 2,
         0,
-        arrowheadSize
+        arrowheadSize,
       );
       return `<g class="arrow">${arrow}</g>`;
     }
@@ -233,7 +232,7 @@ export class DifferentialDrivebase extends LitElement {
         radius,
         arcSign * avgSpeed * maxRadius,
         arcSign * radius,
-        arrowheadSize
+        arrowheadSize,
       );
     } else {
       // Turning about a point inside the frame of the robot
@@ -256,7 +255,7 @@ export class DifferentialDrivebase extends LitElement {
           radius,
           turnSign * angle,
           centerX,
-          arrowheadSize
+          arrowheadSize,
         );
       }
     }
@@ -328,7 +327,6 @@ export class DifferentialDrivebase extends LitElement {
     return this.getForegroundStyle(this.clampedRightMotorSpeed);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   getForegroundStyle(value: number) {
     const min = -1;
     const max = 1;
@@ -372,7 +370,7 @@ export class DifferentialDrivebase extends LitElement {
   resized() {
     const drawing = this.drawMotionVector(
       this.clampedLeftMotorSpeed,
-      this.clampedRightMotorSpeed
+      this.clampedRightMotorSpeed,
     );
     this.renderRoot.querySelector('#forceVector')!.innerHTML = drawing;
     const svgNode = this.renderRoot.querySelector('#svg')!;
@@ -389,7 +387,7 @@ export class DifferentialDrivebase extends LitElement {
   updated() {
     const drawing = this.drawMotionVector(
       this.clampedLeftMotorSpeed,
-      this.clampedRightMotorSpeed
+      this.clampedRightMotorSpeed,
     );
     this.renderRoot.querySelector('#forceVector')!.innerHTML = drawing;
   }

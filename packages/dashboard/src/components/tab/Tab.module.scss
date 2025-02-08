@@ -1,0 +1,57 @@
+.component {
+  box-sizing: border-box;
+  border: 2px dashed rgba(0, 0, 0, 0);
+  width: 100%;
+  height: 100%;
+
+  .component-child {
+    width: 100%;
+    height: 100%;
+  }
+
+  .component-child,
+  .component-child * {
+    .editable & {
+      pointer-events: none;
+    }
+  }
+
+  .editable & {
+    border: 2px dashed #666;
+
+    &.selected {
+      border-color: lightgreen;
+    }
+
+    :global {
+      .react-resizable-handle-e,
+      .react-resizable-handle-w,
+      .react-resizable-handle-s,
+      .react-resizable-handle-n {
+        border: none;
+        display: none;
+      }
+
+      .react-resizable-handle-se,
+      .react-resizable-handle-sw,
+      .react-resizable-handle-ne,
+      .react-resizable-handle-nw {
+        opacity: 0;
+      }
+    }
+
+    &:hover {
+      :global {
+        .react-resizable-handle-se,
+        .react-resizable-handle-sw,
+        .react-resizable-handle-ne,
+        .react-resizable-handle-nw {
+          opacity: 1;
+          &:after {
+            border-color: #aaa !important;
+          }
+        }
+      }
+    }
+  }
+}

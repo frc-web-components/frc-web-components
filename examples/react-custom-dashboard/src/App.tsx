@@ -1,6 +1,6 @@
 import './App.css';
-import ThemeChooser from "./components/ThemeChooser";
-import Dashboard from "./components/Dashboard";
+import ThemeChooser from './components/ThemeChooser';
+import Dashboard from './components/Dashboard';
 
 function App() {
   return (

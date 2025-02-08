@@ -76,17 +76,17 @@ export class PreferencesWrapper extends LitElement {
       () => {
         const source = this.store?.getSource(
           this.sourceProvider,
-          this.sourceKey
+          this.sourceKey,
         );
         this.#sourceJson = source?.getJson(false) ?? {};
         this.requestUpdate();
       },
-      true
+      true,
     );
   }
 
   protected updated(
-    changedProps: PropertyValueMap<any> | Map<PropertyKey, unknown>
+    changedProps: PropertyValueMap<any> | Map<PropertyKey, unknown>,
   ): void {
     if (
       changedProps.has('sourceProvider') ||

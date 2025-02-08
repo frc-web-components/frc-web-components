@@ -177,7 +177,6 @@ export class Axis extends LitElement {
     this.setAxis(changedProps);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   render() {
     return html` <svg id="svg"></svg> `;
   }

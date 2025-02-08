@@ -1,4 +1,3 @@
-
 export const customLightTheme = {
   '--my-element-background': 'cornflowerblue',
   '--my-element-color': 'white',

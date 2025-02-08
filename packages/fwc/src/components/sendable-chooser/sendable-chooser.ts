@@ -111,7 +111,7 @@ export class SendableChooser extends LitElement {
         detail: { selected: this.selected },
         bubbles: true,
         composed: true,
-      })
+      }),
     );
   }
 
@@ -123,15 +123,11 @@ export class SendableChooser extends LitElement {
           <label>
             <select @change=${this.onChange} .value=${this.selected}>
               ${this.options.map(
-                (option) =>
-                  html`
-                    <option
-                      value=${option}
-                      ?selected=${this.selected === option}
-                    >
-                      ${option}
-                    </option>
-                  `
+                (option) => html`
+                  <option value=${option} ?selected=${this.selected === option}>
+                    ${option}
+                  </option>
+                `,
               )}
             </select>
           </label>

@@ -92,7 +92,7 @@ export class NT4_Client {
   private onNewTopicData: (
     topic: NT4_Topic,
     timestamp_us: number,
-    value: unknown
+    value: unknown,
   ) => void;
   private onConnect: () => void;
   private onDisconnect: () => void;
@@ -129,10 +129,10 @@ export class NT4_Client {
     onNewTopicData: (
       topic: NT4_Topic,
       timestamp_us: number,
-      value: unknown
+      value: unknown,
     ) => void,
     onConnect: () => void, //
-    onDisconnect: () => void
+    onDisconnect: () => void,
   ) {
     this.serverBaseAddr = serverAddr;
     this.appName = appName;
@@ -176,7 +176,7 @@ export class NT4_Client {
   subscribePeriodic(
     topicPatterns: string[],
     prefixMode: boolean,
-    period: number
+    period: number,
   ): number {
     let newSub = new NT4_Subscription();
     newSub.uid = this.getNewUID();
@@ -374,7 +374,7 @@ export class NT4_Client {
 
   private ws_handleReceiveTimestamp(
     serverTimestamp: number,
-    clientTimestamp: number
+    clientTimestamp: number,
   ) {
     let rxTime = this.getClientTime_us();
 
@@ -385,7 +385,7 @@ export class NT4_Client {
 
     console.log(
       '[NT4] New server time estimate: ' +
-        (this.getServerTime_us()! / 1000000.0).toString()
+        (this.getServerTime_us()! / 1000000.0).toString(),
     );
   }
 
@@ -410,7 +410,7 @@ export class NT4_Client {
 
   private ws_setproperties(
     topic: string,
-    newProperties: { [id: string]: any }
+    newProperties: { [id: string]: any },
   ) {
     this.ws_sendJSON('setproperties', {
       name: topic,
@@ -426,7 +426,7 @@ export class NT4_Client {
             method: method,
             params: params,
           },
-        ])
+        ]),
       );
     }
   }
@@ -491,7 +491,7 @@ export class NT4_Client {
       let msgData = JSON.parse(event.data);
       if (!Array.isArray(msgData)) {
         console.warn(
-          '[NT4] Ignoring text message, JSON parsing did not produce an array at the top level.'
+          '[NT4] Ignoring text message, JSON parsing did not produce an array at the top level.',
         );
         return;
       }
@@ -500,14 +500,14 @@ export class NT4_Client {
         // Validate proper format of message
         if (typeof msg !== 'object') {
           console.warn(
-            '[NT4] Ignoring text message, JSON parsing did not produce an object.'
+            '[NT4] Ignoring text message, JSON parsing did not produce an object.',
           );
           return;
         }
 
         if (!('method' in msg) || !('params' in msg)) {
           console.warn(
-            '[NT4] Ignoring text message, JSON parsing did not find all required fields.'
+            '[NT4] Ignoring text message, JSON parsing did not find all required fields.',
           );
           return;
         }
@@ -517,14 +517,14 @@ export class NT4_Client {
 
         if (typeof method !== 'string') {
           console.warn(
-            '[NT4] Ignoring text message, JSON parsing found "method", but it wasn\'t a string.'
+            '[NT4] Ignoring text message, JSON parsing found "method", but it wasn\'t a string.',
           );
           return;
         }
 
         if (typeof params !== 'object') {
           console.warn(
-            '[NT4] Ignoring text message, JSON parsing found "params", but it wasn\'t an object.'
+            '[NT4] Ignoring text message, JSON parsing found "params", but it wasn\'t an object.',
           );
           return;
         }
@@ -542,7 +542,7 @@ export class NT4_Client {
           let removedTopic = this.serverTopics.get(params.name);
           if (!removedTopic) {
             console.warn(
-              '[NT4] Ignoring unannounce, topic was not previously announced.'
+              '[NT4] Ignoring unannounce, topic was not previously announced.',
             );
             return;
           }
@@ -552,7 +552,7 @@ export class NT4_Client {
           let topic = this.serverTopics.get(params.name);
           if (!topic) {
             console.warn(
-              '[NT4] Ignoring set properties, topic was not previously announced.'
+              '[NT4] Ignoring set properties, topic was not previously announced.',
             );
             return;
           }
@@ -566,7 +566,7 @@ export class NT4_Client {
           }
         } else {
           console.warn(
-            '[NT4] Ignoring text message - unknown method ' + method
+            '[NT4] Ignoring text message - unknown method ' + method,
           );
           return;
         }
@@ -591,7 +591,7 @@ export class NT4_Client {
             if (!topic) {
               console.warn(
                 '[NT4] Ignoring binary data - unknown topic ID ' +
-                  topicID.toString()
+                  topicID.toString(),
               );
               return;
             }
@@ -601,10 +601,10 @@ export class NT4_Client {
           } else {
             console.warn(
               '[NT4] Ignoring binary data - invalid topic ID ' +
-                topicID.toString()
+                topicID.toString(),
             );
           }
-        }
+        },
       );
     }
   }
@@ -633,10 +633,10 @@ export class NT4_Client {
     this.ws.binaryType = 'arraybuffer';
     this.ws.addEventListener('open', () => this.ws_onOpen());
     this.ws.addEventListener('message', (event: MessageEvent) =>
-      this.ws_onMessage(event)
+      this.ws_onMessage(event),
     );
     this.ws.addEventListener('close', (event: CloseEvent) =>
-      this.ws_onClose(event)
+      this.ws_onClose(event),
     );
     this.ws.addEventListener('error', () => this.ws_onError());
   }

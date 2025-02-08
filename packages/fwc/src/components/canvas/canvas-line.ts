@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-param-reassign */
 import { property, state } from 'lit/decorators.js';
 import { LitElement } from 'lit';
 import { CanvasObjectApi } from './interfaces';

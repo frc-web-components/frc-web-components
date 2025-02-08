@@ -94,7 +94,7 @@ export class Pdp extends LitElement {
             <label part="channel-label">
               <slot name="${`channel-label${number}`}">Ch. ${number}</slot>
             </label>
-          `
+          `,
         )}
         ${getRange(0, 8).map((number) => html` ${this.renderChannel(number)} `)}
         ${getRange(8, 16).map(
@@ -102,10 +102,10 @@ export class Pdp extends LitElement {
             <label part="channel-label">
               <slot name="${`channel-label${number}`}">Ch. ${number}</slot>
             </label>
-          `
+          `,
         )}
         ${getRange(8, 16).map(
-          (number) => html` ${this.renderChannel(number)} `
+          (number) => html` ${this.renderChannel(number)} `,
         )}
       </div>
       <div part="voltage-and-total-current">

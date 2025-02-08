@@ -1,33 +1,34 @@
 {
   "name": "@frc-web-components/react",
-  "version": "0.8.3",
+  "version": "2.1.0",
   "type": "module",
   "files": [
-    "dist"
+    "dist",
+    "types"
   ],
   "main": "./dist/fwc-react.es.js",
   "module": "./dist/fwc-react.es.js",
-  "types": "./dist/index.d.ts",
+  "types": "./types/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/fwc-react.d.ts",
+      "types": "./types/index.d.ts",
       "import": "./dist/fwc-react.es.js"
     },
     "./all-components": {
       "import": {
-        "types": "./dist/components/index.d.js",
+        "types": "./types/components/index.d.js",
         "default": "./dist/components/index.es.js"
       }
     },
     "./components/*": {
       "import": {
-        "types": "./dist/components/*.d.ts",
+        "types": "./types/components/*.d.ts",
         "default": "./dist/components/*.es.js"
       }
     },
     "./networktables": {
       "import": {
-        "types": "./dist/networktables/index.d.js",
+        "types": "./types/networktables/index.d.js",
         "default": "./dist/networktables/index.es.js"
       }
     }
@@ -35,22 +36,21 @@
   "typesVersions": {
     "*": {
       "all-components": [
-        "./dist/components/index.d.js"
+        "./types/components/index.d.js"
       ],
       "components/*": [
-        "./dist/components/*.d.ts"
+        "./types/components/*.d.ts"
       ],
       "networktables": [
-        "./dist/networktabless/index.d.js"
+        "./types/networktabless/index.d.js"
       ]
     }
   },
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "watch": "vite build --watch",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "dev": "vite build --watch --config ./vite.config.dev.ts",
+    "build": "tsc && vite build",
     "preview": "vite preview",
+    "lint": "eslint . --config ../../eslint.config.js",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
@@ -58,22 +58,19 @@
     "@webbitjs/store": "^5.8.0"
   },
   "peerDependencies": {
-    "react": ">=17.0.0",
-    "react-dom": ">=17.0.0",
-    "@frc-web-components/fwc": ">=2.4.4"
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "@frc-web-components/fwc": "workspace:*"
   },
   "devDependencies": {
-    "@frc-web-components/fwc": "2.4.4",
-    "@types/react": "^18.2.15",
-    "@types/react-dom": "^18.2.7",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react": "^4.0.3",
     "eslint": "^8.45.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "vite": "^4.4.5",
     "vite-plugin-dts": "^3.7.0"
   }

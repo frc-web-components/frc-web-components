@@ -47,16 +47,14 @@ export class NumberBar extends LitElement {
         font-family: sans-serif;
       }
 
-      :host([num-tick-marks='0']) [part='bar'] {
+      [part='bar'] {
         width: 100%;
         margin: 0;
       }
 
       [part='bar'] {
         position: relative;
-        width: calc(100% - 40px);
         height: 20px;
-        margin: 0 20px;
         border-radius: 3px;
       }
 

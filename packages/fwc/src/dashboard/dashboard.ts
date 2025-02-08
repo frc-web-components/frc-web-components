@@ -10,7 +10,6 @@ function getFormattedHtml(html: string) {
 }
 
 type ComponentRenderer = (params: {
-  // eslint-disable-next-line no-use-before-define
   dashboard: Dashboard;
   element: HTMLElement;
   config: Record<string, unknown>;
@@ -52,7 +51,7 @@ export default class Dashboard {
   constructor(rootElement?: HTMLElement) {
     this.connector = new WebbitConnector(
       rootElement ?? document.createElement('div'),
-      this.store
+      this.store,
     );
     this.dashboardState.addSourceProvider('dashboardState', this.provider);
     this.dashboardState.subscribeAll(
@@ -60,13 +59,13 @@ export default class Dashboard {
       (value, key) => {
         this.publish('storeValueChange', { value, key });
       },
-      false
+      false,
     );
   }
 
   addSourceProvider(
     providerName: string,
-    sourceProvider: SourceProvider
+    sourceProvider: SourceProvider,
   ): void {
     this.store.addSourceProvider(providerName, sourceProvider);
   }
@@ -121,7 +120,7 @@ export default class Dashboard {
   create(
     componentType: string,
     componentId: string,
-    config: Record<string, unknown> = {}
+    config: Record<string, unknown> = {},
   ): HTMLElement | undefined {
     const element = document.createElement('div');
     const componentKey = this.componentKeys.getKey(componentType, componentId);
@@ -171,7 +170,7 @@ export default class Dashboard {
    */
   subscribe(
     subscriberId: string,
-    subscriber: (...args: unknown[]) => unknown
+    subscriber: (...args: unknown[]) => unknown,
   ): () => void {
     if (!this.subscribers.has(subscriberId)) {
       this.subscribers.set(subscriberId, new Map());
@@ -200,7 +199,7 @@ export default class Dashboard {
 
   addElements(
     elementConfigs?: Record<string, Partial<WebbitConfig>>,
-    group = 'default'
+    group = 'default',
   ): void {
     this.connector.addElementConfigs(elementConfigs, group);
   }
@@ -257,13 +256,13 @@ export default class Dashboard {
     const clonedElement = element.cloneNode(true) as HTMLElement;
     this.setClonedElementPropAttributes(element, clonedElement);
     return getFormattedHtml(
-      inner ? clonedElement.innerHTML : clonedElement.outerHTML
+      inner ? clonedElement.innerHTML : clonedElement.outerHTML,
     );
   }
 
   private setClonedElementPropAttributes(
     element: HTMLElement,
-    clonedElement: HTMLElement
+    clonedElement: HTMLElement,
   ): void {
     const webbit = this.connector.getElementWebbit(element);
     if (webbit) {
@@ -282,13 +281,13 @@ export default class Dashboard {
               clonedElement.setAttribute(attribute, attributeValue);
             }
           }
-        }
+        },
       );
     }
     for (let i = 0; i < element.children.length; i += 1) {
       this.setClonedElementPropAttributes(
         element.children[i] as HTMLElement,
-        clonedElement.children[i] as HTMLElement
+        clonedElement.children[i] as HTMLElement,
       );
     }
   }

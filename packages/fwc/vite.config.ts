@@ -1,18 +1,8 @@
-import { defineConfig, Plugin } from 'vite';
-import basicSsl from '@vitejs/plugin-basic-ssl';
-import { hideBin } from 'yargs/helpers';
-import yargs from 'yargs/yargs';
+import packageJson from './package.json';
+import { getConfig } from '../../vite.config';
+import { defineConfig, mergeConfig } from 'vite';
 import fs from 'fs';
 import path from 'node:path';
-import dts from 'vite-plugin-dts';
-
-const argv = yargs(hideBin(process.argv)).argv;
-
-const plugins: Plugin[] = [dts()];
-
-if ((argv as any)._.includes('--useHttps')) {
-  plugins.push(basicSsl());
-}
 
 function getEntries(folder: string): Record<string, string> {
   const entries: Record<string, string> = {};
@@ -22,9 +12,8 @@ function getEntries(folder: string): Record<string, string> {
 
   fileNames.forEach((fileName) => {
     if (fileName.isDirectory()) {
-      entries[
-        `${folder}/${fileName.name}`
-      ] = `src/${folder}/${fileName.name}/index.ts`;
+      entries[`${folder}/${fileName.name}`] =
+        `src/${folder}/${fileName.name}/index.ts`;
     }
   });
 
@@ -40,30 +29,17 @@ function getAllEntries(): Record<string, string> {
     ...getEntries('source-providers'),
     themes: 'src/themes/index.ts',
     fwc: 'src/index.ts',
-    'source-view': 'src/source-view.ts',
-    'get-asset-url': 'src/get-asset-url.ts',
-    'load-local-storage': 'src/load-local-storage.ts',
   };
 }
 
-export default defineConfig({
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-      '@dashboard': path.resolve(__dirname, './src/dashboard'),
+export default defineConfig(
+  mergeConfig(getConfig({ packageJson }), {
+    build: {
+      lib: {
+        entry: getAllEntries(),
+        formats: ['es'],
+        fileName: (format, entryName) => `${entryName}.${format}.js`,
+      },
     },
-  },
-  build: {
-    lib: {
-      entry: getAllEntries(),
-      formats: ['es'],
-      fileName: (format, entryName) => `${entryName}.${format}.js`,
-    },
-    minify: true,
-    sourcemap: true,
-  },
-  server: {
-    open: '/',
-  },
-  plugins,
-});
+  }),
+);

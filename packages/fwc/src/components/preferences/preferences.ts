@@ -175,7 +175,7 @@ export class Preferences extends LitElement {
         },
         bubbles: true,
         composed: true,
-      })
+      }),
     );
   }
   #dispatchSearch(): void {
@@ -186,7 +186,7 @@ export class Preferences extends LitElement {
         },
         bubbles: true,
         composed: true,
-      })
+      }),
     );
   }
 
@@ -194,7 +194,7 @@ export class Preferences extends LitElement {
     sourceKey: string,
     value: boolean | number | string,
     prefs: IPreferences,
-    property: string
+    property: string,
   ) {
     prefs[property] = value;
     this.#dispatchChange(sourceKey, value);
@@ -215,7 +215,7 @@ export class Preferences extends LitElement {
           return true;
         }
         return source.toLowerCase().includes(this.search.toLowerCase());
-      }
+      },
     );
     return html`
       ${filteredEntries.map(([property, value]) => {
@@ -254,7 +254,7 @@ export class Preferences extends LitElement {
                     source,
                     parseFloat(ev.target.value),
                     prefs,
-                    property
+                    property,
                   );
                 }}
               />

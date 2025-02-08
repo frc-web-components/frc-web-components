@@ -1,39 +1,39 @@
-import { Nt4Provider } from "@frc-web-components/fwc/source-providers";
-import { dashboardElementConfigs, FrcDashboard } from "@frc-web-components/fwc";
-import { Store } from "@webbitjs/store";
-import { setContext, getContext, onDestroy } from "svelte";
-import { writable } from "svelte/store";
+import { Nt4Provider } from '@frc-web-components/fwc/source-providers';
+import { dashboardElementConfigs, FrcDashboard } from '@frc-web-components/fwc';
+import { Store } from '@webbitjs/store';
+import { setContext, getContext, onDestroy } from 'svelte';
+import { writable } from 'svelte/store';
 
 export function setNt4Context(address: string) {
   const dashboard = new FrcDashboard(document.body);
   const provider = new Nt4Provider();
-  dashboard.addSourceProvider("NetworkTables", provider);
-  dashboard.setDefaultSourceProvider("NetworkTables");
-  dashboard.addElements(dashboardElementConfigs, "FRC");
+  dashboard.addSourceProvider('NetworkTables', provider);
+  dashboard.setDefaultSourceProvider('NetworkTables');
+  dashboard.addElements(dashboardElementConfigs, 'FRC');
   provider.connect(address);
 
-  setContext("NT4", {
+  setContext('NT4', {
     store: dashboard.getStore(),
     provider,
   });
 }
 
 export function getNt4Context(): { store: Store; provider: Nt4Provider } {
-  return getContext("NT4");
+  return getContext('NT4');
 }
 
 export function addGlobalListener(
   callback: (key: string, value: unknown) => unknown,
-  immediateNotify: boolean
+  immediateNotify: boolean,
 ) {
   const { store } = getNt4Context();
 
   const unsubscribe = store.subscribeAll(
-    "NetworkTables",
+    'NetworkTables',
     (value: unknown, key: string) => {
       callback(key, value);
     },
-    immediateNotify
+    immediateNotify,
   );
 
   onDestroy(unsubscribe);
@@ -42,17 +42,17 @@ export function addGlobalListener(
 export function addKeyListener<T>(
   key: string,
   callback: (key: string, value: T) => unknown,
-  immediateNotify: boolean
+  immediateNotify: boolean,
 ) {
   const { store } = getNt4Context();
 
   const unsubscribe = store.subscribe(
-    "NetworkTables",
+    'NetworkTables',
     key,
     (value: unknown) => {
       callback(key, value as T);
     },
-    immediateNotify
+    immediateNotify,
   );
 
   onDestroy(unsubscribe);
@@ -71,7 +71,7 @@ export function getEntry<T>(key: string, defaultValue: T) {
         set(newValue);
       }
     },
-    true
+    true,
   );
 
   return {
@@ -87,10 +87,10 @@ export function getJson(key: string, defaultValue?: unknown) {
   addKeyListener(
     key,
     () => {
-      const json = store.getSource("NetworkTables", key)?.getJson();
+      const json = store.getSource('NetworkTables', key)?.getJson();
       set(json);
     },
-    true
+    true,
   );
 
   return {

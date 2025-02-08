@@ -77,7 +77,7 @@ export class PidCommand extends LitElement {
           setpoint: this.setpoint,
           running: this.running,
         },
-      })
+      }),
     );
   }
 

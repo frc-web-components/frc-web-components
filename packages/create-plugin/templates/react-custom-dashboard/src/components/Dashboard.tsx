@@ -5,28 +5,28 @@ import {
   ToggleButton,
   Field,
   FieldRobot,
-} from "@frc-web-components/react";
-import MyElement from "./MyElement";
-import { CSSProperties } from "react";
+} from '@frc-web-components/react';
+import MyElement from './MyElement';
+import { CSSProperties } from 'react';
 
 const Dashboard = () => {
-  const [toggled, setToggled] = useEntry("/dashboard/toggled", false);
-  const [pose] = useEntry("/SmartDashboard/Field/Robot", [0, 0, 0]);
-  const [count, setCount] = useEntry("/dashboard/count", 0);
+  const [toggled, setToggled] = useEntry('/dashboard/toggled', false);
+  const [pose] = useEntry('/SmartDashboard/Field/Robot', [0, 0, 0]);
+  const [count, setCount] = useEntry('/dashboard/count', 0);
 
   const updateToggle = () => {
     setToggled(!toggled);
   };
 
   const divStyles: CSSProperties = {
-    display: "flex",
-    gap: "15px",
-    alignItems: "start",
+    display: 'flex',
+    gap: '15px',
+    alignItems: 'start',
   };
 
   const fieldStyles: CSSProperties = {
-    width: "500px",
-    height: "300px",
+    width: '500px',
+    height: '300px',
   };
 
   return (

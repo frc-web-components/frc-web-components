@@ -1,193 +1,94 @@
 {
   "name": "@frc-web-components/fwc",
-  "version": "2.4.4",
-  "description": "",
+  "version": "3.2.0",
   "files": [
-    "dist"
+    "dist",
+    "types"
   ],
-  "main": "dist/fwc.es.js",
+  "main": "dist/fwc.es.j",
   "module": "dist/fwc.es.js",
   "type": "module",
-  "types": "dist/index.d.ts",
+  "types": "types/index.d.ts",
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/index.d.ts",
+        "types": "./types/index.d.ts",
         "default": "./dist/fwc.es.js"
-      }
-    },
-    "./get-asset-url": {
-      "import": {
-        "types": "./dist/get-asset-url.d.ts",
-        "default": "./dist/get-asset-url.es.js"
-      }
-    },
-    "./load-local-storage": {
-      "import": {
-        "types": "./dist/load-local-storage.d.ts",
-        "default": "./dist/load-local-storage.es.js"
-      }
-    },
-    "./source-view": {
-      "import": {
-        "types": "./dist/source-view.d.ts",
-        "default": "./dist/source-view.es.js"
       }
     },
     "./source-providers": {
       "import": {
-        "types": "./dist/source-providers/index.d.ts",
+        "types": "./types/source-providers/index.d.ts",
         "default": "./dist/source-providers.es.js"
       }
     },
     "./source-providers/*": {
       "import": {
-        "types": "./dist/source-providers/*.d.ts",
+        "types": "./types/source-providers/*.d.ts",
         "default": "./dist/source-providers/*.es.js"
       }
     },
     "./components": {
       "import": {
-        "types": "./dist/components/index.d.ts",
+        "types": "./types/components/index.d.ts",
         "default": "./dist/components.es.js"
       }
     },
     "./components/*": {
       "import": {
-        "types": "./dist/components/*/index.d.ts",
+        "types": "./types/components/*/index.d.ts",
         "default": "./dist/components/*.es.js"
       }
     },
     "./themes": {
       "import": {
-        "types": "./dist/themes/index.d.ts",
+        "types": "./types/themes/index.d.ts",
         "default": "./dist/themes.es.js"
       }
     }
   },
   "typesVersions": {
     "*": {
-      "get-asset-url": [
-        "dist/get-asset-url.d.ts"
-      ],
-      "load-local-storage": [
-        "dist/load-local-storage.d.ts"
-      ],
-      "source-view": [
-        "dist/source-view.d.ts"
-      ],
       "source-providers": [
-        "dist/source-providers/index.d.ts"
+        "types/source-providers/index.d.ts"
       ],
       "source-providers/*": [
-        "dist/source-providers/*.d.ts"
+        "types/source-providers/*.d.ts"
       ],
       "components": [
-        "dist/components/index.d.ts"
+        "types/components/index.d.ts"
       ],
       "components/*": [
-        "dist/components/*/index.d.ts"
+        "types/components/*/index.d.ts"
       ],
       "themes": [
-        "dist/themes/index.d.ts"
+        "types/themes/index.d.ts"
       ]
     }
   },
   "scripts": {
-    "dev": "vite",
-    "host": "vite --host -- --useHttps",
-    "test": "",
-    "test:coverage": "npm test -- --coverage --watchAll=false",
-    "generate-docs": "jsdoc -c jsdoc.conf.json",
-    "build": "vite build",
-    "watch": "vite build --watch",
-    "preview": "vite preview --port 8080",
-    "lint": "",
-    "lint:format": "eslint src/**/* --fix",
-    "prepublishOnly": "npm test && npm run lint && npm run build",
-    "preversion": "npm run lint",
-    "version": "npm run lint && git add -A src",
-    "postversion": "git push && git push --tags"
+    "dev": "vite build --watch --config ./vite.config.dev.ts",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --config ../../eslint.config.js"
   },
-  "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.8.4",
-    "@babel/node": "^7.8.4",
-    "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/plugin-proposal-decorators": "^7.8.3",
-    "@babel/plugin-transform-runtime": "^7.15.8",
-    "@babel/preset-env": "^7.8.4",
-    "@babel/preset-typescript": "^7.16.0",
-    "@testing-library/dom": "^8.10.1",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/d3": "^7.4.0",
-    "@types/js-beautify": "^1.13.3",
-    "@types/lodash.escape": "^4.0.7",
-    "@types/lodash.throttle": "^4.1.7",
-    "@types/lodash.unescape": "^4.0.7",
-    "@types/offscreencanvas": "^2019.7.0",
-    "@types/three": "^0.152.0",
-    "@typescript-eslint/eslint-plugin": "^5.3.1",
-    "@typescript-eslint/parser": "^5.3.1",
-    "@vaadin/vaadin-icons": "^22.0.0",
-    "@vitejs/plugin-basic-ssl": "^1.0.1",
-    "babel-jest": "^25.5.1",
-    "eslint": "^7.27.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-jest-dom": "^3.9.2",
-    "eslint-plugin-monorepo": "^0.3.2",
-    "eslint-plugin-testing-library": "^5.0.0",
-    "jest": "^29.7.0",
-    "jsdoc": "^4.0.2",
-    "lint-staged": "^12.0.3",
-    "prettier": "2.7.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "typescript": "^4.4.4",
-    "vite": "^4.4.5",
-    "vite-plugin-dts": "^3.7.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/frc-web-components/components.git"
-  },
-  "author": "Amory Galili",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/frc-web-components/components/issues"
-  },
-  "homepage": "https://github.com/frc-web-components/components#readme",
   "dependencies": {
-    "@iconify-icons/mdi": "^1.2.0",
-    "@iconify/collections": "^1.0.61",
-    "@iconify/iconify": "^2.1.2",
-    "@lit-labs/context": "^0.1.1",
-    "@lit/context": "^1.1.0",
-    "@vaadin/vaadin": "^22.0.0",
     "@webbitjs/store": "^5.8.0",
     "@webbitjs/webbit": "^5.12.0",
-    "chart.js": "^2.8.0",
-    "codeflask": "^1.4.1",
     "d3": "^7.8.2",
-    "highlight.js": "^11.6.0",
-    "hotkeys-js": "^3.9.3",
-    "interactjs": "^1.10.17",
-    "js-beautify": "^1.13.0",
-    "juicy-ace-editor": "^2.0.5",
-    "lit": "^3.0.1",
-    "lodash.escape": "^4.0.1",
+    "js-beautify": "^1.15.1",
+    "lit": "catalog:",
     "lodash.throttle": "^4.1.1",
-    "lodash.unescape": "^4.0.1",
-    "multiselect-combo-box": "^3.0.0-alpha.2",
     "svg-gauge": "^1.0.6",
-    "three": "^0.152.0",
-    "urdf-loader": "^0.12.0",
-    "yargs": "^17.7.2"
+    "three": "^0.151.3",
+    "urdf-loader": "^0.12.0"
   },
-  "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+  "devDependencies": {
+    "@types/d3": "^7.4.0",
+    "@types/js-beautify": "^1.14.3",
+    "@types/lodash.throttle": "^4.1.9",
+    "@types/three": "^0.150.1",
+    "@vitejs/plugin-basic-ssl": "^1.1.0",
+    "yargs": "^17.7.2"
   }
 }

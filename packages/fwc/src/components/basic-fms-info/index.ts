@@ -1,4 +1,3 @@
-/* eslint-disable no-bitwise */
 import { html, css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 import '../icon';

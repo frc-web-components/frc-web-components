@@ -64,7 +64,7 @@ export class ToggleButton extends LitElement {
         },
         bubbles: true,
         composed: true,
-      })
+      }),
     );
   }
 

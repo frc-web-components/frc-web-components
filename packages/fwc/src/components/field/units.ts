@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 export const baseUnit = 'm';
 
 export const toBaseConversions: Record<string, number> = {

@@ -1,9 +1,9 @@
-import React from "react";
-import { createComponent } from "@lit/react";
+import React from 'react';
+import { createComponent } from '@lit/react';
 import {
   RobotCommand as RobotCommandWc,
   RobotSubsystem as RobotSubsystemWc,
-} from "@frc-web-components/fwc/components/command-based";
+} from '@frc-web-components/fwc/components/command-based';
 
 export const RobotCommand = createComponent({
   tagName: 'frc-robot-command',
@@ -15,7 +15,7 @@ export const RobotCommand = createComponent({
 });
 
 export const RobotSubsystem = createComponent({
-  tagName: "frc-robot-subsystem",
+  tagName: 'frc-robot-subsystem',
   elementClass: RobotSubsystemWc,
   react: React,
 });

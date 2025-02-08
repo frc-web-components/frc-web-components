@@ -7,7 +7,7 @@ export class SourceValue extends AsyncDirective {
     store: Store,
     provider: string,
     key: string,
-    defaultValue: unknown
+    defaultValue: unknown,
   ): unknown {
     const source = store.getSource(provider, key);
     const value = source?.hasValue() ? source.getValue() : defaultValue;
@@ -20,10 +20,10 @@ export class SourceValue extends AsyncDirective {
       key,
       () => {
         this.setValue(
-          SourceValue.getSourceValue(store, provider, key, defaultValue)
+          SourceValue.getSourceValue(store, provider, key, defaultValue),
         );
       },
-      false
+      false,
     );
     return SourceValue.getSourceValue(store, provider, key, defaultValue);
   }

@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { html, svg, css, LitElement, TemplateResult } from 'lit';
 import { property, query } from 'lit/decorators.js';
 // TODO: We should only import the parts we need
@@ -37,7 +36,7 @@ function clamp(value: number, min: number, max: number) {
  */
 function getUnitCircleCords(
   angleDeg: number,
-  counterClockwise = false
+  counterClockwise = false,
 ): [number, number] {
   const unitAngle = deg2Rad(-(angleDeg - 90));
   const x = counterClockwise ? -Math.cos(unitAngle) : Math.cos(unitAngle);
@@ -104,19 +103,19 @@ export class Gyro extends LitElement {
           .attr('alignment-baseline', 'middle')
           .attr('font-size', 15)
           .attr('fill', 'var(--frc-gyro-color, #000)')
-          .text((angle) => `${angle}°`)
+          .text((angle) => `${angle}°`),
       )
       .attr(
         'x',
         (angle) =>
           getUnitCircleCords(angle, this.counterClockwise)[0] *
-          (chartRadius + 30)
+          (chartRadius + 30),
       )
       .attr(
         'y',
         (angle) =>
           -getUnitCircleCords(angle, this.counterClockwise)[1] *
-          (chartRadius + 30)
+          (chartRadius + 30),
       );
   }
 
@@ -126,20 +125,20 @@ export class Gyro extends LitElement {
     d3.select(this._dial)
       .attr(
         'x2',
-        getUnitCircleCords(angle, this.counterClockwise)[0] * (chartRadius - 7)
+        getUnitCircleCords(angle, this.counterClockwise)[0] * (chartRadius - 7),
       )
       .attr(
         'y2',
-        -getUnitCircleCords(angle, this.counterClockwise)[1] * (chartRadius - 7)
+        -getUnitCircleCords(angle, this.counterClockwise)[1] *
+          (chartRadius - 7),
       );
   }
 
-  // eslint-disable-next-line class-methods-use-this
   addTicks(
     parent: SVGElement,
     tickLength: number,
     step: number,
-    strokeWidth: number
+    strokeWidth: number,
   ): void {
     const chartRadius = this.getGyroRadius();
     d3.select(parent)
@@ -149,17 +148,17 @@ export class Gyro extends LitElement {
         enter
           .append('line')
           .attr('stroke', 'var(--frc-gyro-color, #000)')
-          .attr('stroke-width', strokeWidth)
+          .attr('stroke-width', strokeWidth),
       )
       .attr('x1', (angle) => getUnitCircleCords(angle)[0] * chartRadius)
       .attr('y1', (angle) => -getUnitCircleCords(angle)[1] * chartRadius)
       .attr(
         'x2',
-        (angle) => getUnitCircleCords(angle)[0] * (chartRadius + tickLength)
+        (angle) => getUnitCircleCords(angle)[0] * (chartRadius + tickLength),
       )
       .attr(
         'y2',
-        (angle) => -getUnitCircleCords(angle)[1] * (chartRadius + tickLength)
+        (angle) => -getUnitCircleCords(angle)[1] * (chartRadius + tickLength),
       );
   }
 
@@ -177,7 +176,7 @@ export class Gyro extends LitElement {
 
     d3.select(this._gyro).attr(
       'transform',
-      `translate(${size / 2},${size / 2})`
+      `translate(${size / 2},${size / 2})`,
     );
 
     const chartRadius = this.getGyroRadius();

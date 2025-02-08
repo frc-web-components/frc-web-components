@@ -2,7 +2,7 @@
   "name": "react-custom-dashboard",
   "displayName": "react-custom-dashboard",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.4",
   "description": "Example custom react dashboard",
   "author": "",
   "email": "",
@@ -15,8 +15,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@frc-web-components/fwc": "^2.4.0",
-    "@frc-web-components/react": "^0.8.0",
+    "@frc-web-components/fwc": "workspace:*",
+    "@frc-web-components/react": "workspace:*",
     "@webbitjs/store": "^5.8.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

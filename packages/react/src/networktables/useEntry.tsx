@@ -1,10 +1,10 @@
-import { useState, useCallback } from "react";
-import useKeyListener from "./useKeyListener";
-import { useNt4 } from "./NT4Provider";
+import { useState, useCallback } from 'react';
+import useKeyListener from './useKeyListener';
+import { useNt4 } from './NT4Provider';
 
 export function useEntry<T>(
   key: string,
-  defaultValue: T
+  defaultValue: T,
 ): [T, (value: T) => void] {
   const { nt4Provider } = useNt4();
 
@@ -23,7 +23,7 @@ export function useEntry<T>(
         setValue(newValue);
       }
     },
-    true
+    true,
   );
 
   return [value, updateNtValue];

@@ -2,7 +2,7 @@ import { WebbitConfig, WebbitConnector } from '@webbitjs/webbit';
 
 export function getAllowedChildrenByConfig(
   config: WebbitConfig,
-  connector: WebbitConnector
+  connector: WebbitConnector,
 ): { slot: string; allowedChildren: string[] }[] {
   return config.slots.map(({ name, allowedChildren }) => {
     const children: string[] = connector
@@ -10,7 +10,7 @@ export function getAllowedChildrenByConfig(
       .filter((childSelector) =>
         allowedChildren instanceof Array
           ? allowedChildren.includes(childSelector)
-          : connector.getElementConfig(childSelector)?.dashboard?.topLevel
+          : connector.getElementConfig(childSelector)?.dashboard?.topLevel,
       );
     return {
       slot: name,
@@ -21,7 +21,7 @@ export function getAllowedChildrenByConfig(
 
 export default function getAllowedChildren(
   element: HTMLElement,
-  connector: WebbitConnector
+  connector: WebbitConnector,
 ): { slot: string; allowedChildren: string[] }[] {
   if (!element) {
     return [];

@@ -63,7 +63,7 @@ export class PidController extends LitElement {
           d: this.d,
           setpoint: this.setpoint,
         },
-      })
+      }),
     );
   }
 

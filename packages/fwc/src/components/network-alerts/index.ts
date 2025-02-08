@@ -118,7 +118,7 @@ export class NetworkAlerts extends LitElement {
                 </div>
                 <label>${error}</label>
               </div>
-            `
+            `,
           )}
           ${when(
             this.level !== 'error',
@@ -135,9 +135,9 @@ export class NetworkAlerts extends LitElement {
                     </div>
                     <label>${warning}</label>
                   </div>
-                `
+                `,
               )}
-            `
+            `,
           )}
           ${when(
             this.level === 'info',
@@ -154,9 +154,9 @@ export class NetworkAlerts extends LitElement {
                     </div>
                     <label>${info}</label>
                   </div>
-                `
+                `,
               )}
-            `
+            `,
           )}
         </div>
       </div>

@@ -1,10 +1,14 @@
-import { LitElement, html, css } from "lit";
-import { customElement, property } from "lit/decorators.js";
-import { getAssetUrl } from "@frc-web-components/app";
+import { LitElement, html, css } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { getAssetUrl } from '@frc-web-components/app';
 
-@customElement("my-lit-element")
-export class MyElement extends LitElement {
+@customElement('my-lit-element')
+export default class MyElement extends LitElement {
   @property({ type: Number }) count = 0;
+  @property({ type: Object }) setProperty!: (
+    name: string,
+    value: unknown,
+  ) => void;
 
   static styles = css`
     :host {
@@ -20,6 +24,8 @@ export class MyElement extends LitElement {
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      width: 100%;
+      height: 100%;
     }
   `;
 
@@ -27,10 +33,10 @@ export class MyElement extends LitElement {
     return html`
       <button
         @click=${() => {
-          this.count += 1;
+          this.setProperty('count', this.count + 1);
         }}
       >
-        <img src=${getAssetUrl("party.svg")} alt="party time" /> Party Guests:
+        <img src=${getAssetUrl('party.svg')} alt="party time" /> Party Guests:
         ${this.count}
       </button>
     `;
@@ -39,6 +45,6 @@ export class MyElement extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    "my-lit-element": MyElement;
+    'my-lit-element': MyElement;
   }
 }

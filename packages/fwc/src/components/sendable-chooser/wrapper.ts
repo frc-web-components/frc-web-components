@@ -72,7 +72,7 @@ export class SendableChooserWrapper extends LitElement {
     const source = store.getSource(sourceProvider, sourceKey);
     const selectSource = store.getSource(
       sourceProvider,
-      `${sourceKey}/selected`
+      `${sourceKey}/selected`,
     );
 
     if (source?.hasChildren() && !selectSource?.hasValue()) {
