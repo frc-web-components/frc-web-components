@@ -63,6 +63,7 @@ export default function Settings() {
                   setTheme(value.label);
                 }
               }}
+              disabled
               renderInput={(params) => <TextField {...params} label="Theme" />}
             />
           </Grid>
