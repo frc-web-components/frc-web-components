@@ -1,5 +1,11 @@
 # @frc-web-components/app
 
+## 1.3.1
+
+### Patch Changes
+
+- eb126ff: Temporarily disabled changing themes in dashboard.
+
 ## 1.3.0
 
 ### Minor Changes

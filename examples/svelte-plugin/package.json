@@ -2,7 +2,7 @@
   "name": "example-svelte-plugin",
   "displayName": "svelte-plugin",
   "private": true,
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Example svelte plugin",
   "author": "",
   "email": "",
