@@ -1,5 +1,3 @@
-import { FrcDashboard } from '../dashboard';
-
 export const darkTheme: Record<string, string> = {
   /* Base (background) */
   '--lumo-base-color': 'hsl(214, 35%, 21%)',
@@ -158,7 +156,3 @@ export const darkTheme: Record<string, string> = {
   '--frc-preferences-placeholder-text-color': '#aaa',
   '--frc-preferences-header-background-color': 'steelblue',
 };
-
-export function addDarkTheme(dashboard: FrcDashboard): void {
-  dashboard.addThemeRules('dark', darkTheme);
-}

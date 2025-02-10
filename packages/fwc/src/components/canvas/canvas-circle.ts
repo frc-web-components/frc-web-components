@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { property } from 'lit/decorators.js';
 import { LitElement } from 'lit';
 import { CanvasObjectApi } from './interfaces';
@@ -12,9 +11,8 @@ export default class CanvasCircle extends LitElement {
   @property({ type: Number, attribute: 'start-angle' }) startAngle:
     | number
     | null = 0;
-  @property({ type: Number, attribute: 'end-angle' }) endAngle:
-    | number
-    | null = 360;
+  @property({ type: Number, attribute: 'end-angle' }) endAngle: number | null =
+    360;
   @property({ type: Number }) opacity = 1;
   @property({ type: String, attribute: 'stroke-color' }) strokeColor:
     | string
@@ -81,7 +79,7 @@ export default class CanvasCircle extends LitElement {
       this.radius,
       (-(this.startAngle ?? 0) * Math.PI) / 180,
       (-(this.endAngle ?? 360) * Math.PI) / 180,
-      true
+      true,
     );
 
     if (this.fillColor) {

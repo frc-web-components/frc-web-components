@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { WebbitConfig } from '@webbitjs/webbit';
 import defaultFieldConfigs, { FieldConfig } from './field-configs';
 import defaultObjectConfigs from './object-configs';
@@ -85,7 +84,7 @@ export function getField3dDashboardConfigs({
   return {
     'frc-field3d': config,
     'frc-field3d-urdf-wrapper': getField3dUrdfDashboardConfig(
-      urdfConfigs.map(({ name }) => name)
+      urdfConfigs.map(({ name }) => name),
     ),
     'frc-field3d-pose-visualizer': field3dPoseVisualizerConfig,
   } as Record<string, WebbitConfig>;

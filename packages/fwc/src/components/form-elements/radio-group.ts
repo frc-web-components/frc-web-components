@@ -42,7 +42,6 @@ export class RadioGroup extends LitElement {
     }
   `;
 
-  // eslint-disable-next-line class-methods-use-this
   #onChange(ev: CustomEvent) {
     this.selected = ev.detail.value;
     const event = new CustomEvent('change', {
@@ -66,7 +65,7 @@ export class RadioGroup extends LitElement {
         ${this.options.map(
           (value) => html`
             <vaadin-radio-button value=${value}>${value}</vaadin-radio-button>
-          `
+          `,
         )}
       </vaadin-radio-group>
     `;

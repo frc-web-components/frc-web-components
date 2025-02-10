@@ -48,7 +48,7 @@ export class RobotCommand extends LitElement {
         },
         bubbles: true,
         composed: true,
-      })
+      }),
     );
   }
 

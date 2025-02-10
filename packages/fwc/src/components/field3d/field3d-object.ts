@@ -1,8 +1,7 @@
-/* eslint-disable no-underscore-dangle */
 import { LitElement } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { Group, Object3D, Mesh, MeshStandardMaterial } from 'three';
-import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import {
   getQuaternionFromRotSeq,
   rotation3dToQuaternion,
@@ -33,7 +32,6 @@ export default class Object3d extends LitElement {
   group = new Group();
   object?: Object3D;
 
-  // eslint-disable-next-line class-methods-use-this
   getObjectConfig(): ObjectConfig {
     return (
       this.objectConfigs.find(({ name }) => name === this.name) ??
@@ -85,16 +83,16 @@ export default class Object3d extends LitElement {
     // Create promises to load objects
     const components = objectConfig.components ?? [];
     const objectSrcs = [objectConfig.src].concat(
-      components.map(({ src }) => src)
+      components.map(({ src }) => src),
     );
     const objectLoaders: Promise<GLTF>[] = objectSrcs.map(
       (src) =>
         new Promise((resolve) => {
           this.loader.load(
             joinPaths(field3d.assetPathPrefix ?? '', src),
-            (gltf) => resolve(gltf)
+            (gltf) => resolve(gltf),
           );
-        })
+        }),
     );
 
     // Load objects and add them
@@ -106,7 +104,7 @@ export default class Object3d extends LitElement {
     group.add(object);
 
     object.rotation.setFromQuaternion(
-      getQuaternionFromRotSeq(objectConfig.rotations)
+      getQuaternionFromRotSeq(objectConfig.rotations),
     );
     object.position.set(...objectConfig.position);
 
@@ -152,7 +150,7 @@ export default class Object3d extends LitElement {
     if (newConfigs?.length && newConfigs !== this.objectConfigs) {
       this.objectConfigs = newConfigs;
       const hasObject = this.objectConfigs.some(
-        (config) => config.name === this.name
+        (config) => config.name === this.name,
       );
       if (!hasObject) {
         this.name = this.objectConfigs[0].name;

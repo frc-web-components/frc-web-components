@@ -10,6 +10,13 @@ export interface FieldConfig {
 
 export const configs: FieldConfig[] = [
   {
+    game: 'Reefscape',
+    src: '/3d-models/Field3d_2025.glb',
+    rotations: [{ axis: 'x', degrees: 90 }],
+    size: [57.57291667, 26.4167],
+    unit: 'foot',
+  },
+  {
     game: 'Crescendo',
     src: '/3d-models/Field3d_2024.glb',
     rotations: [

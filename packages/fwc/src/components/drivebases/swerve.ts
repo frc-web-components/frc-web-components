@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { html, svg, css, LitElement, TemplateResult } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import * as d3 from 'd3';
@@ -130,12 +129,14 @@ function bound(value: number, min: number, max: number): number {
  */
 function getUnitCircleCords(
   angleDeg: number,
-  counterClockwise = false
+  counterClockwise = false,
 ): [number, number] {
   const unitAngle = deg2Rad(-(angleDeg - 90));
   const x = counterClockwise ? -Math.cos(unitAngle) : Math.cos(unitAngle);
   return [x, Math.sin(unitAngle)];
 }
+
+const MODULE_RADIUS = 35;
 
 export class SwerveDrivebase extends LitElement {
   @property({ type: Number, attribute: 'module-count' }) moduleCount = 4;
@@ -211,7 +212,7 @@ export class SwerveDrivebase extends LitElement {
   setSwerveRotation(): void {
     d3.select(this._swerve).attr(
       'transform',
-      `rotate(${-this.normalizedRotation})`
+      `rotate(${-this.normalizedRotation})`,
     );
   }
 
@@ -219,7 +220,7 @@ export class SwerveDrivebase extends LitElement {
     const [width, height] = this.getBaseSize();
     d3.select(this._swerve).attr(
       'transform-origin',
-      `${width / 2} ${height / 2}`
+      `${width / 2} ${height / 2}`,
     );
   }
 
@@ -273,7 +274,7 @@ export class SwerveDrivebase extends LitElement {
         'sizeLeftRight',
         'sizeFrontBack',
         'robotRotation',
-        'rotationUnit'
+        'rotationUnit',
       )
     ) {
       this.drawBase();
@@ -328,7 +329,7 @@ export class SwerveDrivebase extends LitElement {
   renderModuleDirectionIndicator(
     clipId: string,
     desiredRotation: number,
-    color: string
+    color: string,
   ): TemplateResult {
     const desiredRotDeg =
       this.rotationUnit === 'degrees'
@@ -344,7 +345,7 @@ export class SwerveDrivebase extends LitElement {
           <path d=${path} fill="white" stroke="5" stroke="white" />
         </clipPath>
       </defs>
-      <circle r="47.5" fill=${color} stroke-width="0" clip-path=${`url(#${clipId})`}></circle>
+      <circle r=${MODULE_RADIUS - 2.5} fill=${color} stroke-width="0" clip-path=${`url(#${clipId})`}></circle>
     `;
   }
 
@@ -352,13 +353,13 @@ export class SwerveDrivebase extends LitElement {
     id: string,
     rotation: number,
     velocity: number,
-    color: string
+    color: string,
   ): TemplateResult {
     const rotationDeg =
       this.rotationUnit === 'degrees' ? rotation : rad2Deg(rotation);
 
     let arrowLength = bound((100 * velocity) / this.maxSpeed, -100, 100);
-    arrowLength += 50 * Math.sign(arrowLength);
+    arrowLength += MODULE_RADIUS * Math.sign(arrowLength);
     arrowLength *= -1;
 
     const y1 = Math.abs(arrowLength) - 20;
@@ -371,7 +372,7 @@ export class SwerveDrivebase extends LitElement {
      <defs>
         <mask id=${maskId}>
           <circle r="300" fill="white" ></circle>
-          <circle r="52.5" fill="black" ></circle>
+          <circle r=${MODULE_RADIUS + 2.5} fill="black" ></circle>
         </mask>
       </defs>
       <g class="velocity-indicator" transform=${transform} mask="url(#${maskId})">
@@ -395,35 +396,37 @@ export class SwerveDrivebase extends LitElement {
             desiredVelocity,
           } = module;
           const y =
-            baseHeight / 2 - (baseHeight * location[0]) / this.sizeFrontBack;
+            (baseHeight / 2) * (1 - location[0]) +
+            MODULE_RADIUS * Math.sign(location[0]);
           const x =
-            baseWidth / 2 - (baseWidth * location[1]) / this.sizeLeftRight;
+            (baseWidth / 2) * (location[1] + 1) -
+            MODULE_RADIUS * Math.sign(location[1]);
           const measuredClipId = `module-${index}-measured-clip`;
           const desiredClipId = `module-${index}-desired-clip`;
           return svg`
             <g transform=${`translate(${x}, ${y})`}>
-              <circle class="module-circle" r="50" stroke-width="5" fill="none"></circle>
+              <circle class="module-circle" r=${MODULE_RADIUS} stroke-width="5" fill="none"></circle>
               ${this.renderModuleDirectionIndicator(
                 measuredClipId,
                 measuredRotation,
-                'blue'
+                'blue',
               )}
               ${this.renderModuleDirectionIndicator(
                 desiredClipId,
                 desiredRotation,
-                'red'
+                'red',
               )}
               ${this.renderModuleVelocityIndicator(
                 measuredClipId,
                 measuredRotation,
                 measuredVelocity,
-                'blue'
+                'blue',
               )}
               ${this.renderModuleVelocityIndicator(
                 desiredClipId,
                 desiredRotation,
                 desiredVelocity,
-                'red'
+                'red',
               )}
             </g>
           `;
@@ -460,15 +463,15 @@ export class SwerveDrivebase extends LitElement {
   renderArrow(): TemplateResult {
     const [baseWidth, baseHeight] = this.getBaseSize();
 
-    const arrowHeadPath = `M ${baseWidth / 2 - 30},60 L ${baseWidth / 2},30 L ${
+    const arrowHeadPath = `M ${baseWidth / 2 - 30},100 L ${baseWidth / 2},70 L ${
       baseWidth / 2 + 30
-    },60`;
+    },100`;
+
     return svg`
-      <line class="arrow" x1=${baseWidth / 2} y1=${30} x2=${baseWidth / 2} y2=${
-      baseHeight - 30
-    } stroke-width="5" />
+      <line class="arrow" x1=${baseWidth / 2} y1=${70} x2=${baseWidth / 2} y2=${
+        baseHeight - 30
+      } stroke-width="5" />
       <path class="arrow" d=${arrowHeadPath} stroke-width="5" fill="none" />
-      
     `;
   }
 
@@ -479,7 +482,7 @@ export class SwerveDrivebase extends LitElement {
           <svg>
             ${this.renderWheelMask()}
             <g class="swerve">
-              <rect class="base" mask="url(#wheel-mask)"></rect>
+              <rect class="base" rx=${MODULE_RADIUS}></rect>
               ${this.renderModules()}
               ${this.renderArrow()}
             </g>

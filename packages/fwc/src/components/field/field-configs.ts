@@ -10,6 +10,17 @@ export interface FieldConfig {
 }
 
 export const configs: FieldConfig[] = [
+  // https://www.chiefdelphi.com/t/4k-field-image-2025-reefscape/478797
+  {
+    game: 'Reefscape',
+    image: './field-images/2025-field.jpg',
+    corners: {
+      topLeft: [421, 91],
+      bottomRight: [3352, 1437],
+    },
+    size: [57.57291667, 26.4167],
+    unit: 'foot',
+  },
   // Thanks to MikLast for providing the 2024 field image here:
   // https://www.chiefdelphi.com/t/2024-crescendo-top-down-field-renders/447764
   {

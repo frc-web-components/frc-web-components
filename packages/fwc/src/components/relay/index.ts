@@ -25,7 +25,7 @@ export const relayDashboardConfig: Partial<WebbitConfig> = {
 };
 
 const RELAY_OPTIONS = ['Off', 'On', 'Forward', 'Reverse'] as const;
-type RelayOption = typeof RELAY_OPTIONS[number];
+type RelayOption = (typeof RELAY_OPTIONS)[number];
 
 export class Relay extends LitElement {
   @property({ type: String }) value: RelayOption = 'Off';

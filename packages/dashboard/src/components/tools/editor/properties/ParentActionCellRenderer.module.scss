@@ -1,0 +1,14 @@
+.action-buttons {
+  background: none;
+  border: none;
+  border-radius: 0;
+  color: white;
+  padding: 5px;
+  width: 20px;
+  padding: 0;
+  outline: none;
+
+  &:focus {
+    outline: none;
+  }
+}

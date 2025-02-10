@@ -4,14 +4,14 @@ This template should help get you started developing a custom FWC dashboard with
 
 [<- Home](/README.md)
 
--   [Generating custom dashboard](#generating-custom-dashboard)
--   [Installing](#installing)
--   [Running](#running)
--   [Connecting to Robot](#connecting-to-robot)
--   [Connecting elements to NetworkTables with useEntry hook](#connecting-elements-to-networktables-with-useentry-hook)
--   [Connecting elements to NetworkTables using `source` attributes](#connecting-elements-to-networktables-using-source-attributes)
--   [Component documentation](#component-documentation)
--   [Theming](#theming)
+- [Generating custom dashboard](#generating-custom-dashboard)
+- [Installing](#installing)
+- [Running](#running)
+- [Connecting to Robot](#connecting-to-robot)
+- [Connecting elements to NetworkTables with useEntry hook](#connecting-elements-to-networktables-with-useentry-hook)
+- [Connecting elements to NetworkTables using `source` attributes](#connecting-elements-to-networktables-using-source-attributes)
+- [Component documentation](#component-documentation)
+- [Theming](#theming)
 
 ## Generating custom dashboard
 
@@ -77,9 +77,9 @@ Use `localhost` for simulation and your team number/IP address when connecting t
 One method of connecting HTML and svelte elements to NetworkTables is through the `useEntry` react hook in the `@frc-web-components/react` package:
 
 ```typescript
-import { useEntry } from "@frc-web-components/react";
+import { useEntry } from '@frc-web-components/react';
 
-const [pose] = useEntry("/SmartDashboard/Field/Robot", [0, 0, 0]);
+const [pose] = useEntry('/SmartDashboard/Field/Robot', [0, 0, 0]);
 ```
 
 `useEntry` is similar to `useState` but sends and receives updates to a NetworkTables topic instead. The first parameter is the topic name and the second parameter is the default value. The above line will subscribe to the `/SmartDashboard/Field/Robot` topic. You can pass in the value returned to your element attributes/props. For example:
@@ -93,7 +93,7 @@ The pose prop will be set to the current value of `pose` and will be updated whe
 To send updates `useEntry` returns a setter function as well. For example:
 
 ```typescript
-const [count, setCount] = useEntry("/dashboard/count", 0);
+const [count, setCount] = useEntry('/dashboard/count', 0);
 setCount(5);
 ```
 
@@ -146,7 +146,6 @@ Each component also has examples with form fields you can use to play around wit
 > [!WARNING]
 > The storybook examples generate html which can be used in `lit` and `svelte` dashboards. You'll need to convert the html to the React version. The props can be converted by changing them to camelCase. For example `some-prop="10"` should be changed to `someProp={10}`.
 
-
 ## Theming
 
 The recommended way to do theming is using [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties).
@@ -169,12 +168,12 @@ Per theme rules can be added by modifying the `themes.ts` file located in the `s
 
 ```typescript
 export const customLightTheme = {
-  "--my-element-background": "cornflowerblue",
-  "--my-element-color": "white",
+  '--my-element-background': 'cornflowerblue',
+  '--my-element-color': 'white',
 };
 
 export const customDarkTheme = {
-  "--my-element-background": "cadetblue",
-  "--my-element-color": "black",
+  '--my-element-background': 'cadetblue',
+  '--my-element-color': 'black',
 };
 ```

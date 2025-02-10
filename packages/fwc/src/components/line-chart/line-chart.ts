@@ -34,7 +34,7 @@ const colorScale = d3
   .domain(
     Array(8)
       .fill(0)
-      .map((_, index) => index)
+      .map((_, index) => index),
   )
   .range(d3.schemeSet2);
 
@@ -165,7 +165,7 @@ export class LineChart extends LitElement {
     const removalCutoffIndex =
       data.findIndex(
         ({ timeMs }) =>
-          this.elapsedTimeMs - timeMs < Math.round(this.viewTime * 1000)
+          this.elapsedTimeMs - timeMs < Math.round(this.viewTime * 1000),
       ) - 1;
 
     if (removalCutoffIndex < 0) {
@@ -179,7 +179,7 @@ export class LineChart extends LitElement {
     this.elapsedTimeMs = Date.now() - this.startTime;
 
     const dataElements = [...this.children].filter(
-      (child) => child.tagName.toLowerCase() === 'frc-line-chart-data'
+      (child) => child.tagName.toLowerCase() === 'frc-line-chart-data',
     );
 
     this.data = dataElements.map((child, index) => {
@@ -205,7 +205,7 @@ export class LineChart extends LitElement {
   static getYScale(
     height: number,
     chartData: ChartData[],
-    chartAxis: ILineChartAxis
+    chartAxis: ILineChartAxis,
   ) {
     const { invert, lockMin, lockMax } = chartAxis;
     let { min, max } = chartAxis;
@@ -251,7 +251,7 @@ export class LineChart extends LitElement {
   getYScales(): YScale[] {
     const { height } = this.getDimensions();
     const axisElements = [...this.children].filter(
-      (child) => child.tagName.toLowerCase() === 'frc-line-chart-axis'
+      (child) => child.tagName.toLowerCase() === 'frc-line-chart-axis',
     );
 
     if (axisElements.length === 0) {
@@ -271,7 +271,7 @@ export class LineChart extends LitElement {
           scale: LineChart.getYScale(
             height,
             this.data.filter(({ yAxis }) => yAxis === 0),
-            chartAxis
+            chartAxis,
           ),
         },
       ];
@@ -294,7 +294,7 @@ export class LineChart extends LitElement {
         scale: LineChart.getYScale(
           height,
           this.data.filter(({ yAxis }) => yAxis === index),
-          chartAxis
+          chartAxis,
         ),
       };
     });
@@ -303,17 +303,17 @@ export class LineChart extends LitElement {
   static getPath(
     data: ChartDatum[],
     getX: (datum: ChartDatum) => number,
-    getY: (datum: ChartDatum) => number
+    getY: (datum: ChartDatum) => number,
   ): string {
     const points = data.map((datum) =>
-      [getX(datum).toFixed(3), getY(datum).toFixed(3)].join(',')
+      [getX(datum).toFixed(3), getY(datum).toFixed(3)].join(','),
     );
     return `M${points.join('L')}`;
   }
 
   getLegend(): IChartLegend {
     const legendElement = [...this.children].find(
-      (child) => child.tagName.toLowerCase() === 'frc-line-chart-legend'
+      (child) => child.tagName.toLowerCase() === 'frc-line-chart-legend',
     );
 
     if (!legendElement) {
@@ -452,7 +452,7 @@ export class LineChart extends LitElement {
               ></div>
               <span class="legend-item-label">${displayName}</span>
             </div>
-          `
+          `,
         )}
       </div>
     `;
@@ -464,10 +464,10 @@ export class LineChart extends LitElement {
     const xScale = getXScale(
       width,
       Math.round(this.viewTime * 1000),
-      this.elapsedTimeMs
+      this.elapsedTimeMs,
     );
     const yScales = this.getYScales().filter(
-      ({ chartAxis }) => !chartAxis.hide
+      ({ chartAxis }) => !chartAxis.hide,
     );
 
     const lines = yScales.map((yScale) => {
@@ -475,7 +475,7 @@ export class LineChart extends LitElement {
         LineChart.getPath(
           data,
           (d) => xScale(new Date(d.timeMs)),
-          (d) => yScale.scale(d.value)
+          (d) => yScale.scale(d.value),
         );
       return line;
     });
@@ -497,7 +497,8 @@ export class LineChart extends LitElement {
           <rect class="chart-border" width=${width} height=${height}></rect>
           ${this.data
             .filter(
-              ({ hide, yAxis }) => !hide && yAxis < yScales.length && yAxis >= 0
+              ({ hide, yAxis }) =>
+                !hide && yAxis < yScales.length && yAxis >= 0,
             )
             .map(
               (data) => svg`
@@ -514,7 +515,7 @@ export class LineChart extends LitElement {
                 })}>
               ></path>
             </g>
-          `
+          `,
             )}
         </g>
       </svg>

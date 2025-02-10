@@ -19,7 +19,7 @@ class DashboardThemes {
     }
 
     const rules = Object.entries(cssVariables).map(
-      ([variableName, value]) => `${variableName}: ${value};`
+      ([variableName, value]) => `${variableName}: ${value};`,
     );
     this.themeSheets[theme].insertRule(`
       [${this.themeAttribute}="${theme}"] {

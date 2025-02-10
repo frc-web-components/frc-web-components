@@ -29,7 +29,6 @@
   overflow-y: auto;
 }
 
-
 .key-value-table tbody tr {
   border-bottom: 1px solid #dddddd;
 }
@@ -37,7 +36,6 @@
 .key-value-table tbody tr:nth-of-type(even) {
   background-color: #f3f3f3;
 }
-
 
 .key-value-table tbody tr.active-row {
   font-weight: bold;

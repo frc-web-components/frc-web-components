@@ -1,8 +1,7 @@
-/* eslint-disable no-underscore-dangle */
 import { LitElement } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { Group, Object3D, LoadingManager } from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import URDFLoader from 'urdf-loader';
 import {
   getQuaternionFromRotSeq,
@@ -37,7 +36,6 @@ export default class Urdf3d extends LitElement {
   object?: Object3D;
   robot?: Object3D;
 
-  // eslint-disable-next-line class-methods-use-this
   getUrdfConfig(): UrdfConfig {
     return (
       this.urdfConfigs.find(({ name }) => name === this.name) ??
@@ -69,7 +67,7 @@ export default class Urdf3d extends LitElement {
         },
         bubbles: true,
         composed: true,
-      })
+      }),
     );
   }
 
@@ -101,7 +99,7 @@ export default class Urdf3d extends LitElement {
           joinPaths(field3d.assetPathPrefix ?? '', urdfConfig.src),
           (robot: Object3D) => {
             resolve(robot);
-          }
+          },
         );
       } else {
         const robot = loader.parse(urdfConfig.content ?? '');
@@ -118,7 +116,7 @@ export default class Urdf3d extends LitElement {
     group.add(object);
 
     object.rotation.setFromQuaternion(
-      getQuaternionFromRotSeq(urdfConfig.rotations)
+      getQuaternionFromRotSeq(urdfConfig.rotations),
     );
     object.position.set(...urdfConfig.position);
 
@@ -166,7 +164,7 @@ export default class Urdf3d extends LitElement {
     if (newConfigs?.length && newConfigs !== this.urdfConfigs) {
       this.urdfConfigs = newConfigs;
       const hasUrdf = this.urdfConfigs.some(
-        (config) => config.name === this.name
+        (config) => config.name === this.name,
       );
       if (!hasUrdf) {
         this.name = this.urdfConfigs[0].name;

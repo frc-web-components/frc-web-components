@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { createComponent } from "@lit/react";
-import BasicFmsInfoWc from "@frc-web-components/fwc/components/basic-fms-info";
-import { useNt4 } from "../networktables/NT4Provider";
+import React, { useEffect, useState } from 'react';
+import { createComponent } from '@lit/react';
+import BasicFmsInfoWc from '@frc-web-components/fwc/components/basic-fms-info';
+import { useNt4 } from '../networktables/NT4Provider';
 
 export const BasicFmsInfo = createComponent({
-  tagName: "frc-basic-fms-info",
+  tagName: 'frc-basic-fms-info',
   elementClass: BasicFmsInfoWc,
   react: React,
 });
@@ -23,20 +23,20 @@ export interface FmsInfo {
 }
 
 const fmsInfoNtKeyPropertyMap = {
-  EventName: "eventName",
-  FMSControlData: "fmsControlData",
-  GameSpecificMessage: "gameSpecificMessage",
-  IsRedAlliance: "isRedAlliance",
-  MatchNumber: "matchNumber",
-  MatchType: "matchType",
-  ReplayNumber: "replayNumber",
-  StationNumber: "stationNumber",
+  EventName: 'eventName',
+  FMSControlData: 'fmsControlData',
+  GameSpecificMessage: 'gameSpecificMessage',
+  IsRedAlliance: 'isRedAlliance',
+  MatchNumber: 'matchNumber',
+  MatchType: 'matchType',
+  ReplayNumber: 'replayNumber',
+  StationNumber: 'stationNumber',
 };
 
 const DEFAULT_FMS_INFO: FmsInfo = {
-  eventName: "",
+  eventName: '',
   fmsControlData: 0,
-  gameSpecificMessage: "",
+  gameSpecificMessage: '',
   isRedAlliance: false,
   matchNumber: 0,
   matchType: 0,
@@ -50,28 +50,27 @@ export function useFmsInfo(key: string): FmsInfo {
 
   useEffect(() => {
     return store.subscribe(
-      "NetworkTables",
+      'NetworkTables',
       key,
       () => {
         const info: FmsInfo = { ...DEFAULT_FMS_INFO };
-        const source = store.getSource("NetworkTables", key);
+        const source = store.getSource('NetworkTables', key);
         if (source) {
           const children = source.getChildren();
-          const type = source.getChildren()[".type"]?.getSourceValue();
-          if (type === "FMSInfo") {
+          const type = source.getChildren()['.type']?.getSourceValue();
+          if (type === 'FMSInfo') {
             Object.entries(fmsInfoNtKeyPropertyMap).forEach(
               ([ntKey, property]) => {
                 if (ntKey in children) {
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   (info as any)[property] = children[ntKey].getSourceValue();
                 }
-              }
+              },
             );
           }
         }
         setFmsInfo(info);
       },
-      true
+      true,
     );
   }, []);
 

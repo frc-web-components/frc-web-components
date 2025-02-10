@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-restricted-exports
 export { default } from './canvas';
 export { default as Canvas } from './canvas';
 export { default as CanvasCircle } from './canvas-circle';

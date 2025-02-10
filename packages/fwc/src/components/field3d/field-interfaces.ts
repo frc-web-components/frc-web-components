@@ -50,7 +50,7 @@ export class FieldObject {
   constructor(
     field3d: IField3d,
     onCreate?: (object: FieldObject) => unknown,
-    onRemove?: (oobject: FieldObject) => unknown
+    onRemove?: (oobject: FieldObject) => unknown,
   ) {
     this.#field3d = field3d;
     this.#onCreate = onCreate;

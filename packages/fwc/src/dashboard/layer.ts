@@ -13,7 +13,7 @@ export function createLayerElement(name: string): HTMLElement {
 
 export function getElementBoundingBox(
   layerElement: HTMLElement,
-  element: HTMLElement
+  element: HTMLElement,
 ): {
   left: number;
   top: number;
@@ -32,11 +32,9 @@ export function getElementBoundingBox(
 }
 
 export function addInteractions(layerElement: HTMLElement): void {
-  // eslint-disable-next-line no-param-reassign
   layerElement.style.pointerEvents = 'all';
 }
 
 export function removeInteractions(layerElement: HTMLElement): void {
-  // eslint-disable-next-line no-param-reassign
   layerElement.style.pointerEvents = 'none';
 }

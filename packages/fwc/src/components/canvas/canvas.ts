@@ -102,7 +102,6 @@ export class Canvas extends LitElement {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   protected render(): TemplateResult {
     return html` <canvas></canvas> `;
   }

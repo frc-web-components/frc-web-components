@@ -15,9 +15,9 @@ import {
   Color,
   Quaternion,
 } from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { VRButton } from 'three/examples/jsm/webxr/VRButton';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
 import {
   getPose3d,
   getQuaternionFromRotSeq,
@@ -103,7 +103,7 @@ export default class Field3d extends LitElement implements IField3d {
       50,
       rect.width / rect.height,
       0.1,
-      100
+      100,
     );
 
     return camera;
@@ -130,7 +130,7 @@ export default class Field3d extends LitElement implements IField3d {
     const hemisphereLight = new HemisphereLight(
       skyColor,
       groundColor,
-      hemisphereLightIntensity
+      hemisphereLightIntensity,
     );
     scene.add(hemisphereLight);
   }
@@ -193,7 +193,7 @@ export default class Field3d extends LitElement implements IField3d {
       this.wpilibCoordinateGroup.add(gltf.scene);
       Field3d.adjustMaterials(gltf.scene);
       gltf.scene.rotation.setFromQuaternion(
-        getQuaternionFromRotSeq(fieldConfig.rotations)
+        getQuaternionFromRotSeq(fieldConfig.rotations),
       );
     });
   }
@@ -232,7 +232,7 @@ export default class Field3d extends LitElement implements IField3d {
   updated(changedProps: Map<string, unknown>): void {
     if (changedProps.has('fieldConfigs')) {
       const hasGame = this.fieldConfigs.some(
-        (config) => config.game === this.game
+        (config) => config.game === this.game,
       );
       if (!hasGame) {
         this.game = this.fieldConfigs[0].game;
@@ -253,14 +253,14 @@ export default class Field3d extends LitElement implements IField3d {
         const isBlue = this.origin !== 'red';
         this.wpilibFieldCoordinateGroup.setRotationFromAxisAngle(
           new Vector3(0, 0, 1),
-          isBlue ? 0 : Math.PI
+          isBlue ? 0 : Math.PI,
         );
         this.wpilibFieldCoordinateGroup.position.set(
           convert(fieldConfig.size[0] / 2, fieldConfig.unit, 'm') *
             (isBlue ? -1 : 1),
           convert(fieldConfig.size[1] / 2, fieldConfig.unit, 'm') *
             (isBlue ? -1 : 1),
-          0
+          0,
         );
       }
     }
@@ -297,7 +297,7 @@ export default class Field3d extends LitElement implements IField3d {
           },
           bubbles: true,
           composed: true,
-        })
+        }),
       );
     }
   }
@@ -317,8 +317,8 @@ export default class Field3d extends LitElement implements IField3d {
         getQuaternionFromRotSeq([
           { axis: 'z', degrees: -90 },
           { axis: 'y', degrees: -90 },
-        ])
-      )
+        ]),
+      ),
     );
 
     this.camera.updateMatrixWorld();
@@ -342,7 +342,6 @@ export default class Field3d extends LitElement implements IField3d {
     this.renderer = undefined;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   render(): TemplateResult {
     return html` <div class="container">
       <canvas></canvas>

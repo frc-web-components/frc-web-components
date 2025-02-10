@@ -283,7 +283,7 @@ export class FieldWrapper extends LitElement {
         this.store,
         (objects) => {
           this.fieldObjects = objects;
-        }
+        },
       );
     }
 
@@ -352,7 +352,7 @@ export class FieldWrapper extends LitElement {
                   object.sourceKey === sourceKey &&
                   object.sourceProvider === sourceProvider
                 );
-              }
+              },
             );
             return !hasSlottedElement;
           })

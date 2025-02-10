@@ -4,15 +4,15 @@ This template should help get you started developing a custom FWC dashboard with
 
 [<- Home](/README.md)
 
--   [Generating custom dashboard](#generating-custom-dashboard)
--   [Recommended IDE Setup](#recommended-ide-setup)
--   [Installing](#installing)
--   [Running](#running)
--   [Connecting to Robot](#connecting-to-robot)
--   [Connecting elements to NetworkTables with svelte stores](#connecting-elements-to-networktables-with-svelte-stores)
--   [Connecting elements to NetworkTables using `source` attributes](#connecting-elements-to-networktables-using-source-attributes)
--   [Component documentation](#component-documentation)
--   [Theming](#theming)
+- [Generating custom dashboard](#generating-custom-dashboard)
+- [Recommended IDE Setup](#recommended-ide-setup)
+- [Installing](#installing)
+- [Running](#running)
+- [Connecting to Robot](#connecting-to-robot)
+- [Connecting elements to NetworkTables with svelte stores](#connecting-elements-to-networktables-with-svelte-stores)
+- [Connecting elements to NetworkTables using `source` attributes](#connecting-elements-to-networktables-using-source-attributes)
+- [Component documentation](#component-documentation)
+- [Theming](#theming)
 
 ## Generating custom dashboard
 
@@ -67,7 +67,7 @@ You should see the dashboard in the browser:
 
 ## Connecting to Robot
 
-The address the dashboard connects to can be changed by updating the call to the `setNt4Context` function in the  `src/App.svelte` file:
+The address the dashboard connects to can be changed by updating the call to the `setNt4Context` function in the `src/App.svelte` file:
 
 ```typescript
 // Set robot IP address here
@@ -81,7 +81,7 @@ Use `localhost` for simulation and your team number/IP address when connecting t
 One method of connecting HTML and svelte elements to NetworkTables is through the `getEntry` function in the `@frc-web-components/svelte` package:
 
 ```typescript
-import { getEntry } from "@frc-web-components/svelte";
+import { getEntry } from '@frc-web-components/svelte';
 
 let pose = getEntry(`/SmartDashboard/Field/Robot`, [0, 0, 0]);
 ```
@@ -173,12 +173,12 @@ Per theme rules can be added by modifying the `themes.ts` file located in the `s
 
 ```typescript
 export const customLightTheme = {
-  "--my-element-background": "cornflowerblue",
-  "--my-element-color": "white",
+  '--my-element-background': 'cornflowerblue',
+  '--my-element-color': 'white',
 };
 
 export const customDarkTheme = {
-  "--my-element-background": "cadetblue",
-  "--my-element-color": "black",
+  '--my-element-background': 'cadetblue',
+  '--my-element-color': 'black',
 };
 ```

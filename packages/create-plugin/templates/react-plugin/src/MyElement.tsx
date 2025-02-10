@@ -1,44 +1,47 @@
-import { useEffect, useState, CSSProperties } from "react";
-import r2wc from "@r2wc/react-to-web-component";
-import { getAssetUrl } from "@frc-web-components/app";
+import { CSSProperties } from 'react';
+import {
+  getAssetUrl,
+  createComponent,
+  numberProp,
+} from '@frc-web-components/app';
 
-function MyElement({ count = 0 }: { count: number }) {
-  const [currentCount, setCount] = useState(0);
-
-  useEffect(() => {
-    setCount(count);
-  }, [count]);
-
-  const styles: CSSProperties = {
-    background: 'var(--my-react-element-background, cadetblue)',
-    color: 'var(--my-react-element-color, black)',
-    border: 'none',
-    borderRadius: '3px',
-    padding: "8px",
-    display: "inline-flex",
-    alignItems: "center",
-    gap: "8px",
-  };
-
-  return (
-    <button
-      style={styles}
-      onClick={() => {
-        setCount(currentCount + 1);
-      }}
-    >
-      <img src={getAssetUrl("party.svg")} alt="party time" />
-      Party Guests: {currentCount}
-    </button>
-  );
-}
-
-const WebApp = r2wc(MyElement, {
-  props: {
-    count: "number",
+export const myElement = createComponent(
+  {
+    dashboard: {
+      name: 'My React Element',
+      description: '',
+      defaultSize: { width: 130, height: 50 },
+      minSize: { width: 20, height: 20 },
+    },
+    acceptedSourceTypes: ['Number'],
+    primaryProperty: 'count',
+    properties: {
+      count: numberProp(),
+    },
   },
-});
-
-customElements.define("my-react-element", WebApp);
-
-export default MyElement;
+  ({ count, setProperty }) => {
+    const styles: CSSProperties = {
+      background: 'var(--my-react-element-background, cadetblue)',
+      color: 'var(--my-react-element-color, black)',
+      border: 'none',
+      borderRadius: '3px',
+      padding: '8px',
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '8px',
+      width: '100%',
+      height: '100%',
+    };
+    return (
+      <button
+        style={styles}
+        onClick={() => {
+          setProperty('count', count + 1);
+        }}
+      >
+        <img src={getAssetUrl('party.svg')} alt="party time" />
+        Party Guests: {count}
+      </button>
+    );
+  },
+);

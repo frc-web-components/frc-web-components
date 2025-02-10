@@ -51,7 +51,7 @@ function polarToCartesian(
   centerX: number,
   centerY: number,
   radius: number,
-  angleInDegrees: number
+  angleInDegrees: number,
 ) {
   const angleInRadians = (angleInDegrees * Math.PI) / 180.0;
 
@@ -66,7 +66,7 @@ function describeArc(
   y: number,
   radius: number,
   startAngle: number,
-  endAngle: number
+  endAngle: number,
 ) {
   const start = polarToCartesian(x, y, radius, endAngle);
   const end = polarToCartesian(x, y, radius, startAngle);
@@ -96,7 +96,7 @@ function arc(
   y: number,
   radius: number,
   startAngle: number,
-  endAngle: number
+  endAngle: number,
 ) {
   return `<path d="${describeArc(x, y, radius, startAngle, endAngle)}"/>`;
 }
@@ -108,7 +108,7 @@ export function straightHead(
   startAngle: number,
   size: number,
   xOffset: number,
-  bodyLength: number
+  bodyLength: number,
 ): string {
   const base = size / 2;
 
@@ -150,7 +150,7 @@ export function createStraight(
   length: number,
   angle: number,
   xOffset: number,
-  headSize: number
+  headSize: number,
 ): string {
   const x = Math.cos(angle) * length;
   const y = Math.sin(angle) * length;
@@ -171,7 +171,7 @@ export function makeBody(
   startAngle: number,
   radius: number,
   length: number,
-  xOffset: number
+  xOffset: number,
 ) {
   const angRad = length / radius; // Isn't math nice?
   const angle = toDegrees(angRad);
@@ -180,7 +180,7 @@ export function makeBody(
     0,
     radius,
     toDegrees(startAngle),
-    toDegrees(startAngle) - angle
+    toDegrees(startAngle) - angle,
   );
 }
 
@@ -197,7 +197,7 @@ export function curvedHead(
   size: number,
   arcRadius: number,
   xOffset: number,
-  arcLength: number
+  arcLength: number,
 ) {
   // Half the length of the triangle
   const base = size / 2;
@@ -257,14 +257,14 @@ export function create(
   radius: number,
   length: number,
   xOffset: number,
-  headSize: number
+  headSize: number,
 ) {
   if (radius < 0) {
     throw new Error(`Radius cannot be negative. Given: ${radius}`);
   }
   if (headSize < 0) {
     throw new Error(
-      `The size of the arrowhead cannot be negative. Given: ${headSize}`
+      `The size of the arrowhead cannot be negative. Given: ${headSize}`,
     );
   }
   if (radius === Infinity) {
@@ -295,7 +295,7 @@ export function createPolar(
   radius: number,
   sweepAngle: number,
   xOffset: number,
-  headSize: number
+  headSize: number,
 ) {
   return create(startAngle, radius, radius * sweepAngle, xOffset, headSize);
 }

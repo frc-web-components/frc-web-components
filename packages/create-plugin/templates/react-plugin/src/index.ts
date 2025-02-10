@@ -1,16 +1,9 @@
-import "./MyElement.tsx";
-import { addElements, addThemeRules } from "@frc-web-components/app";
+import { addComponents, addThemeRules } from '@frc-web-components/app';
+import { myElement } from './MyElement.tsx';
 
-addElements({
-  "my-react-element": {
-    dashboard: {
-      displayName: "My React Element",
-    },
-    properties: {
-      count: { type: "Number" },
-    },
-  },
-}, 'My Plugin');
+addComponents({
+  myReactElement: myElement,
+});
 
 addThemeRules('dark', {
   '--my-react-element-background': 'cadetblue',

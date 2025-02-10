@@ -1,0 +1,27 @@
+{
+  "name": "storybook-preview",
+  "private": true,
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "storybook:build": "storybook build"
+  },
+  "devDependencies": {
+    "@frc-web-components/fwc": "workspace:*",
+    "@ljcl/storybook-addon-cssprops": "^4.0.0",
+    "@storybook/addon-essentials": "^8.4.7",
+    "@storybook/addon-links": "^8.4.7",
+    "@storybook/addon-mdx-gfm": "^8.4.7",
+    "@storybook/blocks": "^8.4.7",
+    "@storybook/web-components": "^8.4.7",
+    "@storybook/web-components-vite": "^8.4.7",
+    "eslint-plugin-storybook": "^0.11.2",
+    "storybook": "^8.4.7",
+    "storybook-addon-themes": "^6.1.0"
+  },
+  "author": "Amory Galili",
+  "license": "MIT",
+  "dependencies": {
+    "lit": "catalog:",
+    "react": "catalog:"
+  }
+}

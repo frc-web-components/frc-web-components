@@ -91,7 +91,6 @@ export class Gauge extends LitElement {
     this.gauge?.setValue(this.value);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   render() {
     return html`
       <div class="gauge-container-container">

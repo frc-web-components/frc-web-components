@@ -1,5 +1,3 @@
-/* eslint-disable max-classes-per-file */
-/* eslint-disable no-underscore-dangle */
 import { css, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 import throttle from 'lodash.throttle';
@@ -98,7 +96,7 @@ export default class CanvasMjpgStreamInstance extends LitElement {
         ctx.lineTo(drawX + width / 2, drawY + height);
         ctx.stroke();
       }
-    } catch (e) {
+    } catch {
       this.throttleUpdateImage();
     }
   }
@@ -171,7 +169,7 @@ export default class CanvasMjpgStreamInstance extends LitElement {
       new CustomEvent('connect', {
         bubbles: true,
         composed: true,
-      })
+      }),
     );
   }
 
@@ -180,7 +178,7 @@ export default class CanvasMjpgStreamInstance extends LitElement {
       new CustomEvent('disconnect', {
         bubbles: true,
         composed: true,
-      })
+      }),
     );
   }
 
@@ -203,7 +201,7 @@ export default class CanvasMjpgStreamInstance extends LitElement {
 if (!customElements.get('frc-canvas-mjpg-stream-instance')) {
   customElements.define(
     'frc-canvas-mjpg-stream-instance',
-    CanvasMjpgStreamInstance
+    CanvasMjpgStreamInstance,
   );
 }
 

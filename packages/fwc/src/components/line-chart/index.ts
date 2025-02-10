@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-restricted-exports
 export { default } from './line-chart';
 export { LineChart } from './line-chart';
 export {

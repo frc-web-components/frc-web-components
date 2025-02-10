@@ -30,3 +30,33 @@ A live version of the application can be viewed here: [https://frc-web-component
 - [Svelte plugin example](/examples/svelte-plugin/README.md) - An example plugin using the svelte-plugin template from the `create-fwc` cli tool.
 - [React custom dashboard example](/examples/react-custom-dashboard/README.md) - An example custom dashboard using the react-custom-dashboard template from the `create-fwc` cli tool.
 - [Svelte custom dashboard example](/examples/svelte-custom-dashboard/README.md) - An example custom dashboard using the svelte-custom-dashboard template from the `create-fwc` cli tool.
+
+## Developing
+
+### Installing
+
+This project uses the pnpm package manager. Please install pnpm first before proceeding: https://pnpm.io/installation
+
+If using vscode the following extensions are recommended:
+
+- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode): Code formatting
+- [CSS Modules](https://marketplace.visualstudio.com/items?itemName=clinyong.vscode-css-modules): Used for autocompleting css modules
+
+To install run in the root directory:
+https://github.com/frc-web-components/react-dashboard.gitk
+
+```bash
+pnpm install
+```
+
+### Running
+
+To run the project locally run in the root directory:
+
+```bash
+pnpm dev
+```
+
+### Publishing and Releasing
+
+This project uses changesets to manage publishing. More info can be found here: https://pnpm.io/using-changesets

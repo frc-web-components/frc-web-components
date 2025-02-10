@@ -1,0 +1,7 @@
+.properties-grid {
+  :global {
+    .ag-cell[col-id='name'] {
+      padding: 0;
+    }
+  }
+}

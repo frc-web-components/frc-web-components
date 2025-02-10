@@ -11,7 +11,7 @@ export const ChartLegendPositions = [
   's',
   'se',
 ] as const;
-export type ChartLegendPosition = typeof ChartLegendPositions[number];
+export type ChartLegendPosition = (typeof ChartLegendPositions)[number];
 export type ChartLegendDirection = 'horizontal' | 'vertical';
 
 export interface IChartLegend {

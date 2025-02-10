@@ -1,6 +1,6 @@
-import { useState } from "react";
-import useKeyListener from "./useKeyListener";
-import { useNt4 } from "./NT4Provider";
+import { useState } from 'react';
+import useKeyListener from './useKeyListener';
+import { useNt4 } from './NT4Provider';
 
 export function useJson<T>(
   key: string,
@@ -14,10 +14,10 @@ export function useJson<T>(
   useKeyListener<T>(
     key,
     () => {
-      const json = store.getSource("NetworkTables", key)?.getJson(useCamelCase);
+      const json = store.getSource('NetworkTables', key)?.getJson(useCamelCase);
       setValue(json as T);
     },
-    true
+    true,
   );
 
   return value;

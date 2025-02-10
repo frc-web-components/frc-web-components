@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { property } from 'lit/decorators.js';
 import { LitElement } from 'lit';
 import { CanvasObjectApi } from './interfaces';
@@ -15,9 +14,8 @@ export default class CanvasText extends LitElement {
     null;
   @property({ type: String, attribute: 'font-name' }) fontName: string | null =
     'sans-serif';
-  @property({ type: Number, attribute: 'font-size' }) fontSize:
-    | number
-    | null = 12;
+  @property({ type: Number, attribute: 'font-size' }) fontSize: number | null =
+    12;
   @property({ type: Number }) opacity: number | null = 1;
   @property({ type: String, attribute: 'stroke-color' }) strokeColor:
     | string

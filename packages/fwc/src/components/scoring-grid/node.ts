@@ -62,7 +62,7 @@ export default class ScoringGridNode extends LitElement {
                 points="4,4 4,16 16,16, 16,4"
                 style="fill:rgb(150,0,255);stroke-width:1;stroke:rgb(0,0,0)"
               />
-            `
+            `,
           )}
           ${when(
             this.cubes === 1,
@@ -71,7 +71,7 @@ export default class ScoringGridNode extends LitElement {
                 points="6,6 6,18 18,18, 18,6"
                 style="fill:rgb(150,0,255);stroke-width:1;stroke:rgb(0,0,0)"
               />
-            `
+            `,
           )}
           ${when(
             this.cones > 1,
@@ -84,7 +84,7 @@ export default class ScoringGridNode extends LitElement {
                 points="13,4 11,4 8,18 5,18 19,18 16,18"
                 style="fill:rgb(255,200,0);stroke-width:1;stroke:rgb(0,0,0)"
               />
-            `
+            `,
           )}
           
           ${when(
@@ -94,7 +94,7 @@ export default class ScoringGridNode extends LitElement {
                 points="13,6 11,6 8,20 5,20 19,20 16,20"
                 style="fill:rgb(255,200,0);stroke-width:1;stroke:rgb(0,0,0)"
               />
-            `
+            `,
           )}  
         </svg>
       `}

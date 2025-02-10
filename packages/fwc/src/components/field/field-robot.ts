@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { property } from 'lit/decorators.js';
 import { LitElement } from 'lit';
 import { FieldObjectApi } from './field-interfaces';
@@ -48,7 +47,7 @@ export class FieldRobot extends LitElement {
       -lengthToPx(this.width / 2, unit),
       lengthToPx(this.length, unit),
       lengthToPx(this.width, unit),
-      1
+      1,
     );
     canvas.fill();
     canvas.stroke();
@@ -64,12 +63,12 @@ export class FieldRobot extends LitElement {
 
     canvas.moveTo(
       lengthToPx(this.length * 0.1, unit),
-      -lengthToPx(this.width * 0.25, unit)
+      -lengthToPx(this.width * 0.25, unit),
     );
     canvas.lineTo(lengthToPx(this.length * 0.3, unit), 0);
     canvas.lineTo(
       lengthToPx(this.length * 0.1, unit),
-      lengthToPx(this.width * 0.25, unit)
+      lengthToPx(this.width * 0.25, unit),
     );
 
     canvas.stroke();

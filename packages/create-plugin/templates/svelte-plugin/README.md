@@ -4,19 +4,19 @@ This template should help get you started developing a FWC plugin with Svelte an
 
 [<- Home](/README.md)
 
--   [Generating plugin](#generating-plugin)
--   [Recommended IDE Setup](#recommended-ide-setup)
--   [Installing](#installing)
--   [Running](#running)
--   [Building and importing into dashboard app](#building-and-importing-into-dashboard-app)
--   [Theming](#theming)
--   [Including Static Assets](#including-static-assets)
+- [Generating plugin](#generating-plugin)
+- [Recommended IDE Setup](#recommended-ide-setup)
+- [Installing](#installing)
+- [Running](#running)
+- [Building and importing into dashboard app](#building-and-importing-into-dashboard-app)
+- [Theming](#theming)
+- [Including Static Assets](#including-static-assets)
 
 ## Generating plugin
 
 FWC provides a cli tool which generates a sample plugin that can be used to help get you started with writing your own plugin:
 
-``` bash
+```bash
 npm init fwc@latest <name>
 ```
 
@@ -25,7 +25,7 @@ the above command: <https://nodejs.org/en/download/>
 
 To get started, open a terminal and enter in the following command:
 
-``` bash
+```bash
 npm init fwc@latest my-first-plugin
 ```
 
@@ -36,7 +36,6 @@ After being prompted with a few questions to help setup your plugin, the plugin 
 ## Recommended IDE Setup
 
 [VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
-
 
 ## Installing
 
@@ -66,7 +65,7 @@ You should see the dashboard in the browser:
 
 From here you should be able to navigate to your component which you can add and test in the browser:
 
-![image](./docs/nav-to-my-plugin.png)
+![image](./docs/plugin-dnd-test.gif)
 
 ## Building and importing into dashboard app
 
@@ -80,11 +79,11 @@ A `plugin` folder should be generated:
 
 ![image](./docs/build-files.png)
 
-
 > [!WARNING]  
 > This folder should not modified manually since your changes will be overwritten whenever the build command is run.
 
 Within the build file you'll find a few important files and folders:
+
 - `index.js` which is the root javascript file which the dashboard app will import.
 - `assets` folder which contains images and other static files that your plugin uses. These are copied over from the `public/assets` folder.
 - `plugin.json` which contains metadata like the plugin name, description and version used by the dashboard app for display purposes.
@@ -108,10 +107,6 @@ You should now see the plugin loaded in the dialog:
 The app must be refreshed to view the changes:
 
 ![image](./docs/refresh-plugin.png)
-
-The plugin should now be successfully loaded:
-
-![image](./docs/plugin-successfully-loaded.png)
 
 ## Theming
 
@@ -137,10 +132,12 @@ To add per theme rules add the following code:
 import { addThemeRules } from '@frc-web-components/app';
 
 addThemeRules('dark', {
+  '--my-svelte-element-background': 'cadetblue',
   '--my-svelte-element-color': 'black',
 });
 
 addThemeRules('light', {
+  '--my-svelte-element-background': 'cornflowerblue',
   '--my-svelte-element-color': 'white',
 });
 ```
@@ -150,13 +147,13 @@ addThemeRules('light', {
 Static assets like such as images should be placed in the `/public/assets` folder. They can be included into the app by calling the `getAssetUrl` function. For example:
 
 ```typescript
-import { getAssetUrl } from "@frc-web-components/app";
+import { getAssetUrl } from '@frc-web-components/app';
 
-const url: string = getAssetUrl("party.svg");
+const url: string = getAssetUrl('party.svg');
 ```
 
 The above URL can then be used as the src of an image element:
 
 ```html
-<img src={url} />
+<img src="{url}" />
 ```

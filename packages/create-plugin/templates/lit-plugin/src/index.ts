@@ -1,16 +1,32 @@
-import './my-element';
-import { addElements, addThemeRules } from '@frc-web-components/app';
+import {
+  addComponents,
+  createWebComponent,
+  numberProp,
+  addThemeRules,
+} from '@frc-web-components/app';
+import MyElement from './my-element';
 
-addElements({
-  'my-lit-element': {
+export const myLitElement = createWebComponent(
+  {
     dashboard: {
-      displayName: 'My Lit Element',
+      name: 'My Lit Element',
+      description: '',
+      defaultSize: { width: 130, height: 50 },
+      minSize: { width: 20, height: 20 },
     },
+    acceptedSourceTypes: ['Number'],
+    primaryProperty: 'count',
     properties: {
-      count: { type: 'Number' },
+      count: numberProp(),
     },
-  }
-}, 'My Plugin');
+  },
+  'my-lit-element',
+  MyElement,
+);
+
+addComponents({
+  myLitElement,
+});
 
 addThemeRules('dark', {
   '--my-lit-element-background': 'cadetblue',

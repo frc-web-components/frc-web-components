@@ -82,7 +82,6 @@ export class ScoringGrid extends LitElement {
     }
   `;
 
-  // eslint-disable-next-line class-methods-use-this
   #onSelect(nodeId: number): void {
     if (this.selection === nodeId) {
       this.selection = 0;
@@ -134,12 +133,12 @@ export class ScoringGrid extends LitElement {
             style=${styleMap({
               gridColumn: `${Math.min(
                 getColumnFromId(id, this.reverseCol),
-                getColumnFromId(id + 2, this.reverseCol)
+                getColumnFromId(id + 2, this.reverseCol),
               )} / span 3`,
               gridRow: getRowFromId(id, this.reverseRow),
             })}
           ></div>
-        `
+        `,
       )}
     `;
   }
@@ -166,7 +165,7 @@ export class ScoringGrid extends LitElement {
               >
               </frc-scoring-grid-node>
             </div>
-          `
+          `,
         )}
         ${this.renderLinks()}
       </div>

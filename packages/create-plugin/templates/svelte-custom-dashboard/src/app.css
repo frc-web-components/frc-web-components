@@ -12,7 +12,6 @@ code {
     monospace;
 }
 
-
 .inputs {
   margin: 20px 0 15px;
 }
@@ -34,7 +33,7 @@ code {
   padding: 5px 2px;
 }
 
-[data-theme="dark"] {
+[data-theme='dark'] {
   background: rgb(35, 51, 72);
   & .theme-chooser {
     color: white;

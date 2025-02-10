@@ -245,7 +245,7 @@ export class Field extends LitElement {
 
     const boundingBoxDims = FieldImages.getBoundingBoxDims(
       imageDims,
-      toRadians(this.rotation)
+      toRadians(this.rotation),
     );
 
     const dims = FieldImages.fitImageInsideBox(boundingBoxDims, {
@@ -280,7 +280,7 @@ export class Field extends LitElement {
       0,
       0,
       canvasWidth,
-      canvasHeight
+      canvasHeight,
     );
   }
 
@@ -385,7 +385,7 @@ export class Field extends LitElement {
         },
         bubbles: true,
         composed: true,
-      })
+      }),
     );
   }
 

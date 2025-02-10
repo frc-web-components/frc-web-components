@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import { WebbitConfig } from '@webbitjs/webbit';
 import { html, css, LitElement, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
@@ -38,7 +37,6 @@ export class NumberSlider extends LitElement {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       padding: 0 15px;
     }
 
@@ -64,7 +62,7 @@ export class NumberSlider extends LitElement {
         detail: { value: this.value },
         bubbles: true,
         composed: true,
-      })
+      }),
     );
   }
 

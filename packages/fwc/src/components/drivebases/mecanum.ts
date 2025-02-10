@@ -238,14 +238,14 @@ export class MecanumDrivebase extends LitElement {
         vectorRadius,
         -moment * Math.PI,
         0,
-        8
+        8,
       );
       leftMomentArrow = CurvedArrow.createPolar(
         Math.PI,
         vectorRadius,
         -moment * Math.PI,
         0,
-        8
+        8,
       );
     }
     if (directionMagnitude > 0.01) {
@@ -254,7 +254,7 @@ export class MecanumDrivebase extends LitElement {
         directionMagnitude * vectorRadius,
         -directionAngle,
         0,
-        8
+        8,
       );
     }
 
@@ -346,7 +346,7 @@ export class MecanumDrivebase extends LitElement {
       clamp(this.frontLeftMotorSpeed),
       clamp(this.frontRightMotorSpeed),
       clamp(this.rearLeftMotorSpeed),
-      clamp(this.rearRightMotorSpeed)
+      clamp(this.rearRightMotorSpeed),
     );
     this.renderRoot.querySelector('#forceVector')!.innerHTML = drawing;
     const svgNode = this.renderRoot.querySelector('#svg')!;
@@ -366,7 +366,7 @@ export class MecanumDrivebase extends LitElement {
       clamp(this.frontLeftMotorSpeed),
       clamp(this.frontRightMotorSpeed),
       clamp(this.rearLeftMotorSpeed),
-      clamp(this.rearRightMotorSpeed)
+      clamp(this.rearRightMotorSpeed),
     );
     this.renderRoot.querySelector('#forceVector')!.innerHTML = drawing;
   }

@@ -1,0 +1,37 @@
+.action-buttons {
+  background: rgba(0, 0, 0, 0.3);
+  border: none;
+  border-radius: 0;
+  color: white;
+  padding: 5px;
+  width: 20px;
+  padding: 0;
+}
+
+.number-array-editor {
+  background: black;
+  :global {
+    .ag-cell[col-id='value'] {
+      padding-left: 4px;
+      padding-right: 0px;
+    }
+
+    .ag-drag-handle {
+      margin-right: 4px;
+    }
+
+    // .ag-body-viewport {
+    //   /* Ensures the scrollbar is always visible */
+    //   overflow-y: scroll !important;
+    // }
+
+    // .ag-body-viewport.ag-layout-normal {
+    //   overflow-y: scroll;
+    // }
+
+    // .ag-body-vertical-scroll {
+    //   // overflow-y: scroll;
+    //   display: block;
+    // }
+  }
+}

@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import { WebbitConfig } from '@webbitjs/webbit';
 import { html, css, LitElement, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
@@ -84,7 +83,7 @@ export class ToggleSwitch extends LitElement {
       slider.style.setProperty('--circle-height', `${height * 0.8}px`);
       slider.style.setProperty(
         '--circle-left',
-        `${width / 2 - height * 0.8}px`
+        `${width / 2 - height * 0.8}px`,
       );
       slider.style.setProperty('--circle-top', `${height * 0.1}px`);
       slider.style.setProperty('--circle-translate-x', `${width - height}px`);

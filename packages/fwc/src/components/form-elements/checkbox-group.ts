@@ -43,7 +43,6 @@ export class CheckboxGroup extends LitElement {
     }
   `;
 
-  // eslint-disable-next-line class-methods-use-this
   #onChange() {
     this.selected = (this.element as any).value;
     const event = new CustomEvent('change', {
@@ -68,7 +67,7 @@ export class CheckboxGroup extends LitElement {
             <vaadin-checkbox value=${value} @change=${() => this.#onChange()}
               >${value}</vaadin-checkbox
             >
-          `
+          `,
         )}
       </vaadin-checkbox-group>
     `;

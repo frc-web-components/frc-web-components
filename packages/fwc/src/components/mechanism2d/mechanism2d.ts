@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { svg, css, LitElement, TemplateResult } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { Source } from '@webbitjs/store';
@@ -28,7 +27,7 @@ export function getMechanism2dLines(source: Source): Mechanism2dLine[] {
   const lineSources = Object.values(children).filter(
     (lineSource) =>
       lineSource.hasChildren() &&
-      lineSource.getChildren()['.type']?.getSourceValue() === 'line'
+      lineSource.getChildren()['.type']?.getSourceValue() === 'line',
   );
   const lines: Mechanism2dLine[] = lineSources.map((lineSource) => {
     const lineChildren = lineSource.getChildren();
@@ -47,7 +46,7 @@ export function getMechanism2dLines(source: Source): Mechanism2dLine[] {
 export function getMechanism2dRoots(source: Source): Mechanism2dRoot[] {
   const children: Record<string, Source> = source?.getChildren() ?? {};
   const rootSources = Object.values(children).filter((rootSource) =>
-    rootSource.hasChildren()
+    rootSource.hasChildren(),
   );
   const roots: Mechanism2dRoot[] = rootSources.map((rootSource) => {
     const root: Mechanism2dRoot = {
@@ -146,11 +145,11 @@ export class Mechanism2d extends LitElement {
     return svg`
       <svg
         style="width: ${width}px; height: ${height}px; background: ${
-      this.mechanism2d.backgroundColor
-    }"
+          this.mechanism2d.backgroundColor
+        }"
       >
         ${this.mechanism2d.roots.map((root) =>
-          this.renderMechanism2dRoot(root)
+          this.renderMechanism2dRoot(root),
         )}
       </svg>
     `;

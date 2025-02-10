@@ -17,8 +17,8 @@ import {
   PlaneGeometry,
 } from 'three';
 import URDFLoader from 'urdf-loader';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { VRButton } from 'three/examples/jsm/webxr/VRButton';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
 import urdfConfigs from './urdf-configs';
 import './field3d-object';
 import './field3d-urdf';
@@ -70,7 +70,7 @@ export default class Urdf extends LitElement {
       50,
       rect.width / rect.height,
       0.1,
-      100
+      100,
     );
 
     camera.position.set(1, 1, 1);
@@ -101,7 +101,7 @@ export default class Urdf extends LitElement {
     const hemisphereLight = new HemisphereLight(
       skyColor,
       groundColor,
-      hemisphereLightIntensity
+      hemisphereLightIntensity,
     );
     scene.add(hemisphereLight);
   }
@@ -171,7 +171,7 @@ export default class Urdf extends LitElement {
         detail: {
           urdf: this.robot,
         },
-      })
+      }),
     );
   }
 
@@ -192,7 +192,7 @@ export default class Urdf extends LitElement {
           joinPaths(this.assetPathPrefix ?? '', urdfConfig.src),
           (robot: Object3D) => {
             resolve(robot);
-          }
+          },
         );
       } else {
         const robot = loader.parse(urdfConfig.content ?? '');
@@ -210,7 +210,7 @@ export default class Urdf extends LitElement {
     group.add(object);
 
     object.rotation.setFromQuaternion(
-      getQuaternionFromRotSeq(urdfConfig.rotations)
+      getQuaternionFromRotSeq(urdfConfig.rotations),
     );
     object.position.set(...urdfConfig.position);
 
@@ -225,7 +225,7 @@ export default class Urdf extends LitElement {
   updated(changedProps: Map<string, unknown>): void {
     if (changedProps.has('urdfConfigs') || changedProps.has('name')) {
       const hasUrdf = this.urdfConfigs.some(
-        (config) => config.name === this.name
+        (config) => config.name === this.name,
       );
       if (!hasUrdf) {
         this.name = this.urdfConfigs[0].name;
@@ -264,7 +264,6 @@ export default class Urdf extends LitElement {
     this.renderer = undefined;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   render(): TemplateResult {
     return html` <div class="container">
       <canvas></canvas>

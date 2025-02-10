@@ -2,36 +2,51 @@
 
 [<- Home](/README.md)
 
--   [Creating your first plugin](#creating-your-first-plugin)
--   [Creating custom elements](#creating-custom-elements)
--   [Theming](#theming)
--   [Including Static Assets](#including-static-assets)
--   [Element Config](#element-config)
-    -   [Selectors](#selectors)
-    -   [Properties](#properties)
-    -   [Property Input Config](#property-input-config)
+- [Creating your first plugin](#creating-your-first-plugin)
+- [Creating custom elements](#creating-custom-elements)
+- [Theming](#theming)
+- [Including Static Assets](#including-static-assets)
+- [Component Config](#component-config)
+  - [Selectors](#selectors)
+  - [Properties](#properties)
+  - [Property Input Config](#property-input-config)
 
 FRC Web Components (FWC) dashboard can be extended through its plugin system using the `@frc-web-components/app` package. Below is a simple plugin which adds a custom component created in svelte to the dashboard:
 
-``` javascript
-import './MyElement.svelte';
-import { addElements } from '@frc-web-components/app';
+```typescript
+import {
+  addComponents,
+  createWebComponent,
+  numberProp,
+} from '@frc-web-components/app';
+import MyElement from './MyElement.svelte';
 
-addElements({
-  'my-svelte-element': {
+export const mySvelteElement = createWebComponent(
+  {
     dashboard: {
-      displayName: 'My Svelte Element',
+      name: 'My Svelte Element',
+      description: '',
+      defaultSize: { width: 100, height: 100 },
+      minSize: { width: 20, height: 20 },
     },
+    acceptedSourceTypes: ['Number'],
+    primaryProperty: 'count',
     properties: {
-      count: { type: 'Number' },
+      count: numberProp(),
     },
-  }
+  },
+  'my-svelte-element',
+  MyElement.element!,
+);
+
+addComponents({
+  mySvelteElement,
 });
 ```
 
 FWC provides a cli tool which generates a sample plugin that can be used to help get you started with writing your own plugin:
 
-``` bash
+```bash
 $ npm init fwc@latest <name>
 ```
 
@@ -42,19 +57,18 @@ the above command: <https://nodejs.org/en/download/>
 
 To get started, open a terminal and enter in the following command:
 
-``` bash
+```bash
 $ npm init fwc@latest my-first-plugin
 ```
 
 After being prompted with a few questions to help setup your plugin, the plugin project will be created and installed. The cli tool provides templates to create components using [lit](https://lit.dev/), [react](https://react.dev/) or [svelte](https://svelte.dev/):
-
 
 ![image](./images/creating-plugin.png)
 
 Once installed, a new folder should have been created named after the
 value you passed into the CLI tool. To launch the plugin, navigate to the plugin root and run the `npm run dev` command:
 
-``` bash
+```bash
 $ cd ./my-first-plugin
 $ npm run dev
 ```
@@ -67,7 +81,7 @@ If the plugin does not launch automatically, copy the URL and paste it into a br
 
 ![image](./images/plugin-launched.png)
 
-From here you'll be able to test the functionality of your plugin in a browser instance of the FWC Dashboard. By default the plugin CLI tool includes an example component you can use to get started. The components you create for your plugin can be tested by adding them to the dashboard layout. Elements can be added by dragging them into the layout or clicking the **Prepend** and **Append** buttons:
+From here you'll be able to test the functionality of your plugin in a browser instance of the FWC Dashboard. By default the plugin CLI tool includes an example component you can use to get started. The components you create for your plugin can be tested by adding them to the dashboard layout. Elements can be added by dragging them into the layout:
 
 <img src="./images/plugin-dnd-test.gif" width="750" alt="image" />
 
@@ -75,51 +89,35 @@ Let's open the plugin source code to see what's inside. Visual Studio Code is re
 
 ![image](./images/plugin-source-code.png)
 
-The root of your plugin source code is in the **index.ts** file. It calls the `addElements` function which lets you extend the components that can be added to the dashboard app. Let's look a little closer at the code above:
+The root of your plugin source code is in the **index.ts** file. It calls the `createWebComponent` and `addComponents` functions which lets you extend the components that can be added to the dashboard app. Let's look a little closer at the code above:
 
-``` javascript
-addElements({
-  'my-svelte-element': {
+```ts
+export const mySvelteElement = createWebComponent(
+  {
     dashboard: {
-      displayName: 'My Svelte Element',
+      name: 'My Svelte Element',
+      description: '',
+      defaultSize: { width: 130, height: 50 },
+      minSize: { width: 20, height: 20 },
     },
+    acceptedSourceTypes: ['Number'],
+    primaryProperty: 'count',
     properties: {
-      count: { type: 'Number' },
+      count: numberProp(),
     },
-  }
+  },
+  'my-svelte-element',
+  MyElement.element!,
+);
+
+addComponents({
+  mySvelteElement,
 });
 ```
 
 The above adds a new component to the FWC Dashboard interface. Note that the above is just a config for the **my-svelte-element** HTML element and not the code for the **my-svelte-element** element itself. The above configuration is required by the dashboard so it knows things like how to add the component to the interface, and information about its properties so they can be controlled using external sources such as NetworkTables.
 
-Some config fields are used for display purposes only, such as the
-**displayName** field and the second argument in the **.addElements**
-method which is used by the dashboard app to group similar components
-together. Update the plugin code to the following and see how it appears
-in the dashboard:
-
-``` javascript
-addElements({
-  'my-svelte-element': {
-    dashboard: {
-      displayName: 'My Plugin Element',
-    },
-    properties: {
-      count: { type: 'Number' },
-    },
-  }
-}, 'My Plugin');
-```
-
-The browser should automatically refresh with the latest changes on
-save. In the dropdown on the top left, you should now see the **My
-Plugin** option:
-
-![image](./images/my-plugin-group.png)
-
-Select this group and you should see the **my-svelte-element** element with the new display name:
-
-![image](./images/my-first-element.png)
+Some config fields are used for display purposes only, such as the **name** field.
 
 Now let's take a look at the code for the **my-svelte-element** component.
 
@@ -127,28 +125,31 @@ Now let's take a look at the code for the **my-svelte-element** component.
 
 The source code for the **my-svelte-element** element can be found in the **MyElement.svelte** file under the **src** folder of your plugin:
 
-``` javascript
+```javascript
 <svelte:options customElement="my-svelte-element" />
 
 <script lang="ts">
   import { getAssetUrl } from  '@frc-web-components/app';
-  export let count: number = 0;
-  const increment = () => {
-    count += 1;
-  };
+  let { count = 0, setProperty } = $props();
 </script>
 
-<button on:click={increment}>
+<button onclick={() => setProperty('count', count + 1)}>
   <img src={getAssetUrl('party.svg')} alt="party time" />
   Party Guests: {count}
 </button>
 
 <style>
   button {
+    background: var(--my-svelte-element-background, cadetblue);
+    color: var(--my-svelte-element-color, black);
+    border: none;
+    border-radius: 3px;
     padding: 8px;
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    width: 100%;
+    height: 100%;
   }
 </style>
 ```
@@ -156,49 +157,56 @@ The source code for the **my-svelte-element** element can be found in the **MyEl
 The component above was created using [svelte](https://svelte.dev/), a library thats able to build web components that act just like built-in elements. There are many resources online to learn about the web component standard such as this one: <https://kinsta.com/blog/web-components/>
 
 Web components are supported by all major browsers and can be built
-using many libraries and frameworks. The component above could have also been built using the [lit](https://lit.dev/) framework:
+using many libraries and frameworks. The component above could have also been built using React:
 
-```javascript
-import { LitElement, html, css } from "lit";
-import { customElement, property } from "lit/decorators.js";
-import { getAssetUrl } from "@frc-web-components/app";
+```tsx
+import { CSSProperties } from 'react';
+import {
+  getAssetUrl,
+  createComponent,
+  numberProp,
+} from '@frc-web-components/app';
 
-@customElement("my-lit-element")
-export class MyElement extends LitElement {
-  @property({ type: Number }) count = 0;
-
-  static styles = css`
-    :host {
-      display: inline-block;
-    }
-    
-    button {
-      padding: 8px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-  `;
-
-  render() {
-    return html`
+export const myElement = createComponent(
+  {
+    dashboard: {
+      name: 'My React Element',
+      description: '',
+      defaultSize: { width: 130, height: 50 },
+      minSize: { width: 20, height: 20 },
+    },
+    acceptedSourceTypes: ['Number'],
+    primaryProperty: 'count',
+    properties: {
+      count: numberProp(),
+    },
+  },
+  ({ count, setProperty }) => {
+    const styles: CSSProperties = {
+      background: 'var(--my-react-element-background, cadetblue)',
+      color: 'var(--my-react-element-color, black)',
+      border: 'none',
+      borderRadius: '3px',
+      padding: '8px',
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '8px',
+      width: '100%',
+      height: '100%',
+    };
+    return (
       <button
-        @click=${() => {
-          this.count += 1;
+        style={styles}
+        onClick={() => {
+          setProperty('count', count + 1);
         }}
       >
-        <img src=${getAssetUrl("party.svg")} alt="party time" /> Party Guests:
-        ${this.count}
+        <img src={getAssetUrl('party.svg')} alt="party time" />
+        Party Guests: {count}
       </button>
-    `;
-  }
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    "my-lit-element": MyElement;
-  }
-}
+    );
+  },
+);
 ```
 
 A list of templates with examples can be found here: <https://webcomponents.dev/new>.
@@ -240,110 +248,91 @@ addThemeRules('light', {
 Static assets like such as images should be placed in the `/public/assets` folder. They can be included into the app by calling the `getAssetUrl` function. For example:
 
 ```typescript
-import { getAssetUrl } from "@frc-web-components/app";
+import { getAssetUrl } from '@frc-web-components/app';
 
-const url: string = getAssetUrl("party.svg");
+const url: string = getAssetUrl('party.svg');
 ```
 
 The above URL can then be used as the src of an image element:
 
 ```html
-<img src={url} />
+<img src="{url}" />
 ```
 
-# Element Config
+# Component Config
 
 For elements to be added and handled by the FWC Dashboard, they need an
-associated **ElementConfig**. Below are the configuration options needed
-to define an **ElementConfig**:
+associated **Component Config**. Below are the configuration options needed
+to define an **Component Config**:
 
-``` javascript
+```javascript
 {
-  // A description for the element
-  description?: string,
-  // This is useful if the element is usually associated with a particular source.
+  dashboard: {
+    // The display name for the component
+    name: string,
+    // A description for the component
+    description: string,
+    // A default width and height in pixels
+    defaultSize: { width: number, height: number },
+    // The minimum width and height in pixels
+    minSize: { width: number, height: number },
+    // An optional array of children to add to the component my default. Each child must contain the type of component to add, a name, and optional property values to default to.
+    children?: {
+      type: string,
+      name: string,
+      properties?: Record<string, unknown>,
+    }[],
+    // Set to false if you do not want to be able to directly add this component to the dashboard. This is useful if it should only be added as a child of another component.
+    topLevel?: boolean
+  },
+  // This is useful if the component is usually associated with a particular source.
   // e.g. Robot code publishes field related info to "/SmartDashboard/Field" in NetworkTables
-  // so "defaultSourceKey" is set to this key and "defaultSourceProvider" to "NetworkTables"
+  // so "defaultSource.key" is set to this key and "defaultSource.provider" to "NT"
   // for the Field2d element.
-  defaultSourceKey?: string,
-  defaultSourceProvider?: string,
-  // 
-  dashboard?: DashboardConfig,
+  defaultSource?: {
+    key: string,
+    provider: string,
+  },
+  // Optional list of components that can be added as children to this component
+  children?: {
+    // The type of component that is addable
+    type: string,
+    // Used for display purposes
+    propertyTabName?: string,
+  }[],
+  //
+  acceptedSourceTypes?: string[],
+  //
+  primaryProperty?: string,
   // Properties are used to control how the element looks and behaves. They can be bound
   // to external sources such as NetworkTables
   properties: {
     [propertyName: string]: PropertyConfig
   },
-  slots?: SlotConfig[],
 }
 ```
 
 ## Selectors
 
-Each **ElementConfig** added to the FWC Dashboard requires a
-**selector** so the dashboard interface knows which config should be
-applied to elements added to the dashboard:
+Each **ComponentConfig** added to the FWC Dashboard requires a
+**type** so the dashboard interface knows which config should be
+applied to component added to the dashboard:
 
-``` javascript
-dashboard.addElements({
-  [selector: string]: ElementConfig
+```typescript
+addComponents({
+  [type: string]: ComponentConfig
 });
 ```
-
-A **selector** is any valid CSS selector. Most of the time these are the
-element tag names, but they can also be more specific, such as selectors
-that match elements with classes and attributes. For example take the
-following HTML and element configs added to the dashboard:
-
-``` html
-<button>Click me</button>
-<frc-gyro></frc-gyro>
-<input type="text" />
-<input type="checkbox" />
-<div class="checkbox-group">
-  <input type="checkbox" />
-  <input type="checkbox" />
-</div>
-
-<script>
-  ...
-  dashboard.addElements({
-    "button": { ... },
-    "frc-gyro": { ... },
-    "input[type=text]": { ... },
-    "input[type=checkbox]": { ... },
-    ".checkbox-group input[type=checkbox]": { ... },
-  });
-</script>
-```
-
-In the above script tag there are 5 element configs added to the
-dashboard each with a different selector. The *\<button\>* and
-*\<frc-gyro\>* elements will match the *"button"* and *"frc-gyro"*
-element configs.
-
-To create separate configs for the checkbox and text input elements,
-configs with attribute selectors *"input\[type=text\]"* and
-*"input\[type=checkbox\]"* are needed.
-
-Also note that when an element matches multiple configs, the one with
-the highest specificity wins. The checkbox inputs in the div element
-match both the *"input\[type=checkbox\]"* and *".checkbox-group
-input\[type=checkbox\]"*. Since the second is more specific, the
-elements will take on those configs.
-
-You can read more on CSS selectors here:
-<https://web.dev/learn/css/selectors/>
 
 ## Properties
 
 Properties config is used to connect your element's properties and
 attributes to external sources such as NetworkTables:
 
-``` javascript
+```javascript
 dashboard.addElements({
   'some-element': {
-    properties: { 
+    properties: {
       [propertyName: string]: PropertyConfig
     }
   },
@@ -354,7 +343,7 @@ dashboard.addElements({
 your elements. For example, take the properties from the **frc-gauge**
 component:
 
-``` javascript
+```javascript
 properties: {
   min: { type: 'Number' },
   max: { type: 'Number', defaultValue: 100 },
@@ -376,7 +365,7 @@ camelCase.
 
 Now let's look at how to configure individual properties:
 
-``` javascript
+```javascript
 {
   // This is the only required field and is used by the dashboard to know what type
   // of value element expects for that property. For example, a number input field
@@ -406,7 +395,7 @@ Now let's look at how to configure individual properties:
   // primary is set to true. Only one property should be be the primary value. Defaults
   // to false.
   primary?: boolean,
-  // For the dashboard to send updates to external sources based on changes to property 
+  // For the dashboard to send updates to external sources based on changes to property
   // values, it needs some way to detect that the property value has changed. If the
   // element emits an event when the property changes, the dashboard can detect updates
   // by listening to the event.
@@ -423,7 +412,7 @@ The **input** config option for properties is used to control how the
 property input behaves on the dashboard. The **input** config option
 takes on the following structure:
 
-``` javascript
+```javascript
 {
   type?: string,
   [option: string]: unknown
@@ -432,26 +421,26 @@ takes on the following structure:
 
 The current available types are:
 
--   String
--   Number
--   Boolean
--   Array
--   StringArray
--   BooleanArray
--   NumberArray
--   Textarea
--   StringDropdown
--   ColorPicker
+- String
+- Number
+- Boolean
+- Array
+- StringArray
+- BooleanArray
+- NumberArray
+- Textarea
+- StringDropdown
+- ColorPicker
 
 By default **input.type** field will be equal to the property's type.
 For example:
 
-``` javascript
+```javascript
 dashboard.addElements({
   'some-element': {
-    properties: { 
-      someProp: { type: 'String' }
-    }
+    properties: {
+      someProp: { type: 'String' },
+    },
   },
 });
 ```
@@ -459,11 +448,11 @@ dashboard.addElements({
 Although **input** is not set in the **someProp** property, it will
 default to the following:
 
-``` javascript
-properties: { 
-  someProp: { 
+```javascript
+properties: {
+  someProp: {
     type: 'String',
-    input: { type: 'String' } 
+    input: { type: 'String' }
   }
 }
 ```
@@ -477,9 +466,11 @@ What if we had a property that took in a a hex color? Although we could
 store the data as a **String**, displaying this in a text input field
 isn't very pretty.
 
-``` javascript
-properties: { 
-  color: { type: 'String' } 
+```javascript
+properties: {
+  color: {
+    type: 'String';
+  }
 }
 ```
 
@@ -491,12 +482,12 @@ hex value was red:
 It would be far better in this case if we displayed this using a color
 picker:
 
-``` javascript
-properties: { 
-  color: { 
+```javascript
+properties: {
+  color: {
     type: 'String',
     input: { type: 'ColorPicker' }
-  } 
+  }
 }
 ```
 
@@ -512,8 +503,8 @@ Let's look at the configs for the available input types in more detail.
 The **String** property input displays a text field and accepts
 properties of type **String**. It takes on the following config:
 
-``` javascript
-{ 
+```javascript
+{
   type: 'String',
   isDisabled?: (element: HTMLElement) => boolean,
 }
@@ -528,8 +519,8 @@ A string input with the value "some string" looks like the following:
 The **Number** property input displays a number field and accepts
 properties of type **Number**. It takes on the following config:
 
-``` javascript
-{ 
+```javascript
+{
   type: 'Number',
   isDisabled?: (element: HTMLElement) => boolean,
 }
@@ -544,8 +535,8 @@ Boolean Property Input ---------------------
 The **Boolean** property input displays a checkbox and accepts
 properties of type **Boolean**. It takes on the following config:
 
-``` javascript
-{ 
+```javascript
+{
   type: 'Boolean',
   isDisabled?: (element: HTMLElement) => boolean,
 }
@@ -562,8 +553,8 @@ properties of type **Array**. You can add values by typing and pressing
 the enter/return key and remove them by clicking on the **x** button on
 each item. It takes on the following config:
 
-``` javascript
-{ 
+```javascript
+{
   type: 'Array',
   isDisabled?: (element: HTMLElement) => boolean,
 }
@@ -587,8 +578,8 @@ by typing and pressing the enter/return key or selecting them from the
 dropdown options. Values can be removed by clicking on the **x** button
 on each item. It takes on the following config:
 
-``` javascript
-{ 
+```javascript
+{
   type: 'BooleanArray',
   isDisabled?: (element: HTMLElement) => boolean,
 }
@@ -606,8 +597,8 @@ properties of type **Array**. You can add number values by typing and
 pressing the enter/return key. Values can be removed by clicking on the
 **x** button on each item. It takes on the following config:
 
-``` javascript
-{ 
+```javascript
+{
   type: 'NumberArray',
   isDisabled?: (element: HTMLElement) => boolean,
 }
@@ -622,8 +613,8 @@ An Array input with the value \[1, 2, 3, 4\] looks like the following:
 The **Textarea** property input displays a textarea and accepts
 properties of type **String**. It takes on the following config:
 
-``` javascript
-{ 
+```javascript
+{
   type: 'Textarea',
   isDisabled?: (element: HTMLElement) => boolean,
 }
@@ -643,8 +634,8 @@ accepts values from the available options, but will accept custom values
 if allowCustomValues\*\* is set to **true**. It takes on the following
 config:
 
-``` javascript
-{ 
+```javascript
+{
   type: 'StringDropdown',
   isDisabled?: (element: HTMLElement) => boolean,
   allowCustomValues?: boolean,
@@ -654,7 +645,7 @@ config:
 
 For example, the following config:
 
-``` javascript
+```javascript
 stringDropdown: {
   type: "Array",
   input: {
@@ -674,8 +665,8 @@ ColorPicker Property Input -----------------------
 The **ColorPicker** property input displays a color picker and accepts
 properties of type **String**. It takes on the following config:
 
-``` javascript
-{ 
+```javascript
+{
   type: 'ColorPicker',
   isDisabled?: (element: HTMLElement) => boolean,
 }

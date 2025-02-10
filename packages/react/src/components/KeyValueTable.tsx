@@ -1,4 +1,4 @@
-import "./KeyValueTable.css";
+import './KeyValueTable.css';
 
 export function KeyValueTable({
   keyValuePairs,

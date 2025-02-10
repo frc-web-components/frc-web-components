@@ -1,35 +1,51 @@
 {
-  "name": "frc-web-components",
-  "version": "0.0.0",
-  "license": "MIT",
-  "scripts": {
-    "dev": "nx dev @frc-web-components/app",
-    "build": "nx run-many -t build",
-    "watch:fwc": "npm run watch -w @frc-web-components/fwc",
-    "watch:lit": "npm run watch -w @frc-web-components/lit",
-    "watch:react": "npm run watch -w @frc-web-components/react",
-    "watch:svelte": "npm run watch -w @frc-web-components/svelte",
-    "watch:app": "npm run watch -w @frc-web-components/app",
-    "watch:example-app": "npm run dev -w example-app",
-    "watch": "concurrently \"npm:watch:*\"",
-    "build:fwc": "nx build @frc-web-components/fwc",
-    "build:lit": "nx build @frc-web-components/lit",
-    "build:react": "nx build @frc-web-components/react",
-    "build:svelte": "nx build @frc-web-components/svelte",
-    "storybook": "npm run storybook -w storybook",
-    "prepare": "husky install",
-    "test": ""
-  },
+  "name": "fwc",
   "private": true,
-  "devDependencies": {
-    "@nx/js": "17.1.3",
-    "concurrently": "^8.2.2",
-    "husky": "^7.0.4",
-    "nx": "17.1.3",
-    "typescript": "^5.3.2"
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "prepare": "husky install",
+    "build": "pnpm exec nx run-many -t build",
+    "dev": "pnpm build && pnpm exec nx run-many --parallel=20 -t dev --projects=@frc-web-components/fwc,@frc-web-components/react",
+    "dashboard:dev": "pnpm --filter @frc-web-components/app run dashboard:dev",
+    "graph": "pnpm exec nx graph"
   },
-  "workspaces": [
-    "packages/*",
-    "examples/*"
-  ]
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.16.1"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.10",
+    "@eslint/js": "^9.9.0",
+    "@types/fs-extra": "^11.0.4",
+    "@vitejs/plugin-react": "^4.3.1",
+    "eslint": "^9.9.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+    "eslint-plugin-react-refresh": "^0.4.9",
+    "fs-extra": "^11.2.0",
+    "globals": "^15.9.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.0",
+    "nx": "19.7.3",
+    "prettier": "^3.0.1",
+    "rollup": "^4.21.1",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.0.1",
+    "vite": "^5.4.1",
+    "vite-plugin-dts": "^4.0.3"
+  },
+  "lint-staged": {
+    "**/*.{js,ts,tsx}": [
+      "eslint --fix"
+    ],
+    "**/*": "prettier --write --ignore-unknown"
+  }
 }

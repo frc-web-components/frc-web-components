@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { WebbitConfig } from '@webbitjs/webbit';
 import { html, css, LitElement } from 'lit';
 import { property, state, query } from 'lit/decorators.js';
@@ -96,36 +95,36 @@ export class Bar extends LitElement {
     if (max < center) {
       foreground.style.setProperty(
         '--foreground-width',
-        `${(Math.abs(val - max) / (max - min)) * 100}%`
+        `${(Math.abs(val - max) / (max - min)) * 100}%`,
       );
       foreground.style.setProperty('--foreground-left', 'auto');
       foreground.style.setProperty('--foreground-right', '0');
     } else if (min > center) {
       foreground.style.setProperty(
         '--foreground-width',
-        `${(Math.abs(val - min) / (max - min)) * 100}%`
+        `${(Math.abs(val - min) / (max - min)) * 100}%`,
       );
       foreground.style.setProperty('--foreground-left', '0');
       foreground.style.setProperty('--foreground-right', 'auto');
     } else if (val > center) {
       foreground.style.setProperty(
         '--foreground-width',
-        `${(Math.abs(val - center) / (max - min)) * 100}%`
+        `${(Math.abs(val - center) / (max - min)) * 100}%`,
       );
       foreground.style.setProperty(
         '--foreground-left',
-        `${(Math.abs(min - center) / (max - min)) * 100}%`
+        `${(Math.abs(min - center) / (max - min)) * 100}%`,
       );
       foreground.style.setProperty('--foreground-right', 'auto');
     } else {
       foreground.style.setProperty(
         '--foreground-width',
-        `${(Math.abs(val - center) / (max - min)) * 100}%`
+        `${(Math.abs(val - center) / (max - min)) * 100}%`,
       );
       foreground.style.setProperty('--foreground-left', 'auto');
       foreground.style.setProperty(
         '--foreground-right',
-        `${(Math.abs(max - center) / (max - min)) * 100}%`
+        `${(Math.abs(max - center) / (max - min)) * 100}%`,
       );
     }
   }

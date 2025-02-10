@@ -65,7 +65,7 @@ export default class Logger extends LitElement {
 
   firstUpdated() {
     const loggerElement = this.renderRoot.querySelector(
-      '[part=logger]'
+      '[part=logger]',
     ) as HTMLElement;
     this.logger = new HtmlLogger(
       {
@@ -74,7 +74,7 @@ export default class Logger extends LitElement {
         level: this.levels.indexOf(this.level),
         enabled: !this.disabled,
       },
-      loggerElement
+      loggerElement,
     );
     this.logger.init();
   }
@@ -99,7 +99,6 @@ export default class Logger extends LitElement {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   render() {
     return html` <div part="logger"></div> `;
   }

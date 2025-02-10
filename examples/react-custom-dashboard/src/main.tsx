@@ -8,5 +8,5 @@ ReactDOM.createRoot(document.getElementById('app')!).render(
     <NT4Provider address="localhost">
       <App />
     </NT4Provider>
-  </React.StrictMode>
-)
+  </React.StrictMode>,
+);

@@ -2,13 +2,10 @@
 
 <script lang="ts">
   import { getAssetUrl } from  '@frc-web-components/app';
-  export let count: number = 0;
-  const increment = () => {
-    count += 1;
-  };
+  let { count = 0, setProperty } = $props();
 </script>
 
-<button on:click={increment}>
+<button onclick={() => setProperty('count', count + 1)}>
   <img src={getAssetUrl('party.svg')} alt="party time" />
   Party Guests: {count}
 </button>
@@ -23,5 +20,7 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    width: 100%;
+    height: 100%;
   }
 </style>

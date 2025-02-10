@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { LitElement, TemplateResult, html } from 'lit';
 import { property, state, queryAll } from 'lit/decorators.js';
 import { keyed } from 'lit/directives/keyed.js';
@@ -58,7 +57,7 @@ export default class CanvasMjpgStream extends LitElement {
   protected draw(api: CanvasObjectApi): void {
     const { canvas, ctx } = api;
     const streamInstance = [...this.streamInstances].find(
-      (child: any) => child.src === this._connectedSrc
+      (child: any) => child.src === this._connectedSrc,
     ) as CanvasObject | undefined;
 
     if (streamInstance) {
@@ -80,10 +79,10 @@ export default class CanvasMjpgStream extends LitElement {
           (containerSize.width - width) / 2,
           (containerSize.height - height) / 2,
           width,
-          height
+          height,
         );
         // eslint-disable-next-line no-empty
-      } catch (e) {}
+      } catch {}
     }
   }
 
@@ -127,7 +126,7 @@ export default class CanvasMjpgStream extends LitElement {
             ?hide-crosshair=${this.hideCrosshair}
             crosshair-color=${this.crosshairColor}
           ></frc-canvas-mjpg-stream-instance>
-        `
+        `,
       )}
     `;
   }
@@ -135,7 +134,7 @@ export default class CanvasMjpgStream extends LitElement {
   render(): TemplateResult {
     return html`
       ${this.srcs.map((src) =>
-        this.renderStreamInstance(src.replace('mjpg:', ''))
+        this.renderStreamInstance(src.replace('mjpg:', '')),
       )}
     `;
   }
