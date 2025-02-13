@@ -43,7 +43,6 @@ If using vscode the following extensions are recommended:
 - [CSS Modules](https://marketplace.visualstudio.com/items?itemName=clinyong.vscode-css-modules): Used for autocompleting css modules
 
 To install run in the root directory:
-https://github.com/frc-web-components/react-dashboard.gitk
 
 ```bash
 pnpm install
