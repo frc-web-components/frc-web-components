@@ -9,11 +9,13 @@ interface ContextMenuElement {
 
 export interface AppSliceState {
   editing: boolean;
+  webMode: boolean;
   contextMenuElement?: ContextMenuElement;
 }
 
 const initialState: AppSliceState = {
   editing: true,
+  webMode: false,
 };
 
 export const appSlice = createAppSlice({
@@ -31,16 +33,18 @@ export const appSlice = createAppSlice({
         state.contextMenuElement = action.payload;
       },
     ),
+    setWebMode: create.reducer((state, action: PayloadAction<boolean>) => {
+      state.webMode = action.payload;
+    }),
   }),
   selectors: {
     selectEditing: (state) => state.editing,
     selectContextMenuElement: (state) => state.contextMenuElement,
+    selectWebMode: (state) => state.webMode,
   },
 });
 
-export const { toggleEditing, setContextMenuElement, setEditing } =
+export const { toggleEditing, setContextMenuElement, setEditing, setWebMode } =
   appSlice.actions;
-export const {
-  selectEditing,
-  selectContextMenuElement: selectContextMenuElement,
-} = appSlice.selectors;
+export const { selectEditing, selectContextMenuElement, selectWebMode } =
+  appSlice.selectors;

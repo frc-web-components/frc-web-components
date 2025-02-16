@@ -19,6 +19,7 @@ import {
 } from '@store/selectors/sourceSelectors';
 import { DashboardThemes, darkTheme } from '@frc-web-components/fwc/themes';
 import { useEffect, useState } from 'react';
+import { setWebMode } from './store/slices/appSlice';
 
 export type SourceInfo =
   | {
@@ -100,6 +101,7 @@ interface DashboardEvents {
   newWindowMenuClickEvent: () => void;
   openDashboardMenuClickEvent: () => void;
   saveDashboardMenuClickEvent: () => void;
+  exportForWebClickEvent: () => void;
   saveDashboardAsMenuClickEvent: () => void;
   pluginsMenuClickEvent: () => void;
   closeWindowMenuClickEvent: () => void;
@@ -182,6 +184,15 @@ export default class Dashboard extends (EventEmitter as unknown as new () => Das
 
   getComponents() {
     return this.#store.get(componentsAtom);
+  }
+
+  isWebMode(): boolean {
+    const { webMode } = { ...store.getState().app };
+    return webMode;
+  }
+
+  setWebMode(webMode: boolean) {
+    store.dispatch(setWebMode(webMode));
   }
 
   getLayout(): Layout {

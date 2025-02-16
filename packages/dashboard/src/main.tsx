@@ -86,6 +86,26 @@ export function getTheme() {
   return dashboard.getTheme();
 }
 
+export function isWebMode() {
+  return dashboard.isWebMode();
+}
+
+export function setWebMode(webMode: boolean) {
+  dashboard.setWebMode(webMode);
+}
+
+export function setLayout(layout: Layout) {
+  dashboard.setLayout(layout);
+}
+
+export function resetLayout() {
+  dashboard.resetLayout();
+}
+
+export function getLayout() {
+  return dashboard.getLayout();
+}
+
 export {
   createComponent,
   createWebComponent,
