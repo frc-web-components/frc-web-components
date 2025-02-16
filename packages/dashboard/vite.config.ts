@@ -20,5 +20,9 @@ export default defineConfig(
         '@store': path.resolve(__dirname, './src/store'),
       },
     },
+    // https://stackoverflow.com/questions/72097831/popper-styled-default-is-not-a-function-mui-5-6-0-material-ui
+    optimizeDeps: {
+      include: ['@emotion/react', '@emotion/styled', '@mui/material/Tooltip'],
+    },
   }),
 );

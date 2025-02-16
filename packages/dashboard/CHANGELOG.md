@@ -1,5 +1,11 @@
 # @frc-web-components/app
 
+## 1.4.0
+
+### Minor Changes
+
+- 2c1d42b: Added support for exporting a dashboard layout for the web
+
 ## 1.3.1
 
 ### Patch Changes

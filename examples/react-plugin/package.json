@@ -2,7 +2,7 @@
   "name": "example-react-plugin",
   "displayName": "react-plugin",
   "private": true,
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Example react plugin",
   "author": "",
   "email": "",
