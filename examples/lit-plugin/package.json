@@ -2,7 +2,7 @@
   "name": "example-lit-plugin",
   "displayName": "lit-plugin",
   "private": true,
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Example lit plugin",
   "author": "",
   "email": "",
