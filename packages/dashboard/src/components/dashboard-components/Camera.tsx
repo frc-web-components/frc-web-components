@@ -24,13 +24,14 @@ export const camera = createComponent(
       crosshairColor: colorProp({ defaultValue: '#ffffff' }),
     },
   },
-  ({ backgroundColor, waitImage, hideCrosshair, crosshairColor }) => {
+  ({ streams, backgroundColor, waitImage, hideCrosshair, crosshairColor }) => {
     return (
       <Canvas
         style={{ width: '100%', height: '100%' }}
         backgroundColor={backgroundColor}
       >
         <CanvasMjpgStream
+          srcs={streams}
           waitImage={waitImage}
           crosshairColor={crosshairColor}
           hideCrosshair={hideCrosshair}
