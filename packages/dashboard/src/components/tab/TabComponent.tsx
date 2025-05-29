@@ -57,6 +57,9 @@ function TabComponent({ Component, componentId }: Props) {
   const childComponents = useAppSelector((state) =>
     selectChildren(state, componentId),
   );
+  const component = useAppSelector(
+    (state) => state.layout.components[componentId],
+  );
 
   const { propertyValues, propertySourceInfos } = useMemo(() => {
     if (!componentPropertyData) {
@@ -64,9 +67,20 @@ function TabComponent({ Component, componentId }: Props) {
     }
     const values: Record<string, unknown> = {};
     const sourceInfos: Record<string, SourceInfo> = {};
+    const componentConfig = components[component?.type || ''];
+
     Object.entries(componentPropertyData).forEach(
       ([name, { value, sourceInfo }]) => {
-        values[name] = value;
+        if (value === undefined || value === null) {
+          const propertyConfig = componentConfig?.properties?.[name];
+          if (propertyConfig?.type?.endsWith('[]')) {
+            values[name] = [];
+          } else {
+            values[name] = value;
+          }
+        } else {
+          values[name] = value;
+        }
         sourceInfos[name] = sourceInfo;
       },
     );
@@ -74,7 +88,7 @@ function TabComponent({ Component, componentId }: Props) {
       propertyValues: values,
       propertySourceInfos: sourceInfos,
     };
-  }, [componentPropertyData]);
+  }, [componentPropertyData, components]);
 
   const newSetProperty = useCallback(
     (prop: string, value: unknown) => {

@@ -97,8 +97,9 @@ function Tab({ tabId }: Props) {
   // const [layout, setLayout] = useState<ComponentLayout[]>([]);
 
   const gridLayout = useMemo(() => {
-    const layout: ComponentLayout[] = Object.values(layoutComponents ?? {}).map(
-      (item) => {
+    const layout: ComponentLayout[] = Object.values(layoutComponents ?? {})
+      .filter((item) => item.type in components)
+      .map((item) => {
         return {
           Component: components[item.type].component,
           i: item.id,
@@ -109,13 +110,12 @@ function Tab({ tabId }: Props) {
           minW: item.minSize.width,
           minH: item.minSize.height,
         };
-      },
-    );
+      });
     return layout.map((item) => ({
       ...item,
       static: !editing,
     }));
-  }, [layoutComponents, editing]);
+  }, [layoutComponents, editing, components]);
 
   const minWidth = useMemo(() => {
     let maxX = 0;

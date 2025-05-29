@@ -133,7 +133,12 @@ export function useComponentPropertyValues(componentId: string) {
     const parentSource = prevParentSource.current;
     Object.entries(prevComponent.current?.properties ?? {}).forEach(
       ([name, property]) => {
-        const defaultValue = property.value;
+        // Use the component instance value, but fall back to component config default if undefined
+        const instanceValue = property.value;
+        const componentConfigDefault =
+          componentConfig?.properties?.[name]?.defaultValue;
+        const defaultValue =
+          instanceValue !== undefined ? instanceValue : componentConfigDefault;
         const propertySource = prevSources.current[name];
         const value = prevValues.current[name];
         if (propertySource) {
