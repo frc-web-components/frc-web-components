@@ -117,14 +117,44 @@ function Tab({ tabId }: Props) {
     }));
   }, [layoutComponents, editing, components]);
 
-  const minWidth = useMemo(() => {
+  const { minWidth, minHeight, gridCols, gridWidth } = useMemo(() => {
     let maxX = 0;
+    let maxY = 0;
+    let maxCols = 0;
+    let maxRows = 0;
+
     gridLayout.forEach((item) => {
       const x = (item.x + item.w) * (cellSize + cellGap);
+      const y = (item.y + item.h) * cellSize;
       maxX = Math.max(x, maxX);
+      maxY = Math.max(y, maxY);
+      maxCols = Math.max(maxCols, item.x + item.w);
+      maxRows = Math.max(maxRows, item.y + item.h);
     });
-    return maxX;
-  }, [gridLayout]);
+
+    if (editing) {
+      // Edit mode: Large fixed size (10,000px)
+      const editCols = Math.ceil(10000 / (cellSize + cellGap));
+      const editWidth = editCols * (cellSize + cellGap);
+      const editHeight = 10000;
+      return {
+        minWidth: editWidth,
+        minHeight: editHeight,
+        gridCols: editCols,
+        gridWidth: editWidth,
+      };
+    } else {
+      // Live mode: Fit to content with some padding
+      const liveCols = Math.max(maxCols + 5, 10); // Add some padding
+      const liveWidth = liveCols * (cellSize + cellGap);
+      return {
+        minWidth: Math.max(maxX, 300), // Minimum 300px width
+        minHeight: Math.max(maxY, 200), // Minimum 200px height
+        gridCols: liveCols,
+        gridWidth: liveWidth,
+      };
+    }
+  }, [gridLayout, editing, cellSize, cellGap]);
 
   const addComponentToTab = useCallback(
     (
@@ -284,10 +314,10 @@ function Tab({ tabId }: Props) {
       }}
       style={{
         cursor: 'context-menu',
-        height: '100%',
-        minHeight: '100%',
+        height: editing ? minHeight : '100%',
+        minHeight: editing ? minHeight : '100%',
         minWidth,
-        width: '100%',
+        width: editing ? gridWidth : '100%',
       }}
       // Needed to capture keyboard events.
       tabIndex={0}
@@ -300,8 +330,8 @@ function Tab({ tabId }: Props) {
       <ContextMenu />
       <GridLayout
         style={{
-          height: '100%',
-          width: '100%',
+          height: editing ? minHeight : '100%',
+          width: editing ? gridWidth : '100%',
           backgroundSize: `${cellSize + cellGap}px ${cellSize + cellGap}px`,
           backgroundImage: editing
             ? `linear-gradient(to right, rgba(10, 10, 10,.75) ${Math.max(
@@ -354,11 +384,11 @@ function Tab({ tabId }: Props) {
           [Styles.editable]: editing,
         })}
         layout={gridLayout}
-        cols={20000}
+        cols={gridCols}
         rowHeight={cellSize}
-        width={(cellSize + cellGap) * 20000}
+        width={gridWidth}
         margin={[cellGap, cellGap]}
-        autoSize
+        autoSize={!editing}
         containerPadding={[gridPadding, gridPadding]}
         compactType={null}
         preventCollision
