@@ -1,5 +1,12 @@
 # example-svelte-plugin
 
+## 0.0.9
+
+### Patch Changes
+
+- Updated dependencies [36c4a48]
+  - @frc-web-components/app@1.4.1
+
 ## 0.0.8
 
 ### Patch Changes
