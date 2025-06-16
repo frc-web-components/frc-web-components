@@ -1,5 +1,13 @@
 # react-custom-dashboard
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [b7754eb]
+  - @frc-web-components/fwc@3.3.0
+  - @frc-web-components/react@3.0.0
+
 ## 0.0.4
 
 ### Patch Changes

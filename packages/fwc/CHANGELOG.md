@@ -1,5 +1,11 @@
 # @frc-web-components/fwc
 
+## 3.3.0
+
+### Minor Changes
+
+- b7754eb: Added properties to camera stream component to limit bandwidth
+
 ## 3.2.0
 
 ### Minor Changes

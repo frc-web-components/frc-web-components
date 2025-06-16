@@ -1,5 +1,12 @@
 # @frc-web-components/lit
 
+## 2.1.1
+
+### Patch Changes
+
+- Updated dependencies [b7754eb]
+  - @frc-web-components/fwc@3.3.0
+
 ## 2.1.0
 
 ### Minor Changes

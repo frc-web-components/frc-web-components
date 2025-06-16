@@ -1,5 +1,17 @@
 # @frc-web-components/app
 
+## 1.5.0
+
+### Minor Changes
+
+- b7754eb: Added properties to camera stream component to limit bandwidth
+
+### Patch Changes
+
+- Updated dependencies [b7754eb]
+  - @frc-web-components/fwc@3.3.0
+  - @frc-web-components/react@3.0.0
+
 ## 1.4.1
 
 ### Patch Changes
