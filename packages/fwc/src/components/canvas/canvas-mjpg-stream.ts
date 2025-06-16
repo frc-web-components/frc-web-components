@@ -18,6 +18,12 @@ export default class CanvasMjpgStream extends LitElement {
     false;
   @property({ type: String, attribute: 'crosshair-color' }) crosshairColor =
     'white';
+  @property({ type: Number, attribute: 'resolution-width' })
+  resolutionWidth?: number;
+  @property({ type: Number, attribute: 'resolution-height' })
+  resolutionHeight?: number;
+  @property({ type: Number }) fps?: number;
+  @property({ type: Number }) quality?: number;
 
   @state() _connectedSrc?: string;
 
@@ -125,6 +131,10 @@ export default class CanvasMjpgStream extends LitElement {
             ?disabled=${this._connectedSrc && this._connectedSrc !== src}
             ?hide-crosshair=${this.hideCrosshair}
             crosshair-color=${this.crosshairColor}
+            resolution-width=${ifDefined(this.resolutionWidth)}
+            resolution-height=${ifDefined(this.resolutionHeight)}
+            fps=${ifDefined(this.fps)}
+            quality=${ifDefined(this.quality)}
           ></frc-canvas-mjpg-stream-instance>
         `,
       )}
@@ -133,7 +143,7 @@ export default class CanvasMjpgStream extends LitElement {
 
   render(): TemplateResult {
     return html`
-      ${this.srcs.map((src) =>
+      ${(this.srcs ?? []).map((src) =>
         this.renderStreamInstance(src.replace('mjpg:', '')),
       )}
     `;

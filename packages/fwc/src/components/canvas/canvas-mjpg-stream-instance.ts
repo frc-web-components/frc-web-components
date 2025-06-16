@@ -3,6 +3,63 @@ import { property } from 'lit/decorators.js';
 import throttle from 'lodash.throttle';
 import { CanvasObjectApi } from './interfaces';
 
+export interface CameraStreamParams {
+  resolution?: { width: number; height: number };
+  fps?: number;
+  quality?: number;
+}
+
+/**
+ * Creates a camera stream URL with appropriate parameters
+ * Adapted from https://github.com/Gold872/elastic-dashboard
+ *
+ * @param urlString Base camera stream URL
+ * @param params Camera parameters (resolution, fps, quality)
+ * @returns URL with query parameters
+ */
+export function getUrlWithParameters(
+  urlString: string,
+  params: CameraStreamParams,
+): string {
+  const url = new URL(urlString);
+
+  // Add resolution parameter if valid (exclude if -1 or undefined)
+  if (params.resolution) {
+    let width = params.resolution.width;
+    const height = params.resolution.height;
+
+    // Skip resolution if either dimension is -1 or invalid
+    if (width !== -1 && height !== -1 && width > 0 && height > 0) {
+      // Ensure width is even (round up if odd)
+      if (width % 2 !== 0) {
+        width += 1;
+      }
+
+      url.searchParams.set(
+        'resolution',
+        `${Math.floor(width)}x${Math.floor(height)}`,
+      );
+    }
+  }
+
+  // Add fps parameter if provided and valid (exclude if -1 or undefined)
+  if (params.fps !== undefined && params.fps !== -1 && params.fps > 0) {
+    url.searchParams.set('fps', params.fps.toString());
+  }
+
+  // Add compression/quality parameter if provided and valid (exclude if -1 or undefined)
+  if (
+    params.quality !== undefined &&
+    params.quality !== -1 &&
+    params.quality >= 0 &&
+    params.quality <= 100
+  ) {
+    url.searchParams.set('compression', Math.floor(params.quality).toString());
+  }
+
+  return url.toString();
+}
+
 export default class CanvasMjpgStreamInstance extends LitElement {
   @property({ type: String }) src = '';
   @property({ type: Number }) width: number | null = null;
@@ -13,6 +70,12 @@ export default class CanvasMjpgStreamInstance extends LitElement {
     false;
   @property({ type: String, attribute: 'crosshair-color' }) crosshairColor =
     'white';
+  @property({ type: Number, attribute: 'resolution-width' })
+  resolutionWidth?: number;
+  @property({ type: Number, attribute: 'resolution-height' })
+  resolutionHeight?: number;
+  @property({ type: Number }) fps?: number;
+  @property({ type: Number }) quality?: number;
 
   private image = new Image();
 
@@ -128,7 +191,24 @@ export default class CanvasMjpgStreamInstance extends LitElement {
       return;
     }
 
-    if (this.isImageLoaded()) {
+    // Apply URL parameters for resolution, fps, and quality
+    const resolution =
+      this.resolutionWidth &&
+      this.resolutionHeight &&
+      this.resolutionWidth !== -1 &&
+      this.resolutionHeight !== -1
+        ? { width: this.resolutionWidth, height: this.resolutionHeight }
+        : undefined;
+
+    const params: CameraStreamParams = {
+      resolution,
+      fps: this.fps,
+      quality: this.quality,
+    };
+    const urlWithParams = getUrlWithParameters(this.src ?? '', params);
+
+    // Check if the URL has changed or if image is not loaded
+    if (this.isImageLoaded() && this.image.src === urlWithParams) {
       return;
     }
 
@@ -140,7 +220,9 @@ export default class CanvasMjpgStreamInstance extends LitElement {
     this.image.src = '';
     this.image = new Image();
     this.setConnected(false);
-    this.image.src = this.src ?? '';
+
+    this.image.src = urlWithParams;
+
     this.image.addEventListener('load', this.onImageLoadBound);
     this.image.addEventListener('error', this.onImageErrorBound);
   }
@@ -183,7 +265,13 @@ export default class CanvasMjpgStreamInstance extends LitElement {
   }
 
   protected updated(changedProps: Map<string, unknown>): void {
-    if (changedProps.has('src')) {
+    if (
+      changedProps.has('src') ||
+      changedProps.has('resolutionWidth') ||
+      changedProps.has('resolutionHeight') ||
+      changedProps.has('fps') ||
+      changedProps.has('quality')
+    ) {
       this.throttleUpdateImage();
     }
 

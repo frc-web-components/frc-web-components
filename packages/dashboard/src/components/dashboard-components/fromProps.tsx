@@ -236,3 +236,15 @@ export function stringArrayProp(prop?: Partial<BaseProp<string[]>>): BaseProp<
     tooltip: prop?.tooltip ?? '',
   };
 }
+
+export function objectProp<T extends Record<string, unknown>>(
+  prop?: Partial<BaseProp<T>>,
+): BaseProp<T> & {
+  type: 'Object';
+} {
+  return {
+    type: 'Object',
+    defaultValue: prop?.defaultValue ?? ({} as T),
+    tooltip: prop?.tooltip ?? '',
+  };
+}
