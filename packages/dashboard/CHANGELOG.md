@@ -1,5 +1,17 @@
 # @frc-web-components/app
 
+## 1.6.0
+
+### Minor Changes
+
+- 8896f5d: Added base image path prop to field component
+
+### Patch Changes
+
+- Updated dependencies [8896f5d]
+  - @frc-web-components/fwc@3.4.0
+  - @frc-web-components/react@2.1.2
+
 ## 1.5.0
 
 ### Minor Changes

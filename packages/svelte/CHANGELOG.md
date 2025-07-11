@@ -1,5 +1,12 @@
 # @frc-web-components/svelte
 
+## 2.1.2
+
+### Patch Changes
+
+- Updated dependencies [8896f5d]
+  - @frc-web-components/fwc@3.4.0
+
 ## 2.1.1
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # example-lit-plugin
 
+## 0.0.11
+
+### Patch Changes
+
+- Updated dependencies [8896f5d]
+  - @frc-web-components/app@1.6.0
+
 ## 0.0.10
 
 ### Patch Changes

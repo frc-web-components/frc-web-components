@@ -1,5 +1,11 @@
 # @frc-web-components/fwc
 
+## 3.4.0
+
+### Minor Changes
+
+- 8896f5d: Added base image path prop to field component
+
 ## 3.3.0
 
 ### Minor Changes

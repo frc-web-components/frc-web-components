@@ -1,5 +1,13 @@
 # svelte-custom-dashboard
 
+## 0.0.7
+
+### Patch Changes
+
+- Updated dependencies [8896f5d]
+  - @frc-web-components/fwc@3.4.0
+  - @frc-web-components/svelte@2.1.2
+
 ## 0.0.6
 
 ### Patch Changes
