@@ -6,6 +6,7 @@ import {
   numberArrayProp,
   numberProp,
   stringDropdownProp,
+  stringProp,
 } from './fromProps';
 import {
   baseUnit,
@@ -98,9 +99,22 @@ export const field = createComponent(
       cropRight: numberProp({ defaultValue: 100, min: 0, max: 100 }),
       cropTop: numberProp({ min: 0, max: 100 }),
       cropBottom: numberProp({ defaultValue: 100, min: 0, max: 100 }),
+      baseImagePath: stringProp({
+        defaultValue: './',
+        tooltip:
+          'Base path for field images. Use "./" for relative paths or provide an absolute path/URL.',
+      }),
     },
   },
-  ({ children, cropLeft, cropRight, cropTop, cropBottom, ...props }) => {
+  ({
+    children,
+    cropLeft,
+    cropRight,
+    cropTop,
+    cropBottom,
+    baseImagePath,
+    ...props
+  }) => {
     const tree = useParentSourceTree();
     const sourceChildren = getChildren(tree);
     return (
@@ -110,6 +124,7 @@ export const field = createComponent(
         cropRight={cropRight / 100}
         cropTop={cropTop / 100}
         cropBottom={cropBottom / 100}
+        baseImagePath={baseImagePath}
         {...(props as any)}
       >
         {sourceChildren.map((child) => {

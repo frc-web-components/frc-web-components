@@ -33,6 +33,8 @@ export class Field extends LitElement {
   @property({ type: Boolean, attribute: 'show-grid' }) showGrid = false;
   @property({ type: Number, attribute: 'grid-size' }) gridSize = 1;
   @property({ type: String }) origin: 'red' | 'blue' = 'blue';
+  @property({ type: String, attribute: 'base-image-path' }) baseImagePath =
+    './';
 
   @query('canvas', true)
   canvas!: HTMLCanvasElement;
@@ -62,6 +64,27 @@ export class Field extends LitElement {
   getConfig(): FieldConfig {
     const config = fieldConfigs.find(({ game }) => game === this.game);
     return config ?? fieldConfigs[0];
+  }
+
+  getImageSrc(): string {
+    const config = this.getConfig();
+    const imagePath = config.image;
+
+    // If the image path is already absolute (starts with http/https or /), use it as-is
+    if (imagePath.startsWith('http') || imagePath.startsWith('/')) {
+      return imagePath;
+    }
+
+    const baseImagePath = this.baseImagePath || './';
+
+    // Combine base path with relative image path
+    const basePath = baseImagePath.endsWith('/')
+      ? baseImagePath
+      : baseImagePath + '/';
+    const cleanImagePath = imagePath.startsWith('./')
+      ? imagePath.substring(2)
+      : imagePath;
+    return basePath + cleanImagePath;
   }
 
   getCanvasCtx(): CanvasRenderingContext2D {
@@ -228,7 +251,7 @@ export class Field extends LitElement {
 
   setContainerSize(): void {
     const rect = { width: this.clientWidth, height: this.clientHeight };
-    const src = this.getConfig().image;
+    const src = this.getImageSrc();
     const imageObject = this.#fieldImages.getImage(src);
     const { loaded } = imageObject;
 
@@ -259,7 +282,7 @@ export class Field extends LitElement {
 
   drawImage(): void {
     const ctx = this.getCanvasCtx();
-    const src = this.getConfig().image;
+    const src = this.getImageSrc();
     const { loaded, image, width, height } = this.#fieldImages.getImage(src);
     if (!loaded) {
       return;
