@@ -17,6 +17,7 @@ const defaultArgs: Record<string, any> = {
   showGrid: false,
   gridSize: 1,
   origin: 'blue',
+  baseImagePath: './',
   // robotImage: '',
   robotColor: 'blue',
   robotOpacity: 1,
@@ -100,6 +101,13 @@ const fieldArgTypes: Record<string, any> = {
     table: {
       category: 'Field',
       defaultValue: 'blue',
+    },
+  },
+  baseImagePath: {
+    control: 'text',
+    table: {
+      category: 'Field',
+      defaultValue: { summary: './' },
     },
   },
 };
@@ -216,6 +224,7 @@ function createFieldStory(): Story {
         ?show-grid=${args.showGrid}
         grid-size=${args.gridSize}
         origin=${args.origin}
+        base-image-path=${args.baseImagePath}
       >
         <frc-field-robot
           color=${args.robotColor}

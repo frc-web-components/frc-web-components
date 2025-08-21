@@ -1,5 +1,29 @@
 # @frc-web-components/app
 
+## 1.6.0
+
+### Minor Changes
+
+- 8896f5d: Added base image path prop to field component
+
+### Patch Changes
+
+- Updated dependencies [8896f5d]
+  - @frc-web-components/fwc@3.4.0
+  - @frc-web-components/react@2.1.2
+
+## 1.5.0
+
+### Minor Changes
+
+- b7754eb: Added properties to camera stream component to limit bandwidth
+
+### Patch Changes
+
+- Updated dependencies [b7754eb]
+  - @frc-web-components/fwc@3.3.0
+  - @frc-web-components/react@3.0.0
+
 ## 1.4.1
 
 ### Patch Changes

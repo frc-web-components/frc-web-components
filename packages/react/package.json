@@ -1,6 +1,6 @@
 {
   "name": "@frc-web-components/react",
-  "version": "2.1.0",
+  "version": "2.1.2",
   "type": "module",
   "files": [
     "dist",
