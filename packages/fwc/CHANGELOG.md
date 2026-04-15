@@ -1,5 +1,11 @@
 # @frc-web-components/fwc
 
+## 3.2.1
+
+### Patch Changes
+
+- Added 2026 field
+
 ## 3.2.0
 
 ### Minor Changes

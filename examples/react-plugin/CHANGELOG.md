@@ -1,5 +1,11 @@
 # example-react-plugin
 
+## 0.0.10
+
+### Patch Changes
+
+- @frc-web-components/app@1.4.2
+
 ## 0.0.9
 
 ### Patch Changes

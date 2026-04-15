@@ -1,5 +1,13 @@
 # @frc-web-components/react
 
+## 2.1.1
+
+### Patch Changes
+
+- Added 2026 field
+- Updated dependencies
+  - @frc-web-components/fwc@3.2.1
+
 ## 2.1.0
 
 ### Minor Changes

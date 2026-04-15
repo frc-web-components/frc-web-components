@@ -1,5 +1,13 @@
 # @frc-web-components/app
 
+## 1.4.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @frc-web-components/fwc@3.2.1
+  - @frc-web-components/react@2.1.1
+
 ## 1.4.1
 
 ### Patch Changes
