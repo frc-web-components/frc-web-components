@@ -1,6 +1,6 @@
 # @frc-web-components/react
 
-## 2.1.1
+## 2.1.2
 
 ### Patch Changes
 
