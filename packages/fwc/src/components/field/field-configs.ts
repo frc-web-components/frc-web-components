@@ -9,7 +9,18 @@ export interface FieldConfig {
   unit: string;
 }
 
+// https://www.chiefdelphi.com/t/2026-rebuilt-high-resolution-field-image/510611
 export const configs: FieldConfig[] = [
+  {
+    game: 'Rebuilt',
+    image: './field-images/2026-field.jpg',
+    corners: {
+      topLeft: [250, 107],
+      bottomRight: [3946, 1920],
+    },
+    size: [54.2486877, 26.473097],
+    unit: 'foot',
+  },
   // https://www.chiefdelphi.com/t/4k-field-image-2025-reefscape/478797
   {
     game: 'Reefscape',
